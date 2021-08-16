@@ -1,0 +1,2 @@
+class LineCustomer < ApplicationRecord
+end

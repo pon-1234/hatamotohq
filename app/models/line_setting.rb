@@ -1,0 +1,2 @@
+class LineSetting < ApplicationRecord
+end
