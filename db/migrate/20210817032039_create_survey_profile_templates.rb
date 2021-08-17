@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSurveyProfileTemplates < ActiveRecord::Migration[6.0]
   def change
     create_table :survey_profile_templates do |t|

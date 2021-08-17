@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFlexMessageSentLogs < ActiveRecord::Migration[6.0]
   def change
     create_table :flex_message_sent_logs do |t|

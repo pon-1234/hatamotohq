@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLineCustomers < ActiveRecord::Migration[6.0]
   def change
     # TODO: Please rename this table to line_ofc_accounts

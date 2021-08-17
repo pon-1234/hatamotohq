@@ -1,7 +1,8 @@
-class CreateAutoMessageDistributions < ActiveRecord::Migration[6.0]
+# frozen_string_literal: true
+
+class CreateAutoResponses < ActiveRecord::Migration[6.0]
   def change
-    # TODO: Rename this table
-    create_table :auto_message_distributions do |t|
+    create_table :auto_responses do |t|
       t.references :line_account, foreign_key: true
       t.references :folder, foreign_key: true
       t.string :title

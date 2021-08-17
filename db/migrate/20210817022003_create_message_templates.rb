@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMessageTemplates < ActiveRecord::Migration[6.0]
   def change
     create_table :message_templates do |t|
