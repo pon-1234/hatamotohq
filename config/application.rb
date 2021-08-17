@@ -10,12 +10,35 @@ Bundler.require(*Rails.groups)
 
 module Api
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+    config.time_zone = 'Asia/Tokyo'
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
+    config.i18n.default_locale = :ja
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+
+    config.autoload_paths += %W[#{config.root}/lib]
+    config.action_cable.mount_path = '/cable'
+    config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif]
+    config.filter_parameters << :password
+    config.generators do |g|
+      g.test_framework  :rspec, fixture: true
+      g.view_specs      false
+      g.helper_specs    false
+    end
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '*',
+          headers: :any,
+          expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+          methods: [:get, :post, :options, :delete, :put, :patch]
+      end
+    end
+    ActiveStorage::Engine.config
+      .active_storage
+      .content_types_to_serve_as_binary
+      .delete('image/svg+xml')
+    ActiveSupport::Deprecation.silenced = true
+    config.active_job.queue_adapter = :sidekiq
   end
 end
