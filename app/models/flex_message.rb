@@ -1,0 +1,2 @@
+class FlexMessage < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class MessageContentDistribution < ApplicationRecord
+end

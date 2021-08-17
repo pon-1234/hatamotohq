@@ -1,0 +1,2 @@
+class PostbackChecksum < ApplicationRecord
+end

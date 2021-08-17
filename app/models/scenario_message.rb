@@ -1,0 +1,2 @@
+class ScenarioMessage < ApplicationRecord
+end

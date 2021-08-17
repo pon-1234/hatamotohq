@@ -1,0 +1,2 @@
+class BasicSetting < ApplicationRecord
+end

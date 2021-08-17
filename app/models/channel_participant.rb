@@ -1,0 +1,2 @@
+class ChannelParticipant < ApplicationRecord
+end

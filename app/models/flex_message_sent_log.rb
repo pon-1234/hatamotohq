@@ -1,0 +1,2 @@
+class FlexMessageSentLog < ApplicationRecord
+end

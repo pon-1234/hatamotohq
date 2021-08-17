@@ -1,0 +1,2 @@
+class AutoMessageContentDistribution < ApplicationRecord
+end
