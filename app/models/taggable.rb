@@ -1,0 +1,2 @@
+class Taggable < ApplicationRecord
+end

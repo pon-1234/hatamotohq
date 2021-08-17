@@ -1,0 +1,2 @@
+class SurveyProfileTemplate < ApplicationRecord
+end
