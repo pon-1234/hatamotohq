@@ -743,19 +743,19 @@ export default {
     .bg-text-mess {
       height: 150px;
       width: 100%;
-      background: rgb(245 245 245)
+      background: #F5F5F5;
     }
 
     .line-nav-bar {
       width: 100%;
       height: 50px;
-      background: rgb(10 47 76);
+      background: #0A2F4C;
       color: white;
       display: flex
 
     }
     .line-nav-bar > p {
-      background: rgb(10 47 76);
+      background: #0A2F4C;
       display: inline-block;
       margin: auto;
     }

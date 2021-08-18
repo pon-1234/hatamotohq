@@ -217,7 +217,7 @@ export default {
             margin-right: 10px !important;
         }
         .action-postback {
-            background: rgb(220 220 220);
+            background: gray;
             padding: 0 10px 10px 10px;
             border-radius: 4px
         }

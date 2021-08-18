@@ -194,7 +194,7 @@ export default {
   display: block!important;
 
   .active {
-    background: rgb(215 208 208 / 90%);
+    background: #D7D0D0;
   }
 }
 

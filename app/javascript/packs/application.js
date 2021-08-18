@@ -29,7 +29,6 @@ require('chart.js');
 
 // Plugin configurations
 Vue.config.devtools = true;
-Vue.use(BootstrapVue);
 Vue.use(Chartkick);
 Vue.use(Datetime);
 Vue.use(DateRangePicker);
