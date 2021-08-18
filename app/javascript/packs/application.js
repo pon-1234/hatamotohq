@@ -10,6 +10,17 @@ import 'vue-datetime/dist/vue-datetime.css';
 import DateRangePicker from 'vue2-daterange-picker';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker';
 import vSelect from 'vue-select';
+import * as VueGoogleMaps from 'vue2-google-maps';
+import Clipboard from 'v-clipboard';
+import VTooltip from 'v-tooltip';
+import {
+  BootstrapVue,
+  DropdownPlugin,
+  TabsPlugin
+} from 'bootstrap-vue';
+// Import constant
+import * as constant from '@/core/constant';
+
 import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
 
@@ -21,6 +32,12 @@ window.$ = jQuery;
 window._ = require('lodash');
 const toastr = require('toastr');
 window.toastr = toastr;
+window.emojione = require('../src/lib/emojione');
+window.emojionearea = require('../src/lib/emojionearea');
+Object.keys(constant).forEach((key) => {
+  Vue.prototype[key] = constant[key];
+});
+
 require('@rails/ujs').start();
 require('turbolinks').start();
 require('@rails/activestorage').start();
@@ -33,7 +50,17 @@ Vue.use(Chartkick);
 Vue.use(Datetime);
 Vue.use(DateRangePicker);
 Vue.component('v-select', vSelect);
-
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: process.env.MIX_GOOGLE_MAP_KEY,
+    libraries: 'places'
+  }
+});
+Vue.use(BootstrapVue);
+Vue.use(DropdownPlugin);
+Vue.use(TabsPlugin);
+Vue.use(Clipboard);
+Vue.use(VTooltip);
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
