@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Api</title>
+    <title>LINE MONSTER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.css" integrity="sha512-J5tsMaZISEmI+Ly68nBDiQyNW6vzBoUlNHGsH8T3DzHTn2h9swZqiMeGm/4WMDxAphi5LMZMNA30LvxaEPiPkg==" crossorigin="anonymous" />
   </head>
 
-  <body>
-    <%= yield %>
+  <body data-scrollbar-auto-hide="n" class="hold-transition sidebar-mini layout-navbar-fixed">
+    <div class="wrapper" id="application">
+      <%= render "admin/base/header" %>
+      <%= render "admin/base/left_sidebar_menu"%>
+      <div class="content-wrapper pt-2">
+        <div class="content container-fluid">
+          <div class="container-fluid" >
+            <%= custom_flash_message %>
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    <div>
   </body>
 </html>

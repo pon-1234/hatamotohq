@@ -1,6 +1,27 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # User
+  constraints Subdomain::UserConstraint.new do
+    # root to: 'user/home#index'
+    devise_for :users, path: Subdomain::UserConstraint.path, controllers: {
+      sessions: 'user/sessions',
+      passwords: 'user/passwords'
+    }
+    namespace :user, path: Subdomain::UserConstraint.path do
+      root to: 'home#index'
+    end
+  end
+
+  # # Admin
+  # constraints Subdomain::AdminConstraint.new do
+  #   root to: 'admin/home#index'
+  #   devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
+  #     sessions: 'admin/sessions',
+  #     passwords: 'admin/passwords'
+  #   }
+  #   namespace :admin, path: Subdomain::AdminConstraint.path do
+  #     root to: 'home#index'
+  #   end
+  # end
 end

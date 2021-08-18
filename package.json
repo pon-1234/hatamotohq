@@ -1,15 +1,52 @@
 {
-  "name": "api",
+  "name": "LineMonster",
   "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "eslint --ext .js,.vue app/javascript",
+    "lint-fix": "eslint --fix --ext .js,.vue app/javascript",
+    "doc": "apidoc -i doc/api -o doc/public"
+  },
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
-    "turbolinks": "^5.2.0"
+    "admin-lte": "^3.0.5",
+    "axios": "^0.21.1",
+    "bootstrap-vue": "^2.17.3",
+    "chart.js": "^2.9.4",
+    "chartkick": "^3.2.1",
+    "d3": "^6.3.1",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.21",
+    "luxon": "^1.25.0",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.32",
+    "toastr": "^2.1.4",
+    "turbolinks": "^5.2.0",
+    "vee-validate": "^3.4.3",
+    "vue": "^2.6.12",
+    "vue-chartkick": "^0.6.1",
+    "vue-datetime": "^1.0.0-beta.14",
+    "vue-loader": "^15.9.5",
+    "vue-select": "^3.11.2",
+    "vue-template-compiler": "^2.6.12",
+    "vue2-daterange-picker": "^0.6.2",
+    "vue2-leaflet": "^2.6.0",
+    "vuex": "^3.5.1",
+    "vuex-persistedstate": "^3.1.0",
+    "weekstart": "^1.0.1"
   },
-  "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
+    "apidoc": "^0.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "webpack-dev-server": "^3.11.0"
   }
 }

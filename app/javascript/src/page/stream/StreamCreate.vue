@@ -1,0 +1,353 @@
+<template>
+  <div class="form-common01 create-content" >
+    <div class="form-border">
+      <div class="form-group">
+        <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+        <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" id="menudiv" />
+        <span v-if="errors.first('deliver-title')" class="is-validate-label">タイトルは必須です</span>
+      </div>
+      <div v-if="refresh_content">
+        <div class="btn-template mb20 fz14">
+          <a class="btn-block" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
+          <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+
+        </div>
+        <div v-for="(item, index) in message_data.message_content_distributions"  :key="index">
+          <message-content-distribution
+            :isDisplayTemplate="true"
+            v-bind:data="item"
+            v-bind:index="index"
+            v-bind:countMessages="message_data.message_content_distributions.length"
+            @input="changeContent"
+            @setTemplate="selectTemplate"
+            @remove="removeContent"
+            @moveTopMessage="moveTopMessage"
+            @moveBottomMessage="moveBottomMessage"
+          />
+        </div>
+        <div class="btn-common02 btn-form01 text-center fz14">
+          <a
+            class="btn-add-form01"
+            @click="addMoreMessageContentDistribution"
+            v-if="message_data.message_content_distributions.length < 5"
+          >
+            <span>追加</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="form-border">
+      <div class="form-group">
+          <label>配信先</label>
+          <div class="row-form01 row-form-send mb10">
+              <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
+              <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+          </div>
+          <div class="box-form01 box-form-sort" v-show="message_data.type !== 'all'">
+              <label>タグ</label>
+              <div class="list-checkbox-tag" v-if="refresh_tag">
+                <input-tag :data="message_data.tags" @input="addListTag"/>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="form-border" v-if="message_data.type !== 'all'">
+      <div class="form-group">
+      <label>状態</label>
+      <div class="row-form01 row-form-datetime">
+        <label>
+          <input
+            type="radio"
+            name="friendCondition"
+            value="all"
+            v-model="message_data.conditions.type"
+          />友だちリスト全員
+        </label>
+        <label>
+          <input type="radio" name="friendCondition" value="specific"  v-model="message_data.conditions.type" />条件で絞り込む
+        </label>
+      </div>
+      <div v-if="message_data.conditions.type == 'specific'">
+        <message-condition @input="changeCondition" v-bind:data="message_data.conditions"/>
+      </div>
+    </div>
+    </div>
+    <div class="form-border">
+      <div class="form-group">
+        <label>配信日時</label>
+        <div class="row-form01 row-form-datetime">
+          <label>
+            <input
+              type="radio"
+              name="datetime"
+              :value="true"
+              v-model="message_data.deliver_now"
+              @click="changeStartDateForNow"
+            />今すぐ配信
+          </label>
+          <label>
+            <input type="radio" name="datetime" :value="false" v-model="message_data.deliver_now"/>配信日時を指定
+          </label>
+        </div>
+        <div v-if="!message_data.deliver_now">
+          <VueCtkDateTimePicker v-model="message_data.date_start" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
+          <!--<datetime-->
+                  <!--type="datetime"-->
+                  <!--v-model="message_data.date_start"-->
+                  <!--value-zone="Asia/Tokyo"-->
+                  <!--:min-datetime="currentDate"-->
+                  <!--input-class="form-control"-->
+          <!--style="max-width: 280px">-->
+          <!--</datetime>-->
+        </div>
+      </div>
+    </div>
+
+    <div class="form-bottom">
+      <div class="row-form-btn d-flex">
+        <button
+          type="submit"
+          class="btn btn-submit btn-block"
+          @click="createMessage('pending')"
+        >送信</button>
+        <button
+          type="submit"
+          class="btn btn-draft btn-block"
+          @click="createMessage('draft')"
+        >下書き保存</button>
+        <!-- <button
+          type="submit"
+          class="btn btn-test btn-block"
+          @click="createMessage('sending')"
+        >テスト配信</button> -->
+      </div>
+    </div>
+    <message-preview />
+  </div>
+</template>
+<script>
+import { mapActions, mapState } from 'vuex';
+import moment from 'moment';
+
+export default {
+  props: ['stream_id'],
+  data() {
+    return {
+      message_data: {
+        conditions: {
+          type: 'all',
+          add_friend_date: {
+            start_date: null,
+            end_date: null
+          },
+          age: {
+            min: 0,
+            max: 100
+          },
+          gender: 'all',
+          prefecture: [],
+          month_birthday: [],
+          message_status: false
+        },
+        tags: null,
+        title: '',
+        date_start: moment().format('YYYY-MM-DD HH:mm'),
+        created_at: moment().format('YYYY-MM-DD HH:mm'),
+        status: this.MessageDeliveriesStatus.Pending,
+        message_content_distributions: [],
+        deliver_now: true,
+        type: 'all'
+      },
+      refresh_content: true,
+      refresh_tag: true,
+      currentDate: moment().format('YYYY-MM-DD HH:mm')
+    };
+  },
+
+  provide() {
+    return { parentValidator: this.$validator };
+  },
+
+  created() {
+    console.log(this.stream_id);
+    if (this.stream_id) {
+      this.message_data.id = this.stream_id;
+    } else {
+      this.message_data.message_content_distributions.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
+        }
+      });
+    }
+  },
+
+  async beforeMount() {
+    await this.fetchItem();
+    await this.getTags();
+    await this.listTagAssigned();
+  },
+
+  computed: {
+    ...mapState('message', {
+      message: state => state.message
+    })
+  },
+
+  watch: {
+    message_data: {
+      handler(val) {
+        console.log('handler watch change message', val);
+        this.setMessageDistributions(val);
+      },
+      deep: true
+    }
+  },
+  methods: {
+    ...mapActions('message', [
+      'sendMessageDelivers',
+      'updateMessageDelivers',
+      'fetchMessageDelivers',
+      'setMessageDistributions'
+    ]),
+    ...mapActions('tag', [
+      'getTags',
+      'listTagAssigned'
+    ]),
+    ...mapActions('system', [
+      'setIsSubmitChange'
+    ]),
+
+    async fetchItem() {
+      if (this.stream_id) {
+        this.refresh_tag = false;
+        await this.fetchMessageDelivers({ id: this.stream_id });
+
+        if (this.message.status === 'done') {
+          window.location.href = process.env.MIX_ROOT_PATH + '/streams';
+        }
+
+        Object.assign(this.message_data, this.message);
+
+        this.$nextTick(() => {
+          this.refresh_tag = true;
+        });
+
+        if (this.message_data.deliver_now) {
+          this.changeStartDateForNow();
+        }
+      }
+    },
+
+    changeContent({ index, content }) {
+      this.message_data.message_content_distributions.splice(index, 1, content);
+    },
+
+    removeContent({ index }) {
+      this.refresh_content = false;
+      this.message_data.message_content_distributions.splice(index, 1);
+      this.$nextTick(() => {
+        this.refresh_content = true;
+      });
+    },
+
+    moveTopMessage(index) {
+      this.refresh_content = false;
+      const option = this.message_data.message_content_distributions[index];
+      this.message_data.message_content_distributions[index] = this.message_data.message_content_distributions.splice(index - 1, 1, option)[0];
+      this.$nextTick(() => {
+        this.refresh_content = true;
+      });
+    },
+    moveBottomMessage(index) {
+      this.refresh_content = false;
+      const option = this.message_data.message_content_distributions[index];
+      this.message_data.message_content_distributions[index] = this.message_data.message_content_distributions.splice(index + 1, 1, option)[0];
+      this.$nextTick(() => {
+        this.refresh_content = true;
+      });
+    },
+
+    addMoreMessageContentDistribution() {
+      this.message_data.message_content_distributions.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
+        }
+      });
+    },
+
+    changeStartDateForNow() {
+      this.message_data.date_start = moment().format('YYYY-MM-DD HH:mm');
+    },
+
+    changeCondition(value) {
+      this.message_data.conditions = value;
+    },
+
+    async createMessage(status) {
+      this.message_data.status = status;
+      if (this.message_data.deliver_now) {
+        this.changeStartDateForNow();
+      }
+
+      this.setIsSubmitChange();
+      if (status !== 'draft') {
+        const result = await this.$validator.validateAll();
+        if (!result) {
+          $('input, textarea').each(
+            function(index) {
+              var input = $(this);
+              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
+                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
+                return false;
+              }
+            }
+          );
+          return;
+        };
+      }
+
+      if (!this.stream_id) {
+        await this.sendMessageDelivers(this.message_data);
+        window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_created=true';
+      } else {
+        await this.updateMessageDelivers(this.message_data);
+        window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_updated=true';
+      }
+    },
+
+    selectTemplate(template) {
+      Object.assign(this.message_data, {
+        title: template.title,
+        message_content_distributions: template.contents
+      });
+      this.refresh_content = false;
+
+      this.$nextTick(() => {
+        this.refresh_content = true;
+      });
+    },
+
+    addListTag(data) {
+      this.message_data.tags = data;
+    },
+
+    resetListTag() {
+      this.refresh_tag = false;
+      this.message_data.tags = [];
+      this.$nextTick(() => {
+        this.refresh_tag = true;
+      });
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.message-pagination-template {
+  text-align: center;
+}
+</style>
