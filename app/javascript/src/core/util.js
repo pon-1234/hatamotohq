@@ -9,6 +9,11 @@ import {
 import moment from 'moment';
 
 class Util {
+  static getCsrfToken() {
+    const tokenDom = document.head.querySelector('meta[name="csrf-token"]');
+    return tokenDom ? tokenDom.content : null;
+  }
+
   static checkMediaSize(file) {
     const error = {
       status: true,
