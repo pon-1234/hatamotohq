@@ -10,6 +10,12 @@ Rails.application.routes.draw do
     }
     namespace :user, path: Subdomain::UserConstraint.path do
       root to: 'home#index'
+      resources :setting, only: [:index] do
+        collection do
+          get :edit
+          patch :update
+        end
+      end
     end
   end
 

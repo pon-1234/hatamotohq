@@ -56,7 +56,7 @@
 </template>
 <script>
 export default {
-  props: ['route'],
+  props: ['setting', 'route'],
   data() {
     return {
       days: [

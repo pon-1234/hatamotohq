@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_19_013905) do
+ActiveRecord::Schema.define(version: 2021_08_19_023448) do
 
   create_table "action_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "title"
@@ -92,12 +92,12 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
 
   create_table "channel_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "channel_id"
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.index ["channel_id"], name: "index_channel_participants_on_channel_id"
-    t.index ["line_customer_id"], name: "index_channel_participants_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_channel_participants_on_line_account_id"
   end
 
   create_table "channels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -158,32 +158,27 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   end
 
   create_table "line_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_customer_id"
-    t.string "_uid"
-    t.string "username"
-    t.string "password"
-    t.string "role", default: "admin"
+    t.bigint "owner_id"
+    t.string "line_user_id"
+    t.string "line_picture_url"
+    t.string "line_name"
+    t.string "display_name"
+    t.string "line_client_id"
+    t.string "line_channel_access_token"
+    t.string "line_channel_secret"
+    t.string "invite_url"
+    t.string "webhook_url"
+    t.string "liff_id"
+    t.text "note"
     t.string "status", default: "inactive"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
-    t.index ["line_customer_id"], name: "index_line_accounts_on_line_customer_id"
-  end
-
-  create_table "line_customers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.string "line_picture_url"
-    t.string "line_user_id"
-    t.string "line_name"
-    t.string "display_name"
-    t.text "note"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.index ["owner_id"], name: "index_line_accounts_on_owner_id"
   end
 
   create_table "line_friends", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "line_account_id"
-    t.bigint "line_customer_id"
     t.date "birthday"
     t.string "area"
     t.string "gender"
@@ -194,21 +189,6 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.index ["line_account_id"], name: "index_line_friends_on_line_account_id"
-    t.index ["line_customer_id"], name: "index_line_friends_on_line_customer_id"
-  end
-
-  create_table "line_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_account_id"
-    t.string "client_id"
-    t.string "channel_access_token"
-    t.string "channel_secret"
-    t.string "invite_url"
-    t.string "webhook_url"
-    t.string "liff_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["line_account_id"], name: "index_line_settings_on_line_account_id"
   end
 
   create_table "login_activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -283,7 +263,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
 
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "channel_id"
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.boolean "is_bot_sender", default: false
     t.string "attr", default: "chat-reserve"
     t.string "line_message_id"
@@ -294,7 +274,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["channel_id"], name: "index_messages_on_channel_id"
-    t.index ["line_customer_id"], name: "index_messages_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_messages_on_line_account_id"
   end
 
   create_table "postback_checksums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -359,14 +339,14 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   end
 
   create_table "survey_customer_answers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.bigint "survey_id"
     t.bigint "survey_question_id"
     t.bigint "survey_customer_id"
     t.text "content", size: :long
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["line_customer_id"], name: "index_survey_customer_answers_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_survey_customer_answers_on_line_account_id"
     t.index ["survey_customer_id"], name: "index_survey_customer_answers_on_survey_customer_id"
     t.index ["survey_id"], name: "index_survey_customer_answers_on_survey_id"
     t.index ["survey_question_id"], name: "index_survey_customer_answers_on_survey_question_id"
@@ -374,11 +354,11 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
 
   create_table "survey_customers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "survey_id"
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.integer "answer_num", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["line_customer_id"], name: "index_survey_customers_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_survey_customers_on_line_account_id"
     t.index ["survey_id"], name: "index_survey_customers_on_survey_id"
   end
 
@@ -396,12 +376,12 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   end
 
   create_table "survey_profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.bigint "survey_profile_template_id"
     t.text "content", size: :long
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["line_customer_id"], name: "index_survey_profiles_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_survey_profiles_on_line_account_id"
     t.index ["survey_profile_template_id"], name: "index_survey_profiles_on_survey_profile_template_id"
   end
 
@@ -463,7 +443,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   end
 
   create_table "unread_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_customer_id"
+    t.bigint "line_account_id"
     t.bigint "channel_id"
     t.bigint "last_message_id"
     t.integer "total"
@@ -472,7 +452,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
     t.datetime "deleted_at"
     t.index ["channel_id"], name: "index_unread_messages_on_channel_id"
     t.index ["last_message_id"], name: "index_unread_messages_on_last_message_id"
-    t.index ["line_customer_id"], name: "index_unread_messages_on_line_customer_id"
+    t.index ["line_account_id"], name: "index_unread_messages_on_line_account_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -496,36 +476,34 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   add_foreign_key "auto_responses", "line_accounts"
   add_foreign_key "basic_settings", "line_accounts"
   add_foreign_key "channel_participants", "channels"
-  add_foreign_key "channel_participants", "line_customers"
+  add_foreign_key "channel_participants", "line_accounts"
   add_foreign_key "channels", "line_friends"
   add_foreign_key "flex_message_sent_logs", "flex_messages"
   add_foreign_key "flex_message_sent_logs", "line_accounts"
   add_foreign_key "flex_messages", "line_accounts"
   add_foreign_key "folders", "line_accounts"
-  add_foreign_key "line_accounts", "line_customers"
+  add_foreign_key "line_accounts", "users", column: "owner_id"
   add_foreign_key "line_friends", "line_accounts"
-  add_foreign_key "line_friends", "line_customers"
-  add_foreign_key "line_settings", "line_accounts"
   add_foreign_key "message_content_distributions", "message_distributions"
   add_foreign_key "message_distributions", "line_accounts"
   add_foreign_key "message_templates", "folders"
   add_foreign_key "message_templates", "line_accounts"
   add_foreign_key "messages", "channels"
-  add_foreign_key "messages", "line_customers"
+  add_foreign_key "messages", "line_accounts"
   add_foreign_key "rich_menus", "folders"
   add_foreign_key "rich_menus", "line_accounts"
   add_foreign_key "scenario_messages", "scenarios"
   add_foreign_key "scenarios", "folders"
   add_foreign_key "scenarios", "line_accounts"
-  add_foreign_key "survey_customer_answers", "line_customers"
+  add_foreign_key "survey_customer_answers", "line_accounts"
   add_foreign_key "survey_customer_answers", "survey_customers"
   add_foreign_key "survey_customer_answers", "survey_questions"
   add_foreign_key "survey_customer_answers", "surveys"
-  add_foreign_key "survey_customers", "line_customers"
+  add_foreign_key "survey_customers", "line_accounts"
   add_foreign_key "survey_customers", "surveys"
   add_foreign_key "survey_profile_templates", "folders"
   add_foreign_key "survey_profile_templates", "line_accounts"
-  add_foreign_key "survey_profiles", "line_customers"
+  add_foreign_key "survey_profiles", "line_accounts"
   add_foreign_key "survey_profiles", "survey_profile_templates"
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "surveys", "folders"
@@ -534,6 +512,6 @@ ActiveRecord::Schema.define(version: 2021_08_19_013905) do
   add_foreign_key "tags", "folders"
   add_foreign_key "tags", "line_accounts"
   add_foreign_key "unread_messages", "channels"
-  add_foreign_key "unread_messages", "line_customers"
+  add_foreign_key "unread_messages", "line_accounts"
   add_foreign_key "unread_messages", "messages", column: "last_message_id"
 end

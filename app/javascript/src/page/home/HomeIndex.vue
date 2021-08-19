@@ -1,39 +1,45 @@
 <template>
   <div class="" v-if=" admin_status == 'active' ">
-    <div class="col-lg-12 mb40">
-      <h4 class="hdg4">最新メッセージ</h4>
-      <div class="list-news list-news01">
-        <ul class="list-unstyled fz14">
-          <li v-for="(talk, index) in newTalks" :key="index">
-            <a :href="MIX_ROOT_PATH + '/talks/to/'+(talk.channel.alias || '')">
-              <dl>
-                <dt>{{lineTimestampToDate(talk.line_timestamp) }}<span>@{{talk.customer.line_name}}</span></dt>
-                <dd>
-                  <view-message-content :data="talk.line_content" ></view-message-content>
-                </dd>
-              </dl>
-            </a>
-          </li>
-          <li v-if="isTalkLoading">
-           ローディング...
-          </li>
-        </ul>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">最新メッセージ</h3>
+      </div>
+      <div class="card-body">
+        <div class="list-news list-news01">
+          <ul class="list-unstyled fz14">
+            <li v-for="(talk, index) in newTalks" :key="index">
+              <a :href="MIX_ROOT_PATH + '/talks/to/'+(talk.channel.alias || '')">
+                <dl>
+                  <dt>{{lineTimestampToDate(talk.line_timestamp) }}<span>@{{talk.customer.line_name}}</span></dt>
+                  <dd>
+                    <view-message-content :data="talk.line_content" ></view-message-content>
+                  </dd>
+                </dl>
+              </a>
+            </li>
+            <li v-if="isTalkLoading">
+            ローディング...
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="col-md-12">
-      <h4 class="hdg4">お知らせ</h4>
-      <div class="list-news list-news02">
-        <ul class="list-unstyled fz14">
-          <li v-for="(notice, index) in notices" :key="index" @click="viewNotice(notice)" class="cursor-pointer">
-            <dl>
-              <dt>{{formatDateTime(notice.created_at)}}</dt>
-              <dd><a class="underline important"></a>{{notice.title}}</dd>
-            </dl>
-          </li>
-          <li v-if="isNoticeLoading">
-           ローディング...
-          </li>
-        </ul>
+    <div class="card" hidden>
+      <div class="card-header">
+        <h3 class="card-title">お知らせ</h3>
+      </div>
+      <div class="card-body">
+        <div class="list-news list-news02" v-if="notices.length > 0">
+          <ul class="list-unstyled fz14">
+            <li v-for="(notice, index) in notices" :key="index" @click="viewNotice(notice)" class="cursor-pointer">
+              <dl>
+                <dt>{{formatDateTime(notice.created_at)}}</dt>
+                <dd><a class="underline important"></a>{{notice.title}}</dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+        <span v-else>お知らせがありません。</span>
       </div>
     </div>
 

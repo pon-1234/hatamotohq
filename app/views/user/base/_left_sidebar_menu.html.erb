@@ -1,7 +1,7 @@
   <aside class="main-sidebar sidebar-dark-secondary elevation-4 nav-fixed">
     <!-- Brand Logo -->
     <a href="#" class="brand-link bg-white elevation-4 text-center">
-      <span class="brand-text font-weight-bold text-danger">健康ポイント</span>
+      <span class="brand-text font-weight-bold text-danger">LINE MONSTER</span>
     </a>
 
     <!-- Sidebar -->
@@ -11,11 +11,22 @@
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
             <%= link_to '<i class="nav-icon fas fa-home"></i><p>ホーム</p>'.html_safe,
-              user_home_index_path,
+              user_root_path,
               class: "nav-link #{controller?("user/home") ? 'active' : ''}"
             %>
           </li>
         </ul>
+
+        <!-- Account Setting -->
+        <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-home"></i><p>アカウント設定</p>'.html_safe,
+              user_setting_index_path,
+              class: "nav-link #{controller?("user/setting") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+      </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
