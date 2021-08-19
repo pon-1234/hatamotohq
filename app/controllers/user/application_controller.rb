@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::ApplicationController < ActionController::Base
-  layout 'application'
+  layout 'user/application'
 
   rescue_from ActionController::InvalidAuthenticityToken, with: :not_authenticated
   rescue_from CanCan::AccessDenied do |_exception|
