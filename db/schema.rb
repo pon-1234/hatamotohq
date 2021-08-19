@@ -165,12 +165,10 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
 
   create_table "line_friends", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "line_account_id"
-    t.date "birthday"
-    t.string "area"
-    t.string "gender"
-    t.string "prefecture"
-    t.string "status"
-    t.string "status_from_bot", default: "active"
+    t.string "line_picture_url"
+    t.string "line_user_id"
+    t.string "line_name"
+    t.string "display_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"

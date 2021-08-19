@@ -4,17 +4,15 @@
 #
 # Table name: line_friends
 #
-#  id              :bigint           not null, primary key
-#  area            :string(255)
-#  birthday        :date
-#  deleted_at      :datetime
-#  gender          :string(255)
-#  prefecture      :string(255)
-#  status          :string(255)
-#  status_from_bot :string(255)      default("active")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  line_account_id :bigint
+#  id               :bigint           not null, primary key
+#  deleted_at       :datetime
+#  display_name     :string(255)
+#  line_name        :string(255)
+#  line_picture_url :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  line_account_id  :bigint
+#  line_user_id     :string(255)
 #
 # Indexes
 #
@@ -25,4 +23,5 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class LineFriend < ApplicationRecord
+  belongs_to :line_account
 end

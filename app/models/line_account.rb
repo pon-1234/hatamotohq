@@ -33,6 +33,7 @@
 require 'securerandom'
 class LineAccount < ApplicationRecord
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
+  has_many :line_friends
 
   before_create do
     self.webhook_url = generate_webhook_url

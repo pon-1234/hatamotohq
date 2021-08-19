@@ -23,8 +23,6 @@ module LineApi
         body: body
       }
       response = self.class.post('/oauth/accessToken', options)
-      p 'xxxx'
-      p response.body
       return nil if response.code != 200
       jsonBody = JSON.parse(response.body)
       @access_token = jsonBody['access_token']
