@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApiTokenStrategy < Warden::Strategies::Base
   def valid?
     api_token.present?
@@ -14,8 +16,7 @@ class ApiTokenStrategy < Warden::Strategies::Base
   end
 
   private
-
-  def api_token
-    env['Authorization'].to_s.remove('Bearer ')
-  end
+    def api_token
+      env['Authorization'].to_s.remove('Bearer ')
+    end
 end

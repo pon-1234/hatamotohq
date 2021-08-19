@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::SettingController < User::ApplicationController
   include User::SettingHelper
   def index

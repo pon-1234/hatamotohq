@@ -38,11 +38,27 @@ class LineAccount < ApplicationRecord
     self.webhook_url = generate_webhook_url
   end
 
+  after_create do
+    create_default_folder
+  end
+
   private
     def generate_webhook_url
       loop do
         uid = SecureRandom.alphanumeric(10)
         break uid unless LineAccount.where(webhook_url: uid).first
       end
+    end
+
+    def create_default_folder
+      Folder.create(name: '未分類', line_account: self, type: :tag)
+      Folder.create(name: '未分類', line_account: self, type: :auto_response)
+      Folder.create(name: '未分類', line_account: self, type: :message_template)
+      Folder.create(name: '未分類', line_account: self, type: :rich_menu)
+      Folder.create(name: '未分類', line_account: self, type: :scenario)
+      Folder.create(name: '未分類', line_account: self, type: :scenario_template)
+      Folder.create(name: '未分類', line_account: self, type: :survey)
+      Folder.create(name: '未分類', line_account: self, type: :survey_profile)
+      Folder.create(name: '未分類', line_account: self, type: :flex_message)
     end
 end

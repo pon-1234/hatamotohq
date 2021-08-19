@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module User::SettingHelper
   def line_account_setting_as_json(line_account)
     line_account.as_json(only: [
