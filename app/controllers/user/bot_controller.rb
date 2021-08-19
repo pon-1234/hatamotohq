@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::BotController < User::ApplicationController
   skip_before_action :ensure_bot_initialized
   include User::BotHelper
@@ -11,9 +13,9 @@ class User::BotController < User::ApplicationController
       line_account = current_user.line_account
       line_account.bot_initialized = true
       line_account.update!(bot_params)
-      redirect_to user_root_path, flash: { success: "ボットの設定は完了しました。" }
+      redirect_to user_root_path, flash: { success: 'ボットの設定は完了しました。' }
     else
-      redirect_to user_bot_setup_path, flash: { error: "ボット設定は失敗しました。" }
+      redirect_to user_bot_setup_path, flash: { error: 'ボット設定は失敗しました。' }
     end
   end
 

@@ -24,4 +24,5 @@
 #
 class LineFriend < ApplicationRecord
   belongs_to :line_account
+  has_one :channel
 end

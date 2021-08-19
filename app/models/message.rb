@@ -14,18 +14,18 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  channel_id       :bigint
-#  line_account_id  :bigint
+#  line_friend_id   :bigint
 #  line_message_id  :string(255)
 #
 # Indexes
 #
-#  index_messages_on_channel_id       (channel_id)
-#  index_messages_on_line_account_id  (line_account_id)
+#  index_messages_on_channel_id      (channel_id)
+#  index_messages_on_line_friend_id  (line_friend_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (channel_id => channels.id)
-#  fk_rails_...  (line_account_id => line_accounts.id)
+#  fk_rails_...  (line_friend_id => line_friends.id)
 #
 class Message < ApplicationRecord
 end

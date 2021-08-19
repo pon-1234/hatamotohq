@@ -18,15 +18,20 @@
 #  un_read         :boolean          default(TRUE)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  line_account_id :bigint
 #  line_friend_id  :bigint
 #
 # Indexes
 #
-#  index_channels_on_line_friend_id  (line_friend_id)
+#  index_channels_on_line_account_id  (line_account_id)
+#  index_channels_on_line_friend_id   (line_friend_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (line_account_id => line_accounts.id)
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
 class Channel < ApplicationRecord
+  belongs_to :line_account
+  belongs_to :line_friend
 end
