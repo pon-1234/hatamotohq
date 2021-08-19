@@ -1,1 +1,39 @@
-<setting-index></setting-index>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">アカウント情報</h3>
+  </div>
+  <div class="card-body">
+    <table class="table table-bordered text-left">
+      <tbody>
+        <tr>
+          <th class="fw-300">表示名</th>
+          <td><%= @line_account.display_name %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">LINEアカウント名</th>
+          <td><%= @line_account.line_name %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">LINE公式アカウントID</th>
+          <td><%= @line_account.line_user_id %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">チャネルID</th>
+          <td><%= @line_account.line_channel_id %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">チャネルシークレット</th>
+          <td><%= @line_account.line_channel_secret %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">Webhook URL</th>
+          <td><%= "#{ENV['MIX_ROOT_PATH']}/webhooks/#{@line_account.webhook_url}" %></td>
+        </tr>
+        <tr>
+          <th class="fw-300">LIFF ID</th>
+          <td><%= @line_account.liff_id %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

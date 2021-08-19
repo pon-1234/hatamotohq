@@ -76,20 +76,6 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
     t.index ["line_account_id"], name: "index_auto_responses_on_line_account_id"
   end
 
-  create_table "basic_settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_account_id"
-    t.string "company_name"
-    t.string "address"
-    t.json "business_hours"
-    t.string "phone_number"
-    t.string "website"
-    t.string "email"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["line_account_id"], name: "index_basic_settings_on_line_account_id"
-  end
-
   create_table "channel_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "channel_id"
     t.bigint "line_account_id"
@@ -163,9 +149,9 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
     t.string "line_picture_url"
     t.string "line_name"
     t.string "display_name"
-    t.string "line_client_id"
-    t.string "line_channel_access_token"
+    t.string "line_channel_id"
     t.string "line_channel_secret"
+    t.string "line_channel_access_token"
     t.string "invite_url"
     t.string "webhook_url"
     t.string "liff_id"
@@ -474,7 +460,6 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
   add_foreign_key "auto_response_messages", "auto_responses"
   add_foreign_key "auto_responses", "folders"
   add_foreign_key "auto_responses", "line_accounts"
-  add_foreign_key "basic_settings", "line_accounts"
   add_foreign_key "channel_participants", "channels"
   add_foreign_key "channel_participants", "line_accounts"
   add_foreign_key "channels", "line_friends"

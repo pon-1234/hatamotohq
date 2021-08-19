@@ -1,108 +1,156 @@
 <template>
   <div>
-    <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
-      <h3 class="hdg3">基本設定</h3>
-    </div>
-    <div class="tbl-setting">
-      <div class="btn-edit fz14">
-        <a :href="route"><i class="fas fa-edit"></i>編集</a>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">アカウント情報</h3>
       </div>
-      <table>
-        <tbody>
-        <tr>
-          <th>店舗/会社名</th>
-          <td>{{companyName}}</td>
-        </tr>
-        <tr>
-          <th>住所</th>
-          <td>{{address}}</td>
-        </tr>
-        <tr>
-          <th>営業時間</th>
-          <td>
-            <ul class="list-unstyled list-business no-mgn" v-for="day in days" :key="day.key">
-              <li v-bind:class="{ business: businessHours[day.key] && businessHours[day.key].status == true ,
-                                holiday: businessHours[day.key] && businessHours[day.key].status == false }">
-                <dl class="flex start">
-                  <dt>{{day.label}}</dt>
-                  <dd v-if="businessHours[day.key] && businessHours[day.key].status">
-                    {{businessHours[day.key].start ? businessHours[day.key].start.substring(0, 5) : "--:--"}}
-                    ～
-                    {{businessHours[day.key].end ? businessHours[day.key].end.substring(0, 5) : "--:--"}}
-                  </dd>
-                  <dd v-else-if="businessHours[day.key]">--:--～--:--</dd>
-                  <dd v-else></dd>
-                </dl>
-              </li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <th>電話番号</th>
-          <td>{{this.phoneNumber}}</td>
-        </tr>
-        <tr>
-          <th>ウェブサイト</th>
-          <td>{{this.website}}</td>
-        </tr>
-        <tr>
-          <th>メール<br class="sp-only">アドレス</th>
-          <td>{{this.email}}</td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">クライアントID</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="Email" v-model="lineChannelId">
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="">
+      <div class="col-xs-12">
+        <div class="panel panel-linebot panel-linebot01">
+          <div class="panel-body">
+            <dl class="flex group-admin01 group-linebot01">
+              <dt>
+                <span class="ja">クライアントID</span
+                ><span class="en">Client id</span>
+              </dt>
+              <dd class="fz14">{{ lineChannelId }}</dd>
+            </dl>
+            <dl class="flex group-admin01 group-linebot01">
+              <dt>
+                <span class="ja">チャネルシークレット</span
+                ><span class="en">Channel Secret</span>
+              </dt>
+              <dd class="fz14 flex ai_center">
+                <span
+                  >{{ lineChannelSecret
+                  }}<i class="fa fa-check-circle" aria-hidden="true"></i
+                ></span>
+              </dd>
+            </dl>
+            <dl class="flex group-admin01 group-linebot01">
+              <dt><span class="ja">Webhook URL</span></dt>
+              <dd class="fz14">
+                <span
+                  >{{ webhook
+                  }}<i class="fa fa-check-circle" aria-hidden="true"></i
+                ></span>
+              </dd>
+            </dl>
+            <dl class="flex group-admin01 group-linebot01">
+              <dt><span class="ja">LIFF ID</span></dt>
+              <dd class="fz14">
+                <span>{{ liff_id }}</span>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    <b-modal
+      class="modal modal-common01"
+      id="modal-update-account"
+      aria-hidden="true"
+      title="Update"
+      hide-footer
+    >
+      <div class="form-common01">
+        <div class="modal-body">
+          <div class="form-group p-0">
+            <label>Client Id</label>
+            <input
+              v-model.trim="form.lineChannelId"
+              type="text"
+              class="form-control"
+              placeholder="タイトルを入力してください"
+            />
+          </div>
+          <div class="form-group">
+            <label>チャネルシークレット</label>
+            <input
+              v-model.trim="form.lineChannelSecret"
+              type="text"
+              class="form-control"
+              placeholder="タイトルを入力してください"
+            />
+          </div>
+        </div>
+      </div>
+    </b-modal>
+
+  <div id="modal-delete-account" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="margin-top: 100px">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">アカウントを切断</h4>
+      </div>
+      <div class="modal-body">
+        <p class="message-disconnect">連携解除をするとデータは全て削除され復元できません。<br>よろしいでしょうか。</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
   </div>
 </template>
+
 <script>
+import Util from '@/core/util';
+
 export default {
-  props: ['setting', 'route'],
+  props: ['line_account'],
+  components: {},
+
   data() {
     return {
-      days: [
-        { key: 'mon', label: '月曜日' },
-        { key: 'tue', label: '火曜日' },
-        { key: 'wed', label: '水曜日' },
-        { key: 'thu', label: '木曜日' },
-        { key: 'fri', label: '金曜日' },
-        { key: 'sat', label: '土曜日' },
-        { key: 'sun', label: '日曜日' }
-      ],
-      companyName: '',
-      lineAccountId: '',
-      address: '',
-      businessHours: {},
-      phoneNumber: '',
-      website: '',
-      email: ''
+      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      lineChannelId: '',
+      lineChannelId: '',
+      lineChannelSecret: '',
+      webhook: '',
+      liff_id: '',
+      isLoading: true,
+      form: {
+        lineChannelId: '',
+        lineChannelSecret: ''
+      }
     };
   },
 
-  beforeMount() {
-    this.getBasicSetting();
-  },
-
-  mounted() {
-
+  created() {
+    this.lineChannelId = this.line_account.line_channel_id;
+    this.lineChannelSecret = this.line_account.line_channel_secret;
+    this.webhook = this.line_account.webhook_url;
+    this.liff_id = this.line_account.liff_id;
+    this.form.lineChannelId = this.line_account.line_channel_id;
+    this.form.lineChannelSecret = this.line_account.channel_secret;
   },
 
   methods: {
-    getBasicSetting() {
-      this.$store
-        .dispatch('setting/getSettingBasic')
-        .done(res => {
-          const data = res;
-          this.lineAccountId = data.line_account_id;
-          this.companyName = data.company_name;
-          this.address = data.address;
-          this.businessHours = data.business_hours;
-          this.phoneNumber = data.phone_number;
-          this.website = data.website;
-          this.email = data.email;
-        })
-        .fail(e => {
-        });
-    }
   }
 };
 </script>
+
+<style scoped lang="scss">
+  .btn-disconnect {
+    display: inline;
+    background-color: #e80000 !important;
+    color: white;
+  }
+
+  .message-disconnect {
+    color: rgb(232, 0, 0);
+  }
+</style>
