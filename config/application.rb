@@ -16,7 +16,7 @@ module Api
     config.i18n.default_locale = :ja
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
 
-    config.autoload_paths += %W[#{config.root}/lib]
+    config.autoload_paths += %W[#{config.root}/lib #{config.root}/services]
     config.action_cable.mount_path = '/cable'
     config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif]
     config.filter_parameters << :password

@@ -15,6 +15,7 @@ gem 'webpacker', '~> 4.0'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'browser', require: 'browser/browser'
+gem 'httparty'
 
 # Active Model
 gem 'activerecord_json_validator'

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     }
     namespace :user, path: Subdomain::UserConstraint.path do
       root to: 'home#index'
+      get '/bot/setup', to: 'bot#setup'
+      post '/bot/register', to: 'bot#register'
       resources :setting, only: [:index] do
         collection do
           get :edit

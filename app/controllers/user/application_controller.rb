@@ -9,6 +9,7 @@ class User::ApplicationController < ActionController::Base
   end
 
   before_action :authenticate_user!
+  before_action :ensure_bot_initialized
 
   def not_authenticated
     sign_out
@@ -18,5 +19,9 @@ class User::ApplicationController < ActionController::Base
   def authenticate_user!
     super
     # cookies.signed[:user_id] = current_user.id
+  end
+
+  def ensure_bot_initialized
+    redirect_to user_bot_setup_path unless current_user.line_account.bot_initialized
   end
 end

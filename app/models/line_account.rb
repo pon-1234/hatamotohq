@@ -5,13 +5,13 @@
 # Table name: line_accounts
 #
 #  id                        :bigint           not null, primary key
+#  bot_initialized           :boolean          default(FALSE)
 #  deleted_at                :datetime
 #  display_name              :string(255)
 #  invite_url                :string(255)
 #  line_channel_access_token :string(255)
 #  line_channel_secret       :string(255)
 #  line_name                 :string(255)
-#  line_picture_url          :string(255)
 #  note                      :text(65535)
 #  status                    :string(255)      default("inactive")
 #  webhook_url               :string(255)
