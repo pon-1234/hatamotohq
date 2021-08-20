@@ -11,7 +11,7 @@
 #  is_mute         :boolean          default(FALSE)
 #  is_pair_chat    :boolean          default(TRUE)
 #  last_message    :text(65535)
-#  last_message_at :datetime
+#  last_timestamp  :datetime
 #  slug            :string(255)
 #  status          :string(255)      default("1")
 #  title           :string(255)
@@ -34,4 +34,13 @@
 class Channel < ApplicationRecord
   belongs_to :line_account
   belongs_to :line_friend
+
+  enum status: { active: 'active', block: 'block' }, _prefix: true
+
+  after_create do
+    # Make friend to be a participant
+    ChannelParticipant.create(channel: self, participant: line_friend)
+    # Make owner of official account to be a participant
+    ChannelParticipant.create(channel: self, participant: line_account.owner)
+  end
 end

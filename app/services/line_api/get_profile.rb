@@ -14,7 +14,6 @@ class LineApi::GetProfile < LineApi::BaseRequest
     }
     response = self.class.get("/bot/profile/#{@user_id}", options)
     return nil if response.code != 200
-    json_body = JSON.parse(response.body)
-    json_body
+    JSON.parse(response.body)
   end
 end

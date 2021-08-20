@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # webhooks
+  post 'webhooks/:key', to: 'webhooks#index'
+  post 'webhooks/push', to: 'webhooks#push'
+
   # User
   constraints Subdomain::UserConstraint.new do
     # root to: 'user/home#index'
@@ -12,6 +16,7 @@ Rails.application.routes.draw do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
+
       resources :setting, only: [:index] do
         collection do
           get :edit

@@ -10,7 +10,7 @@ class CreateChannels < ActiveRecord::Migration[6.0]
       t.text :last_message
       t.string :status, default: '1'
       t.string :alias
-      t.datetime :last_message_at
+      t.datetime :last_timestamp
       t.string :slug
       t.boolean :un_read, default: true
       t.boolean :is_mute, default: false
