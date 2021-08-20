@@ -5,4 +5,5 @@ LineAccount.seed do |s|
   s.line_channel_id = '1656309479'
   s.line_channel_secret = '525b11a92f8ba129c6736016685c65b7'
   s.webhook_url = '1kVhS4vKis'
+  s.bot_initialized = true
 end

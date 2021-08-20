@@ -13,7 +13,7 @@
 #  last_message    :text(65535)
 #  last_timestamp  :datetime
 #  slug            :string(255)
-#  status          :string(255)      default("1")
+#  status          :string(255)      default(NULL)
 #  title           :string(255)
 #  un_read         :boolean          default(TRUE)
 #  created_at      :datetime         not null

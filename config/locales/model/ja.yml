@@ -1,0 +1,88 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        id: ID
+        nick_name: ニックネーム
+        name: 氏名
+        email: メール
+        password: パスワード
+        password_confirmation: パスワード（確認用）
+        weight: 重量
+        os: OS
+        birthday: 生年月日
+        avatar: アバター
+        postal_code: 郵便番号
+        phone_number: 電話番号
+      device:
+        token: トークン
+        os: OS
+      group:
+        name: 名前
+        ranking_reset: ランキングのリセットする期限
+        icon: アイコン
+        description: 説明
+      bmi_history:
+        weight: 重量
+      activity:
+        steps: 歩数
+        type: 活動タイプ
+        start_at: 開始日時
+        end_at: 終了日時
+      medical_examination:
+        exam_date: 受診日
+        place: 受診機関
+      walk_rally:
+        uid: UI
+        name: ウォークラリー名
+        description: ウォークラリー説明
+        start_at: 開始日
+        end_at: 終了日
+        document: ドキュメント
+      icon:
+        image: 画像
+      message:
+        content: 内容
+      food:
+        meal: 食事の種類
+        food_master: 食事マスター
+        volume: 分量
+      contact:
+        content: 問い合わせ内容
+        email: メールアドレス
+      announcement:
+        banner: バナー
+      reward:
+        image: 画像
+      admin:
+        name: 氏名
+        password: パスワード
+        password_confirmation: パスワード（確認用）
+        email: メールアドレス
+      food_master:
+        id: ID
+        name: メニュー名
+        volume: 分量
+        unit: 単位
+        calo: カロ
+        created_at: 登録日時
+      calo_target_master:
+        age_from: 年齢範囲開始
+        age_to: 年齢範囲終了
+        m_mets_1: METs目標
+        m_target_1: 男性目標
+        m_mets_2: METs目標
+        m_target_2: 男性目標
+        m_mets_3: METs目標
+        m_target_3: 男性目標
+        fm_mets_1: METs目標
+        fm_target_1: 女性目標
+        fm_mets_2: METs目標
+        fm_target_2: 女性目標
+        fm_mets_3: METs目標
+        fm_target_3: 女性目標
+    models:
+      user: ユーザー
+      group: グループ
+      device: デバイス
+      walk_rally: ウォークラリー

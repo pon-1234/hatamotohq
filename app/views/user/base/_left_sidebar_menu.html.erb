@@ -17,6 +17,16 @@
           </li>
         </ul>
 
+        <!-- Friend List -->
+        <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-users"></i><p>友達一覧</p>'.html_safe,
+              user_line_friends_path,
+              class: "nav-link #{controller?("user/line_friends") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
         <!-- Account Setting -->
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">

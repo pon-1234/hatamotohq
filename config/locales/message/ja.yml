@@ -1,0 +1,146 @@
+ja:
+  points:
+    create_account_completed: 登録完了
+    weekly_update_weight: 体重記録
+    daily_training_activity: 1日の運動強度（進捗ポイント付与）
+    weekly_target_achievement: 1週間の目標活動量の達成
+    daily_target_achievement: 個人目標達成
+    yearly_medical_examination_registration: 健診の受診（年1回）
+    monthly_bmi_maintenance: BMIを改善・維持
+    walk_rally_check_in: ウォークラリー特別ポイント
+    event_check_in: イベント参加
+    meal_registration: 食事登録
+    medium_intensity_exercise_or_exercise_gt_30mins: 中強度or30分以上
+    medium_intensity_exercise: 中強度
+    exercise_gt_30mins: 30分以上
+    event_attendance: イベント参加
+    survey_attendance: アンケート参加
+    system_bonus_point: ボーナスポイント
+  rules:
+    create_account_completed: 登録完了
+    weekly_update_weight: 体重記録
+    daily_training_activity: 1日の運動強度（進捗ポイント付与）
+    weekly_target_achievement: 1週間の目標活動量の達成
+    daily_target_achievement: 個人目標達成
+    yearly_medical_examination_registration: 健診の受診（年1回）
+    monthly_bmi_maintenance: BMIを改善・維持
+    walk_rally_check_in: ウォークラリー特別ポイント
+    event_check_in: イベント参加
+    meal_registration: 食事登録
+    medium_intensity_exercise_or_exercise_gt_30mins: 中強度or30分以上
+    medium_intensity_exercise: 中強度
+    exercise_gt_30mins: 30分以上
+    event_attendance: イベント参加
+    survey_attendance: アンケート参加
+  notifications:
+    create_account_completed:
+      title: 登録完了
+      message: "%{point}ポイント獲得"
+    daily_summary:
+      title: "%{date}の活動記録"
+      sns_share_text: "%{date} 今日の歩数は%{steps_count}歩、獲得ポイントは%{point}ポイントです。"
+      push:
+        title: "%{date}の活動履歴"
+        message: "%{date}\n歩数　%{steps_count}歩\nポイント　%{point}ポイント"
+    daily_target:
+      title: "%{date} あなたの目標活動量"
+      push:
+        title: 目標：1日の活動量
+        message: "%{date}＜%{point}ポイント対象＞今日の目標%{steps_count}歩（歩数換算）です。"
+    daily_target_achievement:
+      title: "%{date}の目標を達成しました"
+      sns_share_text: "%{date} 今日の個人目標を達成しました！ \n活動量%{steps_count}歩（歩数換算）\n%{point}ポイント獲得"
+      push:
+        title: 一日の目標を達成
+        message: "%{date}　＜%{point}ポイント対象＞今日の目標%{steps_count}歩（歩数換算）です。"
+    daily_activity_achievement:
+      title: "%{date}の活動量を達成しました"
+      sns_share_text: "%{date} １日の活動量目標 %{steps_count}歩（歩数換算）を達成しました！"
+      push:
+        title: "１日の活動量を達成しました"
+        message: "１日の活動量%{steps_count}歩（歩数換算）を達成しました！ %{point}ポイント獲得"
+    weekly_target_achievement:
+      title: １週間の活動量を達成しました
+      push:
+        title: 1週間目標達成
+        message: "%{date}　＜%{point}ポイント獲得＞1週間に総計%{steps_count}歩分の運動量をを達成しました！！"
+    weekly_update_weight:
+      title: 体重を量りましょう
+      message: 体重を量る
+    monthly_bmi_maintenance:
+      title: 前月と比較してBMIを改善または維持しました
+      push:
+        title: BMIを改善・維持
+        message: "%{date}＜%{point}ポイント獲得＞前月と比較してBMIを改善または維持しました。この調子で健康づくりに取り組みましょう"
+    highest_steps_count_changed:
+      title: 今月の最高歩数を更新しました
+      push:
+        title: 今月の新記録
+        message: 今月の最高歩数を更新しました
+    highest_distance_bicycle_changed:
+      title: 今月の自転車最長距離を更新しました
+      push:
+        title: 今月の新記録
+        message: 今月の自転車最長距離を更新しました
+    steps_count_gt_10k:
+      title: 1万歩突破しました
+      body: 今夜は足を労わりましょう
+      push:
+        title: 1万歩
+        message: 1万歩突破しました
+    distance_bicycle_gt_10km:
+      title: 自転車移動距離が10km突破しました
+      body: 今夜は足を労わりましょう
+      push:
+        title: 自転車移動10km
+        message: 自転車移動が10kmを突破しました
+    daily_target_80_percent:
+      title: 目標を80%突破しました
+      body: あと少しで達成です！
+      push:
+        title: 目標まであと少し
+        message: 目標まで80%を超えました！あと少しで達成です
+    steps_count_gt_5k:
+      title: 久しぶりに5000歩以上歩きました
+      push:
+        title: 久しぶりの運動
+        message: 久しぶりに5000歩以上歩きました
+    medium_intensity_exercise_or_exercise_gt_30mins:
+      title: 久しぶりに早歩きもしくは自転車での運動をしました
+      push:
+        title: 久しぶりの運動
+        message: 久しぶりに早歩きもしくは自転車での運動をしました。
+    monthly_first_time_medium_intensity_exercise:
+      title: 今月初めて早歩きもしくは自転車での運動を達成しました。
+      body: 今月も運動を心がけましょう
+      push:
+        title: 今月初めての早歩きもしくは自転車での運動
+        message: 今月初めて早歩きもしくは自転車での運動を達成しました。
+    have_no_medium_intensity_exercise:
+      title: ちょっとした運動（早歩き・自転車）をしましょう
+      body: ちょっとした運動してみませんか
+      push:
+        title: ちょっとした運動してみませんか
+        message: "%{date}　ちょっとした運動（早歩き・自転車）をしましょう"
+    excessive_exercise:
+      title: 運動と同じくらい休息も意識しましょう
+      body: いつも頑張っていますね！休息日ももうけてバランスよく運動しましょう
+      push:
+        title: 運動のしすぎに注意
+        message: 運動と同じくらい休息も意識しましょう
+    walk_rally_check_in:
+      title: ポイント獲得
+      message: "%{point}ポイント獲得しました(ウォークラリー特別ポイント)"
+    meal_registration:
+      title: 食事登録
+      message: "%{point}ポイント獲得しました(食事登録)"
+    medium_intensity_exercise:
+      title: 中強度
+      message: "早歩きもしくは自転車での運動15分を達成しました！ %{point}ポイント獲得"
+    exercise_gt_30mins:
+      title: 30分以上
+      message: "30分の連続運動を達成しました！ %{point}ポイント獲得"
+    event_attendance:
+      title: イベント参加
+      message: "%{point}ポイント獲得"
+    have_unread_messages: あなたの参加グループに未読の投稿があります

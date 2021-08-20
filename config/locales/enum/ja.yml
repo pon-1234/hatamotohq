@@ -1,0 +1,169 @@
+ja:
+  enums:
+    activity:
+      type:
+        walk: 徒歩
+        bicycling: 自転車
+        stay: 滞在
+        transport: 乗り物
+    user:
+      gender:
+        male: 男性
+        female: 女性
+        unknown: 不明
+      medical_exam_status:
+        none: 未受診
+        first: 受診済（初回申告）
+        many: 受診済（2回目以降申告）
+      os:
+        ios: iOS
+        android: Android
+      status:
+        inactive: 非アクティブ
+        active: 有効
+        blocked: 無効
+        deleting: 削除中
+    line_friend:
+      status:
+        active: 正常
+        block: ブロック
+        mute: ミュート
+    admin:
+      status:
+        active: 有効
+        blocked: 無効
+    point:
+      type:
+        quest: クエスト
+        training: トレニング
+        system: システム
+        event: イベント
+    membership:
+      status:
+        owned: オーナー
+        pending: 未承認
+        accepted: 済
+        refused: 拒否
+    walk_rally:
+      status:
+        active: 実施中
+        ended: 停止中
+        scheduled: 開催予定
+    announcement:
+      target_os:
+        all: 全て
+        android: Androidのみ
+        ios: iOSのみ
+      repeat:
+        none: なし
+        daily: 毎日
+        weekly: 毎週
+        monthly: 毎月
+        yearly: 毎年
+      type:
+        weight_registration: 体重登録の促進
+        medical_exam_registration: 健診受診の促進
+        walk_rally: ウォークラリー関係のお知らせ
+        point_exchange: ポイント交換関連のお知らせ
+        meal_registration: 食事登録
+        qrcode: QRコード読み取り
+        survey: アンケート
+        free_form: その他
+    announcement_job:
+      status:
+        done: 済
+        queued: 保留中
+        canceled: キャンセル
+    meal:
+      type:
+        breakfast: 朝食
+        lunch: 昼食
+        dinner: 夕食
+        snack: 間食
+    reward:
+      type:
+        commodity: 交換物品
+        lottery: 抽選物品
+        gift: 寄付
+    csv_export_job:
+      status:
+        pending: 保留中
+        processing: 作成中
+        done: ダウンロード可能
+        error: エラー
+      csv_type:
+        user_info: ユーザー情報
+        mets: 活動量
+        steps: 歩数
+        distance_bicycle: 自転車
+        user_target: 個人目標
+        medium_intensity_exercise: 中強度運動
+        exercise_gt_30mins: 運動３０分
+        target_23mets_per_week: 週23METs
+        weight: 体重
+        bmi: BMI
+        examination: 検診
+        point: ポイント
+        walk_rally: ウオークラリー
+    prefecture:
+      hokkaido: 北海道
+      aomori: 青森県
+      iwate: 岩手県
+      miyagi: 宮城県
+      akita: 秋田県
+      yamagata: 山形県
+      fukushima: 福島県
+      ibaraki: 茨城県
+      tochigi: 栃木県
+      gunma: 群馬県
+      saitama: 埼玉県
+      chiba: 千葉県
+      tokyo: 東京都
+      kanagawa: 神奈川県
+      niigata: 新潟県
+      toyama: 富山県
+      ishikawa: 石川県
+      fukui: 福井県
+      yamanashi: 山梨県
+      nagano: 長野県
+      gifu: 岐阜県
+      shizuoka: 静岡県
+      aichi: 愛知県
+      mie: 三重県
+      shiga: 滋賀県
+      kyoto: 京都府
+      osaka: 大阪府
+      hyogo: 兵庫県
+      nara: 奈良県
+      wakayama: 和歌山県
+      tottori: 鳥取県
+      shimane: 島根県
+      okayama: 岡山県
+      hiroshima: 広島県
+      yamaguchi: 山口県
+      tokushima: 徳島県
+      kagawa: 香川県
+      ehime: 愛媛県
+      kochi: 高知県
+      fukuoka: 福岡県
+      saga: 佐賀県
+      nagasaki: 長崎県
+      kumamoto: 熊本県
+      oita: 大分県
+      miyazaki: 宮崎県
+      kagoshima: 鹿児島県
+      okinawa: 沖縄県
+    medical_examination:
+      exam_type:
+        other: その他
+        overall: 健康診査（人間ドッグを含む）
+        cancer: がん検診
+        dental: 歯科検診
+  days:
+    mon: 月曜日
+    tue: 火曜日
+    wed: 水曜日
+    thu: 木曜日
+    fri: 金曜日
+    sat: 土曜日
+    sun: 日曜日

@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <!-- Start: search condition -->
+        <div class="card card-outline card-success">
+          <div class="card-header">
+            <h3 class="card-title">検索</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q, url: search_user_line_friends_path do |f| %>
+            <div class="d-flex">
+              <%= f.search_field :line_name_or_display_name_cont, placeholder: "ユーザー名", class: "form-control fw-300" %>
+              <%= f.select :status_eq,
+                options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
+                class: "form-control select2bs4 fw-200 ml-2" %>
+              <button class="btn btn-success btn-normal ml-2 search-button" type="submit">検索</button>
+            </div>
+            <% end %>
+          </div>
+        </div>
+        <!-- End: search condition -->
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+          <%# Header %>
+            <thead>
+              <tr>
+                <th width="10%" class="text-center"><%= sort_link(@q, :id, 'ID', default_order: :desc) %></th>
+                <th width="15%"><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
+                <th width="15%"><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
+                <th width="30%">タグ</th>
+                <th width="15%">状況</th>
+                <th width="15%"></th>
+              </tr>
+            </thead>
+            <%# Data %>
+            <tbody>
+              <% @line_friends.each do |line_friend| %>
+                <tr>
+                  <td class="text-center"><%= link_to line_friend.id, user_line_friend_path(line_friend) %></td>
+                  <td><%= line_friend.line_name %></td>
+                  <td><%= line_friend.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
+                  <td>なし</td>
+                  <td>
+                    <%= render_line_friend_status(line_friend.status).html_safe %>
+                  </td>
+                  <td class="text-center">
+                    <%= link_to user_line_friend_path(line_friend), class: "btn btn-outline-success btn-sm mr-2" do %>
+                      <i class="fas fa-eye"></i> 詳細
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%# Pagination %>
+        <div class="d-flex justify-content-center mt-4">
+          <% if @line_friends.size == 0 %>
+            <b>データはありません。</b>
+          <% end %>
+          <%= paginate @line_friends %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
