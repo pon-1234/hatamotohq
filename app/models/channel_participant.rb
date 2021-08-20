@@ -24,5 +24,5 @@
 #
 class ChannelParticipant < ApplicationRecord
   belongs_to :channel
-  belongs_to :line_friend
+  belongs_to :participant, polymorphic: true
 end

@@ -29,13 +29,13 @@ module WebhooksHelper
       # Create or reopen channel
       channel_alias = Digest::MD5.hexdigest("#{key}_#{friend_id}")
       channel = Channel.find_or_initialize_by(line_account: line_account, line_friend: line_friend)
-      channel.status = :active
+      channel.status = 'active'
       channel.avatar = line_friend.line_picture_url
       channel.title = line_friend.line_name
       channel.last_timestamp = event['timestamp'] / 1000
       channel.alias = channel_alias
       channel.un_read = 0
-      channel.save
+      channel.save!
       # Redis::publish('redis_lineFollow', json_encode([
       #     'channel' => $channel,
       #     'src' => $customer,
@@ -52,12 +52,12 @@ module WebhooksHelper
       line_friend = LineFriend.find_by(line_account: line_account, line_user_id: friend_id)
       return false if line_friend.nil?
       # Change friend status to block if existing in db
-      line_friend.status = :block
+      line_friend.status = 'block'
       line_friend.save
       # Change channel status to block
-      channel = Channel.find_by(line_account: line_account, line_friend: line_friend)
+      channel = Channel.where(line_account: line_account, line_friend: line_friend).first
       return false if channel.nil?
-      channel.status = :block
+      channel.status = 'block'
       channel.save
       # Redis::publish('redis_lineFollow', json_encode([
       #     'channel' => $channel,
