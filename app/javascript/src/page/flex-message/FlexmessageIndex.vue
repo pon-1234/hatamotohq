@@ -206,7 +206,7 @@ export default {
       }).done(() => {
         old.name = folder.name;
       }).fail((err) => {
-        this.$toastr.e(err.responseJSON.message);
+        window.toastr.error(err.responseJSON.message);
       }).always(() => {
 
       });
@@ -224,7 +224,7 @@ export default {
           this.folderLists.deleteWhere((folder) => folder.id === this.currentFolder.id);
           this.flexMessageList = [];
         }).fail((err) => {
-          this.$toastr.e(err.responseJSON.message);
+          window.toastr.error(err.responseJSON.message);
         });
       }
     },
@@ -257,7 +257,7 @@ export default {
         }).done(() => {
           this.flexMessageList.deleteWhere((flexMessage) => flexMessage.id === this.currentFlexMessage.id);
         }).fail((err) => {
-          this.$toastr.e(err.responseJSON.message);
+          window.toastr.error(err.responseJSON.message);
         });
       }
     },
@@ -267,7 +267,7 @@ export default {
       }).done(() => {
         this.indexFolders(false);
       }).fail((err) => {
-        this.$toastr.e(err.responseJSON.message);
+        window.toastr.error(err.responseJSON.message);
       });
     },
 

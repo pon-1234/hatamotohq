@@ -150,9 +150,9 @@ export default {
     errorMessage: {
       handler(val) {
         if (val.status) {
-          this.$toastr.s(val);
+          window.toastr.success(val);
         } else {
-          this.$toastr.e(val);
+          window.toastr.error(val);
         }
       },
       deep: true
@@ -209,7 +209,7 @@ export default {
             this.errorMessage = err.responseJSON.error;
           }
 
-          // this.$toastr.e(this.errorMessage);
+          // window.toastr.error(this.errorMessage);
         });
     }
   }

@@ -100,11 +100,11 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  async getFriendsTag(context, query) {
+  async getFriendsByTag(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let data = null;
     try {
-      data = await Tag.getFriendsTag(query);
+      data = await Tag.getFriendsByTag(query);
       context.commit('SET_FRIENDS_TAG', data);
     } catch (error) {
       console.log(error);

@@ -1,13 +1,4 @@
 export default {
-  editTag: (query) => {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/tags/' + query.id + '/edit'),
-      method: 'PUT',
-      data: JSON.stringify(query),
-      contentType: 'application/json'
-    });
-  },
-
   getTags: (query = {}) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags',
@@ -17,8 +8,8 @@ export default {
     });
   },
 
-  getFriendsTag: (query = {}) => {
-    return window.$.get(process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/tags/' + query.id + '/listFriendWithTag'));
+  getFriendsByTag: (query = {}) => {
+    return window.$.get(process.env.MIX_ROOT_PATH + '/user/tags/' + query.id + '/friends');
   },
 
   listTagAssigned: (query = {}) => {
@@ -27,17 +18,27 @@ export default {
 
   deleteTag: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/tags/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '/user/tags/' + query.id,
       method: 'DELETE'
     });
   },
 
   createTag: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/tags/add'),
+      url: process.env.MIX_ROOT_PATH + '/user/tags',
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
+  },
+
+  editTag: (query) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/tags/' + query.id,
+      method: 'PUT',
+      data: JSON.stringify(query),
+      contentType: 'application/json'
+    });
   }
+
 };

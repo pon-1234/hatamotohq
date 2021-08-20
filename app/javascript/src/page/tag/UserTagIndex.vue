@@ -1,6 +1,6 @@
 <template>
   <div class="tag-list">
-    <div class="">
+    <div class="row">
       <div :class="getClassLeftTag()">
         <div class="tag-header">
           <div class="group_list_head">
@@ -150,9 +150,9 @@ export default {
     success: {
       handler(val) {
         if (val.status) {
-          this.$toastr.s(val.message);
+          window.toastr.success(val.message);
         } else {
-          this.$toastr.e(val.message);
+          window.toastr.error(val.message);
         }
       },
       deep: true

@@ -119,7 +119,7 @@ export default {
       }).done((res) => {
         window.location.href = process.env.MIX_ROOT_PATH + '/template/flex-messages/folders/' + this.folder_id;
       }).fail((err) => {
-        this.$toastr.e(err.responseJSON.message);
+        window.toastr.error(err.responseJSON.message);
       });
     }
 

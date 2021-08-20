@@ -243,7 +243,7 @@ export default {
           // show dialog error
           $('#modal-alert').modal('show');
         } else if (err.status === 422) {
-          this.$toastr.e('');
+          window.toastr.error('');
         }
       });
 

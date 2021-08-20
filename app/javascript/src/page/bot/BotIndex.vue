@@ -152,9 +152,9 @@ export default {
     success: {
       handler(val) {
         if (val.status) {
-          this.$toastr.s(val.message);
+          window.toastr.success(val.message);
         } else {
-          this.$toastr.e(val.message);
+          window.toastr.error(val.message);
         }
       },
       deep: true
@@ -170,11 +170,11 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        this.$toastr.s('自動応答メッセージの変更は完成しました');
+        window.toastr.success('自動応答メッセージの変更は完成しました');
       }
 
       if (Util.getQueryParamsUrl('is_created') === 'true') {
-        this.$toastr.s('自動応答を登録しました');
+        window.toastr.success('自動応答を登録しました');
       }
     }
   },

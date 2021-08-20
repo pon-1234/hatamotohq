@@ -195,18 +195,18 @@ export default {
         }
         if (this.isCreate) {
           this.createNew(this.surveyData).then(() => {
-            this.$toastr.s('成功');
+            window.toastr.success('成功');
             location.href = this.route + '?folder_index=' + folderIndex;
           }).catch(() => {
-            this.$toastr.e('失敗');
+            window.toastr.error('失敗');
             location.href = this.route + '?folder_index=' + folderIndex;
           });
         } else {
           this.update(this.surveyData).then((res) => {
-            this.$toastr.s('成功');
+            window.toastr.success('成功');
             location.href = this.route + '?folder_index=' + folderIndex;
           }).catch(() => {
-            this.$toastr.e('失敗');
+            window.toastr.error('失敗');
             location.href = this.route + '?folder_index=' + folderIndex;
           });
         }

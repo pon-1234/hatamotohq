@@ -282,14 +282,14 @@ export default {
 
       this.$store.dispatch('richmenu/editRichmenu', data).then((res) => {
         // thanh cong
-        this.$toastr.s('編集完成しました');
+        window.toastr.success('編集完成しました');
         window.location.href = process.env.MIX_ROOT_PATH + '/richmenus';
       }).catch((err) => {
         if (err.status === 400 || err.status === 422) {
           // show dialog error
           $('#modal-alert').modal('show');
         } else if (err.status === 422) {
-          this.$toastr.e('');
+          window.toastr.error('');
         }
       });
     },

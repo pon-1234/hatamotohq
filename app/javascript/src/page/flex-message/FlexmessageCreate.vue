@@ -150,7 +150,7 @@ export default {
       }).done((res) => {
         window.location.href = process.env.MIX_ROOT_PATH + '/template/flex-messages/folders/' + this.folderId;
       }).fail((err) => {
-        this.$toastr.e(err.responseJSON.message);
+        window.toastr.error(err.responseJSON.message);
       });
     }
   }

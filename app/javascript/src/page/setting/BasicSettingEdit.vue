@@ -323,14 +323,14 @@ export default {
       if (this.isSubmit === true) { return; }
 
       this.$store.dispatch('setting/putEditSettingBasic', query).done(res => {
-        this.$toastr.s('', '成功しました');
+        window.toastr.success('', '成功しました');
         window.location.href = this.route;
       }).fail(e => {
         const errorMsg = JSON.parse(e.responseText);
         const msg = Object.keys(errorMsg).map(function(key, _) {
           return errorMsg[key];
         });
-        this.$toastr.e(msg, 'エラーを発生しました');
+        window.toastr.error(msg, 'エラーを発生しました');
       });
     },
     stateDate(day) {

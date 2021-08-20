@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="card-body">
-            <%= search_form_for @q, url: search_user_line_friends_path do |f| %>
+            <%= search_form_for @q, url: search_user_friends_path do |f| %>
             <div class="d-flex">
               <%= f.search_field :line_name_or_display_name_cont, placeholder: "ユーザー名", class: "form-control fw-300" %>
               <%= f.select :status_eq,
@@ -44,15 +44,18 @@
             <tbody>
               <% @line_friends.each do |line_friend| %>
                 <tr>
-                  <td class="text-center"><%= link_to line_friend.id, user_line_friend_path(line_friend) %></td>
-                  <td><%= line_friend.line_name %></td>
+                  <td class="text-center"><%= link_to line_friend.id, user_friend_path(line_friend) %></td>
+                  <td>
+                    <img alt="Avatar" class="user-avatar" src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>">
+                    <%= line_friend.line_name %>
+                  </td>
                   <td><%= line_friend.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
                   <td>なし</td>
                   <td>
-                    <%= render_line_friend_status(line_friend.status).html_safe %>
+                    <%= render_friend_status(line_friend.status).html_safe %>
                   </td>
                   <td class="text-center">
-                    <%= link_to user_line_friend_path(line_friend), class: "btn btn-outline-success btn-sm mr-2" do %>
+                    <%= link_to user_friend_path(line_friend), class: "btn btn-outline-success btn-sm mr-2" do %>
                       <i class="fas fa-eye"></i> 詳細
                     <% end %>
                   </td>

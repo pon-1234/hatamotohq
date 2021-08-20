@@ -146,9 +146,9 @@ export default {
     success: {
       handler(val) {
         if (val.status) {
-          this.$toastr.s(val.message);
+          window.toastr.success(val.message);
         } else {
-          this.$toastr.e(val.message);
+          window.toastr.error(val.message);
         }
       },
       deep: true
@@ -157,13 +157,13 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        this.$toastr.s('ステップ配信 メッセージの変更は完成しました');
+        window.toastr.success('ステップ配信 メッセージの変更は完成しました');
       }
 
       if (Util.getQueryParamsUrl('is_created') === 'true') {
-        this.$toastr.s('ステップ配信 メッセージを登録しました');
+        window.toastr.success('ステップ配信 メッセージを登録しました');
       } else if (Util.getQueryParamsUrl('is_created') === 'false') {
-        this.$toastr.e('シナリオの数が上限に達しています。登録できません。');
+        window.toastr.error('シナリオの数が上限に達しています。登録できません。');
       }
     }
   },

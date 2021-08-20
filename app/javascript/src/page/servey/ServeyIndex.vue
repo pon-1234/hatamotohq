@@ -227,9 +227,9 @@ export default {
         id: survey.id,
         status: survey.status
       }).done((res) => {
-        this.$toastr.s('ステータスが変更されました');
+        window.toastr.success('ステータスが変更されました');
       }).fail(() => {
-        this.$toastr.e('ステータスの変更はエラーになりました');
+        window.toastr.error('ステータスの変更はエラーになりました');
       });
     },
     modalCopy(survey) {
@@ -247,7 +247,7 @@ export default {
         }).done(() => {
           this.getSurveys();
         }).fail(() => {
-          this.$toastr.e('コピーエラー');
+          window.toastr.error('コピーエラー');
         });
       }
     },
@@ -266,7 +266,7 @@ export default {
         }).done(() => {
           this.getSurveys();
         }).fail(() => {
-          this.$toastr.e('削除エラー');
+          window.toastr.error('削除エラー');
         });
       }
     },

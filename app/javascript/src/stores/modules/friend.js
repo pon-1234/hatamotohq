@@ -55,14 +55,14 @@ export const actions = {
     });
   },
 
-  async getDetailFriend(context, query, showLoading = true) {
+  async getFriendDetail(context, query, showLoading = true) {
     if (showLoading) {
       context.dispatch('system/setLoading', true, { root: true });
     }
 
     let friendData = null;
     try {
-      friendData = await FriendApi.getDetailFriend(query);
+      friendData = await FriendApi.getFriendDetail(query);
       context.dispatch('system/setLoading', false, { root: true });
       context.commit('SET_FRIEND', friendData);
       return friendData;

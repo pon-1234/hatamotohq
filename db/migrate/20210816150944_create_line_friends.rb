@@ -9,6 +9,7 @@ class CreateLineFriends < ActiveRecord::Migration[6.0]
       t.string :line_name
       t.string :display_name
       t.string :status, default: 'active'
+      t.text :note
       t.timestamps
       t.datetime :deleted_at
     end

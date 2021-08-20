@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
     t.string "line_name"
     t.string "display_name"
     t.string "status", default: "active"
+    t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"

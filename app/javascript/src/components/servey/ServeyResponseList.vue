@@ -84,7 +84,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('friend', ['getDetailFriend']),
+    ...mapActions('friend', ['getFriendDetail']),
     fetchData() {
       this.isLoading = true;
       this.isError = false;

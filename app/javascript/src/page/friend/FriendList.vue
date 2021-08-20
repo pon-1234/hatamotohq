@@ -208,7 +208,7 @@ export default {
           $('#modal-alert').modal('show');
         }
       }).fail(e => {
-        this.$toastr.s(e.responseJSON.message[0]);
+        window.toastr.success(e.responseJSON.message[0]);
       });
     },
 

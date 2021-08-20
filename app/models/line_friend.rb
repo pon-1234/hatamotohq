@@ -9,6 +9,7 @@
 #  display_name     :string(255)
 #  line_name        :string(255)
 #  line_picture_url :string(255)
+#  note             :text(65535)
 #  status           :string(255)      default("active")
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -26,6 +27,7 @@
 class LineFriend < ApplicationRecord
   belongs_to :line_account
   has_one :channel
+  has_many :tags, through: :taggables, source: :taggable, source_type: 'Tag'
 
   enum status: { active: 'active', block: 'block', active: 'active', mute: 'mute' }, _prefix: true
 end

@@ -10,9 +10,13 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
-  getDetailFriend: (query) => {
-    query._pid = btoa('/friends/' + query.id + '/detail');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  getFriendDetail: (query) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/friends/' + 1,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
 
   editTag: (query) => {
@@ -26,7 +30,7 @@ export default {
 
   editLineInfo: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/friends/' + query.id + '/editLineInfo'),
+      url: process.env.MIX_ROOT_PATH + '/user/friends/' + query.id,
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'

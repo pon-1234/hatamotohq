@@ -98,9 +98,9 @@ export default {
     success: {
       handler(val) {
         if (val.status) {
-          this.$toastr.s(val.message);
+          window.toastr.success(val.message);
         } else {
-          this.$toastr.e(val.message);
+          window.toastr.error(val.message);
         }
       },
       deep: true
@@ -130,11 +130,11 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        this.$toastr.s('メッセージの変更は完成しました');
+        window.toastr.success('メッセージの変更は完成しました');
       }
 
       if (Util.getQueryParamsUrl('is_created') === 'true') {
-        this.$toastr.s('メッセージ配信を登録しました');
+        window.toastr.success('メッセージ配信を登録しました');
       }
     }
   },
@@ -146,7 +146,7 @@ export default {
 
   methods: {
     ...mapActions('message', ['fetchListMessageDelivers', 'setParams', 'copyMessageDelivers', 'deleteMessageDelivers']),
-    ...mapActions('tag', ['getFriendsTag']),
+    ...mapActions('tag', ['getFriendsByTag']),
     ...mapActions('tag', ['getTags']),
 
     async fetchItem() {
@@ -188,7 +188,7 @@ export default {
     },
 
     async showListFriends(id) {
-      await this.getFriendsTag({ id: id });
+      await this.getFriendsByTag({ id: id });
       $('#modal-friends-tag').modal('show');
     },
 

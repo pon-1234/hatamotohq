@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
 
-      resources :line_friends do
+      resources :friends do
         collection do
           get :search
         end
@@ -29,6 +29,9 @@ Rails.application.routes.draw do
         collection do
           get :edit
           patch :update
+        end
+        member do
+          get :friends
         end
       end
     end

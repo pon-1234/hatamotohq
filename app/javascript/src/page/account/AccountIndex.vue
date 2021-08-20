@@ -171,7 +171,7 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        this.$toastr.s('アカウントのパスワードを変更しました');
+        window.toastr.success('アカウントのパスワードを変更しました');
       }
     }
   },
@@ -179,7 +179,7 @@ export default {
   beforeMount() {
     this.getAcount();
     if (this.errMsg) {
-      this.$toastr.e(this.errMsg);
+      window.toastr.error(this.errMsg);
     }
   },
 
