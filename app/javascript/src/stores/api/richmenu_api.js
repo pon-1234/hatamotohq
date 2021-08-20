@@ -1,7 +1,7 @@
 export default {
   createRichmenu: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/richmenus/add'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/add'),
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -10,7 +10,7 @@ export default {
 
   editRichmenu: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/richmenus/' + data.id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/' + data.id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -19,19 +19,19 @@ export default {
 
   getList: (query) => {
     query._pid = btoa('/richmenus');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   getDetail: (richMenuId) => {
     const query = {
       _pid: btoa('/richmenus/' + richMenuId)
     };
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   destroyRichmenu: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/richmenus/' + data.richMenuId + '/destroy'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/' + data.richMenuId + '/destroy'),
       method: 'DELETE',
       contentType: 'application/json'
     });
@@ -42,7 +42,7 @@ export default {
     formData.append('fileData', data.file);
 
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/richmenus/uploadImage'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/uploadImage'),
       method: 'POST',
       data: formData,
       processData: false,

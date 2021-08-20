@@ -4,12 +4,12 @@ export default {
       _pid: btoa('/messageTemplates/' + query.id)
     };
 
-    return window.$.get(process.env.MIX_API_URL, qr);
+    return window.$.get(process.env.MIX_ROOT_PATH, qr);
   },
 
   sendMessage: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/messageTemplates/add'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/messageTemplates/add'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -18,7 +18,7 @@ export default {
 
   updateMessage: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/messageTemplates/' + query.id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/messageTemplates/' + query.id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -28,12 +28,12 @@ export default {
   getListMessage: (query) => {
     query._pid = btoa('/messageTemplates');
 
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   deleteMessage: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/messageTemplates/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/messageTemplates/' + query.id + '/delete'),
       method: 'DELETE'
     });
   },
@@ -43,7 +43,7 @@ export default {
       _pid: btoa('/messageTemplates/' + query.id + '/copy')
     };
 
-    return window.$.get(process.env.MIX_API_URL, qr);
+    return window.$.get(process.env.MIX_ROOT_PATH, qr);
   }
 
 };

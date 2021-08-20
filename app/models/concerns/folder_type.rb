@@ -14,6 +14,6 @@ module FolderType
       survey: 'survey',
       survey_profile: 'survey_profile',
       flex_message: 'flex_message'
-    }, _suffix: true
+    }, _prefix: :type
   end
 end

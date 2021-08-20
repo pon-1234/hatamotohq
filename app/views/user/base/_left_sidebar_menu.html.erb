@@ -27,6 +27,16 @@
           </li>
         </ul>
 
+        <!-- Tag Management -->
+        <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-tag"></i><p>タグ管理</p>'.html_safe,
+              user_tags_path,
+              class: "nav-link #{controller?("user/tags") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
         <!-- Account Setting -->
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">

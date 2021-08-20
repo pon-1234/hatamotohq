@@ -23,4 +23,5 @@
 class Folder < ApplicationRecord
   include FolderType
   belongs_to :line_account
+  has_many :tags, dependent: :destroy
 end

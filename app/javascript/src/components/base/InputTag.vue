@@ -34,7 +34,7 @@
                 <div class="tag-scroll folder-list">
                   <div v-for="(item, index) in tags_options" :key="index" :class="selected_folder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
                     <i :class="selected_folder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
-                    <span class="tag-label">{{item.name}}</span> ({{item.tags_content.length}})
+                    <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
                   </div>
                 </div>
               </div>
@@ -112,7 +112,7 @@ export default {
 
     availableOptions() {
       const criteria = this.criteria;
-      const options = this.tags_options[this.selected_folder].tags_content;
+      const options = this.tags_options[this.selected_folder].tags;
       if (criteria) {
         return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1);
       }

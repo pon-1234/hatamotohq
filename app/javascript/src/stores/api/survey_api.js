@@ -1,7 +1,7 @@
 export default {
   createNew(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/create'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/create'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -9,7 +9,7 @@ export default {
   },
   update(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + query.id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -17,7 +17,7 @@ export default {
   },
   delete(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/delete'),
       method: 'DELETE',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -26,17 +26,17 @@ export default {
 
   list(query) {
     query._pid = btoa('/surveys');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   folders(query) {
     query._pid = btoa('/folders');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   updateStatus(data) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + data.id + '/status'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/status'),
       method: 'PUT',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -44,18 +44,18 @@ export default {
   },
   getCustomers(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + query.id + '/customers')
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/customers')
     });
   },
 
   answersOfCustomer(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + query.id + '/answersOfCustomer')
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/answersOfCustomer')
     });
   },
   copy(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + query.id + '/copy'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/copy'),
       method: 'POST',
       contentType: 'application/json'
     });
@@ -63,7 +63,7 @@ export default {
 
   addSurveyProfile(data) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/addProfileTemplate'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/addProfileTemplate'),
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -72,12 +72,12 @@ export default {
 
   getSurveyProfiles(query) {
     query._pid = btoa('/surveys/getProfileTemplates');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   updateSurveyProfile(data) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/' + data.id + '/updateSurveyProfile'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/updateSurveyProfile'),
       method: 'PUT',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -86,7 +86,7 @@ export default {
 
   friendAnswers(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/surveys/friendAnswers/' + query.id)
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/friendAnswers/' + query.id)
     });
   }
 };

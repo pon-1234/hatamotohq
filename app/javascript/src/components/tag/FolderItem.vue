@@ -3,7 +3,7 @@
     <div  class="d-flex align-items-center" v-if="!isEdit || !active">
       <span>
         <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
-        {{data.name}} ({{data.tags_content_count}})
+        {{data.name}} ({{data.tags_count}})
       </span>
       <div class="dropdown" v-if="active && index!=0">
         <button type="button" class="btn dropdown-toggle btn-default action-tags" data-toggle="dropdown" aria-expanded="false">

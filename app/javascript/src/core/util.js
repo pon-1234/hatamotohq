@@ -70,7 +70,7 @@ class Util {
   }
 
   static getMediaFromLine(id) {
-    return process.env.MIX_API_URL + '?_pid=' + btoa('/channels/contentFromLine/' + id);
+    return process.env.MIX_ROOT_PATH + '?_pid=' + btoa('/channels/contentFromLine/' + id);
   }
 
   static makeUrlfromKey(key) {

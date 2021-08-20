@@ -22,6 +22,9 @@ Rails.application.routes.draw do
           get :search
         end
       end
+
+      resources :tags
+
       resources :setting, only: [:index] do
         collection do
           get :edit

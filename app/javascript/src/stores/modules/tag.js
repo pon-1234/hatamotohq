@@ -10,8 +10,8 @@ export const mutations = {
   EDIT_FOLDER(state, folder) {
     state.tags.forEach((element, index) => {
       if (element.id === folder.id) {
-        folder.tags_content_count = element.tags_content_count;
-        folder.tags_content = element.tags_content;
+        folder.tags_count = element.tags_count;
+        folder.tags = element.tags;
         state.tags.splice(index, 1, folder);
       }
     });
@@ -20,7 +20,7 @@ export const mutations = {
   EDIT_TAG(state, tag) {
     state.tags.forEach(element => {
       if (element.id === tag.folder_id) {
-        element.tags_content.forEach((el, index) => {
+        element.tags.forEach((el, index) => {
           if (el.id === tag.id) {
             el.name = tag.name;
           }
@@ -40,10 +40,10 @@ export const mutations = {
   DELETE_TAG(state, { id, folderId }) {
     state.tags.forEach((element, index) => {
       if (element.id === folderId) {
-        element.tags_content_count -= 1;
-        element.tags_content.forEach((el, index) => {
+        element.tags_count -= 1;
+        element.tags.forEach((el, index) => {
           if (el.id === id) {
-            element.tags_content.splice(index, 1);
+            element.tags.splice(index, 1);
           }
         });
       }
@@ -63,8 +63,8 @@ export const mutations = {
   },
 
   ADD_NEW_FOLDER(state, value) {
-    if (value && !value.tags_content_count) {
-      value.tags_content_count = 0;
+    if (value && !value.tags_count) {
+      value.tags_count = 0;
     }
     state.tags.push(value);
   },
@@ -72,9 +72,9 @@ export const mutations = {
   ADD_NEW_TAG(state, value) {
     state.tags.forEach(element => {
       if (element.id === value.folder_id) {
-        element.tags_content_count += 1;
+        element.tags_count += 1;
         value.line_friend_count = 0;
-        element.tags_content.splice(0, 0, value);
+        element.tags.splice(0, 0, value);
       }
     });
   }
@@ -171,8 +171,8 @@ export const actions = {
       const response = await Tag.createTag(query);
 
       if (query.type === 'folder') {
-        response.tags_content_count = 0;
-        response.tags_content = [];
+        response.tags_count = 0;
+        response.tags = [];
         context.commit('ADD_NEW_FOLDER', response);
         context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
       } else {

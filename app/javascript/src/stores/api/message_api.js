@@ -5,12 +5,12 @@ export default {
       _pid: btoa('/deliveries/distributions/' + query.id)
     };
 
-    return window.$.get(process.env.MIX_API_URL, qr);
+    return window.$.get(process.env.MIX_ROOT_PATH, qr);
   },
 
   sendMessageDelivers: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/deliveries/distributions/add'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/add'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -19,7 +19,7 @@ export default {
 
   updateMessageDelivers: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -29,12 +29,12 @@ export default {
   getListMessageDelivers: (query) => {
     query._pid = btoa('/deliveries/distributions');
 
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   deleteMessageDelivers: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/delete'),
       method: 'DELETE'
     });
   },
@@ -44,7 +44,7 @@ export default {
       _pid: btoa('/deliveries/distributions/' + query.id + '/copy')
     };
 
-    return window.$.get(process.env.MIX_API_URL, qr);
+    return window.$.get(process.env.MIX_ROOT_PATH, qr);
   }
 
 };

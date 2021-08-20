@@ -90,7 +90,7 @@
                     <td style="width: 5em; vertical-align: middle; text-align: left;">0人</td>
                     <td style="width: 10em; vertical-align: middle;">{{getCreatedAt()}}</td>
                   </tr>
-                  <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags_content"
+                  <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags"
                     :key="index"
                     @deleteTag="setSelectedTag"
                     @editTag="submitEditTag"

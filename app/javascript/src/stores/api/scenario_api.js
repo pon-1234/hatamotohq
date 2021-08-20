@@ -1,11 +1,11 @@
 export default {
   getList: (query = {}) => {
     query._pid = btoa('/talks/scenarios');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
   scenarioAdd: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/' + query.folderId + '/scenarios/add'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/' + query.folderId + '/scenarios/add'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -13,7 +13,7 @@ export default {
   },
   scenarioEdit: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -21,7 +21,7 @@ export default {
   },
   scenarioDelete: (query = {}) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/delete'),
       method: 'DELETE',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -29,7 +29,7 @@ export default {
   },
   scenarioCopy: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/copy'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/copy'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -37,19 +37,19 @@ export default {
   },
   scenarioDetail: (query) => {
     query._pid = btoa('/talks/scenarios');
-    return window.$.get(process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id));
+    return window.$.get(process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id));
   },
   getTalks: (query) => {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
   getTalk: (query) => {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id);
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
   talkAdd: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/add'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/add'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -57,7 +57,7 @@ export default {
   },
   talkAddFromTemplate: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/addFromTemplate'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/addFromTemplate'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -65,7 +65,7 @@ export default {
   },
   talkDelete: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/delete'),
       method: 'DELETE',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -73,7 +73,7 @@ export default {
   },
   talkEdit: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/edit'),
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -81,7 +81,7 @@ export default {
   },
   talksEdit: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/updateListMessage'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/updateListMessage'),
       method: 'PUT',
       data: JSON.stringify(query.data),
       contentType: 'application/json'
@@ -90,7 +90,7 @@ export default {
 
   copyMessageScenario(query) {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/copy'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/copy'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'

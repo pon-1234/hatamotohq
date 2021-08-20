@@ -2,14 +2,14 @@ export default {
 
   indexFolders: () => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders'),
       method: 'GET',
       contentType: 'application/json'
     });
   },
   editFolder: (data, folderId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/edit'),
       method: 'PUT',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -17,7 +17,7 @@ export default {
   },
   createFolder: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/create'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/create'),
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -25,28 +25,28 @@ export default {
   },
   deleteFolder: (folderId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/delete'),
       method: 'DELETE',
       contentType: 'application/json'
     });
   },
   folderFlexMessages: (folderId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message'),
       method: 'GET',
       contentType: 'application/json'
     });
   },
   detailFlexMessage: (folderId, flexMessageId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message/' + flexMessageId),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message/' + flexMessageId),
       method: 'GET',
       contentType: 'application/json'
     });
   },
   createFlexMessage: (data, folderId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message/create'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/folders/' + folderId + '/flex-message/create'),
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -54,7 +54,7 @@ export default {
   },
   editFlexMessage: (data, folderId, flexMessageId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/edit'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/edit'),
       method: 'PUT',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -62,7 +62,7 @@ export default {
   },
   deleteFlexMessage: (flexMessageId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/delete'),
       method: 'DELETE',
       contentType: 'application/json'
     });
@@ -70,14 +70,14 @@ export default {
 
   copyFlexMessage: (flexMessageId) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/copy'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/copy'),
       method: 'GET',
       contentType: 'application/json'
     });
   },
   renderFlexMesasege: (flexMessageId, source) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?source=' + source + '&' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/render'),
+      url: process.env.MIX_ROOT_PATH + '?source=' + source + '&' + '_pid=' + btoa('/flexMessages/' + flexMessageId + '/render'),
       method: 'GET'
     });
   }

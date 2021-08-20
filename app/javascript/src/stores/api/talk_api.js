@@ -1,7 +1,7 @@
 export default {
   getChannels: (query = {}) => {
     query._pid = btoa('/channels');
-    return window.$.get(process.env.MIX_API_URL, query);
+    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   getListMessages: (query) => {
@@ -9,7 +9,7 @@ export default {
       _pid: btoa('/channels/' + query.channelId + '/messages')
     };
     Object.assign(qr, query);
-    return window.$.get(process.env.MIX_API_URL, qr);
+    return window.$.get(process.env.MIX_ROOT_PATH, qr);
   },
 
   sendMedia: (query) => {
@@ -20,7 +20,7 @@ export default {
     const qr = '_pid=' + btoa('/channels/' + query.channelId + '/sendFile');
 
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + qr,
+      url: process.env.MIX_ROOT_PATH + '?' + qr,
       method: 'POST',
       data: formData,
       processData: false,
@@ -32,7 +32,7 @@ export default {
     const qr = '_pid=' + btoa('/channels/' + query.channelId + '/sendMediaFromManager');
 
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + qr,
+      url: process.env.MIX_ROOT_PATH + '?' + qr,
       method: 'POST',
       data: JSON.stringify(query),
       processData: false,
@@ -42,7 +42,7 @@ export default {
 
   unreadMessage: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_API_URL + '?' + '_pid=' + btoa('/channels/unreadMessage'),
+      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/channels/unreadMessage'),
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
