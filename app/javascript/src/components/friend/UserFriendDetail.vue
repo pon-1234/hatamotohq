@@ -4,7 +4,7 @@
       <h3 class="hdg3">プロフィール</h3>
     </div>
     <div class="profile-detail row" v-if="isRendering && friendDetail">
-      <div class="col-md-4">
+      <div class="col-lg-4">
         <div class="card card-success card-outline">
           <div class="card-body box-profile">
             <!-- profile image -->
@@ -31,7 +31,8 @@
           <!-- /.card-body -->
         </div>
         <!-- /.card -->
-
+      </div>
+      <div class="col-lg-8">
         <div class="card card-success">
           <div class="card-header">
             <h3 class="card-title">詳細情報</h3>
@@ -45,7 +46,7 @@
 
             <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
             <p class="text-muted mt-2">
-              <textarea rows="4" class="form-control" placeholder="メモ欄" v-model="friendDetail.note"></textarea>
+              <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friendDetail.note"></textarea>
             </p>
             <hr>
 
@@ -61,8 +62,7 @@
         </div>
         <!-- /.card -->
       </div>
-
-      <div class="col-md-8">
+      <div class="col-lg-12">
         <div class="tabs">
           <div @click="currentTab = '友だち情報名'" :class="{'active': currentTab === '友だち情報名'}">友だち情報名</div>
           <div @click="currentTab = '回答一覧'" :class="{'active': currentTab === '回答一覧'}">回答一覧</div>
@@ -80,8 +80,8 @@
                       <!--render-->
                       <div v-if="profile.content.type === 'file'">
                         <img style="width: 150px; margin-bottom: 10px; height: 150px; object-fit: contain"
-                            :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
-                            v-if="profile.content.content.mine_type!=null && profile.content.content.mine_type.includes('image/')">
+                          :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
+                          v-if="profile.content.content.mine_type!=null && profile.content.content.mine_type.includes('image/')">
                         <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
                         <div>
                           <input type="hidden" v-model="friendDetail.survey_profile[index].content.content.alias">
@@ -101,16 +101,16 @@
                       </div>
                       <div v-else-if="profile.content.type === 'date'" class="input-group newgroup-inputs">
                         <datetime
-                                type="date"
-                                v-model="friendDetail.survey_profile[index].content.content"
-                                :input-class="{'form-control': true}">
+                          type="date"
+                          v-model="friendDetail.survey_profile[index].content.content"
+                          :input-class="{'form-control': true}">
                         </datetime>
                       </div>
                       <div v-else style="input-group newgroup-inputs">
-                          <input type="text" placeholder="" class="form-control"
-                                @click.stop
-                                v-model="friendDetail.survey_profile[index].content.content"
-                          >
+                        <input type="text" placeholder="" class="form-control"
+                          @click.stop
+                          v-model="friendDetail.survey_profile[index].content.content"
+                        >
                       </div>
 
                     </div>
@@ -118,6 +118,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="text-center mt-5" v-if="friendDetail.survey_profile && friendDetail.survey_profile.length === 0">データがありません。</div>
           </div>
           <div v-if="currentTab === '回答一覧'" class="tbl-admin01 table-responsive fz14 text-center" style="overflow-x: scroll">
             <friend-survey-answer :friendId="friendId"></friend-survey-answer>
@@ -125,7 +126,7 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>

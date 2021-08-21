@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="status === 'active'" class="status complete">
+    <span v-if="status === 'active'" class="text-success complete">
       正常
     </span>
     <span v-else-if="status === 'block'" class="status draft">

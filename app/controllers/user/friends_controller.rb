@@ -33,7 +33,8 @@ class User::FriendsController < User::ApplicationController
     def update_friend_params
       params.permit(
         :display_name,
-        :note
+        :note,
+        tags: [:id]
       )
     end
 

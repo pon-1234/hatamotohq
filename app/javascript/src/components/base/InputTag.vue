@@ -21,54 +21,54 @@
           autocomplete="off"
           placeholder="タグ名を入力"
           ></b-form-input>
-        <div class="w-100 dropdown-tag" v-if="isFocus" :class="{top: isShowTop()}">
-            <div :class="getClassLeftTag()">
-              <div class="tag-content">
-                <table class="table table-tags-header">
-                  <thead class="thead-light">
-                    <tr>
-                      <th scope="col" style="height: 42px">フォルダ</th>
-                    </tr>
-                  </thead>
-                </table>
-                <div class="tag-scroll folder-list">
-                  <div v-for="(item, index) in tags_options" :key="index" :class="selected_folder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
-                    <i :class="selected_folder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
-                    <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div :class="getClassRightTag()">
-              <div class="tag-content">
-                <!--<table class="table table-tags-header">-->
-                  <!--<thead>-->
-                  <!--<tr>-->
-                    <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                    <!--<th v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</th>-->
-                  <!--</tr>-->
-                  <!--</thead>-->
-                <!--</table>-->
-                <div class="x-tag-header">
-                  <div class="x-btn-back">
-                    <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                  <div class="x-title"
-                       v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</div>
-                </div>
-
-                <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
-                  <div v-for="(item, index) in availableOptions"
-                    :key="index" :class="selected_tag.find(el=>el.id === item.id)? 'folder-item active':'folder-item'"
-                    @click="changeSelectedTag({item, addTag})">
-                    <span class="tag-label">{{item.name}}</span> <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span> <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span> <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
-                  </div>
-                </div>
-                <div v-else class="tag-scroll tag-empty-content text-center">
-                  空のデータ
+        <div class="w-100 dropdown-tag row" v-if="isFocus" :class="{top: isShowTop()}">
+          <div :class="getClassLeftTag()">
+            <div class="tag-content">
+              <table class="table table-tags-header">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" style="height: 42px">フォルダ</th>
+                  </tr>
+                </thead>
+              </table>
+              <div class="tag-scroll folder-list">
+                <div v-for="(item, index) in tags_options" :key="index" :class="selected_folder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
+                  <i :class="selected_folder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
+                  <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
                 </div>
               </div>
             </div>
           </div>
+          <div :class="getClassRightTag()">
+            <div class="tag-content">
+              <!--<table class="table table-tags-header">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                  <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
+                  <!--<th v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+              <!--</table>-->
+              <div class="x-tag-header">
+                <div class="x-btn-back">
+                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
+                <div class="x-title"
+                      v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</div>
+              </div>
+
+              <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
+                <div v-for="(item, index) in availableOptions"
+                  :key="index" :class="selected_tag.find(el=>el.id === item.id)? 'folder-item active':'folder-item'"
+                  @click="changeSelectedTag({item, addTag})">
+                  <span class="tag-label">{{item.name}}</span> <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span> <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span> <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
+                </div>
+              </div>
+              <div v-else class="tag-scroll tag-empty-content text-center">
+                空のデータ
+              </div>
+            </div>
+          </div>
+        </div>
       </template>
     </b-form-tags>
   </div>
