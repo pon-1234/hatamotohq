@@ -14,6 +14,8 @@ class User::FriendsController < User::ApplicationController
   end
 
   def update
+    p '------'
+    p update_friend_params
     if @friend.update(update_friend_params)
       render_success
     else
@@ -34,7 +36,7 @@ class User::FriendsController < User::ApplicationController
       params.permit(
         :display_name,
         :note,
-        tags: [:id]
+        tag_ids: []
       )
     end
 

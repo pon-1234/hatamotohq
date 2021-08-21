@@ -8,5 +8,11 @@ json.channel do
   json.alias @friend.channel.alias
   json.avatar @friend.channel.avatar
 end
+json.tags do
+  json.array! @friend.tags do |tag|
+    json.id tag.id
+    json.name tag.name
+  end
+end
 json.status @friend.status
 json.created_at @friend.created_at.strftime('%Y-%m-%d %H:%M')

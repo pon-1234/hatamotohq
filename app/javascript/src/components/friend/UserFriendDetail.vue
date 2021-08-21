@@ -210,7 +210,13 @@ export default {
     },
 
     saveInfo() {
-      this.editLineInfo(this.friendDetail).then((res) => {
+      const formData = {
+        id: this.friendDetail.id,
+        display_name: this.friendDetail.display_name,
+        note: this.friendDetail.note,
+        tag_ids: this.friendDetail.tags ? this.friendDetail.tags.map(_ => _.id) : []
+      }
+      this.editLineInfo(formData).then((res) => {
         window.toastr.success('友だち情報の更新が成功しました。');
       }).catch(() => {
         window.toastr.error('友だち情報の更新が失敗しました。');
