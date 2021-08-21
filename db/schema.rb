@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_19_023448) do
+ActiveRecord::Schema.define(version: 2021_08_21_104402) do
 
   create_table "action_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "title"
@@ -407,15 +407,15 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
     t.index ["line_account_id"], name: "index_surveys_on_line_account_id"
   end
 
-  create_table "taggables", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+  create_table "taggings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "taggable_type"
     t.bigint "taggable_id"
     t.bigint "tag_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
-    t.index ["tag_id"], name: "index_taggables_on_tag_id"
-    t.index ["taggable_type", "taggable_id"], name: "index_taggables_on_taggable_type_and_taggable_id"
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
   end
 
   create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -497,7 +497,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_023448) do
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "surveys", "folders"
   add_foreign_key "surveys", "line_accounts"
-  add_foreign_key "taggables", "tags"
+  add_foreign_key "taggings", "tags"
   add_foreign_key "tags", "folders"
   add_foreign_key "tags", "line_accounts"
   add_foreign_key "unread_messages", "channels"

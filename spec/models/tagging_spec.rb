@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: taggables
+# Table name: taggings
 #
 #  id            :bigint           not null, primary key
 #  deleted_at    :datetime
@@ -14,14 +12,15 @@
 #
 # Indexes
 #
-#  index_taggables_on_tag_id                         (tag_id)
-#  index_taggables_on_taggable_type_and_taggable_id  (taggable_type,taggable_id)
+#  index_taggings_on_tag_id                         (tag_id)
+#  index_taggings_on_taggable_type_and_taggable_id  (taggable_type,taggable_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (tag_id => tags.id)
 #
-class Taggable < ApplicationRecord
-  belongs_to :tag
-  belongs_to :taggable, polymorphic: true
+require 'rails_helper'
+
+RSpec.describe Tagging, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

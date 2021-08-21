@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
-class CreateTaggables < ActiveRecord::Migration[6.0]
+class CreateTaggings < ActiveRecord::Migration[6.0]
   def change
-    create_table :taggables do |t|
+    create_table :taggings do |t|
       t.references :taggable, polymorphic: true
       t.references :tag, foreign_key: true
       t.timestamps
