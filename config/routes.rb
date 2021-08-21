@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :folders, only: [:create]
       resources :tags
 
       resources :setting, only: [:index] do

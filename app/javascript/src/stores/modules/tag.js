@@ -1,4 +1,5 @@
 import Tag from '../api/tag_api';
+import Folder from '../api/folder_api';
 
 export const state = {
   tags: [],
@@ -168,14 +169,16 @@ export const actions = {
   async createTag(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      const response = await Tag.createTag(query);
 
       if (query.type === 'folder') {
+        const formData = { name: query.name, type: 'tag' };
+        const response = await Folder.createFolder(formData);
         response.tags_count = 0;
         response.tags = [];
         context.commit('ADD_NEW_FOLDER', response);
         context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
       } else {
+        const response = await Tag.createTag(query);
         context.commit('ADD_NEW_TAG', response);
         context.dispatch('system/setSuccess', { status: true, message: 'タグを登録しました' }, { root: true });
       }
