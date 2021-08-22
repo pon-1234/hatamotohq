@@ -1,0 +1,2 @@
+class BroadcastMessage < ApplicationRecord
+end

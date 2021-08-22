@@ -1,0 +1,2 @@
+class BroadcastTemplateMessage < ApplicationRecord
+end

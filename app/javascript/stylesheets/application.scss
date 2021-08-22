@@ -1,7 +1,15 @@
 @import "admin-lte";
 @import "toastr/build/toastr";
 @import "bootstrap-vue/dist/bootstrap-vue.css";
+@import "./emojione/emojione.min.css";
+@import "./emojione/emojionearea.min.css";
 @import "./linebot.css";
+@import "./common.css";
+@import "./perfect-scrollbar.min.css";
+@import "./register.css";
+@import "./slick/slick.css";
+@import "./slick/slick-theme.css";
+
 a.sort_link {
   color: #212529;
 }
@@ -25,6 +33,11 @@ td {
   .form-control {
     font-size: 14px !important;
   }
+}
+
+// Override default style
+.content-wrapper {
+  background: white !important;
 }
 
 .header-title {

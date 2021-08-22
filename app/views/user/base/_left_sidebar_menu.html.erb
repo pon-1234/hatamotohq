@@ -27,6 +27,16 @@
           </li>
         </ul>
 
+        <!-- Broadcast List -->
+        <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-users"></i><p>一斉配信</p>'.html_safe,
+              user_broadcasts_path,
+              class: "nav-link #{controller?("user/broadcasts") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
         <!-- Tag Management -->
         <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">

@@ -1,0 +1,2 @@
+class BroadcastTemplate < ApplicationRecord
+end

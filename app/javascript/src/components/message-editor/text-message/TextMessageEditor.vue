@@ -1,8 +1,7 @@
 <template>
   <div class="pos">
     <span class="title-editor">絵文字</span>
-    <input :name="'message-editor'+index" type="text" v-model='input_value' v-validate="'required'" style="width: 0px; height: 0px; border: none;"/>
-    <div :class="errors.first('message-editor'+index)?'is-validate':'' ">
+    <ValidationProvider name="テキスト" rules="required|max:10" v-slot="{ errors }">
       <textarea
         ref='textarea'
         class='form-control'
@@ -10,8 +9,8 @@
         placeholder='テキストを入力してください'
         v-model='input_value'
       ></textarea>
-    </div>
-    <span v-if="errors.first('message-editor'+index)" class="is-validate-label">テキストは必須です</span>
+      <span class="error-explanation">{{ errors[0] }}</span>
+    </ValidationProvider>
   </div>
 </template>
 <script>

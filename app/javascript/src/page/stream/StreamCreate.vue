@@ -1,16 +1,18 @@
 <template>
   <div class="form-common01 create-content" >
+    <ValidationObserver v-slot="{ invalid }">
     <div class="form-border">
       <div class="form-group">
-        <label>タイトル<span class="label label-sm label-danger">必須</span></label>
-        <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" id="menudiv" />
-        <span v-if="errors.first('deliver-title')" class="is-validate-label">タイトルは必須です</span>
+        <label>タイトル<required-mark/></label>
+        <ValidationProvider name="タイトル" rules="required|max:10" v-slot="{ errors }">
+          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" id="menudiv" />
+          <span class="error-explanation">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div v-if="refresh_content">
-        <div class="btn-template mb20 fz14">
-          <a class="btn-block" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
+        <div class="mb-2">
+          <a class="btn btn-secondary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
           <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
-
         </div>
         <div v-for="(item, index) in message_data.message_content_distributions"  :key="index">
           <message-content-distribution
@@ -25,14 +27,12 @@
             @moveBottomMessage="moveBottomMessage"
           />
         </div>
-        <div class="btn-common02 btn-form01 text-center fz14">
-          <a
-            class="btn-add-form01"
-            @click="addMoreMessageContentDistribution"
-            v-if="message_data.message_content_distributions.length < 5"
-          >
-            <span>追加</span>
-          </a>
+        <div
+          class="btn btn-outline-success"
+          @click="addMoreMessageContentDistribution"
+          v-if="message_data.message_content_distributions.length < 5"
+        >
+          <i class="fa fa-plus"></i> <span>追加</span>
         </div>
       </div>
     </div>
@@ -107,21 +107,18 @@
       <div class="row-form-btn d-flex">
         <button
           type="submit"
-          class="btn btn-submit btn-block"
+          class="btn btn-success"
           @click="createMessage('pending')"
+          :disabled="invalid"
         >送信</button>
         <button
           type="submit"
-          class="btn btn-draft btn-block"
+          class="btn btn-outline-success"
           @click="createMessage('draft')"
         >下書き保存</button>
-        <!-- <button
-          type="submit"
-          class="btn btn-test btn-block"
-          @click="createMessage('sending')"
-        >テスト配信</button> -->
       </div>
     </div>
+    </ValidationObserver>
     <message-preview />
   </div>
 </template>

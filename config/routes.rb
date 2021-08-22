@@ -22,8 +22,10 @@ Rails.application.routes.draw do
           get :search
         end
       end
+      resources :broadcasts
 
       resources :folders, only: [:create]
+
       resources :tags
 
       resources :setting, only: [:index] do

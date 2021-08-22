@@ -117,7 +117,7 @@ export const actions = {
     context.dispatch('system/setLoading', true, { root: true });
     let data = null;
     try {
-      data = await Tag.listTagAssigned(query);
+      data = await Tag.getTags(query);
       context.commit('SET_TAGS_ASSIGNED', data);
     } catch (error) {
       console.log(error);
