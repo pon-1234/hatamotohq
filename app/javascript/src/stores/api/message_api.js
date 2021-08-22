@@ -8,9 +8,9 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH, qr);
   },
 
-  sendMessageDelivers: (query) => {
+  createBroadcast: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/add'),
+      url: process.env.MIX_ROOT_PATH + '/user/broadcasts',
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'

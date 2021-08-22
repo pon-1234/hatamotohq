@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_21_104402) do
+ActiveRecord::Schema.define(version: 2021_08_22_034103) do
 
   create_table "action_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "title"
@@ -74,6 +74,47 @@ ActiveRecord::Schema.define(version: 2021_08_21_104402) do
     t.datetime "deleted_at"
     t.index ["folder_id"], name: "index_auto_responses_on_folder_id"
     t.index ["line_account_id"], name: "index_auto_responses_on_line_account_id"
+  end
+
+  create_table "broadcast_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "broadcast_id"
+    t.text "content", size: :long
+    t.string "message_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["broadcast_id"], name: "index_broadcast_messages_on_broadcast_id"
+  end
+
+  create_table "broadcast_template_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "broadcast_template_id"
+    t.string "message_type"
+    t.text "content", size: :long
+    t.integer "sort_order", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["broadcast_template_id"], name: "index_broadcast_template_messages_on_broadcast_template_id"
+  end
+
+  create_table "broadcast_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "line_account_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["line_account_id"], name: "index_broadcast_templates_on_line_account_id"
+  end
+
+  create_table "broadcasts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "line_account_id"
+    t.json "conditions"
+    t.string "title"
+    t.string "date_start"
+    t.boolean "deliver_now", default: true
+    t.string "status"
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["line_account_id"], name: "index_broadcasts_on_line_account_id"
   end
 
   create_table "channel_participants", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -204,16 +245,6 @@ ActiveRecord::Schema.define(version: 2021_08_21_104402) do
     t.index ["user_type", "user_id"], name: "index_login_activities_on_user_type_and_user_id"
   end
 
-  create_table "message_content_distributions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "message_distribution_id"
-    t.text "content", size: :long
-    t.string "message_type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["message_distribution_id"], name: "index_message_content_distributions_on_message_distribution_id"
-  end
-
   create_table "message_content_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "message_template_id"
     t.string "message_type"
@@ -222,20 +253,6 @@ ActiveRecord::Schema.define(version: 2021_08_21_104402) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["message_template_id"], name: "index_message_content_templates_on_message_template_id"
-  end
-
-  create_table "message_distributions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "line_account_id"
-    t.text "conditions"
-    t.string "title"
-    t.string "date_start"
-    t.boolean "deliver_now", default: true
-    t.string "status"
-    t.string "type"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.index ["line_account_id"], name: "index_message_distributions_on_line_account_id"
   end
 
   create_table "message_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -464,6 +481,10 @@ ActiveRecord::Schema.define(version: 2021_08_21_104402) do
   add_foreign_key "auto_response_messages", "auto_responses"
   add_foreign_key "auto_responses", "folders"
   add_foreign_key "auto_responses", "line_accounts"
+  add_foreign_key "broadcast_messages", "broadcasts"
+  add_foreign_key "broadcast_template_messages", "broadcast_templates"
+  add_foreign_key "broadcast_templates", "line_accounts"
+  add_foreign_key "broadcasts", "line_accounts"
   add_foreign_key "channel_participants", "channels"
   add_foreign_key "channels", "line_accounts"
   add_foreign_key "channels", "line_friends"
@@ -473,8 +494,6 @@ ActiveRecord::Schema.define(version: 2021_08_21_104402) do
   add_foreign_key "folders", "line_accounts"
   add_foreign_key "line_accounts", "users", column: "owner_id"
   add_foreign_key "line_friends", "line_accounts"
-  add_foreign_key "message_content_distributions", "message_distributions"
-  add_foreign_key "message_distributions", "line_accounts"
   add_foreign_key "message_templates", "folders"
   add_foreign_key "message_templates", "line_accounts"
   add_foreign_key "messages", "channels"

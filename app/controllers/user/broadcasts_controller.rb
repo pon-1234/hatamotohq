@@ -6,5 +6,15 @@ class User::BroadcastsController < User::ApplicationController
   end
 
   def create
+    p '--------'
+    p params
   end
+
+  private
+    def broadcast_params
+      params.permit(
+        :title,
+        :
+      )
+    end
 end

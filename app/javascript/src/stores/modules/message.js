@@ -65,11 +65,11 @@ export const actions = {
     context.commit('SET_MESSAGE', messageData);
   },
 
-  async sendMessageDelivers(context, query) {
+  async createBroadcast(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let messageIdData = null;
     try {
-      const response = await Message.sendMessageDelivers(query);
+      const response = await Message.createBroadcast(query);
 
       if (response && response.id) {
         messageIdData = response.id;

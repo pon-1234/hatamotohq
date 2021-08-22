@@ -119,7 +119,7 @@
       </div>
     </div>
     </ValidationObserver>
-    <message-preview />
+    <!-- <message-preview /> -->
   </div>
 </template>
 <script>
@@ -203,7 +203,7 @@ export default {
   },
   methods: {
     ...mapActions('message', [
-      'sendMessageDelivers',
+      'createBroadcast',
       'updateMessageDelivers',
       'fetchMessageDelivers',
       'setMessageDistributions'
@@ -292,27 +292,27 @@ export default {
 
       this.setIsSubmitChange();
       if (status !== 'draft') {
-        const result = await this.$validator.validateAll();
-        if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              var input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
-        };
+        // const result = await this.$validator.validateAll();
+        // if (!result) {
+          // $('input, textarea').each(
+          //   function(index) {
+          //     var input = $(this);
+          //     if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
+          //       $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
+          //       return false;
+          //     }
+          //   }
+          // );
+          // return;
+        // };
       }
 
       if (!this.stream_id) {
-        await this.sendMessageDelivers(this.message_data);
-        window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_created=true';
+        await this.createBroadcast(this.message_data);
+        // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_created=true';
       } else {
         await this.updateMessageDelivers(this.message_data);
-        window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_updated=true';
+        // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_updated=true';
       }
     },
 
