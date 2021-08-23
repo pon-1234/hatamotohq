@@ -21,11 +21,12 @@ export default {
   },
 
   getStickers: (query = {}) => {
-    const qr = {
-      _pid: btoa('/emojis/' + query.packageId)
-    };
-
-    return window.$.get(process.env.MIX_ROOT_PATH, qr);
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/emojis/' + query.packageId,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
 
   getGenTokenMedias: (query = {}) => {

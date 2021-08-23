@@ -1,0 +1,2 @@
+module User::EmojisHelper
+end

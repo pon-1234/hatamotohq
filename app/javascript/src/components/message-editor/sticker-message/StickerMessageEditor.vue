@@ -31,10 +31,9 @@
         </div>
       </div>
       <span v-if="errors.first('sticker-id' + index)" class="is-validate-label">スタンプは必須です</span>
-
-      <!-- Modal -->
-      <sticker-modal name="stickerModalCenter" @input="selectSticker" />
     </div>
+    <!-- Modal -->
+    <sticker-modal name="stickerModalCenter" @input="selectSticker" />
     <input type="hidden" v-model="stickerId" :name="'sticker-id' + index" v-validate="'required'" />
   </div>
 </template>

@@ -1,11 +1,11 @@
 <template>
-  <a href='#' v-bind:class='getClass()' @click='selectPackageId'>
+  <div role="button" v-bind:class='getClass()' @click='selectPackageId'>
     <img
       v-if='data.packageId'
       :src="'https://stickershop.line-scdn.net/stickershop/v1/product/'+ data.packageId+'/ANDROID/tab_on.png'"
     />
     <i v-bind:class='data.icon' v-if='data.icon'></i>
-  </a>
+  </div>
 </template>
 
 <script>

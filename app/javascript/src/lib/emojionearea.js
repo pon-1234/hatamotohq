@@ -989,9 +989,6 @@
             };
             if ($.fn.textcomplete) {
                 autocomplete();
-            } else {
-                $.getScript("https://cdn.rawgit.com/yuku-t/jquery-textcomplete/v1.3.4/dist/jquery.textcomplete.js",
-                    autocomplete);
             }
         }
 

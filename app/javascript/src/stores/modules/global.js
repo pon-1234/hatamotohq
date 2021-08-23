@@ -84,7 +84,7 @@ export const actions = {
 
   async getStickers(context, query) {
     let stickersData = [];
-    if (context.state.stickersHistories.find(item => parseInt(item.package_id) === query.packageId)) {
+    if (query.packageId && context.state.stickersHistories.find(item => parseInt(item.package_id) === query.packageId)) {
       stickersData = context.state.stickersHistories.filter(item => parseInt(item.package_id) === query.packageId);
     } else if (query.packageId) {
       context.dispatch('system/setLoading', true, { root: true });

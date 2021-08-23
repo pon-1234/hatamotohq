@@ -11,4 +11,5 @@
 #  package_id    :string(255)
 #
 class Emoji < ApplicationRecord
+  scope :by_pack, -> (pack_id) { where(package_id: pack_id) }
 end

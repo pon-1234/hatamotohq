@@ -174,8 +174,6 @@
 .modal-open>header{
     padding-right: 15px;
 }
-.modal-open>header, .modal-open .main .left-content, .modal-open .main .right-content > div:not(.modal), .modal-open .main .right-content > form, .modal-open>footer {
-}
 .modal-open .modal {
     -ms-filter: none;
     filter: blur(0px);
@@ -194,9 +192,6 @@
 .modal-common01.fade .modal-dialog {
     -webkit-transform: translateY(-54%);
     transform: translateY(-54%);
-}
-.modal-common01 .modal-dialog {
-    top: 50%;
 }
 .modal-common01 .modal-content {
     box-shadow: 0px 5px 15px rgba(0,0,0,.3);

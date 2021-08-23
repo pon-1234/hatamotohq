@@ -29,9 +29,8 @@ Rails.application.routes.draw do
       end
 
       resources :folders, only: [:create]
-
       resources :tags
-
+      get '/emojis/:pack_id', to: 'emojis#show'
       resources :setting, only: [:index] do
         collection do
           get :edit
