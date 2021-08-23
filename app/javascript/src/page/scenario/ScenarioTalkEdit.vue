@@ -24,12 +24,12 @@
           <div  v-if="refresh_content">
             <message-content-distribution
               :isDisplayTemplate="true"
-              v-for="(item, index) in talk.message_content_distributions"
+              v-for="(item, index) in talk.broadcast_messages"
               :key="index"
               v-bind:data="item"
               v-bind:index="index"
               @setTemplate="selectTemplate"
-              v-bind:countMessages="talk.message_content_distributions.length"
+              v-bind:countMessages="talk.broadcast_messages.length"
               @input="changeContent"
             />
           </div>
@@ -108,7 +108,7 @@ export default {
         name: '',
         status: true,
         priority: 1,
-        message_content_distributions: [],
+        broadcast_messages: [],
         scenario_title: '',
         delivery_timing: 0,
         time_designation: '00:00'
@@ -159,8 +159,8 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.talk.message_content_distributions[index] = content;
-      this.updateContentMessageDistributions(this.talk.message_content_distributions);
+      this.talk.broadcast_messages[index] = content;
+      this.updateContentMessageDistributions(this.talk.broadcast_messages);
     },
     getTalk() {
       const query = {
@@ -176,11 +176,11 @@ export default {
           this.talk.priority = res.priority;
           this.talk.scenario_title = res.scenario_title;
           this.talk.time_designation = res.time_designation;
-          this.talk.message_content_distributions.push({
+          this.talk.broadcast_messages.push({
             content: res.content,
             message_type_id: res.message_type.id
           });
-          this.updateContentMessageDistributions(this.talk.message_content_distributions);
+          this.updateContentMessageDistributions(this.talk.broadcast_messages);
 
           const matchDay = /([0-9]+)d/m.exec(res.delivery_timing);
           if (matchDay && matchDay.length > 1) {
@@ -239,7 +239,7 @@ export default {
         delivery_timing: this.talk.delivery_timing,
         time_designation: this.talk.time_designation,
         status: Util.stringStatus(this.talk.status),
-        ...this.talk.message_content_distributions[0],
+        ...this.talk.broadcast_messages[0],
         priority: this.talk.priority
       };
 
@@ -266,9 +266,9 @@ export default {
       // eslint-disable-next-line no-undef
       this.refresh_content = false;
 
-      this.talk.message_content_distributions.splice(0, 1, template);
+      this.talk.broadcast_messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.talk.message_content_distributions);
+      this.updateContentMessageDistributions(this.talk.broadcast_messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;

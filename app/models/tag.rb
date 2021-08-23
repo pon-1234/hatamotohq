@@ -29,6 +29,7 @@ class Tag < ApplicationRecord
   belongs_to :folder
   has_many :taggables, as: :taggable, dependent: :destroy
   has_many :friends, through: :taggable
+  has_many :broadcasts, through: :taggable
 
   validates :name, presence: true
 end

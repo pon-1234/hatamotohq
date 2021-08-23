@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(version: 2021_08_22_034103) do
 
   create_table "broadcast_messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "broadcast_id"
-    t.text "content", size: :long
-    t.string "message_type"
+    t.json "content"
+    t.string "message_type_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"

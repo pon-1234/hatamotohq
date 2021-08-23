@@ -1,9 +1,8 @@
 import '../stylesheets/application'; // This file will contain your custom CSS
 import Vue from 'vue';
-import { ValidationProvider, ValidationObserver, localize, extend } from 'vee-validate';
-import ja from '../strings/validator/ja.json';
+import VeeValidate, { Validator } from 'vee-validate';
+import ja from 'vee-validate/dist/locale/ja';
 import 'bootstrap';
-import * as rules from 'vee-validate/dist/rules';
 import Chartkick from 'vue-chartkick';
 import { Datetime } from 'vue-datetime';
 import 'vue-datetime/dist/vue-datetime.css';
@@ -62,28 +61,8 @@ Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
 // START: vee-validation configuration
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
-localize('ja', ja);
-
-Object.keys(rules).forEach(rule => {
-  extend(rule, rules[rule]);
-});
-
-extend('url', value => {
-  var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-  return !!pattern.test(value);
-});
-
-extend('email', value => {
-  var pattern = new RegExp('^\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$');
-  return !!pattern.test(value);
-});
+Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
+Validator.localize('ja', ja);
 // END: vee-validation configuration
 
 // Automatically import components

@@ -23,4 +23,26 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Broadcast < ApplicationRecord
+  CONDITION_SEND_ALL = {
+    type: all,
+    add_friend_date: {
+      start_date: nil,
+      end_date: nil
+    },
+    age: {
+      min: nil,
+      max: nil
+    },
+    gender: nil
+  }.freeze
+
+  belongs_to :line_account
+  has_many :broadcast_messages
+  has_many :taggings, as: :taggable
+  has_many :tags, through: :taggings
+
+  validates :title, presence: true, length: { maximum: 255 }
+  validates :date_start, presence: true
+  
+  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', failed: 'failed', canceled: 'canceled' }, _prefix: true
 end

@@ -29,6 +29,7 @@ class LineFriend < ApplicationRecord
   has_one :channel
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
+  has_many :line_friends, dependent: :destroy
 
   enum status: { active: 'active', block: 'block', active: 'active', mute: 'mute' }, _prefix: true
 end

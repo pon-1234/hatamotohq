@@ -1,58 +1,57 @@
 <template>
   <div class="form-common01 create-content" >
-    <ValidationObserver v-slot="{ invalid }">
-    <div class="form-border">
-      <div class="form-group">
-        <label>タイトル<required-mark/></label>
-        <ValidationProvider name="タイトル" rules="required|max:10" v-slot="{ errors }">
-          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" id="menudiv" />
-          <span class="error-explanation">{{ errors[0] }}</span>
-        </ValidationProvider>
-      </div>
-      <div v-if="refresh_content">
-        <div class="mb-2">
-          <a class="btn btn-secondary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-          <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label>タイトル<required-mark/></label>
+          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
+          <error-message :message="errors.first('deliver-title')"></error-message>
         </div>
-        <div v-for="(item, index) in message_data.message_content_distributions"  :key="index">
-          <message-content-distribution
-            :isDisplayTemplate="true"
-            v-bind:data="item"
-            v-bind:index="index"
-            v-bind:countMessages="message_data.message_content_distributions.length"
-            @input="changeContent"
-            @setTemplate="selectTemplate"
-            @remove="removeContent"
-            @moveTopMessage="moveTopMessage"
-            @moveBottomMessage="moveBottomMessage"
-          />
-        </div>
-        <div
-          class="btn btn-outline-success"
-          @click="addMoreMessageContentDistribution"
-          v-if="message_data.message_content_distributions.length < 5"
-        >
-          <i class="fa fa-plus"></i> <span>追加</span>
+        <div v-if="refresh_content">
+          <div class="mb-2">
+            <a class="btn btn-secondary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
+            <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+          </div>
+          <div v-for="(item, index) in message_data.broadcast_messages"  :key="index">
+            <message-content-distribution
+              :isDisplayTemplate="true"
+              v-bind:data="item"
+              v-bind:index="index"
+              v-bind:countMessages="message_data.broadcast_messages.length"
+              @input="changeContent"
+              @setTemplate="selectTemplate"
+              @remove="removeContent"
+              @moveTopMessage="moveTopMessage"
+              @moveBottomMessage="moveBottomMessage"
+            />
+          </div>
+          <div
+            class="btn btn-outline-success"
+            @click="addMoreMessageContentDistribution"
+            v-if="message_data.broadcast_messages.length < 5"
+          >
+            <i class="fa fa-plus"></i> <span>追加</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="form-border">
-      <div class="form-group">
-          <label>配信先</label>
-          <div class="row-form01 row-form-send mb10">
-              <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
-              <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+    <div class="card">
+      <div class="card-body">
+        <label>配信先</label>
+        <div class="row-form01 row-form-send mb10">
+            <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
+            <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+        </div>
+        <div v-show="message_data.type !== 'all'">
+          <label>タグ</label>
+          <div class="list-checkbox-tag" v-if="refresh_tag">
+            <input-tag :data="message_data.tags" @input="addListTag"/>
           </div>
-          <div class="box-form01 box-form-sort" v-show="message_data.type !== 'all'">
-              <label>タグ</label>
-              <div class="list-checkbox-tag" v-if="refresh_tag">
-                <input-tag :data="message_data.tags" @input="addListTag"/>
-              </div>
-          </div>
+        </div>
       </div>
     </div>
-    <div class="form-border" v-if="message_data.type !== 'all'">
-      <div class="form-group">
+    <div class="card" v-if="message_data.type !== 'all'">
+      <div class="card-body">
       <label>状態</label>
       <div class="row-form01 row-form-datetime">
         <label>
@@ -72,8 +71,8 @@
       </div>
     </div>
     </div>
-    <div class="form-border">
-      <div class="form-group">
+    <div class="card">
+      <div class="card-body">
         <label>配信日時</label>
         <div class="row-form01 row-form-datetime">
           <label>
@@ -103,7 +102,7 @@
       </div>
     </div>
 
-    <div class="form-bottom">
+    <div>
       <div class="row-form-btn d-flex">
         <button
           type="submit"
@@ -118,7 +117,6 @@
         >下書き保存</button>
       </div>
     </div>
-    </ValidationObserver>
     <!-- <message-preview /> -->
   </div>
 </template>
@@ -146,12 +144,12 @@ export default {
           month_birthday: [],
           message_status: false
         },
-        tags: null,
+        tags: [],
         title: '',
         date_start: moment().format('YYYY-MM-DD HH:mm'),
         created_at: moment().format('YYYY-MM-DD HH:mm'),
         status: this.MessageDeliveriesStatus.Pending,
-        message_content_distributions: [],
+        broadcast_messages: [],
         deliver_now: true,
         type: 'all'
       },
@@ -170,7 +168,7 @@ export default {
     if (this.stream_id) {
       this.message_data.id = this.stream_id;
     } else {
-      this.message_data.message_content_distributions.push({
+      this.message_data.broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -238,12 +236,12 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.message_data.message_content_distributions.splice(index, 1, content);
+      this.message_data.broadcast_messages.splice(index, 1, content);
     },
 
     removeContent({ index }) {
       this.refresh_content = false;
-      this.message_data.message_content_distributions.splice(index, 1);
+      this.message_data.broadcast_messages.splice(index, 1);
       this.$nextTick(() => {
         this.refresh_content = true;
       });
@@ -251,23 +249,23 @@ export default {
 
     moveTopMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.message_content_distributions[index];
-      this.message_data.message_content_distributions[index] = this.message_data.message_content_distributions.splice(index - 1, 1, option)[0];
+      const option = this.message_data.broadcast_messages[index];
+      this.message_data.broadcast_messages[index] = this.message_data.broadcast_messages.splice(index - 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
     moveBottomMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.message_content_distributions[index];
-      this.message_data.message_content_distributions[index] = this.message_data.message_content_distributions.splice(index + 1, 1, option)[0];
+      const option = this.message_data.broadcast_messages[index];
+      this.message_data.broadcast_messages[index] = this.message_data.broadcast_messages.splice(index + 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
 
     addMoreMessageContentDistribution() {
-      this.message_data.message_content_distributions.push({
+      this.message_data.broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -306,12 +304,15 @@ export default {
           // return;
         // };
       }
-
+      // Normalize data
+      const broadcastFormData = _.cloneDeep(this.message_data);
+      broadcastFormData.tag_ids = broadcastFormData.tags.map(_ => _.id);
+      delete broadcastFormData.tags;
       if (!this.stream_id) {
-        await this.createBroadcast(this.message_data);
+        await this.createBroadcast(broadcastFormData);
         // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_created=true';
       } else {
-        await this.updateMessageDelivers(this.message_data);
+        await this.updateMessageDelivers(broadcastFormData);
         // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_updated=true';
       }
     },
@@ -319,7 +320,7 @@ export default {
     selectTemplate(template) {
       Object.assign(this.message_data, {
         title: template.title,
-        message_content_distributions: template.contents
+        broadcast_messages: template.contents
       });
       this.refresh_content = false;
 

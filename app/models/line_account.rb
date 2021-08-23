@@ -36,6 +36,8 @@ class LineAccount < ApplicationRecord
   has_many :channels
   has_many :line_friends
 
+  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }, _prefix: true
+
   before_create do
     self.webhook_url = generate_webhook_url if self.webhook_url.nil?
   end

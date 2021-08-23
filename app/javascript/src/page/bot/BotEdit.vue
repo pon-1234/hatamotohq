@@ -61,11 +61,11 @@
 
           <message-content-distribution
             :isDisplayTemplate="true"
-            v-for="(item, index) in message_data.auto_message_content_distributions"
+            v-for="(item, index) in message_data.auto_broadcast_messages"
             :key="index"
             v-bind:data="item"
             v-bind:index="index"
-            v-bind:countMessages="message_data.auto_message_content_distributions.length"
+            v-bind:countMessages="message_data.auto_broadcast_messages.length"
             @input="changeContent"
             @setTemplate="selectTemplate"
             @remove="removeContent"
@@ -77,7 +77,7 @@
             <a
               class="btn-add-form01"
               @click="addMoreMessageContentDistribution"
-              v-if="message_data.auto_message_content_distributions.length < 3"
+              v-if="message_data.auto_broadcast_messages.length < 3"
             >
               <span>追加</span>
             </a>
@@ -208,11 +208,11 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.message_data.auto_message_content_distributions.splice(index, 1, content);
+      this.message_data.auto_broadcast_messages.splice(index, 1, content);
     },
 
     addMoreMessageContentDistribution() {
-      this.message_data.auto_message_content_distributions.push({
+      this.message_data.auto_broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -227,7 +227,7 @@ export default {
 
       Object.assign(this.message_data, {
         title: template.title,
-        auto_message_content_distributions: template.contents
+        auto_broadcast_messages: template.contents
       });
 
       this.$nextTick(() => {
@@ -236,7 +236,7 @@ export default {
     },
 
     removeContent({ index }) {
-      this.message_data.auto_message_content_distributions.splice(index, 1);
+      this.message_data.auto_broadcast_messages.splice(index, 1);
       this.refresh_content = false;
       this.$nextTick(() => {
         this.refresh_content = true;
@@ -245,16 +245,16 @@ export default {
 
     moveTopMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.auto_message_content_distributions[index];
-      this.message_data.auto_message_content_distributions[index] = this.message_data.auto_message_content_distributions.splice(index - 1, 1, option)[0];
+      const option = this.message_data.auto_broadcast_messages[index];
+      this.message_data.auto_broadcast_messages[index] = this.message_data.auto_broadcast_messages.splice(index - 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
     moveBottomMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.auto_message_content_distributions[index];
-      this.message_data.auto_message_content_distributions[index] = this.message_data.auto_message_content_distributions.splice(index + 1, 1, option)[0];
+      const option = this.message_data.auto_broadcast_messages[index];
+      this.message_data.auto_broadcast_messages[index] = this.message_data.auto_broadcast_messages.splice(index + 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });

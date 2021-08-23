@@ -10,7 +10,7 @@
               <dd v-if="data">{{data.title}}</dd>
               <dt class="d-flex align-items-center">内容</dt>
               <dd v-if="data" style="background: #ededed">
-                <div v-for="(item, index) in data.message_content_distributions" :key="index" class="message-detail-content d-flex align-items-center">
+                <div v-for="(item, index) in data.broadcast_messages" :key="index" class="message-detail-content d-flex align-items-center">
                   <view-message-content :data="item.content" ></view-message-content>
                   <text-message-type :data="item.content"/>
                 </div>

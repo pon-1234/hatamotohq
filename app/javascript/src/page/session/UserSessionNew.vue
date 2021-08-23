@@ -5,20 +5,21 @@
         <div class="card-header">
           <h3 class="card-title header-title">ログイン</h3>
         </div>
-        <ValidationObserver v-slot="{ invalid }">
         <form ref="form" @submit.prevent="onSubmit" :action="getAction()" method="post">
           <input type="hidden" name="authenticity_token" :value="csrfToken">
           <div class="card-body">
             <div class="form-group row">
               <label class="col-4">メールアドレス</label>
               <div class="col-8">
-                <input type="text" class="form-control" name="user[email]" placeholder="メールを入力してください" v-model="userData.email">
+                <input type="text" v-validate="'required|email'" data-vv-as="メール" class="form-control" name="user[email]" placeholder="メールを入力してください" v-model="userData.email">
+                <error-message :message="errors.first('user[email]')"></error-message>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-4">パスワード</label>
               <div class="col-8">
-                <input type="password" class="form-control" name="user[password]" placeholder="パスワードを入力してください" v-model="userData.password">
+                <input type="password" v-validate="'required'" data-vv-as="パースワード" class="form-control" name="user[password]" placeholder="パスワードを入力してください" v-model="userData.password">
+                <error-message :message="errors.first('user[password]')"></error-message>
               </div>
             </div>
           </div>
@@ -26,7 +27,6 @@
             <button class="btn btn-success pl-5 pr-5" type="submit" :disabled="invalid">ログイン</button>
           </div>
         </form>
-        </ValidationObserver>
       </div>
     </div>
   </div>

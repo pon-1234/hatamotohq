@@ -2,13 +2,13 @@
 #
 # Table name: broadcast_messages
 #
-#  id           :bigint           not null, primary key
-#  content      :text(4294967295)
-#  deleted_at   :datetime
-#  message_type :string(255)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  broadcast_id :bigint
+#  id              :bigint           not null, primary key
+#  content         :json
+#  deleted_at      :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  broadcast_id    :bigint
+#  message_type_id :string(255)
 #
 # Indexes
 #

@@ -46,7 +46,7 @@ export const getters = {};
 export const actions = {
 
   updateContentMessageDistributions(context, message) {
-    context.dispatch('preview/setMessages', message.auto_message_content_distributions, { root: true });
+    context.dispatch('preview/setMessages', message.auto_broadcast_messages, { root: true });
   },
 
   async getList(context, query) {

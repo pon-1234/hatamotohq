@@ -61,7 +61,7 @@
                       </ul>
                     </td>
                     <td class=" fz12">
-                      <div v-for="(item, index) in message.auto_message_content_distributions" v-bind:key="index">
+                      <div v-for="(item, index) in message.auto_broadcast_messages" v-bind:key="index">
                         <view-message-content :data="item.content" ></view-message-content>
                       </div>
                     </td>
@@ -104,7 +104,7 @@
               </dd>
               <dt>内容</dt>
               <dd>
-                <div v-for="(item, index) in messageDetail.auto_message_content_distributions" v-bind:key="index">
+                <div v-for="(item, index) in messageDetail.auto_broadcast_messages" v-bind:key="index">
                   <view-message-content :data="item.content" ></view-message-content>
                 </div>
               </dd>

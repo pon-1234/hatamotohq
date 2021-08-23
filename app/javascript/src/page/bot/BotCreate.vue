@@ -64,11 +64,11 @@
 
           <message-content-distribution
             :isDisplayTemplate="true"
-            v-for="(item, index) in message.auto_message_content_distributions"
+            v-for="(item, index) in message.auto_broadcast_messages"
             :key="index"
             v-bind:data="item"
             v-bind:index="index"
-            v-bind:countMessages="message.auto_message_content_distributions.length"
+            v-bind:countMessages="message.auto_broadcast_messages.length"
             @input="changeContent"
             @setTemplate="selectTemplate"
             @remove="removeContent"
@@ -80,7 +80,7 @@
             <a
               class="btn-add-form01"
               @click="addMoreMessageContentDistribution"
-              v-if="message.auto_message_content_distributions.length < 3"
+              v-if="message.auto_broadcast_messages.length < 3"
             >
               <span>追加</span>
             </a>
@@ -111,7 +111,7 @@ export default {
         status: 'enable',
         keywords: [],
         keyword_status: 'enable',
-        auto_message_content_distributions: [
+        auto_broadcast_messages: [
           {
             message_type_id: this.MessageTypeIds.Text,
             content: {
@@ -215,11 +215,11 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.message.auto_message_content_distributions.splice(index, 1, content);
+      this.message.auto_broadcast_messages.splice(index, 1, content);
     },
 
     addMoreMessageContentDistribution() {
-      this.message.auto_message_content_distributions.push({
+      this.message.auto_broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -234,7 +234,7 @@ export default {
 
       Object.assign(this.message, {
         title: template.title,
-        auto_message_content_distributions: template.contents
+        auto_broadcast_messages: template.contents
       });
 
       this.$nextTick(() => {
@@ -243,7 +243,7 @@ export default {
     },
 
     removeContent(index) {
-      this.message.auto_message_content_distributions.splice(index, 1);
+      this.message.auto_broadcast_messages.splice(index, 1);
       console.log('aaaa');
       this.refresh_content = false;
       this.$nextTick(() => {
@@ -253,16 +253,16 @@ export default {
 
     moveTopMessage(index) {
       this.refresh_content = false;
-      const option = this.message.auto_message_content_distributions[index];
-      this.message.auto_message_content_distributions[index] = this.message.auto_message_content_distributions.splice(index - 1, 1, option)[0];
+      const option = this.message.auto_broadcast_messages[index];
+      this.message.auto_broadcast_messages[index] = this.message.auto_broadcast_messages.splice(index - 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
     moveBottomMessage(index) {
       this.refresh_content = false;
-      const option = this.message.auto_message_content_distributions[index];
-      this.message.auto_message_content_distributions[index] = this.message.auto_message_content_distributions.splice(index + 1, 1, option)[0];
+      const option = this.message.auto_broadcast_messages[index];
+      this.message.auto_broadcast_messages[index] = this.message.auto_broadcast_messages.splice(index + 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });

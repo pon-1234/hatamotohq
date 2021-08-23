@@ -22,7 +22,7 @@
           <label>メッセージ本文</label>
             <message-content-distribution
              :isDisplayTemplate="true"
-              v-for="(item, index) in talk.message_content_distributions"
+              v-for="(item, index) in talk.broadcast_messages"
               :key="index"
               v-bind:data="item"
               v-bind:index="index"
@@ -91,7 +91,7 @@ export default {
         name: '',
         status: true,
         priority: 1,
-        message_content_distributions: [
+        broadcast_messages: [
           {
             message_type_id: MessageTypeIds.Text,
             content: {
@@ -158,8 +158,8 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.talk.message_content_distributions[index] = content;
-      this.updateContentMessageDistributions(this.talk.message_content_distributions);
+      this.talk.broadcast_messages[index] = content;
+      this.updateContentMessageDistributions(this.talk.broadcast_messages);
       // this.validate(this.talk);
     },
     async talkAdd() {
@@ -194,7 +194,7 @@ export default {
         delivery_timing: this.talk.delivery_timing,
         time_designation: this.talk.time_designation,
         status: Util.stringStatus(this.talk.status),
-        ...this.talk.message_content_distributions[0]
+        ...this.talk.broadcast_messages[0]
       };
 
       this.$store
@@ -222,9 +222,9 @@ export default {
       // eslint-disable-next-line no-undef
       this.refresh_content = false;
 
-      this.talk.message_content_distributions.splice(0, 1, template);
+      this.talk.broadcast_messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.talk.message_content_distributions);
+      this.updateContentMessageDistributions(this.talk.broadcast_messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;
