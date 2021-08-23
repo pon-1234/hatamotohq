@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       resources :folders, only: [:create]
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
+      resources :medias
       resources :setting, only: [:index] do
         collection do
           get :edit

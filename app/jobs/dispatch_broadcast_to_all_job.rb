@@ -27,13 +27,6 @@ class DispatchBroadcastToAllJob < ApplicationJob
 
   def deliver_messages(line_account, messages)
     LineApi::PostMessageBroadcast.new(line_account.line_channel_id, line_account.line_channel_secret, messages).perform
-    # $res = LineService::broadcastMessage([
-    #   'clientId' => $lineSetting->client_id,
-    #   'secretKey' => $lineSetting->channel_secret,
-    # ], [
-    #   'messages' => $messageFixed
-    # ]);
-
   end
 
   def normalize_message_content(message_content)

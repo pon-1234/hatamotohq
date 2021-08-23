@@ -155,7 +155,8 @@ export default {
   },
   computed: {
     ...mapState('global', {
-      key: state => state.key
+      media_url: state => state.media_url,
+      media_preview_url: state => state.media_preview_url
     })
   },
   created() {
@@ -291,35 +292,34 @@ export default {
         // imagemap
         await this.uploadImagemap({ file: this.inputFile });
 
-        if (this.key) {
+        if (this.media_url) {
           this.errorMessage = null;
-          this.$emit('input', { id: this.key });
+          this.$emit('input', { id: this.media_url });
         }
         this.$refs.close.click();
       } else if (this.data.type === 'richmenu') {
         // richmenu
         await this.uploadImageForRichMenu({ file: this.inputFile });
 
-        if (this.key) {
+        if (this.media_url) {
           this.errorMessage = null;
-          this.$emit('input', this.key);
+          this.$emit('input', this.media_url);
         }
         this.$refs.close.click();
       } else {
         // other
         await this.sendMedia(query);
-
-        if (this.key) {
+        if (this.media_url) {
           if (
             this.defaults.type === this.MessageType.Image ||
             this.defaults.type === this.MessageType.Video
           ) {
-            this.defaults.originalContentUrl = Util.makeUrlfromKey(this.key).originalContentUrl;
-            this.defaults.previewImageUrl = Util.makeUrlfromKey(this.key).previewImageUrl;
+            this.defaults.originalContentUrl = this.media_url;
+            this.defaults.previewImageUrl = this.media_preview_url;
           }
 
           if (this.defaults.type === this.MessageType.Audio) {
-            this.defaults.originalContentUrl = Util.makeUrlfromKey(this.key).originalContentUrl;
+            this.defaults.originalContentUrl = this.media_url;
             this.defaults.duration = this.duration;
           }
           this.$emit('input', this.defaults);

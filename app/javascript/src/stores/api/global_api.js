@@ -6,13 +6,13 @@ export default {
 
   sendMedia: (query) => {
     const formData = new FormData();
-    formData.append('fileData', query.file);
+    formData.append('file', query.file);
     if (query.duration) {
       formData.append('duration', query.duration);
     }
 
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/medias/upload'),
+      url: process.env.MIX_ROOT_PATH + '/user/medias',
       method: 'POST',
       data: formData,
       processData: false,

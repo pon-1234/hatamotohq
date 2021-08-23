@@ -26,7 +26,7 @@
 #
 class Broadcast < ApplicationRecord
   CONDITION_SEND_ALL = {
-    type: all,
+    type: 'all',
     add_friend_date: {
       start_date: nil,
       end_date: nil

@@ -6,6 +6,8 @@ export const state = {
   stickers: [],
   stickersHistories: [],
   user: null,
+  media_url: null,
+  media_preview_url: null,
   key: '',
   action_objects: null,
   action_objects_expired: null,
@@ -23,6 +25,14 @@ export const mutations = {
 
   SET_STICKERS_HISTORIES(state, stickers) {
     state.stickersHistories = state.stickersHistories.concat(stickers);
+  },
+
+  SET_MEDIA_URL(state, url) {
+    state.media_url = url;
+  },
+
+  SET_MEDIA_PREVIEW_URL (state, url) {
+    state.media_preview_url = url;
   },
 
   SET_KEY(state, key) {
@@ -68,17 +78,18 @@ export const actions = {
 
   async sendMedia(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
-    let keyData = '';
 
     const response = await Global.sendMedia({ file: query.file, duration: query.duration });
 
-    if (response && response.id) {
-      keyData = response.id;
-      context.dispatch('system/setLoading', false, { root: true });
-    }
-
     context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_KEY', keyData);
+
+    if (response && !response.id) {
+      window.toastr.error('Could not upload media');
+    }
+    const media_url = response.url;
+    const media_preview_url = response.preview_url;
+    context.commit('SET_MEDIA_URL', media_url);
+    context.commit('SET_MEDIA_PREVIEW_URL', media_preview_url);
     return response;
   },
 

@@ -11,6 +11,10 @@ module ResponseHelper
     render json: { status: :error }, status: 400
   end
 
+  def render_bad_request_with_error_message(message)
+    render json: { status: :error, message: message }, status: 400
+  end
+
   def render_server_error
     render json: { status: :error }, status: 500
   end

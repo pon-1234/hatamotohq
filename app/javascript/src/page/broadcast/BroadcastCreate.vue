@@ -290,19 +290,19 @@ export default {
 
       this.setIsSubmitChange();
       if (status !== 'draft') {
-        // const result = await this.$validator.validateAll();
-        // if (!result) {
-          // $('input, textarea').each(
-          //   function(index) {
-          //     var input = $(this);
-          //     if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-          //       $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-          //       return false;
-          //     }
-          //   }
-          // );
-          // return;
-        // };
+        const result = await this.$validator.validateAll();
+        if (!result) {
+          $('input, textarea').each(
+            function(index) {
+              var input = $(this);
+              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
+                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
+                return false;
+              }
+            }
+          );
+          return;
+        };
       }
       // Normalize data
       const broadcastFormData = _.cloneDeep(this.message_data);

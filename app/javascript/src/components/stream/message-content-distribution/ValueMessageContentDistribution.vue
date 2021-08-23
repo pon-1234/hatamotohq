@@ -13,14 +13,10 @@
       :index="index"
     />
 
-    <!-- image -->
-    <media-message-editor v-if="data.type === 'image'" :data="data" @input="changeMedia" :index="index"/>
-
-    <!-- video -->
-    <media-message-editor v-if="data.type === 'video'" :data="data" @input="changeMedia" :index="index"/>
-
-    <!-- audio -->
-    <media-message-editor v-if="data.type === 'audio'" :data="data" @input="changeMedia" :index="index"/>
+    <!-- image/video/audio -->
+    <template v-if="['image', 'video', 'audio'].includes(data.type)">
+      <media-message-editor :data="data" @input="changeMedia" :index="index"/>
+    </template>
 
     <div class="form-group" v-if="data.type == MessageType.Template || data.type == 'imagemap' || data.type == MessageType.Flex">
       <label>メッセージ通知文</label>
