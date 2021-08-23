@@ -310,10 +310,17 @@ export default {
       delete broadcastFormData.tags;
       if (!this.stream_id) {
         await this.createBroadcast(broadcastFormData);
-        // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_created=true';
+        window.toastr.success('一斉配信の作成は完了しました。');
+        setTimeout(() => {
+          window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
+        }, 1000);
+        
       } else {
         await this.updateMessageDelivers(broadcastFormData);
-        // window.location.href = process.env.MIX_ROOT_PATH + '/streams?is_updated=true';
+        window.toastr.success('一斉配信の作成は失敗しました。');
+        setTimeout(() => {
+          window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
+        }, 1000);
       }
     },
 
