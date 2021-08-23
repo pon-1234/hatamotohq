@@ -6,7 +6,9 @@
 #  conditions      :json
 #  date_start      :string(255)
 #  deleted_at      :datetime
+#  deliver_at      :datetime
 #  deliver_now     :boolean          default(TRUE)
+#  schedule_at     :datetime
 #  status          :string(255)
 #  title           :string(255)
 #  type            :string(255)

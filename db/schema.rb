@@ -111,6 +111,8 @@ ActiveRecord::Schema.define(version: 2021_08_22_034103) do
     t.boolean "deliver_now", default: true
     t.string "status"
     t.string "type"
+    t.datetime "schedule_at"
+    t.datetime "deliver_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"

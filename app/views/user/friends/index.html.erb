@@ -3,27 +3,15 @@
     <div class="card">
       <div class="card-header">
         <!-- Start: search condition -->
-        <div class="card card-outline card-success">
-          <div class="card-header">
-            <h3 class="card-title">検索</h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body">
-            <%= search_form_for @q, url: search_user_friends_path do |f| %>
-            <div class="d-flex">
-              <%= f.search_field :line_name_or_display_name_cont, placeholder: "ユーザー名", class: "form-control fw-300" %>
-              <%= f.select :status_eq,
-                options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
-                class: "form-control select2bs4 fw-200 ml-2" %>
-              <button class="btn btn-success btn-normal ml-2 search-button" type="submit">検索</button>
-            </div>
-            <% end %>
-          </div>
+        <%= search_form_for @q, url: search_user_friends_path do |f| %>
+        <div class="d-flex">
+          <%= f.search_field :line_name_or_display_name_cont, placeholder: "ユーザー名", class: "form-control fw-300" %>
+          <%= f.select :status_eq,
+            options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
+            class: "form-control select2bs4 fw-200 ml-2" %>
+          <button class="btn btn-success btn-normal ml-2 search-button" type="submit">検索</button>
         </div>
+        <% end %>
         <!-- End: search condition -->
       </div>
       <div class="card-body">

@@ -19,6 +19,10 @@ class DispatchBroadcastToAllJob < ApplicationJob
     message_contents.each do |content|
       insert_delivered_message(line_account, content)
     end
+
+    # Set broadcast's status to done
+    broadcast.status = :done
+    broadcast.save
   end
 
   def deliver_messages(line_account, messages)

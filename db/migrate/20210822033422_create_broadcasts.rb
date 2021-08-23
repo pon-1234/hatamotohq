@@ -8,6 +8,8 @@ class CreateBroadcasts < ActiveRecord::Migration[6.0]
       t.boolean :deliver_now, default: 1
       t.string :status
       t.string :type
+      t.datetime :schedule_at
+      t.datetime :deliver_at
       t.timestamps
       t.datetime :deleted_at
     end

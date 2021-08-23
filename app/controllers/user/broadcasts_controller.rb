@@ -2,6 +2,14 @@ class User::BroadcastsController < User::ApplicationController
   include User::BroadcastsHelper
 
   def index
+    @params = params[:q]
+    @q = Broadcast.order(id: :desc).ransack(params[:q])
+    @broadcasts = @q.result.page(params[:page])
+  end
+
+  def search
+    index
+    render :index
   end
 
   def new

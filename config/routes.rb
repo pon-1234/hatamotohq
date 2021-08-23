@@ -22,7 +22,11 @@ Rails.application.routes.draw do
           get :search
         end
       end
-      resources :broadcasts
+      resources :broadcasts do
+        collection do
+          get :search
+        end
+      end
 
       resources :folders, only: [:create]
 
