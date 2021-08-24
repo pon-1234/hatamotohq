@@ -16,7 +16,7 @@
         <span v-if="errors.first('button-text'+indexParent)" class="is-validate-label">テキストは必須です</span>
       </div>
 
-      <div class="row col-12" style="margin-top: 10px !important;">
+      <div class="row col-12" style="margin-top: 15px !important;">
         <div class="col-sm-3">
           <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
             <li v-for="(item, index) in defaults.actions" :key="index" :class="selected == index? 'active': ''" @click="changeSelected(index)">

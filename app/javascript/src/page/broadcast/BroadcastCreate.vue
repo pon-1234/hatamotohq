@@ -110,6 +110,7 @@
           </div>
         </div>
       </div>
+      <loading-indicator :loading="!refresh_content"></loading-indicator>
     </div>
 
 
@@ -128,7 +129,7 @@
         >下書き保存</button>
       </div>
     </div>
-    <!-- <message-preview /> -->
+    <message-preview />
   </div>
 </template>
 <script>

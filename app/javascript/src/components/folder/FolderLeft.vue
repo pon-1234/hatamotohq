@@ -36,7 +36,7 @@
         </div>
 
         <folder-left-item
-          v-for="(item, index) in data"
+          v-for="(item, index) in (data || [])"
           :type="type"
           :isPerview="isPerview"
           :data="item"

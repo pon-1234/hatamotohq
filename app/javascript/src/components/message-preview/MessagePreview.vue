@@ -1,7 +1,7 @@
 <template>
   <div class="message-preview-el">
     <div
-      class="card bg-info card-sliding"
+      class="card card-sliding"
       :style="isHidden? 'margin-bottom: -50vh;':'margin-bottom: 0px;'"
     >
       <div class="card-header bg-dark d-flex justify-content-between align-items-center">
@@ -75,6 +75,7 @@ export default {
 
   .bg-info {
     background-color: #666f86 !important;
+    color: black !important;
   }
 }
 </style>
