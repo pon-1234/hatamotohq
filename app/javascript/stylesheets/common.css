@@ -9,7 +9,6 @@ body {
     font-size: 16px;
     letter-spacing: .1em;
     line-height: 1.6;
-    font-family: "メイリオ", Meiryo, sans-serif;
     background: #fff;
 }
 small {
@@ -1243,7 +1242,6 @@ button:disabled{
 .panel-profile:before {
     content: "\f2be";
     position: absolute;
-    font-family: "メイリオ", Meiryo, sans-serif;
     right: -25px;
     bottom: -60px;
     color: rgba(255,255,255,.05);
@@ -1333,10 +1331,6 @@ button:disabled{
 
 .border {
     border: 1px solid #dee2e6!important;
-}
-
-.fade{
-    opacity: 1;
 }
 
 .my-4 {
@@ -1527,10 +1521,6 @@ h2, .h2 {
 .mt-2, .my-2 {margin-top: 0.5rem !important;}
 .mr-2, .mx-2 {margin-right: 0.5rem !important;}
 
-.modal-common01 .modal-footer {padding: 0;
-
-
-}
 
 .opacity-0 {opacity: 0 !important;}
 

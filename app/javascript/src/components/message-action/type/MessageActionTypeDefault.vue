@@ -37,7 +37,7 @@
       </action-postback>
     </div>
     <div class="text-center mt-4" v-if="messages.length < 3">
-      <button class="btn btn-add" type="button" @click="addMessage()"><i
+      <button class="btn btn-outline-success" type="button" @click="addMessage()"><i
         class="fa fa-plus"></i> アクションの追加
       </button>
     </div>

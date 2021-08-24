@@ -21,6 +21,24 @@ module User::BroadcastsHelper
     broadcast
   end
 
+  def update_broadcast(broadcast, broadcast_params)
+    conditions = broadcast_params[:conditions]
+    type = broadcast_params[:type] || 'all'
+    if type.eql?('all')
+      conditions = Broadcast::CONDITION_SEND_ALL
+    end
+
+    broadcast.title = broadcast_params[:title]
+    broadcast.conditions = conditions
+    broadcast.type = broadcast_params[:type]
+    broadcast.schedule_at = broadcast_params[:schedule_at]
+    broadcast.deliver_now = broadcast_params[:deliver_now]
+    broadcast.status = :pending
+    # Attach tags
+    broadcast.tag_ids = broadcast_params[:tag_ids]
+    broadcast
+  end
+
   def build_broadcast_messages(broadcast, broadcast_messages_params)
     # Delete old messages before adding new one
     broadcast.broadcast_messages.destroy_all

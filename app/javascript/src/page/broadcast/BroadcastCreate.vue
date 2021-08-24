@@ -1,6 +1,82 @@
 <template>
   <div class="form-common01 create-content" >
     <div class="card">
+      <div class="card-header left-border">
+        <h3 class="card-title">配信先</h3>
+      </div>
+      <div class="card-body">
+        <div class="row-form01 row-form-send mb10">
+            <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
+            <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+        </div>
+        <div v-show="message_data.type !== 'all'">
+          <label>タグ</label>
+          <div class="list-checkbox-tag" v-if="refresh_tag">
+            <input-tag :data="message_data.tags" @input="addListTag"/>
+          </div>
+        </div>
+
+        <div v-if="message_data.type !== 'all'">
+          <div>
+            <label>状態</label>
+            <div class="row-form01 row-form-datetime">
+              <label>
+                <input
+                  type="radio"
+                  name="friendCondition"
+                  value="all"
+                  v-model="message_data.conditions.type"
+                />友だちリスト全員
+              </label>
+              <label>
+                <input type="radio" name="friendCondition" value="specific"  v-model="message_data.conditions.type" />条件で絞り込む
+              </label>
+            </div>
+            <div v-if="message_data.conditions.type == 'specific'">
+              <message-condition @input="changeCondition" v-bind:data="message_data.conditions"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header left-border">
+        <h3 class="card-title">配信日時</h3>
+      </div>
+      <div class="card-body">
+        <div class="row-form01 row-form-datetime">
+          <label>
+            <input
+              type="radio"
+              name="datetime"
+              :value="true"
+              v-model="message_data.deliver_now"
+              @click="changeStartDateForNow"
+            />今すぐ配信
+          </label>
+          <label>
+            <input type="radio" name="datetime" :value="false" v-model="message_data.deliver_now"/>配信日時を指定
+          </label>
+        </div>
+        <div v-if="!message_data.deliver_now">
+          <VueCtkDateTimePicker v-model="message_data.schedule_at" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
+          <!--<datetime-->
+                  <!--type="datetime"-->
+                  <!--v-model="message_data.schedule_at"-->
+                  <!--value-zone="Asia/Tokyo"-->
+                  <!--:min-datetime="currentDate"-->
+                  <!--input-class="form-control"-->
+          <!--style="max-width: 280px">-->
+          <!--</datetime>-->
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header left-border">
+        <div class="card-title">配信メッセージ設定</div>
+      </div>
       <div class="card-body">
         <div class="form-group">
           <label>タイトル<required-mark/></label>
@@ -35,72 +111,7 @@
         </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-body">
-        <label>配信先</label>
-        <div class="row-form01 row-form-send mb10">
-            <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
-            <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
-        </div>
-        <div v-show="message_data.type !== 'all'">
-          <label>タグ</label>
-          <div class="list-checkbox-tag" v-if="refresh_tag">
-            <input-tag :data="message_data.tags" @input="addListTag"/>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card" v-if="message_data.type !== 'all'">
-      <div class="card-body">
-      <label>状態</label>
-      <div class="row-form01 row-form-datetime">
-        <label>
-          <input
-            type="radio"
-            name="friendCondition"
-            value="all"
-            v-model="message_data.conditions.type"
-          />友だちリスト全員
-        </label>
-        <label>
-          <input type="radio" name="friendCondition" value="specific"  v-model="message_data.conditions.type" />条件で絞り込む
-        </label>
-      </div>
-      <div v-if="message_data.conditions.type == 'specific'">
-        <message-condition @input="changeCondition" v-bind:data="message_data.conditions"/>
-      </div>
-    </div>
-    </div>
-    <div class="card">
-      <div class="card-body">
-        <label>配信日時</label>
-        <div class="row-form01 row-form-datetime">
-          <label>
-            <input
-              type="radio"
-              name="datetime"
-              :value="true"
-              v-model="message_data.deliver_now"
-              @click="changeStartDateForNow"
-            />今すぐ配信
-          </label>
-          <label>
-            <input type="radio" name="datetime" :value="false" v-model="message_data.deliver_now"/>配信日時を指定
-          </label>
-        </div>
-        <div v-if="!message_data.deliver_now">
-          <VueCtkDateTimePicker v-model="message_data.schedule_at" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
-          <!--<datetime-->
-                  <!--type="datetime"-->
-                  <!--v-model="message_data.schedule_at"-->
-                  <!--value-zone="Asia/Tokyo"-->
-                  <!--:min-datetime="currentDate"-->
-                  <!--input-class="form-control"-->
-          <!--style="max-width: 280px">-->
-          <!--</datetime>-->
-        </div>
-      </div>
-    </div>
+
 
     <div>
       <div class="row-form-btn d-flex">

@@ -17,9 +17,9 @@
         </div>
       </div>
       <div class="col-md-6" v-for="(item, index) in defaults.actions" :key="index">
-        <div class="panel panel-default">
-          <div class="panel-heading">選択肢{{index+1}}</div>
-          <div class="panel-body">
+        <div class="card card-outline card-success">
+          <div class="card-header"><h3 class="card-title">選択肢{{index+1}}</h3></div>
+          <div class="card-body">
             <div class="">
               <div class="col-md-12 p-0">
                 <message-action-type

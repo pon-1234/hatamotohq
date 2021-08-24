@@ -16,7 +16,7 @@
 
             <div class="my-2">
               <button type="button" class="btn-block btn btn-secondary"
-                      data-toggle="modal" :data-target="'#'+index+'_imagemapModalTemplateChoose'">
+                      data-toggle="modal" :data-target="'#'+index+'_imagemapTemplateSelectorModal'">
                 テンプレートを選択
               </button>
             </div>
@@ -80,8 +80,8 @@
       </div>
     </div>
 
-    <imagemap-modal-template-choose
-      :id="index+'_imagemapModalTemplateChoose'"
+    <imagemap-template-selector
+      :id="index+'_imagemapTemplateSelectorModal'"
       :selectionId="templateId"
       @accept="templateChange" />
     <media-modal @input="changeLineMediaAlias" :data="{type: 'imagemap'}" :id="index+'_imagemapModalUploadImage'"/>

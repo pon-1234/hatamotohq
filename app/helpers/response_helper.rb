@@ -17,6 +17,10 @@ module ResponseHelper
     render json: { status: :error, message: message }, status: 400
   end
 
+  def render_permission_denied
+    render json: { status: :error, message: 'Permission denied' }, status: 403
+  end
+
   def render_server_error
     render json: { status: :error }, status: 500
   end

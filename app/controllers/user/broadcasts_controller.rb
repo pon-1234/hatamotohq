@@ -19,8 +19,6 @@ class User::BroadcastsController < User::ApplicationController
   # GET /user/broadcasts/:id
   def show
     @broadcast = Broadcast.find(params[:id])
-    p '--------'
-    p @broadcast.to_json
     render 'user/broadcasts/show_success.json.jbuilder'
   end
 
@@ -37,15 +35,37 @@ class User::BroadcastsController < User::ApplicationController
   def create
     ApplicationRecord.transaction do
       @broadcast = build_broadcast(broadcast_params)
-      if @broadcast.save!
+      if @broadcast.save
         build_broadcast_messages(@broadcast, broadcast_params[:broadcast_messages])
         # TODO refactor me
         DispatchBroadcastJob.perform_later(@broadcast.id)
         render 'user/broadcasts/create_success.json.jbuilder'
+      else
+        render_bad_request_with_error_message(@broadcast.error.full_messages.first)
       end
     rescue => e
       logger.error e.message
-      render_bad_request_with_error_message(@broadcast.error.full_messages.first)
+      render_bad_request
+    end
+  end
+
+  # PATCH /user/broadcasts/:id
+  def update
+    ApplicationRecord.transaction do
+      @broadcast = Broadcast.find(params[:id])
+      return render_permission_denied unless @broadcast.editable?
+
+      @broadcast = update_broadcast(broadcast, broadcast_params)
+      if @broadcast.save
+        build_broadcast_messages(@broadcast, broadcast_params[:broadcast_messages])
+        # TODO refactor me
+        DispatchBroadcastJob.perform_later(@broadcast.id)
+        render 'user/broadcasts/update_success.json.jbuilder'
+      else
+      end
+    rescue => e
+      logger.error e.message
+      render_bad_request
     end
   end
 

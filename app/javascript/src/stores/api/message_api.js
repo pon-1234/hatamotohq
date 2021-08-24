@@ -20,8 +20,8 @@ export default {
 
   updateBroadcast: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/edit'),
-      method: 'PUT',
+      url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + query.id,
+      method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });

@@ -1,6 +1,5 @@
 <template>
-  <div tabindex="-1" role="dialog" aria-hidden="true" class="modal fade modal-common01"
-       :id="id">
+  <div tabindex="-1" role="dialog" aria-hidden="true" class="modal fade modal-common01" :id="id">
     <div class="modal-dialog modal-dialog-centered modal-md modal-rg" role="document">
       <div class="modal-content h-100 p-0">
         <div class="modal-header flex-shrink-0"><h5 class="mb-0">テンプレートを選択</h5>
