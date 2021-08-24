@@ -125,7 +125,7 @@ import { mapActions, mapState } from 'vuex';
 import moment from 'moment';
 
 export default {
-  props: ['stream_id'],
+  props: ['broadcast_id'],
   data() {
     return {
       message_data: {
@@ -164,9 +164,9 @@ export default {
   },
 
   created() {
-    console.log(this.stream_id);
-    if (this.stream_id) {
-      this.message_data.id = this.stream_id;
+    console.log(this.broadcast_id);
+    if (this.broadcast_id) {
+      this.message_data.id = this.broadcast_id;
     } else {
       this.message_data.broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
@@ -202,7 +202,7 @@ export default {
   methods: {
     ...mapActions('message', [
       'createBroadcast',
-      'updateMessageDelivers',
+      'updateBroadcast',
       'fetchMessageDelivers',
       'setMessageDistributions'
     ]),
@@ -215,9 +215,9 @@ export default {
     ]),
 
     async fetchItem() {
-      if (this.stream_id) {
+      if (this.broadcast_id) {
         this.refresh_tag = false;
-        await this.fetchMessageDelivers({ id: this.stream_id });
+        await this.fetchMessageDelivers({ id: this.broadcast_id });
 
         if (this.message.status === 'done') {
           window.location.href = process.env.MIX_ROOT_PATH + '/streams';
@@ -308,20 +308,31 @@ export default {
       const broadcastFormData = _.cloneDeep(this.message_data);
       broadcastFormData.tag_ids = broadcastFormData.tags.map(_ => _.id);
       delete broadcastFormData.tags;
-      if (!this.stream_id) {
-        await this.createBroadcast(broadcastFormData);
-        window.toastr.success('一斉配信の作成は完了しました。');
-        setTimeout(() => {
-          window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
-        }, 1000);
-        
+      if (!this.broadcast_id) {
+        const broadcastId = await this.createBroadcast(broadcastFormData);
+        if (broadcastId) this.onCreateSuccess();
+        if (!broadcastId) this.onCreateFailure();
       } else {
-        await this.updateMessageDelivers(broadcastFormData);
+        await this.updateBroadcast(broadcastFormData);
         window.toastr.success('一斉配信の作成は失敗しました。');
         setTimeout(() => {
           window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
-        }, 1000);
+        }, 500);
       }
+    },
+
+    // Handle broadcast creation response
+    onCreateSuccess() {
+      window.toastr.success('一斉配信の作成は完了しました。');
+      setTimeout(() => {
+        window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
+      }, 500);
+    },
+    onCreateFailure() {
+      window.toastr.error('一斉配信の作成は失敗しました。');
+      setTimeout(() => {
+        window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts/new';
+      }, 1000);
     },
 
     selectTemplate(template) {

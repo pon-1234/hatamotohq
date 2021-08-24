@@ -1,0 +1,2 @@
+module User::ActionObjectsHelper
+end

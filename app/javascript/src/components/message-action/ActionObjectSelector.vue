@@ -56,9 +56,7 @@ export default {
     },
 
     emitObj(value) {
-      let val = this.action_objects.firstWhere((item) => {
-        return item.id === value;
-      });
+      let val = this.action_objects.find(item => item.id === value);
 
       if (!val) {
         val = { type: 'none' };

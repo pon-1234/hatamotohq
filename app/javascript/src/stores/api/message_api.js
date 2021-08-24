@@ -17,7 +17,7 @@ export default {
     });
   },
 
-  updateMessageDelivers: (query) => {
+  updateBroadcast: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/edit'),
       method: 'PUT',

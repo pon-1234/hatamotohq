@@ -2,19 +2,19 @@
 
 packages = [
   {
-    id: 11537,
-    start: 52002734,
-    end: 52002773
+    'id': 11537,
+    'start': 52002734,
+    'end': 52002773
   },
   {
-    id: 11538,
-    start: 51626494,
-    end: 51626533
+    'id': 11538,
+    'start': 51626494,
+    'end': 51626533
   },
   {
-    id: 11539,
-    start: 52114110,
-    end: 52114149
+    'id': 11539,
+    'start': 52114110,
+    'end': 52114149
   }
 ]
 
@@ -31,4 +31,11 @@ packages.each do |package|
     index += 1
   end
 end
-Emoji.import! emojis
+
+emojis.each do |emoji|
+  Emoji.seed do |s|
+    s.id = emoji[:id]
+    s.package_id = emoji[:package_id]
+    s.line_emoji_id = emoji[:line_emoji_id]
+  end
+end

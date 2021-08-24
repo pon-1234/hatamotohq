@@ -32,7 +32,7 @@
         class="btn btn-submit btn-block"
         @click="createMessage"
       >保存</button>
-      <div v-if="stream_id"><a class="btn btn-delete btn-block" data-toggle="modal" data-target="#modal-confirm">削除</a></div>
+      <div v-if="broadcast_id"><a class="btn btn-delete btn-block" data-toggle="modal" data-target="#modal-confirm">削除</a></div>
     </div>
     <message-preview />
     <modal-confirm v-bind:title="'このメッセージを削除します。よろしいですか？'" type='delete' @input="deleteMessageTemplate"/>
@@ -43,7 +43,7 @@ import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
-  props: ['stream_id'],
+  props: ['broadcast_id'],
   provide() {
     return { parentValidator: this.$validator };
   },
@@ -59,8 +59,8 @@ export default {
     };
   },
   created() {
-    if (this.stream_id) {
-      this.message_data.id = this.stream_id;
+    if (this.broadcast_id) {
+      this.message_data.id = this.broadcast_id;
     } else {
       this.message_data.message_content_distribution_templates.push({
         message_type_id: this.MessageTypeIds.Text,
@@ -148,9 +148,9 @@ export default {
     },
 
     async fetchItem() {
-      if (this.stream_id) {
+      if (this.broadcast_id) {
         this.refresh_tag = false;
-        await this.getMessageById({ id: this.stream_id });
+        await this.getMessageById({ id: this.broadcast_id });
         Object.assign(this.message_data, this.message);
         console.log(this.message_data);
 
@@ -189,13 +189,13 @@ export default {
       }
 
       const makeValue = {
-        id: this.stream_id,
+        id: this.broadcast_id,
         title: this.message.title,
         folder_id: Util.getQueryParamsUrl('folder_id'),
         messages: this.message.message_content_distribution_templates
       };
 
-      if (!this.stream_id) {
+      if (!this.broadcast_id) {
         await this.sendMessage(makeValue);
         window.location.href = process.env.MIX_ROOT_PATH + '/template/streams?is_created=true';
       } else {
@@ -205,7 +205,7 @@ export default {
     },
 
     async deleteMessageTemplate() {
-      await this.deleteMessage({ id: this.stream_id });
+      await this.deleteMessage({ id: this.broadcast_id });
       window.location.href = process.env.MIX_ROOT_PATH + '/template/streams';
     }
   }

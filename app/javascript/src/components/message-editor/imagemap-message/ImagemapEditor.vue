@@ -4,7 +4,7 @@
       <!--Editor-->
       <div>
         <div class="d-flex-sm" style="justify-content: center">
-          <div class="w-fix-260"  >
+          <div class="w-fix-260" style="height: 260px !important;">
             <input type="text" v-model="backgroundUrl" :name="'image-url'+index" v-validate="'required'" style="width: 0px; height: 0px; border: none;"/>
 
             <imagemap-view
@@ -59,8 +59,9 @@
                         <div class="card-body pt-0 accordion-0 center">
                           <div>
                             <message-action-type
+                              :index="index"
                               :value="item.action"
-                              :supports="['message','uri', 'survey']"
+                              :supports="['message', 'uri', 'survey']"
                               :labelRequired="false"
                               :showTitle="false"
                               :name="'imagemap_action_'+index"

@@ -98,7 +98,6 @@
           <button type="button" class="btn btn-submit" @click="acceptAction" data-dismiss="modal">選択
           </button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
-
         </div>
       </div>
     </div>

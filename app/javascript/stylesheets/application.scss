@@ -123,6 +123,15 @@ td {
   }
 }
 
+@for $i from 1 through 300 {
+  $height: 0px + $i;
+  .fh-#{$i} {
+    height: $height;
+    min-height: $height;
+    max-height: $height;
+  }
+}
+
 @for $i from 101 through 300 {
   $width: 0px + $i;
   .mw-#{$i} {

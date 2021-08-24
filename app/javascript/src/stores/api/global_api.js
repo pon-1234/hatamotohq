@@ -35,8 +35,12 @@ export default {
   },
 
   getActionObjects: (query) => {
-    query._pid = btoa('/actionObjects');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/action_objects',
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
 
   getBadge: () => {
