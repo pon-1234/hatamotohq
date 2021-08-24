@@ -3,7 +3,7 @@
     <div v-if="showTitle" style="display: contents">
       <label class="w-100 mt20">
         ラベル
-        <span class="label label-sm label-danger" v-if="labelRequired">必須</span>
+        <required-mark v-if="labelRequired"/>
       </label>
       <div class="w-100">
         <input :name="name+'_label'" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="data.label"
@@ -13,7 +13,7 @@
     </div>
     <label class="w-100 mt20">
       TEL
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
     <div class="w-100">
       <input :name="name+'_value'" type="text" maxlength="1000" v-model="data.uri" placeholder="09044445555"  class="w-100 form-control" @blur="changeValueUrl" v-validate="{required: true, regex:  getRegexTel()}" />

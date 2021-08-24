@@ -1,11 +1,12 @@
 export default {
 
-  getMessageDelivers: (query) => {
-    const qr = {
-      _pid: btoa('/deliveries/distributions/' + query.id)
-    };
-
-    return window.$.get(process.env.MIX_ROOT_PATH, qr);
+  getBroadcast: (query) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + query.id,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
 
   createBroadcast: (query) => {

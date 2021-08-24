@@ -7,7 +7,7 @@
     <div class="form-common01">
       <div class="form-border">
         <div class="form-group">
-          <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+          <label>タイトル<required-mark/></label>
           <input type="text" name="bot-title" class="form-control" v-model="message.title" placeholder="タイトルを入力してください" v-validate="'required'">
           <span v-if="errors.first('bot-title')" class="is-validate-label">タイトルは必須です</span>
         </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="form-border">
         <div class="form-group">
-          <label class="mb10">キーワード<span class="label label-sm label-danger">必須</span></label>
+          <label class="mb10">キーワード<required-mark/></label>
           <!-- <div class="flex start ai_center mb10">
             <div class="toggle-switch btn-keyword02">
               <input id="keyword-onoff-setting02" class="toggle-input" type="checkbox"
@@ -40,7 +40,7 @@
                 <span></span>
               </label>
             </div>
-            <p class="keyword-status no-mgn"  v-if="message.keyword_status =='enable'">キーワードを有効にする<span class="label label-sm label-danger">必須</span></p>
+            <p class="keyword-status no-mgn"  v-if="message.keyword_status =='enable'">キーワードを有効にする<required-mark/></p>
             <p class="keyword-status no-mgn"  v-else>キーワードを無効にする</p>
           </div> -->
           <b-form-tags class="bot-tag" input-id="tags-basic" v-model="message.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"

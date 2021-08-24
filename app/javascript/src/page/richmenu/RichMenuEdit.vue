@@ -10,7 +10,7 @@
         <div class="form-common01">
             <div class="form-border">
                 <div class="form-group">
-                    <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+                    <label>タイトル<required-mark/></label>
                     <input v-model.trim="title" name="title" type="text" class="form-control" placeholder="タイトルを入力してください" v-validate="'required'">
                     <span v-if="errors.first('title')" class="is-validate-label">タイトルは必須です</span>
                 </div>
@@ -18,7 +18,7 @@
 
             <div class="form-border">
                 <div class="form-group">
-                    <label>メニューバーのテキスト<span class="label label-sm label-danger">必須</span></label>
+                    <label>メニューバーのテキスト<required-mark/></label>
                     <input v-model.trim="chatBarText" name="richmenu-title" type="text" class="form-control" placeholder="タイトルを入力してください" v-validate="'required'">
                     <span v-if="errors.first('richmenu-title')" class="is-validate-label">タイトルは必須です</span>
                 </div>
@@ -26,7 +26,7 @@
 
             <div class="form-border">
                 <div class="form-group">
-                    <label>表示期間<span class="label label-sm label-danger">必須</span></label>
+                    <label>表示期間<required-mark/></label>
                     <div class="d-flex mb20 sp-flex-direction">
                         <!-- <VueCtkDateTimePicker label="" v-model="start_date" input-size="sm" locale="ja" :error="!start_date" no-label :only-date="true" :max-date="end_date" format="YYYY-MM-DD" formatted="ll" button-now-translation="今"></VueCtkDateTimePicker>&nbsp; -->
                         <div style="display: flex; margin-bottom: 10px">

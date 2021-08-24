@@ -2,7 +2,7 @@
   <section>
     <label class="w-100 mt20">
       内容
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
     <textarea :name="name+'_postback_text'"
       placeholder="テキストを入力してください"

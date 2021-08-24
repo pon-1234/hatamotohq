@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="form-group">
-      <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+      <label>タイトル<required-mark/></label>
       <input type="text" placeholder="タイトルを入力してください" name="location-title" class="form-control" max="100" v-model="defaults.title" v-validate="'required'">
       <span v-if="errors.first('location-title')" class="is-validate-label">タイトルは必須です</span>
     </div>
     <div class="form-group">
-      <label>住所<span class="label label-sm label-danger">必須</span></label>
+      <label>住所<required-mark/></label>
       <div class="d-flex" style="align-items: flex-start;" >
         <div class="flex column flex-grow-1">
           <textarea class="form-control" rows="2" maxlength="90" placeholder="住所を入力してください"  v-model="defaults.address" v-validate="'required'" name="location-description"></textarea>

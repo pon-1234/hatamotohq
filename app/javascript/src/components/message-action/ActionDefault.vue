@@ -2,7 +2,7 @@
   <div>
     <label class="w-100 mt20">
       ラベル
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
     <div class="w-100">
       <input type="text" maxlength="20" placeholder="ラベルを入力してください" v-model="value.label" class="gw-100 form-control"  @keyup="changeValue" v-validate="'required'" name="action-default"/>

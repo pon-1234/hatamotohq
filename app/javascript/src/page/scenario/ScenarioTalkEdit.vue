@@ -13,7 +13,7 @@
     <div class="form-common01">
       <div class="form-border">
         <div class="form-group">
-          <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+          <label>タイトル<required-mark/></label>
           <input type="text" name="talk-title" class="form-control" placeholder="タイトルを入力してください" v-model="talk.name" v-validate="'required'">
           <span v-if="errors.first('talk-title')" class="is-validate-label">タイトルは必須です</span>
         </div>

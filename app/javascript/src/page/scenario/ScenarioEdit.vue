@@ -1,13 +1,13 @@
 <template>
   <div class="form-common01" >
     <div class="form-group">
-      <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+      <label>タイトル<required-mark/></label>
       <input type="text" name="タイトル" class="form-control" placeholder="タイトルを入力してください" v-model="scenario.title" v-validate="'required'" >
         <span v-if="errors.first('タイトル')" class="is-validate-label">{{errors.first('タイトル')}}</span>
     </div>
     <div class="form-border">
       <div class="form-group">
-        <label class="mb10">内容<span class="label label-sm label-danger">必須</span></label>
+        <label class="mb10">内容<required-mark/></label>
         <textarea class="form-control" rows="5"  name="内容" placeholder="内容を入力してください" v-model="scenario.content" v-validate="'required'" ></textarea>
         <span v-if="errors.first('内容')" class="is-validate-label">{{errors.first('内容')}}</span>
       </div>

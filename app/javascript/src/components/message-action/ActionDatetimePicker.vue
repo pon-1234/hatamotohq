@@ -3,7 +3,7 @@
     <div v-if="showTitle" style="display: contents">
       <label class="w-100 mt20" >
         ラベル
-        <span class="label label-sm label-danger" v-if="labelRequired">必須</span>
+        <required-mark v-if="labelRequired"/>
       </label>
       <div class="w-100">
         <input type="text" name="datetime-label" placeholder="ラベルを入力してください" maxlength="12" v-model="data.label" class="w-100 form-control" @keyup="changeValue" v-validate="{required: labelRequired && showTitle}"/>

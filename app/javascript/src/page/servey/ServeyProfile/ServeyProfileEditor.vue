@@ -13,7 +13,7 @@
             <div style="display: contents">
               <label class="w-100 mt20">
                 友だち情報名
-                <span class="label label-sm label-danger">必須</span>
+                <required-mark/>
               </label>
               <div class="w-100">
                 <input name="label" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="data.field_name"

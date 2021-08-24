@@ -3,7 +3,7 @@
     <div v-if="showTitle" style="display: contents">
       <label class="w-100 mt20">
         ラベル
-        <span class="label label-sm label-danger" v-if="labelRequired">必須</span>
+        <required-mark v-if="labelRequired"/>
       </label>
       <div class="w-100">
         <input :name="name+'_label'" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="value.label"
@@ -13,7 +13,7 @@
     </div>
     <label class="w-100 mt20">
       テキスト
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
     <div class="w-100">
       <textarea :name="name+'_value'" placeholder="テキストを入力してください" type="text" maxlength="300" v-model="value.text" class="w-100 form-control"  @keyup="changeValue" v-validate="'required'"/>

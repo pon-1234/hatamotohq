@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="form-group clearfix" >
-            <label class="col-sm-3">質問名 <span class="label label-sm label-danger">必須</span></label>
+            <label class="col-sm-3">質問名 <required-mark/></label>
             <div class="col-sm-9">
                 <input v-model.trim="value.text"
                        type="text"

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="mt-4 d-flex mt-2 mb-2">
+    <div class="d-flex mt-2 mb-2">
       <label v-if="isSupportPostBack" class="d-flex align-items-center mr-2">
-        <input type="radio" :name="name+'_message_action_type'" value="default" :checked="type==='default'" @change="changeType('default')"> カスタムアクション
+        <input type="radio" :name="name+'_message_action_type'" value="default" :checked="type==='default'" @change="changeType('default')" class="mr-1"> カスタムアクション
       </label>
       <label v-if="isSupportPostBack" class="d-flex align-items-center">
-        <input type="radio" :name="name+'_message_action_type'" value="basic" :checked="type==='basic'" @change="changeType('basic')"> 基本アクション
+        <input type="radio" :name="name+'_message_action_type'" value="basic" :checked="type==='basic'" @change="changeType('basic')" class="mr-1"> 基本アクション
       </label>
     </div>
 

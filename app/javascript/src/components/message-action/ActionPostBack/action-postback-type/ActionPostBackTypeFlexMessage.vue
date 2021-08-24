@@ -2,7 +2,7 @@
   <div>
     <label class="w-100 mt20">
       コンテンツ
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
 
     <div class="btn-template mb20 fz14">

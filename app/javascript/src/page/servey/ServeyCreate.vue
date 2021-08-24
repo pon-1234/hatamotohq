@@ -6,14 +6,14 @@
     <div class="form-common01">
       <div class="form-border">
         <div class="form-group">
-          <label>アンケート名<span class="label label-sm label-danger">必須</span></label>
+          <label>アンケート名<required-mark/></label>
           <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control"
                  placeholder="" v-validate="'required'">
           <span v-if="errors.first('survey-name')" class="is-validate-label">アンケート名は必須です</span>
         </div>
 
         <div class="form-group">
-          <label>フォルダ<span class="label label-sm label-danger">必須</span></label>
+          <label>フォルダ<required-mark/></label>
           <select class="form-control" name="survey-folder" v-model="surveyData.folder_id" v-validate="'required'">
             <option v-for="(folder, index) of folders" :key="index" :value="folder.id">{{folder.name}}</option>
           </select>
@@ -24,14 +24,14 @@
                 placeholder="" v-validate="'required'">
 
         <div class="form-group">
-          <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+          <label>タイトル<required-mark/></label>
           <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control"
                  placeholder="" v-validate="'required'">
           <span v-if="errors.first('survey-title')" class="is-validate-label">タイトルは必須です</span>
         </div>
 
         <div class="form-group">
-          <label>説明<span class="label label-sm label-danger">必須</span></label>
+          <label>説明<required-mark/></label>
           <textarea rows="5" v-model.trim="surveyData.description" type="text" name="survey-description"
                     class="form-control"
                     placeholder="" v-validate="'required'"></textarea>
@@ -60,7 +60,7 @@
       <div class="form-border">
         <div class="form-group">
           <label>回答後の文章
-            <span class="label label-sm label-danger">必須</span></label>
+            <required-mark/></label>
           <textarea v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
                     class="form-control"
                     placeholder="" v-validate="'required'">

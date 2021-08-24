@@ -3,24 +3,37 @@
 class User::BroadcastsController < User::ApplicationController
   include User::BroadcastsHelper
 
+  # GET /user/broadcasts
   def index
     @params = params[:q]
     @q = Broadcast.order(id: :desc).ransack(params[:q])
     @broadcasts = @q.result.page(params[:page])
   end
 
+  # GET /user/broadcasts/search
   def search
     index
     render :index
   end
 
+  # GET /user/broadcasts/:id
+  def show
+    @broadcast = Broadcast.find(params[:id])
+    p '--------'
+    p @broadcast.to_json
+    render 'user/broadcasts/show_success.json.jbuilder'
+  end
+
+  # GET /user/broadcasts/new
   def new
   end
 
+  # GET /user/broadcasts/edit
   def edit
     @broadcast_id = params[:id]
   end
 
+  # POST /user/broadcasts
   def create
     ApplicationRecord.transaction do
       @broadcast = build_broadcast(broadcast_params)

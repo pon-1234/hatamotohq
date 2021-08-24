@@ -7,7 +7,7 @@
     <div class="form-common01">
       <div class="form-border">
         <div class="form-group">
-          <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+          <label>タイトル<required-mark/></label>
           <input v-model.trim="title" type="text" name="title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required'">
           <span v-if="errors.first('title')" class="is-validate-label">タイトルは必須です</span>
         </div>
@@ -15,7 +15,7 @@
 
       <div class="form-border">
         <div class="form-group">
-          <label>メニューバーのテキスト<span class="label label-sm label-danger">必須</span></label>
+          <label>メニューバーのテキスト<required-mark/></label>
           <input v-model.trim="chatBarText" type="text" name="richmenu-title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required|max:14'">
           <span v-if="errors.firstByRule('richmenu-title', 'required')" class="is-validate-label">タイトルは必須です</span>
           <span v-else-if="errors.firstByRule('richmenu-title', 'max')" class="is-validate-label">14文字までしか入らないです</span>
@@ -24,7 +24,7 @@
 
       <div class="form-border">
         <div class="form-group">
-          <label>表示期間<span class="label label-sm label-danger">必須</span></label>
+          <label>表示期間<required-mark/></label>
           <div class="d-flex align-items-center mb20" >
             <datetime
               type="datetime"

@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100 mt10">
         ラベル
-        <span class="label label-sm label-danger" v-if="labelRequired">必須</span>
+        <required-mark v-if="labelRequired"/>
       </label>
       <div class="w-100">
         <input type="text" :name="name+'_label'" placeholder="ラベルを入力してください" maxlength="12" v-model="label"

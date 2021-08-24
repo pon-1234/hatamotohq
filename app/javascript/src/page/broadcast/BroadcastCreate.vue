@@ -164,7 +164,6 @@ export default {
   },
 
   created() {
-    console.log(this.broadcast_id);
     if (this.broadcast_id) {
       this.message_data.id = this.broadcast_id;
     } else {
@@ -203,7 +202,7 @@ export default {
     ...mapActions('message', [
       'createBroadcast',
       'updateBroadcast',
-      'fetchMessageDelivers',
+      'getBroadcast',
       'setMessageDistributions'
     ]),
     ...mapActions('tag', [
@@ -217,7 +216,7 @@ export default {
     async fetchItem() {
       if (this.broadcast_id) {
         this.refresh_tag = false;
-        await this.fetchMessageDelivers({ id: this.broadcast_id });
+        await this.getBroadcast({ id: this.broadcast_id });
 
         if (this.message.status === 'done') {
           window.location.href = process.env.MIX_ROOT_PATH + '/streams';

@@ -4,7 +4,7 @@
     <div v-if="showTitle" style="display: contents">
       <label class="w-100 mt20">
         ラベル
-        <span class="label label-sm label-danger" v-if="labelRequired">必須</span>
+        <required-mark v-if="labelRequired"/>
       </label>
       <div class="w-100">
         <input :name="name+'_label'" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="value.label"
@@ -15,7 +15,7 @@
 
     <label class="w-100 mt20">
       コンテンツ
-      <span class="label label-sm label-danger">必須</span>
+      <required-mark/>
     </label>
 
     <div class="btn-template mb20 fz14">

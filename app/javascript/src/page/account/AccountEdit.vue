@@ -11,7 +11,7 @@
         <div class="panel-body">
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">LINEアカウント名<span class="label label-sm label-danger">必須</span></span
+              <span class="ja">LINEアカウント名<required-mark/></span
               ><span class="en">Account name</span>
             </dt>
             <dd>
@@ -61,7 +61,7 @@
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">LIFF ID<span class="label label-sm label-danger">必須</span></span>
+              <span class="ja">LIFF ID<required-mark/></span>
               <span class="en">from LIFFアプリ詳細</span>
             </dt>
             <dd class="fz14">
@@ -70,7 +70,7 @@
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">現在のパスワード<span class="label label-sm label-danger">必須</span></span>
+              <span class="ja">現在のパスワード<required-mark/></span>
               <span class="en">Current password</span>
             </dt>
             <dd class="fz14">

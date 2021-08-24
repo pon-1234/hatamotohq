@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="form-group">
           <label for="question_title">質問文</label>
-          <span class="label label-sm label-danger">必須</span>
+          <required-mark/>
           <input class="form-control"
             :name="'confirm-label'+ indexParent"
             placeholder="質問文を入力してください"

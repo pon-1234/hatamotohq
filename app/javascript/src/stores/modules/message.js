@@ -52,11 +52,11 @@ export const actions = {
     context.dispatch('preview/setMessages', message.broadcast_messages, { root: true });
   },
 
-  async fetchMessageDelivers(context, query) {
+  async getBroadcast(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let messageData = null;
     try {
-      messageData = await Message.getMessageDelivers(query);
+      messageData = await Message.getBroadcast(query);
     } catch (error) {
       console.log(error);
     }

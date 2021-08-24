@@ -7,7 +7,7 @@
     <div class="form-common01" v-if="message_data">
       <div class="form-border">
         <div class="form-group">
-          <label>タイトル<span class="label label-sm label-danger">必須</span></label>
+          <label>タイトル<required-mark/></label>
           <input type="text" class="form-control" v-model="message_data.title" placeholder="タイトルを入力してください"  v-validate="'required'">
         </div>
       </div>
@@ -38,7 +38,7 @@
                 <span></span>
               </label>
             </div>
-            <p class="keyword-status no-mgn"  v-if="message_data.keyword_status =='enable'">キーワードを有効にする<span class="label label-sm label-danger">必須</span></p>
+            <p class="keyword-status no-mgn"  v-if="message_data.keyword_status =='enable'">キーワードを有効にする<required-mark/></p>
             <p class="keyword-status no-mgn"  v-else>キーワードを無効にする</p>
           </div> -->
           <b-form-tags class="bot-tag" input-id="tags-basic" v-model="message_data.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
