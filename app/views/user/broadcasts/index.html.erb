@@ -26,7 +26,7 @@
                 <tr>
                   <td><%= link_to broadcast.id, user_broadcast_path(broadcast) %></td>
                   <td>
-                    <%= broadcast.deliver_at&.strftime('%Y-%m-%d %H:%M') %>
+                    <%= formatted_time(broadcast.deliver_at || broadcast.schedule_at) %>
                   </td>
                   <td><%= broadcast.title %></td>
                   <td>全て</td>

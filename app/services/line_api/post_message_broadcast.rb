@@ -8,7 +8,7 @@ class LineApi::PostMessageBroadcast < LineApi::BaseRequest
   end
 
   def perform
-    headers = { 
+    headers = {
       'Authorization' => "Bearer #{@access_token}",
       'Content-Type' => 'application/json'
     }
@@ -16,7 +16,10 @@ class LineApi::PostMessageBroadcast < LineApi::BaseRequest
       headers: headers,
       body: { messages: @messages }.to_json
     }
-    response = self.class.post("/bot/message/broadcast", options)
-    return response.code == 200
+    response = self.class.post('/bot/message/broadcast', options)
+    p '------------'
+    p response.code
+    p response.body
+    response.code == 200
   end
 end

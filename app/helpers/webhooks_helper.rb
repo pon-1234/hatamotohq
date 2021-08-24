@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'digest'
 
 module WebhooksHelper
   def handle_event(event, key)
     type = event[:type]
     case type
-      when 'follow'
-        handle_follow(event, key)
-      when 'unfollow'
-        handle_unfollow(event, key)
+    when 'follow'
+      handle_follow(event, key)
+    when 'unfollow'
+      handle_unfollow(event, key)
     end
   end
 

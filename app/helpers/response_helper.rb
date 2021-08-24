@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ResponseHelper
   def render_success
     render json: { status: :success }, status: 200

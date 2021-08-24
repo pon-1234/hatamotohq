@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::FriendsController < User::ApplicationController
   before_action :find_friend, only: [:update]
   include User::FriendsHelper

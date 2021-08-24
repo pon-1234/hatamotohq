@@ -19,8 +19,8 @@
           </div>
         </template>
 
-        <template v-slot:cell(date_start)="data">
-          <span v-if="data.item.status === 'done'">{{formatDateTime(data.item.date_start)}}</span>
+        <template v-slot:cell(schedule_at)="data">
+          <span v-if="data.item.status === 'done'">{{formatDateTime(data.item.schedule_at)}}</span>
           <span v-else>未配信 </span>
         </template>
         <template v-slot:cell(title)="data">{{data.item.title}}</template>
@@ -85,7 +85,7 @@ export default {
       copyMessageId: null,
       isBusy: true,
       fields: [
-        { key: 'date_start', label: '配信日時', sortable: true, thClass: 'w15' },
+        { key: 'schedule_at', label: '配信日時', sortable: true, thClass: 'w15' },
         { key: 'title', label: 'タイトル', sortable: true, thClass: 'w15', thStyle: 'min-width: 115px;' },
         { key: 'tags', label: '配信先', sortable: false, thClass: 'th-none-event w25' },
         { key: 'status', label: 'ステータス', sortable: true, thClass: 'w15' },

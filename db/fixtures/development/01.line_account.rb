@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 LineAccount.seed do |s|
   s.id = 1
   s.owner_id = 1

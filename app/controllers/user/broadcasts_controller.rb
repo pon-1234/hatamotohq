@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::BroadcastsController < User::ApplicationController
   include User::BroadcastsHelper
 
@@ -36,7 +38,7 @@ class User::BroadcastsController < User::ApplicationController
         :title,
         :type,
         :deliver_now,
-        :date_start,
+        :schedule_at,
         conditions: {},
         tag_ids: [],
         broadcast_messages: [

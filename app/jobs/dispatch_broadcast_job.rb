@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DispatchBroadcastJob < ApplicationJob
   queue_as :default
 
@@ -10,7 +12,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     messages = broadcast.broadcast_messages
     # if broadcast.type == :all
-      DispatchBroadcastToAllJob.perform_now(broadcast)
+    DispatchBroadcastToAllJob.perform_now(broadcast)
     # end
   end
 end

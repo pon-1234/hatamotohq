@@ -2,7 +2,7 @@
 
 class User::ApplicationController < ActionController::Base
   layout 'user/application'
-  
+
   include ResponseHelper
 
   rescue_from ActionController::InvalidAuthenticityToken, with: :not_authenticated

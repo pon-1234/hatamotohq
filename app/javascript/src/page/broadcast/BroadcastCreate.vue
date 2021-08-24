@@ -89,10 +89,10 @@
           </label>
         </div>
         <div v-if="!message_data.deliver_now">
-          <VueCtkDateTimePicker v-model="message_data.date_start" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
+          <VueCtkDateTimePicker v-model="message_data.schedule_at" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
           <!--<datetime-->
                   <!--type="datetime"-->
-                  <!--v-model="message_data.date_start"-->
+                  <!--v-model="message_data.schedule_at"-->
                   <!--value-zone="Asia/Tokyo"-->
                   <!--:min-datetime="currentDate"-->
                   <!--input-class="form-control"-->
@@ -146,7 +146,7 @@ export default {
         },
         tags: [],
         title: '',
-        date_start: moment().format('YYYY-MM-DD HH:mm'),
+        schedule_at: moment().format('YYYY-MM-DD HH:mm'),
         created_at: moment().format('YYYY-MM-DD HH:mm'),
         status: this.MessageDeliveriesStatus.Pending,
         broadcast_messages: [],
@@ -275,7 +275,7 @@ export default {
     },
 
     changeStartDateForNow() {
-      this.message_data.date_start = moment().format('YYYY-MM-DD HH:mm');
+      this.message_data.schedule_at = moment().format('YYYY-MM-DD HH:mm');
     },
 
     changeCondition(value) {

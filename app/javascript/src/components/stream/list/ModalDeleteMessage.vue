@@ -7,7 +7,7 @@
           <p class="mb10 fz14">以下のメッセージを削除します。よろしいですか？</p>
           <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between">
             <dt>配信日時</dt>
-            <dd>{{formatDateTime(data.date_start)}}</dd>
+            <dd>{{formatDateTime(data.schedule_at)}}</dd>
             <dt>タイトル</dt>
             <dd>{{data.title}}</dd>
             <dt>配信先</dt>

@@ -70,7 +70,7 @@
                   class="form-text text-muted text-pre-line small"
                   v-else-if="defaults.type ==='audio'"
                 >
-                  ファイル形式：WAV, MP3, M4A, AAC, OGG
+                  ファイル形式：MP3
                   ファイルサイズ：200MB以下
                 </small>
                 <small class="form-text text-muted small"

@@ -29,6 +29,10 @@ module ApplicationHelper
     end
   end
 
+  def formatted_time(time)
+    time&.strftime('%Y-%m-%d %H:%M')
+  end
+
   def mobile_device?
     browser = Browser.new(request.user_agent)
     browser.device.mobile?

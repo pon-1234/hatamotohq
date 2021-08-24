@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
   include WebhooksHelper
@@ -5,7 +7,7 @@ class WebhooksController < ApplicationController
   def index
     events = params[:events]
     key = params[:key]
-    return render_bad_request if events.blank? or key.blank?
+    return render_bad_request if events.blank? || key.blank?
     # only handle first event
     event = events.first
     if handle_event(event, key)

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 packages = [
-  { 
+  {
     id: 11537,
     start: 52002734,
     end: 52002773

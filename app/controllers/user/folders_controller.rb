@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::FoldersController < User::ApplicationController
   def create
     @folder = Folder.new(folder_params)

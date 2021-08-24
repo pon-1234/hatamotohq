@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module User::BroadcastsHelper
   def build_broadcast(broadcast_params)
     conditions = broadcast_params[:conditions]
@@ -11,8 +13,8 @@ module User::BroadcastsHelper
     broadcast.title = broadcast_params[:title]
     broadcast.conditions = conditions
     broadcast.type = broadcast_params[:type]
-    broadcast.date_start = broadcast_params[:date_start]
-    broadcast.deliver_now = broadcast_params[:date_start]
+    broadcast.schedule_at = broadcast_params[:schedule_at]
+    broadcast.deliver_now = broadcast_params[:deliver_now]
     broadcast.status = :pending
     # Attach tags
     broadcast.tag_ids = broadcast_params[:tag_ids]
@@ -32,16 +34,16 @@ module User::BroadcastsHelper
 
   def render_broadcast_status(status)
     case status
-      when 'pending'
-        '<span class="badge badge-primary p-2">配信予約</span>'
-      when 'sending'
-        '<span class="badge badge-info p-2">配信中</span>'
-      when 'done'
-        '<span class="badge badge-success p-2">配信済</span>'
-      when 'failed'
-        '<span class="badge badge-warning p-2">エラー</span>'
-      when 'draft'
-        '<span class="badge badge-secondary p-2">下書き</span>'
+    when 'pending'
+      '<span class="badge badge-primary p-2">配信予約</span>'
+    when 'sending'
+      '<span class="badge badge-info p-2">配信中</span>'
+    when 'done'
+      '<span class="badge badge-success p-2">配信済</span>'
+    when 'failed'
+      '<span class="badge badge-warning p-2">エラー</span>'
+    when 'draft'
+      '<span class="badge badge-secondary p-2">下書き</span>'
     end
   end
 end

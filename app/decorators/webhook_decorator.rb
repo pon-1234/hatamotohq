@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebhookDecorator < Draper::Decorator
   delegate_all
 
@@ -9,5 +11,4 @@ class WebhookDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.array! @emojis do |emoji|
   json.id emoji.id
   json.package_id emoji.package_id

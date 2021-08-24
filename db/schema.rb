@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_22_034103) do
+ActiveRecord::Schema.define(version: 2021_08_23_074802) do
 
   create_table "action_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "title"
@@ -245,6 +245,15 @@ ActiveRecord::Schema.define(version: 2021_08_22_034103) do
     t.index ["identity"], name: "index_login_activities_on_identity"
     t.index ["ip"], name: "index_login_activities_on_ip"
     t.index ["user_type", "user_id"], name: "index_login_activities_on_user_type_and_user_id"
+  end
+
+  create_table "media", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "line_account_id"
+    t.string "alias"
+    t.string "type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["line_account_id"], name: "index_media_on_line_account_id"
   end
 
   create_table "message_content_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -496,6 +505,7 @@ ActiveRecord::Schema.define(version: 2021_08_22_034103) do
   add_foreign_key "folders", "line_accounts"
   add_foreign_key "line_accounts", "users", column: "owner_id"
   add_foreign_key "line_friends", "line_accounts"
+  add_foreign_key "media", "line_accounts"
   add_foreign_key "message_templates", "folders"
   add_foreign_key "message_templates", "line_accounts"
   add_foreign_key "messages", "channels"

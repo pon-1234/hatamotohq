@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: broadcasts
@@ -44,7 +46,7 @@ class Broadcast < ApplicationRecord
   has_many :tags, through: :taggings
 
   validates :title, presence: true, length: { maximum: 255 }
-  validates :date_start, presence: true
-  
+  validates :schedule_at, presence: true
+
   enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', failed: 'failed', canceled: 'canceled' }, _prefix: true
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DispatchBroadcastToAllJob < ApplicationJob
   queue_as :default
 
@@ -15,7 +17,11 @@ class DispatchBroadcastToAllJob < ApplicationJob
     end
 
     # Deliver messages via line api
-    deliver_messages(line_account, message_contents)
+    if !deliver_messages(line_account, message_contents)
+      broadcast.status = :error
+      broadcast.save
+      return
+    end
     message_contents.each do |content|
       insert_delivered_message(line_account, content)
     end
@@ -96,7 +102,7 @@ class DispatchBroadcastToAllJob < ApplicationJob
     #   }
     #   return $o;
     # })->toArray();
-    return message_content
+    message_content
   end
 
   def handle_media(message_content)
@@ -152,6 +158,6 @@ class DispatchBroadcastToAllJob < ApplicationJob
     #       'line_reply_token' => '',
     #       'raw_content' => json_encode($body),
     #     ];
-    #     $this->_saveMessage($savedDate, $channel, false); 
+    #     $this->_saveMessage($savedDate, $channel, false);
   end
 end

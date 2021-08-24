@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: broadcast_template_messages
@@ -20,6 +22,5 @@
 #
 FactoryBot.define do
   factory :broadcast_template_message do
-    
   end
 end

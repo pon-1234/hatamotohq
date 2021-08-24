@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id @friend.id
 json.line_name @friend.line_name
 json.line_picture_url @friend.line_picture_url

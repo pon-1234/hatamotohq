@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::TagsController < User::ApplicationController
   before_action :find_tag, only: [:update, :destroy, :friends]
 

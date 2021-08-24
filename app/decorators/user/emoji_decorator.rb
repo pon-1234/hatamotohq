@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::EmojiDecorator < Draper::Decorator
   delegate_all
 
@@ -9,5 +11,4 @@ class User::EmojiDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
-
 end
