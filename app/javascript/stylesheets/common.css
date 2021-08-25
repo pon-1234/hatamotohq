@@ -1395,34 +1395,6 @@ button:disabled{
   padding-bottom: 20px;
 }
 
-.pagination > li > span {
-    padding: 5px 15px!important;
-}
-
-.page-item.active .page-link {
-    border: 1px solid #dee2e6;
-    color: #fff;
-    background-color: #00B900;
-    border-color: #00B900;
-}
-
-.page-item .page-link {
-    position: relative;
-    display: block;
-    padding: 5px 15px;
-    margin-left: -1px;
-    border: 1px solid #dee2e6;
-    z-index: 3;
-    color: #00B900;
-    background-color: #fff;
-    font-size: inherit;
-    border: 1px solid #dee2e6;
-}
-
-.pagination {
-    display: inline-flex;
-}
-
 .panel-default>.panel-heading {
     color: #333;
     background-color: #f5f5f5;
@@ -1561,10 +1533,6 @@ h2, .h2 {
 @media (max-width: 991px) {
   .page-item .page-link {
     padding: 5px 10px;
-  }
-
-  .pagination > li > span {
-    padding: 5px 10px !important;
   }
 }
 

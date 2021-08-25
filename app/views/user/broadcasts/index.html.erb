@@ -29,16 +29,16 @@
                     <%= formatted_time(broadcast.deliver_at) || '未配信' %>
                   </td>
                   <td><%= broadcast.title %></td>
-                  <td>全て</td>
+                  <td><span class="text-center d-flex flex-wrap justify-content-center align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
                   <td>
                     <%= render_broadcast_status(broadcast.status).html_safe %>
                   </td>
                   <td class="text-left">
-                    <%= link_to user_broadcast_path(broadcast), class: "btn btn-outline-success btn-sm mr-2" do %>
+                    <%= link_to user_broadcast_path(broadcast), class: "btn btn-outline-info btn-sm mr-2" do %>
                       <i class="fas fa-eye"></i> 詳細
                     <% end %>
                     <% if broadcast.editable? %>
-                      <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-outline-success btn-sm mr-2" do %>
+                      <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-outline-info btn-sm mr-2" do %>
                         <i class="fas fa-pencil-alt"></i> 編集
                       <% end %>
                     <% end %>

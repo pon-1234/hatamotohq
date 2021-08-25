@@ -64,4 +64,17 @@ module User::BroadcastsHelper
       '<span class="badge badge-secondary p-2">下書き</span>'
     end
   end
+
+  def render_broadcast_condition(broadcast)
+    if broadcast.broadcast_type_all?
+      '全て'
+    else
+      tags = broadcast.tags.map(&:name)
+      html = ''
+      tags.each do |tag|
+        html = html + "<span class='tag m-1'>#{tag}</span>"
+      end
+      html
+    end
+  end
 end

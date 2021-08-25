@@ -44,11 +44,12 @@ class Broadcast < ApplicationRecord
   has_many :broadcast_messages
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
-
-  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
-
+  
   validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
   validates :schedule_at, presence: { unless: :status_draft? }
+
+  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
+  enum type: { all: 'all', condition: 'condition' }, _prefix: :broadcast_type # type_condition is already defined by Active Record
 
   # Get all broadcast to dispatch. The broadcast have status pending and schedule_at < now
   scope :dispatchable, -> { where(status: :pending).where('schedule_at <= ?', Time.zone.now) }

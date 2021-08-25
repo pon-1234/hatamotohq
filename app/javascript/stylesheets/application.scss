@@ -10,11 +10,7 @@
 @import "./slick/slick.css";
 @import "./slick/slick-theme.css";
 
-body {
-  font-family: Lucida Grande, Hiragino Kaku Gothic ProN,
-    "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA",
-    "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Emoji !important;
+* {
   font-size: 14px;
 }
 
@@ -182,3 +178,12 @@ td {
   background-size: cover;
   border-radius: 50%;
 }
+
+// START: Tags
+.tag {
+  border: thin solid #17a2b8;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px !important;
+}
+// END: Tags
