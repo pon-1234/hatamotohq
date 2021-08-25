@@ -11,8 +11,6 @@ class DispatchBroadcastJob < ApplicationJob
     broadcast.save
 
     messages = broadcast.broadcast_messages
-    # if broadcast.type == :all
-    DispatchBroadcastToAllJob.perform_now(broadcast)
-    # end
+    DispatchBroadcastToAllJob.perform_now(broadcast) if broadcast.type == 'all'
   end
 end

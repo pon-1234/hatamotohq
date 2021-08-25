@@ -1,0 +1,23 @@
+verbose: false
+concurrency: 10
+pidfile: ./tmp/pids/sidekiq.pid
+logfile: ./log/sidekiq.log
+queues:
+  - critical
+  - mailers
+  - default
+  - searchkick
+  - active_storage_analysis
+  - active_storage_purge
+  - low
+production:
+  concurrency: 25
+staging:
+  concurrency: 15
+
+:schedule:
+  WorkerDispatchBroadcast:
+    cron: "0 * * * * *" # Runs every minute
+    include_metadata: true
+    description: "This job dispatch broadcast that was enqueued"
+    enabled: true

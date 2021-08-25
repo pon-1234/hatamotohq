@@ -20,7 +20,6 @@ class DispatchBroadcastToAllJob < ApplicationJob
     if !deliver_messages(line_account, message_contents)
       broadcast.status = :error
       broadcast.save
-      byebug
       return
     end
     message_contents.each do |content|

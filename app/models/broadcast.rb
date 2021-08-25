@@ -49,6 +49,8 @@ class Broadcast < ApplicationRecord
   validates :schedule_at, presence: true
 
   enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
+  # Get all broadcast to dispatch. The broadcast have status pending and schedule_at < now
+  scope :dispatchable, -> { where(status: :pending).where('schedule_at <= ?', Time.zone.now) }
 
   def editable?
     return self.status_draft? || self.status_pending?

@@ -33,7 +33,6 @@ module User::BroadcastsHelper
     broadcast.type = broadcast_params[:type]
     broadcast.schedule_at = broadcast_params[:schedule_at]
     broadcast.deliver_now = broadcast_params[:deliver_now]
-    broadcast.status = :pending
     # Attach tags
     broadcast.tag_ids = broadcast_params[:tag_ids]
     broadcast

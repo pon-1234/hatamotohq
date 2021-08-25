@@ -56,4 +56,13 @@ Rails.application.routes.draw do
   #     root to: 'home#index'
   #   end
   # end
+
+  require 'sidekiq/web'
+  require 'sidekiq-scheduler/web'
+  # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+  #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
+  # end
+  mount Sidekiq::Web => '/sidekiq'
+  # Log viewer
+  # mount Logster::Web, at: '/logs'
 end
