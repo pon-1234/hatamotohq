@@ -59,8 +59,18 @@
             <input type="radio" name="datetime" :value="false" v-model="message_data.deliver_now"/>配信日時を指定
           </label>
         </div>
-        <div v-if="!message_data.deliver_now">
-          <VueCtkDateTimePicker v-model="message_data.schedule_at" locale="ja" :min-date="currentDate" no-label format="YYYY-MM-DD HH:mm" button-now-translation="今" />
+        <datetime
+          v-if="!message_data.deliver_now"
+          v-model="message_data.schedule_at"
+          input-class="form-control"
+          type="datetime"
+          :phrases="{ok: '確定', cancel: '閉じる'}"
+          placeholder="日付を選択してください"
+          :min-datetime="currentDate"
+          value-zone="Asia/Tokyo"
+          zone="Asia/Tokyo"
+        ></datetime>
+
           <!--<datetime-->
                   <!--type="datetime"-->
                   <!--v-model="message_data.schedule_at"-->
@@ -69,7 +79,6 @@
                   <!--input-class="form-control"-->
           <!--style="max-width: 280px">-->
           <!--</datetime>-->
-        </div>
       </div>
     </div>
 
@@ -134,10 +143,14 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
-import moment from 'moment';
+import moment from 'moment-timezone';
+import { Datetime } from 'vue-datetime';
 
 export default {
   props: ['broadcast_id'],
+  components: {
+    Datetime
+  },
   data() {
     return {
       message_data: {
@@ -158,8 +171,8 @@ export default {
         },
         tags: [],
         title: '',
-        schedule_at: moment().format('YYYY-MM-DD HH:mm'),
-        created_at: moment().format('YYYY-MM-DD HH:mm'),
+        schedule_at: moment().tz('Asia/Tokyo').format(),
+        created_at: moment().tz('Asia/Tokyo').format(),
         status: this.MessageDeliveriesStatus.Pending,
         broadcast_messages: [],
         deliver_now: true,
@@ -167,7 +180,7 @@ export default {
       },
       refresh_content: true,
       refresh_tag: true,
-      currentDate: moment().format('YYYY-MM-DD HH:mm')
+      currentDate: moment().tz('Asia/Tokyo').format()
     };
   },
 

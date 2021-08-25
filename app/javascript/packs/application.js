@@ -5,6 +5,7 @@ import ja from 'vee-validate/dist/locale/ja';
 import 'bootstrap';
 import Chartkick from 'vue-chartkick';
 import { Datetime } from 'vue-datetime';
+import { Settings } from 'luxon';
 import 'vue-datetime/dist/vue-datetime.css';
 import DateRangePicker from 'vue2-daterange-picker';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker';
@@ -46,7 +47,11 @@ require('chart.js');
 // Plugin configurations
 Vue.config.devtools = true;
 Vue.use(Chartkick);
+
+// Datetime picker
 Vue.use(Datetime);
+Settings.defaultLocale = 'ja';
+
 Vue.use(DateRangePicker);
 Vue.component('v-select', vSelect);
 Vue.use(VueGoogleMaps, {
