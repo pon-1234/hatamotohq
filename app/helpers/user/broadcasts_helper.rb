@@ -58,8 +58,8 @@ module User::BroadcastsHelper
       '<span class="badge badge-info p-2">配信中</span>'
     when 'done'
       '<span class="badge badge-success p-2">配信済</span>'
-    when 'failed'
-      '<span class="badge badge-warning p-2">エラー</span>'
+    when 'error'
+      '<span class="badge badge-danger p-2">エラー</span>'
     when 'draft'
       '<span class="badge badge-secondary p-2">下書き</span>'
     end

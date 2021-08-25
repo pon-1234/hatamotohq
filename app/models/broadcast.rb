@@ -48,7 +48,7 @@ class Broadcast < ApplicationRecord
   validates :title, presence: true, length: { maximum: 255 }
   validates :schedule_at, presence: true
 
-  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', failed: 'failed', canceled: 'canceled' }, _prefix: true
+  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
 
   def editable?
     return self.status_draft? || self.status_pending?
