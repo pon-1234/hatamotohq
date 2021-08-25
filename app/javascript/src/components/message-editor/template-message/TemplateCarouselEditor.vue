@@ -1,11 +1,27 @@
 <template>
   <div>
-    <div class="card card-outline card-success pb20 mb-0">
-      <div class="card-header">
-        <h3 class="card-title">カルーセル（プレビュー）</h3>
-      </div>
+    <div class="card m-0 p-0">
       <div class="card-body">
-        <div class="carousel-body">
+        <div class="alert alert-warning alert-dismissible">
+          パネルタイトルの有無・画像の有無・ボタンの数は全てのパネルで同じ必要があります。
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'active' : ''" @click="changeSelected(index)">
+            <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
+                パネル{{ index + 1}}
+              <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
+                <i class="fa fa-times"></i>
+              </span>
+            </a>
+          </li>
+          <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+            <span>
+              <i class="fa fa-plus"></i>追加
+            </span>
+          </li>
+        </ul>
+        <div class="carousel-body" hidden>
           <div class="list-carousel d-flex align-items-center">
             <div class="carousel-group d-flex align-items-center">
               <div v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'carousel-preview active': 'carousel-preview'">
@@ -50,16 +66,15 @@
           </div>
         </div>
         <div v-for="(column, indexColumn) in defaults.columns" :key="indexColumn"  v-show="indexColumn === selected" >
-          <div class="carousel-group-action">
-            <h4>{{selected + 1}}枚目</h4>
+          <div class="carousel-group-action row">
             <div class="col-sm-5 p-0">
               <div class="form-group">
-                <label>タイトル <span class="label label-danger" v-if="requiredTitle">必須</span></label>
+                <label>パネル{{ selected + 1}}タイトル <span class="label label-danger" v-if="requiredTitle">必須</span></label>
                 <input type="text" :name="'carousel-title'+indexColumn" placeholder="タイトル" class="form-control" v-model="column.title" maxlength='40' v-validate="{required: requiredTitle}">
                 <span v-if="errors.first('carousel-title'+indexColumn)" class="is-validate-label">タイトルは必須です</span>
               </div>
               <div class="form-group">
-                <label>本文</label><span class="label label-danger">必須</span>
+                <label>パネル{{ selected + 1}}本文</label><span class="label label-danger">必須</span>
                 <textarea  :name="'carousel-text'+indexColumn" placeholder="本文を入力してください" class="form-control" v-model="column.text" maxlength='60' v-validate="'required'"> </textarea>
                 <span v-if="errors.first('carousel-text'+indexColumn)" class="is-validate-label">本文は必須です</span>
               </div>
@@ -67,10 +82,10 @@
             <div class="col-sm-7">
               <div class="form-group">
                 <label>画像</label>
-                <div class="">
+                <div class="row">
                   <div class="col-sm-6">
                     <div class="group-button-thumb">
-                      <div class="btn btn-info btn-block uploadfile-thumb"  data-toggle="modal" :data-target="'#imageModalCenter'+ indexParent">
+                      <div class="btn btn-info btn-block btn-sm uploadfile-thumb"  data-toggle="modal" :data-target="'#uploadImageModal'+ indexParent">
                         <i class="glyphicon glyphicon-picture"></i>
                         画像選択
                         <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
@@ -93,50 +108,73 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-12 p-0">
-              <div class="form-group" >
+            <div class="col-sm-12 p-0 row">
+              <div class="col-sm-3">
+              <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
+                <li v-for="(item, index) in column.actions" :key="index" :class="selectedAction == index? 'active': ''" @click="changeActiveAction(index)">
+                  <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'is-validate': ''">
+                    ボタン{{index + 1}}
+                    <span v-if="column.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeCurrentAction(index)"><i class="fas fa-times"></i></span>
+                  </div>
+                </li>
+                <li v-if="column.actions.length < 3">
+                  <div class="nav-button btn justify-content-center" @click="addMoreAction">
+                    <i class="fa fa-plus"></i> 追加
+                  </div>
+                </li>
+              </ul>
+              </div>
+              <div class="col-sm-9">
+                <div v-for="(item, index) in column.actions" :key="index" v-show="selectedAction === index" class="card card-light">
+                  <div class="card-header d-flex flex-start">
+                    <h3 class="card-title">選択肢{{index+1}}</h3>
+                    <div class="btn btn-outline-success btn-sm ml-auto" @click.stop="copyCurrentAction(index)"><i class="fas fa-copy"></i></div>
+                  </div>
+                  <div class="card-body">
+                    <div class="col-sm-12">
+                      <message-action-type
+                        :name="index+ '_template_carousel_'+ indexColumn"
+                        :value="item"
+                        @input="changeActionColumn(indexColumn, index, ...arguments)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="form-group" >
                 <h5><label>ボタン{{selected + 1}}</label></h5>
-                  <div v-for="(item, index) in column.actions"
-                    :key="index" @click="changeActiveAction(index)"
-                    :class="selectedAction === index ? 'panel action-panel panel-default pb20 active': 'panel action-panel panel-default pb20'" >
-                    <div class="panel-body">
-                      <div class="col-sm-9">
-                        <label class="mt20">
-                          選択後の挙動 : {{index+1}}
-                        </label>
-                        <message-action-type
-                          :name="index+ '_template_carousel_'+ indexColumn"
-                          :value="item"
-                          @input="changeActionColumn(indexColumn, index, ...arguments)"
-                        />
-                      </div>
-                      <div class="col-sm-3 panel-tool" style="">
-                        <div class="btn-group btn-group-justified mt20">
-                          <div class="btn-group" @click.stop="moveTopAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i></button></div>
-                          <div class="btn-group" @click.stop="moveBottomAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i></button></div>
-                          <div class="btn-group" @click.stop="copyCurrentAction(index)"><button type="button" class="btn btn-default"><i class="fas fa-copy"></i></button></div>
-                          <div class="btn-group" v-if="column.actions.length > 1" @click.stop="removeCurrentAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button></div>
-                        </div>
+                <div v-for="(item, index) in column.actions"
+                  :key="index" @click="changeActiveAction(index)"
+                  :class="selectedAction === index ? 'panel action-panel panel-default pb20 active': 'panel action-panel panel-default pb20'" >
+                  <div class="panel-body">
+                    <div class="col-sm-9">
+                      <label class="mt20">
+                        選択後の挙動 : {{index+1}}
+                      </label>
+                      <message-action-type
+                        :name="index+ '_template_carousel_'+ indexColumn"
+                        :value="item"
+                        @input="changeActionColumn(indexColumn, index, ...arguments)"
+                      />
+                    </div>
+                    <div class="col-sm-3 panel-tool" style="">
+                      <div class="btn-group btn-group-justified mt20">
+                        <div class="btn-group" @click.stop="moveTopAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i></button></div>
+                        <div class="btn-group" @click.stop="moveBottomAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i></button></div>
+                        <div class="btn-group" @click.stop="copyCurrentAction(index)"><button type="button" class="btn btn-default"><i class="fas fa-copy"></i></button></div>
+                        <div class="btn-group" v-if="column.actions.length > 1" @click.stop="removeCurrentAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button></div>
                       </div>
                     </div>
                   </div>
-              </div>
-            </div>
-            <div class="col-sm-12" v-if="column.actions.length < 3">
-              <div class="col-sm-1"></div>
-              <div class="col-sm-10">
-                <span  class="btn btn-sm btn-default btn-block btn-carousel-button-add" @click="addMoreAction">
-                  <i class="glyphicon glyphicon-plus"></i>
-                  追加 ({{column.actions.length}}/ 3)
-                </span>
-              </div>
-              <div class="col-sm-1"></div>
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <media-modal @input="uploadThumb" :data="{type: 'image'}" :id="'imageModalCenter'+indexParent"/>
+    <media-modal @input="uploadThumb" :data="{type: 'image'}" :id="'uploadImageModal'+indexParent"/>
   </div>
 </template>
 <script>
@@ -207,13 +245,9 @@ export default {
         option.actions.push({ ...this.ActionMessage.default, label: '' });
       });
 
-      if (index !== null) {
-        this.defaults.columns.splice(index + 1, 0, option);
-        this.selected = index + 1;
-      } else {
-        this.defaults.columns.push(option);
-        this.selected = this.defaults.columns.length - 1;
-      }
+      this.defaults.columns.push(option);
+      this.selected = this.defaults.columns.length - 1;
+      console.log('selected tab = ', this.selected);
     },
 
     removeColumn(index) {
@@ -264,6 +298,7 @@ export default {
 
     removeCurrentThumb() {
       this.defaults.columns[this.selected].thumbnailImageUrl = '';
+      console.log('this.selected', this.selected);
       this.$emit('input', this.defaults);
     },
 
@@ -336,218 +371,257 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.error-message-upload {
-  color: #bf5329;
-  white-space: pre-line;
-}
-
-.template-carousel{
-  padding: 15px 0;
-  margin: 0px!important;
-}
-
-.panel-heading {
-  padding: 5px 10px;
-  background-color: #ccc;
-}
-.panel-body {
-  padding: 0px !important;
-  .panel-tool {
-    padding-left: 0px !important;
-    max-width: 154px;
-    float: right;
-  }
-}
-
-.carousel-body{
-  background: #f1f1f1;
-  overflow-y: hidden;
-  margin: 0 0px;
-  position: relative;
-  padding: 5px;
-  margin-bottom: 15px;
-}
-
-.carousel-group-action{
-  padding: 15px;
-}
-
-.list-carousel{
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  margin: 0 0;
-  padding-left: 5px;
-  padding-right: 10px;
-}
-
-.carousel-add-btn {
-  border-radius: 4px;
-  margin: 0 1em;
-  padding: 0.2em;
-  width: 100px;
-  text-align: center;
-  color: #999;
-  background-color: rgba(255,255,255,0.8);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .count-carousel{
-    font-size: 20px;
+  .nav-stacked>li {
+    float: none;
+    position: relative;
+    display: block;
   }
 
-  .glyphicon-plus-sign{
-    font-size: 35px;
+  li {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .nav-button {
+      width: 100% !important;
+      display: flex !important;
+      height: 40px;
+      align-items: center !important;
+      border: 1px solid #e4e4e4;
+      padding-left: 10px;
+    }
+
+    .action-tab-selector-remover {
+      color: #212529;
+      padding: 5px;
+      cursor: pointer;
+      line-height: 1;
+      align-items: center;
+      margin-left: auto;
+      display: inline-flex;
+    }
   }
-}
 
-.carousel-preview {
-  margin: 5px;
-  width: 278px;
-  display: inline-block;
-  .carousel-header {
-    .carousel-header-title {
-      font-size: 14px;
-      line-height: 1.5em;
-
-      color: #aaa;
+  li.active {
+    .nav-button {
+      border-left: 3px solid #28a745;
+      color: #28a745;
       font-weight: bold;
     }
-    .carousel-header-action {
+  }
+
+  .error-message-upload {
+    color: #bf5329;
+    white-space: pre-line;
+  }
+
+  .template-carousel{
+    padding: 15px 0;
+    margin: 0px!important;
+  }
+
+  .panel-heading {
+    padding: 5px 10px;
+    background-color: #ccc;
+  }
+  .panel-body {
+    padding: 0px !important;
+    .panel-tool {
+      padding-left: 0px !important;
+      max-width: 154px;
       float: right;
-      .action-item {
-        margin-left: 0px;
-        cursor: pointer;
-        display: block;
-        float: left;
-        text-align: center;
-        line-height: 1.2;
-        width: 2em;
-        border-left: 1px solid #ccc;
-        .glyphicon{
-         font-size: 14px;
+    }
+  }
+
+  .carousel-body{
+    background: #f1f1f1;
+    overflow-y: hidden;
+    margin: 0 0px;
+    position: relative;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+
+  .carousel-group-action{
+    padding: 15px;
+  }
+
+  .list-carousel{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 0 0;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+
+  .carousel-add-btn {
+    border-radius: 4px;
+    margin: 0 1em;
+    padding: 0.2em;
+    width: 100px;
+    text-align: center;
+    color: #999;
+    background-color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .count-carousel{
+      font-size: 20px;
+    }
+
+    .glyphicon-plus-sign{
+      font-size: 35px;
+    }
+  }
+
+  .carousel-preview {
+    margin: 5px;
+    width: 278px;
+    display: inline-block;
+    .carousel-header {
+      .carousel-header-title {
+        font-size: 14px;
+        line-height: 1.5em;
+
+        color: #aaa;
+        font-weight: bold;
+      }
+      .carousel-header-action {
+        float: right;
+        .action-item {
+          margin-left: 0px;
+          cursor: pointer;
+          display: block;
+          float: left;
+          text-align: center;
+          line-height: 1.2;
+          width: 2em;
+          border-left: 1px solid #ccc;
+          .glyphicon{
+          font-size: 14px;
+          }
+        }
+
+        .action-item:first-child {
+          border-left-color: transparent;
+        }
+      }
+    }
+
+    .carousel-content{
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+
+      .carousel-heading{
+        b {
+          display: block;
+          padding: 0 0.5em;
+          line-height: 2.5em;
+          word-wrap: break-word;
+          min-height: 2em;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          display: block;
+          padding: 0 0.5em;
+          border-bottom: 1px solid #eee;
+          word-wrap: break-word;
+          white-space: pre-line;
+          margin-bottom: 0;
+          line-height: 2.5em;
+          min-height: 2em;
+        }
+
+        .carousel-text{
+          // font-weight: bold;
+          // color: red;
         }
       }
 
-      .action-item:first-child {
-        border-left-color: transparent;
-      }
-    }
-  }
-
-  .carousel-content{
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-
-    .carousel-heading{
-      b {
-        display: block;
-        padding: 0 0.5em;
-        line-height: 2.5em;
-        word-wrap: break-word;
-        min-height: 2em;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      p {
-        display: block;
-        padding: 0 0.5em;
-        border-bottom: 1px solid #eee;
-        word-wrap: break-word;
-        white-space: pre-line;
-        margin-bottom: 0;
-        line-height: 2.5em;
-        min-height: 2em;
-      }
-
-      .carousel-text{
-        // font-weight: bold;
-        // color: red;
-      }
-    }
-
-    .carousel-thumb {
-      height: 180px;
-      line-height: 159px;
-      background-size: cover;
-      background-position: center center;
-      color: #aaa;
-      text-align: center;
-    }
-
-    .carousel-action {
-      .carousel-action-label-default {
-        color: #ccc;
-      }
-      .carousel-action-label {
+      .carousel-thumb {
+        height: 180px;
+        line-height: 159px;
+        background-size: cover;
+        background-position: center center;
+        color: #aaa;
         text-align: center;
-        line-height: 2em;
-        min-height: 2em;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      }
+
+      .carousel-action {
+        .carousel-action-label-default {
+          color: #ccc;
+        }
+        .carousel-action-label {
+          text-align: center;
+          line-height: 2em;
+          min-height: 2em;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
-}
 
-.group-button-thumb {
-  .btn {
-    width: 100%;
-    margin-bottom: 20px;
+  .group-button-thumb {
+    .btn {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+  }
+  .btn-info {
+    color: white;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .btn-default {
+    white-space: normal;
+    word-break: break-word;
   }
 
-}
-.btn-info {
-  color: white;
-  white-space: normal;
-  word-break: break-word;
-}
-.btn-default {
-  white-space: normal;
-  word-break: break-word;
-}
-
-.uploadfile-thumb {
-  position: relative;
-  overflow: hidden;
-  color: white;
-  input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    opacity: 0;
-    cursor: inherit;
-    display: block;
+  .uploadfile-thumb {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    input[type=file] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      opacity: 0;
+      cursor: inherit;
+      display: block;
+    }
   }
-}
 
-.image-carousel-thumb {
-  height: 150px;
-}
-
-.active {
-  .carousel-content{
-    box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
-    border-color: #5bc0de;
+  .image-carousel-thumb {
+    height: 150px;
   }
-}
-// Action panel
-.action-panel.active {
-    box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
-    border-color: #5bc0de;
-}
 
-.btn-group{
-  .btn{
-    padding-left: 0px;
-    padding-right: 0px;
+  .active {
+    .carousel-content{
+      box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
+      border-color: #5bc0de;
+    }
   }
-}
+  // Action panel
+  .action-panel.active {
+      box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
+      border-color: #5bc0de;
+  }
+
+  .btn-group{
+    .btn{
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
 </style>

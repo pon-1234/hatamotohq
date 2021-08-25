@@ -11,7 +11,8 @@
         <span v-if="errors.first(name+'_label')" class="is-validate-label">ラベルは必須です</span>
       </div>
     </div>
-    <div class="form-group" v-if="showLaunchMesasge">
+
+    <div class="form-group mt-2" v-if="showLaunchMesasge">
       <label>選択時のメッセージ</label>
       <input type="text" placeholder="選択時のメッセージを入力してください" v-model="displayText"
         class="w-100 form-control" @keyup="changeDisplayText($event)"/>

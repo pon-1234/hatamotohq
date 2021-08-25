@@ -26,7 +26,7 @@
               </div>
             </li>
             <li v-if="defaults.actions.length < 4">
-              <div class="nav-button" @click="addMoreAction">
+              <div class="nav-button btn btn-outline-success justify-content-center" @click="addMoreAction">
                 <i class="fa fa-plus"></i> 追加
               </div>
             </li>
