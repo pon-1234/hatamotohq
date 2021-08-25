@@ -321,29 +321,41 @@ export default {
       delete broadcastFormData.tags;
       if (!this.broadcast_id) {
         const broadcastId = await this.createBroadcast(broadcastFormData);
-        if (broadcastId) this.onCreateSuccess();
-        if (!broadcastId) this.onCreateFailure();
+        this.onReceiveCreateBroadcastResponse(broadcastId);
       } else {
-        await this.updateBroadcast(broadcastFormData);
-        window.toastr.success('一斉配信の作成は失敗しました。');
-        setTimeout(() => {
-          window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
-        }, 500);
+        const broadcastId = await this.updateBroadcast(broadcastFormData);
+        this.onReceiveUpdateBroadcastResponse(broadcastId);
       }
     },
 
     // Handle broadcast creation response
-    onCreateSuccess() {
-      window.toastr.success('一斉配信の作成は完了しました。');
-      setTimeout(() => {
-        window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts';
-      }, 500);
+    onReceiveCreateBroadcastResponse(broadcastId) {
+      if (broadcastId) {
+        window.toastr.success('一斉配信の作成は完了しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
+        }, 500);
+      } else {
+        window.toastr.error('一斉配信の作成は失敗しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
+        }, 500);
+      }
+
     },
-    onCreateFailure() {
-      window.toastr.error('一斉配信の作成は失敗しました。');
-      setTimeout(() => {
-        window.location.href = process.env.MIX_ROOT_PATH + '/user/broadcasts/new';
-      }, 1000);
+    onReceiveUpdateBroadcastResponse(broadcastId) {
+      if (broadcastId) {
+        window.toastr.success('一斉配信の更新は完了しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
+        }, 500);
+      } else {
+        window.toastr.error('一斉配信の更新は失敗しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
+        }, 500);
+      }
+
     },
 
     selectTemplate(template) {

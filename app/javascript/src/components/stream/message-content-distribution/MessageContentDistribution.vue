@@ -1,29 +1,41 @@
 <template>
   <div>
     <div class="dashed" v-if="index !== 0"></div>
-    <div class="d-flex align-items-center mb10">
-      <select-message-content-distribution
-        v-model="defaults.message_type_id"
-        @input="changeSelectedMessage"
-      />
-      <div class="group-action d-flex" v-if="countMessages && countMessages > 0">
-        <button type="button" class="d-flex btn btn-light action-item" @click="moveTopMessage" v-if="index >= 1">
-          <i class="fas fa-chevron-up"></i>
-        </button>
-        <button type="button" class="d-flex btn btn-light action-item" @click="moveBottomMessage" v-if="index < countMessages - 1">
-          <i class="fas fa-chevron-down"></i>
-        </button>
-        <button type="button" class="d-flex btn btn-light action-item" @click="removeContent" v-if="countMessages !=1">
-          <i class="fas fa-times"></i>
-        </button>
+    <div class="card card-outline card-success mt-4">
+      <div class="card-header">
+        <span class="card-title">メッセージ{{index + 1}}設定</span>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+          </button>
+        </div>
       </div>
-    </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center mb10">
+          <select-message-content-distribution
+            v-model="defaults.message_type_id"
+            @input="changeSelectedMessage"
+          />
+          <div class="group-action d-flex" v-if="countMessages && countMessages > 0">
+            <button type="button" class="d-flex btn btn-light action-item" @click="moveTopMessage" v-if="index >= 1">
+              <i class="fas fa-chevron-up"></i>
+            </button>
+            <button type="button" class="d-flex btn btn-light action-item" @click="moveBottomMessage" v-if="index < countMessages - 1">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <button type="button" class="d-flex btn btn-light action-item" @click="removeContent" v-if="countMessages !=1">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
     <value-message-content-distribution
       v-if="rerender"
       :index="index"
       :data="defaults.content"
       @changeContent="changeContentMessage"
     />
+      </div>
+    </div>
+
   </div>
 </template>
 <script>

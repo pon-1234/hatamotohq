@@ -3,11 +3,24 @@
     <div class="border template-carousel row">
       <div class="col-md-12">
         <div class="panel panel-default pb20 mb-0">
-           <div class="panel-heading">
-            <h5>画像カルーセル（プレビュー）</h5>
-          </div>
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'active' : ''" @click="changeSelected(index)">
+              <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
+                  パネル{{ index + 1}}
+                <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
+                  <i class="fa fa-times"></i>
+                </span>
+              </a>
+            </li>
+            <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+              <span>
+                <i class="fa fa-plus"></i>追加
+              </span>
+            </li>
+          </ul>
+          
           <div class="panel-body">
-            <div class="carousel-body">
+            <div class="carousel-body" hidden>
               <div class="list-carousel d-flex align-items-center">
                 <div class="carousel-group d-flex align-items-center">
                   <div v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'carousel-preview active': 'carousel-preview'">
@@ -48,7 +61,7 @@
               </div>
               <div class="col-sm-4">
                 <div class="group-button-thumb form-group">
-                  <label>画像未登録</label>
+                  <label>画像<required-mark></required-mark></label>
                   <div class="btn btn-info btn-block uploadfile-thumb" data-toggle="modal" :data-target="'#imageModalCenter'+ indexParent">
                     <i class="glyphicon glyphicon-picture"></i>
                     画像選択
@@ -63,6 +76,11 @@
                   <div class="btn btn-default btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
                     全パネルの画像を削除
                   </div>
+                  <!-- error message if no image is selected -->
+                  <input type="hidden" v-model="column.imageUrl" :name="'image-url-'+indexColum" v-validate="'required'" data-vv-as="パネル画像"/>
+                  <template v-if="errors.first('image-url-'+ indexColum)">
+                    <error-message message="パネルの画像は必須項目です"></error-message>
+                  </template>
                 </div>
               </div>
               <div class="col-sm-3">
@@ -82,8 +100,11 @@
 <script>
 
 import { ActionMessage } from '../../../core/constant';
+import ErrorMessage from '../../base/ErrorMessage.vue';
+import RequiredMark from '../../base/RequiredMark.vue';
 
 export default {
+  components: { RequiredMark, ErrorMessage },
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
   data() {
@@ -128,13 +149,8 @@ export default {
         action: ActionMessage.default
       };
 
-      if (index !== null) {
-        this.defaults.columns.splice(index + 1, 0, option);
-        this.selected = index + 1;
-      } else {
-        this.defaults.columns.push(option);
-        this.selected = this.defaults.columns.length - 1;
-      }
+      this.defaults.columns.push(option);
+      this.selected = this.defaults.columns.length - 1;
     },
 
     removeColumn(index) {
@@ -209,172 +225,212 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.template-carousel{
-  padding: 15px 0;
-  margin: 0px!important;
-}
-
-.panel-heading {
-  padding: 5px 10px;
-  background-color: #ccc;
-}
-
-.panel-body {
-  padding: 0px!important;
-}
-
-.carousel-body{
-  background: #f1f1f1;
-  overflow-y: hidden;
-  margin: 0 0px;
-  position: relative;
-  padding: 5px;
-  margin-bottom: 15px;
-}
-
-.list-carousel{
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  margin: 0 0;
-  padding-left: 5px;
-  padding-right: 10px;
-}
-
-.carousel-add-btn {
-  border-radius: 4px;
-  margin: 0 1em;
-  padding: 0.2em;
-  width: 100px;
-  text-align: center;
-  color: #999;
-  background-color: rgba(255,255,255,0.8);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .count-carousel{
-    font-size: 20px;
+  .template-carousel{
+    padding: 15px 0;
+    margin: 0px!important;
   }
 
-  .glyphicon-plus-sign{
-    font-size: 35px;
+  .panel-heading {
+    padding: 5px 10px;
+    background-color: #ccc;
   }
-}
 
-.carousel-preview {
-  margin: 5px;
-  width: 210px;
-  display: inline-block;
-  .carousel-header {
-    .carousel-header-title {
-      font-size: 14px;
-      color: #aaa;
-      font-weight: bold;
+  .panel-body {
+    padding: 0px!important;
+  }
+
+  .carousel-body{
+    background: #f1f1f1;
+    overflow-y: hidden;
+    margin: 0 0px;
+    position: relative;
+    padding: 5px;
+    margin-bottom: 15px;
+  }
+
+  .list-carousel{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 0 0;
+    padding-left: 5px;
+    padding-right: 10px;
+  }
+
+  .carousel-add-btn {
+    border-radius: 4px;
+    margin: 0 1em;
+    padding: 0.2em;
+    width: 100px;
+    text-align: center;
+    color: #999;
+    background-color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .count-carousel{
+      font-size: 20px;
     }
-    .carousel-header-action {
-      float: right;
-      .action-item {
-        margin-left: 0px;
 
-        cursor: pointer;
-        display: block;
-        float: left;
-        text-align: center;
-        line-height: 1.2;
-        width: 2em;
-        border-left: 1px solid #ccc;
-        .glyphicon{
-         font-size: 14px;
+    .glyphicon-plus-sign{
+      font-size: 35px;
+    }
+  }
+
+  .carousel-preview {
+    margin: 5px;
+    width: 210px;
+    display: inline-block;
+    .carousel-header {
+      .carousel-header-title {
+        font-size: 14px;
+        color: #aaa;
+        font-weight: bold;
+      }
+      .carousel-header-action {
+        float: right;
+        .action-item {
+          margin-left: 0px;
+
+          cursor: pointer;
+          display: block;
+          float: left;
+          text-align: center;
+          line-height: 1.2;
+          width: 2em;
+          border-left: 1px solid #ccc;
+          .glyphicon{
+          font-size: 14px;
+          }
+        }
+
+        .action-item:first-child {
+          border-left-color: transparent;
         }
       }
-
-      .action-item:first-child {
-        border-left-color: transparent;
-      }
-    }
-  }
-
-  .carousel-content{
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    width: 200px;
-
-    .carousel-thumb {
-      height: 200px;
-      line-height: 159px;
-      background-size: cover;
-      background-position: center center;
-      color: #aaa;
-      text-align: center;
     }
 
-    .carousel-action {
-      .carousel-action-label-default {
-        color: #ccc;
-      }
-      .carousel-action-label {
+    .carousel-content{
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+      width: 200px;
+
+      .carousel-thumb {
+        height: 200px;
+        line-height: 159px;
+        background-size: cover;
+        background-position: center center;
+        color: #aaa;
         text-align: center;
-        line-height: 2em;
-        min-height: 2em;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+      }
+
+      .carousel-action {
+        .carousel-action-label-default {
+          color: #ccc;
+        }
+        .carousel-action-label {
+          text-align: center;
+          line-height: 2em;
+          min-height: 2em;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
-}
 
-.group-button-thumb {
-  .btn {
-    width: 100%;
-    margin-bottom: 20px;
+  .group-button-thumb {
+    .btn {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .btn-info {
+      color: white;
+    }
   }
 
   .btn-info {
     color: white;
+    white-space: normal;
+    word-break: break-word;
   }
-}
+  .btn-default {
+    white-space: normal;
+    word-break: break-word;
+  }
 
-.btn-info {
-  color: white;
-  white-space: normal;
-  word-break: break-word;
-}
-.btn-default {
-  white-space: normal;
-  word-break: break-word;
-}
+  .uploadfile-thumb {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    input[type=file] {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      opacity: 0;
+      cursor: inherit;
+      display: block;
+    }
+  }
 
-.uploadfile-thumb {
-  position: relative;
-  overflow: hidden;
-  color: white;
-  input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    opacity: 0;
-    cursor: inherit;
+  .active {
+    .carousel-content{
+      box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
+      border-color: #5bc0de;
+    }
+  }
+
+  .carousel-group-action{
+    padding: 15px;
+  }
+
+  .image-carousel-thumb {
+    max-width: 150px;
+  }
+
+  // Panel tab
+  .nav-stacked>li {
+    float: none;
+    position: relative;
     display: block;
   }
-}
 
-.active {
-  .carousel-content{
-    box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
-    border-color: #5bc0de;
+  li {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .nav-button {
+      width: 100% !important;
+      display: flex !important;
+      height: 40px;
+      align-items: center !important;
+      border: 1px solid #e4e4e4;
+      padding-left: 10px;
+    }
+
+    .action-tab-selector-remover {
+      color: #212529;
+      padding: 5px;
+      cursor: pointer;
+      line-height: 1;
+      align-items: center;
+      margin-left: auto;
+      display: inline-flex;
+    }
   }
-}
 
-.carousel-group-action{
-  padding: 15px;
-}
-
-.image-carousel-thumb {
-  max-width: 150px;
-}
+  li.active {
+    .nav-button {
+      border-left: 3px solid #28a745;
+      color: #28a745;
+      font-weight: bold;
+    }
+  }
 </style>

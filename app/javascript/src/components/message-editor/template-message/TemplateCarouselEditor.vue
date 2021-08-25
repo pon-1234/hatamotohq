@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="card m-0 p-0">
-      <div class="card-body">
-        <div class="alert alert-warning alert-dismissible">
+    <div>
+      <div>
+        <div class="alert alert-warning">
           パネルタイトルの有無・画像の有無・ボタンの数は全てのパネルで同じ必要があります。
         </div>
 
@@ -126,9 +126,9 @@
               </div>
               <div class="col-sm-9">
                 <div v-for="(item, index) in column.actions" :key="index" v-show="selectedAction === index" class="card card-light">
-                  <div class="card-header d-flex flex-start">
+                  <div class="card-header d-flex flex-start align-items-center">
                     <h3 class="card-title">選択肢{{index+1}}</h3>
-                    <div class="btn btn-outline-success btn-sm ml-auto" @click.stop="copyCurrentAction(index)"><i class="fas fa-copy"></i></div>
+                    <div class="btn btn-secondary btn-sm ml-auto" @click.stop="copyCurrentAction(index)"><i class="fas fa-copy"></i></div>
                   </div>
                   <div class="card-body">
                     <div class="col-sm-12">

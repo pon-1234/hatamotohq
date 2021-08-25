@@ -83,24 +83,18 @@ export const actions = {
 
   async updateBroadcast(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
-    let messageIdData = null;
+    let broadcastId = null;
     try {
       const response = await Message.updateBroadcast(query);
+      context.dispatch('system/setLoading', false, { root: true });
 
       if (response && response.id) {
-        messageIdData = response.id;
-        context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      }
-
-      if (!messageIdData) {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
+        broadcastId = response.id;
       }
     } catch (error) {
       console.log(error);
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE_ID', messageIdData.id);
+    return broadcastId;
   },
 
   async fetchListMessageDelivers(context, query = {}) {
