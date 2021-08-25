@@ -5,9 +5,9 @@
         <h3 class="card-title">配信先</h3>
       </div>
       <div class="card-body">
-        <div class="row-form01 row-form-send mb10">
-            <label><input type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
-            <label><input type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+        <div class="radio-group mt-2 mb-2">
+          <label><input class="mr-1" type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
+          <label><input class="mr-1" type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
         </div>
         <div v-show="message_data.type !== 'all'">
           <label>タグ</label>
@@ -17,9 +17,10 @@
         </div>
 
         <div v-if="message_data.type !== 'all'">
-          <div>
+          <div class="divider"></div>
+          <div class="mt-2">
             <label>状態</label>
-            <div class="row-form01 row-form-datetime">
+            <div class="radio-group mt-2 mb-2">
               <label>
                 <input
                   type="radio"
@@ -45,7 +46,7 @@
         <h3 class="card-title">配信日時</h3>
       </div>
       <div class="card-body">
-        <div class="row-form01 row-form-datetime">
+        <div class="radio-group">
           <label>
             <input
               type="radio"
@@ -70,15 +71,6 @@
           value-zone="Asia/Tokyo"
           zone="Asia/Tokyo"
         ></datetime>
-
-          <!--<datetime-->
-                  <!--type="datetime"-->
-                  <!--v-model="message_data.schedule_at"-->
-                  <!--value-zone="Asia/Tokyo"-->
-                  <!--:min-datetime="currentDate"-->
-                  <!--input-class="form-control"-->
-          <!--style="max-width: 280px">-->
-          <!--</datetime>-->
       </div>
     </div>
 

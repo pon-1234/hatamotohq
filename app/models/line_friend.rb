@@ -31,5 +31,7 @@ class LineFriend < ApplicationRecord
   has_many :tags, through: :taggings
   has_many :line_friends, dependent: :destroy
 
-  enum status: { active: 'active', block: 'block', active: 'active', mute: 'mute' }, _prefix: true
+  enum status: { active: 'active', block: 'block', inactive: 'inactive', mute: 'mute' }, _prefix: true
+  scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
+  scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
 end

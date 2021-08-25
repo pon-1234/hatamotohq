@@ -57,4 +57,9 @@ class Broadcast < ApplicationRecord
   def editable?
     return self.status_draft? || self.status_pending?
   end
+
+  def update_status(status)
+    self.status = status
+    self.save
+  end
 end

@@ -1,94 +1,26 @@
 <template>
   <div>
-    <div class="">
-      <div class="col-md-12">
-        <label>
-          <i class="fa fa-calendar-check-o icon-color" aria-hidden="true"></i>
-        </label>
-        友だち登録日
-        <div class="d-flex align-items-center mb20">
-          <VueCtkDateTimePicker label="日付を選択"  v-model="condition.add_friend_date.start_date" locale="ja" :only-date="true" :max-date="condition.add_friend_date.end_date" no-label format="YYYY-MM-DD" formatted="ll" button-now-translation="今"></VueCtkDateTimePicker>
-          <i class="fas fa-arrows-alt-h"></i>
-          <VueCtkDateTimePicker label="日付を選択"  v-model="condition.add_friend_date.end_date" locale="ja" :only-date="true" :min-date="condition.add_friend_date.start_date" no-label format="YYYY-MM-DD" formatted="ll" button-now-translation="今"></VueCtkDateTimePicker>
-        </div>
-      </div>
-      <!-- <div class="col-md-6">
-        <label>
-          <i class="fas fa-male icon-color" ></i>
-        </label>
-        年齢
-        <div class="d-flex align-items-center mb20">
-          <input class="input-age form-control" type="number" :max='condition.age.max' min="0" v-model="condition.age.min"/>
-          <i class="fas fa-arrows-alt-h"></i>
-          <input class="input-age form-control" type="number" :min='condition.age.min' max="100" v-model="condition.age.max"/>
-        </div>
-      </div> -->
-    </div>
-    <!-- <div class="row">
-      <div class="col-md-6 mb10">
-        <label>
-          <i class="fas fa-globe-europe icon-color"></i>
-        </label>
-          都道府県
-        <div class="d-flex align-items-center">
-          <select v-model="condition.prefecture" class="form-control">
-            <option v-for="(item, index) in options_prefecture" :key="index" :value="item.value">
-              {{
-              item.text
-              }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-md-6 mb10">
-       <label>
-          <i class="fas fa-user-friends icon-color"></i>
-        </label>
-          性別
-        <div class="d-flex align-items-center" >
-          <button v-for="(item, index) in options_gender" :key="index" :class="condition.gender == item.value? 'active-button btn btn-outline-success button-condition': 'btn btn-outline-success button-condition'">
-            <label class="radio-inline"  >
-              <input type="radio" :value="item.value" v-model="condition.gender" :checked="item.value == condition.gender">{{item.text}}
-            </label>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <label>
-            <i class="fas fa-birthday-cake icon-color"></i>
-        </label>
-          誕生日月
-        <div class="flex start">
-          <button :class="condition.month_birthday.includes(item.value)? 'active-button btn btn-outline-success button-condition mb10': 'mb10 btn btn-outline-success button-condition'" v-for="(item, index) in options_month" :key="index" >
-            <label class="checkbox-inline">
-              <input type="checkbox" :value="item.value" v-model="condition.month_birthday" >{{item.text}}
-            </label>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <label>
-      <i class="fas fa-envelope icon-color"></i>
-    </label>
-
-      未読ユーザーの除外設定
-    <div class="d-flex align-items-center mb20" >
-      <label class="checkbox-inline" >
-        <input type="checkbox" v-model="condition.message_status">
-        未読ユーザーの除外する
+    <div>
+      <label>
+        <i class="fa fa-calendar-check-o icon-color" aria-hidden="true"></i>友だち登録日
       </label>
-    </div> -->
+      <div class="mt-2">
+        <daterange-picker
+          class="d-block"
+          :start_date.sync="condition.add_friend_date.start_date"
+          :end_date.sync="condition.add_friend_date.end_date"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import Util from '@/core/util';
+import DateRangePicker from 'vue2-daterange-picker';
 
 export default {
   props: ['data'],
-
+  components: { DateRangePicker },
   data() {
     return {
       options_prefecture: this.Prefecture,
