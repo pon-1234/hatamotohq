@@ -45,10 +45,11 @@ class Broadcast < ApplicationRecord
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
 
-  validates :title, presence: true, length: { maximum: 255 }
-  validates :schedule_at, presence: true
-
   enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
+
+  validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
+  validates :schedule_at, presence: { unless: :status_draft? }
+
   # Get all broadcast to dispatch. The broadcast have status pending and schedule_at < now
   scope :dispatchable, -> { where(status: :pending).where('schedule_at <= ?', Time.zone.now) }
 
