@@ -7,7 +7,7 @@ class CreateScenarios < ActiveRecord::Migration[6.0]
       t.references :folder, foreign_key: true
       t.string :type, default: 'normal'
       t.string :title
-      t.string :content
+      t.string :description
       t.string :status, default: 'disable'
       t.string :mode, default: 'date'
       t.string :time_base_type, default: 'none'

@@ -6,8 +6,8 @@
 #
 #  id              :bigint           not null, primary key
 #  action          :json
-#  content         :string(255)
 #  deleted_at      :datetime
+#  description     :string(255)
 #  mode            :string(255)      default("date")
 #  status          :string(255)      default("disable")
 #  time_base_type  :string(255)      default("none")
@@ -29,8 +29,8 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Scenario < ApplicationRecord
-
   validates_presence_of :status
+  validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
 
   enum mode: { date: 'date', elapsed_time: 'elapsed_time' }, _prefix: true
   enum status: { enable: 'enable', disable: 'disable', draft: 'draft' }, _prefix: true

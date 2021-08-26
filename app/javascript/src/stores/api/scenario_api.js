@@ -35,9 +35,13 @@ export default {
       contentType: 'application/json'
     });
   },
-  scenarioDetail: (query) => {
-    query._pid = btoa('/talks/scenarios');
-    return window.$.get(process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id));
+  getScenario: (query) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/scenarios/' + query.id,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
   getTalks: (query) => {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages');

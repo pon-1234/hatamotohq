@@ -44,7 +44,7 @@ class Broadcast < ApplicationRecord
   has_many :broadcast_messages
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
-  
+
   validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
   validates :schedule_at, presence: { unless: :status_draft? }
 
@@ -55,7 +55,7 @@ class Broadcast < ApplicationRecord
   scope :dispatchable, -> { where(status: :pending).where('schedule_at <= ?', Time.zone.now) }
 
   def editable?
-    return self.status_draft? || self.status_pending?
+    self.status_draft? || self.status_pending?
   end
 
   def update_status(status)

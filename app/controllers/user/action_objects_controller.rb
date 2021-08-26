@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::ActionObjectsController < User::ApplicationController
   def index
     # TODO: this should be cached in redis

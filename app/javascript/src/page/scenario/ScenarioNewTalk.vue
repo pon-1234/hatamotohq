@@ -149,7 +149,7 @@ export default {
         id: this.scenario_id
       };
 
-      this.$store.dispatch('scenario/scenarioDetail', query).then((res) => {
+      this.$store.dispatch('scenario/getScenario', query).then((res) => {
         this.scenario = res;
         this.talk.priority = res.messages_count + 1;
       }).catch((err) => {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.id @broadcast.id
 json.title @broadcast.title
 json.deliver_now @broadcast.deliver_now

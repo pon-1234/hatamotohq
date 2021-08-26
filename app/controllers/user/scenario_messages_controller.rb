@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::ScenarioMessagesController < User::ApplicationController
   # GET /user/scenarios/:scenario_id/messages
   def index

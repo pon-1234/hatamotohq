@@ -1,20 +1,23 @@
 <template>
-  <div>
-    <div>
+  <div class="card card-success">
+    <div class="card-header">
+      <h3 class="card-title">シナリオ新規登録</h3>
+    </div>
+    <div class="card-body">
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
           <div class="form-border" style="border-top: 0">
             <div class="form-group">
               <label>シナリオ名<required-mark/></label>
-              <input type="text" name="name" class="form-control" placeholder="シナリオ名を入力してください" v-model="scenarioData.title" v-validate="'required'" data-vv-as="シナリオ名">
+              <input type="text" name="name" class="form-control" placeholder="シナリオ名を入力してください" v-model="scenarioData.title" v-validate="'required|max:255'" data-vv-as="シナリオ名">
               <error-message :message="errors.first('name')"></error-message>
             </div>
           </div>
           <div class="form-border">
             <div class="form-group">
-              <label class="mb10">シナリオ説明<required-mark/></label>
-              <textarea class="form-control" name="description" rows="3" placeholder="シナリオ説明を入力してください" v-model="scenarioData.content" v-validate="'required'" data-vv-as="シナリオ説明"></textarea>
+              <label class="mb10">シナリオ説明</label>
+              <textarea class="form-control" name="description" rows="3" placeholder="シナリオ説明を入力してください" v-model="scenarioData.description" v-validate="'max:2000'" data-vv-as="シナリオ説明"></textarea>
               <error-message :message="errors.first('description')"></error-message>
             </div>
           </div>
@@ -85,7 +88,7 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-header card-title"><h3 class="card-title">配信終了アクション設定</h3></div>
+        <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
         <div class="card-body">
           <message-action-type-default
             name="action"
@@ -99,27 +102,19 @@
         </div>
       </div>
 
-      <div class="row-form-btn flex start">
-        <button type="submit" class="btn btn-submit btn-block" @click="saveScenario()" >保存</button>
-        <button
-          type="submit"
-          class="btn btn-draft btn-block"
-          @click="saveScenario('draft')"
-        >下書き保存</button>
+      <div class="card-footer d-flex">
+        <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()" >保存</button>
+        <button type="submit" class="btn btn-outline-success" @click="saveScenario('draft')">下書き保存</button>
       </div>
     </div>
-
-    <!-- モーダル -->
-    <modal-select-scenario-template @changeSelectedTemplate="changeSelectedTemplate" id="modal-scenario-template"/>
+    <loading-indicator :loading="loading"/>
   </div>
 </template>
 <script>
 import Util from '@/core/util';
 import { mapActions } from 'vuex';
-import ErrorMessage from '../../components/base/ErrorMessage.vue';
 
 export default {
-  components: { ErrorMessage },
   props: ['scenario_id'],
 
   provide() {
@@ -128,11 +123,11 @@ export default {
 
   data() {
     return {
-      refresh_tag: true,
+      loading: true,
       target: 'all', // or 'tags'
       scenarioData: {
         title: '',
-        content: '',
+        description: '',
         tags: null,
         status: 'disable',
         mode: 'date',
@@ -146,6 +141,10 @@ export default {
   async beforeMount() {
     await this.getTags();
     await this.listTagAssigned();
+    if (this.scenario_id) {
+      this.getScenarioDetail();
+    }
+    this.loading = false;
   },
 
   methods: {
@@ -157,17 +156,15 @@ export default {
       'listTagAssigned'
     ]),
 
-    changeSelectedTemplate(scenario) {
-      this.refresh_tag = false;
-      this.scenarioData = scenario;
-      this.scenarioData.template_id = scenario.id;
-
-      if (this.scenarioData.tags && this.scenarioData.tags.length === 0) {
-        this.scenarioData.tags = null;
-      }
-
-      this.$nextTick(() => {
-        this.refresh_tag = true;
+    getScenarioDetail() {
+      const query = {
+        id: this.scenario_id
+      };
+      
+      this.$store.dispatch('scenario/getScenario', query).then((res) => {
+        this.scenarioData = res;
+      }).catch((err) => {
+        console.log(err);
       });
     },
 
@@ -225,18 +222,10 @@ export default {
       }
     },
 
-
     addListTag(data) {
       this.$set(this.scenarioData, 'tags', data);
     },
 
-    resetListTag() {
-      this.refresh_tag = false;
-      this.scenarioData.tags = null;
-      this.$nextTick(() => {
-        this.refresh_tag = true;
-      });
-    },
     updateAction(data) {
       console.log(data);
       this.scenarioData.action = data;

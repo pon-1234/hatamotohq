@@ -6,7 +6,7 @@ Rails.application.configure do
     Bullet.alert         = true
     Bullet.bullet_logger = true
     Bullet.console       = true
-  # Bullet.growl         = true
+    # Bullet.growl         = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
   end
@@ -39,6 +39,16 @@ Rails.application.configure do
 
     config.cache_store = :null_store
   end
+
+  # Use the lowest log level to ensure availability of diagnostic information
+  # when problems arise.
+  config.log_level = :warn
+
+  # Prepend all log lines with the following tags.
+  config.log_tags = [:request_id]
+
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local

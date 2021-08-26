@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.array! @action_objects do |action_object|
   json.id action_object.id
   json.type action_object.type

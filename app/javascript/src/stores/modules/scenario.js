@@ -71,8 +71,8 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  scenarioDetail(_, query) {
-    return ScenarioApi.scenarioDetail(query).done((res) => {
+  getScenario(_, query) {
+    return ScenarioApi.getScenario(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);

@@ -54,7 +54,7 @@ class DispatchBroadcastJob < ApplicationJob
     end
     if !post_message_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')
-      return
+      nil
     end
   end
 
@@ -77,7 +77,7 @@ class DispatchBroadcastJob < ApplicationJob
       end
       # filter by tags
       unless broadcast.tags.empty?
-        friends.where(tags: {id: broadcast.tag_ids})
+        friends.where(tags: { id: broadcast.tag_ids })
       end
       friends
     end

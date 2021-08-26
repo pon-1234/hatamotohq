@@ -125,7 +125,7 @@
     </div>
     <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modal-confirm-delete-folder' type='delete' @input="submitDeleteTag"/>
 
-    <div v-if="scenarioDetail">
+    <div v-if="getScenario">
       <div  class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -134,11 +134,11 @@
               <p class="mb10 fz14">以下のステップを削除します。よろしいですか？</p>
               <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between">
                 <dt >タイトル</dt>
-                <dd>{{this.scenarioDetail.title}}</dd>
+                <dd>{{this.getScenario.title}}</dd>
               </dl>
             </div>
             <div class="modal-footer flex center">
-              <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="scenarioDelete(scenarioDetail.id)">削除</button>
+              <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="scenarioDelete(getScenario.id)">削除</button>
               <button type="button" class="btn btn-common01 btn-modal-cancel" data-dismiss="modal">キャンセル</button>
             </div>
           </div>
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <modal-confirm id="modal-copy" type="confirm" @input="scenarioCopy(scenarioDetail.id)" title="コピーしますか？"/>
+    <modal-confirm id="modal-copy" type="confirm" @input="scenarioCopy(getScenario.id)" title="コピーしますか？"/>
   </div>
 
 </template>
@@ -164,7 +164,7 @@ export default {
       scenarioIndex: 0,
       scenarios: [],
       scenariosContent: [],
-      scenarioDetail: null,
+      getScenario: null,
       selectedStatus: this.MessageDeliveriesStatusFilter[0],
       optionsStatusFilter: this.ScenarioStatusFilter
     };
@@ -271,7 +271,7 @@ export default {
     },
 
     showModal(scenario, index) {
-      this.scenarioDetail = scenario;
+      this.getScenario = scenario;
       this.scenarioIndex = index;
     },
 

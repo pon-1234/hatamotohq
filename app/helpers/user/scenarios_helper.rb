@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module User::ScenariosHelper
   def render_scenario_status(status)
     return '' if status.blank?

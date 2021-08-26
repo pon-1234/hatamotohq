@@ -123,7 +123,7 @@ export default {
     await this.getTags();
 
     await this.listTagAssigned();
-    this.scenarioDetail();
+    this.getScenario();
   },
   methods: {
     ...mapActions('tag', [
@@ -131,12 +131,12 @@ export default {
       'listTagAssigned'
     ]),
 
-    scenarioDetail() {
+    getScenario() {
       const query = {
         id: this.scenario_id
       };
 
-      this.$store.dispatch('scenario/scenarioDetail', query).then((res) => {
+      this.$store.dispatch('scenario/getScenario', query).then((res) => {
         console.log(res, 'asdasd');
         res.tags = res.tags.length > 0 ? res.tags : null;
         this.refresh_tag = false;
