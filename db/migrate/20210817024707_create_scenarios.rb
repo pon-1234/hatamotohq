@@ -9,9 +9,9 @@ class CreateScenarios < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :content
       t.string :status, default: 'disable'
-      t.string :delivery_timing_type, default: 'now'
+      t.string :mode, default: 'date'
       t.string :time_base_type, default: 'none'
-      t.longtext :action
+      t.json :action
       t.timestamps
       t.datetime :deleted_at
     end

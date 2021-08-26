@@ -12,11 +12,10 @@
           <%# Header %>
             <thead>
               <tr>
-                <th width="5%"><%= sort_link(@q, :id, 'ID', default_order: :desc) %></th>
-                <th width="15%"><%= sort_link(@q, :deliver_at, '配信日時', default_order: :desc) %></th>
+                <th width="15%">日時</th>
                 <th width="30%">タイトル</th>
-                <th width="25%">配信先</th>
                 <th width="10%">状況</th>
+                <th width="25%">配信先</th>
                 <th width="15%"></th>
               </tr>
             </thead>
@@ -24,22 +23,19 @@
             <tbody>
               <% @broadcasts.each do |broadcast| %>
                 <tr>
-                  <td><%= link_to broadcast.id, user_broadcast_path(broadcast) %></td>
-                  <td>
+                  <td class="text-center">
                     <%= formatted_time(broadcast.deliver_at) || '未配信' %>
                   </td>
                   <td><%= broadcast.title %></td>
+                  <td class="text-center"><%= render_broadcast_status(broadcast.status).html_safe %></td>
                   <td><span class="text-center d-flex flex-wrap justify-content-center align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
-                  <td>
-                    <%= render_broadcast_status(broadcast.status).html_safe %>
-                  </td>
                   <td class="text-left">
-                    <%= link_to user_broadcast_path(broadcast), class: "btn btn-outline-info btn-sm mr-2" do %>
-                      <i class="fas fa-eye"></i> 詳細
+                    <%= link_to user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
+                      詳細
                     <% end %>
                     <% if broadcast.editable? %>
-                      <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-outline-info btn-sm mr-2" do %>
-                        <i class="fas fa-pencil-alt"></i> 編集
+                      <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
+                        編集
                       <% end %>
                     <% end %>
                   </td>

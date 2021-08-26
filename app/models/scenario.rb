@@ -4,19 +4,19 @@
 #
 # Table name: scenarios
 #
-#  id                   :bigint           not null, primary key
-#  action               :text(4294967295)
-#  content              :string(255)
-#  deleted_at           :datetime
-#  delivery_timing_type :string(255)      default("now")
-#  status               :string(255)      default("disable")
-#  time_base_type       :string(255)      default("none")
-#  title                :string(255)
-#  type                 :string(255)      default("normal")
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  folder_id            :bigint
-#  line_account_id      :bigint
+#  id              :bigint           not null, primary key
+#  action          :json
+#  content         :string(255)
+#  deleted_at      :datetime
+#  mode            :string(255)      default("date")
+#  status          :string(255)      default("disable")
+#  time_base_type  :string(255)      default("none")
+#  title           :string(255)
+#  type            :string(255)      default("normal")
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  folder_id       :bigint
+#  line_account_id :bigint
 #
 # Indexes
 #
@@ -29,4 +29,9 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Scenario < ApplicationRecord
+
+  validates_presence_of :status
+
+  enum mode: { date: 'date', elapsed_time: 'elapsed_time' }, _prefix: true
+  enum status: { enable: 'enable', disable: 'disable', draft: 'draft' }, _prefix: true
 end

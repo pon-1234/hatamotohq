@@ -59,13 +59,13 @@
         <label>配信タイミング</label>
         <div class="row-form01 row-form-timing">
           <!-- <label v-if="scenario.time_base_type !== 'no_selection'">
-            <input type="radio" value="now" v-model="scenario.delivery_timing_type">購読開始直後
+            <input type="radio" value="now" v-model="scenario.mode">購読開始直後
           </label> -->
           <label>
-            <input type="radio"  value="delay" v-model="scenario.delivery_timing_type">経過時間
+            <input type="radio"  value="delay" v-model="scenario.mode">経過時間で指定
           </label>
           <label>
-            <input type="radio"  value="time_designation" v-model="scenario.delivery_timing_type"> 指定時刻
+            <input type="radio"  value="time_designation" v-model="scenario.mode"> 時刻で指定
           </label>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default {
         content: null,
         tags: null,
         time_base_type: 'no_selection',
-        delivery_timing_type: 'delay',
+        mode: 'delay',
         action: this.ActionMessage.default
       },
       refresh_tag: true
@@ -151,7 +151,7 @@ export default {
     },
 
     async scenarioEdit(status) {
-      console.log(this.scenario.delivery_timing_type);
+      console.log(this.scenario.mode);
       if (status !== 'draft') {
         if (this.$refs.status.checked) {
           this.scenario.status = 'enable';
@@ -195,9 +195,9 @@ export default {
     changeTimeBase(value) {
       console.log(value);
       if (value === 'no_selection') {
-        this.scenario.delivery_timing_type = 'delay';
+        this.scenario.mode = 'delay';
       } else {
-        this.scenario.delivery_timing_type = 'delay';
+        this.scenario.mode = 'delay';
       }
     },
 

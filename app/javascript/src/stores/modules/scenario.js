@@ -20,17 +20,20 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  scenarioAdd(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return ScenarioApi.scenarioAdd(query).done((res) => {
-      _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      _.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
+  async createScenario(context, query) {
+    context.dispatch('system/setLoading', true, { root: true });
+    let scenarioId = null;
+    try {
+      const response = await ScenarioApi.createScenario(query);
+      context.dispatch('system/setLoading', false, { root: true });
+
+      if (response && response.id) {
+        scenarioId = response.id;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return scenarioId;
   },
   scenarioEdit(_, query) {
     _.dispatch('system/setLoading', true, { root: true });

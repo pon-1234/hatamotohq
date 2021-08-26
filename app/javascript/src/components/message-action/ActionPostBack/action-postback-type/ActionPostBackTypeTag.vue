@@ -1,6 +1,5 @@
 <template>
   <section>
-
     <div class="w-100">
       <input-tag
               v-if="refreshTag"

@@ -6,17 +6,17 @@
       </div>
       <div class="card-body">
         <div class="radio-group mt-2 mb-2">
-          <label><input class="mr-1" type="radio" v-model="message_data.type" name="send" value="all"  @click="resetListTag">全員</label>
-          <label><input class="mr-1" type="radio" v-model="message_data.type" name="send" value="condition" >条件で絞り込む</label>
+          <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
+          <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
         </div>
-        <div v-show="message_data.type !== 'all'">
+        <div v-show="broadcastData.type !== 'all'">
           <label>タグ</label>
           <div class="list-checkbox-tag" v-if="refresh_tag">
-            <input-tag :data="message_data.tags" @input="addListTag"/>
+            <input-tag :data="broadcastData.tags" @input="addListTag"/>
           </div>
         </div>
 
-        <div v-if="message_data.type !== 'all'">
+        <div v-if="broadcastData.type !== 'all'">
           <div class="divider"></div>
           <div class="mt-2">
             <label>状態</label>
@@ -26,15 +26,15 @@
                   type="radio"
                   name="friendCondition"
                   value="all"
-                  v-model="message_data.conditions.type"
+                  v-model="broadcastData.conditions.type"
                 />友だちリスト全員
               </label>
               <label>
-                <input type="radio" name="friendCondition" value="specific"  v-model="message_data.conditions.type" />条件で絞り込む
+                <input type="radio" name="friendCondition" value="specific"  v-model="broadcastData.conditions.type" />条件で絞り込む
               </label>
             </div>
-            <div v-if="message_data.conditions.type == 'specific'">
-              <message-condition @input="changeCondition" v-bind:data="message_data.conditions"/>
+            <div v-if="broadcastData.conditions.type == 'specific'">
+              <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions"/>
             </div>
           </div>
         </div>
@@ -52,17 +52,17 @@
               type="radio"
               name="datetime"
               :value="true"
-              v-model="message_data.deliver_now"
+              v-model="broadcastData.deliver_now"
               @click="changeStartDateForNow"
             />今すぐ配信
           </label>
           <label>
-            <input type="radio" name="datetime" :value="false" v-model="message_data.deliver_now"/>配信日時を指定
+            <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now"/>配信日時を指定
           </label>
         </div>
         <datetime
-          v-if="!message_data.deliver_now"
-          v-model="message_data.schedule_at"
+          v-if="!broadcastData.deliver_now"
+          v-model="broadcastData.schedule_at"
           input-class="form-control"
           type="datetime"
           :phrases="{ok: '確定', cancel: '閉じる'}"
@@ -81,7 +81,7 @@
       <div class="card-body">
         <div class="form-group">
           <label>タイトル<required-mark/></label>
-          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="message_data.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
+          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="broadcastData.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
           <error-message :message="errors.first('deliver-title')"></error-message>
         </div>
         <div v-if="refresh_content">
@@ -89,12 +89,12 @@
             <a class="btn btn-secondary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
             <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
           </div>
-          <div v-for="(item, index) in message_data.broadcast_messages"  :key="index">
+          <div v-for="(item, index) in broadcastData.broadcast_messages"  :key="index">
             <message-content-distribution
               :isDisplayTemplate="true"
               v-bind:data="item"
               v-bind:index="index"
-              v-bind:countMessages="message_data.broadcast_messages.length"
+              v-bind:countMessages="broadcastData.broadcast_messages.length"
               @input="changeContent"
               @setTemplate="selectTemplate"
               @remove="removeContent"
@@ -105,7 +105,7 @@
           <div
             class="btn btn-outline-success"
             @click="addMoreMessageContentDistribution"
-            v-if="message_data.broadcast_messages.length < 5"
+            v-if="broadcastData.broadcast_messages.length < 5"
           >
             <i class="fa fa-plus"></i> <span>メッセージ追加</span>
           </div>
@@ -145,7 +145,7 @@ export default {
   },
   data() {
     return {
-      message_data: {
+      broadcastData: {
         conditions: {
           type: 'all',
           add_friend_date: {
@@ -182,9 +182,9 @@ export default {
 
   created() {
     if (this.broadcast_id) {
-      this.message_data.id = this.broadcast_id;
+      this.broadcastData.id = this.broadcast_id;
     } else {
-      this.message_data.broadcast_messages.push({
+      this.broadcastData.broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -207,7 +207,7 @@ export default {
   },
 
   watch: {
-    message_data: {
+    broadcastData: {
       handler(val) {
         console.log('handler watch change message', val);
         this.setMessageDistributions(val);
@@ -239,25 +239,25 @@ export default {
           window.location.href = process.env.MIX_ROOT_PATH + '/streams';
         }
 
-        Object.assign(this.message_data, this.message);
+        Object.assign(this.broadcastData, this.message);
 
         this.$nextTick(() => {
           this.refresh_tag = true;
         });
 
-        if (this.message_data.deliver_now) {
+        if (this.broadcastData.deliver_now) {
           this.changeStartDateForNow();
         }
       }
     },
 
     changeContent({ index, content }) {
-      this.message_data.broadcast_messages.splice(index, 1, content);
+      this.broadcastData.broadcast_messages.splice(index, 1, content);
     },
 
     removeContent({ index }) {
       this.refresh_content = false;
-      this.message_data.broadcast_messages.splice(index, 1);
+      this.broadcastData.broadcast_messages.splice(index, 1);
       this.$nextTick(() => {
         this.refresh_content = true;
       });
@@ -265,23 +265,23 @@ export default {
 
     moveTopMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.broadcast_messages[index];
-      this.message_data.broadcast_messages[index] = this.message_data.broadcast_messages.splice(index - 1, 1, option)[0];
+      const option = this.broadcastData.broadcast_messages[index];
+      this.broadcastData.broadcast_messages[index] = this.broadcastData.broadcast_messages.splice(index - 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
     moveBottomMessage(index) {
       this.refresh_content = false;
-      const option = this.message_data.broadcast_messages[index];
-      this.message_data.broadcast_messages[index] = this.message_data.broadcast_messages.splice(index + 1, 1, option)[0];
+      const option = this.broadcastData.broadcast_messages[index];
+      this.broadcastData.broadcast_messages[index] = this.broadcastData.broadcast_messages.splice(index + 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
 
     addMoreMessageContentDistribution() {
-      this.message_data.broadcast_messages.push({
+      this.broadcastData.broadcast_messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -291,16 +291,16 @@ export default {
     },
 
     changeStartDateForNow() {
-      this.message_data.schedule_at = moment().format('YYYY-MM-DD HH:mm');
+      this.broadcastData.schedule_at = moment().format('YYYY-MM-DD HH:mm');
     },
 
     changeCondition(value) {
-      this.message_data.conditions = value;
+      this.broadcastData.conditions = value;
     },
 
     async createMessage(status) {
-      this.message_data.status = status;
-      if (this.message_data.deliver_now) {
+      this.broadcastData.status = status;
+      if (this.broadcastData.deliver_now) {
         this.changeStartDateForNow();
       }
 
@@ -321,21 +321,21 @@ export default {
         };
       }
       // Normalize data
-      const broadcastFormData = _.cloneDeep(this.message_data);
-      broadcastFormData.tag_ids = broadcastFormData.tags.map(_ => _.id);
-      delete broadcastFormData.tags;
+      const broadcastDataData = _.cloneDeep(this.broadcastData);
+      broadcastDataData.tag_ids = broadcastDataData.tags.map(_ => _.id);
+      delete broadcastDataData.tags;
       if (!this.broadcast_id) {
-        const broadcastId = await this.createBroadcast(broadcastFormData);
-        this.onReceiveCreateBroadcastResponse(broadcastId);
+        const broadcastId = await this.createBroadcast(broadcastDataData);
+        this.onReceiveCreateBroadcastResponse(!!broadcastId);
       } else {
-        const broadcastId = await this.updateBroadcast(broadcastFormData);
-        this.onReceiveUpdateBroadcastResponse(broadcastId);
+        const broadcastId = await this.updateBroadcast(broadcastDataData);
+        this.onReceiveUpdateBroadcastResponse(!!broadcastId);
       }
     },
 
     // Handle broadcast creation response
-    onReceiveCreateBroadcastResponse(broadcastId) {
-      if (broadcastId) {
+    onReceiveCreateBroadcastResponse(success) {
+      if (success) {
         window.toastr.success('一斉配信の作成は完了しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
@@ -348,8 +348,8 @@ export default {
       }
 
     },
-    onReceiveUpdateBroadcastResponse(broadcastId) {
-      if (broadcastId) {
+    onReceiveUpdateBroadcastResponse(success) {
+      if (success) {
         window.toastr.success('一斉配信の更新は完了しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
@@ -364,7 +364,7 @@ export default {
     },
 
     selectTemplate(template) {
-      Object.assign(this.message_data, {
+      Object.assign(this.broadcastData, {
         title: template.title,
         broadcast_messages: template.contents
       });
@@ -376,12 +376,12 @@ export default {
     },
 
     addListTag(data) {
-      this.message_data.tags = data;
+      this.broadcastData.tags = data;
     },
 
     resetListTag() {
       this.refresh_tag = false;
-      this.message_data.tags = [];
+      this.broadcastData.tags = [];
       this.$nextTick(() => {
         this.refresh_tag = true;
       });

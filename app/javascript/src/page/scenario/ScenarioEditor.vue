@@ -1,0 +1,280 @@
+<template>
+  <div>
+    <div>
+      <div class="card">
+        <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
+        <div class="card-body">
+          <div class="form-border" style="border-top: 0">
+            <div class="form-group">
+              <label>シナリオ名<required-mark/></label>
+              <input type="text" name="name" class="form-control" placeholder="シナリオ名を入力してください" v-model="scenarioData.title" v-validate="'required'" data-vv-as="シナリオ名">
+              <error-message :message="errors.first('name')"></error-message>
+            </div>
+          </div>
+          <div class="form-border">
+            <div class="form-group">
+              <label class="mb10">シナリオ説明<required-mark/></label>
+              <textarea class="form-control" name="description" rows="3" placeholder="シナリオ説明を入力してください" v-model="scenarioData.content" v-validate="'required'" data-vv-as="シナリオ説明"></textarea>
+              <error-message :message="errors.first('description')"></error-message>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
+        <div class="card-body">
+          <div class="form-border">
+            <div class="form-group">
+              <label class="mb10">配信</label>
+              <div class="flex start ai_center">
+                <div class="toggle-switch btn-scenario01">
+                  <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enable" false-value="disable" ref="status">
+                  <label for="scenario-onoff" class="toggle-label">
+                    <span></span>
+                  </label>
+                </div>
+                <p class="scenario-status no-mgn">配信する</p>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="mt-2">
+            <div class="form-group">
+              <label>配信先</label>
+              <div class="radio-group mb10">
+                <label><input type="radio" name="send" value="all"  :checked="target === 'all'"  @click="changeDeliverTarget('all')">全員</label>
+                <label><input type="radio" name="send" value="sort" :checked="target === 'tags'" @click="changeDeliverTarget('tags')">条件で絞り込む</label>
+              </div>
+              <div v-if="target === 'tags'">
+                <label>タグ</label>
+                <div>
+                  <input-tag :data="scenarioData.tags" @input="addListTag"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="mt-2">
+            <div class="form-group">
+              <label>配信開始</label>
+              <div class="radio-group">
+                <label>
+                  <input type="radio" value="no_selection" v-model="scenarioData.time_base_type" @change="changeTimeBase('no_selection')">選択なし
+                </label>
+                <label>
+                  <input type="radio"  value="friend_added" v-model="scenarioData.time_base_type" @change="changeTimeBase('friend_added')">友達追加時
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>配信タイミング</label>
+              <div class="radio-group">
+                <!-- <label v-if="scenarioData.time_base_type !== 'no_selection'">
+                  <input type="radio" value="now" v-model="scenarioData.mode">購読開始直後
+                </label> -->
+                <label>
+                  <input type="radio" value="date" v-model="scenarioData.mode">経過時間で指定
+                </label>
+                <label>
+                  <input type="radio" value="elapsed_time" v-model="scenarioData.mode">時刻で指定
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header card-title"><h3 class="card-title">配信終了アクション設定</h3></div>
+        <div class="card-body">
+          <message-action-type-default
+            name="action"
+            :value="scenarioData.action"
+            :labelRequired="false"
+            :showTitle="false"
+            :showLaunchMesasge="false"
+            @input="updateAction"
+          />
+
+        </div>
+      </div>
+
+      <div class="row-form-btn flex start">
+        <button type="submit" class="btn btn-submit btn-block" @click="saveScenario()" >保存</button>
+        <button
+          type="submit"
+          class="btn btn-draft btn-block"
+          @click="saveScenario('draft')"
+        >下書き保存</button>
+      </div>
+    </div>
+
+    <!-- モーダル -->
+    <modal-select-scenario-template @changeSelectedTemplate="changeSelectedTemplate" id="modal-scenario-template"/>
+  </div>
+</template>
+<script>
+import Util from '@/core/util';
+import { mapActions } from 'vuex';
+import ErrorMessage from '../../components/base/ErrorMessage.vue';
+
+export default {
+  components: { ErrorMessage },
+  props: ['scenario_id'],
+
+  provide() {
+    return { parentValidator: this.$validator };
+  },
+
+  data() {
+    return {
+      refresh_tag: true,
+      target: 'all', // or 'tags'
+      scenarioData: {
+        title: '',
+        content: '',
+        tags: null,
+        status: 'disable',
+        mode: 'date',
+        type: this.type || 'normal',
+        time_base_type: 'no_selection',
+        action: this.ActionMessage.default
+      }
+    };
+  },
+
+  async beforeMount() {
+    await this.getTags();
+    await this.listTagAssigned();
+  },
+
+  methods: {
+    ...mapActions('scenario', [
+      'createScenario',
+    ]),
+    ...mapActions('tag', [
+      'getTags',
+      'listTagAssigned'
+    ]),
+
+    changeSelectedTemplate(scenario) {
+      this.refresh_tag = false;
+      this.scenarioData = scenario;
+      this.scenarioData.template_id = scenario.id;
+
+      if (this.scenarioData.tags && this.scenarioData.tags.length === 0) {
+        this.scenarioData.tags = null;
+      }
+
+      this.$nextTick(() => {
+        this.refresh_tag = true;
+      });
+    },
+
+    changeTimeBase(value) {
+      console.log(value);
+      if (value === 'no_selection') {
+        this.scenarioData.mode = 'delay';
+      } else {
+        this.scenarioData.mode = 'delay';
+      }
+    },
+
+    changeDeliverTarget(target) {
+      if (target === 'all') {
+        this.scenarioData.tags = null;
+      }
+      this.target = target;
+    },
+
+    async saveScenario(status) {
+      if (status !== 'draft') {
+        if (this.$refs.status.checked) {
+          this.scenarioData.status = 'enable';
+        } else {
+          this.scenarioData.status = 'disable';
+        }
+        const result = await this.$validator.validateAll();
+        if (!result) {
+          $('input, textarea').each(
+            function(index) {
+              let input = $(this);
+              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
+                if (input.is(':hidden')) {
+                  input = input.parent();
+                }
+                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
+                return false;
+              }
+            }
+          );
+          return;
+        }
+      } else {
+        this.scenarioData.status = status;
+      }
+
+      this.scenarioData.folderId = Util.getQueryParamsUrl('folder_id');
+
+      this.scenarioData.type = this.type || 'normal';
+      const scenarioId = await this.createScenario(this.scenarioData);
+      if (!this.scenario_id) {
+        this.onReceiveCreateScenarioResponse(!!scenarioId);
+      } else {
+        this.onReceiveUpdateScenarioResponse(!!scenarioId);
+      }
+    },
+
+
+    addListTag(data) {
+      this.$set(this.scenarioData, 'tags', data);
+    },
+
+    resetListTag() {
+      this.refresh_tag = false;
+      this.scenarioData.tags = null;
+      this.$nextTick(() => {
+        this.refresh_tag = true;
+      });
+    },
+    updateAction(data) {
+      console.log(data);
+      this.scenarioData.action = data;
+    },
+
+    // Show alert and redirect after create/update
+    onReceiveCreateScenarioResponse(success) {
+      if (success) {
+        window.toastr.success('シナリオの作成は完了しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+        }, 500);
+      } else {
+        window.toastr.error('シナリオの作成は失敗しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
+        }, 500);
+      }
+    },
+    onReceiveUpdateScenarioResponse(success) {
+      if (success) {
+        window.toastr.success('シナリオの更新は完了しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+        }, 500);
+      } else {
+        window.toastr.error('シナリオの更新は失敗しました。');
+        setTimeout(() => {
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+        }, 500);
+      }
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+  .form-group .box-form-timing {
+    background: #f2f2f2;
+    padding: 15px;
+  }
+</style>

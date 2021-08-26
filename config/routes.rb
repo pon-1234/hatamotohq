@@ -27,7 +27,12 @@ Rails.application.routes.draw do
           get :search
         end
       end
-
+      resources :scenarios do
+        collection do
+          get :search
+        end
+        resources :messages, controller: 'scenario_messages'
+      end
       resources :folders, only: [:create]
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'

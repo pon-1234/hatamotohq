@@ -49,20 +49,6 @@
 .tbl-linebot01 table tbody td {
     text-align: center;
 }
-.tbl-linebot01 table thead th {
-    border-bottom-color: #00B900;
-    white-space: nowrap;
-}
-.tbl-linebot01 table thead th .caret.active, .tbl-linebot01 table thead th .caret:hover {
-    color: #00B900;
-}
-.tbl-linebot01 .table > tbody > tr:hover > td {
-    color: #00B900;
-}
-.tbl-linebot01 .table > tbody > tr:hover .btn-more span:after {
-    border-bottom-color: #00B900;
-    border-right-color: #00B900;
-}
 .tbl-linebot01 .table tbody tr td .status {
     padding: 9px 5px;
     border-radius: 5px;

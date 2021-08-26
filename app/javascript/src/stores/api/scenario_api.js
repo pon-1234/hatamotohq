@@ -3,9 +3,9 @@ export default {
     query._pid = btoa('/talks/scenarios');
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
-  scenarioAdd: (query) => {
+  createScenario: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/' + query.folderId + '/scenarios/add'),
+      url: process.env.MIX_ROOT_PATH + '/user/scenarios',
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'

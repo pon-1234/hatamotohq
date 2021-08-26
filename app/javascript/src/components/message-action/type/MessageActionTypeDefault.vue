@@ -20,7 +20,7 @@
 
     <div class="message-item" v-for="(message, index) in messages" :key="index">
       <div class="d-flex">
-        <label style="flex: 1">アクションNo : {{index + 1}}</label>
+        <label style="flex: 1">アクション{{index + 1}}</label>
         <div tyle="float:right" class="d-inline-block" v-if="messages.length > 1">
           <a class="btn btn-default" @click="moveUpMessage(index)">
             <i class="fa fa-arrow-up"></i></a>
@@ -52,7 +52,6 @@
           <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグを追加</label>
           <action-post-back-type-tag
                   v-if="refreshTag"
-            class="tag"
             :value="tagContent.content"
             :name="name + '_tag'"
             @input="updateTagContent">
@@ -63,7 +62,6 @@
           <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグをはずす</label>
           <action-post-back-type-tag
                   v-if="refreshTag"
-            class="tag"
             :value="tagDeleteContent.content"
             :name="name + '_tag_delete'"
             @input="deleteTagContent">

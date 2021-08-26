@@ -28,83 +28,18 @@ ja:
         active: 正常
         block: ブロック
         mute: ミュート
+    scenario:
+      mode:
+        date: 経過時間
+        elapsed_time: 時刻
+      status:
+        enable: 稼働中
+        disable: 停止中
+        draft: 下書き
     admin:
       status:
         active: 有効
         blocked: 無効
-    point:
-      type:
-        quest: クエスト
-        training: トレニング
-        system: システム
-        event: イベント
-    membership:
-      status:
-        owned: オーナー
-        pending: 未承認
-        accepted: 済
-        refused: 拒否
-    walk_rally:
-      status:
-        active: 実施中
-        ended: 停止中
-        scheduled: 開催予定
-    announcement:
-      target_os:
-        all: 全て
-        android: Androidのみ
-        ios: iOSのみ
-      repeat:
-        none: なし
-        daily: 毎日
-        weekly: 毎週
-        monthly: 毎月
-        yearly: 毎年
-      type:
-        weight_registration: 体重登録の促進
-        medical_exam_registration: 健診受診の促進
-        walk_rally: ウォークラリー関係のお知らせ
-        point_exchange: ポイント交換関連のお知らせ
-        meal_registration: 食事登録
-        qrcode: QRコード読み取り
-        survey: アンケート
-        free_form: その他
-    announcement_job:
-      status:
-        done: 済
-        queued: 保留中
-        canceled: キャンセル
-    meal:
-      type:
-        breakfast: 朝食
-        lunch: 昼食
-        dinner: 夕食
-        snack: 間食
-    reward:
-      type:
-        commodity: 交換物品
-        lottery: 抽選物品
-        gift: 寄付
-    csv_export_job:
-      status:
-        pending: 保留中
-        processing: 作成中
-        done: ダウンロード可能
-        error: エラー
-      csv_type:
-        user_info: ユーザー情報
-        mets: 活動量
-        steps: 歩数
-        distance_bicycle: 自転車
-        user_target: 個人目標
-        medium_intensity_exercise: 中強度運動
-        exercise_gt_30mins: 運動３０分
-        target_23mets_per_week: 週23METs
-        weight: 体重
-        bmi: BMI
-        examination: 検診
-        point: ポイント
-        walk_rally: ウオークラリー
     prefecture:
       hokkaido: 北海道
       aomori: 青森県

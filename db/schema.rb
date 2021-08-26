@@ -346,9 +346,9 @@ ActiveRecord::Schema.define(version: 2021_08_23_074802) do
     t.string "title"
     t.string "content"
     t.string "status", default: "disable"
-    t.string "delivery_timing_type", default: "now"
+    t.string "mode", default: "date"
     t.string "time_base_type", default: "none"
-    t.text "action", size: :long
+    t.json "action"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"

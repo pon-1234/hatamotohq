@@ -6,7 +6,7 @@ class User::BroadcastsController < User::ApplicationController
   # GET /user/broadcasts
   def index
     @params = params[:q]
-    @q = Broadcast.order(id: :desc).ransack(params[:q])
+    @q = Broadcast.includes([:tags, taggings: [:tag]]).order(id: :desc).ransack(params[:q])
     @broadcasts = @q.result.page(params[:page])
   end
 

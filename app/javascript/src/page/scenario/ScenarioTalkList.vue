@@ -30,7 +30,7 @@
         <tr>
           <th class="w5">配信</th>
           <th class="w10" style="min-width: 100px">通目</th>
-          <th class="w15"  style="min-width: 150px" v-if="scenario && (scenario.delivery_timing_type === 'delay' || scenario.delivery_timing_type === 'time_designation')">配信時間</th>
+          <th class="w15"  style="min-width: 150px" v-if="scenario && (scenario.mode === 'delay' || scenario.mode === 'time_designation')">配信時間</th>
           <th class="w10">タイトル</th>
           <th class="w25" style="min-width: 200px; ">本文</th>
           <th class="w20" style="min-width: 100px">タイプ</th>
@@ -47,7 +47,7 @@
               </div>
             </td>
             <td  name="num-data" >{{index+1}}</td>
-            <td  v-if="scenario && (scenario.delivery_timing_type === 'delay' || scenario.delivery_timing_type === 'time_designation')">{{getDeliverTime(talk)}}</td>
+            <td  v-if="scenario && (scenario.mode === 'delay' || scenario.mode === 'time_designation')">{{getDeliverTime(talk)}}</td>
             <td style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;">{{talk.name}}</td>
             <td style="min-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;" >
               <div class="message-content">
@@ -283,7 +283,7 @@ export default {
     },
 
     getDeliverTime(message) {
-      if (this.scenario.delivery_timing_type === 'delay') {
+      if (this.scenario.mode === 'delay') {
         return Util.timeConvertJp(message.delivery_timing) + '後 ';
       }
 

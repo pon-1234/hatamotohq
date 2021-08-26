@@ -36,16 +36,16 @@
         </div>
       </div>
       <div class="form-border">
-        <div  class="form-group" v-if="scenario && (scenario.delivery_timing_type === 'delay' || scenario.delivery_timing_type === 'time_designation') ">
-          <label  class="mb10" v-if="scenario && scenario.delivery_timing_type === 'delay'" >配信時期：経過時間</label>
-          <label  class="mb10" v-if="scenario && scenario.delivery_timing_type === 'time_designation'">配信時期：時刻指定</label>
-          <div v-if="scenario && scenario.delivery_timing_type === 'delay'" class="box-form-timing">
+        <div  class="form-group" v-if="scenario && (scenario.mode === 'delay' || scenario.mode === 'time_designation') ">
+          <label  class="mb10" v-if="scenario && scenario.mode === 'delay'" >配信時期：経過時間で指定</label>
+          <label  class="mb10" v-if="scenario && scenario.mode === 'time_designation'">配信時期：時刻指定</label>
+          <div v-if="scenario && scenario.mode === 'delay'" class="box-form-timing">
             登録から:
             <input type="text" v-model="delivery_timing_day" class="form-control delivery-timing-input"  min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');"  v-validate="'required'">日&nbsp;
             <VueCtkDateTimePicker id="time-select" label="00:00" v-model="delivery_timing_hour" input-size="sm" :error="!delivery_timing_hour" no-label :only-time="true" format="HH:mm" formatted="HH:mm" />&nbsp;時間後
             <input type="hidden" :value="delivery_timing_hour" name="delivery-timing-min" v-validate="'required'">
           </div>
-          <div v-if="scenario && scenario.delivery_timing_type === 'time_designation'" class="box-form-timing">
+          <div v-if="scenario && scenario.mode === 'time_designation'" class="box-form-timing">
             登録から:
             <input type="text" v-model="talk.delivery_timing" class="form-control delivery-timing-input"  min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');"  v-validate="'required'">日後
             <VueCtkDateTimePicker id="time-select" label="00:00" v-model="talk.time_designation" input-size="sm" no-label :only-time="true" format="HH:mm" formatted="HH:mm" minute-interval="5" />
@@ -223,10 +223,10 @@ export default {
         return;
       };
 
-      if (this.scenario.delivery_timing_type === 'delay') {
+      if (this.scenario.mode === 'delay') {
         const time = Util.getTimeWithFormat(this.delivery_timing_hour);
         this.talk.delivery_timing = this.delivery_timing_day + 'd' + time;
-      } else if (this.scenario.delivery_timing_type === 'time_designation') {
+      } else if (this.scenario.mode === 'time_designation') {
         this.talk.delivery_timing += 'd';
       } else {
         this.talk.delivery_timing = 0;
