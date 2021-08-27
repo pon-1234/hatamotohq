@@ -31,8 +31,8 @@
 #
 class Scenario < ApplicationRecord
   belongs_to :line_account
-  has_many :scenario_messages
-  has_many :taggings, as: :taggable
+  has_many :scenario_messages, dependent: :destroy
+  has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
   validates_presence_of :status

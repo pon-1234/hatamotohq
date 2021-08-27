@@ -221,7 +221,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
   .media-list {
     display: flex;
     margin: 0 -5px;

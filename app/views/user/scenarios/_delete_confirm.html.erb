@@ -1,0 +1,17 @@
+
+<div id="confirmDelModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header align-items-center">
+        <label class="m-0">本当に削除してよろしですか？</label>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        シナリオ名：<%= @scenario.title %>
+      </div>
+      <div class="modal-footer">
+        <%= link_to '削除', user_scenario_path(@scenario), class: "btn btn-danger fw-100", method: :delete %>
+      </div>      
+    </div>
+  </div>
+</div>

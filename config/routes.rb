@@ -18,20 +18,15 @@ Rails.application.routes.draw do
       post '/bot/register', to: 'bot#register'
 
       resources :friends do
-        collection do
-          get :search
-        end
+        get :search, on: :collection
       end
       resources :broadcasts do
-        collection do
-          get :search
-        end
+        get :search, on: :collection
       end
       resources :scenarios do
-        collection do
-          get :search
-        end
+        get :search, on: :collection
         resources :messages, controller: 'scenario_messages'
+        get :delete_confirm, on: :member
       end
       resources :auto_responses
       resources :folders, only: [:create]
@@ -40,13 +35,9 @@ Rails.application.routes.draw do
       get '/action_objects', to: 'action_objects#index'
       resources :medias
       resources :setting, only: [:index] do
-        collection do
-          get :edit
-          patch :update
-        end
-        member do
-          get :friends
-        end
+        get :edit, on: :collection
+        patch :update, on: :collection
+        get :friends, on: :member
       end
     end
   end

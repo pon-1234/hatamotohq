@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::ScenariosController < User::ApplicationController
-  before_action :find_scenario, only: [:show, :update]
+  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm]
 
   include User::ScenariosHelper
 
@@ -50,6 +50,21 @@ class User::ScenariosController < User::ApplicationController
       render 'user/scenarios/update_success.json.jbuilder'
     else
       render_bad_request_with_message(@scenario.first_error_message)
+    end
+  end
+
+  # DELETE /user/scenarios/:id
+  def destroy
+    if @scenario.destroy
+      redirect_to user_scenarios_path, flash: { success: 'シナリオの削除は成功しました。' }
+    else
+      redirect_to user_scenarios_path, flash: { error: 'シナリオの削除は失敗しました。' }
+    end
+  end
+
+  def delete_confirm
+    respond_to do |format|
+      format.js
     end
   end
 
