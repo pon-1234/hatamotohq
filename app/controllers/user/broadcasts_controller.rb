@@ -52,11 +52,12 @@ class User::BroadcastsController < User::ApplicationController
     return render_permission_denied unless @broadcast.editable?
 
     @broadcast = update_broadcast(@broadcast, broadcast_params)
-    if @broadcast.save!
+    if @broadcast.save
       build_broadcast_messages(@broadcast, broadcast_params[:broadcast_messages])
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
       render 'user/broadcasts/update_success.json.jbuilder'
     else
+      render_bad_request_with_error_message(@broadcast.error.full_messages.first)
     end
   rescue => e
     logger.error e.message
