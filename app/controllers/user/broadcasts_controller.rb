@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class User::BroadcastsController < User::ApplicationController
+  load_and_authorize_resource
   include User::BroadcastsHelper
 
   # GET /user/broadcasts
   def index
     @params = params[:q]
-    @q = Broadcast.includes([:tags, taggings: [:tag]]).order(id: :desc).ransack(params[:q])
+    @q = Broadcast.accessible_by(current_ability).includes([:tags, taggings: [:tag]]).order(id: :desc).ransack(params[:q])
     @broadcasts = @q.result.page(params[:page])
   end
 

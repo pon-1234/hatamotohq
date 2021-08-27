@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class User::ScenariosController < User::ApplicationController
+  load_and_authorize_resource
   before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm]
 
   include User::ScenariosHelper
@@ -8,7 +9,7 @@ class User::ScenariosController < User::ApplicationController
   # GET /user/scenarios
   def index
     @params = params[:q]
-    @q = Scenario.order(id: :desc).ransack(params[:q])
+    @q = Scenario.accessible_by(current_ability).order(id: :desc).ransack(params[:q])
     @scenarios = @q.result.page(params[:page])
   end
 

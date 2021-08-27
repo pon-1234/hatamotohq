@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.array! Folder.type_tag do |folder|
+json.array! @folders do |folder|
   json.id folder.id
   json.name folder.name
   json.tags_count folder.tags.count

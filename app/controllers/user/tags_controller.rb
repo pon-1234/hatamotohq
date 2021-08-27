@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class User::TagsController < User::ApplicationController
+  load_and_authorize_resource
   before_action :find_tag, only: [:update, :destroy, :friends]
 
   def index
+    @folders = Folder.accessible_by(current_ability).type_tag
     respond_to do |format|
       format.html
       format.json { render 'user/tags/index.json.jbuilder' }
