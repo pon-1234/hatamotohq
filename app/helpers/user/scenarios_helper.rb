@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module User::ScenariosHelper
+  def build_scenario(scenario_params)
+    scenario = Scenario.new(scenario_params)
+    scenario.line_account = current_user.line_account
+  end
+
   def render_scenario_status(status)
     return '' if status.blank?
     status_i18n = I18n.t('enums.scenario.status.' + status)

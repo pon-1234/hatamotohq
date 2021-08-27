@@ -1,2 +1,2 @@
-class User::AutoResponsesController < ApplicationController
+class User::AutoResponsesController < User::ApplicationController
 end

@@ -34,7 +34,7 @@ class User::BroadcastsController < User::ApplicationController
   # POST /user/broadcasts
   def create
     @broadcast = build_broadcast(broadcast_params)
-    if @broadcast.save!
+    if @broadcast.save
       build_broadcast_messages(@broadcast, broadcast_params[:broadcast_messages])
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
       render 'user/broadcasts/create_success.json.jbuilder'

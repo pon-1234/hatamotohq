@@ -11,7 +11,7 @@
 #  mode                    :string(255)      default("date")
 #  scenario_messages_count :integer
 #  status                  :string(255)      default("disable")
-#  time_base_type          :string(255)      default("none")
+#  type          :string(255)      default("none")
 #  title                   :string(255)
 #  type                    :string(255)      default("normal")
 #  created_at              :datetime         not null
@@ -32,10 +32,13 @@
 class Scenario < ApplicationRecord
   belongs_to :line_account
   has_many :scenario_messages
+  has_many :taggings, as: :taggable
+  has_many :tags, through: :taggings
 
   validates_presence_of :status
   validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
 
   enum mode: { date: 'date', elapsed_time: 'elapsed_time' }, _prefix: true
   enum status: { enable: 'enable', disable: 'disable', draft: 'draft' }, _prefix: true
+  enum type: { auto: 'auto', send: 'send' }, _prefix: true
 end

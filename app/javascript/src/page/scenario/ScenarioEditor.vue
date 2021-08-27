@@ -1,8 +1,11 @@
 <template>
   <div class="mw-1200">
-    <div class="card card-info">
-      <div class="card-header">
-        <h3 class="card-title">シナリオ新規登録</h3>
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        <a :href="`${userRootUrl}/user/scenarios`" class="text-info">
+          <i class="fa fa-arrow-left"></i> シナリオ一覧
+        </a>
+        <h5 class="m-auto font-weight-bold">新規登録</h5>
       </div>
       <div class="card-body">
         <div class="card">
@@ -63,10 +66,10 @@
                 <label>配信開始</label>
                 <div class="radio-group">
                   <label>
-                    <input type="radio" value="no_selection" v-model="scenarioData.time_base_type" @change="changeTimeBase('no_selection')">選択なし
+                    <input type="radio" value="send" v-model="scenarioData.type" @change="changeScenarioType('send')">選択なし
                   </label>
                   <label>
-                    <input type="radio"  value="friend_added" v-model="scenarioData.time_base_type" @change="changeTimeBase('friend_added')">友達追加時
+                    <input type="radio"  value="auto" v-model="scenarioData.type" @change="changeScenarioType('auto')">友達追加時
                   </label>
                 </div>
               </div>
@@ -74,7 +77,7 @@
               <div class="form-group">
                 <label>配信タイミング</label>
                 <div class="radio-group">
-                  <!-- <label v-if="scenarioData.time_base_type !== 'no_selection'">
+                  <!-- <label v-if="scenarioData.type !== 'no_selection'">
                     <input type="radio" value="now" v-model="scenarioData.mode">購読開始直後
                   </label> -->
                   <label>
@@ -125,6 +128,7 @@ export default {
 
   data() {
     return {
+      userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       target: 'all', // or 'tags'
       scenarioData: {
@@ -133,8 +137,7 @@ export default {
         tags: null,
         status: 'disable',
         mode: 'date',
-        type: this.type || 'normal',
-        time_base_type: 'no_selection',
+        type: 'auto', // or 'send'
         action: this.ActionMessage.default
       }
     };
@@ -170,7 +173,7 @@ export default {
       });
     },
 
-    changeTimeBase(value) {
+    changeScenarioType(value) {
       console.log(value);
       if (value === 'no_selection') {
         this.scenarioData.mode = 'delay';
@@ -215,7 +218,7 @@ export default {
 
       this.scenarioData.folderId = Util.getQueryParamsUrl('folder_id');
 
-      this.scenarioData.type = this.type || 'normal';
+      this.scenarioData.type = this.type || 'send';
       const scenarioId = await this.createScenario(this.scenarioData);
       if (!this.scenario_id) {
         this.onReceiveCreateScenarioResponse(!!scenarioId);

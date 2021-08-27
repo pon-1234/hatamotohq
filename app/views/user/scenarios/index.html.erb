@@ -12,8 +12,8 @@
           <%# Header %>
             <thead>
               <tr>
-                <th class="mw-200">シナリオ名</th>
                 <th class="mw-120">配信方式</th>
+                <th class="mw-200">シナリオ名</th>
                 <th class="mw-100">状況</th>
                 <th class="mw-120">メッセージ数</th>
                 <th class="mw-300">設定</th>
@@ -23,10 +23,10 @@
             <tbody>
               <% @scenarios.each do |scenario| %>
                 <tr>
-                  <td><%= scenario.title %></td>
                   <td><%= scenario.mode_i18n %></td>
+                  <td><%= scenario.title %></td>
                   <td><%= render_scenario_status(scenario.status).html_safe %></td>
-                  <td>0</td>
+                  <td><%= scenario.scenario_messages_count %></td>
                   <td>
                     <%= link_to edit_user_scenario_path(scenario), class: "btn btn-primary btn-xs mr-2" do %>
                       基本設定

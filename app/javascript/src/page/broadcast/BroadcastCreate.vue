@@ -1,8 +1,11 @@
 <template>
   <div class="mw-1200" >
-    <div class="card card-info">
-      <div class="card-header">
-        <h3 class="card-title">一斉配信新規登録</h3>
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        <a :href="`${userRootUrl}/user/broadcasts`" class="text-info">
+          <i class="fa fa-arrow-left"></i> 一斉配信一覧
+        </a>
+        <h5 class="m-auto font-weight-bold">新規登録</h5>
       </div>
       <div class="card-body">
         <div class="card">
@@ -153,6 +156,7 @@ export default {
   },
   data() {
     return {
+      userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       broadcastData: {
         conditions: {

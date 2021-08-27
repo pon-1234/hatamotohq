@@ -345,12 +345,11 @@ ActiveRecord::Schema.define(version: 2021_08_23_074802) do
   create_table "scenarios", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "line_account_id"
     t.bigint "folder_id"
-    t.string "type", default: "normal"
     t.string "title"
     t.string "description"
     t.string "status", default: "disable"
     t.string "mode", default: "date"
-    t.string "time_base_type", default: "none"
+    t.string "type", default: "send"
     t.json "action"
     t.integer "scenario_messages_count"
     t.datetime "created_at", precision: 6, null: false

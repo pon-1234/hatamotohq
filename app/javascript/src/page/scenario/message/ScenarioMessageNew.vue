@@ -3,9 +3,9 @@
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/scenarios/${scenario_id}/messages`" class="text-info" v-if="!loading">
-          <i class="fa fa-arrow-left"></i>メッセージ一覧
+          <i class="fa fa-arrow-left"></i> メッセージ一覧
         </a>
-        <span class="m-auto font-weight-bold">新規登録</span>
+        <h5 class="m-auto font-weight-bold">新規登録</h5>
       </div>
       <div class="card-body">
         <scenario-message-time-define

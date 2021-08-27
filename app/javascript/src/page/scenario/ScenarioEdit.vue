@@ -48,17 +48,17 @@
         <label>配信開始</label>
         <div class="row-form01 row-form-timing">
           <label>
-            <input type="radio" value="no_selection" v-model="scenario.time_base_type" @change="changeTimeBase('no_selection')">選択なし
+            <input type="radio" value="no_selection" v-model="scenario.type" @change="changeTimeBase('no_selection')">選択なし
           </label>
           <label>
-            <input type="radio"  value="friend_added" v-model="scenario.time_base_type" @change="changeTimeBase('friend_added')">友達追加時
+            <input type="radio"  value="friend_added" v-model="scenario.type" @change="changeTimeBase('friend_added')">友達追加時
           </label>
         </div>
       </div>
       <div class="form-group">
         <label>配信タイミング</label>
         <div class="row-form01 row-form-timing">
-          <!-- <label v-if="scenario.time_base_type !== 'no_selection'">
+          <!-- <label v-if="scenario.type !== 'no_selection'">
             <input type="radio" value="now" v-model="scenario.mode">購読開始直後
           </label> -->
           <label>
@@ -112,7 +112,7 @@ export default {
         title: null,
         content: null,
         tags: null,
-        time_base_type: 'no_selection',
+        type: 'no_selection',
         mode: 'delay',
         action: this.ActionMessage.default
       },

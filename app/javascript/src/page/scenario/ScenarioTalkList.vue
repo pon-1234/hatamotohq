@@ -8,7 +8,7 @@
         <div style="display: block">
           <button class="btn btn-common01 btn-modal-cancel fz14 "
                   style="margin: initial;width: auto;padding: 10px 30px;"
-                  v-if="scenario && scenario.time_base_type === 'no_selection'"
+                  v-if="scenario && scenario.type === 'no_selection'"
                   data-toggle="modal" data-target="#confirmSelectTemplate">
             テンプレートから作成
           </button>

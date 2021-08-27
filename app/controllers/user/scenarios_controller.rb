@@ -3,6 +3,8 @@
 class User::ScenariosController < User::ApplicationController
   before_action :find_scenario, only: [:show, :update]
 
+  include User::ScenariosHelper
+
   # GET /user/scenarios
   def index
     @params = params[:q]
@@ -29,9 +31,8 @@ class User::ScenariosController < User::ApplicationController
 
   # POST /user/scenarios
   def create
-    @scenario = Scenario.new(scenario_params)
-    @scenario.line_account = current_user.line_account
-    if @scenario.save
+    @scenario = build_scenario(scenario_params)
+    if @scenario.save!
       render 'user/scenarios/create_success.json.jbuilder'
     else
       render_bad_request_with_message(@scenario.first_error_message)
@@ -53,7 +54,7 @@ class User::ScenariosController < User::ApplicationController
         :title,
         :description,
         :mode,
-        :time_base_type,
+        :type,
         :status,
         action: {},
         tags: []
