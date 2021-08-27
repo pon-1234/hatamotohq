@@ -17,6 +17,16 @@
           </li>
         </ul>
 
+        <!-- トーク -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-comment-dots"></i><p>個別トーク</p>'.html_safe,
+              user_channels_path,
+              class: "nav-link #{controller?("user/channels") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
         <!-- Friend List -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">

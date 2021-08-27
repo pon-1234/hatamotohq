@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
-
+      resources :channels
       resources :friends do
         get :search, on: :collection
       end
