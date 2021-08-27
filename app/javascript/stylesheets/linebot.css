@@ -1280,15 +1280,6 @@
     line-height: normal;
 }
 
-
-@media(min-width: 1199px) {
-
-}
-
-.create-content {
-    max-width: 1000px;
-}
-
 .is-validate {
     border: 1px solid red!important;
     border-radius: 4px;

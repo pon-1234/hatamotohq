@@ -30,8 +30,12 @@ class User::ScenariosController < User::ApplicationController
   # POST /user/scenarios
   def create
     @scenario = Scenario.new(scenario_params)
-    @scenario.save!
-    render 'user/scenarios/create_success.json.jbuilder'
+    @scenario.line_account = current_user.line_account
+    if @scenario.save
+      render 'user/scenarios/create_success.json.jbuilder'
+    else
+      render_bad_request_with_message(@scenario.first_error_message)
+    end
   end
 
   # GET /user/scenarios/:id

@@ -1,142 +1,144 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">一斉配信新規登録</h3>
-    </div>
-    <div class="card-body" >
-      <div class="card">
-        <div class="card-header left-border">
-          <h3 class="card-title">配信先</h3>
-        </div>
-        <div class="card-body">
-          <div class="radio-group mt-2 mb-2">
-            <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
-            <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
+  <div class="mw-1200" >
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">一斉配信新規登録</h3>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <div class="card-header left-border">
+            <h3 class="card-title">配信先</h3>
           </div>
-          <div v-show="broadcastData.type !== 'all'">
-            <label>タグ</label>
-            <div class="list-checkbox-tag" v-if="refresh_tag">
-              <input-tag :data="broadcastData.tags" @input="addListTag"/>
+          <div class="card-body">
+            <div class="radio-group mt-2 mb-2">
+              <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
+              <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
             </div>
-          </div>
-
-          <div v-if="broadcastData.type !== 'all'">
-            <div class="divider"></div>
-            <div class="mt-2">
-              <label>状態</label>
-              <div class="radio-group mt-2 mb-2">
-                <label>
-                  <input
-                    type="radio"
-                    name="friendCondition"
-                    value="all"
-                    v-model="broadcastData.conditions.type"
-                  />友だちリスト全員
-                </label>
-                <label>
-                  <input type="radio" name="friendCondition" value="specific"  v-model="broadcastData.conditions.type" />条件で絞り込む
-                </label>
-              </div>
-              <div v-if="broadcastData.conditions.type == 'specific'">
-                <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions"/>
+            <div v-show="broadcastData.type !== 'all'">
+              <label>タグ</label>
+              <div class="list-checkbox-tag" v-if="refresh_tag">
+                <input-tag :data="broadcastData.tags" @input="addListTag"/>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-header left-border">
-          <h3 class="card-title">配信日時</h3>
-        </div>
-        <div class="card-body">
-          <div class="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="datetime"
-                :value="true"
-                v-model="broadcastData.deliver_now"
-                @click="changeStartDateForNow"
-              />今すぐ配信
-            </label>
-            <label>
-              <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now"/>配信日時を指定
-            </label>
-          </div>
-          <datetime
-            v-if="!broadcastData.deliver_now"
-            v-model="broadcastData.schedule_at"
-            input-class="form-control"
-            type="datetime"
-            :phrases="{ok: '確定', cancel: '閉じる'}"
-            placeholder="日付を選択してください"
-            :min-datetime="currentDate"
-            value-zone="Asia/Tokyo"
-            zone="Asia/Tokyo"
-          ></datetime>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-header left-border">
-          <div class="card-title">配信メッセージ設定</div>
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label>タイトル<required-mark/></label>
-            <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="broadcastData.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
-            <error-message :message="errors.first('deliver-title')"></error-message>
+            <div v-if="broadcastData.type !== 'all'">
+              <div class="divider"></div>
+              <div class="mt-2">
+                <label>状態</label>
+                <div class="radio-group mt-2 mb-2">
+                  <label>
+                    <input
+                      type="radio"
+                      name="friendCondition"
+                      value="all"
+                      v-model="broadcastData.conditions.type"
+                    />友だちリスト全員
+                  </label>
+                  <label>
+                    <input type="radio" name="friendCondition" value="specific"  v-model="broadcastData.conditions.type" />条件で絞り込む
+                  </label>
+                </div>
+                <div v-if="broadcastData.conditions.type == 'specific'">
+                  <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions"/>
+                </div>
+              </div>
+            </div>
           </div>
-          <div v-if="refresh_content">
-            <div class="mb-2">
-              <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-              <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+        </div>
+        
+        <div class="card">
+          <div class="card-header left-border">
+            <h3 class="card-title">配信日時</h3>
+          </div>
+          <div class="card-body">
+            <div class="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="datetime"
+                  :value="true"
+                  v-model="broadcastData.deliver_now"
+                  @click="changeStartDateForNow"
+                />今すぐ配信
+              </label>
+              <label>
+                <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now"/>配信日時を指定
+              </label>
             </div>
-            <div v-for="(item, index) in broadcastData.broadcast_messages"  :key="index">
-              <message-content-distribution
-                :isDisplayTemplate="true"
-                v-bind:data="item"
-                v-bind:index="index"
-                v-bind:countMessages="broadcastData.broadcast_messages.length"
-                @input="changeContent"
-                @setTemplate="selectTemplate"
-                @remove="removeContent"
-                @moveTopMessage="moveTopMessage"
-                @moveBottomMessage="moveBottomMessage"
-              />
+            <datetime
+              v-if="!broadcastData.deliver_now"
+              v-model="broadcastData.schedule_at"
+              input-class="form-control"
+              type="datetime"
+              :phrases="{ok: '確定', cancel: '閉じる'}"
+              placeholder="日付を選択してください"
+              :min-datetime="currentDate"
+              value-zone="Asia/Tokyo"
+              zone="Asia/Tokyo"
+            ></datetime>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header left-border">
+            <div class="card-title">配信メッセージ設定</div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>タイトル<required-mark/></label>
+              <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="broadcastData.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
+              <error-message :message="errors.first('deliver-title')"></error-message>
             </div>
-            <div
+            <div v-if="refresh_content">
+              <div class="mb-2">
+                <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
+                <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+              </div>
+              <div v-for="(item, index) in broadcastData.broadcast_messages"  :key="index">
+                <message-content-distribution
+                  :isDisplayTemplate="true"
+                  v-bind:data="item"
+                  v-bind:index="index"
+                  v-bind:countMessages="broadcastData.broadcast_messages.length"
+                  @input="changeContent"
+                  @setTemplate="selectTemplate"
+                  @remove="removeContent"
+                  @moveTopMessage="moveTopMessage"
+                  @moveBottomMessage="moveBottomMessage"
+                />
+              </div>
+              <div
+                class="btn btn-outline-success"
+                @click="addMoreMessageContentDistribution"
+                v-if="broadcastData.broadcast_messages.length < 5"
+              >
+                <i class="fa fa-plus"></i> <span>メッセージ追加</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div>
+          <div class="row-form-btn d-flex">
+            <button
+              type="submit"
+              class="btn btn-success"
+              @click="createMessage('pending')"
+              :disabled="invalid"
+            >送信</button>
+            <button
+              type="submit"
               class="btn btn-outline-success"
-              @click="addMoreMessageContentDistribution"
-              v-if="broadcastData.broadcast_messages.length < 5"
-            >
-              <i class="fa fa-plus"></i> <span>メッセージ追加</span>
-            </div>
+              @click="createMessage('draft')"
+            >下書き保存</button>
           </div>
         </div>
+        <message-preview />
       </div>
 
-
-      <div>
-        <div class="row-form-btn d-flex">
-          <button
-            type="submit"
-            class="btn btn-success"
-            @click="createMessage('pending')"
-            :disabled="invalid"
-          >送信</button>
-          <button
-            type="submit"
-            class="btn btn-outline-success"
-            @click="createMessage('draft')"
-          >下書き保存</button>
-        </div>
-      </div>
-      <message-preview />
+      <loading-indicator :loading="loading" />
     </div>
-
-    <loading-indicator :loading="loading" />
   </div>
 </template>
 <script>

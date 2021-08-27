@@ -9,6 +9,20 @@ import {
 import moment from 'moment';
 
 class Util {
+  static showSuccessThenRedirect(message, redirect_to) {
+    window.toastr.success(message);
+    setTimeout(() => {
+     window.location.href = redirect_to;
+    }, 500);
+  }
+
+  static showErrorThenRedirect(message, redirect_to) {
+    window.toastr.error(message);
+    setTimeout(() => {
+     window.location.href = redirect_to;
+    }, 500);
+  }
+
   static getCsrfToken() {
     const tokenDom = document.head.querySelector('meta[name="csrf-token"]');
     return tokenDom ? tokenDom.content : null;

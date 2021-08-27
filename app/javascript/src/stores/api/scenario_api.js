@@ -51,15 +51,15 @@ export default {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id);
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
-  talkAdd: (query) => {
+  createScenarioMessage: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/add'),
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${data.scenario_id}/messages`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(data),
       contentType: 'application/json'
     });
   },
-  talkAddFromTemplate: (query) => {
+  createScenarioMessageFromTemplate: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/addFromTemplate'),
       method: 'POST',

@@ -4,18 +4,21 @@
 #
 # Table name: scenario_messages
 #
-#  id               :bigint           not null, primary key
-#  content          :text(4294967295)
-#  deleted_at       :datetime
-#  delivery_timing  :string(255)
-#  message_type     :string(255)
-#  name             :string(255)
-#  priority         :float(24)        default(999.0)
-#  status           :string(255)      default("disable")
-#  time_designation :string(255)      default("00:00")
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  scenario_id      :bigint
+#  id              :bigint           not null, primary key
+#  content         :json
+#  date            :integer
+#  deleted_at      :datetime
+#  is_initial      :boolean          default(TRUE)
+#  name            :string(255)
+#  order           :integer
+#  pause           :boolean
+#  status          :string(255)      default("disable")
+#  step            :integer
+#  time            :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  message_type_id :integer
+#  scenario_id     :bigint
 #
 # Indexes
 #
@@ -26,4 +29,7 @@
 #  fk_rails_...  (scenario_id => scenarios.id)
 #
 class ScenarioMessage < ApplicationRecord
+  belongs_to :scenario, counter_cache: true
+
+  validates_presence_of :content, :message_type_id
 end

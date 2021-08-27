@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 2021_08_23_074802) do
   create_table 'broadcast_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'broadcast_id'
     t.json 'content'
-    t.string 'message_type_id'
+    t.integer 'message_type_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
@@ -329,11 +329,14 @@ ActiveRecord::Schema.define(version: 2021_08_23_074802) do
     t.bigint 'scenario_id'
     t.string 'status', default: 'disable'
     t.string 'name'
-    t.text 'content', size: :long
-    t.string 'message_type'
-    t.float 'priority', default: 999.0
-    t.string 'delivery_timing'
-    t.string 'time_designation', default: '00:00'
+    t.json 'content'
+    t.integer 'message_type_id'
+    t.integer 'date'
+    t.string 'time'
+    t.boolean 'is_initial', default: true
+    t.integer 'step'
+    t.integer 'order'
+    t.boolean 'pause'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
@@ -350,6 +353,7 @@ ActiveRecord::Schema.define(version: 2021_08_23_074802) do
     t.string 'mode', default: 'date'
     t.string 'time_base_type', default: 'none'
     t.json 'action'
+    t.integer 'scenario_messages_count'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

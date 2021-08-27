@@ -47,21 +47,21 @@
       <label class="w-100 mt20">
         タグ設定
       </label>
-      <div class="tag-content">
-        <div class="w-100 d-flex-auto">
+      <div class="tag-content row">
+        <div class="col-md-6 d-flex-auto">
           <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグを追加</label>
           <action-post-back-type-tag
-                  v-if="refreshTag"
+            v-if="refreshTag"
             :value="tagContent.content"
             :name="name + '_tag'"
             @input="updateTagContent">
           </action-post-back-type-tag>
         </div>
 
-        <div class="w-100 d-flex-auto">
+        <div class="col-md-6 d-flex-auto">
           <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグをはずす</label>
           <action-post-back-type-tag
-                  v-if="refreshTag"
+            v-if="refreshTag"
             :value="tagDeleteContent.content"
             :name="name + '_tag_delete'"
             @input="deleteTagContent">

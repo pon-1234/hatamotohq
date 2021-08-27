@@ -10,7 +10,7 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  broadcast_id    :bigint
-#  message_type_id :string(255)
+#  message_type_id :integer
 #
 # Indexes
 #

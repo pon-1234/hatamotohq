@@ -1,5 +1,5 @@
 <template>
-  <div class="message-text-content">
+  <div class="d-inline-block text-nowrap">
     <span v-if="data.type === 'text' ">【テキスト】</span>
     <span v-if="data.type === 'sticker' ">【スタンプ】</span>
     <span v-if="data.type === 'image' ">【画像】</span>
@@ -21,10 +21,3 @@ export default {
   props: ['data']
 };
 </script>
-
-<style lang="scss" scoped>
-.message-text-content {
-  display: inline-block;
-    white-space: nowrap;
-}
-</style>

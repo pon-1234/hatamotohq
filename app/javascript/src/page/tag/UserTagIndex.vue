@@ -65,8 +65,8 @@
                 <thead>
                   <tr>
                     <th  style="min-width: 200px;"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
-                    <th style="width: 5em;" >メンバー数</th>
-                    <th style="width: 10em;" >作成日</th>
+                    <th class="fw-150">メンバー数</th>
+                    <th class="fw-200">作成日</th>
                   </tr>
                 </thead>
                 <tbody v-if="tags && tags[selected_tag]">
@@ -87,8 +87,8 @@
                         </div>
                       </div>
                     </td>
-                    <td style="width: 5em; vertical-align: middle; text-align: left;">0人</td>
-                    <td style="width: 10em; vertical-align: middle;">{{getCreatedAt()}}</td>
+                    <td class="text-center">0人</td>
+                    <td class="text-center">{{getCreatedAt()}}</td>
                   </tr>
                   <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags"
                     :key="index"

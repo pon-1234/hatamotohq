@@ -5,9 +5,9 @@
       :style="isHidden? 'margin-bottom: -50vh;':'margin-bottom: 0px;'"
     >
       <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-        <a href="#" class="text-white" @click="changePreview">
+        <div role="button" class="text-white" @click="changePreview">
           <i :class="isHidden?'fas mr-2 fa-caret-up': 'fas mr-2 fa-caret-down'"></i>プレビュー
-        </a>
+        </div>
         <i id="gijvq97" class="lar la-question-circle text-white"></i>
       </div>
       <div

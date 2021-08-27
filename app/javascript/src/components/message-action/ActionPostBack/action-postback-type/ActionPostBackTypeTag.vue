@@ -2,7 +2,7 @@
   <section>
     <div class="w-100">
       <input-tag
-              v-if="refreshTag"
+        v-if="refreshTag"
         :allTags="true"
         :data="list_tag"
         class="w-100" @input="changeListTag">

@@ -97,9 +97,9 @@ export const actions = {
     });
   },
 
-  talkAddFromTemplate(_, query) {
+  createScenarioMessageFromTemplate(_, body) {
     _.dispatch('system/setLoading', true, { root: true });
-    return ScenarioApi.talkAddFromTemplate(query).done((res) => {
+    return ScenarioApi.createScenarioMessageFromTemplate(body).done((res) => {
       _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
       return Promise.resolve(res);
     }).fail((err) => {
@@ -110,17 +110,10 @@ export const actions = {
     });
   },
 
-  talkAdd(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return ScenarioApi.talkAdd(query).done((res) => {
-      _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      _.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
+  async createScenarioMessage(_, data) {
+    const response = await ScenarioApi.createScenarioMessage(data);
+    console.log(response);
+    return response.id;
   },
   talkDelete(_, query) {
     _.dispatch('system/setLoading', true, { root: true });

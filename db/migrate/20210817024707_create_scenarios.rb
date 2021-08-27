@@ -12,6 +12,7 @@ class CreateScenarios < ActiveRecord::Migration[6.0]
       t.string :mode, default: 'date'
       t.string :time_base_type, default: 'none'
       t.json :action
+      t.integer :scenario_messages_count
       t.timestamps
       t.datetime :deleted_at
     end

@@ -55,7 +55,7 @@
               </div>
             </td>
             <td >
-              <text-message-type :data="talk.content"/>
+              <message-type-label :data="talk.content"/>
             </td>
             <td >
               <div class="row-btn row-btn-customize">
@@ -99,7 +99,7 @@
                 </div>
               </dd>
               <dt>タイプ</dt>
-              <dd><text-message-type :data="talkDetail.content"/></dd>
+              <dd><message-type-label :data="talkDetail.content"/></dd>
             </dl>
           </div>
           <div class="modal-footer flex center">
@@ -301,7 +301,7 @@ export default {
 
     selectTemplate(template) {
       this.$store
-        .dispatch('scenario/talkAddFromTemplate', { id: this.scenario.id, template_id: template.id })
+        .dispatch('scenario/createScenarioMessageFromTemplate', { id: this.scenario.id, template_id: template.id })
         .done(res => {
           this.getTalks();
         });

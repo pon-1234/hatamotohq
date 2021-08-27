@@ -1,29 +1,42 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <div class="card-header">
-        <%= link_to new_user_scenario_message_path do %>
+      <div class="card-header d-flex align-items-center">
+        <span class="font-weight-bold">シナリオ名：<%= @scenario.title %></span>
+        <%= link_to new_user_scenario_message_path, class: 'ml-auto' do %>
           <button type="button" class="btn btn-success mr-2"><i class="fa fa-plus"></i> メッセージを追加</button>
         <% end %>
         <button type="button" class="btn btn-primary mr-2"><i class="fa fa-plus"></i> テンプレートを追加</button>
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered table-striped">
+          <table class="table table-bordered table-striped index">
           <%# Header %>
             <thead>
               <tr>
-                <th width="20%">日数</th>
-                <th width="15%">時刻</th>
-                <th width="10%">メッセージプレビュー</th>
-                <th width="15%">操作</th>
+                <th class="fw-100">日数</th>
+                <th class="fw-150">時刻</th>
+                <th>タイプ</th>
+                <th>メッセージプレビュー</th>
+                <th class="fw-200">操作</th>
               </tr>
             </thead>
             <%# Data %>
             <tbody>
               <% @messages.each do |message| %>
-                <tr>
-                  <td><%= message.id %></td>
+                <tr class="text-center">
+                  <% if @scenario.mode_date? %>
+                    <td><%= message.date == 0 ? '開始当日' : "#{message.date}日後" %></td>
+                    <td><%= message.time %> <span class="ml-2"><%= message.order %>通目</span></td>
+                  <% elsif @scenario.mode_elapsed_time? %>
+                    <td><%= message.date == 0 ? '開始当日' : "#{message.date}日後" %></td>
+                    <td><%= message.time %> <span class="ml-2"><%= message.order %>通目</span></td>
+                  <% end %>
+                  <td><message-type-label :data="<%= message.content.to_json %>"/></td>
+                  <td><view-message-content :data="<%= message.content.to_json %>"></view-message-content></td>
+                  <td>
+                    <div class="btn btn-warning btn-xs">編集</div>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

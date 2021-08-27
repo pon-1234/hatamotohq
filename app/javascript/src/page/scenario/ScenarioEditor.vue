@@ -1,113 +1,115 @@
 <template>
-  <div class="card card-success">
-    <div class="card-header">
-      <h3 class="card-title">シナリオ新規登録</h3>
-    </div>
-    <div class="card-body">
-      <div class="card">
-        <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
-        <div class="card-body">
-          <div class="form-border" style="border-top: 0">
-            <div class="form-group">
-              <label>シナリオ名<required-mark/></label>
-              <input type="text" name="name" class="form-control" placeholder="シナリオ名を入力してください" v-model="scenarioData.title" v-validate="'required|max:255'" data-vv-as="シナリオ名">
-              <error-message :message="errors.first('name')"></error-message>
+  <div class="mw-1200">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">シナリオ新規登録</h3>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
+          <div class="card-body">
+            <div class="form-border" style="border-top: 0">
+              <div class="form-group">
+                <label>シナリオ名<required-mark/></label>
+                <input type="text" name="name" class="form-control" placeholder="シナリオ名を入力してください" v-model="scenarioData.title" v-validate="'required|max:255'" data-vv-as="シナリオ名">
+                <error-message :message="errors.first('name')"></error-message>
+              </div>
             </div>
-          </div>
-          <div class="form-border">
-            <div class="form-group">
-              <label class="mb10">シナリオ説明</label>
-              <textarea class="form-control" name="description" rows="3" placeholder="シナリオ説明を入力してください" v-model="scenarioData.description" v-validate="'max:2000'" data-vv-as="シナリオ説明"></textarea>
-              <error-message :message="errors.first('description')"></error-message>
+            <div class="form-border">
+              <div class="form-group">
+                <label class="mb10">シナリオ説明</label>
+                <textarea class="form-control" name="description" rows="3" placeholder="シナリオ説明を入力してください" v-model="scenarioData.description" v-validate="'max:2000'" data-vv-as="シナリオ説明"></textarea>
+                <error-message :message="errors.first('description')"></error-message>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
-        <div class="card-body">
-          <div class="form-border">
-            <div class="form-group">
-              <label class="mb10">配信</label>
-              <div class="flex start ai_center">
-                <div class="toggle-switch btn-scenario01">
-                  <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enable" false-value="disable" ref="status">
-                  <label for="scenario-onoff" class="toggle-label">
-                    <span></span>
+        <div class="card">
+          <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
+          <div class="card-body">
+            <div class="form-border">
+              <div class="form-group">
+                <label class="mb10">配信</label>
+                <div class="flex start ai_center">
+                  <div class="toggle-switch btn-scenario01">
+                    <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enable" false-value="disable" ref="status">
+                    <label for="scenario-onoff" class="toggle-label">
+                      <span></span>
+                    </label>
+                  </div>
+                  <p class="scenario-status no-mgn">配信する</p>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="mt-2">
+              <div class="form-group">
+                <label>配信先</label>
+                <div class="radio-group mb10">
+                  <label><input type="radio" name="send" value="all"  :checked="target === 'all'"  @click="changeDeliverTarget('all')">全員</label>
+                  <label><input type="radio" name="send" value="sort" :checked="target === 'tags'" @click="changeDeliverTarget('tags')">条件で絞り込む</label>
+                </div>
+                <div v-if="target === 'tags'">
+                  <label>タグ</label>
+                  <div>
+                    <input-tag :data="scenarioData.tags" @input="addListTag"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="mt-2">
+              <div class="form-group">
+                <label>配信開始</label>
+                <div class="radio-group">
+                  <label>
+                    <input type="radio" value="no_selection" v-model="scenarioData.time_base_type" @change="changeTimeBase('no_selection')">選択なし
+                  </label>
+                  <label>
+                    <input type="radio"  value="friend_added" v-model="scenarioData.time_base_type" @change="changeTimeBase('friend_added')">友達追加時
                   </label>
                 </div>
-                <p class="scenario-status no-mgn">配信する</p>
               </div>
-            </div>
-          </div>
-          <div class="divider"></div>
-          <div class="mt-2">
-            <div class="form-group">
-              <label>配信先</label>
-              <div class="radio-group mb10">
-                <label><input type="radio" name="send" value="all"  :checked="target === 'all'"  @click="changeDeliverTarget('all')">全員</label>
-                <label><input type="radio" name="send" value="sort" :checked="target === 'tags'" @click="changeDeliverTarget('tags')">条件で絞り込む</label>
-              </div>
-              <div v-if="target === 'tags'">
-                <label>タグ</label>
-                <div>
-                  <input-tag :data="scenarioData.tags" @input="addListTag"/>
+
+              <div class="form-group">
+                <label>配信タイミング</label>
+                <div class="radio-group">
+                  <!-- <label v-if="scenarioData.time_base_type !== 'no_selection'">
+                    <input type="radio" value="now" v-model="scenarioData.mode">購読開始直後
+                  </label> -->
+                  <label>
+                    <input type="radio" value="date" v-model="scenarioData.mode">経過時間で指定
+                  </label>
+                  <label>
+                    <input type="radio" value="elapsed_time" v-model="scenarioData.mode">時刻で指定
+                  </label>
                 </div>
               </div>
             </div>
           </div>
-          <div class="divider"></div>
-          <div class="mt-2">
-            <div class="form-group">
-              <label>配信開始</label>
-              <div class="radio-group">
-                <label>
-                  <input type="radio" value="no_selection" v-model="scenarioData.time_base_type" @change="changeTimeBase('no_selection')">選択なし
-                </label>
-                <label>
-                  <input type="radio"  value="friend_added" v-model="scenarioData.time_base_type" @change="changeTimeBase('friend_added')">友達追加時
-                </label>
-              </div>
-            </div>
+        </div>
+        <div class="card">
+          <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
+          <div class="card-body">
+            <message-action-type-default
+              name="action"
+              :value="scenarioData.action"
+              :labelRequired="false"
+              :showTitle="false"
+              :showLaunchMesasge="false"
+              @input="updateAction"
+            />
 
-            <div class="form-group">
-              <label>配信タイミング</label>
-              <div class="radio-group">
-                <!-- <label v-if="scenarioData.time_base_type !== 'no_selection'">
-                  <input type="radio" value="now" v-model="scenarioData.mode">購読開始直後
-                </label> -->
-                <label>
-                  <input type="radio" value="date" v-model="scenarioData.mode">経過時間で指定
-                </label>
-                <label>
-                  <input type="radio" value="elapsed_time" v-model="scenarioData.mode">時刻で指定
-                </label>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
-        <div class="card-body">
-          <message-action-type-default
-            name="action"
-            :value="scenarioData.action"
-            :labelRequired="false"
-            :showTitle="false"
-            :showLaunchMesasge="false"
-            @input="updateAction"
-          />
 
+        <div class="card-footer d-flex">
+          <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()" >保存</button>
+          <button type="submit" class="btn btn-outline-success" @click="saveScenario('draft')">下書き保存</button>
         </div>
       </div>
-
-      <div class="card-footer d-flex">
-        <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()" >保存</button>
-        <button type="submit" class="btn btn-outline-success" @click="saveScenario('draft')">下書き保存</button>
-      </div>
+      <loading-indicator :loading="loading"/>
     </div>
-    <loading-indicator :loading="loading"/>
   </div>
 </template>
 <script>

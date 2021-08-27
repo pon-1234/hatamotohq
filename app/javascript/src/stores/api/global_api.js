@@ -1,7 +1,7 @@
 export default {
 
   getUserDetails: (query = {}) => {
-    return window.$.get(process.env.MIX_ROOT_PATH + '/information/profile', query);
+    // return window.$.get(process.env.MIX_ROOT_PATH + '/information/profile', query);
   },
 
   sendMedia: (query) => {

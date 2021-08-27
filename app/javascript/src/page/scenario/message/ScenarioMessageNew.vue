@@ -1,81 +1,73 @@
 <template>
-  <div class="card card-success">
-    <div class="card-header">
-      <h3 class="card-title">配信メッセージ登録</h3>
-    </div>
-    <div class="card-body">
-      <div>
-        シナリオ名：{{ scenario.title }}
+  <div class="mw-1200">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">配信メッセージ登録</h3>
       </div>
-      <div class="row-ttl01 flex ai_center  flex-wrap justify-content-between">
-        <div class="d-flex flex-column">
-          <div class="d-flex talk-priority align-items-center mt-2">
-            <h4 class="hdg3 d-flex align-items-center" v-if="talk">配信No.:<input type="number" class="form-control" v-model="talk.priority" v-validate="'required'" min='1'>&nbsp;通目</h4>
-          </div>
-        </div>
-      </div>
-      <div class="form-common01">
-        <div class="form-border">
-          <div class="form-group">
-            <label>タイトル<required-mark/></label>
-            <input type="text" name="talk-title" class="form-control" placeholder="タイトルを入力してください" v-model="talk.name" v-validate="'required'">
-            <span v-if="errors.first('talk-title')" class="is-validate-label">タイトルは必須です</span>
-          </div>
-        </div>
-        <div class="form-border">
-          <div class="form-group" v-if="refresh_content">
-            <label>メッセージ本文</label>
-              <message-content-distribution
-              :isDisplayTemplate="true"
-                v-for="(item, index) in talk.broadcast_messages"
-                :key="index"
-                v-bind:data="item"
-                v-bind:index="index"
-                @setTemplate="selectTemplate"
-                @input="changeContent"
-              />
-          </div>
-        </div>
-        <div class="form-border">
-          <div  class="form-group" v-if="scenario && (scenario.mode === 'delay' || scenario.mode === 'time_designation') ">
-            <label  class="mb10" v-if="scenario && scenario.mode === 'delay'" >配信時期：経過時間で指定</label>
-            <label  class="mb10" v-if="scenario && scenario.mode === 'time_designation'">配信時期：時刻指定</label>
-            <div v-if="scenario && scenario.mode === 'delay'" class="box-form-timing">
-              登録から:
-              <input type="text" v-model="delivery_timing_day" class="form-control  delivery-timing-input"  min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');"  v-validate="'required'">日&nbsp;
-              <VueCtkDateTimePicker id="time-select" label="00:00" v-model="delivery_timing_hour" input-size="sm" :error="!delivery_timing_hour" no-label :only-time="true" format="HH:mm" formatted="HH:mm" />&nbsp;時間後
-              <input type="hidden" :value="delivery_timing_hour" name="delivery-timing-min" v-validate="'required'">
-            </div>
-            <div v-if="scenario && scenario.mode === 'time_designation'" class="box-form-timing">
-              登録から:
-              <input type="text" v-model="talk.delivery_timing" class="form-control  delivery-timing-input"  min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');"  v-validate="'required'">日後
-              <VueCtkDateTimePicker id="time-select" label="00:00" v-model="talk.time_designation" input-size="sm" no-label :only-time="true" format="HH:mm" formatted="HH:mm" minute-interval="5" />
+      <div class="card-body">
+        <span class="font-weight-bold" v-if="!loading">
+          シナリオ名：{{ scenario.title }}
+        </span>
+        <scenario-message-time-define
+          v-if="!loading"
+          :mode="scenario.mode"
+          :is_initial.sync="scenarioMessageData.is_initial"
+          :date.sync="scenarioMessageData.date"
+          :time.sync="scenarioMessageData.time"
+          :order.sync="scenarioMessageData.order"
+          >
+        </scenario-message-time-define>
+        <div class="row">
+          <div class="d-flex flex-column">
+            <div class="d-flex talk-priority align-items-center mt-2">
+              <h4 class="hdg3 d-flex align-items-center" v-if="talk">配信No.:<input type="number" class="form-control" v-model="scenarioMessageData.priority" v-validate="'required'" min='1'>&nbsp;通目</h4>
             </div>
           </div>
         </div>
-        <div class="form-border">
-          <div class="form-group">
-            <label class="mb10">配信</label>
-            <div class="flex start ai_center">
-              <div class="toggle-switch btn-scenario01">
-                <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="talk.status">
-                <label for="scenario-onoff" class="toggle-label">
-                  <span></span>
-                </label>
+        <div class="form-common01">
+          <div class="form-border">
+            <div class="form-group">
+              <label>タイトル<required-mark/></label>
+              <input type="text" name="talk-title" class="form-control" placeholder="タイトルを入力してください" v-model="scenarioMessageData.name" v-validate="'required'">
+              <span v-if="errors.first('talk-title')" class="is-validate-label">タイトルは必須です</span>
+            </div>
+          </div>
+          <div class="form-border">
+            <div class="form-group" v-if="refresh_content">
+              <label>メッセージ本文</label>
+                <message-content-distribution
+                :isDisplayTemplate="true"
+                  v-for="(item, index) in scenarioMessageData.messages"
+                  :key="index"
+                  v-bind:data="item"
+                  v-bind:index="index"
+                  @setTemplate="selectTemplate"
+                  @input="changeContent"
+                />
+            </div>
+          </div>
+          <div class="form-border">
+            <div class="form-group">
+              <label class="mb10">配信</label>
+              <div class="flex start ai_center">
+                <div class="toggle-switch btn-scenario01">
+                  <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioMessageData.status">
+                  <label for="scenario-onoff" class="toggle-label">
+                    <span></span>
+                  </label>
+                </div>
+                <p class="scenario-status no-mgn">配信する</p>
               </div>
-              <p class="scenario-status no-mgn">配信する</p>
             </div>
           </div>
         </div>
-        <div class="form-bottom">
-          <div class="row-form-btn flex start">
-            <button type="submit" class="btn btn-submit btn-block" @click="talkAdd()" >保存</button>
-          </div>
-        </div>
       </div>
-      <MessagePreview />
+      <div class="card-footer">
+        <button type="submit" class="btn btn-success" @click="submit()" >保存</button>
+      </div>
+      <loading-indicator :loading="loading"/>
     </div>
-    <loading-indicator :loading="loading"/>
+    <message-preview />
   </div>
 </template>
 <script>
@@ -95,11 +87,14 @@ export default {
   data() {
     return {
       loading: true,
-      talk: {
+      scenarioMessageData: {
+        is_initial: false,
+        date: 0,
+        time: null,
+        order: 1,
         name: '',
         status: true,
-        priority: 1,
-        broadcast_messages: [
+        messages: [
           {
             message_type_id: MessageTypeIds.Text,
             content: {
@@ -108,14 +103,10 @@ export default {
             }
           }
         ],
-        delivery_timing: 1,
-        time_designation: '00:00'
       },
       current_page_template: 1,
       refresh_content: true,
       scenario: null,
-      delivery_timing_hour: '00:00',
-      delivery_timing_day: 0
     };
   },
 
@@ -131,7 +122,7 @@ export default {
   },
 
   async beforeMount() {
-    this.getScenario();
+    await this.getScenario();
     await this.getTags();
     await this.listTagAssigned();
     this.loading = false;
@@ -139,6 +130,7 @@ export default {
 
   methods: {
     ...mapActions('scenario', [
+      'createScenarioMessage',
       'updateContentMessageDistributions'
     ]),
     ...mapActions('messageTemplate', [
@@ -160,18 +152,17 @@ export default {
 
       this.$store.dispatch('scenario/getScenario', query).then((res) => {
         this.scenario = res;
-        this.talk.priority = res.messages_count + 1;
       }).catch((err) => {
         console.log(err);
       });
     },
 
     changeContent({ index, content }) {
-      this.talk.broadcast_messages[index] = content;
-      this.updateContentMessageDistributions(this.talk.broadcast_messages);
+      this.scenarioMessageData.messages[index] = content;
+      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
       // this.validate(this.talk);
     },
-    async talkAdd() {
+    async submit() {
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
       if (!result) {
@@ -187,53 +178,36 @@ export default {
         return;
       };
 
-      if (this.scenario.mode === 'delay') {
-        const time = Util.getTimeWithFormat(this.delivery_timing_hour);
-        this.talk.delivery_timing = this.delivery_timing_day + 'd' + time;
-      } else if (this.scenario.mode === 'time_designation') {
-        this.talk.delivery_timing += 'd';
-      } else {
-        this.talk.delivery_timing = 0;
-      }
-
-      const query = {
-        id: this.scenario_id,
-        name: this.talk.name,
-        priority: this.talk.priority,
-        delivery_timing: this.talk.delivery_timing,
-        time_designation: this.talk.time_designation,
-        status: Util.stringStatus(this.talk.status),
-        ...this.talk.broadcast_messages[0]
+      // Build message body
+      const body = {
+        scenario_id: this.scenario_id,
+        name: this.scenarioMessageData.name,
+        order: this.scenarioMessageData.order,
+        date: this.scenarioMessageData.date,
+        time: this.scenarioMessageData.time,
+        status: Util.stringStatus(this.scenarioMessageData.status),
+        ...this.scenarioMessageData.messages[0]
       };
 
-      this.$store
-        .dispatch('scenario/talkAdd', query)
-        .done(res => {
-          if (this.type === 'template') {
-            window.location.href = process.env.MIX_ROOT_PATH + '/template/scenarios/' + this.scenario_id + '?is_created=true';
-          } else {
-            window.location.href = process.env.MIX_ROOT_PATH + '/scenarios/' + this.scenario_id + '?is_created=true';
-          }
-        }).fail(e => {
-          if (e.status === 422) {
-            if (this.type === 'template') {
-              window.location.href = process.env.MIX_ROOT_PATH + '/template/scenarios/' + this.scenario_id + '?is_created=false';
-            } else {
-              window.location.href = process.env.MIX_ROOT_PATH + '/scenarios/' + this.scenario_id + '?is_created=false';
-            }
-          } else {
-            this.talk.delivery_timing = this.talk.delivery_timing.replace(/d/g, '').replace('h', '');
-          }
-        });
+      const messageId = await this.createScenarioMessage(body);
+      // if (this.type === 'template') {
+      //   window.location.href = process.env.MIX_ROOT_PATH + '/template/scenarios/' + this.scenario_id + '?is_created=true';
+      // } else {
+      if (messageId) {
+        Util.showSuccessThenRedirect('シナリオにメッセージを追加しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+      } else {
+        Util.showErrorThenRedirect('シナリオにメッセージの追加は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+      }
+      // }
     },
 
     selectTemplate({ index, template }) {
       // eslint-disable-next-line no-undef
       this.refresh_content = false;
 
-      this.talk.broadcast_messages.splice(0, 1, template);
+      this.scenarioMessageData.messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.talk.broadcast_messages);
+      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;

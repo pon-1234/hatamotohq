@@ -128,7 +128,7 @@ export default {
   methods: {
     isShowTop() {
       const rect = this.$refs.inputTag.$el.getBoundingClientRect();
-      return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 100 || (rect.top + window.scrollY) < 100;
+      return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || (rect.top + window.scrollY) < 100;
     },
     changeSelected(index) {
       this.selected_folder = index;
