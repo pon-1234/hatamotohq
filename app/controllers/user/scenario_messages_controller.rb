@@ -2,6 +2,8 @@
 
 class User::ScenarioMessagesController < User::ApplicationController
   before_action :find_scenario, only: [:index, :create]
+  before_action :find_message, only: [:destroy, :delete_confirm]
+
   # GET /user/scenarios/:scenario_id/messages
   def index
     @messages = @scenario.scenario_messages.ordered.page(params[:page])
@@ -23,6 +25,22 @@ class User::ScenarioMessagesController < User::ApplicationController
     end
   end
 
+  # DELETE /user/scenarios/:scenario_id/messages/:id
+  def destroy
+    if @message.destroy
+      redirect_to user_scenario_messages_path, flash: { success: 'シナリオメッセージの削除は成功しました。' }
+    else
+      redirect_to user_scenario_messages_path, flash: { error: 'シナリオメッセージの削除は失敗しました。' }
+    end
+  end
+
+  def delete_confirm
+    @scenario_id = params[:scenario_id]
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     def message_params
       params.permit(
@@ -38,5 +56,9 @@ class User::ScenarioMessagesController < User::ApplicationController
 
     def find_scenario
       @scenario = Scenario.find(params[:scenario_id])
+    end
+
+    def find_message
+      @message = ScenarioMessage.find(params[:id])
     end
 end

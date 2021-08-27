@@ -43,6 +43,7 @@
                   <td><view-message-content :data="<%= message.content.to_json %>"></view-message-content></td>
                   <td>
                     <div class="btn btn-warning btn-xs">編集</div>
+                    <%= link_to '削除', delete_confirm_user_scenario_message_path(scenario_id: @scenario.id, id: message), remote: true, class: "btn btn-danger btn-xs" %>
                   </td>
                 </tr>
               <% end %>
@@ -60,3 +61,5 @@
     </div>
   </div>
 </div>
+
+<div id='confirmDelContent'></div>

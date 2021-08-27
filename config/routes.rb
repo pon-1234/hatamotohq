@@ -25,7 +25,9 @@ Rails.application.routes.draw do
       end
       resources :scenarios do
         get :search, on: :collection
-        resources :messages, controller: 'scenario_messages'
+        resources :messages, controller: 'scenario_messages' do
+          get :delete_confirm, on: :member
+        end
         get :delete_confirm, on: :member
       end
       resources :auto_responses
