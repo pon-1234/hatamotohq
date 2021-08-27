@@ -137,7 +137,7 @@ export default {
         tags: null,
         status: 'disable',
         mode: 'date',
-        type: 'auto', // or 'send'
+        type: 'send', // or 'auto'
         action: this.ActionMessage.default
       }
     };

@@ -46,6 +46,11 @@ class User::ScenariosController < User::ApplicationController
 
   # PATCH /user/scenarios/:id
   def update
+    if @scenario.update(scenario_params.except(:mode))
+      render 'user/scenarios/update_success.json.jbuilder'
+    else
+      render_bad_request_with_message(@scenario.first_error_message)
+    end
   end
 
   private

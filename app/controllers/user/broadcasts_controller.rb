@@ -39,7 +39,7 @@ class User::BroadcastsController < User::ApplicationController
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
       render 'user/broadcasts/create_success.json.jbuilder'
     else
-      render_bad_request_with_error_message(@broadcast.error.full_messages.first)
+      render_bad_request_with_message(@broadcast.error.full_messages.first)
     end
   rescue => e
     logger.error e.message
@@ -57,7 +57,7 @@ class User::BroadcastsController < User::ApplicationController
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
       render 'user/broadcasts/update_success.json.jbuilder'
     else
-      render_bad_request_with_error_message(@broadcast.error.full_messages.first)
+      render_bad_request_with_message(@broadcast.error.full_messages.first)
     end
   rescue => e
     logger.error e.message
