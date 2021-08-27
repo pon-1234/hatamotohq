@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         end
         resources :messages, controller: 'scenario_messages'
       end
+      resources :auto_responses
       resources :folders, only: [:create]
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'

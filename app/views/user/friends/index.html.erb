@@ -15,43 +15,41 @@
         <!-- End: search condition -->
       </div>
       <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-          <%# Header %>
-            <thead>
+        <table class="table table-bordered table-striped index">
+        <%# Header %>
+          <thead>
+            <tr>
+              <th width="10%" class="text-center"><%= sort_link(@q, :id, 'ID', default_order: :desc) %></th>
+              <th width="15%"><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
+              <th width="15%"><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
+              <th width="30%">タグ</th>
+              <th width="15%">状況</th>
+              <th width="15%"></th>
+            </tr>
+          </thead>
+          <%# Data %>
+          <tbody>
+            <% @line_friends.each do |line_friend| %>
               <tr>
-                <th width="10%" class="text-center"><%= sort_link(@q, :id, 'ID', default_order: :desc) %></th>
-                <th width="15%"><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
-                <th width="15%"><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
-                <th width="30%">タグ</th>
-                <th width="15%">状況</th>
-                <th width="15%"></th>
+                <td class="text-center"><%= link_to line_friend.id, user_friend_path(line_friend) %></td>
+                <td>
+                  <img alt="Avatar" class="user-avatar" src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>">
+                  <%= line_friend.line_name %>
+                </td>
+                <td><%= line_friend.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
+                <td>なし</td>
+                <td>
+                  <%= render_friend_status(line_friend.status).html_safe %>
+                </td>
+                <td class="text-center">
+                  <%= link_to user_friend_path(line_friend), class: "btn btn-outline-success btn-sm mr-2" do %>
+                    <i class="fas fa-eye"></i> 詳細
+                  <% end %>
+                </td>
               </tr>
-            </thead>
-            <%# Data %>
-            <tbody>
-              <% @line_friends.each do |line_friend| %>
-                <tr>
-                  <td class="text-center"><%= link_to line_friend.id, user_friend_path(line_friend) %></td>
-                  <td>
-                    <img alt="Avatar" class="user-avatar" src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>">
-                    <%= line_friend.line_name %>
-                  </td>
-                  <td><%= line_friend.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
-                  <td>なし</td>
-                  <td>
-                    <%= render_friend_status(line_friend.status).html_safe %>
-                  </td>
-                  <td class="text-center">
-                    <%= link_to user_friend_path(line_friend), class: "btn btn-outline-success btn-sm mr-2" do %>
-                      <i class="fas fa-eye"></i> 詳細
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+            <% end %>
+          </tbody>
+        </table>
         <%# Pagination %>
         <div class="d-flex justify-content-center mt-4">
           <% if @line_friends.size == 0 %>

@@ -40,9 +40,19 @@
         <!-- Scenario List -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <%= link_to '<i class="nav-icon fa fa-paper-plane"></i><p>シナリオ配信</p>'.html_safe,
+            <%= link_to '<i class="nav-icon fa fa-clipboard-list"></i><p>シナリオ配信</p>'.html_safe,
               user_scenarios_path,
               class: "nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
+        <!-- Auto Response -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-robot"></i><p>自動応答</p>'.html_safe,
+              user_auto_responses_path,
+              class: "nav-link #{controller?("user/auto_responses") ? 'active' : ''}"
             %>
           </li>
         </ul>

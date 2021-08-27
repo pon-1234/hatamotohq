@@ -1501,13 +1501,6 @@ h2, .h2 {
 .btn-light {color: #212529;background-color: #efefef;border-color: #efefef;}
 .btn-light:disabled {color: #212529;background-color: #efefef;border-color: #efefef;}
 
-.table-responsive table{user-select: none; cursor: pointer;}
-.table-responsive table {width: 100%;}
-.table-responsive table th {text-align: center;padding: 8px;}
-.table-responsive table td > button {display: inline-block;width: auto;}
-.table-responsive table td.row-btn{min-width: 100px;}
-/*.table-responsive table tr:nth-child(even){background-color: #f2f2f2}*/
-
 .richmenu-preview:after{
     content: "";
     display: block;
