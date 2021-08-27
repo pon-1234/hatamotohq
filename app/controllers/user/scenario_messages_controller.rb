@@ -4,7 +4,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   before_action :find_scenario, only: [:index, :create]
   # GET /user/scenarios/:scenario_id/messages
   def index
-    @messages = @scenario.scenario_messages.page(params[:page])
+    @messages = @scenario.scenario_messages.ordered.page(params[:page])
   end
 
   # GET /user/scenarios/:scenario_id/messages/new
@@ -26,6 +26,8 @@ class User::ScenarioMessagesController < User::ApplicationController
   private
     def message_params
       params.permit(
+        :name,
+        :is_initial,
         :date,
         :time,
         :order,

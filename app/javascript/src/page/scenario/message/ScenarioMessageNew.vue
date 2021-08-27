@@ -1,13 +1,13 @@
 <template>
   <div class="mw-1200">
-    <div class="card card-info">
-      <div class="card-header">
-        <h3 class="card-title">配信メッセージ登録</h3>
+    <div class="card">
+      <div class="card-header d-flex align-items-center">
+        <a :href="`${userRootUrl}/user/scenarios/${scenario_id}/messages`" class="text-info" v-if="!loading">
+          <i class="fa fa-arrow-left"></i>メッセージ一覧
+        </a>
+        <span class="m-auto font-weight-bold">新規登録</span>
       </div>
       <div class="card-body">
-        <span class="font-weight-bold" v-if="!loading">
-          シナリオ名：{{ scenario.title }}
-        </span>
         <scenario-message-time-define
           v-if="!loading"
           :mode="scenario.mode"
@@ -17,13 +17,6 @@
           :order.sync="scenarioMessageData.order"
           >
         </scenario-message-time-define>
-        <div class="row">
-          <div class="d-flex flex-column">
-            <div class="d-flex talk-priority align-items-center mt-2">
-              <h4 class="hdg3 d-flex align-items-center" v-if="talk">配信No.:<input type="number" class="form-control" v-model="scenarioMessageData.priority" v-validate="'required'" min='1'>&nbsp;通目</h4>
-            </div>
-          </div>
-        </div>
         <div class="form-common01">
           <div class="form-border">
             <div class="form-group">
@@ -86,6 +79,7 @@ export default {
 
   data() {
     return {
+      userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       scenarioMessageData: {
         is_initial: false,
@@ -94,6 +88,7 @@ export default {
         order: 1,
         name: '',
         status: true,
+        // Each scenario message contains only one message, but we use array to reuse component
         messages: [
           {
             message_type_id: MessageTypeIds.Text,
@@ -182,6 +177,7 @@ export default {
       const body = {
         scenario_id: this.scenario_id,
         name: this.scenarioMessageData.name,
+        is_initial: this.scenarioMessageData.is_initial,
         order: this.scenarioMessageData.order,
         date: this.scenarioMessageData.date,
         time: this.scenarioMessageData.time,

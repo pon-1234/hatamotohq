@@ -2,8 +2,13 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header d-flex align-items-center">
-        <span class="font-weight-bold">シナリオ名：<%= @scenario.title %></span>
-        <%= link_to new_user_scenario_message_path, class: 'ml-auto' do %>
+        <%= link_to user_scenarios_path, class: "btn text-info" do %>
+          <i class="fa fa-arrow-left"></i>シナリオ一覧
+        <% end %>
+
+        <span class="m-auto font-weight-bold">「<%= @scenario.title %>」のメッセージ一覧</span>
+        
+        <%= link_to new_user_scenario_message_path do %>
           <button type="button" class="btn btn-success mr-2"><i class="fa fa-plus"></i> メッセージを追加</button>
         <% end %>
         <button type="button" class="btn btn-primary mr-2"><i class="fa fa-plus"></i> テンプレートを追加</button>
@@ -16,6 +21,7 @@
               <tr>
                 <th class="fw-100">日数</th>
                 <th class="fw-150">時刻</th>
+                <th>タイトル</th>
                 <th>タイプ</th>
                 <th>メッセージプレビュー</th>
                 <th class="fw-200">操作</th>
@@ -32,6 +38,7 @@
                     <td><%= message.date == 0 ? '開始当日' : "#{message.date}日後" %></td>
                     <td><%= message.time %> <span class="ml-2"><%= message.order %>通目</span></td>
                   <% end %>
+                  <td><%= message.name %></td>
                   <td><message-type-label :data="<%= message.content.to_json %>"/></td>
                   <td><view-message-content :data="<%= message.content.to_json %>"></view-message-content></td>
                   <td>

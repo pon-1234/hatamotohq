@@ -32,4 +32,7 @@ class ScenarioMessage < ApplicationRecord
   belongs_to :scenario, counter_cache: true
 
   validates_presence_of :content, :message_type_id
+  
+  # Scope
+  scope :ordered, -> { order(is_initial: :desc, date: :asc, time: :asc, order: :asc) }
 end
