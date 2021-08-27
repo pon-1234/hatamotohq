@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <div class="talk">
+  <div class="card">
+    <div class="card-body talk">
       <talk-menu-bar @input="showChannels"/>
       <div class="container">
         <div id="chatbox" class="chatbox active">
@@ -11,7 +11,7 @@
     </div>
     <talk-modal-search :id="'TalkModalSearch'" @input="fetchItem"></talk-modal-search>
     <modal-friend-detail :data="friend" :talk="true" @changeTilteChannel="changeTilteChannelActive" v-if="rerender"/>
-  </section>
+  </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
