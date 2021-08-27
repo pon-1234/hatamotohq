@@ -15,12 +15,12 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-bordered table-striped index">
+          <table class="table table-bordered table-striped index text-center">
           <%# Header %>
             <thead>
               <tr>
                 <th class="fw-100">日数</th>
-                <th class="fw-150">時刻</th>
+                <th class="fw-200">時刻</th>
                 <th>タイトル</th>
                 <th>タイプ</th>
                 <th>メッセージプレビュー</th>
@@ -30,13 +30,13 @@
             <%# Data %>
             <tbody>
               <% @messages.each do |message| %>
-                <tr class="text-center">
+                <tr>
                   <% if @scenario.mode_date? %>
-                    <td><%= message.date == 0 ? '開始当日' : "#{message.date}日後" %></td>
+                    <td><%= message.is_initial? == 0 ? '開始当日' : "#{message.date}日後" %></td>
                     <td><%= message.time %> <span class="ml-2"><%= message.order %>通目</span></td>
                   <% elsif @scenario.mode_elapsed_time? %>
-                    <td><%= message.date == 0 ? '開始当日' : "#{message.date}日後" %></td>
-                    <td><%= message.time %> <span class="ml-2"><%= message.order %>通目</span></td>
+                    <td><%= message.is_initial ? '開始当日' : '' %></td>
+                    <td><%= message.is_initial? ? "#{message.order}通目" : "#{message.date}日#{message.time&.to_time.strftime('%-H時間%-M分')}後 #{message.order}通目" %></td>
                   <% end %>
                   <td><%= message.name %></td>
                   <td><message-type-label :data="<%= message.content.to_json %>"/></td>

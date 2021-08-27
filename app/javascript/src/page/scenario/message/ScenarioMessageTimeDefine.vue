@@ -12,7 +12,7 @@
               v-bind:value="false"
               @change="$emit('update:is_initial', false)"
             />
-            時刻指定
+            {{ mode === 'date' ? '時刻指定' : '経過時間指定' }}
           </label>
         </div>
         <div class="radio">
@@ -31,7 +31,8 @@
       <div class="col-sm-8 d-flex flex-column">
         <span class="mb-2">配信タイミング</span>
         <div class="d-flex align-items-center" style="gap: 5px;">
-          <template v-if="!is_initial">
+          <!-- MODE: date -->
+          <template v-if="!is_initial && mode === 'date'">
             <input
               v-model="date"
               class="form-control"
@@ -51,6 +52,30 @@
               class="theme-success mr-4"
               :phrases="{ok: '確定', cancel: '閉じる'}"
             ></datetime>
+          </template>
+
+          <!-- MODE: ELAPSED TIME -->
+          <template v-if="!is_initial && mode === 'elapsed_time'">
+            <input
+              v-model="date"
+              class="form-control"
+              min="1"
+              style="width:5em;"
+              autocomplete="off"
+              name="step"
+              type="number"
+              @change="$emit('update:date', date)"
+            />
+            <span>日と</span>
+            <datetime
+              style="width:6em;"
+              v-model="selectedTime"
+              input-class="form-control"
+              type="time"
+              class="theme-success"
+              :phrases="{ok: '確定', cancel: '閉じる'}"
+            ></datetime>
+            <span class="mr-4">時間後</span>
           </template>
 
           <input
@@ -80,6 +105,7 @@ export default {
     Datetime
   },
   props: {
+    mode: String,
     is_initial: String,
     date: Number,
     time: String,
