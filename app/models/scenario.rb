@@ -11,9 +11,8 @@
 #  mode                    :string(255)      default("date")
 #  scenario_messages_count :integer
 #  status                  :string(255)      default("disable")
-#  type          :string(255)      default("none")
 #  title                   :string(255)
-#  type                    :string(255)      default("normal")
+#  type                    :string(255)      default("send")
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  folder_id               :bigint

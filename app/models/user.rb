@@ -8,6 +8,7 @@
 #  authentication_token   :string(255)
 #  email                  :string(255)      default(""), not null
 #  encrypted_password     :string(255)      default(""), not null
+#  pubsub_token           :string(255)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
@@ -21,8 +22,8 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
-  before_create :ensure_authentication_token
-  after_create :excute_after_create
+  before_create :execute_before_create
+  after_create :execute_after_create
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -39,7 +40,12 @@ class User < ApplicationRecord
     end
   end
 
-  def excute_after_create
+  def execute_before_create
+    ensure_authentication_token
+    generate_pubsub_token
+  end
+
+  def execute_after_create
     create_line_account
   end
 
@@ -54,5 +60,12 @@ class User < ApplicationRecord
     def create_line_account
       line_account = LineAccount.new(owner: self)
       line_account.save!
+    end
+
+    def generate_pubsub_token
+      loop do
+        self.pubsub_token = SecureRandom.base64(32)
+        break unless User.where(pubsub_token: self.pubsub_token).exists?
+      end
     end
 end

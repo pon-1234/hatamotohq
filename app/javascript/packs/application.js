@@ -24,9 +24,6 @@ import * as constant from '@/core/constant';
 import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
 
-// Action cable
-// import '../channels/conversation_channel';
-
 const jQuery = require('jquery');
 window.$ = jQuery;
 window._ = require('lodash');

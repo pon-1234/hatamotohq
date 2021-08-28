@@ -20,7 +20,8 @@ class User::ApplicationController < ActionController::Base
 
   def authenticate_user!
     super
-    # cookies.signed[:user_id] = current_user.id
+    # For authenticating websocket connection
+    cookies.signed[:user_id] = current_user.id
   end
 
   def ensure_bot_initialized

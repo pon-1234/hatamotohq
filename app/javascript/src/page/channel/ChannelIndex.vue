@@ -4,8 +4,8 @@
       <talk-menu-bar @input="showChannels"/>
       <div class="container">
         <div id="chatbox" class="chatbox active">
-          <talk-channel @activeChannel="clickActiveChannel" :class="getLeftItem()" />
-          <talk-conversation @sendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
+          <channel-list @activeChannel="clickActiveChannel" :class="getLeftItem()" />
+          <chat-box @sendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
         </div>
       </div>
     </div>
@@ -15,13 +15,18 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
-import { WebSocketClient } from '@/core/websocket';
+// import { WebSocketClient } from '@/core/websocket';
+import consumer from '@channels/consumer';
+import * as ActionCable from '@rails/actioncable';
+import moment from 'moment-timezone';
+ActionCable.logger.enabled = true;
 
 export default {
   props: ['alias'],
   async beforeMount() {
     await this.fetchItem();
-    this.connectWs();
+    this.connectWS();
+    this.getChannels();
     await this.getTags();
   },
 
@@ -89,6 +94,19 @@ export default {
       'getTags'
     ]),
 
+    connectWS() {
+       consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
+          received(data) {
+            this.appendNewMessage(data);
+          },
+
+          appendNewMessage(data) {
+            console.log('----------- received --------', data);
+          },
+        }
+      );
+    },
+
     async fetchItem(query = {}) {
       console.log(query);
       await this.getChannels(query);
@@ -105,24 +123,24 @@ export default {
       }
     },
 
-    connectWs() {
-      this.ws = new WebSocketClient();
-      this.ws.open();
-      this.ws.onopen = () => {
-        if (this.channelActive) {
-          this.autoActiveChannel();
-          this.$store.dispatch('global/getBadge');
-        }
-      };
-      this.ws.onmessage = (message) => {
-        const mess = JSON.parse(message);
-        console.log('onmessage', mess);
-        this.getMessageFromWs(mess);
-        if (mess.payload && mess.payload.channel && this.channelActive && this.channelActive.id === mess.payload.channel.id && !this.unreadChannelId) {
-          this.autoActiveChannel();
-        }
+    getChannels() {
+      // this.ws = new WebSocketClient();
+      // this.ws.open();
+      // this.ws.onopen = () => {
+      //   if (this.channelActive) {
+        this.autoActiveChannel();
         this.$store.dispatch('global/getBadge');
-      };
+      //   }
+      // };
+      // this.ws.onmessage = (message) => {
+      //   const mess = JSON.parse(message);
+      //   console.log('onmessage', mess);
+      //   this.getMessageFromWs(mess);
+      //   if (mess.payload && mess.payload.channel && this.channelActive && this.channelActive.id === mess.payload.channel.id && !this.unreadChannelId) {
+      //     this.autoActiveChannel();
+      //   }
+      //   this.$store.dispatch('global/getBadge');
+      // };
     },
 
     sendMessage(message) {
