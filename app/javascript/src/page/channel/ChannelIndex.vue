@@ -22,7 +22,10 @@ import moment from 'moment-timezone';
 ActionCable.logger.enabled = true;
 
 export default {
-  props: ['alias'],
+  props: {
+    channels: Array,
+    activeChannel: Number,
+  },
   async beforeMount() {
     await this.fetchItem();
     this.connectWS();
@@ -108,7 +111,6 @@ export default {
     },
 
     async fetchItem(query = {}) {
-      console.log(query);
       await this.getChannels(query);
       if (this.alias) {
         this.isShowTalkChannel = true;
@@ -123,13 +125,13 @@ export default {
       }
     },
 
-    getChannels() {
+    // getChannels() {
       // this.ws = new WebSocketClient();
       // this.ws.open();
       // this.ws.onopen = () => {
       //   if (this.channelActive) {
-        this.autoActiveChannel();
-        this.$store.dispatch('global/getBadge');
+        // this.autoActiveChannel();
+        // this.$store.dispatch('global/getBadge');
       //   }
       // };
       // this.ws.onmessage = (message) => {
@@ -141,7 +143,7 @@ export default {
       //   }
       //   this.$store.dispatch('global/getBadge');
       // };
-    },
+    // },
 
     sendMessage(message) {
       this.sendMessageToWs(message);

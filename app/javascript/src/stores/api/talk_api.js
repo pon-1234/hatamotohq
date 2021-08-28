@@ -1,7 +1,11 @@
 export default {
   getChannels: (query = {}) => {
-    query._pid = btoa('/channels');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels`,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
 
   getListMessages: (query) => {

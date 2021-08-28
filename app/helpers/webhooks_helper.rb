@@ -22,13 +22,11 @@ module WebhooksHelper
     def handle_follow(event, line_account)
       friend_id = event[:source][:userId]
       line_friend = add_friend(line_account, friend_id)
-   
       # Redis::publish('redis_lineFollow', json_encode([
       #     'channel' => $channel,
       #     'src' => $customer,
       #     'dest' => $lineSetting->lineAccount
       # ]));
-
       return line_friend.present?
     end
 
@@ -54,7 +52,6 @@ module WebhooksHelper
     end
 
     def handle_message(event, line_account)
-      p '----handle message-----', event.to_json
       # Get user profile
       friend_id = event[:source][:userId]
       line_friend = LineFriend.where(line_account: line_account, line_user_id: friend_id).first
@@ -66,9 +63,16 @@ module WebhooksHelper
       # Bot could not send to itself
       return false if line_friend.line_user_id == line_account.line_user_id
       # Increase unread message count by 1
-      channel = line_friend.channel
+      update_channel_last_message(line_friend.channel, event)
+      ActionCable.server.broadcast("channel_user_#{Current.user.id}", { body: event.to_json })
+    rescue => e
+      p '-----'
+      p e.to_json
     end
 
+    # Store new friend data when adding new friend, or unblocking friend
+    # The existing friend in LINE system may not exists in this system, so when sending
+    # a message from LINE we need to check and store friend if needs
     def add_friend(line_account, friend_id)
       user_profile = LineApi::GetProfile.new(line_account.line_channel_id, line_account.line_channel_secret, friend_id).perform
       # Return if could not file user profile
@@ -91,5 +95,14 @@ module WebhooksHelper
       channel.save
 
       line_friend
+    end
+
+    # When incoming message is reached, the number of unread messages is increased by 1
+    # Last message data is also updated
+    def update_channel_last_message(channel, event)
+      channel.un_read = 1
+      channel.last_message = event[:message]
+      channel.last_timestamp = event['timestamp'] / 1000
+      channel.save
     end
 end

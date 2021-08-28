@@ -20,6 +20,11 @@ class User::ApplicationController < ActionController::Base
 
   def authenticate_user!
     super
+    if current_user.present?
+      Current.user = current_user
+    else
+      Current.reset
+    end
     # For authenticating websocket connection
     cookies.signed[:user_id] = current_user.id
   end
