@@ -100,11 +100,8 @@
 <script>
 
 import { ActionMessage } from '../../../core/constant';
-import ErrorMessage from '../../base/ErrorMessage.vue';
-import RequiredMark from '../../base/RequiredMark.vue';
 
 export default {
-  components: { RequiredMark, ErrorMessage },
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
   data() {
