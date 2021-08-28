@@ -23,14 +23,13 @@ ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    channels: Array,
     activeChannel: Number,
   },
   async beforeMount() {
-    await this.fetchItem();
     this.connectWS();
-    this.getChannels();
+    await this.getChannels();
     await this.getTags();
+    this.setActiveChannel();
   },
 
   data() {
@@ -110,19 +109,30 @@ export default {
       );
     },
 
-    async fetchItem(query = {}) {
-      await this.getChannels(query);
-      if (this.alias) {
-        this.isShowTalkChannel = true;
-        this.isPc = false;
-        const channel = this.channels.find(item => item.alias === this.alias);
-        this.setChangeActive(channel);
-        this.resetMessages();
-        const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
-
-        await this.setMessageParams({ channelId: channel.id, unread: totalUnreadMessage });
-        await this.getMessages(this.messageParams);
+    setActiveChannel(channel = null) {
+      if (channel) {
+        this.activeChannel = channel;
       }
+
+      // Reset unread message count to 0
+      // TODO
+      // Show channel chatbox
+      // TODO
+    },
+
+    async fetchItem(query = {}) {
+      // await this.getChannels(query);
+      // if (this.alias) {
+      //   this.isShowTalkChannel = true;
+      //   this.isPc = false;
+      //   const channel = this.channels.find(item => item.alias === this.alias);
+      //   this.setChangeActive(channel);
+      //   this.resetMessages();
+      //   const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
+
+      //   await this.setMessageParams({ channelId: channel.id, unread: totalUnreadMessage });
+      //   await this.getMessages(this.messageParams);
+      // }
     },
 
     // getChannels() {
