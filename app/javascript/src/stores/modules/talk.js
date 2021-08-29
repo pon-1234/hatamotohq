@@ -2,7 +2,7 @@ import Talk from '../api/talk_api';
 
 export const state = {
   channels: [],
-  channelActive: null,
+  activeChannel: null,
   messages: [],
   messageParams: {
     page: 1,
@@ -37,18 +37,18 @@ export const mutations = {
   SET_UNREAD_CHANNEL_ID(state, unreadChannelId) {
     state.unreadChannelId = unreadChannelId;
     if (unreadChannelId) {
-      state.channelActive.un_read = true;
+      state.activeChannel.un_read = true;
     }
   },
 
-  SET_CHANEL_ACTIVE(state, channelActive) {
-    state.channelActive = channelActive;
-    if (state.unreadChannelId !== state.channelActive.id) {
-      state.channelActive.un_read = false;
+  SET_ACTIVE_CHANNEL(state, activeChannel) {
+    state.activeChannel = activeChannel;
+    if (state.unreadChannelId !== state.activeChannel.id) {
+      state.activeChannel.un_read = false;
     }
-    const index = state.channels.findIndex(item => parseInt(item.id) === parseInt(channelActive.id));
+    const index = state.channels.findIndex(item => parseInt(item.id) === parseInt(activeChannel.id));
     if (index >= 0) {
-      state.channels.splice(index, 1, channelActive);
+      state.channels.splice(index, 1, activeChannel);
     }
   },
 
@@ -87,21 +87,21 @@ export const mutations = {
     state.messages.push(message);
 
     if (state.unreadChannelId) {
-      state.channelActive.total_unread_messages += 1;
+      state.activeChannel.total_unread_messages += 1;
     } else {
-      state.channelActive.total_unread_messages = 0;
+      state.activeChannel.total_unread_messages = 0;
     }
   },
 
   UPDATE_CHANNELS(state, { status, channel }) {
     const index = state.channels.findIndex(item => item.id === channel.id);
     if (index >= 0) {
-      if (state.channelActive && state.channelActive.id === channel.id) {
+      if (state.activeChannel && state.activeChannel.id === channel.id) {
         channel.un_read = false;
         if (!state.unreadChannelId) {
           channel.total_unread_messages = 0;
         }
-        state.channelActive = channel;
+        state.activeChannel = channel;
       }
 
       if (status === 'new_message') {
@@ -143,7 +143,7 @@ export const actions = {
     context.commit('SET_LOAD_MORE_MESSAGE', true);
     try {
       const res = await Talk.getListMessages(query);
-      if (res && res.data && (context.state.channelActive && query.channelId === context.state.channelActive.id)) {
+      if (res && res.data && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
         context.commit('SET_MESSAGES', res);
       }
     } catch (error) {
@@ -152,8 +152,8 @@ export const actions = {
     context.commit('SET_LOAD_MORE_MESSAGE', false);
   },
 
-  setChangeActive(context, payload) {
-    context.commit('SET_CHANEL_ACTIVE', payload);
+  setActiveChannel(context, payload) {
+    context.commit('SET_ACTIVE_CHANNEL', payload);
   },
 
   setMessageParams(context, params) {
@@ -165,7 +165,7 @@ export const actions = {
 
   getMessageFromWs(context, mess) {
     if (mess.action === 'new_message') {
-      if (context.state.channelActive && context.state.channelActive.id && mess.channel.id === context.state.channelActive.id) {
+      if (context.state.activeChannel && context.state.activeChannel.id && mess.channel.id === context.state.activeChannel.id) {
         context.commit('PUSH_MESSAGE', mess.content);
       }
       context.commit('UPDATE_CHANNELS', { status: 'new_message', channel: mess.channel });
@@ -214,7 +214,7 @@ export const actions = {
     try {
       const res = await Talk.unreadMessage(query);
       if (res && res.total) {
-        context.commit('SET_CHANEL_ACTIVE', Object.assign({}, context.state.channelActive, { total_unread_messages: res.total }));
+        context.commit('SET_ACTIVE_CHANNEL', Object.assign({}, context.state.activeChannel, { total_unread_messages: res.total }));
       }
     } catch (error) {
       console.log(error);

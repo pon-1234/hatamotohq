@@ -1,15 +1,15 @@
 <template>
-  <div  class="container" v-if="channelActive">
+  <div  class="container" v-if="activeChannel">
     <div class="nav-element">
       <!-- left -->
       <div class="left">
           <div class="avatar">
-              <img :src="channelActive.avatar ? channelActive.avatar : '/img/no-image-profile.png'">
+              <img :src="activeChannel.avatar ? activeChannel.avatar : '/img/no-image-profile.png'">
           </div>
           <div class="name">
-              {{channelActive.title}}
+              {{activeChannel.title}}
           </div>
-          <div  id="btn-detail" class="btn-detail fz14 btn-deatil-friend" @click="showFriendDetail(channelActive.line_friend_id)"><a >友だち詳細</a></div>
+          <div  id="btn-detail" class="btn-detail fz14 btn-deatil-friend" @click="showFriendDetail(activeChannel.line_friend_id)"><a >友だち詳細</a></div>
       </div>
       <div class="right">
       </div>
@@ -48,7 +48,7 @@
             />
           </div>
         </div>
-        <div class="tool d-flex align-items-center" v-if="channelActive.status !== 'blocked'">
+        <div class="tool d-flex align-items-center" v-if="activeChannel.status !== 'blocked'">
           <ul class="left list-action">
             <li class="text-sticker" @click="openSticker">
               <i class="fas fa-smile "></i>
@@ -69,7 +69,7 @@
           </ul>
           <div class="btn-send" @click="sendTextMessage"><i class="fas fa-paper-plane"></i></div>
         </div>
-        <div class="text"  v-if="channelActive.status !== 'blocked'">
+        <div class="text"  v-if="activeChannel.status !== 'blocked'">
             <b-form-textarea
               v-model="textMessage"
               id='txtMessage'
@@ -83,7 +83,7 @@
         </b-form-textarea>
         </div>
         <div class="blocked"
-          v-if="channelActive.status === 'blocked'"
+          v-if="activeChannel.status === 'blocked'"
           style="padding: 30px;background-color: #ededed;display: flex;">
             <div style="font-size: 12px; text-align: center; user-select: none; height: 100%; overflow: hidden"> このユーザーはLINEアカウントを削除したか、あなたのアカウントをブロックしたか、あなたをチャットルームから退出させたため、このユーザーにメッセージを送信できません。
             </div>
@@ -140,7 +140,7 @@ export default {
       deep: true
     },
 
-    channelActive: {
+    activeChannel: {
       handler(val) {
         if (!val) return;
         this.$nextTick(() => {
@@ -159,7 +159,7 @@ export default {
   },
   computed: {
     ...mapState('talk', {
-      channelActive: state => state.channelActive,
+      activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       isLoadmoreMessage: state => state.isLoadmoreMessage,
       messageParams: state => state.messageParams,
@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getMessages', 'setMessageParams', 'setChangeActive', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
+    ...mapActions('talk', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
     ...mapActions('global', ['getStickers']),
 
     scrollToBottom() {
@@ -204,11 +204,11 @@ export default {
     sendTextMessage() {
       if (this.textMessage.trim()) {
         // eslint-disable-next-line no-undef
-        const channel = _.cloneDeep(this.channelActive);
+        const channel = _.cloneDeep(this.activeChannel);
         channel.last_message = this.textMessage;
         channel.last_timetamp = new Date().getTime();
 
-        this.setChangeActive(channel);
+        this.setActiveChannel(channel);
         const message = {
           channel: channel,
           content: {
@@ -245,10 +245,10 @@ export default {
 
     selectSticker(sticker) {
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.last_message = 'スタンプメッセージ';
       channel.last_timetamp = new Date().getTime();
-      this.setChangeActive(channel);
+      this.setActiveChannel(channel);
       const message = {
         channel: channel,
         content: {
@@ -280,7 +280,7 @@ export default {
     sendFile(file) {
       let message = null;
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.last_message = '';
       channel.last_timetamp = new Date().getTime();
       if (this.ImageType.indexOf(file.type) !== -1) {
@@ -355,7 +355,7 @@ export default {
     sendMediaFromManager(media) {
       let message = null;
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.last_message = '';
       channel.last_timetamp = new Date().getTime();
       if (this.ImageType.indexOf(media.mine_type) >= 0) {
@@ -437,8 +437,8 @@ export default {
     },
 
     setUnreadMessage(messageId) {
-      this.setUnreadChannelId(this.channelActive.id);
-      this.unreadMessage({ message_id: messageId, channel_id: this.channelActive.id });
+      this.setUnreadChannelId(this.activeChannel.id);
+      this.unreadMessage({ message_id: messageId, channel_id: this.activeChannel.id });
     },
 
     isDateTimeMessage(currentMessage, lastMessage) {
@@ -459,9 +459,9 @@ export default {
 
     selectMessageTemplate(template) {
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.last_timetamp = new Date().getTime();
-      this.setChangeActive(channel);
+      this.setActiveChannel(channel);
 
       const message = {
         channel: channel,
@@ -476,7 +476,7 @@ export default {
 
     selectScenarioTemplate(template) {
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       const message = {
         channel: channel,
         content: {
@@ -491,9 +491,9 @@ export default {
     selectFlexMessageTemplate(template) {
       const content = JSON.parse(template.json_message);
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.last_timetamp = new Date().getTime();
-      this.setChangeActive(channel);
+      this.setActiveChannel(channel);
       const message = {
         channel: channel,
         content: {

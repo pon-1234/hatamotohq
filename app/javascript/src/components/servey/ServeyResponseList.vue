@@ -105,7 +105,7 @@ export default {
       window.location.href = process.env.MIX_ROOT_PATH + '/surveys/' + surveyId + '/answer/' + answerId;
     },
 
-    changeTilteChannelActive(title) {
+    changeTilteActiveChannel(title) {
       if (this.focus != null) {
         this.responseLists[this.focus].display_name = title;
         // this.blink();

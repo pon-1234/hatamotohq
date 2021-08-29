@@ -10,7 +10,7 @@
       </div>
     </div>
     <talk-modal-search :id="'TalkModalSearch'" @input="fetchItem"></talk-modal-search>
-    <modal-friend-detail :data="friend" :talk="true" @changeTilteChannel="changeTilteChannelActive" v-if="rerender"/>
+    <modal-friend-detail :data="friend" :talk="true" @changeTilteChannel="changeTilteActiveChannel" v-if="rerender"/>
   </div>
 </template>
 <script>
@@ -29,7 +29,7 @@ export default {
     this.connectWS();
     await this.getChannels();
     await this.getTags();
-    this.setActiveChannel();
+    this.activateFirstChannel();
   },
 
   data() {
@@ -57,7 +57,7 @@ export default {
 
   computed: {
     ...mapState('talk', {
-      channelActive: state => state.channelActive,
+      activeChannel: state => state.activeChannel,
       channels: state => state.channels,
       messages: state => state.messages,
       messageParams: state => state.messageParams,
@@ -69,7 +69,7 @@ export default {
   },
 
   watch: {
-    channelActive: {
+    activeChannel: {
       handler(val) {
         this.rerender = false;
         this.$nextTick(() => {
@@ -86,7 +86,7 @@ export default {
       'getMessageFromWs',
       'pushMessage',
       'updateChannels',
-      'setChangeActive',
+      'setActiveChannel',
       'setMessageParams',
       'getMessages',
       'setUnreadChannelId',
@@ -105,7 +105,7 @@ export default {
 
         appendNewMessage(data) {
           _this.getMessageFromWs(data);
-          // if (mess.payload && mess.payload.channel && this.channelActive && this.channelActive.id === mess.payload.channel.id && !this.unreadChannelId) {
+          // if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
           //   this.autoActiveChannel();
           // }
           // this.$store.dispatch('global/getBadge');
@@ -113,16 +113,11 @@ export default {
         }
       )
     },
-
-    setActiveChannel(channel = null) {
-      if (channel) {
-        this.activeChannel = channel;
-      }
-
-      // Reset unread message count to 0
-      // TODO
-      // Show channel chatbox
-      // TODO
+    
+    async activateFirstChannel() {
+      this.setActiveChannel(this.channels[0]);
+      await this.setMessageParams({ channelId: this.activeChannel.id });
+      await this.getMessages(this.messageParams);
     },
 
     async fetchItem(query = {}) {
@@ -131,7 +126,7 @@ export default {
       //   this.isShowTalkChannel = true;
       //   this.isPc = false;
       //   const channel = this.channels.find(item => item.alias === this.alias);
-      //   this.setChangeActive(channel);
+      //   this.setActiveChannel(channel);
       //   this.resetMessages();
       //   const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
 
@@ -144,7 +139,7 @@ export default {
       // this.ws = new WebSocketClient();
       // this.ws.open();
       // this.ws.onopen = () => {
-      //   if (this.channelActive) {
+      //   if (this.activeChannel) {
         // this.autoActiveChannel();
         // this.$store.dispatch('global/getBadge');
       //   }
@@ -153,7 +148,7 @@ export default {
       //   const mess = JSON.parse(message);
       //   console.log('onmessage', mess);
       //   this.getMessageFromWs(mess);
-      //   if (mess.payload && mess.payload.channel && this.channelActive && this.channelActive.id === mess.payload.channel.id && !this.unreadChannelId) {
+      //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
       //     this.autoActiveChannel();
       //   }
       //   this.$store.dispatch('global/getBadge');
@@ -190,7 +185,7 @@ export default {
         this.setUnreadChannelId(null);
         this.ws.send(JSON.stringify({
           action: 'message_read',
-          payload: this.channelActive
+          payload: this.activeChannel
         }));
       });
     },
@@ -235,11 +230,11 @@ export default {
       $('#modal-detail-friend').modal('show');
     },
 
-    changeTilteChannelActive(title) {
+    changeTilteActiveChannel(title) {
       // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.channelActive);
+      const channel = _.cloneDeep(this.activeChannel);
       channel.title = title;
-      this.setChangeActive(channel);
+      this.setActiveChannel(channel);
     }
   }
 };

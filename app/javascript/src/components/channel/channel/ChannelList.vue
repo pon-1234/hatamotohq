@@ -26,8 +26,8 @@ export default {
     };
   },
   created() {
-    if (this.channelActive) {
-      this.selected = this.channels.firstWhere(item => item.id === this.channelActive.id);
+    if (this.activeChannel) {
+      this.selected = this.channels.firstWhere(item => item.id === this.activeChannel.id);
     }
   },
 
@@ -38,15 +38,15 @@ export default {
       messageParams: state => state.messageParams,
       lastPage: state => state.channel_LastPage || 1,
       currentPage: state => state.channel_CurrentPage || 1,
-      channelActive: state => state.channelActive
+      activeChannel: state => state.activeChannel
     })
   },
 
   watch: {
     channels: {
       handler(val) {
-        if (this.channelActive) {
-          this.selected = this.channels.firstWhere(item => item.id === this.channelActive.id);
+        if (this.activeChannel) {
+          this.selected = _.first(this.channels, item => item.id === this.activeChannel.id);
         }
 
         this.currentIndexChannel = 0;
@@ -60,14 +60,14 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getChannels', 'getMessages', 'setChangeActive', 'setMessageParams', 'resetMessages']),
+    ...mapActions('talk', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
     async changeChanel(channel, index) {
       const isCurrentChannel = this.selected ? (channel.id === this.selected.id) : false;
       this.$emit('activeChannel', !isCurrentChannel);
 
       if (isCurrentChannel) return;
       this.selected = channel;
-      this.setChangeActive(channel);
+      this.setActiveChannel(channel);
       this.resetMessages();
       const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
       await this.setMessageParams({ channelId: channel.id, unread: totalUnreadMessage });
