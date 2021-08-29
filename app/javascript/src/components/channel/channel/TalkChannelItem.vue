@@ -14,8 +14,8 @@
     </div>
     <!-- last message -->
     <div class="d-flex">
-      <div class="last-message" :class="data.un_read?'unread': ''">
-              {{data.last_message}}
+      <div class="last-message" :class="data.un_read ? 'unread': ''">
+        <last-message-text :message="data.last_message"/>
       </div>
       <div class="total-unread-message" v-if="data.total_unread_messages">{{getTotalUnreadMessage()}}</div>
     </div>

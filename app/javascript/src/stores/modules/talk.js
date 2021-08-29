@@ -104,14 +104,16 @@ export const mutations = {
         state.channelActive = channel;
       }
 
-      if (status === 'add_message') {
+      if (status === 'new_message') {
+        // move channel to top
+        console.log('-----channels-----', state.channels);
+        console.log('-----new channel-----', channel);
         state.channels.splice(index, 1);
         state.channels.unshift(channel);
       } else if (status === 'read_message' || status === 'line_follow') {
         state.channels.splice(index, 1, channel);
       }
     } else {
-      // theem channel mới
       state.channels.unshift(channel);
     }
   }
@@ -162,15 +164,15 @@ export const actions = {
   },
 
   getMessageFromWs(context, mess) {
-    if (mess.action === 'message_sent' || mess.action === 'message_receive') {
-      if (context.state.channelActive && context.state.channelActive.id && mess.payload.channel.id === context.state.channelActive.id) {
-        context.commit('PUSH_MESSAGE', mess.payload.content);
+    if (mess.action === 'new_message') {
+      if (context.state.channelActive && context.state.channelActive.id && mess.channel.id === context.state.channelActive.id) {
+        context.commit('PUSH_MESSAGE', mess.content);
       }
-      context.commit('UPDATE_CHANNELS', { status: 'add_message', channel: mess.payload.channel });
+      context.commit('UPDATE_CHANNELS', { status: 'new_message', channel: mess.channel });
     } else if (mess.action === 'message_read') {
-      context.commit('UPDATE_CHANNELS', { status: 'read_message', channel: mess.payload });
+      context.commit('UPDATE_CHANNELS', { status: 'read_message', channel: mess });
     } else if (mess.action === 'line_follow') {
-      context.commit('UPDATE_CHANNELS', { status: 'line_follow', channel: mess.payload.channel });
+      context.commit('UPDATE_CHANNELS', { status: 'line_follow', channel: mess.channel });
     }
   },
 

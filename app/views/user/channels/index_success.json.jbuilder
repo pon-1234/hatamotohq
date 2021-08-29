@@ -6,10 +6,6 @@ json.meta do
 end
 json.data do
   json.array! @channels do |channel|
-    json.(channel, :id, :title, :status)
-    json.line_friend_id 1
-    json.last_message 'xxxxx'
-    json.last_timetamp '2021-08-27 17:00:00'
-    json.unread 0
+    json.(channel, :id, :title, :status, :line_friend_id, :last_message, :last_timestamp, :un_read)
   end
 end

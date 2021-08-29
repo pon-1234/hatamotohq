@@ -281,18 +281,19 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
 
   create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "channel_id"
-    t.bigint "line_friend_id"
+    t.string "sender_type"
+    t.bigint "sender_id"
     t.boolean "is_bot_sender", default: false
     t.string "attr", default: "chat-reserve"
     t.string "line_message_id"
-    t.text "line_content", size: :long
+    t.json "line_content"
     t.string "line_timestamp"
     t.string "line_reply_token"
     t.text "slug"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["channel_id"], name: "index_messages_on_channel_id"
-    t.index ["line_friend_id"], name: "index_messages_on_line_friend_id"
+    t.index ["sender_type", "sender_id"], name: "index_messages_on_sender_type_and_sender_id"
   end
 
   create_table "postback_checksums", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
@@ -513,7 +514,6 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
   add_foreign_key "message_templates", "folders"
   add_foreign_key "message_templates", "line_accounts"
   add_foreign_key "messages", "channels"
-  add_foreign_key "messages", "line_friends"
   add_foreign_key "rich_menus", "folders"
   add_foreign_key "rich_menus", "line_accounts"
   add_foreign_key "scenario_messages", "scenarios"

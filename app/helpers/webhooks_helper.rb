@@ -21,7 +21,7 @@ module WebhooksHelper
   private
     def handle_follow(event, line_account)
       friend_id = event[:source][:userId]
-      line_friend = add_friend(line_account, friend_id)
+      line_friend = add_friend(line_account, friend_id, event)
       # Redis::publish('redis_lineFollow', json_encode([
       #     'channel' => $channel,
       #     'src' => $customer,
@@ -57,23 +57,27 @@ module WebhooksHelper
       line_friend = LineFriend.where(line_account: line_account, line_user_id: friend_id).first
       # Store friend data if does not exists
       unless line_friend
-        line_friend = add_friend(line_account, friend_id)
+        line_friend = add_friend(line_account, friend_id, event)
         return false if line_friend.nil?        
       end
       # Bot could not send to itself
       return false if line_friend.line_user_id == line_account.line_user_id
+      channel = line_friend.channel
+      # Create a message
+      message = create_message(channel, line_friend, event)
       # Increase unread message count by 1
-      update_channel_last_message(line_friend.channel, event)
-      ActionCable.server.broadcast("channel_user_#{Current.user.id}", { body: event.to_json })
+      update_channel_last_message(channel, event)
+      
+      ws_channel = "channel_user_#{channel.line_account.id}"
+      Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
     rescue => e
-      p '-----'
-      p e.to_json
+      logger.error(e)
     end
 
     # Store new friend data when adding new friend, or unblocking friend
     # The existing friend in LINE system may not exists in this system, so when sending
     # a message from LINE we need to check and store friend if needs
-    def add_friend(line_account, friend_id)
+    def add_friend(line_account, friend_id, event)
       user_profile = LineApi::GetProfile.new(line_account.line_channel_id, line_account.line_channel_secret, friend_id).perform
       # Return if could not file user profile
       return nil if user_profile.nil?
@@ -92,7 +96,7 @@ module WebhooksHelper
       channel.last_timestamp = event['timestamp'] / 1000
       channel.alias = channel_alias
       channel.un_read = 0
-      channel.save
+      channel.save!
 
       line_friend
     end
@@ -101,8 +105,22 @@ module WebhooksHelper
     # Last message data is also updated
     def update_channel_last_message(channel, event)
       channel.un_read = 1
-      channel.last_message = event[:message]
+      channel.last_message = event[:message].to_json
       channel.last_timestamp = event['timestamp'] / 1000
-      channel.save
+      channel.save!
+    end
+
+    def create_message(channel, sender, body)
+      message = Message.new
+      message.channel = channel
+      message.sender = sender
+      message.is_bot_sender = false
+      message.line_message_id = body[:message][:id]
+      message.line_content = body[:message]
+      message.line_timestamp = body[:timestamp]
+      message.line_reply_token = body[:replyToken]
+      message.slug = body[:message][:type].eql?('text') ? body[:message][:text] : nil
+      message.save!
+      message
     end
 end

@@ -97,16 +97,21 @@ export default {
     ]),
 
     connectWS() {
-       consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
-          received(data) {
-            this.appendNewMessage(data);
-          },
+      const _this = this;
+      consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
+        received(data) {
+          this.appendNewMessage(data);
+        },
 
-          appendNewMessage(data) {
-            console.log('----------- received --------', data);
+        appendNewMessage(data) {
+          _this.getMessageFromWs(data);
+          // if (mess.payload && mess.payload.channel && this.channelActive && this.channelActive.id === mess.payload.channel.id && !this.unreadChannelId) {
+          //   this.autoActiveChannel();
+          // }
+          // this.$store.dispatch('global/getBadge');
           },
         }
-      );
+      )
     },
 
     setActiveChannel(channel = null) {

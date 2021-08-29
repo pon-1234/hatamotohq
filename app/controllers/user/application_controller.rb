@@ -12,6 +12,7 @@ class User::ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :ensure_bot_initialized
+  around_action :set_current_thread_user
 
   def not_authenticated
     sign_out
@@ -20,13 +21,17 @@ class User::ApplicationController < ActionController::Base
 
   def authenticate_user!
     super
-    if current_user.present?
-      Current.user = current_user
-    else
-      Current.reset
-    end
     # For authenticating websocket connection
     cookies.signed[:user_id] = current_user.id
+  end
+
+  def set_current_thread_user
+    Current.user = current_user
+    begin
+      yield
+    ensure
+      Current.reset
+    end
   end
 
   def ensure_bot_initialized
