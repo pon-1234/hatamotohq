@@ -8,7 +8,7 @@ export const state = {
     page: 1,
     channelId: null
   },
-  lastPage: 1,
+  totalPages: 1,
   currentPage: null,
   channel_LastPage: 1,
   channel_CurrentPage: null,
@@ -57,7 +57,7 @@ export const mutations = {
   },
 
   SET_MESSAGES(state, messages) {
-    state.lastPage = parseInt(messages.meta.last_page);
+    state.totalPages = parseInt(messages.meta.total_pages);
     state.currentPage = parseInt(messages.meta.current_page);
 
     if (messages.meta.current_page > 1) {

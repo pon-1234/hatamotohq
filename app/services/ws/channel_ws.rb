@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ws::ChannelWs
   def initialize(ws_channel)
     @ws_channel = ws_channel

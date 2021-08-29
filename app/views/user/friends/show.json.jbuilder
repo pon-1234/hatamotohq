@@ -8,4 +8,3 @@ json.tags do
     json.(tag, :id, :name)
   end
 end
-

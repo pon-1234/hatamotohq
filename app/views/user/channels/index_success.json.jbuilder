@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 json.meta do
   json.total_pages @channels.total_pages
   json.current_page @channels.current_page

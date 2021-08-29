@@ -36,7 +36,7 @@ export default {
       channels: state => state.channels,
       isLoadMoreChannel: state => state.isLoadMoreChannel,
       messageParams: state => state.messageParams,
-      lastPage: state => state.channel_LastPage || 1,
+      totalPages: state => state.channel_LastPage || 1,
       currentPage: state => state.channel_CurrentPage || 1,
       activeChannel: state => state.activeChannel
     })
@@ -114,7 +114,7 @@ export default {
         // lấy thêm channel
         this.getChannelsFromCache(this.channels);
 
-        // if (this.currentPage >= this.lastPage) return;
+        // if (this.currentPage >= this.totalPages) return;
         // await this.getChannels({
         //   page: this.currentPage + 1
         // });

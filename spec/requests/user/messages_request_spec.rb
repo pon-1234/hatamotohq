@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe 'User::AutoResponses', type: :request do
+RSpec.describe 'User::Messages', type: :request do
 end

@@ -163,7 +163,7 @@ export default {
       messages: state => state.messages,
       isLoadmoreMessage: state => state.isLoadmoreMessage,
       messageParams: state => state.messageParams,
-      lastPage: state => state.lastPage,
+      totalPages: state => state.totalPages,
       currentPage: state => state.currentPage,
       unreadChannelId: state => state.unreadChannelId
     }),
@@ -192,7 +192,7 @@ export default {
       if (messageDisplay.scrollTop < 10 && !this.isLoadmoreMessage) {
         const page = this.messageParams.page + 1;
         this.currentScrollTop = messageDisplay.scrollHeight;
-        if (page > this.lastPage) return;
+        if (page > this.totalPages) return;
         this.setMessageParams({ page: page });
         await this.getMessages(this.messageParams);
         this.$nextTick(() => {

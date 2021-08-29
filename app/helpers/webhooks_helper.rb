@@ -27,7 +27,7 @@ module WebhooksHelper
       #     'src' => $customer,
       #     'dest' => $lineSetting->lineAccount
       # ]));
-      return line_friend.present?
+      line_friend.present?
     end
 
     def handle_unfollow(event, line_account)
@@ -58,7 +58,7 @@ module WebhooksHelper
       # Store friend data if does not exists
       unless line_friend
         line_friend = add_friend(line_account, friend_id, event)
-        return false if line_friend.nil?        
+        return false if line_friend.nil?
       end
       # Bot could not send to itself
       return false if line_friend.line_user_id == line_account.line_user_id
@@ -67,7 +67,7 @@ module WebhooksHelper
       message = create_message(channel, line_friend, event)
       # Increase unread message count by 1
       update_channel_last_message(channel, event)
-      
+
       ws_channel = "channel_user_#{channel.line_account.id}"
       Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
     rescue => e
