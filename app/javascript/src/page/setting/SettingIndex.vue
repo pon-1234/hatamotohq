@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">アカウント情報</h3>
+      <div class="card-header d-flex">
+        <h5 class="m-auto font-weight-bold">アカウント情報</h5>
       </div>
       <div class="card-body">
         <div class="form-group row">
