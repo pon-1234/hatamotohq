@@ -69,6 +69,11 @@ class User::ScenariosController < User::ApplicationController
     end
   end
 
+  # POST /user/scenarios/:id/copy
+  def copy
+    # TODO
+  end
+
   private
     def scenario_params
       params.permit(

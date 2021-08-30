@@ -31,6 +31,7 @@ Rails.application.routes.draw do
           get :delete_confirm, on: :member
         end
         get :delete_confirm, on: :member
+        post :copy, on: :member
       end
       resources :auto_responses
       resources :folders, only: [:create]
