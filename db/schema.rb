@@ -284,6 +284,7 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
     t.bigint 'channel_id'
     t.string 'sender_type'
     t.bigint 'sender_id'
+    t.string 'type'
     t.boolean 'is_bot_sender', default: false
     t.string 'attr', default: 'chat-reserve'
     t.string 'line_message_id'

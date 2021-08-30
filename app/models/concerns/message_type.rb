@@ -4,7 +4,7 @@ module MessageType
   extend ActiveSupport::Concern
 
   included do
-    enum message_type: {
+    enum type: {
       text: 'text',
       sticker: 'sticker',
       image: 'image',
@@ -12,10 +12,7 @@ module MessageType
       audio: 'audio',
       location: 'location',
       imagemap: 'imagemap',
-      template_button: 'template_button',
-      template_confirm: 'template_confirm',
-      template_carousel: 'template_carousel',
-      template_image_carousel: 'template_image_carousel',
+      template: 'template',
       flex: 'flex'
     }, _suffix: true
   end

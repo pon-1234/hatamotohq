@@ -16,8 +16,6 @@ class User::FriendsController < User::ApplicationController
   end
 
   def update
-    p '------'
-    p update_friend_params
     if @friend.update(update_friend_params)
       render_success
     else
@@ -27,6 +25,8 @@ class User::FriendsController < User::ApplicationController
 
   def show
     @friend = LineFriend.find(params[:id])
+    p '------'
+    p @friend.to_json
     respond_to do |format|
       format.html
       format.json { render 'user/friends/show.json.jbuilder' }

@@ -1,1 +1,1 @@
-<user-friend-detail :friendId="<%= @friend.id.to_json %>"></user-friend-detail>
+<friend-detail :friend="<%= @friend.to_json %>" channel_id="<%= @friend.channel.id %>"></friend-detail>

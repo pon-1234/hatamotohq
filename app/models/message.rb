@@ -12,6 +12,7 @@
 #  line_timestamp   :string(255)
 #  sender_type      :string(255)
 #  slug             :text(65535)
+#  type             :string(255)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  channel_id       :bigint
@@ -28,6 +29,10 @@
 #  fk_rails_...  (channel_id => channels.id)
 #
 class Message < ApplicationRecord
+  include MessageType
+
   belongs_to :channel
   belongs_to :sender, polymorphic: true
+  validates :line_content, presence: true
+  validates :type, presence: true
 end

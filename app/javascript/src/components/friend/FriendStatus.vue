@@ -1,9 +1,9 @@
 <template>
   <div>
-    <span v-if="status === 'active'" class="text-success complete">
+    <span v-if="status === 'active'" class="badge badge-success">
       正常
     </span>
-    <span v-else-if="status === 'block'" class="status draft">
+    <span v-else-if="status === 'block'" class="badge badge-warning">
       友達からブロック
     </span>
   </div>

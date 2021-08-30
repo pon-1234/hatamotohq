@@ -5,6 +5,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
     create_table :messages do |t|
       t.references :channel, foreign_key: true
       t.references :sender, polymorphic: true
+      t.string :type
       t.boolean :is_bot_sender, default: 0
       t.string :attr, default: 'chat-reserve'
       t.string :line_message_id
