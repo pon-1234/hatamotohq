@@ -1,92 +1,88 @@
 <template>
-  <div>
-    <div class="row-ttl01 d-flex ai_center mb40 flex-wrap justify-content-between bot  align-items-center">
-      <div class="col-l flex">
-        <h3 class="hdg3">自動応答一覧</h3>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <folder-left
+          type="auto_response"
+          :data="messages"
+          :isPc="isPc"
+          :selectedFolder="selectedFolder"
+          @changeSelectedFolder="changeSelectedFolder"
+          @submitEditFolder="submitEditFolder"
+          @submitAddNewFolder="submitAddNewFolder"
+          />
+          <div :class="getClassRightTag()">
+            <div class="tag-header">
+              <div class="col-r">
+                <div class="btn-common02 fz14" v-if="messages && messages.length && messages[selectedFolder]">
+                  <a :href="MIX_ROOT_PATH + '/bots/create?folder_id='+messages[selectedFolder].id"><span>新規作成</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="tag-content">
+              <div style="height: 41px; display: flex; padding-right: 10px">
+                <div style="width: 41px;display: inline-flex;vertical-align: middle;height: 100%;justify-content: center; margin: 0">
+                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
+                <div style="flex: 1 1 0%; overflow: hidden;text-overflow: ellipsis;margin: auto; font-weight: bold;"
+                    v-if="messages && messages.length && messages[selectedFolder]">{{messages[selectedFolder].name}}
+                </div>
+              </div>
+              <div class="tag-scroll">
+                <div class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center">
+                  <table class="table table-hover table-bot">
+                    <thead>
+                      <tr>
+                        <th class="w10">設定</th>
+                        <th class="w25" >タイトル</th>
+                        <th class="w25">キーワード</th>
+                        <th class="w25">内容</th>
+                        <th class="w30" style="min-width: 150px">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="message in messagesContent" v-bind:key="message.id">
+                        <td class=" fz14">
+                          <div class="toggle-switch" style="margin: auto;">
+                            <input v-bind:id="message.id" class="toggle-input" type="checkbox"
+                                    v-model="message.status" true-value="enable"
+                                    false-value="disable" @change="botEditMessage(message)">
+                            <label v-bind:for="message.id" class="toggle-label" />
+                            <span></span>
+                          </div>
+                        </td>
+                        <td class="w25" style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;">{{message.title}}</td>
+                        <td class="">
+                          <ul class="list-tag list-unstyled no-mgn" >
+                            <li class="tag mr-1" v-for="tag in tags(message.keyword)" v-bind:key="tag">{{tag}}</li>
+                          </ul>
+                        </td>
+                        <td class=" fz12">
+                          <div v-for="(item, index) in message.auto_broadcast_messages" v-bind:key="index">
+                            <view-message-content :data="item.content" ></view-message-content>
+                          </div>
+                        </td>
+                        <td class=" row-btn">
+                          <div class="btn-edit01" data-toggle="tooltip" title="編集">
+                            <a v-bind:href="MIX_ROOT_PATH + '/bots/' + message.id + '/edit'" class="btn-more btn-more-linebot btn-block">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                          </div>
+                          <div class="btn-delete01" data-toggle="tooltip" title="削除">
+                            <a class="btn-more btn-more-linebot btn-block" @click="showModal(message)"
+                                data-toggle="modal" data-target="#modal-delete">
+                              <i class="fas fa-trash-alt"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
-   <div>
-    <folder-left
-      type="auto_message"
-      :data="messages"
-      :isPc="isPc"
-      :selectedFolder="selectedFolder"
-      @changeSelectedFolder="changeSelectedFolder"
-      @submitEditFolder="submitEditFolder"
-      @submitAddNewFolder="submitAddNewFolder"
-      />
-      <div :class="getClassRightTag()">
-        <div class="tag-header">
-          <div class="col-r">
-            <div class="btn-common02 fz14" v-if="messages && messages.length && messages[selectedFolder]">
-              <a :href="MIX_ROOT_PATH + '/bots/create?folder_id='+messages[selectedFolder].id"><span>新規作成</span></a>
-            </div>
-          </div>
-        </div>
-        <div class="tag-content">
-          <div style="height: 41px; display: flex; padding-right: 10px">
-            <div style="width: 41px;display: inline-flex;vertical-align: middle;height: 100%;justify-content: center; margin: 0">
-              <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-            <div style="flex: 1 1 0%; overflow: hidden;text-overflow: ellipsis;margin: auto; font-weight: bold;"
-                 v-if="messages && messages.length && messages[selectedFolder]">{{messages[selectedFolder].name}}
-            </div>
-          </div>
-          <div class="tag-scroll">
-            <div class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center">
-              <table class="table table-hover table-bot">
-                <thead>
-                  <tr>
-                    <th class="w10">設定</th>
-                    <th class="w25" >タイトル</th>
-                    <th class="w25">キーワード</th>
-                    <th class="w25">内容</th>
-                    <th class="w30" style="min-width: 150px">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="message in messagesContent" v-bind:key="message.id">
-                    <td class=" fz14">
-                      <div class="toggle-switch" style="margin: auto;">
-                        <input v-bind:id="message.id" class="toggle-input" type="checkbox"
-                                v-model="message.status" true-value="enable"
-                                false-value="disable" @change="botEditMessage(message)">
-                        <label v-bind:for="message.id" class="toggle-label" />
-                        <span></span>
-                      </div>
-                    </td>
-                    <td class="w25" style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;">{{message.title}}</td>
-                    <td class="">
-                      <ul class="list-tag list-unstyled no-mgn" >
-                        <li class="tag mr-1" v-for="tag in tags(message.keyword)" v-bind:key="tag">{{tag}}</li>
-                      </ul>
-                    </td>
-                    <td class=" fz12">
-                      <div v-for="(item, index) in message.auto_broadcast_messages" v-bind:key="index">
-                        <view-message-content :data="item.content" ></view-message-content>
-                      </div>
-                    </td>
-                    <td class=" row-btn">
-                      <div class="btn-edit01" data-toggle="tooltip" title="編集">
-                        <a v-bind:href="MIX_ROOT_PATH + '/bots/' + message.id + '/edit'" class="btn-more btn-more-linebot btn-block">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      </div>
-                      <div class="btn-delete01" data-toggle="tooltip" title="削除">
-                        <a class="btn-more btn-more-linebot btn-block" @click="showModal(message)"
-                            data-toggle="modal" data-target="#modal-delete">
-                          <i class="fas fa-trash-alt"></i>
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-         </div>
-      </div>
-   </div>
-
     <div class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -136,15 +132,15 @@ export default {
   },
 
   beforeMount() {
-    this.getListBot();
+    this.$store.dispatch('autoResponse/getAutoResponses');
   },
 
   computed: {
     ...mapState('system', {
       success: state => state.success
     }),
-    ...mapState('bot', {
-      messages: state => state.messages
+    ...mapState('autoResponse', {
+      messages: state => state.folders
     })
   },
 
@@ -180,8 +176,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('bot', [
-      'getList',
+    ...mapActions('autoResponse', [
       'botDelete',
       'botEdit',
       'deleteFolder',
@@ -195,10 +190,6 @@ export default {
 
     tags(strtag) {
       return typeof (strtag) === 'string' ? (strtag.length > 0 ? strtag.split(',') : []) : strtag;
-    },
-
-    async getListBot() {
-      await this.getList();
     },
 
     async botEditMessage(message) {
@@ -237,13 +228,10 @@ export default {
         });
     },
 
-    submitAddNewFolder(value) {
-      this.$store
-        .dispatch('global/createFolder', value)
-        .done(res => {
-          this.createFolder(res);
-        }).fail(e => {
-        });
+    async submitAddNewFolder(value) {
+      console.log('----ad new folder -----', value);
+      const folder = await this.$store.dispatch('autoResponse/createFolder', value);
+      console.log('------folder------', folder);
     },
 
     backToFolder() {

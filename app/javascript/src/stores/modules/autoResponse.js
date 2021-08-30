@@ -1,4 +1,5 @@
-import BotApi from '../api/bot_api';
+import AutoResponseAPI from '../api/auto_response_api';
+import FolderAPI from '../api/folder_api';
 
 export const state = {
   tags: [],
@@ -9,8 +10,13 @@ export const state = {
 };
 
 export const mutations = {
-  SET_MESSAGES_DATA(state, { messages, total, perPage }) {
-    state.messages = messages;
+  CREATE_FOLDER(state, folder) {
+    params.auto_messages = [];
+    state.folders.push(folder);
+  },
+
+  SET_FOLDERS(state, { folders, total, perPage }) {
+    state.folders = folders;
     state.total = total;
     state.perPage = perPage;
   },
@@ -21,23 +27,23 @@ export const mutations = {
   },
 
   SET_MESSAGES_DELETE(state, params) {
-    state.messages.find(item => item.id === params.folder_id).auto_messages = state.messages.find(item => item.id === params.folder_id).auto_messages.filter(item => item.id !== params.id);
+    state.folders.find(item => item.id === params.folder_id).auto_messages = state.folders.find(item => item.id === params.folder_id).auto_messages.filter(item => item.id !== params.id);
   },
 
   ADD_NEW_MESSAGE(state, params) {
     params.auto_messages = [];
-    state.messages.push(params);
+    state.folders.push(params);
   },
 
   EDIT_MESSAGE(state, params) {
-    const item = state.messages.find(item => item.id === params.id);
+    const item = state.folders.find(item => item.id === params.id);
     if (item) {
       item.name = params.name;
     }
   },
 
   DELETE_MESSAGE(state, index) {
-    state.messages = state.messages.filter(item => item.id !== index);
+    state.folders = state.folders.filter(item => item.id !== index);
   }
 };
 
@@ -49,25 +55,23 @@ export const actions = {
     context.dispatch('preview/setMessages', message.auto_broadcast_messages, { root: true });
   },
 
-  async getList(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messages = null;
+  async getAutoResponses(context, query) {
+    let autoResponses = null;
     const total = 1;
     const perPage = 1;
     try {
-      const res = await BotApi.getList(query);
-      messages = res;
+      const res = await AutoResponseAPI.getAutoResponses(query);
+      autoResponses = res;
     } catch (error) {
 
     }
-    context.commit('SET_MESSAGES_DATA', { messages: messages, total, perPage });
-    context.dispatch('system/setLoading', false, { root: true });
+    context.commit('SET_FOLDERS', { autoResponses, total, perPage });
   },
 
   async botDetail(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      const res = await BotApi.getDetail(query);
+      const res = await AutoResponseAPI.getDetail(query);
       context.commit('SET_MESSAGE', res);
     } catch (error) {
 
@@ -78,7 +82,7 @@ export const actions = {
   async botAdd(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      await BotApi.botAdd(query);
+      await AutoResponseAPI.botAdd(query);
       context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
     } catch (e) {
       context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
@@ -89,7 +93,7 @@ export const actions = {
   async botWithKeyword(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      const res = await BotApi.botWithKeyword(query);
+      const res = await AutoResponseAPI.botWithKeyword(query);
       context.dispatch('system/setLoading', false, { root: true });
       return res;
     } catch (e) {
@@ -101,7 +105,7 @@ export const actions = {
   async botEdit(context, query) {
     if (query.isLoad === true) context.dispatch('system/setLoading', true, { root: true });
     try {
-      await BotApi.botEdit(query.message);
+      await AutoResponseAPI.botEdit(query.message);
       context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
     } catch (e) {
       context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
@@ -112,7 +116,7 @@ export const actions = {
   async botDelete(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      await BotApi.botDelete(query);
+      await AutoResponseAPI.botDelete(query);
       context.commit('SET_MESSAGES_DELETE', query);
       context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
     } catch (error) {
@@ -121,8 +125,14 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  createFolder(context, payload) {
-    context.commit('ADD_NEW_MESSAGE', payload);
+  async createFolder(context, payload) {
+    try {
+      const res = await FolderAPI.createFolder(payload);
+      context.commit('CREATE_FOLDER', payload);
+      return res;
+    } catch (error) {
+      return null;
+    }
   },
 
   editFolder(context, payload) {

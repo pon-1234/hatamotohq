@@ -93,7 +93,7 @@ export default {
     submitAddNewFolder(e) {
       if (this.folderData.name) {
         this.$emit('submitAddNewFolder', this.folderData);
-        this.folderData.name = '';
+        // this.folderData.name = '';
         this.isAddMoreFolder = false;
       }
     },

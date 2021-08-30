@@ -1,7 +1,11 @@
 export default {
-  getList: (query = {}) => {
-    query._pid = btoa('/automessage');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  getAutoResponses: (query = {}) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses`,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
   getDetail: (query = {}) => {
     query._pid = btoa('/automessage/' + query.id);
