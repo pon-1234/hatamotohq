@@ -22,11 +22,8 @@ export default {
     const formData = new FormData();
     formData.append('key', query.key);
     formData.append('fileData', query.file);
-
-    const qr = '_pid=' + btoa('/channels/' + query.channelId + '/sendFile');
-
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + qr,
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages/sendMedia`,
       method: 'POST',
       data: formData,
       processData: false,
@@ -35,10 +32,8 @@ export default {
   },
 
   sendMediaFromManager: (query) => {
-    const qr = '_pid=' + btoa('/channels/' + query.channelId + '/sendMediaFromManager');
-
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + qr,
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages/sendMediaFromManager`,
       method: 'POST',
       data: JSON.stringify(query),
       processData: false,
@@ -48,7 +43,7 @@ export default {
 
   unreadMessage: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/channels/unreadMessage'),
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/unreadMessage`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'

@@ -33,13 +33,6 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
-  deleteMessageDelivers: (query) => {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/deliveries/distributions/' + query.id + '/delete'),
-      method: 'DELETE'
-    });
-  },
-
   copyMessageDelivers: (query) => {
     const qr = {
       _pid: btoa('/deliveries/distributions/' + query.id + '/copy')

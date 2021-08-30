@@ -36,7 +36,7 @@ class User::BroadcastsController < User::ApplicationController
   def create
     @broadcast = build_broadcast(broadcast_params)
     if @broadcast.save
-      build_broadcast_messages(@broadcast, broadcast_params[:broadcast_messages])
+      build_broadcast_messages(@broadcast, broadcast_messages_params)
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
       render 'user/broadcasts/create_success.json.jbuilder'
     else
@@ -75,10 +75,12 @@ class User::BroadcastsController < User::ApplicationController
         :schedule_at,
         conditions: {},
         tag_ids: [],
-        broadcast_messages: [
-          :message_type_id,
-          content: {}
-        ]
+      )
+    end
+
+    def broadcast_messages_params
+      params.permit(
+        broadcast_messages: []
       )
     end
 end

@@ -3,7 +3,7 @@
 Rails.application.configure do
   config.after_initialize do
     Bullet.enable        = true
-    Bullet.alert         = true
+    Bullet.alert         = false
     Bullet.bullet_logger = true
     Bullet.console       = true
     # Bullet.growl         = true
@@ -42,7 +42,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = :warn
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
