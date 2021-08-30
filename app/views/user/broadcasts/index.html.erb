@@ -12,24 +12,24 @@
           <%# Header %>
             <thead>
               <tr>
-                <th width="15%">日時</th>
-                <th width="30%">タイトル</th>
-                <th width="10%">状況</th>
-                <th width="25%">配信先</th>
-                <th width="15%"></th>
+                <th class="fw-150">日時</th>
+                <th>タイトル</th>
+                <th class="fw-120">状況</th>
+                <th>配信先</th>
+                <th class="fw-200"></th>
               </tr>
             </thead>
             <%# Data %>
             <tbody>
               <% @broadcasts.each do |broadcast| %>
                 <tr>
-                  <td class="text-center">
+                  <td>
                     <%= formatted_time(broadcast.deliver_at) || '未配信' %>
                   </td>
                   <td><%= broadcast.title %></td>
-                  <td class="text-center"><%= render_broadcast_status(broadcast.status).html_safe %></td>
-                  <td><span class="text-center d-flex flex-wrap justify-content-center align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
-                  <td class="text-left">
+                  <td><%= render_broadcast_status(broadcast.status).html_safe %></td>
+                  <td><span class="d-flex flex-wrap align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
+                  <td>
                     <%= link_to user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
                       詳細
                     <% end %>
