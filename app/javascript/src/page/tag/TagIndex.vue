@@ -2,13 +2,12 @@
   <div class="card">
     <div class="card-body">
       <div class="tag-list">
-        <div class="row">
-          <div :class="getClassLeftTag()">
+        <div class="d-flex">
+          <div class="fw-300">
             <div class="tag-header">
               <div class="group_list_head">
                 <div class="add_group btn btn-sm btn-success" @click="addMoreFolder">
-                  <i class="glyphicon glyphicon-plus"></i>
-                    新しいフォルダ
+                  <i class="fa fa-plus"></i> 新しいフォルダ
                 </div>
               </div>
             </div>
@@ -51,56 +50,52 @@
               </div>
             </div>
           </div>
-          <div :class="getClassRightTag()">
-            <div class="tag-header">
-              <div class="btn_wrapper">
-                <div class="btn btn-primary btn-sm"  @click="addMoreTag">
-                  <i class="glyphicon glyphicon-plus"></i>
-                    新しいタグ
-                </div>
-              </div>
+          <div class="flex-1">
+            <div class="btn btn-primary btn-sm" @click="addTag">
+              <i class="fa fa-plus"></i> 新しいタグ
             </div>
             <div class="tag-content">
               <div class="tag-scroll tag-list">
-                <div class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center">
-                  <table class="table table-hover table-message-content">
-                    <thead>
-                      <tr>
-                        <th  style="min-width: 200px;"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
-                        <th class="fw-150">メンバー数</th>
-                        <th class="fw-200">作成日</th>
-                      </tr>
-                    </thead>
-                    <tbody v-if="tags && tags[selected_tag]">
-                      <tr v-if="isAddMoreTag" class="tag-item">
-                        <td style="min-width: 200px; vertical-align: middle;">
-                          <div class="folder-item">
-                            <div class="input-group newgroup-inputs">
-                              <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tag_data.name" ref="tagName"
-                                @keyup.enter='enterSubmitAddNewTag'
-                                @compositionend="compositionend($event)"
-                                @compositionstart="compositionstart($event)"
-                                >
-                              <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" @click="submitAddNewTag" ref="buttonAddTag">
-                                  決定
-                                </button>
-                              </span>
-                            </div>
+                <table class="table index">
+                  <thead>
+                    <tr>
+                      <th  style="min-width: 200px;"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
+                      <th class="fw-150">メンバー数</th>
+                      <th class="fw-200">作成日</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="tags && tags[selected_tag]">
+                    <tr class="text-center" v-if="tags[selected_tag].tags.length === 0">
+                      <td colspan="3">データはありません。</td>
+                    </tr>
+                    <tr v-if="isAddMoreTag" class="tag-item">
+                      <td style="min-width: 200px; vertical-align: middle;">
+                        <div class="folder-item">
+                          <div class="input-group newgroup-inputs">
+                            <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tag_data.name" ref="tagName"
+                              @keyup.enter='enterSubmitAddNewTag'
+                              @compositionend="compositionend($event)"
+                              @compositionstart="compositionstart($event)"
+                              >
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-default" @click="submitAddNewTag" ref="buttonAddTag">
+                                決定
+                              </button>
+                            </span>
                           </div>
-                        </td>
-                        <td class="text-center">0人</td>
-                        <td class="text-center">{{getCreatedAt()}}</td>
-                      </tr>
-                      <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags"
-                        :key="index"
-                        @deleteTag="setSelectedTag"
-                        @editTag="submitEditTag"
-                        @detailFriends="detailFriends"
-                      />
-                    </tbody>
-                  </table>
-                </div>
+                        </div>
+                      </td>
+                      <td class="text-center">0人</td>
+                      <td class="text-center">{{getCreatedAt()}}</td>
+                    </tr>
+                    <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags"
+                      :key="index"
+                      @deleteTag="setSelectedTag"
+                      @editTag="submitEditTag"
+                      @detailFriends="detailFriends"
+                    />
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -171,24 +166,6 @@ export default {
       'editTag',
       'createTag'
     ]),
-    getClassLeftTag() {
-      let className = 'col-md-4 tag-content-left';
-
-      if (this.isPc) {
-        className += ' item-pc';
-      }
-      return className;
-    },
-
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
 
     backToFolder() {
       this.isPc = false;
@@ -214,7 +191,7 @@ export default {
       this.folder_data.name = '';
     },
 
-    addMoreTag() {
+    addTag() {
       this.isAddMoreTag = !this.isAddMoreTag;
       if (this.isAddMoreFolder) {
         this.isAddMoreFolder = false;
@@ -295,7 +272,6 @@ export default {
 
 .tag-content {
   height: 85vh;
-  background-color: #f0f0f0;
   margin-top: 10px;
   overflow: hidden;
   display: flex;

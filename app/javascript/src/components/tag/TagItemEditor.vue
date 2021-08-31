@@ -4,14 +4,14 @@
       <span>
         {{data.name}}
       </span>
-      <div class="dropdown">
-        <button type="button" class="btn dropdown-toggle  btn-primary action-tags" data-toggle="dropdown" aria-expanded="false">
-          操作<span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li role="presentation" @click.stop="changeName"><a role="menuitem" tabindex="-1">名前を変える</a></li>
-            <li role="presentation"  @click="deleteFolder"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modal-confirm-tag">タグを削除</a></li>
-        </ul>
+      <div class="btn-group ml-auto">
+        <button type="button" class="btn btn-primary">操作</button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+        <div class="dropdown-menu" role="menu" style="">
+            <a class="dropdown-item" @click="changeName">名前を変える</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" @click="deleteFolder" data-toggle="modal" data-target="#modal-confirm-tag">タグを削除</a>
+          </div>
       </div>
     </div>
     <div v-if="isEdit">
@@ -99,10 +99,6 @@ export default {
     .caret {
       margin-left: 2px;
     }
-  }
-
-  .dropdown {
-    margin-left: auto;
   }
 
   input {

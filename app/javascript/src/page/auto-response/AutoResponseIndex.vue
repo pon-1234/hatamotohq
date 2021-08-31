@@ -19,19 +19,19 @@
                 </a>
               </div>
             </div>
-            <div class="table-responsive mt-2">
+            <div class="mt-2">
               <table class="table">
                 <thead>
                   <tr>
                     <th class="w25" >自動応答名</th>
                     <th class="w25">キーワード</th>
                     <th>メッセージ</th>
-                    <th class="fw-100">状況</th>
-                    <th class="fw-150">登録日</th>
                     <th class="fw-120">操作</th>
+                    <th class="fw-180">登録日</th>
+                    <th class="fw-100">状況</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style="min-height: 60vh;">
                   <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
                     <td>{{auto_response.name}}</td>
                     <td>
@@ -44,26 +44,27 @@
                       </div>
                     </td>
                     <td>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-warning">編集</button>
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+                        <div class="dropdown-menu bg-white" role="menu" style="">
+                          <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
+                          <div class="dropdown-divider"></div>
+                          <a role="button" class="dropdown-item" >自動応答を編集する</a>
+                          <div class="dropdown-divider"></div>
+                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(auto_response)">自動応答を削除する</a>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>{{ formattedDate(auto_response.created_at) }}</td>
+                    <td>
                       <template v-if="auto_response.status === 'enable'">
                         <span class="badge badge-success">有効</span>
                       </template>
                       <template v-else>
                         <span class="badge badge-warning">無効</span>
                       </template>
-                    <td>{{ formattedDate(auto_response.created_at) }}</td>
-                    <td>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-warning">編集</button>
-                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
-                          <div class="dropdown-menu bg-white" role="menu" style="">
-                            <a class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">自動応答を編集する</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(auto_response)">自動応答を削除する</a>
-                          </div>
-                        </button>
-                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -173,7 +174,7 @@ export default {
     },
 
     async updateAutoResponseStatus(autoResponse) {
-      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' }
+      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' };
       await this.updateAutoResponse(payload);
     },
 
@@ -209,7 +210,7 @@ export default {
     },
 
     async submitCreateFolder(value) {
-     this.$store.dispatch('autoResponse/createFolder', value);
+      this.$store.dispatch('autoResponse/createFolder', value);
     },
 
     backToFolder() {
@@ -226,9 +227,9 @@ export default {
         }).fail(e => {
         });
     },
-  
+
     formattedDate(date) {
-      return moment(date).format('YYYY-MM-DD');
+      return moment(date).format('YYYY年MM月DD日');
     }
   }
 };

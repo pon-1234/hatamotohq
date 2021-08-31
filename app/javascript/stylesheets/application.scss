@@ -52,6 +52,12 @@
   border-radius: 3px;
 }
 
+.btn-group {
+  button {
+    padding: 2px 5px !important;
+  }
+}
+
 a.sort_link {
   color: #212529;
 }
