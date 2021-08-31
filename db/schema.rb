@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_30_130439) do
+ActiveRecord::Schema.define(version: 2021_08_31_052717) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -56,8 +56,8 @@ ActiveRecord::Schema.define(version: 2021_08_30_130439) do
 
   create_table 'auto_response_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'auto_response_id'
-    t.text 'content'
-    t.string 'message_type'
+    t.json 'content'
+    t.integer 'message_type_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['auto_response_id'], name: 'index_auto_response_messages_on_auto_response_id'

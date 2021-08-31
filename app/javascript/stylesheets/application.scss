@@ -12,10 +12,10 @@
 @import "./slick/slick-theme.css";
 
 * {
-  font-family: "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "游ゴシック",
-    "游ゴシック体", YuGothic, "Yu Gothic", "メイリオ", Meiryo, "ＭＳ ゴシック",
-    "MS Gothic", HiraKakuProN-W3, "TakaoExゴシック", TakaoExGothic,
-    "MotoyaLCedar", "Droid Sans Japanese", sans-serif;
+  font-family: Lucida Grande, Hiragino Kaku Gothic ProN,
+    "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA",
+    "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
 }
 
 // Override bootstrap

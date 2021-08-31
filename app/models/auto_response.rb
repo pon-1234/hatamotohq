@@ -27,4 +27,6 @@
 #
 class AutoResponse < ApplicationRecord
   belongs_to :folder
+  has_many :auto_response_keywords, dependent: :destroy
+  has_many :auto_response_messages, dependent: :destroy
 end

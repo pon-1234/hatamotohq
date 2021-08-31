@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="row">
+      <div class="d-flex">
         <folder-left
           type="auto_response"
           :data="folders"
@@ -11,74 +11,65 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-          <div :class="getClassRightTag()">
+          <div class="flex-1">
             <div class="tag-header">
               <div class="col-r">
-                <div class="btn-common02 fz14" v-if="folders && folders.length && folders[selectedFolder]">
-                  <a :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id"><span>新規作成</span></a>
-                </div>
+                <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
+                  <i class="fa fa-plus"></i> 新規作成
+                </a>
               </div>
             </div>
-            <div class="tag-content">
-              <div style="height: 41px; display: flex; padding-right: 10px">
-                <div style="width: 41px;display: inline-flex;vertical-align: middle;height: 100%;justify-content: center; margin: 0">
-                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                <div style="flex: 1 1 0%; overflow: hidden;text-overflow: ellipsis;margin: auto; font-weight: bold;"
-                    v-if="folders && folders.length && folders[selectedFolder]">{{folders[selectedFolder].name}}
-                </div>
-              </div>
-              <div class="tag-scroll">
-                <div class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center">
-                  <table class="table table-hover table-bot">
-                    <thead>
-                      <tr>
-                        <th class="w10">設定</th>
-                        <th class="w25" >タイトル</th>
-                        <th class="w25">キーワード</th>
-                        <th class="w25">内容</th>
-                        <th class="w30" style="min-width: 150px">操作</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="message in messagesContent" v-bind:key="message.id">
-                        <td class=" fz14">
-                          <div class="toggle-switch" style="margin: auto;">
-                            <input v-bind:id="message.id" class="toggle-input" type="checkbox"
-                                    v-model="message.status" true-value="enable"
-                                    false-value="disable" @change="botEditMessage(message)">
-                            <label v-bind:for="message.id" class="toggle-label" />
-                            <span></span>
+            <div class="table-responsive mt-2">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="w10">設定</th>
+                    <th class="w25" >自動応答名</th>
+                    <th class="w25">キーワード</th>
+                    <th></th>
+                    <th class="fw-150">登録日</th>
+                    <th class="fw-120">操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
+                    <td class=" fz14">
+                      <div class="toggle-switch m-auto">
+                        <input v-bind:id="auto_response.id" class="toggle-input" type="checkbox"
+                                v-model="auto_response.status" true-value="enable"
+                                false-value="disable" @change="botEditMessage(auto_response)">
+                        <label v-bind:for="auto_response.id" class="toggle-label" />
+                        <span></span>
+                      </div>
+                    </td>
+                    <td>{{auto_response.name}}</td>
+                    <td>
+                      <div><small>どれか1つにマッチ</small></div>
+                      <span class="mr-1" v-for="(tag, index) in auto_response.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
+                    </td>
+                    <td>
+                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
+                        <view-message-content :data="item.content" ></view-message-content>
+                      </div>
+                    </td>
+                    <td>{{ formattedDate(auto_response.created_at) }}</td>
+                    <td>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-warning">編集</button>
+                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                          <div class="dropdown-menu bg-white" role="menu" style="">
+                            <a class="dropdown-item" @click="botEditMessage(auto_response)">ONにする</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">自動応答を編集する</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(auto_response)">自動応答を削除する</a>
                           </div>
-                        </td>
-                        <td class="w25" style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;">{{message.title}}</td>
-                        <td class="">
-                          <ul class="list-tag list-unstyled no-mgn" >
-                            <li class="tag mr-1" v-for="tag in tags(message.keyword)" v-bind:key="tag">{{tag}}</li>
-                          </ul>
-                        </td>
-                        <td class=" fz12">
-                          <div v-for="(item, index) in message.auto_broadcast_messages" v-bind:key="index">
-                            <view-message-content :data="item.content" ></view-message-content>
-                          </div>
-                        </td>
-                        <td class=" row-btn">
-                          <div class="btn-edit01" data-toggle="tooltip" title="編集">
-                            <a v-bind:href="MIX_ROOT_PATH + '/bots/' + message.id + '/edit'" class="btn-more btn-more-linebot btn-block">
-                              <i class="fas fa-edit"></i>
-                            </a>
-                          </div>
-                          <div class="btn-delete01" data-toggle="tooltip" title="削除">
-                            <a class="btn-more btn-more-linebot btn-block" @click="showModal(message)"
-                                data-toggle="modal" data-target="#modal-delete">
-                              <i class="fas fa-trash-alt"></i>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
       </div>
@@ -100,7 +91,7 @@
               </dd>
               <dt>内容</dt>
               <dd>
-                <div v-for="(item, index) in messageDetail.auto_broadcast_messages" v-bind:key="index">
+                <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
                   <view-message-content :data="item.content" ></view-message-content>
                 </div>
               </dd>
@@ -117,6 +108,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment-timezone';
 import { mapState, mapActions } from 'vuex';
 import Util from '@/core/util';
 
@@ -127,7 +119,7 @@ export default {
       messageDetail: null,
       isPc: true,
       selectedFolder: 0,
-      messagesContent: []
+      auto_responses: []
     };
   },
 
@@ -145,20 +137,9 @@ export default {
   },
 
   watch: {
-    success: {
-      handler(val) {
-        if (val.status) {
-          window.toastr.success(val.message);
-        } else {
-          window.toastr.error(val.message);
-        }
-      },
-      deep: true
-    },
     folders: {
       handler(val) {
-        console.log();
-        // this.messagesContent = val[this.selectedFolder] ? val[this.selectedFolder].auto_messages : [];
+        this.auto_responses = val[this.selectedFolder] ? val[this.selectedFolder].auto_responses : [];
       },
       deep: true
     }
@@ -217,7 +198,7 @@ export default {
     async changeSelectedFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
-      this.messagesContent = this.folders[index].auto_messages;
+      this.auto_responses = this.folders[index].auto_responses;
     },
 
     submitUpdateFolder(value) {
@@ -243,11 +224,14 @@ export default {
         .done(res => {
           this.deleteFolder(this.folders[this.selectedFolder].id);
           this.selectedFolder -= 1;
-          this.messagesContent = this.folders[this.selectedFolder].auto_messages;
+          this.auto_responses = this.folders[this.selectedFolder].auto_responses;
         }).fail(e => {
         });
+    },
+  
+    formattedDate(date) {
+      return moment(date).format('YYYY-MM-DD');
     }
-
   }
 };
 </script>
@@ -265,90 +249,4 @@ export default {
       padding: 0px;
     }
   }
-
-.table-responsive > .table > thead > tr > th {
-  white-space: nowrap !important;
-  height: 49px;
-}
-
-.btn-action {
-  white-space: nowrap;
-  width: auto!important;
-}
-
-.tag-header {
-  height: 40px;
-  color: white;
-  .col-r {
-    display: inline-flex;
-    float: right;
-  }
-  button {
-    color: black!important;
-  }
-}
-
-.tag-content {
-  height: 85vh;
-  background-color: #f0f0f0;
-  margin-top: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  .tag-scroll {
-    height: 100%;
-    overflow: hidden;
-    margin: 0 0;
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.table-tags-header {
-  margin-bottom: 0px!important;
-}
-
-.item-sm {
-  display: none;
-}
-
-@media (max-width: 991px) {
-  .item-pc {
-    display: none!important;
-  }
-
-  .item-sm {
-    display: inline-block!important;
-  }
-
-  .fa-arrow-left {
-    cursor: pointer;
-  }
-
-}
-
-.table-responsive {
-  overflow-x: scroll;
-  overflow-y: auto;
-  height: 100%;
-  margin-bottom: 0px!important;
-  thead {
-    border-bottom: none!important;
-    th {
-      padding: 8px!important;
-      border-bottom: none!important;
-      position: sticky; top: 0;
-      background:#e0e0e0;
-      border-radius: 0px!important;
-    }
-  }
-}
-
-.table-bot {
-  min-width: 800px;
-}
-
-.col-r {
-  float: right;
-}
 </style>

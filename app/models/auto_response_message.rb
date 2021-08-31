@@ -5,11 +5,11 @@
 # Table name: auto_response_messages
 #
 #  id               :bigint           not null, primary key
-#  content          :text(65535)
-#  message_type     :string(255)
+#  content          :json
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  auto_response_id :bigint
+#  message_type_id  :integer
 #
 # Indexes
 #
@@ -20,4 +20,5 @@
 #  fk_rails_...  (auto_response_id => auto_responses.id)
 #
 class AutoResponseMessage < ApplicationRecord
+  belongs_to :auto_response
 end

@@ -31,6 +31,10 @@
 </template>
 <script>
 export default {
-  props: ['data', 'time', 'source']
+  props: {
+    data: Object,
+    time: String,
+    source: String
+  }
 };
 </script>
