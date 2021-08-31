@@ -22,6 +22,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class AutoResponseKeyword < ApplicationRecord
+  # TODO using elasticsearch here
   belongs_to :auto_response
 
   # Validation

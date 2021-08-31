@@ -14,7 +14,7 @@ class DispatchBroadcastJob < ApplicationJob
     broadcast.update_status('done')
   rescue => e
     p e.message
-    broadcast.update_status('error')
+    broadcast&.update_status('error')
   end
 
   # send message to every friends of line official account

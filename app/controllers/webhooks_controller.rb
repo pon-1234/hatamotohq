@@ -5,8 +5,8 @@ class WebhooksController < ApplicationController
   include WebhooksHelper
 
   def index
-    events = params[:events]
-    key = params[:key]
+    events = events_params[:events]
+    key = events_params[:key]
     return render_bad_request if events.blank? || key.blank?
     # only handle first event
     event = events.first
@@ -18,17 +18,20 @@ class WebhooksController < ApplicationController
   end
 
   def push
-    p '----hook push----'
   end
 
   private
     def events_params
-      params.permit(events: [
-        :type,
-        :timestamp,
-        :source,
-        :replyToken,
-        :mode
-      ])
+      params.permit(
+        :key,
+        events: [
+          :type,
+          :timestamp,
+          :replyToken,
+          :mode,
+          message: {},
+          source: {},
+        ]
+      )
     end
 end

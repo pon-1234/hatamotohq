@@ -70,8 +70,8 @@ module WebhooksHelper
       # Broadcast message via websocket
       ws_channel = "channel_user_#{channel.line_account.id}"
       Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
-      # Handle auto response
-
+      # Enqueue auto response job
+      AutoResponseJob.perform_later(event, line_account.id, line_friend.id) if message.type.eql?('text')
     rescue => e
       logger.error(e)
     end
@@ -116,6 +116,7 @@ module WebhooksHelper
       message = Message.new
       message.channel = channel
       message.sender = sender
+      message.type = body[:message][:type]
       message.is_bot_sender = false
       message.line_message_id = body[:message][:id]
       message.line_content = body[:message]
