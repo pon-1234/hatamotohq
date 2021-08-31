@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_28_052600) do
+ActiveRecord::Schema.define(version: 2021_08_31_052717) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -56,8 +56,8 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
 
   create_table 'auto_response_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'auto_response_id'
-    t.text 'content'
-    t.string 'message_type'
+    t.json 'content'
+    t.integer 'message_type_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['auto_response_id'], name: 'index_auto_response_messages_on_auto_response_id'
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
   create_table 'auto_responses', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
-    t.string 'title'
+    t.string 'name'
     t.string 'status'
     t.string 'keyword'
     t.string 'keyword_status'
@@ -284,6 +284,7 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
     t.bigint 'channel_id'
     t.string 'sender_type'
     t.bigint 'sender_id'
+    t.string 'type'
     t.boolean 'is_bot_sender', default: false
     t.string 'attr', default: 'chat-reserve'
     t.string 'line_message_id'
@@ -352,7 +353,7 @@ ActiveRecord::Schema.define(version: 2021_08_28_052600) do
     t.string 'status', default: 'disable'
     t.string 'mode', default: 'date'
     t.string 'type', default: 'send'
-    t.json 'action'
+    t.json 'after_action'
     t.integer 'scenario_messages_count'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false

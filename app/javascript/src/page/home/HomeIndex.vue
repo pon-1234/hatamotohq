@@ -12,7 +12,7 @@
                 <dl>
                   <dt>{{lineTimestampToDate(talk.line_timestamp) }}<span>@{{talk.customer.line_name}}</span></dt>
                   <dd>
-                    <view-message-content :data="talk.line_content" ></view-message-content>
+                    <message-content-view :data="talk.line_content" ></message-content-view>
                   </dd>
                 </dl>
               </a>

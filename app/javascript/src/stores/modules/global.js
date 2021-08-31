@@ -98,37 +98,34 @@ export const actions = {
     if (query.packageId && context.state.stickersHistories.find(item => parseInt(item.package_id) === query.packageId)) {
       stickersData = context.state.stickersHistories.filter(item => parseInt(item.package_id) === query.packageId);
     } else if (query.packageId) {
-      context.dispatch('system/setLoading', true, { root: true });
-
       try {
-        stickersData = await Global.getStickers(query);
+        if (context.state.stickers && context.state.stickers.length > 0) {
+          // Load from cache
+          stickersData = context.state.stickers;
+        } else {
+          // Call api to load stickers
+          stickersData = await Global.getStickers(query);
+          context.commit('SET_STICKERS', stickersData);
+        }
       } catch (error) {
         console.log(error);
       }
+      // TODO fixme
       context.commit('SET_STICKERS_HISTORIES', stickersData);
-      context.dispatch('system/setLoading', false, { root: true });
     }
-
-    context.commit('SET_STICKERS', stickersData);
   },
 
   async getActionObject(context, query = {}) {
-    const now = new Date().getTime();
-    if (context.state.action_objects_expired && now - context.state.action_objects_expired <= 300000) {
+    // Loaded from cache, no need to load new one
+    if (context.state.action_objects && context.state.action_objects.length > 0) {
       return;
     }
-    context.commit('SET_ACTION_OBJECTS_EXPIRED', new Date().getTime());
-
-    context.dispatch('system/setLoading', true, { root: true });
     let data = null;
-
     try {
       data = await Global.getActionObjects(query);
     } catch (error) {
       console.log(error);
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
     context.commit('SET_ACTION_OBJECTS', data);
   },
 

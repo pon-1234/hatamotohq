@@ -1,28 +1,28 @@
 export default {
-  getList: (query = {}) => {
-    query._pid = btoa('/automessage');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  getAutoResponses: (query = {}) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses`,
+      method: 'GET',
+      dataType: "json",
+      contentType: 'application/json'
+    });
   },
   getDetail: (query = {}) => {
     query._pid = btoa('/automessage/' + query.id);
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
-  botWithKeyword: (query = {}) => {
-    query._pid = btoa('/automessage/autoMessageWithKeyword');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-  botAdd: (query) => {
+  createAutoResponse: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/automessage/add'),
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
   },
-  botEdit: (query) => {
+  updateAutoResponse: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/automessage/' + query.id + '/edit'),
-      method: 'PUT',
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${query.id}`,
+      method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });

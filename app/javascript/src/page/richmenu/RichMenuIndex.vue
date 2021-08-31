@@ -12,8 +12,8 @@
             :isPc="isPc"
             :selectedFolder="selectedFolder"
             @changeSelectedFolder="changeSelectedFolder"
-            @submitEditFolder="submitEditFolder"
-            @submitAddNewFolder="submitAddNewFolder"
+            @submitUpdateFolder="submitUpdateFolder"
+            @submitCreateFolder="submitCreateFolder"
             />
 
           <div :class="getClassRightTag()">
@@ -173,7 +173,7 @@ export default {
       this.richMenusContent = this.richMenus[this.selectedFolder].rich_menus;
     },
 
-    async submitEditFolder(value) {
+    async submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {
@@ -182,7 +182,7 @@ export default {
         });
     },
 
-    async submitAddNewFolder(value) {
+    async submitCreateFolder(value) {
       this.$store
         .dispatch('global/createFolder', value)
         .done(res => {

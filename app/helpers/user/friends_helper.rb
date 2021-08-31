@@ -6,9 +6,9 @@ module User::FriendsHelper
     when 'active'
       '<span class="badge badge-success p-2">正常</span>'
     when 'block'
-      '<span class="badge badge-danger p-2">ブロック</span>'
+      '<span class="badge badge-warning p-2">ブロック</span>'
     when 'mute'
-      '<span class="badge badge-warning p-2">ミュート</span>'
+      '<span class="badge badge-secondary p-2">ミュート</span>'
     end
   end
 end

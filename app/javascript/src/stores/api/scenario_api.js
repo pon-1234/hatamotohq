@@ -11,11 +11,11 @@ export default {
       contentType: 'application/json'
     });
   },
-  scenarioEdit: (query) => {
+  scenarioEdit: (scenarioData) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/edit'),
-      method: 'PUT',
-      data: JSON.stringify(query),
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenarioData.id}`,
+      method: 'PATCH',
+      data: JSON.stringify(scenarioData),
       contentType: 'application/json'
     });
   },

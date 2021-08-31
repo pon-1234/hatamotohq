@@ -68,8 +68,8 @@ export default {
         return this.data.rich_menus.length;
       }
 
-      if (this.type === 'auto_message') {
-        return this.data.auto_messages.length;
+      if (this.type === 'auto_response') {
+        return this.data.auto_responses.length;
       }
       if (this.type === 'survey') {
         return this.data.surveys.length;

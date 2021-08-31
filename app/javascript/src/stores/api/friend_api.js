@@ -11,12 +11,14 @@ export default {
   },
 
   getFriendDetail: (query) => {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/friends/' + 1,
-      method: 'GET',
-      dataType: "json",
-      contentType: 'application/json'
-    });
+    console.log('-------');
+    console.log(query);
+    // return window.$.ajax({
+    //   url: `${process.env.MIX_ROOT_PATH}/user/friends/${query.id}`,
+    //   method: 'GET',
+    //   dataType: "json",
+    //   contentType: 'application/json'
+    // });
   },
 
   editTag: (query) => {

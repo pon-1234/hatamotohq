@@ -31,7 +31,7 @@
                     @compositionstart="compositionstart($event)"
                     >
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" @click="submitAddNewFolder" ref="buttonAddFolder">
+                      <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonAddFolder">
                         決定
                       </button>
                     </span>
@@ -238,7 +238,7 @@ export default {
       this.tagSelected = value;
     },
 
-    submitAddNewFolder() {
+    submitCreateFolder() {
       if (this.folder_data.name) {
         this.submitCreateTag(this.folder_data);
         this.folder_data.name = '';

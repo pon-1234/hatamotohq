@@ -22,4 +22,8 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class AutoResponseKeyword < ApplicationRecord
+  belongs_to :auto_response
+
+  # Validation
+  validates :keyword, presence: true, length: { maximum: 255 }
 end

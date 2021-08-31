@@ -8,8 +8,8 @@
         :isPc="isPc"
         :selectedFolder="selectedFolder"
         @changeSelectedFolder="changeSelectedFolder"
-        @submitEditFolder="submitEditFolder"
-        @submitAddNewFolder="submitAddNewFolder"
+        @submitUpdateFolder="submitUpdateFolder"
+        @submitCreateFolder="submitCreateFolder"
         />
       <div :class="getClassRightTag()">
         <div class="tag-header">
@@ -174,11 +174,11 @@ export default {
       this.messagesContent = this.messages[this.selectedFolder].message_templates;
     },
 
-    async submitEditFolder(value) {
+    async submitUpdateFolder(value) {
       await this.editFolder(value);
     },
 
-    async submitAddNewFolder(value) {
+    async submitCreateFolder(value) {
       await this.createFolder(value);
     },
 

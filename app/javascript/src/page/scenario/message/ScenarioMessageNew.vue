@@ -83,8 +83,8 @@ export default {
       loading: true,
       scenarioMessageData: {
         is_initial: false,
-        date: 0,
-        time: null,
+        date: 1,
+        time: '00:00',
         order: 1,
         name: '',
         status: true,

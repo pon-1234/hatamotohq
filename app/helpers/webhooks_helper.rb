@@ -67,9 +67,11 @@ module WebhooksHelper
       message = create_message(channel, line_friend, event)
       # Increase unread message count by 1
       update_channel_last_message(channel, event)
-
+      # Broadcast message via websocket
       ws_channel = "channel_user_#{channel.line_account.id}"
       Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
+      # Handle auto response
+
     rescue => e
       logger.error(e)
     end

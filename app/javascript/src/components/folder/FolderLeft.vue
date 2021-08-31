@@ -1,12 +1,12 @@
 <template>
-  <div :class="getClassLeftTag()">
-    <div class="tag-header" v-if="!isPerview">
-      <div class="add_group btn  btn-success" @click="addMoreFolder">
-        <i class="glyphicon glyphicon-plus"></i>
+  <div class="fw-300">
+    <div v-if="!isPerview">
+      <div class="add_group btn btn-success" @click="addMoreFolder">
+        <i class="fa fa-plus"></i>
           新しいフォルダ
       </div>
     </div>
-    <div class="tag-content" :class="!isPerview?'':'tag-content-preview'">
+    <div class="mt-2 tag-content" :class="!isPerview?'':'tag-content-preview'">
       <div class="folder-list-title">
         <table class="table table-tags-header">
           <thead class="thead-light">
@@ -28,7 +28,7 @@
             @compositionstart="compositionstart($event)"
             >
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" @click="submitAddNewFolder" ref="buttonChange">
+              <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">
                 決定
               </button>
             </span>
@@ -44,7 +44,7 @@
           :index="index"
           :key="index"
           @changeSelected="changeSelectedFolder(index)"
-          @editTag="submitEditFolder"
+          @editTag="submitUpdateFolder"
           />
       </div>
     </div>
@@ -72,17 +72,8 @@ export default {
       this.$emit('changeSelectedFolder', index);
     },
 
-    getClassLeftTag() {
-      let className = 'col-md-4 tag-content-left';
-
-      if (this.isPc) {
-        className += ' item-pc';
-      }
-      return className;
-    },
-
-    submitEditFolder(value) {
-      this.$emit('submitEditFolder', value);
+    submitUpdateFolder(value) {
+      this.$emit('submitUpdateFolder', value);
     },
 
     addMoreFolder() {
@@ -90,10 +81,10 @@ export default {
       this.folderData.name = '';
     },
 
-    submitAddNewFolder(e) {
+    submitCreateFolder(e) {
       if (this.folderData.name) {
-        this.$emit('submitAddNewFolder', this.folderData);
-        this.folderData.name = '';
+        this.$emit('submitCreateFolder', this.folderData);
+        // this.folderData.name = '';
         this.isAddMoreFolder = false;
       }
     },
@@ -118,7 +109,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 .folder-list {
   border-right: thin solid #ccc;
 }
@@ -139,7 +129,6 @@ export default {
 .tag-content {
   height: 85vh;
   background-color: #f0f0f0;
-  margin-top: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -176,5 +165,4 @@ export default {
   background: #fff3a0 !important;
   padding: 10px;
 }
-
 </style>

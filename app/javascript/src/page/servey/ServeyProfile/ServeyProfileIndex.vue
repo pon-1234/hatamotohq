@@ -10,8 +10,8 @@
         :isPc="isPc"
         :selectedFolder="selectedFolder"
         @changeSelectedFolder="changeSelectedFolder"
-        @submitEditFolder="submitEditFolder"
-        @submitAddNewFolder="submitAddNewFolder"
+        @submitUpdateFolder="submitUpdateFolder"
+        @submitCreateFolder="submitCreateFolder"
       ></folder-left>
       <div :class="getClassRightTag()">
         <div class="tag-header">
@@ -149,7 +149,7 @@ export default {
       this.surveyContents = this.surveyProfiles[index].survey_profile_templates;
       this.blink();
     },
-    submitAddNewFolder(value) {
+    submitCreateFolder(value) {
       this.$store
         .dispatch('global/createFolder', value)
         .done(res => {
@@ -160,7 +160,7 @@ export default {
         });
     },
 
-    submitEditFolder(value) {
+    submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {

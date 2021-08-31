@@ -13,8 +13,8 @@
         :isPc="isPc"
         :selectedFolder="selectedFolder"
         @changeSelectedFolder="changeSelectedFolder"
-        @submitEditFolder="submitEditFolder"
-        @submitAddNewFolder="submitAddNewFolder"
+        @submitUpdateFolder="submitUpdateFolder"
+        @submitCreateFolder="submitCreateFolder"
         />
       <div :class="getClassRightTag()">
         <div class="tag-header">
@@ -216,7 +216,7 @@ export default {
       return className;
     },
 
-    submitAddNewFolder(value) {
+    submitCreateFolder(value) {
       if (this.type === 'template') {
         value.type = 'template_scenario';
       }
@@ -238,7 +238,7 @@ export default {
       this.scenariosContent = this.scenarios[index].scenarios;
     },
 
-    submitEditFolder(value) {
+    submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {
