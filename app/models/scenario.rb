@@ -5,7 +5,7 @@
 # Table name: scenarios
 #
 #  id                      :bigint           not null, primary key
-#  action                  :json
+#  after_action            :json
 #  deleted_at              :datetime
 #  description             :string(255)
 #  mode                    :string(255)      default("date")

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User::AutoResponsesController < User::ApplicationController
+  before_action :find_auto_response, only: [:update]
+
   include User::AutoResponsesHelper
 
   # GET /user/auto_responses
@@ -28,6 +30,31 @@ class User::AutoResponsesController < User::ApplicationController
     end
   end
 
+  # GET /user/auto_response/:id
+  def edit
+  end
+
+  # PATCH /user/auto_response/:id
+  def update
+    if @auto_response.update(update_auto_response_params.except(:keywords))
+      if update_auto_response_params[:keywords].present?
+        build_auto_response_keywords(@auto_response, update_auto_response_params[:keywords])
+      end
+      if params[:messages].present?
+        build_auto_response_messages(@auto_response, messages_params)
+      end
+      respond_to do |format|
+        format.html { redirect_to user_auto_responses_path, flash: { success: '自動応答の変更は完了しました。' } }
+        format.json { render_success }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to user_auto_responses_path, flash: { error: '自動応答の変更は失敗しました。' } }
+        format.json { render_bad_request_with_message(@auto_response.first_error_message) }
+      end
+    end
+  end
+
   private
     def auto_response_params
       params.permit(
@@ -38,9 +65,21 @@ class User::AutoResponsesController < User::ApplicationController
       )
     end
 
+    def update_auto_response_params
+      params.permit(
+        :name,
+        :status,
+        keywords: []
+      )
+    end
+
     def messages_params
       params.require(:messages).map do |p|
         p.permit(:message_type_id, content: {})
       end
+    end
+
+    def find_auto_response
+      @auto_response = AutoResponse.find(params[:id])
     end
 end

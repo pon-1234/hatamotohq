@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success" @click="botCreateMessage()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="botCreateMessage()">保存</button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />

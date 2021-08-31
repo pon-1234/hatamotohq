@@ -7,7 +7,7 @@
 
     <div class="btn-template mb20 fz14">
       <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-if="currentTemplate.template_id">
-        <view-message-content :data="currentTemplate.content" v-if="currentTemplate.content" />
+        <message-content-view :data="currentTemplate.content" v-if="currentTemplate.content" />
         <span v-else>{{currentTemplate.title}}</span>
         </a>
       <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-else>テンプレートから作成</a>

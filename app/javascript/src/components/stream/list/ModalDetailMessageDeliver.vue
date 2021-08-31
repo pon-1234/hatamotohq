@@ -11,7 +11,7 @@
               <dt class="d-flex align-items-center">内容</dt>
               <dd v-if="data" style="background: #ededed">
                 <div v-for="(item, index) in data.broadcast_messages" :key="index" class="message-detail-content d-flex align-items-center">
-                  <view-message-content :data="item.content" ></view-message-content>
+                  <message-content-view :data="item.content" ></message-content-view>
                   <message-type-label :data="item.content"/>
                 </div>
               </dd>

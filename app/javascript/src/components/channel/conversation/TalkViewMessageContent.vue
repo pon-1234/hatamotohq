@@ -6,7 +6,7 @@
     <div class="chat-content">
       <div class="chat-body">
         <div class="chat-main" :class="data.is_bot_sender ? ' is_bot' : ''">
-          <view-message-content :data="data.line_content" :time="getTimeMessage(data)" :source="data.source || 'sended'"></view-message-content>
+          <message-content-view :data="data.line_content" :time="getTimeMessage(data)" :source="data.source || 'sended'"></message-content-view>
         </div>
       </div>
     </div>

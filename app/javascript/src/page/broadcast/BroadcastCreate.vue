@@ -126,13 +126,13 @@
           <div class="row-form-btn d-flex">
             <button
               type="submit"
-              class="btn btn-success"
+              class="btn btn-success fw-120"
               @click="createMessage('pending')"
               :disabled="invalid"
             >送信</button>
             <button
               type="submit"
-              class="btn btn-outline-success"
+              class="btn btn-outline-success fw-120"
               @click="createMessage('draft')"
             >下書き保存</button>
           </div>

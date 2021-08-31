@@ -13,7 +13,7 @@
           <div v-if="user" class="chat-header">{{user.line_name}}</div>
           <div class="chat-body">
             <div class="chat-main w-min-0">
-              <view-message-content :data="item.content" ></view-message-content>
+              <message-content-view :data="item.content" ></message-content-view>
             </div>
           </div>
         </div>

@@ -95,8 +95,8 @@
           <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
           <div class="card-body">
             <message-action-type-default
-              name="action"
-              :value="scenarioData.action"
+              name="after_action"
+              :value="scenarioData.after_action"
               :labelRequired="false"
               :showTitle="false"
               :showLaunchMesasge="false"
@@ -108,7 +108,7 @@
 
         <div class="card-footer d-flex">
           <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()" >保存</button>
-          <button type="submit" class="btn btn-outline-success" @click="saveScenario('draft')">下書き保存</button>
+          <button type="submit" class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</button>
         </div>
       </div>
       <loading-indicator :loading="loading"/>
@@ -138,7 +138,7 @@ export default {
         status: 'disable',
         mode: 'date',
         type: 'send', // or 'auto'
-        action: this.ActionMessage.default
+        after_action: this.ActionMessage.default
       }
     };
   },
@@ -155,6 +155,7 @@ export default {
   methods: {
     ...mapActions('scenario', [
       'createScenario',
+      'updateScenario'
     ]),
     ...mapActions('tag', [
       'getTags',
@@ -219,10 +220,11 @@ export default {
       this.scenarioData.folderId = Util.getQueryParamsUrl('folder_id');
 
       this.scenarioData.type = this.type || 'send';
-      const scenarioId = await this.createScenario(this.scenarioData);
       if (!this.scenario_id) {
+        const scenarioId = await this.createScenario(this.scenarioData);
         this.onReceiveCreateScenarioResponse(!!scenarioId);
       } else {
+        const scenarioId = await this.updateScenario(this.scenarioData);
         this.onReceiveUpdateScenarioResponse(!!scenarioId);
       }
     },
@@ -233,7 +235,7 @@ export default {
 
     updateAction(data) {
       console.log(data);
-      this.scenarioData.action = data;
+      this.scenarioData.after_action = data;
     },
 
     // Show alert and redirect after create/update

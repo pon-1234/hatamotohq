@@ -20,28 +20,19 @@
               </div>
             </div>
             <div class="table-responsive mt-2">
-              <table class="table table-bordered">
+              <table class="table">
                 <thead>
                   <tr>
-                    <th class="w10">設定</th>
                     <th class="w25" >自動応答名</th>
                     <th class="w25">キーワード</th>
-                    <th></th>
+                    <th>メッセージ</th>
+                    <th class="fw-100">状況</th>
                     <th class="fw-150">登録日</th>
                     <th class="fw-120">操作</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
-                    <td class=" fz14">
-                      <div class="toggle-switch m-auto">
-                        <input v-bind:id="auto_response.id" class="toggle-input" type="checkbox"
-                                v-model="auto_response.status" true-value="enable"
-                                false-value="disable" @change="botEditMessage(auto_response)">
-                        <label v-bind:for="auto_response.id" class="toggle-label" />
-                        <span></span>
-                      </div>
-                    </td>
                     <td>{{auto_response.name}}</td>
                     <td>
                       <div><small>どれか1つにマッチ</small></div>
@@ -49,16 +40,23 @@
                     </td>
                     <td>
                       <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
-                        <view-message-content :data="item.content" ></view-message-content>
+                        <message-content-view :data="item.content" ></message-content-view>
                       </div>
                     </td>
+                    <td>
+                      <template v-if="auto_response.status === 'enable'">
+                        <span class="badge badge-success">有効</span>
+                      </template>
+                      <template v-else>
+                        <span class="badge badge-warning">無効</span>
+                      </template>
                     <td>{{ formattedDate(auto_response.created_at) }}</td>
                     <td>
                       <div class="btn-group">
                         <button type="button" class="btn btn-warning">編集</button>
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                           <div class="dropdown-menu bg-white" role="menu" style="">
-                            <a class="dropdown-item" @click="botEditMessage(auto_response)">ONにする</a>
+                            <a class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">自動応答を編集する</a>
                             <div class="dropdown-divider"></div>
@@ -92,7 +90,7 @@
               <dt>内容</dt>
               <dd>
                 <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
-                  <view-message-content :data="item.content" ></view-message-content>
+                  <message-content-view :data="item.content" ></message-content-view>
                 </div>
               </dd>
             </dl>
@@ -160,7 +158,7 @@ export default {
   methods: {
     ...mapActions('autoResponse', [
       'botDelete',
-      'botEdit',
+      'updateAutoResponse',
       'deleteFolder',
       'editFolder',
       'createFolder'
@@ -174,9 +172,9 @@ export default {
       return typeof (strtag) === 'string' ? (strtag.length > 0 ? strtag.split(',') : []) : strtag;
     },
 
-    async botEditMessage(message) {
-      message.keywords = this.tags(message.keyword);
-      await this.botEdit({ message: message, isLoad: false });
+    async updateAutoResponseStatus(autoResponse) {
+      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' }
+      await this.updateAutoResponse(payload);
     },
 
     async deleteBotMessage() {

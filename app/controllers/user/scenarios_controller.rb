@@ -82,8 +82,8 @@ class User::ScenariosController < User::ApplicationController
         :mode,
         :type,
         :status,
-        action: {},
-        tags: []
+        tags: [],
+        after_action: {},
       )
     end
 

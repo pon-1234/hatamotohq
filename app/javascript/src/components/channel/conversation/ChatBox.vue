@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <talk-view-message-content  :data="message" @unread="setUnreadMessage"/>
+          <talk-message-content-view  :data="message" @unread="setUnreadMessage"/>
         </div>
       </div>
       <div class="box-input" style="position: relative">

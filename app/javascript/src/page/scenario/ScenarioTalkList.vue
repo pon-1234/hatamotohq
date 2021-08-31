@@ -51,7 +51,7 @@
             <td style="max-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;">{{talk.name}}</td>
             <td style="min-width: 200px; text-overflow: ellipsis; white-space: nowrap; word-break: break-word; overflow: hidden;" >
               <div class="message-content">
-                <view-message-content :data="talk.content" ></view-message-content>
+                <message-content-view :data="talk.content" ></message-content-view>
               </div>
             </td>
             <td >
@@ -95,7 +95,7 @@
               <dt>内容</dt>
               <dd v-if="talkDetail">
                 <div class="message-content">
-                  <view-message-content :data="talkDetail.content" ></view-message-content>
+                  <message-content-view :data="talkDetail.content" ></message-content-view>
                 </div>
               </dd>
               <dt>タイプ</dt>

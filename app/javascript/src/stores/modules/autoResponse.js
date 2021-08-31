@@ -81,19 +81,10 @@ export const actions = {
 
   async createAutoResponse(context, query) {
     const res = await AutoResponseAPI.createAutoResponse(query);
-    console.log('--------');
-    console.log(res);
   },
 
-  async botEdit(context, query) {
-    if (query.isLoad === true) context.dispatch('system/setLoading', true, { root: true });
-    try {
-      await AutoResponseAPI.botEdit(query.message);
-      context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-    } catch (e) {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-    }
-    if (query.isLoad === true) context.dispatch('system/setLoading', false, { root: true });
+  async updateAutoResponse(context, auto_response) {
+    await AutoResponseAPI.updateAutoResponse(auto_response);
   },
 
   async botDelete(context, query) {

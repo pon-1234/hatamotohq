@@ -162,7 +162,7 @@ export default {
   methods: {
     ...mapActions('bot', [
       'botDetail',
-      'botEdit',
+      'updateAutoResponse',
       'botWithKeyword',
       'updateContentMessageDistributions'
     ]),
@@ -203,7 +203,7 @@ export default {
         );
         return;
       };
-      await this.botEdit({ message: this.message_data, isLoad: true });
+      await this.updateAutoResponse({ message: this.message_data, isLoad: true });
       window.location.href = process.env.MIX_ROOT_PATH + '/bots?is_updated=true';
     },
 

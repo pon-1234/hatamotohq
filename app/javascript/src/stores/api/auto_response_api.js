@@ -19,10 +19,10 @@ export default {
       contentType: 'application/json'
     });
   },
-  botEdit: (query) => {
+  updateAutoResponse: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/automessage/' + query.id + '/edit'),
-      method: 'PUT',
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${query.id}`,
+      method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
