@@ -4,18 +4,18 @@
       <div class="row">
         <folder-left
           type="auto_response"
-          :data="messages"
+          :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolder"
           @changeSelectedFolder="changeSelectedFolder"
-          @submitEditFolder="submitEditFolder"
-          @submitAddNewFolder="submitAddNewFolder"
+          @submitUpdateFolder="submitUpdateFolder"
+          @submitCreateFolder="submitCreateFolder"
           />
           <div :class="getClassRightTag()">
             <div class="tag-header">
               <div class="col-r">
-                <div class="btn-common02 fz14" v-if="messages && messages.length && messages[selectedFolder]">
-                  <a :href="MIX_ROOT_PATH + '/bots/create?folder_id='+messages[selectedFolder].id"><span>新規作成</span></a>
+                <div class="btn-common02 fz14" v-if="folders && folders.length && folders[selectedFolder]">
+                  <a :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id"><span>新規作成</span></a>
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@
                 <div style="width: 41px;display: inline-flex;vertical-align: middle;height: 100%;justify-content: center; margin: 0">
                   <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
                 <div style="flex: 1 1 0%; overflow: hidden;text-overflow: ellipsis;margin: auto; font-weight: bold;"
-                    v-if="messages && messages.length && messages[selectedFolder]">{{messages[selectedFolder].name}}
+                    v-if="folders && folders.length && folders[selectedFolder]">{{folders[selectedFolder].name}}
                 </div>
               </div>
               <div class="tag-scroll">
@@ -140,7 +140,7 @@ export default {
       success: state => state.success
     }),
     ...mapState('autoResponse', {
-      messages: state => state.folders
+      folders: state => state.folders
     })
   },
 
@@ -155,16 +155,17 @@ export default {
       },
       deep: true
     },
-    messages: {
+    folders: {
       handler(val) {
-        this.messagesContent = val[this.selectedFolder] ? val[this.selectedFolder].auto_messages : [];
+        console.log();
+        // this.messagesContent = val[this.selectedFolder] ? val[this.selectedFolder].auto_messages : [];
       },
       deep: true
     }
   },
 
   created() {
-    if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
+    if (PerformanceNavigation.type !== PerformanceNavigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
         window.toastr.success('自動応答メッセージの変更は完成しました');
       }
@@ -216,10 +217,10 @@ export default {
     async changeSelectedFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
-      this.messagesContent = this.messages[index].auto_messages;
+      this.messagesContent = this.folders[index].auto_messages;
     },
 
-    submitEditFolder(value) {
+    submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {
@@ -228,10 +229,8 @@ export default {
         });
     },
 
-    async submitAddNewFolder(value) {
-      console.log('----ad new folder -----', value);
-      const folder = await this.$store.dispatch('autoResponse/createFolder', value);
-      console.log('------folder------', folder);
+    async submitCreateFolder(value) {
+     this.$store.dispatch('autoResponse/createFolder', value);
     },
 
     backToFolder() {
@@ -240,11 +239,11 @@ export default {
 
     submitDeleteFolder() {
       this.$store
-        .dispatch('global/deleteFolder', { id: this.messages[this.selectedFolder].id, type: 'auto_message' })
+        .dispatch('global/deleteFolder', { id: this.folders[this.selectedFolder].id, type: 'auto_message' })
         .done(res => {
-          this.deleteFolder(this.messages[this.selectedFolder].id);
+          this.deleteFolder(this.folders[this.selectedFolder].id);
           this.selectedFolder -= 1;
-          this.messagesContent = this.messages[this.selectedFolder].auto_messages;
+          this.messagesContent = this.folders[this.selectedFolder].auto_messages;
         }).fail(e => {
         });
     }

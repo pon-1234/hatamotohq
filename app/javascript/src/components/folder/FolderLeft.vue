@@ -28,7 +28,7 @@
             @compositionstart="compositionstart($event)"
             >
             <span class="input-group-btn">
-              <button type="button" class="btn btn-default" @click="submitAddNewFolder" ref="buttonChange">
+              <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">
                 決定
               </button>
             </span>
@@ -44,7 +44,7 @@
           :index="index"
           :key="index"
           @changeSelected="changeSelectedFolder(index)"
-          @editTag="submitEditFolder"
+          @editTag="submitUpdateFolder"
           />
       </div>
     </div>
@@ -81,8 +81,8 @@ export default {
       return className;
     },
 
-    submitEditFolder(value) {
-      this.$emit('submitEditFolder', value);
+    submitUpdateFolder(value) {
+      this.$emit('submitUpdateFolder', value);
     },
 
     addMoreFolder() {
@@ -90,9 +90,9 @@ export default {
       this.folderData.name = '';
     },
 
-    submitAddNewFolder(e) {
+    submitCreateFolder(e) {
       if (this.folderData.name) {
-        this.$emit('submitAddNewFolder', this.folderData);
+        this.$emit('submitCreateFolder', this.folderData);
         // this.folderData.name = '';
         this.isAddMoreFolder = false;
       }

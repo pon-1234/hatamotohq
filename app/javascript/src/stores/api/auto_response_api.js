@@ -11,13 +11,9 @@ export default {
     query._pid = btoa('/automessage/' + query.id);
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
-  botWithKeyword: (query = {}) => {
-    query._pid = btoa('/automessage/autoMessageWithKeyword');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-  botAdd: (query) => {
+  createAutoResponse: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/automessage/add'),
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'

@@ -97,12 +97,12 @@
                 <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
                 <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
               </div>
-              <div v-for="(item, index) in broadcastData.broadcast_messages"  :key="index">
+              <div v-for="(item, index) in broadcastData.messages"  :key="index">
                 <message-content-distribution
                   :isDisplayTemplate="true"
                   v-bind:data="item"
                   v-bind:index="index"
-                  v-bind:countMessages="broadcastData.broadcast_messages.length"
+                  v-bind:countMessages="broadcastData.messages.length"
                   @input="changeContent"
                   @setTemplate="selectTemplate"
                   @remove="removeContent"
@@ -113,7 +113,7 @@
               <div
                 class="btn btn-outline-success"
                 @click="addMoreMessageContentDistribution"
-                v-if="broadcastData.broadcast_messages.length < 5"
+                v-if="broadcastData.messages.length < 5"
               >
                 <i class="fa fa-plus"></i> <span>メッセージ追加</span>
               </div>
@@ -179,7 +179,7 @@ export default {
         schedule_at: moment().tz('Asia/Tokyo').format(),
         created_at: moment().tz('Asia/Tokyo').format(),
         status: this.MessageDeliveriesStatus.Pending,
-        broadcast_messages: [],
+        messages: [],
         deliver_now: true,
         type: 'all'
       },
@@ -197,7 +197,7 @@ export default {
     if (this.broadcast_id) {
       this.broadcastData.id = this.broadcast_id;
     } else {
-      this.broadcastData.broadcast_messages.push({
+      this.broadcastData.messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -266,12 +266,12 @@ export default {
     },
 
     changeContent({ index, content }) {
-      this.broadcastData.broadcast_messages.splice(index, 1, content);
+      this.broadcastData.messages.splice(index, 1, content);
     },
 
     removeContent({ index }) {
       this.refresh_content = false;
-      this.broadcastData.broadcast_messages.splice(index, 1);
+      this.broadcastData.messages.splice(index, 1);
       this.$nextTick(() => {
         this.refresh_content = true;
       });
@@ -279,23 +279,23 @@ export default {
 
     moveTopMessage(index) {
       this.refresh_content = false;
-      const option = this.broadcastData.broadcast_messages[index];
-      this.broadcastData.broadcast_messages[index] = this.broadcastData.broadcast_messages.splice(index - 1, 1, option)[0];
+      const option = this.broadcastData.messages[index];
+      this.broadcastData.messages[index] = this.broadcastData.messages.splice(index - 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
     moveBottomMessage(index) {
       this.refresh_content = false;
-      const option = this.broadcastData.broadcast_messages[index];
-      this.broadcastData.broadcast_messages[index] = this.broadcastData.broadcast_messages.splice(index + 1, 1, option)[0];
+      const option = this.broadcastData.messages[index];
+      this.broadcastData.messages[index] = this.broadcastData.messages.splice(index + 1, 1, option)[0];
       this.$nextTick(() => {
         this.refresh_content = true;
       });
     },
 
     addMoreMessageContentDistribution() {
-      this.broadcastData.broadcast_messages.push({
+      this.broadcastData.messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -380,7 +380,7 @@ export default {
     selectTemplate(template) {
       Object.assign(this.broadcastData, {
         title: template.title,
-        broadcast_messages: template.contents
+        messages: template.contents
       });
       this.refresh_content = false;
 

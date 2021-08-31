@@ -84,7 +84,17 @@ td {
 // START: card view
 .card {
   .left-border {
-    border-left: 4px solid #28a745;
+    border-left: solid 5px #40bd62;
+    border-bottom: dashed 1px #aaa;
+    font-weight: bold;
+    line-height: 34px;
+    .card-header {
+      border: none;
+    }
+    h3 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
   }
 }
 

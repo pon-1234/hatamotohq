@@ -3,7 +3,7 @@ import FolderAPI from '../api/folder_api';
 
 export const state = {
   tags: [],
-  messages: [],
+  folders: [],
   total: 1,
   perPage: 1,
   message: null
@@ -11,7 +11,7 @@ export const state = {
 
 export const mutations = {
   CREATE_FOLDER(state, folder) {
-    params.auto_messages = [];
+    folder.auto_responses = [];
     state.folders.push(folder);
   },
 
@@ -63,9 +63,9 @@ export const actions = {
       const res = await AutoResponseAPI.getAutoResponses(query);
       autoResponses = res;
     } catch (error) {
-
+      console.log(error);
     }
-    context.commit('SET_FOLDERS', { autoResponses, total, perPage });
+    context.commit('SET_FOLDERS', { folders: autoResponses, total, perPage });
   },
 
   async botDetail(context, query) {
@@ -79,27 +79,10 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  async botAdd(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    try {
-      await AutoResponseAPI.botAdd(query);
-      context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-    } catch (e) {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-    }
-    context.dispatch('system/setLoading', false, { root: true });
-  },
-
-  async botWithKeyword(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    try {
-      const res = await AutoResponseAPI.botWithKeyword(query);
-      context.dispatch('system/setLoading', false, { root: true });
-      return res;
-    } catch (e) {
-    }
-    context.dispatch('system/setLoading', false, { root: true });
-    return null;
+  async createAutoResponse(context, query) {
+    const res = await AutoResponseAPI.createAutoResponse(query);
+    console.log('--------');
+    console.log(res);
   },
 
   async botEdit(context, query) {
@@ -128,7 +111,7 @@ export const actions = {
   async createFolder(context, payload) {
     try {
       const res = await FolderAPI.createFolder(payload);
-      context.commit('CREATE_FOLDER', payload);
+      context.commit('CREATE_FOLDER', res);
       return res;
     } catch (error) {
       return null;

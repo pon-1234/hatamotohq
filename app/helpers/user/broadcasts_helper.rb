@@ -42,6 +42,8 @@ module User::BroadcastsHelper
   def build_broadcast_messages(broadcast, broadcast_messages_params)
     # Delete old messages before adding new one
     broadcast.broadcast_messages.destroy_all
+    p 'ddddd'
+    p broadcast_messages_params
     # Insert new message
     broadcast_messages_params.each do |broadcast_message_params|
       broadcast_message = BroadcastMessage.new(broadcast_message_params)

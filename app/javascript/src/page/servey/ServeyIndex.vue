@@ -14,8 +14,8 @@
         :isPc="isPc"
         :selectedFolder="selectedFolder"
         @changeSelectedFolder="changeSelectedFolder"
-        @submitEditFolder="submitEditFolder"
-        @submitAddNewFolder="submitAddNewFolder"
+        @submitUpdateFolder="submitUpdateFolder"
+        @submitCreateFolder="submitCreateFolder"
       ></folder-left>
       <div :class="getClassRightTag()">
         <div class="tag-header">
@@ -206,7 +206,7 @@ export default {
       this.surveyContents = this.surveys[index].surveys;
       this.blink();
     },
-    submitEditFolder(value) {
+    submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {
@@ -214,7 +214,7 @@ export default {
         }).fail(e => {
         });
     },
-    submitAddNewFolder(value) {
+    submitCreateFolder(value) {
       this.$store
         .dispatch('global/createFolder', value)
         .done(res => {
