@@ -14,7 +14,6 @@
           <input type="text" name="name" class="form-control" v-model="autoResponseData.name" placeholder="自動応答名を入力してください" v-validate="'required'" data-vv-as="自動応答名">
           <error-message :message="errors.first('name')"></error-message>
         </div>
-          
         <div class="form-group">
           <label class="mb10">設定</label>
           <div class="flex start ai_center">
@@ -49,7 +48,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card">
           <div class="card-header left-border">
             <h3>反応時のアクションを設定する</h3>
@@ -61,7 +60,7 @@
                 <div>
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
-                <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
 
                 <message-content-distribution
                   :isDisplayTemplate="true"
