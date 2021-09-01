@@ -35,4 +35,11 @@ class ScenarioMessage < ApplicationRecord
 
   # Scope
   scope :ordered, -> { order(is_initial: :desc, date: :asc, time: :asc, order: :asc) }
+
+  def clone_to(scenario_id)
+    new_message = self.dup
+    new_message.scenario_id = scenario_id
+    new_message.save!
+    new_message
+  end
 end
