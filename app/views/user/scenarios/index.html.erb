@@ -34,7 +34,7 @@
                     <%= link_to user_scenario_messages_path(scenario), class: "btn btn-primary btn-xs mr-1" do %>
                       配信文設定
                     <% end %>
-                    <%= link_to 'コピー', copy_user_scenario_path(scenario), method: :post, class: "btn btn-primary btn-xs" %>
+                    <%= link_to 'コピー', copy_confirm_user_scenario_path(scenario), remote: true, class: "btn btn-primary btn-xs" %>
                     <%= link_to '削除', delete_confirm_user_scenario_path(scenario), remote: true, class: "btn btn-danger btn-xs" %>
                   </td>
                 </tr>
@@ -55,3 +55,4 @@
 </div>
 
 <div id='confirmDelContent'></div>
+<div id='confirmCopyContent'></div>

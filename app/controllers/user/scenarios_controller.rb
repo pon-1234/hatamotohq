@@ -2,7 +2,7 @@
 
 class User::ScenariosController < User::ApplicationController
   load_and_authorize_resource
-  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm]
+  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm, :copy]
 
   include User::ScenariosHelper
 
@@ -71,7 +71,22 @@ class User::ScenariosController < User::ApplicationController
 
   # POST /user/scenarios/:id/copy
   def copy
-    # TODO
+    new_scenario = @scenario.clone
+    if new_scenario.present?
+      @scenario.scenario_messages&.each { |message| message.clone_to(new_scenario.id) }
+      redirect_to user_scenarios_path, flash: { success: 'シナリオのコビーは完了しました。' }
+    else
+      redirect_to user_scenarios_path, flash: { error: 'シナリオのコビーは失敗しました。' }
+    end
+  rescue => e
+    logger.error e.message
+    redirect_to user_scenarios_path, flash: { error: 'シナリオのコビーは失敗しました。' }
+  end
+
+  def copy_confirm
+    respond_to do |format|
+      format.js
+    end
   end
 
   private
@@ -83,7 +98,7 @@ class User::ScenariosController < User::ApplicationController
         :type,
         :status,
         tags: [],
-        after_action: {},
+        after_action: {}
       )
     end
 

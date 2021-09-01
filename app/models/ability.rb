@@ -9,7 +9,7 @@ class Ability
     can [:create], Broadcast
 
     # Scenario
-    can [:read, :update, :destroy, :delete_confirm, :search, :copy], Scenario, line_account: user.line_account
+    can [:read, :update, :destroy, :delete_confirm, :search, :copy, :copy_confirm], Scenario, line_account: user.line_account
     can [:create], Scenario
 
     # Folder
