@@ -9,17 +9,17 @@ import {
 import moment from 'moment';
 
 class Util {
-  static showSuccessThenRedirect(message, redirect_to) {
+  static showSuccessThenRedirect(message, redirectTo) {
     window.toastr.success(message);
     setTimeout(() => {
-     window.location.href = redirect_to;
+      window.location.href = redirectTo;
     }, 500);
   }
 
-  static showErrorThenRedirect(message, redirect_to) {
+  static showErrorThenRedirect(message, redirectTo) {
     window.toastr.error(message);
     setTimeout(() => {
-     window.location.href = redirect_to;
+      window.location.href = redirectTo;
     }, 500);
   }
 

@@ -38,13 +38,13 @@ class PushMessageToLineJob < ApplicationJob
     store_message() if success
   end
 
-  def store_message()
+  def store_message
   end
 
   def normalize_message(message)
     message_type = message[:type]
     return message if message_type.eql?('message')
-    
+
     if message_type.eql?('flex') && message[:id].present?
       flex_message_id = message[:id]
       flex_message = FlexMessage.find_by_id(flex_message_id)

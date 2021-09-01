@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   # User
   constraints Subdomain::UserConstraint.new do
-    # root to: 'user/home#index'
+    root to: 'user/home#index'
     devise_for :users, path: Subdomain::UserConstraint.path, controllers: {
       sessions: 'user/sessions',
       passwords: 'user/passwords'
@@ -49,23 +49,21 @@ Rails.application.routes.draw do
   end
 
   # # Admin
-  # constraints Subdomain::AdminConstraint.new do
-  #   root to: 'admin/home#index'
-  #   devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
-  #     sessions: 'admin/sessions',
-  #     passwords: 'admin/passwords'
-  #   }
-  #   namespace :admin, path: Subdomain::AdminConstraint.path do
-  #     root to: 'home#index'
-  #   end
-  # end
+  constraints Subdomain::AdminConstraint.new do
+    devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
+      sessions: 'admin/sessions',
+      passwords: 'admin/passwords'
+    }
+    namespace :admin, path: Subdomain::AdminConstraint.path do
+      root to: 'users#index'
+      resources :users
+    end
 
-  require 'sidekiq/web'
-  require 'sidekiq-scheduler/web'
-  # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-  #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
-  # end
-  mount Sidekiq::Web => '/sidekiq'
-  # Log viewer
-  # mount Logster::Web, at: '/logs'
+    require 'sidekiq/web'
+    require 'sidekiq-scheduler/web'
+    # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
+    # end
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
