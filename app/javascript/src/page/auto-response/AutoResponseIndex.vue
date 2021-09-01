@@ -45,7 +45,7 @@
                     </td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-warning">編集</button>
+                        <button type="button" class="btn btn-warning" @click="openEdit(auto_response)">編集</button>
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                         <div class="dropdown-menu bg-white" role="menu" style="">
                           <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
@@ -60,10 +60,10 @@
                     <td>{{ formattedDate(auto_response.created_at) }}</td>
                     <td>
                       <template v-if="auto_response.status === 'enable'">
-                        <span class="badge badge-success">有効</span>
+                        <span class="badge badge-success p-2">有効</span>
                       </template>
                       <template v-else>
-                        <span class="badge badge-warning">無効</span>
+                        <span class="badge badge-warning p-2">無効</span>
                       </template>
                     </td>
                   </tr>
@@ -226,6 +226,10 @@ export default {
           this.auto_responses = this.folders[this.selectedFolder].auto_responses;
         }).fail(e => {
         });
+    },
+
+    openEdit(autoResponse) {
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`;
     },
 
     formattedDate(date) {

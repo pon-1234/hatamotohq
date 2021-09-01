@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::AutoResponsesController < User::ApplicationController
-  before_action :find_auto_response, only: [:update]
+  before_action :find_auto_response, only: [:show, :update]
 
   include User::AutoResponsesHelper
 
@@ -32,6 +32,7 @@ class User::AutoResponsesController < User::ApplicationController
 
   # GET /user/auto_response/:id
   def edit
+    @auto_response_id = params[:id]
   end
 
   # PATCH /user/auto_response/:id
@@ -52,6 +53,13 @@ class User::AutoResponsesController < User::ApplicationController
         format.html { redirect_to user_auto_responses_path, flash: { error: '自動応答の変更は失敗しました。' } }
         format.json { render_bad_request_with_message(@auto_response.first_error_message) }
       end
+    end
+  end
+
+  # GET /user/auto_responses/:id
+  def show
+    respond_to do |format|
+      format.json { render 'user/auto_responses/show_success.json.jbuilder' }
     end
   end
 

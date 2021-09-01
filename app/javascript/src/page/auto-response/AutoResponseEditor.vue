@@ -36,10 +36,10 @@
           <div class="card-body">
             <div class="form-group d-flex flex-column">
               <label class="mb10">キーワード<required-mark/></label>
-              <b-form-tags class="bot-tag" input-id="tags-basic" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
-                placeholder="キーワードを入力してください" separator=" ,;" :disabled="(autoResponseData.keyword_status !=='enable')" :add-button-text="'追加'" >
+              <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
+                placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
               </b-form-tags>
-              <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="{required: autoResponseData.keyword_status =='enable'}"/>
+              <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
               <div>
                 <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
               </div>
@@ -100,7 +100,7 @@ import Util from '@/core/util';
 
 export default {
   props: {
-    autoResponseId: Number
+    auto_response_id: Number
   },
   data() {
     return {
@@ -114,15 +114,7 @@ export default {
         status: 'enable',
         keywords: [],
         keyword_status: 'enable',
-        messages: [
-          {
-            message_type_id: this.MessageTypeIds.Text,
-            content: {
-              type: this.MessageType.Text,
-              text: ''
-            }
-          }
-        ]
+        messages: []
       }
     };
   },
@@ -131,8 +123,19 @@ export default {
   },
 
   async beforeMount() {
-    if (this.autoResponseId) {
-      await this.getAutoResponse(this.autoResponseId);
+    if (this.auto_response_id) {
+      const autoResponse = await this.getAutoResponse(this.auto_response_id);
+      this.autoResponseData = _.cloneDeep(autoResponse);
+    } else {
+      this.autoResponseData.message = [
+        {
+          message_type_id: this.MessageTypeIds.Text,
+          content: {
+            type: this.MessageType.Text,
+            text: ''
+          }
+        }
+      ];
     }
     await this.getTags();
     this.loading = false;
@@ -155,6 +158,7 @@ export default {
     ...mapActions('autoResponse', [
       'getAutoResponse',
       'createAutoResponse',
+      'updateAutoResponse',
       'updateContentMessageDistributions'
     ]),
 
@@ -177,7 +181,11 @@ export default {
         folder_id: Util.getQueryParamsUrl('folder_id'),
         ...this.autoResponseData
       };
-      await this.createAutoResponse(data);
+      if (this.auto_response_id) {
+        await this.updateAutoResponse(data);
+      } else {
+        await this.createAutoResponse(data);
+      }
     },
 
     onMessageContentChanged({ index, content }) {
@@ -238,12 +246,15 @@ export default {
 </script>
 <style lang="scss"  scoped>
   ::v-deep {
-    #tags-basic {
+    #tags-limit {
       border: none;
       background-color: rgba(255, 255, 255, 0)!important;
     }
     .bot-tag.disabled {
       background-color: #ccc !important;
+    }
+    .b-form-tags-button {
+      width: 80px !important;
     }
   }
 </style>
