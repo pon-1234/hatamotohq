@@ -71,7 +71,13 @@ module WebhooksHelper
       ws_channel = "channel_user_#{channel.line_account.id}"
       Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
       # Enqueue auto response job
-      AutoResponseJob.perform_later(event, line_account.id, line_friend.id) if message.type.eql?('text')
+      payload = {
+        event: event,
+        line_account_id: line_account.id,
+        line_friend_id: line_friend.id,
+        channel_id: channel.id
+      }
+      AutoResponseJob.perform_later(payload) if message.type.eql?('text')
     rescue => e
       logger.error(e)
     end

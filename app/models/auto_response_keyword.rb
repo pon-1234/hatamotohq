@@ -10,16 +10,14 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  auto_response_id :bigint
-#  line_account_id  :bigint
 #
 # Indexes
 #
 #  index_auto_response_keywords_on_auto_response_id  (auto_response_id)
-#  index_auto_response_keywords_on_line_account_id   (line_account_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (line_account_id => line_accounts.id)
+#  fk_rails_...  (auto_response_id => auto_responses.id)
 #
 class AutoResponseKeyword < ApplicationRecord
   # TODO using elasticsearch here

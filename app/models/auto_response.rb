@@ -26,6 +26,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class AutoResponse < ApplicationRecord
+  belongs_to :line_account
   belongs_to :folder
   has_many :auto_response_keywords, dependent: :destroy
   has_many :auto_response_messages, dependent: :destroy

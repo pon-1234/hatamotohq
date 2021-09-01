@@ -44,14 +44,12 @@ ActiveRecord::Schema.define(version: 2021_08_31_052717) do
   end
 
   create_table 'auto_response_keywords', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
     t.bigint 'auto_response_id'
     t.string 'keyword'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['auto_response_id'], name: 'index_auto_response_keywords_on_auto_response_id'
-    t.index ['line_account_id'], name: 'index_auto_response_keywords_on_line_account_id'
   end
 
   create_table 'auto_response_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -495,7 +493,7 @@ ActiveRecord::Schema.define(version: 2021_08_31_052717) do
   end
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
-  add_foreign_key 'auto_response_keywords', 'line_accounts'
+  add_foreign_key 'auto_response_keywords', 'auto_responses'
   add_foreign_key 'auto_response_messages', 'auto_responses'
   add_foreign_key 'auto_responses', 'folders'
   add_foreign_key 'auto_responses', 'line_accounts'

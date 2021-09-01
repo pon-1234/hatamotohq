@@ -3,6 +3,7 @@
 module User::AutoResponsesHelper
   def build_auto_response(params)
     auto_response = AutoResponse.new
+    auto_response.line_account = Current.user.line_account
     auto_response.folder_id = params[:folder_id]
     auto_response.name = params[:name]
     auto_response.status = params[:status]
