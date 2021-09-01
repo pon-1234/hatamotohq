@@ -1,0 +1,24 @@
+  <aside class="main-sidebar elevation-4 sidebar-light-info">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link navbar-info">
+      <span class="text-white brand-text font-weight-bold">LINE MONSTER</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <!-- User List -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fa fa-clipboard-list"></i><p>ユーザー管理</p>'.html_safe,
+              admin_users_path,
+              class: "nav-link #{controller?("admin/users") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>

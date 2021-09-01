@@ -5,13 +5,23 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  address                :string(255)
 #  authentication_token   :string(255)
+#  company_name           :string(255)
+#  current_sign_in_at     :datetime
+#  current_sign_in_ip     :string(255)
 #  email                  :string(255)      default(""), not null
 #  encrypted_password     :string(255)      default(""), not null
+#  last_sign_in_at        :datetime
+#  last_sign_in_ip        :string(255)
+#  name                   :string(255)
+#  note                   :text(65535)
+#  phone_number           :string(255)
 #  pubsub_token           :string(255)
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
+#  sign_in_count          :integer          default(0), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -26,13 +36,24 @@ class User < ApplicationRecord
   after_create :execute_after_create
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :trackable
 
   include Avatarable
 
   has_one :line_account, class_name: 'LineAccount', foreign_key: 'owner_id'
+
+  # Validations
+  validates :name, length: { maximum: 255 }, allow_nil: true
+  validates :phone_number, numericality: true, length: 10..11, allow_nil: true
+  validates :address, length: { maximum: 255 }, allow_nil: true
+  validates :company_name, length: { maximum: 255 }, allow_nil: true
+  validates :note, length: { maximum: 2000 }, allow_nil: true
+
+  # Scope
+  enum status: { active: 'active', block: 'block' }, _prefix: true
 
   def ensure_authentication_token
     if authentication_token.blank?
