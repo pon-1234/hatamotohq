@@ -35,6 +35,7 @@ Rails.application.routes.draw do
         post :copy, on: :member
       end
       resources :auto_responses
+      resources :templates
       resources :folders, only: [:create]
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'

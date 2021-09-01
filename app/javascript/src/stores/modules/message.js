@@ -49,7 +49,7 @@ export const getters = {
 export const actions = {
   setMessageDistributions(context, message) {
     context.commit('SET_MESSAGE', message);
-    context.dispatch('preview/setMessages', message.broadcast_messages, { root: true });
+    context.dispatch('preview/setMessages', message.messages, { root: true });
   },
 
   async getBroadcast(context, query) {

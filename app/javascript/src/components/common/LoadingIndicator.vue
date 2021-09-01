@@ -5,6 +5,6 @@
 </template>
 <script>
 export default {
-  props: ['loading'],
+  props: ['loading']
 };
 </script>

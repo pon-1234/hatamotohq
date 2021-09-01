@@ -28,7 +28,7 @@
           <div class="form-border">
             <div class="form-group" v-if="refresh_content">
               <label>メッセージ本文</label>
-                <message-content-distribution
+                <message-editor
                 :isDisplayTemplate="true"
                   v-for="(item, index) in scenarioMessageData.messages"
                   :key="index"
@@ -97,11 +97,11 @@ export default {
               text: ''
             }
           }
-        ],
+        ]
       },
       current_page_template: 1,
       refresh_content: true,
-      scenario: null,
+      scenario: null
     };
   },
 

@@ -51,8 +51,8 @@ export const getters = {};
 
 export const actions = {
 
-  updateContentMessageDistributions(context, message) {
-    context.dispatch('preview/setMessages', message.auto_broadcast_messages, { root: true });
+  updateContentMessageDistributions(context, autoResponse) {
+    context.dispatch('preview/setMessages', autoResponse.messages, { root: true });
   },
 
   async getAutoResponses(context, query) {
@@ -60,7 +60,7 @@ export const actions = {
     const total = 1;
     const perPage = 1;
     try {
-      const res = await AutoResponseAPI.getAutoResponses(query);
+      const res = await AutoResponseAPI.list(query);
       autoResponses = res;
     } catch (error) {
       console.log(error);
@@ -68,19 +68,12 @@ export const actions = {
     context.commit('SET_FOLDERS', { folders: autoResponses, total, perPage });
   },
 
-  async botDetail(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    try {
-      const res = await AutoResponseAPI.getDetail(query);
-      context.commit('SET_MESSAGE', res);
-    } catch (error) {
-
-    }
-    context.dispatch('system/setLoading', false, { root: true });
+  async getAutoResponse(context, id) {
+    return await AutoResponseAPI.get(id);
   },
 
-  async createAutoResponse(context, query) {
-    const res = await AutoResponseAPI.createAutoResponse(query);
+  async createAutoResponse(context, autoResponseData) {
+    return await AutoResponseAPI.create(autoResponseData);
   },
 
   async updateAutoResponse(context, auto_response) {

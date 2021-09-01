@@ -1423,7 +1423,6 @@ button:disabled{
 .text-white {color: #fff !important;}
 
 .btn-link {font-weight: 400;color: #00B900;background-color: transparent;}
-.btn-outline-secondary {color: #495057 !important;}
 .btn-block {display: block;width: 100%;}
 .btn-outline-primary {background-color: transparent;background-image: none;color: #00B900;border-color: #00B900;}
 .btn-secondary {color: #212529 !important; background-color: #cfd4da !important; border-color: #cfd4da !important;}

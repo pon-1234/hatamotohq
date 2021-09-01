@@ -3,7 +3,7 @@ export default {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags',
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },

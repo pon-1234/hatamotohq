@@ -23,7 +23,7 @@ ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    activeChannel: Number,
+    activeChannel: Number
   },
   async beforeMount() {
     this.connectWS();
@@ -109,11 +109,11 @@ export default {
           //   this.autoActiveChannel();
           // }
           // this.$store.dispatch('global/getBadge');
-          },
         }
-      )
+      }
+      );
     },
-    
+
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
       await this.setMessageParams({ channelId: this.activeChannel.id });
@@ -136,23 +136,23 @@ export default {
     },
 
     // getChannels() {
-      // this.ws = new WebSocketClient();
-      // this.ws.open();
-      // this.ws.onopen = () => {
-      //   if (this.activeChannel) {
-        // this.autoActiveChannel();
-        // this.$store.dispatch('global/getBadge');
-      //   }
-      // };
-      // this.ws.onmessage = (message) => {
-      //   const mess = JSON.parse(message);
-      //   console.log('onmessage', mess);
-      //   this.getMessageFromWs(mess);
-      //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
-      //     this.autoActiveChannel();
-      //   }
-      //   this.$store.dispatch('global/getBadge');
-      // };
+    // this.ws = new WebSocketClient();
+    // this.ws.open();
+    // this.ws.onopen = () => {
+    //   if (this.activeChannel) {
+    // this.autoActiveChannel();
+    // this.$store.dispatch('global/getBadge');
+    //   }
+    // };
+    // this.ws.onmessage = (message) => {
+    //   const mess = JSON.parse(message);
+    //   console.log('onmessage', mess);
+    //   this.getMessageFromWs(mess);
+    //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
+    //     this.autoActiveChannel();
+    //   }
+    //   this.$store.dispatch('global/getBadge');
+    // };
     // },
 
     sendMessage(message) {

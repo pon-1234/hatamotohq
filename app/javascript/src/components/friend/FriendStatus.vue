@@ -12,7 +12,7 @@
 <script>
 export default {
   props: ['status']
-}
+};
 </script>
 
 <style>

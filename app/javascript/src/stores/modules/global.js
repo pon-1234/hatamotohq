@@ -31,7 +31,7 @@ export const mutations = {
     state.media_url = url;
   },
 
-  SET_MEDIA_PREVIEW_URL (state, url) {
+  SET_MEDIA_PREVIEW_URL(state, url) {
     state.media_preview_url = url;
   },
 
@@ -115,14 +115,14 @@ export const actions = {
     }
   },
 
-  async getActionObject(context, query = {}) {
+  async getActionObjectConfigs(context, query = {}) {
     // Loaded from cache, no need to load new one
     if (context.state.action_objects && context.state.action_objects.length > 0) {
       return;
     }
     let data = null;
     try {
-      data = await Global.getActionObjects(query);
+      data = await Global.getActionObjectConfigs(query);
     } catch (error) {
       console.log(error);
     }

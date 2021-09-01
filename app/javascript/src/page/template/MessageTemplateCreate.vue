@@ -9,7 +9,7 @@
     </div>
     <div class="form-border">
       <div v-if="refresh_content">
-        <message-content-distribution
+        <message-editor
           :isDisplayTemplate="false"
           v-for="(item, index) in message_data.message_content_distribution_templates"
           :key="index"
