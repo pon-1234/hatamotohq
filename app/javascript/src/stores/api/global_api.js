@@ -24,7 +24,7 @@ export default {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/emojis/' + query.packageId,
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },
@@ -34,11 +34,11 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
-  getActionObjects: (query) => {
+  getActionObjectConfigs: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/action_objects',
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },

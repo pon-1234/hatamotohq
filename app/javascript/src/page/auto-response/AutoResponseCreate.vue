@@ -62,14 +62,14 @@
                 </div>
                 <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
 
-                <message-content-distribution
+                <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"
                   :key="index"
                   v-bind:data="item"
                   v-bind:index="index"
                   v-bind:countMessages="autoResponseData.messages.length"
-                  @input="changeContent"
+                  @input="onMessageContentChanged"
                   @setTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
@@ -87,7 +87,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="botCreateMessage()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -99,6 +99,9 @@ import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
+  props: {
+    autoResponseId: Number
+  },
   data() {
     return {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
@@ -128,9 +131,10 @@ export default {
   },
 
   async beforeMount() {
-    await this.fetchItem();
+    if (this.autoResponseId) {
+      await this.getAutoResponse(this.autoResponseId);
+    }
     await this.getTags();
-    await this.listTagAssigned();
     this.loading = false;
   },
 
@@ -140,42 +144,22 @@ export default {
         this.updateContentMessageDistributions(this.autoResponseData);
       },
       deep: true
-    },
-    'autoResponseData.keywords': {
-      handler: function(after, before) {
-      },
-      deep: true
     }
   },
 
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     ...mapActions('autoResponse', [
+      'getAutoResponse',
       'createAutoResponse',
       'updateContentMessageDistributions'
     ]),
 
-    ...mapActions('global', [
-      'fetchUserData',
-      'getActionObject'
-    ]),
-
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
-
-    async fetchItem() {
-      await this.fetchUserData();
-      await this.getActionObject();
-    },
-
-    async botCreateMessage() {
+    async submitCreate() {
       const result = await this.$validator.validateAll();
-      this.setIsSubmitChange();
 
       if (!result) {
         $('input, textarea').each(
@@ -194,10 +178,9 @@ export default {
         ...this.autoResponseData
       };
       await this.createAutoResponse(data);
-      // window.location.href = process.env.MIX_ROOT_PATH + '/bots?is_created=true';
     },
 
-    changeContent({ index, content }) {
+    onMessageContentChanged({ index, content }) {
       this.autoResponseData.messages.splice(index, 1, content);
     },
 

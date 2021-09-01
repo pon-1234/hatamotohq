@@ -59,7 +59,7 @@
             <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
           </div>
 
-          <message-content-distribution
+          <message-editor
             :isDisplayTemplate="true"
             v-for="(item, index) in message_data.auto_broadcast_messages"
             :key="index"
@@ -167,10 +167,6 @@ export default {
       'updateContentMessageDistributions'
     ]),
 
-    ...mapActions('global', [
-      'getActionObject'
-    ]),
-
     ...mapActions('tag', [
       'getTags',
       'listTagAssigned'
@@ -181,7 +177,6 @@ export default {
     ]),
 
     async fetchItem() {
-      await this.getActionObject();
       await this.botDetail({ id: this.message_id });
       // eslint-disable-next-line no-undef
       this.message_data = _.cloneDeep(this.message);

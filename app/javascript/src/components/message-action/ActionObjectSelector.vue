@@ -47,7 +47,7 @@ export default {
   },
 
   beforeMount() {
-    this.$store.dispatch('global/getActionObject');
+    this.$store.dispatch('global/getActionObjectConfigs');
   },
 
   methods: {

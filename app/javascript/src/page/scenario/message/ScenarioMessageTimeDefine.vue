@@ -115,11 +115,11 @@ export default {
   data() {
     return {
       selectedTime: '00:00'
-    }
+    };
   },
 
   watch: {
-    selectedTime: function (val) {
+    selectedTime: function(val) {
       const timeOnly = moment(val).format('HH:mm');
       this.$emit('update:time', timeOnly);
     }

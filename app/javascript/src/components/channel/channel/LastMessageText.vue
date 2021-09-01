@@ -12,8 +12,8 @@ export default {
       const messageJson = JSON.parse(this.message);
       return messageJson.text;
     }
-  },
-}
+  }
+};
 </script>
 
 <style>

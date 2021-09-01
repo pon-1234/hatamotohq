@@ -166,7 +166,7 @@ export default {
       const query = {
         id: this.scenario_id
       };
-      
+
       this.$store.dispatch('scenario/getScenario', query).then((res) => {
         this.scenarioData = res;
       }).catch((err) => {

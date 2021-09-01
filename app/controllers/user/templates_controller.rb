@@ -1,2 +1,2 @@
-class User::TemplatesController < ApplicationController
+class User::TemplatesController < User::ApplicationController
 end

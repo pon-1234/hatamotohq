@@ -48,7 +48,6 @@
             </div>
           </div>
         </div>
-        
         <div class="card">
           <div class="card-header left-border">
             <h3 class="card-title">配信日時</h3>
@@ -95,10 +94,10 @@
             <div v-if="refresh_content">
               <div class="mb-2">
                 <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-                <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">
-                <message-content-distribution
+                <message-editor
                   :isDisplayTemplate="true"
                   v-bind:data="item"
                   v-bind:index="index"
@@ -120,7 +119,6 @@
             </div>
           </div>
         </div>
-
 
         <div>
           <div class="row-form-btn d-flex">
@@ -211,7 +209,7 @@ export default {
     await this.fetchItem();
     await this.getTags();
     await this.listTagAssigned();
-    this.loading = false
+    this.loading = false;
   },
 
   computed: {
@@ -360,7 +358,6 @@ export default {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
         }, 500);
       }
-
     },
     onReceiveUpdateBroadcastResponse(success) {
       if (success) {
@@ -374,7 +371,6 @@ export default {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
         }, 500);
       }
-
     },
 
     selectTemplate(template) {

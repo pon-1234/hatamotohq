@@ -22,7 +22,7 @@
         <div class="form-group">
           <label>メッセージ本文</label>
           <div  v-if="refresh_content">
-            <message-content-distribution
+            <message-editor
               :isDisplayTemplate="true"
               v-for="(item, index) in talk.broadcast_messages"
               :key="index"

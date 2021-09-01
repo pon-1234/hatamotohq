@@ -3,7 +3,7 @@ export default {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels`,
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },
@@ -13,7 +13,7 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,
       query: query,
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },

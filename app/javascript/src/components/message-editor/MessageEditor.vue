@@ -11,7 +11,7 @@
       </div>
       <div class="card-body">
         <div class="d-flex align-items-center mb10">
-          <select-message-content-distribution
+          <message-type-selection
             v-model="defaults.message_type_id"
             @input="changeSelectedMessage"
           />
@@ -27,12 +27,12 @@
             </button>
           </div>
         </div>
-    <value-message-content-distribution
-      v-if="rerender"
-      :index="index"
-      :data="defaults.content"
-      @changeContent="changeContentMessage"
-    />
+        <message-content-editor
+          v-if="rerender"
+          :index="index"
+          :data="defaults.content"
+          @changeContent="changeContentMessage"
+        />
       </div>
     </div>
 

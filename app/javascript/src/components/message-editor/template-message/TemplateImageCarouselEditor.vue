@@ -18,7 +18,7 @@
               </span>
             </li>
           </ul>
-          
+
           <div class="panel-body">
             <div class="carousel-body" hidden>
               <div class="list-carousel d-flex align-items-center">

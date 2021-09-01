@@ -51,8 +51,8 @@ export const getters = {};
 
 export const actions = {
 
-  updateContentMessageDistributions(context, message) {
-    context.dispatch('preview/setMessages', message.auto_broadcast_messages, { root: true });
+  updateContentMessageDistributions(context, autoResponse) {
+    context.dispatch('preview/setMessages', autoResponse.messages, { root: true });
   },
 
   async getAutoResponses(context, query) {

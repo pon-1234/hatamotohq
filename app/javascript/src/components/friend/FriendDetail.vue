@@ -206,7 +206,7 @@ export default {
         display_name: this.friend.display_name,
         note: this.friend.note,
         tag_ids: this.friend.tags ? this.friend.tags.map(_ => _.id) : []
-      }
+      };
       this.editLineInfo(formData).then((res) => {
         window.toastr.success('友だち情報の更新が成功しました。');
       }).catch(() => {
