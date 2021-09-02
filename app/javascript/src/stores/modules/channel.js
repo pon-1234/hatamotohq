@@ -1,4 +1,4 @@
-import Talk from '../api/talk_api';
+import ChannelAPI from '../api/channel_api';
 
 export const state = {
   channels: [],
@@ -18,7 +18,7 @@ export const state = {
 };
 
 export const mutations = {
-  SET_CHANELS(state, channels) {
+  SET_CHANNELS(state, channels) {
     state.channel_LastPage = parseInt(channels.meta.last_page);
     state.channel_CurrentPage = parseInt(channels.meta.current_page);
     if (state.channel_CurrentPage === 1) {
@@ -128,9 +128,9 @@ export const actions = {
     context.commit('SET_LOAD_MORE_CHANNEL', true);
 
     try {
-      const res = await Talk.getChannels(query);
+      const res = await ChannelAPI.list();
       if (res) {
-        context.commit('SET_CHANELS', res);
+        context.commit('SET_CHANNELS', res);
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +142,7 @@ export const actions = {
   async getMessages(context, query) {
     context.commit('SET_LOAD_MORE_MESSAGE', true);
     try {
-      const res = await Talk.getListMessages(query);
+      const res = await ChannelAPI.getListMessages(query);
       if (res && res.data && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
         context.commit('SET_MESSAGES', res);
       }
@@ -163,16 +163,25 @@ export const actions = {
     context.commit('SET_MESSAGE_PARAMS', Object.assign({}, context.state.messageParams, params));
   },
 
-  getMessageFromWs(context, mess) {
-    if (mess.action === 'new_message') {
-      if (context.state.activeChannel && context.state.activeChannel.id && mess.channel.id === context.state.activeChannel.id) {
-        context.commit('PUSH_MESSAGE', mess.content);
+  onReceiveWebsocketEvent(context, event) {
+    const eventType = event.action;
+    switch (eventType) {
+    case 'new_message':
+      if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id) {
+        console.log('----1-----');
+        context.commit('PUSH_MESSAGE', event.content);
       }
-      context.commit('UPDATE_CHANNELS', { status: 'new_message', channel: mess.channel });
-    } else if (mess.action === 'message_read') {
-      context.commit('UPDATE_CHANNELS', { status: 'read_message', channel: mess });
-    } else if (mess.action === 'line_follow') {
-      context.commit('UPDATE_CHANNELS', { status: 'line_follow', channel: mess.channel });
+      context.commit('UPDATE_CHANNELS', { status: 'new_message', channel: event.channel });
+      break;
+
+    case 'message_read':
+      context.commit('UPDATE_CHANNELS', { status: 'read_message', channel: event });
+      break;
+
+    case 'line_follow':
+      context.commit('UPDATE_CHANNELS', { status: 'line_follow', channel: event.channel });
+      break;
+    default:
     }
   },
 
@@ -194,7 +203,7 @@ export const actions = {
 
   async sendMedia(context, query) {
     try {
-      const response = await Talk.sendMedia(query);
+      const response = await ChannelAPI.sendMedia(query);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -203,7 +212,7 @@ export const actions = {
 
   async sendMediaFromManager(context, query) {
     try {
-      const response = await Talk.sendMediaFromManager(query);
+      const response = await ChannelAPI.sendMediaFromManager(query);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -212,7 +221,7 @@ export const actions = {
 
   async unreadMessage(context, query) {
     try {
-      const res = await Talk.unreadMessage(query);
+      const res = await ChannelAPI.unreadMessage(query);
       if (res && res.total) {
         context.commit('SET_ACTIVE_CHANNEL', Object.assign({}, context.state.activeChannel, { total_unread_messages: res.total }));
       }

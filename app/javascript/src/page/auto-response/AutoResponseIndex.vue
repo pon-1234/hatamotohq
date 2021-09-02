@@ -23,15 +23,15 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="w25" >自動応答名</th>
-                    <th class="w25">キーワード</th>
+                    <th>自動応答名</th>
+                    <th>キーワード</th>
                     <th>メッセージ</th>
-                    <th class="fw-120">操作</th>
-                    <th class="fw-180">登録日</th>
-                    <th class="fw-100">状況</th>
+                    <th>操作</th>
+                    <th>登録日</th>
+                    <th>状況</th>
                   </tr>
                 </thead>
-                <tbody style="min-height: 60vh;">
+                <tbody>
                   <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
                     <td>{{auto_response.name}}</td>
                     <td>
@@ -73,6 +73,7 @@
           </div>
       </div>
     </div>
+    <loading-indicator :loading="loading"></loading-indicator>
     <div class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -118,12 +119,14 @@ export default {
       messageDetail: null,
       isPc: true,
       selectedFolder: 0,
-      auto_responses: []
+      auto_responses: [],
+      loading: true
     };
   },
 
-  beforeMount() {
-    this.$store.dispatch('autoResponse/getAutoResponses');
+  async beforeMount() {
+    await this.$store.dispatch('autoResponse/getAutoResponses');
+    this.loading = false;
   },
 
   computed: {

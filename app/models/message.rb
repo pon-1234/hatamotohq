@@ -5,7 +5,7 @@
 # Table name: messages
 #
 #  id               :bigint           not null, primary key
-#  attr             :string(255)      default("chat-reserve")
+#  from             :string(255)
 #  is_bot_sender    :boolean          default(FALSE)
 #  line_content     :json
 #  line_reply_token :string(255)
@@ -31,8 +31,11 @@
 class Message < ApplicationRecord
   include MessageType
 
+  enum from: { user: 'user', friend: 'friend', system: 'system' }, _prefix: true
+
   belongs_to :channel
   belongs_to :sender, polymorphic: true
   validates :line_content, presence: true
   validates :type, presence: true
+  validates_presence_of :from
 end

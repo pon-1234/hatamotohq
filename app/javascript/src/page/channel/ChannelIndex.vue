@@ -18,7 +18,6 @@ import { mapActions, mapState } from 'vuex';
 // import { WebSocketClient } from '@/core/websocket';
 import consumer from '@channels/consumer';
 import * as ActionCable from '@rails/actioncable';
-import moment from 'moment-timezone';
 ActionCable.logger.enabled = true;
 
 export default {
@@ -56,7 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       channels: state => state.channels,
       messages: state => state.messages,
@@ -81,9 +80,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', [
+    ...mapActions('channel', [
       'getChannels',
-      'getMessageFromWs',
+      'onReceiveWebsocketEvent',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
@@ -100,11 +99,9 @@ export default {
       const _this = this;
       consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
         received(data) {
-          this.appendNewMessage(data);
+          _this.onReceiveWebsocketEvent(data);
         },
-
         appendNewMessage(data) {
-          _this.getMessageFromWs(data);
           // if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
           //   this.autoActiveChannel();
           // }
@@ -147,7 +144,7 @@ export default {
     // this.ws.onmessage = (message) => {
     //   const mess = JSON.parse(message);
     //   console.log('onmessage', mess);
-    //   this.getMessageFromWs(mess);
+    //   this.onReceiveWebsocketEvent(mess);
     //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
     //     this.autoActiveChannel();
     //   }
@@ -179,16 +176,16 @@ export default {
       }
     },
 
-    activeChannel(e) {
-      console.log(e, 'activeChannel');
-      this.$nextTick(() => {
-        this.setUnreadChannelId(null);
-        this.ws.send(JSON.stringify({
-          action: 'message_read',
-          payload: this.activeChannel
-        }));
-      });
-    },
+    // activeChannel(e) {
+    //   console.log(e, 'activeChannel');
+    //   this.$nextTick(() => {
+    //     this.setUnreadChannelId(null);
+    //     this.ws.send(JSON.stringify({
+    //       action: 'message_read',
+    //       payload: this.activeChannel
+    //     }));
+    //   });
+    // },
 
     autoActiveChannel() {
       this.activeChannel();

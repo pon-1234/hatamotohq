@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <talk-message-content-view  :data="message" @unread="setUnreadMessage"/>
+          <channel-message-view  :data="message" @unread="setUnreadMessage"/>
         </div>
       </div>
       <div class="box-input" style="position: relative">
@@ -90,10 +90,10 @@
         </div>
       </div>
     </div>
-    <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/>
-    <modal-select-message-template @setTemplate="selectMessageTemplate"/>
-    <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/>
-    <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/>
+    <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
+    <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
+    <!-- <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/> -->
+    <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
     <div class="empty" ></div>
@@ -158,7 +158,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       isLoadmoreMessage: state => state.isLoadmoreMessage,
@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
+    ...mapActions('channel', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
     ...mapActions('global', ['getStickers']),
 
     scrollToBottom() {

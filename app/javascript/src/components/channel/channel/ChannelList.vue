@@ -32,7 +32,7 @@ export default {
   },
 
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       channels: state => state.channels,
       isLoadMoreChannel: state => state.isLoadMoreChannel,
       messageParams: state => state.messageParams,
@@ -60,7 +60,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
+    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
     async changeChanel(channel, index) {
       const isCurrentChannel = this.selected ? (channel.id === this.selected.id) : false;
       this.$emit('activeChannel', !isCurrentChannel);
