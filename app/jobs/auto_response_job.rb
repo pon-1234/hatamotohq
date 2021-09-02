@@ -18,8 +18,8 @@ class AutoResponseJob < ApplicationJob
     # # Send auto response message if keyword is hitted
     message_content = []
     auto_response_ids.each do |auto_response_id|
-      auto_response_messages = AutoResponse.where(id: auto_response_id, status: 'enable')&.first.auto_response_messages
-      next if auto_response_messages.empty?
+      auto_response_messages = AutoResponse.where(id: auto_response_id, status: 'enable').first&.auto_response_messages
+      next if auto_response_messages.blank?
 
       auto_response_messages.each do |message|
         message_content << {

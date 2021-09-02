@@ -1,11 +1,11 @@
 <template>
   <div :class="'chat '+ data.attr">
-    <div class="avatar" v-if="data.attr == 'chat-secondary'">
+    <div class="avatar" v-if="data.from === 'friend'">
       <img :src="data.customer.line_picture_url ? data.customer.line_picture_url :  '/img/no-image-profile.png'">
     </div>
     <div class="chat-content">
       <div class="chat-body">
-        <div class="chat-main" :class="data.is_bot_sender ? ' is_bot' : ''">
+        <div class="chat-main" :class="data.from === 'bot' ? ' is_bot' : ''">
           <message-content-view :data="data.line_content" :time="getTimeMessage(data)" :source="data.source || 'sended'"></message-content-view>
         </div>
       </div>

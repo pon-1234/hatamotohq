@@ -11,7 +11,7 @@ class PushMessageToLineJob < ApplicationJob
     if reply_token.present?
       # Get the first 3 messages to send using reply token
       reply_messages = messages.shift(3)
-      send_reply_messages(line_account, reply_messages, reply_token)
+      send_reply(line_account, reply_messages, reply_token)
     end
 
     # Send remaining message
@@ -20,25 +20,40 @@ class PushMessageToLineJob < ApplicationJob
     end
   end
 
-  def send_reply_messages(line_account, messages, reply_token)
-    message_body = []
+  def send_reply(line_account, messages, reply_token)
+    message_content_arr = []
     messages.each do |message|
       message_content = message[:data][:content][:line_content]
-      message_body << message_content
+      message_content_arr << message_content
     end
 
-    return if message_body.empty?
+    return if message_content_arr.empty?
     success = LineApi::PostMessageReply.new(
       line_account.line_channel_id,
       line_account.line_channel_secret,
-      message_body,
+      message_content_arr,
       reply_token
     ).perform
-
-    store_message() if success
+    return unless success
+    store_messages(message_content_arr)
   end
 
-  def store_message
+  def store_messages(message_content_arr, channel_id)
+    message_content_arr.each do |message_content|
+      message = Message.new
+      message.channel = channel
+      message.sender = sender
+      message.from = :friend
+      message.type = body[:message][:type]
+      message.is_bot_sender = false
+      message.line_message_id = body[:message][:id]
+      message.line_content = body[:message]
+      message.line_timestamp = body[:timestamp]
+      message.line_reply_token = body[:replyToken]
+      message.slug = body[:message][:type].eql?('text') ? body[:message][:text] : nil
+      message.save!
+      message
+    end
   end
 
   def normalize_message(message)

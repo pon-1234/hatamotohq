@@ -34,6 +34,7 @@
 class Channel < ApplicationRecord
   belongs_to :line_account
   belongs_to :line_friend
+  has_many :messages, dependent: :destroy, autosave: true
 
   enum status: { active: 'active', block: 'block' }, _prefix: true
 

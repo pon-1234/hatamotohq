@@ -17,7 +17,7 @@ class Ws::ChannelWs
         channel: sender.channel.as_json(except: [:deleted_at]),
         content: {
           customer: { id: sender.id },
-          is_bot_sender: 0,
+          from: message.from,
           line_content: message.line_content,
           line_timestamp: message.line_timestamp
         }

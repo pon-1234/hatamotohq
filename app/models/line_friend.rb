@@ -34,4 +34,13 @@ class LineFriend < ApplicationRecord
   enum status: { active: 'active', block: 'block', inactive: 'inactive', mute: 'mute' }, _prefix: true
   scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
   scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
+
+  def push_event_data
+    {
+      id: id,
+      name: display_name,
+      avatar_url: line_picture_url,
+      type: 'friend'
+    }
+  end
 end

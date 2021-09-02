@@ -119,17 +119,7 @@ module WebhooksHelper
     end
 
     def create_message(channel, sender, body)
-      message = Message.new
-      message.channel = channel
-      message.sender = sender
-      message.type = body[:message][:type]
-      message.is_bot_sender = false
-      message.line_message_id = body[:message][:id]
-      message.line_content = body[:message]
-      message.line_timestamp = body[:timestamp]
-      message.line_reply_token = body[:replyToken]
-      message.slug = body[:message][:type].eql?('text') ? body[:message][:text] : nil
-      message.save!
-      message
+      mb = Messages::MessageBuilder.new(sender, channel, body)
+      message = mb.perform
     end
 end

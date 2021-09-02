@@ -6,12 +6,11 @@
 #
 #  id               :bigint           not null, primary key
 #  from             :string(255)
-#  is_bot_sender    :boolean          default(FALSE)
 #  line_content     :json
 #  line_reply_token :string(255)
 #  line_timestamp   :string(255)
 #  sender_type      :string(255)
-#  slug             :text(65535)
+#  text             :text(65535)
 #  type             :string(255)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -29,13 +28,33 @@
 #  fk_rails_...  (channel_id => channels.id)
 #
 class Message < ApplicationRecord
+  default_scope { order(created_at: :desc) }
+
   include MessageType
 
-  enum from: { user: 'user', friend: 'friend', system: 'system' }, _prefix: true
+  enum from: { user: 'user', friend: 'friend', bot: 'bot', system: 'system' }, _prefix: true
 
   belongs_to :channel
-  belongs_to :sender, polymorphic: true
+  belongs_to :sender, polymorphic: true, required: false
   validates :line_content, presence: true
   validates :type, presence: true
   validates_presence_of :from
+
+  def push_event_data
+    data = {
+      id: id,
+      channel_id: channel_id,
+      from: from,
+      type: type_before_type_cast,
+      created_at: created_at.to_i,
+      line_content: line_content,
+      line_timestamp: line_timestamp
+    }
+    merge_sender_attributes(data)
+  end
+
+  def merge_sender_attributes(data)
+    data[:sender] = sender.push_event_data if sender && sender.is_a?(LineFriend)
+    data
+  end
 end
