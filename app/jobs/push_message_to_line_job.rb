@@ -13,14 +13,14 @@ class PushMessageToLineJob < ApplicationJob
     if @reply_token.present?
       # Get the first 5 messages to send using reply token
       reply_messages = messages.shift(MAX_MSG_IN_REQUEST)
-      send_reply(reply_messages)
+      send_reply_messages(reply_messages)
     end
 
     # Send remaining message
-    send(messages)
+    send_messages(messages)
   end
 
-  def send_reply(messages)
+  def send_reply_messages(messages)
     message_content_arr = []
     messages.each do |message|
       message_content = message[:message]
@@ -38,9 +38,8 @@ class PushMessageToLineJob < ApplicationJob
     store_messages(message_content_arr)
   end
 
-  def send(messages)
+  def send_messages(messages)
     messages.in_groups_of(MAX_MSG_IN_REQUEST, false) do |grouped_messages|
-      byebug
       message_content_arr = []
       grouped_messages.each do |message|
         message_content = message[:message]

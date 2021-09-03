@@ -13,9 +13,6 @@ class MediaValidator < ActiveModel::Validator
   def validate(record)
     file = record.file
     file_size = file.byte_size
-    p '---------'
-    p file.content_type
-    p '---------'
     if (file.image? && file_size > IMAGE_MAXSIZE) || (file.video? && file_size > VIDEO_MAXSIZE) || (file.audio? && file_size > AUDIO_MAXSIZE)
       record.errors.add :file, I18n.t('errors.messages.file_size_out_of_range', file_size: number_to_human_size(file_size))
     end

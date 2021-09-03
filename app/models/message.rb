@@ -82,6 +82,6 @@ class Message < ApplicationRecord
       # Send reply message if sender is a friend
       return unless from.eql?('friend')
       # Enqueue auto response job
-      AutoResponseJob.perform_later(id) if type.eql?('text')
+      AutoResponseJob.set(wait: 5.seconds).perform_later(id) if type.eql?('text')
     end
 end

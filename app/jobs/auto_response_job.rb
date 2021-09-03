@@ -5,7 +5,6 @@ class AutoResponseJob < ApplicationJob
 
   def perform(message_id)
     message = Message.find(message_id)
-
     auto_response_ids = hit_auto_responses(message)
     return if auto_response_ids.blank?
 

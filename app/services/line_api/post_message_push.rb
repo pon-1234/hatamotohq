@@ -21,8 +21,6 @@ class LineApi::PostMessagePush < LineApi::BaseRequest
       }.to_json
     }
     response = self.class.post('/bot/message/push', options)
-    p '------'
-    p response.body
     response.code == 200
   end
 end
