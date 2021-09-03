@@ -51,7 +51,7 @@ export const getters = {};
 
 export const actions = {
 
-  updateContentMessageDistributions(context, autoResponse) {
+  setPreviewContent(context, autoResponse) {
     context.dispatch('preview/setMessages', autoResponse.messages, { root: true });
   },
 

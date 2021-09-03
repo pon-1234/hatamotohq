@@ -126,7 +126,7 @@ export default {
   methods: {
     ...mapActions('scenario', [
       'createScenarioMessage',
-      'updateContentMessageDistributions'
+      'setPreviewContent'
     ]),
     ...mapActions('messageTemplate', [
       'fetchListMessageTemplate',
@@ -154,7 +154,7 @@ export default {
 
     changeContent({ index, content }) {
       this.scenarioMessageData.messages[index] = content;
-      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
+      this.setPreviewContent(this.scenarioMessageData.messages);
       // this.validate(this.talk);
     },
     async submit() {
@@ -203,7 +203,7 @@ export default {
 
       this.scenarioMessageData.messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
+      this.setPreviewContent(this.scenarioMessageData.messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;

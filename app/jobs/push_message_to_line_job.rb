@@ -7,18 +7,17 @@ class PushMessageToLineJob < ApplicationJob
   def perform(payload)
     @line_account = LineAccount.find(payload[:line_account_id])
     @channel = Channel.find(payload[:channel_id])
-    @messages = payload[:messages]
     @reply_token = payload[:reply_token]
-
+    messages = payload[:messages]
     # Send using reply token
     if @reply_token.present?
       # Get the first 5 messages to send using reply token
-      reply_messages = @messages.shift(MAX_MSG_IN_REQUEST)
+      reply_messages = messages.shift(MAX_MSG_IN_REQUEST)
       send_reply(reply_messages)
     end
 
     # Send remaining message
-    send(@messages)
+    send(messages)
   end
 
   def send_reply(messages)
@@ -27,8 +26,8 @@ class PushMessageToLineJob < ApplicationJob
       message_content = message[:message]
       message_content_arr << message_content
     end
-
     return if message_content_arr.empty?
+
     success = LineApi::PostMessageReply.new(
       @line_account.line_channel_id,
       @line_account.line_channel_secret,
@@ -41,13 +40,14 @@ class PushMessageToLineJob < ApplicationJob
 
   def send(messages)
     messages.in_groups_of(MAX_MSG_IN_REQUEST, false) do |grouped_messages|
+      byebug
       message_content_arr = []
       grouped_messages.each do |message|
         message_content = message[:message]
         message_content_arr << message_content
       end
-
       return if message_content_arr.empty?
+
       success = LineApi::PostMessagePush.new(
         @line_account.line_channel_id,
         @line_account.line_channel_secret,

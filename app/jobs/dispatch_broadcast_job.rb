@@ -31,7 +31,7 @@ class DispatchBroadcastJob < ApplicationJob
     end
 
     # Deliver messages via line api
-    if !post_message_broadcast(line_account, nomalized_messages_data)
+    if !send_broadcast(line_account, nomalized_messages_data)
       broadcast.update_status('error')
       return
     end
@@ -52,18 +52,17 @@ class DispatchBroadcastJob < ApplicationJob
     messages.each do |message|
       nomalized_messages_data << normalize_message_content(message.content)
     end
-    if !post_message_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
+    if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')
-      nil
     end
   end
 
   private
-    def post_message_broadcast(line_account, messages_data)
+    def send_broadcast(line_account, messages_data)
       LineApi::PostMessageBroadcast.new(line_account.line_channel_id, line_account.line_channel_secret, messages_data).perform
     end
 
-    def post_message_multicast(line_account, messages_data, friend_ids)
+    def send_multicast(line_account, messages_data, friend_ids)
       friend_ids.in_groups_of(400, false) do |ids|
         LineApi::PostMessageMulticast.new(line_account.line_channel_id, line_account.line_channel_secret, messages_data, ids).perform
       end
