@@ -22,7 +22,7 @@ require 'capistrano/bundler'
 require 'capistrano/rbenv'
 require 'seed-fu/capistrano3'
 require 'capistrano/puma'
-install_plugin Capistrano::Puma::Daemon
+install_plugin Capistrano::Puma, load_hooks: true
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
