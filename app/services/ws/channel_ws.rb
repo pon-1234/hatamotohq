@@ -5,21 +5,21 @@ class Ws::ChannelWs
     @ws_channel = ws_channel
   end
 
-  def send_message(sender, message)
-    payload = build_payload(sender, message)
+  def send_message(message)
+    payload = build_payload(message)
     ActionCable.server.broadcast(@ws_channel, payload)
   end
 
   private
-    def build_payload(sender, message)
+    def build_payload(message)
       {
         action: 'new_message',
-        channel: sender.channel.as_json(except: [:deleted_at]),
+        channel: message.channel.as_json(except: [:deleted_at]),
         content: {
-          customer: { id: sender.id },
-          is_bot_sender: 0,
+          customer: { id: message.sender&.id },
+          from: message.from,
           line_content: message.line_content,
-          line_timestamp: message.line_timestamp
+          timestamp: message.timestamp
         }
       }
     end

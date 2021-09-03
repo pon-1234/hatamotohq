@@ -5,6 +5,7 @@ module MessageType
 
   included do
     enum type: {
+      system: 'system',
       text: 'text',
       sticker: 'sticker',
       image: 'image',

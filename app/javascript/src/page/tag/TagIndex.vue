@@ -56,7 +56,7 @@
             </div>
             <div class="tag-content">
               <div class="tag-scroll tag-list">
-                <table class="table index">
+                <table class="table">
                   <thead>
                     <tr>
                       <th  style="min-width: 200px;"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>

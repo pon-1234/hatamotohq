@@ -8,6 +8,6 @@ json.meta do
 end
 json.data do
   json.array! @channels do |channel|
-    json.(channel, :id, :title, :status, :line_friend_id, :last_message, :last_timestamp, :un_read)
+    json.(channel, :id, :title, :status, :line_friend_id, :last_message, :last_activity_at, :un_read)
   end
 end

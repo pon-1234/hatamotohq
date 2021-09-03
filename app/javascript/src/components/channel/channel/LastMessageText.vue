@@ -5,7 +5,7 @@
 <script>
 export default {
   props: {
-    message: String
+    message: Object
   },
   computed: {
     messageText: function() {

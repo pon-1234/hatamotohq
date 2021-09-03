@@ -51,7 +51,7 @@ export const getters = {};
 
 export const actions = {
 
-  updateContentMessageDistributions(context, autoResponse) {
+  setPreviewContent(context, autoResponse) {
     context.dispatch('preview/setMessages', autoResponse.messages, { root: true });
   },
 
@@ -76,8 +76,8 @@ export const actions = {
     return await AutoResponseAPI.create(autoResponseData);
   },
 
-  async updateAutoResponse(context, auto_response) {
-    await AutoResponseAPI.updateAutoResponse(auto_response);
+  async updateAutoResponse(context, autoResponse) {
+    await AutoResponseAPI.updateAutoResponse(autoResponse);
   },
 
   async botDelete(context, query) {

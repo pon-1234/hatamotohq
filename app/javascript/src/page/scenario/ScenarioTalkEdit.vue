@@ -140,7 +140,7 @@ export default {
 
   methods: {
     ...mapActions('scenario', [
-      'updateContentMessageDistributions'
+      'setPreviewContent'
     ]),
     ...mapActions('messageTemplate', [
       'fetchListMessageTemplate',
@@ -160,7 +160,7 @@ export default {
 
     changeContent({ index, content }) {
       this.talk.broadcast_messages[index] = content;
-      this.updateContentMessageDistributions(this.talk.broadcast_messages);
+      this.setPreviewContent(this.talk.broadcast_messages);
     },
     getTalk() {
       const query = {
@@ -180,7 +180,7 @@ export default {
             content: res.content,
             message_type_id: res.message_type.id
           });
-          this.updateContentMessageDistributions(this.talk.broadcast_messages);
+          this.setPreviewContent(this.talk.broadcast_messages);
 
           const matchDay = /([0-9]+)d/m.exec(res.delivery_timing);
           if (matchDay && matchDay.length > 1) {
@@ -268,7 +268,7 @@ export default {
 
       this.talk.broadcast_messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.talk.broadcast_messages);
+      this.setPreviewContent(this.talk.broadcast_messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;

@@ -10,7 +10,7 @@
             <li v-for="(talk, index) in newTalks" :key="index">
               <a :href="MIX_ROOT_PATH + '/talks/to/'+(talk.channel.alias || '')">
                 <dl>
-                  <dt>{{lineTimestampToDate(talk.line_timestamp) }}<span>@{{talk.customer.line_name}}</span></dt>
+                  <dt>{{lineTimestampToDate(talk.timestamp) }}<span>@{{talk.customer.line_name}}</span></dt>
                   <dd>
                     <message-content-view :data="talk.line_content" ></message-content-view>
                   </dd>

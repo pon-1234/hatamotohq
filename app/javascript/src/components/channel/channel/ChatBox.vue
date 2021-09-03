@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <talk-message-content-view  :data="message" @unread="setUnreadMessage"/>
+          <channel-message-view  :data="message" @unread="setUnreadMessage"/>
         </div>
       </div>
       <div class="box-input" style="position: relative">
@@ -90,10 +90,10 @@
         </div>
       </div>
     </div>
-    <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/>
-    <modal-select-message-template @setTemplate="selectMessageTemplate"/>
-    <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/>
-    <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/>
+    <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
+    <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
+    <!-- <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/> -->
+    <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
     <div class="empty" ></div>
@@ -158,7 +158,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       isLoadmoreMessage: state => state.isLoadmoreMessage,
@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
+    ...mapActions('channel', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
     ...mapActions('global', ['getStickers']),
 
     scrollToBottom() {
@@ -210,16 +210,11 @@ export default {
 
         this.setActiveChannel(channel);
         const message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'text',
-              text: this.textMessage
-            },
-            line_timestamp: new Date().getTime()
+          channel_id: channel.id,
+          message: {
+            type: 'text',
+            text: this.textMessage,
+            timestamp: new Date().getTime()
           }
         };
 
@@ -261,7 +256,7 @@ export default {
             stickerId: sticker.line_emoji_id,
             stickerResourceType: 'STATIC'
           },
-          line_timestamp: new Date().getTime()
+          timestamp: new Date().getTime()
         }
       };
 
@@ -300,7 +295,7 @@ export default {
                 previewImageUrl: URL.createObjectURL(file)
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       } else if (this.VideoType.indexOf(file.type) !== -1) {
@@ -321,7 +316,7 @@ export default {
               },
               duration: 0
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       } else if (this.AudioType.indexOf(file.type) !== -1) {
@@ -342,7 +337,7 @@ export default {
                 originalContentUrl: URL.createObjectURL(file)
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -377,7 +372,7 @@ export default {
                 previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -401,7 +396,7 @@ export default {
               },
               duration: 0
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -424,7 +419,7 @@ export default {
                 originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -443,8 +438,8 @@ export default {
 
     isDateTimeMessage(currentMessage, lastMessage) {
       if (currentMessage && currentMessage.created_at && lastMessage && lastMessage.created_at) {
-        const currentTime = moment(moment(parseInt(currentMessage.line_timestamp)).format('YYYY-MM-DD'));
-        const lastTime = moment(moment(parseInt(lastMessage.line_timestamp)).format('YYYY-MM-DD'));
+        const currentTime = moment(moment(parseInt(currentMessage.timestamp)).format('YYYY-MM-DD'));
+        const lastTime = moment(moment(parseInt(lastMessage.timestamp)).format('YYYY-MM-DD'));
         const dif = currentTime.diff(lastTime, 'days');
         if (dif >= 1) {
           return true;
@@ -454,7 +449,7 @@ export default {
     },
 
     getDateTimeMessage(value) {
-      return moment(parseInt(value.line_timestamp)).format('YYYY年MM月DD日');
+      return moment(parseInt(value.timestamp)).format('YYYY年MM月DD日');
     },
 
     selectMessageTemplate(template) {
@@ -501,7 +496,7 @@ export default {
           is_bot_sender: 0,
           attr: 'chat-reverse',
           line_content: { ...content, id: template.id },
-          line_timestamp: new Date().getTime()
+          timestamp: new Date().getTime()
         }
       };
 

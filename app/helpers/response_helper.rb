@@ -9,6 +9,10 @@ module ResponseHelper
     render json: { status: :success, message: message }, status: 200
   end
 
+  def render_could_not_create_error(message)
+    render json: { error: message }, status: :unprocessable_entity
+  end
+
   def render_bad_request
     render json: { status: :error }, status: 400
   end

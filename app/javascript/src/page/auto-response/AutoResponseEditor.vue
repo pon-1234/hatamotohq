@@ -61,7 +61,6 @@
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
                 <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
-
                 <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"
@@ -75,7 +74,6 @@
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"
                 />
-
                 <div>
                   <div class="btn btn-outline-success" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
                     <i class="fa fa-plus"></i><span> メッセージ追加</span>
@@ -125,17 +123,9 @@ export default {
   async beforeMount() {
     if (this.auto_response_id) {
       const autoResponse = await this.getAutoResponse(this.auto_response_id);
-      this.autoResponseData = _.cloneDeep(autoResponse);
+      Object.assign(this.autoResponseData, autoResponse);
     } else {
-      this.autoResponseData.message = [
-        {
-          message_type_id: this.MessageTypeIds.Text,
-          content: {
-            type: this.MessageType.Text,
-            text: ''
-          }
-        }
-      ];
+      this.setDefaultMessage();
     }
     await this.getTags();
     this.loading = false;
@@ -144,7 +134,7 @@ export default {
   watch: {
     autoResponseData: {
       handler(val) {
-        this.updateContentMessageDistributions(this.autoResponseData);
+        this.setPreviewContent(this.autoResponseData);
       },
       deep: true
     }
@@ -159,7 +149,7 @@ export default {
       'getAutoResponse',
       'createAutoResponse',
       'updateAutoResponse',
-      'updateContentMessageDistributions'
+      'setPreviewContent'
     ]),
 
     async submitCreate() {
@@ -186,6 +176,18 @@ export default {
       } else {
         await this.createAutoResponse(data);
       }
+    },
+
+    setDefaultMessage() {
+      this.autoResponseData.messages.push(
+        {
+          message_type_id: this.MessageTypeIds.Text,
+          content: {
+            type: this.MessageType.Text,
+            text: ''
+          }
+        }
+      );
     },
 
     onMessageContentChanged({ index, content }) {

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_01_071029) do
+ActiveRecord::Schema.define(version: 2021_09_03_053615) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -149,8 +149,8 @@ ActiveRecord::Schema.define(version: 2021_09_01_071029) do
     t.string 'avatar'
     t.text 'last_message'
     t.string 'status', default: '1'
+    t.datetime 'last_activity_at'
     t.string 'alias'
-    t.datetime 'last_timestamp'
     t.string 'slug'
     t.boolean 'un_read', default: true
     t.boolean 'is_mute', default: false
@@ -295,13 +295,12 @@ ActiveRecord::Schema.define(version: 2021_09_01_071029) do
     t.string 'sender_type'
     t.bigint 'sender_id'
     t.string 'type'
-    t.boolean 'is_bot_sender', default: false
-    t.string 'attr', default: 'chat-reserve'
+    t.string 'from'
+    t.text 'text'
     t.string 'line_message_id'
     t.json 'line_content'
-    t.string 'line_timestamp'
-    t.string 'line_reply_token'
-    t.text 'slug'
+    t.string 'timestamp'
+    t.string 'reply_token'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['channel_id'], name: 'index_messages_on_channel_id'
