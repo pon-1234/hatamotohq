@@ -27,7 +27,6 @@ gem 'cancancan'
 
 # Search engine
 gem 'searchkick'
-gem 'elasticsearch-xpack', '>= 7.8.0'
 
 # Authentication
 gem 'devise'
