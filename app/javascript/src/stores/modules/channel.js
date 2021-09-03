@@ -142,7 +142,7 @@ export const actions = {
   async getMessages(context, query) {
     context.commit('SET_LOAD_MORE_MESSAGE', true);
     try {
-      const res = await ChannelAPI.getListMessages(query);
+      const res = await ChannelAPI.channelMessages(query);
       if (res && res.data && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
         context.commit('SET_MESSAGES', res);
       }
@@ -168,7 +168,6 @@ export const actions = {
     switch (eventType) {
     case 'new_message':
       if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id) {
-        console.log('----1-----');
         context.commit('PUSH_MESSAGE', event.content);
       }
       context.commit('UPDATE_CHANNELS', { status: 'new_message', channel: event.channel });
@@ -183,6 +182,12 @@ export const actions = {
       break;
     default:
     }
+  },
+
+  // Send a text message to the active channel
+  async sendTextMessage(context, payload) {
+    const response = await ChannelAPI.sendTextMessage(context.state.activeChannel.id, payload);
+    return response;
   },
 
   pushMessage(context, message) {

@@ -43,4 +43,12 @@ class LineFriend < ApplicationRecord
       type: 'friend'
     }
   end
+
+  def name
+    display_name
+  end
+
+  def avatar_url
+    line_picture_url
+  end
 end

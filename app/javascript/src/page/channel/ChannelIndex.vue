@@ -83,6 +83,7 @@ export default {
     ...mapActions('channel', [
       'getChannels',
       'onReceiveWebsocketEvent',
+      'sendTextMessage',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
@@ -153,11 +154,13 @@ export default {
     // },
 
     sendMessage(message) {
-      this.sendMessageToWs(message);
-      if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
-        message.content.source = 'sender';
-        this.pushMessage(message.content);
-      }
+      console.log('------sending text message-------', message);
+      this.sendTextMessage(message);
+      // this.sendMessageToWs(message);
+      // if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
+      //   message.content.source = 'sender';
+      //   this.pushMessage(message.content);
+      // }
     },
 
     sendMediaMessage(message) {

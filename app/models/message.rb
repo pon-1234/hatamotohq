@@ -4,19 +4,19 @@
 #
 # Table name: messages
 #
-#  id               :bigint           not null, primary key
-#  from             :string(255)
-#  line_content     :json
-#  line_reply_token :string(255)
-#  line_timestamp   :string(255)
-#  sender_type      :string(255)
-#  text             :text(65535)
-#  type             :string(255)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  channel_id       :bigint
-#  line_message_id  :string(255)
-#  sender_id        :bigint
+#  id              :bigint           not null, primary key
+#  from            :string(255)
+#  line_content    :json
+#  reply_token     :string(255)
+#  sender_type     :string(255)
+#  text            :text(65535)
+#  timestamp       :string(255)
+#  type            :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  channel_id      :bigint
+#  line_message_id :string(255)
+#  sender_id       :bigint
 #
 # Indexes
 #
@@ -29,7 +29,6 @@
 #
 class Message < ApplicationRecord
   default_scope { order(created_at: :desc) }
-
   include MessageType
 
   enum from: { user: 'user', friend: 'friend', bot: 'bot', system: 'system' }, _prefix: true
@@ -40,6 +39,8 @@ class Message < ApplicationRecord
   validates :type, presence: true
   validates_presence_of :from
 
+  after_create :execute_after_create
+
   def push_event_data
     data = {
       id: id,
@@ -48,7 +49,7 @@ class Message < ApplicationRecord
       type: type_before_type_cast,
       created_at: created_at.to_i,
       line_content: line_content,
-      line_timestamp: line_timestamp
+      timestamp: timestamp
     }
     merge_sender_attributes(data)
   end
@@ -57,4 +58,30 @@ class Message < ApplicationRecord
     data[:sender] = sender.push_event_data if sender && sender.is_a?(LineFriend)
     data
   end
+
+
+
+  private
+    def execute_after_create
+      set_conversation_activity
+      dispatch_create_events
+      send_reply
+    end
+
+    def set_conversation_activity
+      channel.update_columns(last_activity_at: created_at)
+    end
+
+    def dispatch_create_events
+      # Broadcast message via websocket
+      ws_channel = "channel_user_#{channel.line_account.id}"
+      Ws::ChannelWs.new(ws_channel).send_message(self)
+    end
+
+    def send_reply
+      # Send reply message if sender is a friend
+      return unless from.eql?('friend')
+      # Enqueue auto response job
+      AutoResponseJob.perform_later(id) if type.eql?('text')
+    end
 end

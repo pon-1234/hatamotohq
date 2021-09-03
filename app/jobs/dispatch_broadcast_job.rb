@@ -180,7 +180,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'attr' => 'chat-reverse',
       #       'line_message_id' => $now,
       #       'line_content' => json_encode($lineContent),
-      #       'line_timestamp' => $now.'000',
+      #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),
       #       'slug' => $slug,
@@ -201,7 +201,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'attr' => 'chat-log',
       #       'line_message_id' => $now,
       #       'line_content' => json_encode($savedLog),
-      #       'line_timestamp' => $now.'000',
+      #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),
       #     ];

@@ -8,11 +8,21 @@ export default {
     });
   },
 
-  getListMessages: (query) => {
+  channelMessages: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,
       query: query,
       method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  sendTextMessage: (channelId, payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages`,
+      method: 'POST',
+      data: JSON.stringify(payload),
       dataType: 'json',
       contentType: 'application/json'
     });

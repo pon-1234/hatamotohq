@@ -34,7 +34,7 @@ export default {
     },
 
     getTimeMessage(value) {
-      return moment(parseInt(value.line_timestamp)).format('HH:mm');
+      return moment(parseInt(value.timestamp)).format('HH:mm');
     }
   }
 };

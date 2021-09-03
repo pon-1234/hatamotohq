@@ -70,6 +70,10 @@ class User < ApplicationRecord
     create_line_account
   end
 
+  def display_name
+    name
+  end
+
   private
     def generate_authentication_token
       loop do

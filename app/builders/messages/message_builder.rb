@@ -17,7 +17,9 @@ class Messages::MessageBuilder
 
   private
     def from
-      'friend'
+      return @body[:from] if @body[:from].present?
+      return 'friend' if @sender&.is_a?(LineFriend)
+      'bot'
     end
 
     def text
@@ -31,8 +33,8 @@ class Messages::MessageBuilder
         type: @body[:message][:type],
         line_message_id: @body[:message][:id],
         line_content: @body[:message],
-        line_timestamp: @body[:timestamp],
-        line_reply_token: @body[:replyToken],
+        timestamp: @body[:message][:timestamp],
+        reply_token: @body[:replyToken],
         text: text
       }
     end
