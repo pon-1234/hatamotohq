@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class User::MessagesController < User::ApplicationController
-  before_action :find_channel, only: [:create]
+  before_action :find_channel, only: [:index, :create]
 
   # GET /user/channels/:channel_id/messages
   def index
-    @messages = Message.all.page(params[:page])
+    @messages = @channel.messages.all.page(params[:page])
   end
 
   # POST /user/channels/:channel_id/messages

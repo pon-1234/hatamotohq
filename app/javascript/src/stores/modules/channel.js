@@ -52,8 +52,10 @@ export const mutations = {
     }
   },
 
-  RESET_MESSAGES(state, messages = []) {
-    state.messages = messages;
+  RESET_MESSAGES(state) {
+    state.messages = [];
+    state.totalPages = 0;
+    state.currentPage = 0;
   },
 
   SET_MESSAGES(state, messages) {
@@ -198,8 +200,8 @@ export const actions = {
     context.commit('UPDATE_CHANNELS', { status, channel });
   },
 
-  resetMessages(context, payload) {
-    context.commit('RESET_MESSAGES', payload);
+  resetMessages(context) {
+    context.commit('RESET_MESSAGES');
   },
 
   setUnreadChannelId(context, payload) {

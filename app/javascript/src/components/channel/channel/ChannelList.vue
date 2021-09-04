@@ -5,8 +5,8 @@
       <talk-channel-item
         v-for="(channel, index) in showChannels" :key="index"
         :data="channel"
-        :active="selected ? channel.id === selected.id : false"
-        @click.native="changeChanel(channel, index)"
+        :active="activeChannel && channel.id === activeChannel.id"
+        @click.native="switchChannel(channel, index)"
         />
     </div>
   </div>
@@ -17,18 +17,12 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      selected: null,
       showChannels: [],
       currentIndexChannel: 0,
       isLastChannel: false,
       hiddenChannels: [],
       PER_PAGE: 20
     };
-  },
-  created() {
-    if (this.activeChannel) {
-      this.selected = this.channels.firstWhere(item => item.id === this.activeChannel.id);
-    }
   },
 
   computed: {
@@ -45,10 +39,6 @@ export default {
   watch: {
     channels: {
       handler(val) {
-        if (this.activeChannel) {
-          this.selected = _.first(this.channels, item => item.id === this.activeChannel.id);
-        }
-
         this.currentIndexChannel = 0;
         const lengthShowChannel = val.length;
         this.isLastChannel = false;
@@ -61,12 +51,13 @@ export default {
 
   methods: {
     ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
-    async changeChanel(channel, index) {
-      const isCurrentChannel = this.selected ? (channel.id === this.selected.id) : false;
-      this.$emit('activeChannel', !isCurrentChannel);
+    async switchChannel(channel, index) {
+      const notChanged = this.activeChannel.id === channel.id;
+      this.$emit('switchChannel', !notChanged);
+      // Do nothing if channel is not changed
+      if (notChanged) return;
 
-      if (isCurrentChannel) return;
-      this.selected = channel;
+      // Activate new channel
       this.setActiveChannel(channel);
       this.resetMessages();
       const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
@@ -74,6 +65,7 @@ export default {
       await this.getMessages(this.messageParams);
     },
 
+    // TODO: refactor this dummy
     getChannelsFromCache(channels, perPage = 0) {
       if (perPage === 0) {
         perPage = this.PER_PAGE;

@@ -4,7 +4,7 @@
       <talk-menu-bar @input="showChannels"/>
       <div class="container">
         <div id="chatbox" class="chatbox active">
-          <channel-list @activeChannel="clickActiveChannel" :class="getLeftItem()" />
+          <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
           <chat-box @sendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
         </div>
       </div>
@@ -190,13 +190,13 @@ export default {
     //   });
     // },
 
-    autoActiveChannel() {
-      this.activeChannel();
-    },
+    // autoActiveChannel() {
+    //   this.activeChannel();
+    // },
 
-    clickActiveChannel(isRefresh) {
+    switchChannel(isRefresh) {
       this.isPc = !this.isPc;
-      if (isRefresh) { this.activeChannel(0); }
+      // if (isRefresh) { this.activeChannel(0); }
     },
 
     showChannels() {
