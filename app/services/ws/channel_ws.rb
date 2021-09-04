@@ -15,12 +15,7 @@ class Ws::ChannelWs
       {
         action: 'new_message',
         channel: message.channel.as_json(except: [:deleted_at]),
-        content: {
-          customer: { id: message.sender&.id },
-          from: message.from,
-          line_content: message.line_content,
-          timestamp: message.timestamp
-        }
+        content: message.push_event_data
       }
     end
 end

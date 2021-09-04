@@ -39,7 +39,7 @@ class Message < ApplicationRecord
   validates :type, presence: true
   validates_presence_of :from
 
-  after_create :execute_after_create
+  after_create_commit :execute_after_create_commit
 
   def push_event_data
     data = {
@@ -59,10 +59,8 @@ class Message < ApplicationRecord
     data
   end
 
-
-
   private
-    def execute_after_create
+    def execute_after_create_commit
       set_conversation_activity
       dispatch_create_events
       send_reply
@@ -82,6 +80,6 @@ class Message < ApplicationRecord
       # Send reply message if sender is a friend
       return unless from.eql?('friend')
       # Enqueue auto response job
-      AutoResponseJob.set(wait: 5.seconds).perform_later(id) if type.eql?('text')
+      AutoResponseJob.perform_later(id) if type.eql?('text')
     end
 end

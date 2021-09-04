@@ -49,7 +49,7 @@ export const getters = {
 export const actions = {
   setPreviewContent(context, broadcast) {
     context.commit('SET_BROADCAST', broadcast);
-    context.dispatch('preview/setMessages', broadcast.broadcasts, { root: true });
+    context.dispatch('preview/setMessages', broadcast.messages, { root: true });
   },
 
   async getBroadcast(context, id) {

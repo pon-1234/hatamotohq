@@ -44,7 +44,6 @@ export default {
   padding: 8px 12px;
   line-height: 1.25;
   text-align: center;
-  color: #495057;
   position: relative;
   word-break: break-word;
   word-wrap: break-word;

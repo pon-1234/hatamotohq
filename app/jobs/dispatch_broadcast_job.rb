@@ -71,8 +71,9 @@ class DispatchBroadcastJob < ApplicationJob
     def filter_friend_by_conditions(broadcast)
       conditions = broadcast.conditions
       add_friend_date_cond = conditions['add_friend_date']
+      friends = broadcast.line_account.line_friends
       if conditions['type']&.eql?('specific')
-        friends = broadcast.line_account.line_friends.created_at_gteq(add_friend_date_cond['start_date']).created_at_lteq(add_friend_date_cond['end_date'])
+        friends = friends.created_at_gteq(add_friend_date_cond['start_date']).created_at_lteq(add_friend_date_cond['end_date'])
       end
       # filter by tags
       unless broadcast.tags.empty?

@@ -11,14 +11,18 @@ class Messages::MessageBuilder
 
   def perform
     @message = @channel.messages.build(message_params)
+    @message.sender = @sender
     @message.save
     @message
+  rescue => e
+    p e.message
   end
 
   private
     def from
       return @body[:from] if @body[:from].present?
       return 'friend' if @sender&.is_a?(LineFriend)
+      return 'user' if @sender&.is_a?(User)
       'bot'
     end
 
@@ -33,7 +37,7 @@ class Messages::MessageBuilder
         type: @body[:message][:type],
         line_message_id: @body[:message][:id],
         line_content: @body[:message],
-        timestamp: @body[:message][:timestamp],
+        timestamp: @body[:timestamp],
         reply_token: @body[:replyToken],
         text: text
       }

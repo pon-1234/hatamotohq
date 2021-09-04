@@ -25,10 +25,10 @@ class User::MessagesController < User::ApplicationController
     def message_params
       params.permit(
         :channel_id,
+        :timestamp,
         message: [
           :type,
-          :text,
-          :timestamp
+          :text
         ]
       )
     end

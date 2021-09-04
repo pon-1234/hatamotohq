@@ -55,6 +55,14 @@ class User < ApplicationRecord
   # Scope
   enum status: { active: 'active', block: 'block' }, _prefix: true
 
+  def push_event_data
+    {
+      id: id,
+      name: name,
+      avatar_url: avatar_url
+    }
+  end
+
   def ensure_authentication_token
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token

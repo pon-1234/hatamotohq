@@ -1024,7 +1024,8 @@
   .chatbox
   > .container
   .messages
-  .chat.chat-reverse
+  .chat.bot
+  .chat.user
   .chat-content
   .chat-body
   .chat-main
@@ -1042,7 +1043,7 @@
   .chatbox
   > .container
   .messages
-  .chat.chat-reverse
+  .chat.bot
   .chat-content
   .chat-body
   .chat-sub {

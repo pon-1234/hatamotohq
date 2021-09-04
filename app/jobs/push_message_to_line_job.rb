@@ -63,11 +63,8 @@ class PushMessageToLineJob < ApplicationJob
       # Normalized message params
       message_params = {
         replyToken: @reply_token,
-        message: {
-          type: message_content[:type],
-          line_content: message_content,
-          timestamp: Time.now.to_i
-        }
+        message: message_content.with_indifferent_access,
+        timestamp: Time.now.to_i
       }
       mb = Messages::MessageBuilder.new(nil, @channel, message_params)
       message = mb.perform

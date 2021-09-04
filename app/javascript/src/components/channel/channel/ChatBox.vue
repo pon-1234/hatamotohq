@@ -1,6 +1,6 @@
 <template>
   <div  class="container" v-if="activeChannel">
-    <div class="nav-element">
+    <div class="nav-element" hidden>
       <!-- left -->
       <div class="left">
           <div class="avatar">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="messages">
-      <div class="content" style="padding: 10px 0;" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+      <div class="content direct-chat-messages" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
         <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadmoreMessage">
         <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
           <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <channel-message-view  :data="message" @unread="setUnreadMessage"/>
+          <channel-message-view  :message="message" @unread="setUnreadMessage"/>
         </div>
       </div>
       <div class="box-input" style="position: relative">
@@ -213,9 +213,9 @@ export default {
           channel_id: channel.id,
           message: {
             type: 'text',
-            text: this.textMessage,
-            timestamp: new Date().getTime()
-          }
+            text: this.textMessage
+          },
+          timestamp: new Date().getTime()
         };
 
         this.$emit('sendMessage', message);
