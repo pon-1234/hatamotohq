@@ -3,6 +3,9 @@
 class Messages::MessageBuilder
   attr_reader :message
 
+  # sender: LineFriend, User or nil means Bot
+  # channel: destination
+  # body: message body
   def initialize(sender, channel, body)
     @body = body
     @channel = channel
@@ -12,7 +15,7 @@ class Messages::MessageBuilder
   def perform
     @message = @channel.messages.build(message_params)
     @message.sender = @sender
-    @message.save
+    @message.save!
     @message
   rescue => e
     p e.message

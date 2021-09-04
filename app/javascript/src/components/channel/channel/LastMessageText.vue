@@ -1,17 +1,11 @@
 <template>
-  <span>{{ messageText }}</span>
+  <span>{{ message.text }}</span>
 </template>
 
 <script>
 export default {
   props: {
     message: Object
-  },
-  computed: {
-    messageText: function() {
-      const messageJson = JSON.parse(this.message);
-      return messageJson.text;
-    }
   }
 };
 </script>

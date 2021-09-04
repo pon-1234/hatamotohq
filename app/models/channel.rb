@@ -11,7 +11,7 @@
 #  is_mute          :boolean          default(FALSE)
 #  is_pair_chat     :boolean          default(TRUE)
 #  last_activity_at :datetime
-#  last_message     :text(65535)
+#  last_message     :json
 #  slug             :string(255)
 #  status           :string(255)      default(NULL)
 #  title            :string(255)

@@ -5,7 +5,7 @@ class User::MessagesController < User::ApplicationController
 
   # GET /user/channels/:channel_id/messages
   def index
-    @messages = @channel.messages.all.page(params[:page])
+    @messages = @channel.messages.includes([:sender]).page(params[:page])
   end
 
   # POST /user/channels/:channel_id/messages

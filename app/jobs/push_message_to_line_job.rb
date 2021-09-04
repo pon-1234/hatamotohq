@@ -66,8 +66,7 @@ class PushMessageToLineJob < ApplicationJob
         message: message_content.with_indifferent_access,
         timestamp: Time.now.to_i
       }
-      mb = Messages::MessageBuilder.new(nil, @channel, message_params)
-      message = mb.perform
+      Messages::MessageBuilder.new(nil, @channel, message_params).perform
     end
   end
 

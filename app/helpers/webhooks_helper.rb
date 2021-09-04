@@ -22,11 +22,6 @@ module WebhooksHelper
     def handle_follow(event, line_account)
       friend_id = event[:source][:userId]
       line_friend = add_friend(line_account, friend_id, event)
-      # Redis::publish('redis_lineFollow', json_encode([
-      #     'channel' => $channel,
-      #     'src' => $customer,
-      #     'dest' => $lineSetting->lineAccount
-      # ]));
       line_friend.present?
     end
 
@@ -43,11 +38,6 @@ module WebhooksHelper
       return false if channel.nil?
       channel.status = 'block'
       channel.save
-      # Redis::publish('redis_lineFollow', json_encode([
-      #     'channel' => $channel,
-      #     'src' => $customer,
-      #     'dest' => $lineSetting->lineAccount
-      # ]));
       true
     end
 

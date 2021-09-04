@@ -67,7 +67,7 @@ class Message < ApplicationRecord
     end
 
     def set_conversation_activity
-      channel.update_columns(last_activity_at: created_at)
+      channel.update_columns(last_activity_at: created_at, last_message: line_content)
     end
 
     def dispatch_create_events

@@ -36,7 +36,7 @@ class DispatchBroadcastJob < ApplicationJob
       return
     end
     nomalized_messages_data.each do |content|
-      insert_delivered_message(line_account, content)
+      insert_delivered_message(channels, content)
     end
   end
 
@@ -46,6 +46,7 @@ class DispatchBroadcastJob < ApplicationJob
     line_account = broadcast.line_account
 
     friends = filter_friend_by_conditions(broadcast)
+    channels = Channel.where(line_friend_id: friends.map(&:id))
     messages = broadcast.broadcast_messages
 
     nomalized_messages_data = []
@@ -54,6 +55,9 @@ class DispatchBroadcastJob < ApplicationJob
     end
     if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')
+    end
+    nomalized_messages_data.each do |content|
+      insert_delivered_message(channels, content)
     end
   end
 
@@ -77,7 +81,7 @@ class DispatchBroadcastJob < ApplicationJob
       end
       # filter by tags
       unless broadcast.tags.empty?
-        friends.where(tags: { id: broadcast.tag_ids })
+        friends = friends.joins(:tags).references(:tags).where(tags: { id: broadcast.tag_ids })
       end
       friends
     end
@@ -171,7 +175,14 @@ class DispatchBroadcastJob < ApplicationJob
       # }
     end
 
-    def insert_delivered_message(line_account, message_content)
+    def insert_delivered_message(channels, message_content)
+      message_params = {
+        message: message_content.with_indifferent_access,
+        timestamp: Time.now.to_i
+      }
+      channels.each do |channel|
+        Messages::MessageBuilder.new(nil, channel, message_params).perform
+      end
       # slug = content['type'] == 'text' ? content['text'] : nil
       # $savedData = [
       #       'line_account_id' => $lineAccount->id,
