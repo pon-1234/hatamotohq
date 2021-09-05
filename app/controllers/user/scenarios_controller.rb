@@ -22,7 +22,7 @@ class User::ScenariosController < User::ApplicationController
   # GET /user/scenarios/:id
   def show
     respond_to do |format|
-      format.json { render 'user/scenarios/show_success.json.jbuilder' }
+      format.json
     end
   end
 
@@ -47,7 +47,7 @@ class User::ScenariosController < User::ApplicationController
 
   # PATCH /user/scenarios/:id
   def update
-    if @scenario.update(scenario_params.except(:mode))
+    if @scenario.update(update_params)
       render 'user/scenarios/update_success.json.jbuilder'
     else
       render_bad_request_with_message(@scenario.first_error_message)
@@ -97,9 +97,13 @@ class User::ScenariosController < User::ApplicationController
         :mode,
         :type,
         :status,
-        tags: [],
+        tag_ids: [],
         after_action: {}
       )
+    end
+
+    def update_params
+      scenario_params.except(:mode)
     end
 
     def find_scenario

@@ -68,8 +68,8 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  async getScenario(_, query) {
-    return await ScenarioApi.getScenario(query);
+  async getScenario(_, id) {
+    return await ScenarioApi.get(id);
   },
   getTalks(_, query) {
     _.dispatch('system/setLoading', true, { root: true });

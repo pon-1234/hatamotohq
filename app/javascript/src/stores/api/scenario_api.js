@@ -35,9 +35,9 @@ export default {
       contentType: 'application/json'
     });
   },
-  getScenario: (query) => {
+  get: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/scenarios/' + query.id,
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
