@@ -10,7 +10,7 @@
       <span v-if="errors.first(name+'_scenario_id')" class="is-validate-label">ステップ配信は必須です</span>
     </div>
 
-    <modal-select-scenario-template @changeSelectedTemplate="changeSelectedTemplate" :id="name" type="normal"/>
+    <modal-select-scenario @changeSelectedTemplate="changeSelectedTemplate" :id="name" type="normal"/>
   </section>
 
 </template>

@@ -5,7 +5,7 @@ class User::ChannelsController < User::ApplicationController
     @channels = Channel.all.page(params[:page])
     respond_to do |format|
       format.html
-      format.json { render 'user/channels/index_success.json.jbuilder' }
+      format.json
     end
   end
 end

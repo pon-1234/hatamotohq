@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_04_155321) do
+ActiveRecord::Schema.define(version: 2021_09_05_152756) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -336,6 +336,22 @@ ActiveRecord::Schema.define(version: 2021_09_04_155321) do
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
   end
 
+  create_table 'scenario_events', id: false, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.bigint 'scenario_id'
+    t.bigint 'scenario_message_id'
+    t.bigint 'channel_id'
+    t.datetime 'schedule_at'
+    t.integer 'order'
+    t.string 'status'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['channel_id'], name: 'index_scenario_events_on_channel_id'
+    t.index ['line_account_id'], name: 'index_scenario_events_on_line_account_id'
+    t.index ['scenario_id'], name: 'index_scenario_events_on_scenario_id'
+    t.index ['scenario_message_id'], name: 'index_scenario_events_on_scenario_message_id'
+  end
+
   create_table 'scenario_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'scenario_id'
     t.string 'status', default: 'disable'
@@ -537,6 +553,10 @@ ActiveRecord::Schema.define(version: 2021_09_04_155321) do
   add_foreign_key 'messages', 'channels'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
+  add_foreign_key 'scenario_events', 'channels'
+  add_foreign_key 'scenario_events', 'line_accounts'
+  add_foreign_key 'scenario_events', 'scenario_messages'
+  add_foreign_key 'scenario_events', 'scenarios'
   add_foreign_key 'scenario_messages', 'scenarios'
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'

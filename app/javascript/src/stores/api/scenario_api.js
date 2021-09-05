@@ -1,7 +1,19 @@
 export default {
-  getList: (query = {}) => {
-    query._pid = btoa('/talks/scenarios');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  listManual: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/manual`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+  get: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
   },
   createScenario: (query) => {
     return window.$.ajax({
@@ -32,14 +44,6 @@ export default {
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/copy'),
       method: 'POST',
       data: JSON.stringify(query),
-      contentType: 'application/json'
-    });
-  },
-  get: (id) => {
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${id}`,
-      method: 'GET',
-      dataType: 'json',
       contentType: 'application/json'
     });
   },

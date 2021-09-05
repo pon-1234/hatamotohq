@@ -92,7 +92,7 @@
     </div>
     <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
     <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
-    <!-- <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/> -->
+    <modal-select-scenario @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >

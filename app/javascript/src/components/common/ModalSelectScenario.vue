@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   props: ['type', 'id'],
 
@@ -70,29 +72,12 @@ export default {
   },
 
   created() {
-    this.getScenarioTemps();
+    const response = this.getScenarios();
+    this.scenarioTemps = response;
   },
 
   methods: {
-    getScenarioTemps(page) {
-      const query = {
-        type: 'template'
-      };
-
-      if (this.type && this.type === 'normal') {
-        query.type = 'normal';
-        query.is_talk_page = true;
-      } else {
-        query.is_post_back = true;
-      }
-
-      this.$store
-        .dispatch('scenario/getList', query)
-        .done(res => {
-          this.scenarioTemps = res;
-        }).fail(e => {
-        });
-    },
+    ...mapActions('scenario', ['getScenarios']),
 
     changeSelectedFolderTemplate(index) {
       this.selectedTemplate = index;

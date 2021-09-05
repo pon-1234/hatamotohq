@@ -20,7 +20,6 @@ class User::BroadcastsController < User::ApplicationController
   # GET /user/broadcasts/:id
   def show
     @broadcast = Broadcast.find(params[:id])
-    render 'user/broadcasts/show_success.json.jbuilder'
   end
 
   # GET /user/broadcasts/new
@@ -38,7 +37,6 @@ class User::BroadcastsController < User::ApplicationController
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
-      render 'user/broadcasts/create_success.json.jbuilder'
     else
       render_bad_request_with_message(@broadcast.error.full_messages.first)
     end
@@ -56,7 +54,6 @@ class User::BroadcastsController < User::ApplicationController
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
-      render 'user/broadcasts/update_success.json.jbuilder'
     else
       render_bad_request_with_message(@broadcast.error.full_messages.first)
     end

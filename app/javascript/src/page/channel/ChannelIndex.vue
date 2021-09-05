@@ -15,7 +15,6 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex';
-// import { WebSocketClient } from '@/core/websocket';
 import consumer from '@channels/consumer';
 import * as ActionCable from '@rails/actioncable';
 ActionCable.logger.enabled = true;

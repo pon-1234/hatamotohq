@@ -8,23 +8,19 @@ class User::TagsController < User::ApplicationController
     @folders = Folder.accessible_by(current_ability).type_tag
     respond_to do |format|
       format.html
-      format.json { render 'user/tags/index.json.jbuilder' }
+      format.json
     end
   end
 
   def create
     @tag = Tag.new(tag_params)
-    if @tag.save
-      render 'user/tags/tag.json.jbuilder'
-    else
+    if !@tag.save
       render_bad_request
     end
   end
 
   def update
-    if @tag.update(params.permit(:name))
-      render 'user/tags/tag.json.jbuilder'
-    else
+    if !@tag.update(params.permit(:name))
       render_bad_request
     end
   end
@@ -38,7 +34,6 @@ class User::TagsController < User::ApplicationController
   # Get all friends by tag
   def friends
     @friends = @tag.friends
-    render 'user/tags/friends.json.jbuilder'
   end
 
   private

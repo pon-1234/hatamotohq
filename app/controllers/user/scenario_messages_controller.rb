@@ -18,9 +18,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   def create
     @message = ScenarioMessage.new(message_params)
     @message.scenario = @scenario
-    if @message.save
-      render 'user/scenario_messages/create_success.json.jbuilder'
-    else
+    if !@message.save
       render_bad_request_with_message(@message.first_error_message)
     end
   end

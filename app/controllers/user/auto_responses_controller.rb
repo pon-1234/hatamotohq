@@ -10,7 +10,7 @@ class User::AutoResponsesController < User::ApplicationController
     @folders = Folder.accessible_by(current_ability).includes([auto_responses: [:auto_response_keywords, :auto_response_messages]]).type_auto_response
     respond_to do |format|
       format.html
-      format.json { render 'user/auto_responses/index_success.json.jbuilder' }
+      format.json
     end
   end
 
@@ -59,7 +59,7 @@ class User::AutoResponsesController < User::ApplicationController
   # GET /user/auto_responses/:id
   def show
     respond_to do |format|
-      format.json { render 'user/auto_responses/show_success.json.jbuilder' }
+      format.json
     end
   end
 
