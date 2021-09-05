@@ -18,6 +18,8 @@ class Messages::MessageBuilder
     @message.save!
     @message
   rescue => e
+    byebug
+    p '---------------'
     p e.message
   end
 

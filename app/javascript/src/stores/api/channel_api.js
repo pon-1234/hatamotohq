@@ -18,7 +18,7 @@ export default {
     });
   },
 
-  sendTextMessage: (channelId, payload) => {
+  create: (channelId, payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages`,
       method: 'POST',

@@ -108,8 +108,6 @@ export const mutations = {
 
       if (status === 'new_message') {
         // move channel to top
-        console.log('-----channels-----', state.channels);
-        console.log('-----new channel-----', channel);
         state.channels.splice(index, 1);
         state.channels.unshift(channel);
       } else if (status === 'read_message' || status === 'line_follow') {
@@ -187,8 +185,8 @@ export const actions = {
   },
 
   // Send a text message to the active channel
-  async sendTextMessage(context, payload) {
-    const response = await ChannelAPI.sendTextMessage(context.state.activeChannel.id, payload);
+  async sendMessage(context, payload) {
+    const response = await ChannelAPI.create(context.state.activeChannel.id, payload);
     return response;
   },
 

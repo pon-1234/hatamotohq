@@ -1,5 +1,5 @@
 <template>
-  <a v-if="animation" href="#" class="sticker-item animation" data-dismiss="modal">
+  <span v-if="animation" class="sticker-item animation" data-dismiss="modal">
     <img
       :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker_animation.png'"
       class="sticker-animation position-absolute"
@@ -9,24 +9,24 @@
       v-if="animation"
       :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker.png'"
       class="sticker-static"
-      @click="selectSicker"
+      @click="onSelectSticker"
       style
     />
-  </a>
-  <a v-else href="#" class="sticker-item" data-dismiss="modal">
+  </span>
+  <span v-else class="sticker-item" data-dismiss="modal">
     <img
       :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker.png'"
       class="sticker-static"
-      @click="selectSicker"
+      @click="onSelectSticker"
       style
     />
-  </a>
+  </span>
 </template>
 <script>
 export default {
   props: ['sticker', 'animation'],
   methods: {
-    selectSicker() {
+    onSelectSticker() {
       this.$emit('input', this.sticker);
     }
   }

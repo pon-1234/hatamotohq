@@ -28,7 +28,10 @@ class User::MessagesController < User::ApplicationController
         :timestamp,
         message: [
           :type,
-          :text
+          :text,
+          :packageId,
+          :stickerId,
+          :stickerResourceType
         ]
       )
     end

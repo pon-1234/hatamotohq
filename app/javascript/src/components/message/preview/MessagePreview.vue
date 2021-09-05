@@ -15,7 +15,7 @@
         style="width: 370px; height: 50vh; max-height: none;"
       >
         <div class="bg-info" style="padding: 20px 0px 20px 20px; min-height: 50vh;">
-          <message-content />
+          <message-content-preview></message-content-preview>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <div  class="container" v-if="activeChannel">
+  <div class="container" v-if="activeChannel">
     <div class="nav-element" hidden>
       <!-- left -->
       <div class="left">
@@ -30,11 +30,11 @@
               </div>
             </div>
           </div>
-          <channel-message-view  :message="message" @unread="setUnreadMessage"/>
+          <chat-item  :message="message" @unread="setUnreadMessage"></chat-item>
         </div>
       </div>
       <div class="box-input" style="position: relative">
-        <div  class="emoji" v-if="isOpenStickers">
+        <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
             <select-package-sticker @input="changePackageId" />
           </div>
@@ -44,7 +44,7 @@
               v-bind:sticker="sticker"
               v-bind:animation="animation"
               :key="index"
-              @input="selectSticker"
+              @input="onSendStickerMessage"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       textMessage: '',
-      isOpenStickers: false,
+      openedStickerPane: false,
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
@@ -190,46 +190,24 @@ export default {
     async loadMoreMessages() {
       const messageDisplay = this.$refs.messageDisplay;
       if (messageDisplay.scrollTop < 10 && !this.isLoadmoreMessage) {
+        const lastElement = messageDisplay.firstElementChild.id;
         const page = this.messageParams.page + 1;
         this.currentScrollTop = messageDisplay.scrollHeight;
         if (page > this.totalPages) return;
         this.setMessageParams({ page: page });
         await this.getMessages(this.messageParams);
         this.$nextTick(() => {
-          messageDisplay.scrollTop = this.currentScrollTop;
+          document.getElementById(lastElement).scrollIntoView();
         });
       }
     },
 
-    sendTextMessage() {
-      if (this.textMessage.trim()) {
-        // eslint-disable-next-line no-undef
-        const channel = _.cloneDeep(this.activeChannel);
-        channel.last_message = this.textMessage;
-        channel.last_timetamp = new Date().getTime();
-
-        this.setActiveChannel(channel);
-        const message = {
-          channel_id: channel.id,
-          message: {
-            type: 'text',
-            text: this.textMessage
-          },
-          timestamp: new Date().getTime()
-        };
-
-        this.$emit('sendMessage', message);
-      }
-
-      this.textMessage = '';
-    },
-
     openSticker() {
-      this.isOpenStickers = !this.isOpenStickers;
+      this.openedStickerPane = !this.openedStickerPane;
       this.getStickers({ packageId: null });
     },
     clickMessagesContent() {
-      this.isOpenStickers = false;
+      this.openedStickerPane = false;
       this.getStickers({ packageId: null });
     },
 
@@ -238,29 +216,40 @@ export default {
       this.getStickers({ packageId: option.packageId });
     },
 
-    selectSticker(sticker) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_message = 'スタンプメッセージ';
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-      const message = {
-        channel: channel,
-        content: {
-          key: new Date().getTime(),
-          is_bot_sender: 0,
-          attr: 'chat-reverse',
-          line_content: {
-            type: 'sticker',
-            packageId: sticker.package_id,
-            stickerId: sticker.line_emoji_id,
-            stickerResourceType: 'STATIC'
+    // Send a text message from input
+    sendTextMessage() {
+      if (this.textMessage.trim()) {
+        const message = {
+          channel_id: this.activeChannel.id,
+          message: {
+            type: 'text',
+            text: this.textMessage
           },
           timestamp: new Date().getTime()
-        }
+        };
+
+        this.$emit('onSendMessage', message);
+      }
+
+      this.textMessage = '';
+    },
+    // Send a sticker message
+    onSendStickerMessage(sticker) {
+      // close stickers pane
+      this.openedStickerPane = false;
+
+      const message = {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'sticker',
+          packageId: sticker.package_id,
+          stickerId: sticker.line_emoji_id,
+          stickerResourceType: 'STATIC'
+        },
+        timestamp: new Date().getTime()
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     onDropMessage(event) {
@@ -342,7 +331,7 @@ export default {
         };
       }
       if (message) {
-        this.$emit('sendMessage', message);
+        this.$emit('onSendMessage', message);
         this.sendMedia({ key: message.content.key, file: file, channelId: channel.id });
       }
     },
@@ -466,7 +455,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectScenarioTemplate(template) {
@@ -480,7 +469,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectFlexMessageTemplate(template) {
@@ -500,7 +489,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     }
   }
 };
