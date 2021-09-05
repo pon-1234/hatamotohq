@@ -40,7 +40,7 @@
                   <% end %>
                   <td><%= message.name %></td>
                   <td><message-type-label :data="<%= message.content.to_json %>"/></td>
-                  <td><message-content-view :data="<%= message.content.to_json %>"></message-content-view></td>
+                  <td><message-content :data="<%= message.content.to_json %>"></message-content></td>
                   <td>
                     <div class="btn btn-warning btn-xs">編集</div>
                     <%= link_to '削除', delete_confirm_user_scenario_message_path(scenario_id: @scenario.id, id: message), remote: true, class: "btn btn-danger btn-xs" %>

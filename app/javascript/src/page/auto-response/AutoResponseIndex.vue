@@ -40,7 +40,7 @@
                     </td>
                     <td>
                       <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
-                        <message-content-view :data="item.content" ></message-content-view>
+                        <message-content :data="item.content" ></message-content>
                       </div>
                     </td>
                     <td>
@@ -92,7 +92,7 @@
               <dt>内容</dt>
               <dd>
                 <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
-                  <message-content-view :data="item.content" ></message-content-view>
+                  <message-content :data="item.content" ></message-content>
                 </div>
               </dd>
             </dl>

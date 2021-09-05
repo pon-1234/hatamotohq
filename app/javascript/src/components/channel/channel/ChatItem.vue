@@ -6,8 +6,8 @@
       </div>
       <div class="d-flex">
         <img class="direct-chat-img" alt="friend avatar" :src="message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'">
-        <div class="direct-chat-text ml-2">
-          <message-content-view :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content-view>
+        <div class="ml-2">
+          <message-content :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
         </div>
         <span class="direct-chat-timestamp float-right mt-auto ml-2">{{getTimeMessage(message)}}</span>
       </div>
@@ -21,8 +21,8 @@
           </div>
           <div class="d-flex float-right">
             <span class="direct-chat-timestamp float-left mt-auto mr-2">{{getTimeMessage(message)}}</span>
-            <div class="direct-chat-text mr-0">
-              <message-content-view :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content-view>
+            <div class="chat-item mr-0">
+              <message-content :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
       <div class="chat-content">
         <div class="chat-body">
           <div class="chat-main" :class="message.from === 'bot' ? ' is_bot' : ''">
-            <message-content-view :data="message.line_content" :time="getTimeMessage(data)" :source="message.source || 'sended'"></message-content-view>
+            <message-content :data="message.line_content" :time="getTimeMessage(data)" :source="message.source || 'sended'"></message-content>
           </div>
         </div>
       </div>
@@ -101,11 +101,21 @@ export default {
     }
   }
 
+  .direct-chat-text {
+    border-radius: 10px;
+  }
+
   .user {
     .right .direct-chat-text {
-      background-color: #88d69a;
-      border: 1px solid #88d69a !important;
+      background-color: #b8ebb8;
+      border: 1px solid #b8ebb8 !important;
       color: #000 !important;
+      left: auto;
+      right: 0;
+      border-left-color: #b8ebb8 !important;
+      border-right: 0;
+      border-top: 0;
+      margin-right: -0.375rem;
     }
     .right .direct-chat-text::after, .right .direct-chat-text::before {
       border-left-color: #88d69a !important;

@@ -1,5 +1,5 @@
 <template>
-  <div  class="container" v-if="activeChannel">
+  <div class="container" v-if="activeChannel">
     <div class="nav-element" hidden>
       <!-- left -->
       <div class="left">
@@ -30,7 +30,7 @@
               </div>
             </div>
           </div>
-          <channel-message-view  :message="message" @unread="setUnreadMessage"/>
+          <chat-item  :message="message" @unread="setUnreadMessage"></chat-item>
         </div>
       </div>
       <div class="box-input" style="position: relative">
@@ -44,7 +44,7 @@
               v-bind:sticker="sticker"
               v-bind:animation="animation"
               :key="index"
-              @input="selectSticker"
+              @input="sendStickerMessage"
             />
           </div>
         </div>
@@ -201,29 +201,6 @@ export default {
       }
     },
 
-    sendTextMessage() {
-      if (this.textMessage.trim()) {
-        // eslint-disable-next-line no-undef
-        const channel = _.cloneDeep(this.activeChannel);
-        channel.last_message = this.textMessage;
-        channel.last_timetamp = new Date().getTime();
-
-        this.setActiveChannel(channel);
-        const message = {
-          channel_id: channel.id,
-          message: {
-            type: 'text',
-            text: this.textMessage
-          },
-          timestamp: new Date().getTime()
-        };
-
-        this.$emit('sendMessage', message);
-      }
-
-      this.textMessage = '';
-    },
-
     openSticker() {
       this.isOpenStickers = !this.isOpenStickers;
       this.getStickers({ packageId: null });
@@ -238,26 +215,34 @@ export default {
       this.getStickers({ packageId: option.packageId });
     },
 
-    selectSticker(sticker) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_message = 'スタンプメッセージ';
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-      const message = {
-        channel: channel,
-        content: {
-          key: new Date().getTime(),
-          is_bot_sender: 0,
-          attr: 'chat-reverse',
-          line_content: {
-            type: 'sticker',
-            packageId: sticker.package_id,
-            stickerId: sticker.line_emoji_id,
-            stickerResourceType: 'STATIC'
+    // Send a text message from input
+    sendTextMessage() {
+      if (this.textMessage.trim()) {
+        const message = {
+          channel_id: this.activeChannel.id,
+          message: {
+            type: 'text',
+            text: this.textMessage
           },
           timestamp: new Date().getTime()
-        }
+        };
+
+        this.$emit('sendMessage', message);
+      }
+
+      this.textMessage = '';
+    },
+    // Send a sticker message
+    sendStickerMessage(sticker) {
+      const message = {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'sticker',
+          packageId: sticker.package_id,
+          stickerId: sticker.line_emoji_id,
+          stickerResourceType: 'STATIC'
+        },
+        timestamp: new Date().getTime()
       };
 
       this.$emit('sendMessage', message);

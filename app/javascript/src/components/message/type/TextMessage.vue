@@ -1,11 +1,11 @@
 <script>
 export default {
-  props: ['data', 'className'],
+  props: ['data'],
   render: function(h) {
     return h(
       'div',
       {
-        class: this.className ? this.className + ' chat-item' : 'chat-item'
+        class: 'balloon'
       },
       [
         h(
@@ -47,5 +47,29 @@ export default {
   position: relative;
   word-break: break-word;
   word-wrap: break-word;
+}
+
+.balloon:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-right-color: #edeff0;
+  border-left: 0;
+  border-top: 0;
+  margin-left: -7px;
+}
+
+.chat-body .chat-main .chat-item.balloon {
+  margin-right: 1.25rem;
+}
+
+.chat-item.balloon {
+  border-radius: 1rem;
+  display: inline-block;
+  background: white;
 }
 </style>
