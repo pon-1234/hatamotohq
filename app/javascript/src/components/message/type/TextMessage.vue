@@ -28,48 +28,88 @@ export default {
   }
 };
 </script>
-
-<style lang='scss' >
-.preview-text-content {
-  white-space: pre-wrap;
-  display: inline-block;
-  text-align: left;
-  .emojione {
-    min-width: 20px;
-    min-height: 20px;
+<style lang="scss" scoped>
+  .preview-text-content {
+    white-space: pre-wrap;
+    display: inline-block;
+    text-align: left;
+    .emojione {
+      min-width: 20px;
+      min-height: 20px;
+    }
   }
-}
 
-.chat-item-text {
-  padding: 8px 12px;
-  line-height: 1.25;
-  text-align: center;
-  position: relative;
-  word-break: break-word;
-  word-wrap: break-word;
-}
+  .chat-item-text {
+    padding: 8px 12px;
+    line-height: 1.25;
+    text-align: center;
+    position: relative;
+    word-break: break-word;
+    word-wrap: break-word;
+  }
 
-.balloon:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.75rem;
-  width: 0;
-  height: 0;
-  border: 8px solid transparent;
-  border-right-color: #edeff0;
-  border-left: 0;
-  border-top: 0;
-  margin-left: -7px;
-}
+  .balloon {
+    position: relative;
+  }
 
-.chat-body .chat-main .chat-item.balloon {
-  margin-right: 1.25rem;
-}
+  .user, .bot, .friend {
+    .balloon {
+      border-radius: 1rem;
+      display: inline-block;
+      background: #edeff0;
+    }
+    .balloon::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      top: 0.75rem;
+      border: 1rem solid transparent;
+      margin-left: -0.375rem;
+      margin-right: -0.375rem;
+    }
+  }
 
-.chat-item.balloon {
-  border-radius: 1rem;
-  display: inline-block;
-  background: white;
-}
+  .user {
+    .balloon {
+      background: #b8ebb8;
+    }
+    .balloon::after {
+      left: auto;
+      right: 0;
+      border-right: 0;
+      border-top: 0;
+      border-left-color: #b8ebb8;
+      margin-right: -0.375rem;
+    }
+  }
+
+  .bot {
+    .balloon {
+      background: #edeff0;
+
+    }
+    .balloon::after {
+      left: auto;
+      right: 0;
+      border-right: 0;
+      border-top: 0;
+      border-left-color: #edeff0;
+      margin-right: -0.375rem;
+    }
+  }
+
+  .friend {
+    .balloon {
+      background: #d1dcf5;
+    }
+    .balloon::after {
+      border-left-color: #d1dcf5;
+      left: 0;
+      right: auto;
+      border-right-color: #d1dcf5;
+      border-left: 0;
+      border-top: 0;
+    }
+  }
 </style>

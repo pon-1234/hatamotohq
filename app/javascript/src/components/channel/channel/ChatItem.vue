@@ -1,5 +1,5 @@
 <template>
-  <div class="direct-chat-msg">
+  <div :class="'direct-chat-msg ' + message.from">
     <template v-if="message.from === 'friend'">
       <div class="direct-chat-infos clearfix">
         <span class="direct-chat-name float-left">{{ message.sender.name }}</span>
@@ -14,7 +14,7 @@
     </template>
 
     <template v-if="['bot', 'user'].includes(message.from)">
-      <div :class="message.from">
+      <div>
         <div class="direct-chat-msg right">
           <div class="direct-chat-infos clearfix" v-if="message.sender">
             <span class="direct-chat-name float-right">{{ message.sender.name }}</span>

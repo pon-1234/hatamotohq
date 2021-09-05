@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="box-input" style="position: relative">
-        <div  class="emoji" v-if="isOpenStickers">
+        <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
             <select-package-sticker @input="changePackageId" />
           </div>
@@ -44,7 +44,7 @@
               v-bind:sticker="sticker"
               v-bind:animation="animation"
               :key="index"
-              @input="sendStickerMessage"
+              @input="onSendStickerMessage"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       textMessage: '',
-      isOpenStickers: false,
+      openedStickerPane: false,
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
@@ -190,23 +190,24 @@ export default {
     async loadMoreMessages() {
       const messageDisplay = this.$refs.messageDisplay;
       if (messageDisplay.scrollTop < 10 && !this.isLoadmoreMessage) {
+        const lastElement = messageDisplay.firstElementChild.id;
         const page = this.messageParams.page + 1;
         this.currentScrollTop = messageDisplay.scrollHeight;
         if (page > this.totalPages) return;
         this.setMessageParams({ page: page });
         await this.getMessages(this.messageParams);
         this.$nextTick(() => {
-          messageDisplay.scrollTop = this.currentScrollTop;
+          document.getElementById(lastElement).scrollIntoView();
         });
       }
     },
 
     openSticker() {
-      this.isOpenStickers = !this.isOpenStickers;
+      this.openedStickerPane = !this.openedStickerPane;
       this.getStickers({ packageId: null });
     },
     clickMessagesContent() {
-      this.isOpenStickers = false;
+      this.openedStickerPane = false;
       this.getStickers({ packageId: null });
     },
 
@@ -227,13 +228,16 @@ export default {
           timestamp: new Date().getTime()
         };
 
-        this.$emit('sendMessage', message);
+        this.$emit('onSendMessage', message);
       }
 
       this.textMessage = '';
     },
     // Send a sticker message
-    sendStickerMessage(sticker) {
+    onSendStickerMessage(sticker) {
+      // close stickers pane
+      this.openedStickerPane = false;
+
       const message = {
         channel_id: this.activeChannel.id,
         message: {
@@ -245,7 +249,7 @@ export default {
         timestamp: new Date().getTime()
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     onDropMessage(event) {
@@ -327,7 +331,7 @@ export default {
         };
       }
       if (message) {
-        this.$emit('sendMessage', message);
+        this.$emit('onSendMessage', message);
         this.sendMedia({ key: message.content.key, file: file, channelId: channel.id });
       }
     },
@@ -451,7 +455,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectScenarioTemplate(template) {
@@ -465,7 +469,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectFlexMessageTemplate(template) {
@@ -485,7 +489,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     }
   }
 };

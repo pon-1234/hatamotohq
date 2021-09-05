@@ -5,7 +5,7 @@
       <div class="container">
         <div id="chatbox" class="chatbox active">
           <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
-          <chat-box @sendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
+          <chat-box @onSendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@ export default {
     activeChannel: Number
   },
   async beforeMount() {
-    this.connectWS();
+    this.connectToWebsocket();
     await this.getChannels();
     await this.getTags();
     this.activateFirstChannel();
@@ -83,7 +83,7 @@ export default {
     ...mapActions('channel', [
       'getChannels',
       'onReceiveWebsocketEvent',
-      'sendTextMessage',
+      'sendMessage',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
@@ -96,19 +96,15 @@ export default {
       'getTags'
     ]),
 
-    connectWS() {
+    connectToWebsocket() {
       const _this = this;
-      consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
-        received(data) {
-          _this.onReceiveWebsocketEvent(data);
-        },
-        appendNewMessage(data) {
-          // if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
-          //   this.autoActiveChannel();
-          // }
-          // this.$store.dispatch('global/getBadge');
+      consumer.subscriptions.create(
+        { channel: 'ConversationChannel' },
+        {
+          received(data) {
+            _this.onReceiveWebsocketEvent(data);
+          }
         }
-      }
       );
     },
 
@@ -153,9 +149,8 @@ export default {
     // };
     // },
 
-    sendMessage(message) {
-      console.log('------sending text message-------', message);
-      this.sendTextMessage(message);
+    onSendMessage(message) {
+      // this.sendMessage(message);
       // this.sendMessageToWs(message);
       // if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
       //   message.content.source = 'sender';
@@ -165,18 +160,6 @@ export default {
 
     sendMediaMessage(message) {
       this.pushMessage(message.content);
-      this.sendMessageToWs(message);
-    },
-
-    sendMessageToWs(message) {
-      this.updateChannels({ status: 'add_message', channel: message.channel });
-      console.log('sendMessage', message);
-      if (this.ws) {
-        this.ws.send(JSON.stringify({
-          action: 'message_send',
-          payload: message
-        }));
-      }
     },
 
     // activeChannel(e) {
