@@ -1,56 +1,36 @@
 <template>
-  <div class="modal fade modal-template modal-common01" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal fade" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
-        <div class="modal-body overflow-hidden">
+        <div class="modal-header">
+          <h4 class="modal-title">シナリオ配信を選択してください。</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">×</span>
           </button>
-          <label class="mb15">ステップ配信を選択してください。</label>
-          <div class=" template-list-content" v-if="scenarioTemps && scenarioTemps.length">
-            <folder-left
-              type="template_scenario"
-              :isPerview="true"
-              :data="scenarioTemps"
-              :isPc="isPc"
-              :selectedFolder="selectedTemplate"
-              @changeSelectedFolder="changeSelectedFolderTemplate"
-              />
-            <div :class="getClassRightTag()">
-              <!--<table class="table table-tags-header">-->
-                <!--<thead>-->
-                  <!--<tr>-->
-                    <!--<th class="w5"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                    <!--<th v-if="scenarioTemps[selectedTemplate]">{{scenarioTemps[selectedTemplate].name}}</th>-->
-                  <!--</tr>-->
-                <!--</thead>-->
-              <!--</table>-->
-
-              <div class="x-tag-header">
-                <div class="x-btn-back">
-                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                <div class="x-title"
-                     v-if="scenarioTemps[selectedTemplate]">{{scenarioTemps[selectedTemplate].name}}
-                </div>
-              </div>
-              <div class="list-content">
-                <div class="list-scroll message-template-list" v-if="scenarioTemps && scenarioTemps[this.selectedTemplate]">
-                  <div v-if="scenarioTemps[this.selectedTemplate].scenarios && scenarioTemps[this.selectedTemplate].scenarios.length">
-                    <div v-for="(item, index) in scenarioTemps[this.selectedTemplate].scenarios"
-                      :key="index"
-                      class="folder-item"
-                      data-dismiss="modal"
-                      @click="changeSelectedTemplate(item)">
-                      <span class="tag-label">{{item.title}}</span>
-                    </div>
-                  </div>
-                  <div v-else class="text-center mt40">
-                  データーがありません
-                </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        </div>
+        <div class="modal-body text-sm">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>配信方式</th>
+                <th>シナリオ名</th>
+                <th>メッセージ数</th>
+                <th>選択</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(scenario, index) in scenarios" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ scenario.mode === 'date' ? '時刻' : '経過時間' }}</td>
+                <td>{{ scenario.title }}</td>
+                <td>{{ scenario.scenario_messages_count || 0 }}</td>
+                <td>
+                  <div class="btn btn-primary btn-sm" @click="selectScenario(scenario)">選択</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -65,40 +45,19 @@ export default {
 
   data() {
     return {
-      scenarioTemps: [],
-      selectedTemplate: 0,
+      scenarios: [],
       isPc: true
     };
   },
 
-  created() {
-    const response = this.getScenarios();
-    this.scenarioTemps = response;
+  async beforeMount() {
+    const response = await this.getScenarios();
+    this.scenarios = response;
   },
 
   methods: {
     ...mapActions('scenario', ['getScenarios']),
-
-    changeSelectedFolderTemplate(index) {
-      this.selectedTemplate = index;
-      this.isPc = true;
-    },
-
-    backToFolder() {
-      this.isPc = false;
-    },
-
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
-
-    changeSelectedTemplate(scenario) {
+    selectScenario(scenario) {
       this.$emit('changeSelectedTemplate', scenario);
     }
   }
