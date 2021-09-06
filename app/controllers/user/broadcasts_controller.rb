@@ -36,7 +36,7 @@ class User::BroadcastsController < User::ApplicationController
     @broadcast = build_broadcast(broadcast_params)
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
-      DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
+      DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.draft?
     else
       render_bad_request_with_message(@broadcast.error.full_messages.first)
     end
@@ -53,7 +53,7 @@ class User::BroadcastsController < User::ApplicationController
     @broadcast = update_broadcast(@broadcast, broadcast_params)
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
-      DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.status_draft?
+      DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.draft?
     else
       render_bad_request_with_message(@broadcast.error.full_messages.first)
     end

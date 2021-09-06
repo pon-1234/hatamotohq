@@ -62,7 +62,7 @@
                     <i class="fas fa-plus"></i>
                   </template>
                 <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
-                <b-dropdown-item data-toggle="modal" data-target="#modal-scenario-template">ステップ配信</b-dropdown-item>
+                <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">ステップ配信</b-dropdown-item>
                 <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item>
               </b-dropdown>
             </li>
@@ -92,7 +92,7 @@
     </div>
     <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
     <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
-    <modal-select-scenario @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/>
+    <modal-select-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"/>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
@@ -458,18 +458,13 @@ export default {
       this.$emit('onSendMessage', message);
     },
 
-    selectScenarioTemplate(template) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      const message = {
-        channel: channel,
-        content: {
-          type: 'scenario',
-          scenario_id: template.id
-        }
+    onSelectScenario(scenario) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        scenario_id: scenario.id
       };
 
-      this.$emit('onSendMessage', message);
+      this.$emit('onSendScenario', payload);
     },
 
     selectFlexMessageTemplate(template) {

@@ -26,7 +26,7 @@
                 <td>{{ scenario.title }}</td>
                 <td>{{ scenario.scenario_messages_count || 0 }}</td>
                 <td>
-                  <div class="btn btn-primary btn-sm" @click="selectScenario(scenario)">選択</div>
+                  <div role="button" class="btn btn-primary btn-sm" @click="selectScenario(scenario)" data-dismiss="modal">選択</div>
                 </td>
               </tr>
             </tbody>
@@ -58,7 +58,7 @@ export default {
   methods: {
     ...mapActions('scenario', ['getScenarios']),
     selectScenario(scenario) {
-      this.$emit('changeSelectedTemplate', scenario);
+      this.$emit('onSelectScenario', scenario);
     }
   }
 };

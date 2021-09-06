@@ -10,7 +10,7 @@
       <span v-if="errors.first(name+'_scenario_id')" class="is-validate-label">ステップ配信は必須です</span>
     </div>
 
-    <modal-select-scenario @changeSelectedTemplate="changeSelectedTemplate" :id="name" type="normal"/>
+    <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"/>
   </section>
 
 </template>
@@ -73,7 +73,7 @@ export default {
   },
 
   methods: {
-    changeSelectedTemplate(scenario) {
+    onSelectScenario(scenario) {
       this.currentTemplate = { scenario_id: scenario.id, ...scenario };
       this.$emit('input', {
         title: scenario.title,

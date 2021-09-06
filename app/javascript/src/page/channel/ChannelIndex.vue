@@ -5,7 +5,7 @@
       <div class="container">
         <div id="chatbox" class="chatbox active">
           <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
-          <chat-box @onSendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
+          <chat-box @onSendMessage="sendMessage" @onSendScenario="sendScenario" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
         </div>
       </div>
     </div>
@@ -83,6 +83,7 @@ export default {
       'getChannels',
       'onReceiveWebsocketEvent',
       'sendMessage',
+      'sendScenario',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
@@ -113,68 +114,9 @@ export default {
       await this.getMessages(this.messageParams);
     },
 
-    async fetchItem(query = {}) {
-      // await this.getChannels(query);
-      // if (this.alias) {
-      //   this.isShowTalkChannel = true;
-      //   this.isPc = false;
-      //   const channel = this.channels.find(item => item.alias === this.alias);
-      //   this.setActiveChannel(channel);
-      //   this.resetMessages();
-      //   const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
-
-      //   await this.setMessageParams({ channelId: channel.id, unread: totalUnreadMessage });
-      //   await this.getMessages(this.messageParams);
-      // }
-    },
-
-    // getChannels() {
-    // this.ws = new WebSocketClient();
-    // this.ws.open();
-    // this.ws.onopen = () => {
-    //   if (this.activeChannel) {
-    // this.autoActiveChannel();
-    // this.$store.dispatch('global/getBadge');
-    //   }
-    // };
-    // this.ws.onmessage = (message) => {
-    //   const mess = JSON.parse(message);
-    //   console.log('onmessage', mess);
-    //   this.onReceiveWebsocketEvent(mess);
-    //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
-    //     this.autoActiveChannel();
-    //   }
-    //   this.$store.dispatch('global/getBadge');
-    // };
-    // },
-
-    onSendMessage(message) {
-      // this.sendMessage(message);
-      // this.sendMessageToWs(message);
-      // if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
-      //   message.content.source = 'sender';
-      //   this.pushMessage(message.content);
-      // }
-    },
-
     sendMediaMessage(message) {
       this.pushMessage(message.content);
     },
-
-    // activeChannel(e) {
-    //   console.log(e, 'activeChannel');
-    //   this.$nextTick(() => {
-    //     this.setUnreadChannelId(null);
-    //     this.ws.send(JSON.stringify({
-    //       action: 'message_read',
-    //       payload: this.activeChannel
-    //     }));
-    //   });
-    // },
-
-    // autoActiveChannel() {
-    //   this.activeChannel();
-    // },
 
     switchChannel(isRefresh) {
       this.isPc = !this.isPc;

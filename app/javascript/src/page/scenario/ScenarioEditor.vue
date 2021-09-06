@@ -35,7 +35,7 @@
                 <label class="mb10">配信</label>
                 <div class="flex start ai_center">
                   <div class="toggle-switch btn-scenario01">
-                    <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enable" false-value="disable" ref="status">
+                    <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enabled" false-value="disabled" ref="status">
                     <label for="scenario-onoff" class="toggle-label">
                       <span></span>
                     </label>
@@ -131,7 +131,7 @@ export default {
         title: '',
         description: '',
         tags: null,
-        status: 'disable',
+        status: 'disabled',
         mode: 'date', // or 'elapsed_time'
         type: 'manual', // or 'auto'
         after_action: this.ActionMessage.default
@@ -174,11 +174,7 @@ export default {
 
     async saveScenario(status) {
       if (status !== 'draft') {
-        if (this.$refs.status.checked) {
-          this.scenarioData.status = 'enable';
-        } else {
-          this.scenarioData.status = 'disable';
-        }
+        this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
           $('input, textarea').each(

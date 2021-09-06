@@ -186,7 +186,12 @@ export const actions = {
 
   // Send a text message to the active channel
   async sendMessage(context, payload) {
-    const response = await ChannelAPI.create(context.state.activeChannel.id, payload);
+    const response = await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
+    return response;
+  },
+  // Send a scenario to the active channel
+  async sendScenario(context, payload) {
+    const response = await ChannelAPI.sendScenario(context.state.activeChannel.id, payload);
     return response;
   },
 

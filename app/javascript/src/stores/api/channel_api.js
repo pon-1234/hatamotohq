@@ -18,9 +18,19 @@ export default {
     });
   },
 
-  create: (channelId, payload) => {
+  sendMessage: (channelId, payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages`,
+      method: 'POST',
+      data: JSON.stringify(payload),
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  sendScenario: (channelId, payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages/send_scenario`,
       method: 'POST',
       data: JSON.stringify(payload),
       dataType: 'json',

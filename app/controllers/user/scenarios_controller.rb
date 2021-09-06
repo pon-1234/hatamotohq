@@ -15,7 +15,7 @@ class User::ScenariosController < User::ApplicationController
 
   # GET /user/scenarios/manual
   def manual
-    @scenarios = Scenario.accessible_by(current_ability).type_manual
+    @scenarios = Scenario.accessible_by(current_ability).type_manual.enabled
   end
 
   # GET /user/scenarios/search
