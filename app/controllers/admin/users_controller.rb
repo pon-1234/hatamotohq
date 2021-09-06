@@ -70,6 +70,9 @@ class Admin::UsersController < Admin::ApplicationController
         :email,
         :name,
         :status,
+        :company_name,
+        :phone_number,
+        :address,
         :password,
         :password_confirmation
       )

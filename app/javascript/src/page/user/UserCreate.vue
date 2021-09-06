@@ -24,8 +24,35 @@
             <div class="form-group row">
               <label class="col-12">氏名<required-mark/></label>
               <div class="col-12">
-                <ValidationProvider name="氏名" rules="required" v-slot="{ errors }">
+                <ValidationProvider name="氏名" rules="required|max:255" v-slot="{ errors }">
                   <input type="text" class="form-control" name="user[name]" placeholder="入力してください" v-model="userFormData.name">
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-12">address<required-mark/></label>
+              <div class="col-12">
+                <ValidationProvider name="address" rules="required|max:255" v-slot="{ errors }">
+                  <input type="text" class="form-control" name="user[address]" placeholder="入力してください" v-model="userFormData.address">
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-12">phone_number<required-mark/></label>
+              <div class="col-12">
+                <ValidationProvider name="phone_number" rules="required|min:10|max:11" v-slot="{ errors }">
+                  <input type="number" class="form-control" name="user[phone_number]" placeholder="入力してください" v-model="userFormData.phone_number">
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-12">company_name</label>
+              <div class="col-12">
+                <ValidationProvider name="company_name" rules="max:255" v-slot="{ errors }">
+                  <input type="text" class="form-control" name="user[company_name]" placeholder="入力してください" v-model="userFormData.company_name">
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
@@ -86,7 +113,10 @@ export default {
         password: null,
         passwordConfirmation: null,
         status: 'actived',
-        name: null
+        name: null,
+        company_name: null,
+        address: null,
+        phone_number: null
       },
       isEmailUnique: true,
       enabled: true

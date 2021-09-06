@@ -26,6 +26,18 @@
                   <td><%= @user.name %></td>
                 </tr>
                 <tr>
+                  <th class="fw-300">address</th>
+                  <td><%= @user.address %></td>
+                </tr>
+                <tr>
+                  <th class="fw-300">phone_number</th>
+                  <td><%= @user.phone_number %></td>
+                </tr>
+                <tr>
+                  <th class="fw-300">company_name</th>
+                  <td><%= @user.company_name %></td>
+                </tr>
+                <tr>
                   <th>状況</th>
                   <td>
                     <span class="badge <%= @user.status.eql?('actived') ? 'badge-success' : (@user.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @user.status_i18n %></span>
