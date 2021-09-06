@@ -154,6 +154,7 @@ export default {
 
   methods: {
     ...mapActions('scenario', [
+      'getScenario',
       'createScenario',
       'updateScenario'
     ]),
@@ -162,16 +163,13 @@ export default {
       'listTagAssigned'
     ]),
 
-    getScenarioDetail() {
+    async getScenarioDetail() {
       const query = {
         id: this.scenario_id
       };
-      
-      this.$store.dispatch('scenario/getScenario', query).then((res) => {
-        this.scenarioData = res;
-      }).catch((err) => {
-        console.log(err);
-      });
+
+      const response = await this.getScenario(query);
+      this.scenarioData = response;
     },
 
     changeScenarioType(value) {

@@ -22,11 +22,6 @@ module WebhooksHelper
     def handle_follow(event, line_account)
       friend_id = event[:source][:userId]
       line_friend = add_friend(line_account, friend_id, event)
-      # Redis::publish('redis_lineFollow', json_encode([
-      #     'channel' => $channel,
-      #     'src' => $customer,
-      #     'dest' => $lineSetting->lineAccount
-      # ]));
       line_friend.present?
     end
 
@@ -43,11 +38,6 @@ module WebhooksHelper
       return false if channel.nil?
       channel.status = 'block'
       channel.save
-      # Redis::publish('redis_lineFollow', json_encode([
-      #     'channel' => $channel,
-      #     'src' => $customer,
-      #     'dest' => $lineSetting->lineAccount
-      # ]));
       true
     end
 
@@ -67,17 +57,6 @@ module WebhooksHelper
       message = create_message(channel, line_friend, event)
       # Increase unread message count by 1
       update_channel_last_message(channel, event)
-      # Broadcast message via websocket
-      ws_channel = "channel_user_#{channel.line_account.id}"
-      Ws::ChannelWs.new(ws_channel).send_message(line_friend, message)
-      # Enqueue auto response job
-      payload = {
-        event: event,
-        line_account_id: line_account.id,
-        line_friend_id: line_friend.id,
-        channel_id: channel.id
-      }
-      AutoResponseJob.perform_later(payload) if message.type.eql?('text')
     rescue => e
       logger.error(e)
     end
@@ -101,7 +80,6 @@ module WebhooksHelper
       channel.status = 'active'
       channel.avatar = line_friend.line_picture_url
       channel.title = line_friend.line_name
-      channel.last_timestamp = event['timestamp'] / 1000
       channel.alias = channel_alias
       channel.un_read = 0
       channel.save!
@@ -114,22 +92,11 @@ module WebhooksHelper
     def update_channel_last_message(channel, event)
       channel.un_read = 1
       channel.last_message = event[:message].to_json
-      channel.last_timestamp = event['timestamp'] / 1000
       channel.save!
     end
 
     def create_message(channel, sender, body)
-      message = Message.new
-      message.channel = channel
-      message.sender = sender
-      message.type = body[:message][:type]
-      message.is_bot_sender = false
-      message.line_message_id = body[:message][:id]
-      message.line_content = body[:message]
-      message.line_timestamp = body[:timestamp]
-      message.line_reply_token = body[:replyToken]
-      message.slug = body[:message][:type].eql?('text') ? body[:message][:text] : nil
-      message.save!
-      message
+      mb = Messages::MessageBuilder.new(sender, channel, body)
+      message = mb.perform
     end
 end

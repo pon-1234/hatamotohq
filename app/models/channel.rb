@@ -4,22 +4,22 @@
 #
 # Table name: channels
 #
-#  id              :bigint           not null, primary key
-#  alias           :string(255)
-#  avatar          :string(255)
-#  deleted_at      :datetime
-#  is_mute         :boolean          default(FALSE)
-#  is_pair_chat    :boolean          default(TRUE)
-#  last_message    :text(65535)
-#  last_timestamp  :datetime
-#  slug            :string(255)
-#  status          :string(255)      default(NULL)
-#  title           :string(255)
-#  un_read         :boolean          default(TRUE)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  line_account_id :bigint
-#  line_friend_id  :bigint
+#  id               :bigint           not null, primary key
+#  alias            :string(255)
+#  avatar           :string(255)
+#  deleted_at       :datetime
+#  is_mute          :boolean          default(FALSE)
+#  is_pair_chat     :boolean          default(TRUE)
+#  last_activity_at :datetime
+#  last_message     :json
+#  slug             :string(255)
+#  status           :string(255)      default(NULL)
+#  title            :string(255)
+#  un_read          :boolean          default(TRUE)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  line_account_id  :bigint
+#  line_friend_id   :bigint
 #
 # Indexes
 #
@@ -34,6 +34,7 @@
 class Channel < ApplicationRecord
   belongs_to :line_account
   belongs_to :line_friend
+  has_many :messages, dependent: :destroy, autosave: true
 
   enum status: { active: 'active', block: 'block' }, _prefix: true
 

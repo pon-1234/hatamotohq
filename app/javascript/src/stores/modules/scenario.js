@@ -7,7 +7,7 @@ export const mutations = {};
 export const getters = {};
 
 export const actions = {
-  updateContentMessageDistributions(context, message) {
+  setPreviewContent(context, message) {
     context.dispatch('preview/setMessages', message, { root: true });
   },
   getList(_, query) {
@@ -68,13 +68,8 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  getScenario(_, query) {
-    return ScenarioApi.getScenario(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-    });
+  async getScenario(_, query) {
+    return await ScenarioApi.getScenario(query);
   },
   getTalks(_, query) {
     _.dispatch('system/setLoading', true, { root: true });

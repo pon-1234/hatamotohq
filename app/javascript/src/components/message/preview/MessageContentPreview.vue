@@ -13,7 +13,7 @@
           <div v-if="user" class="chat-header">{{user.line_name}}</div>
           <div class="chat-body">
             <div class="chat-main w-min-0">
-              <message-content-view :data="item.content" ></message-content-view>
+              <message-content :data="item.content" ></message-content>
             </div>
           </div>
         </div>
@@ -113,30 +113,6 @@ export default {
 
   .chat-item {
     position: relative;
-  }
-
-  .baloon:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.75rem;
-    width: 0;
-    height: 0;
-    border: 8px solid transparent;
-    border-right-color: #edeff0;
-    border-left: 0;
-    border-top: 0;
-    margin-left: -7px;
-  }
-
-  .chat-body .chat-main .chat-item.baloon {
-    margin-right: 1.25rem;
-  }
-
-  .chat-item.baloon {
-    border-radius: 1rem;
-    display: inline-block;
-    background: white;
   }
 
   .chat-item.rounded {

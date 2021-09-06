@@ -4,8 +4,8 @@
       <talk-menu-bar @input="showChannels"/>
       <div class="container">
         <div id="chatbox" class="chatbox active">
-          <channel-list @activeChannel="clickActiveChannel" :class="getLeftItem()" />
-          <chat-box @sendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
+          <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
+          <chat-box @onSendMessage="sendMessage" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
         </div>
       </div>
     </div>
@@ -18,15 +18,14 @@ import { mapActions, mapState } from 'vuex';
 // import { WebSocketClient } from '@/core/websocket';
 import consumer from '@channels/consumer';
 import * as ActionCable from '@rails/actioncable';
-import moment from 'moment-timezone';
 ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    activeChannel: Number,
+    activeChannel: Number
   },
   async beforeMount() {
-    this.connectWS();
+    this.connectToWebsocket();
     await this.getChannels();
     await this.getTags();
     this.activateFirstChannel();
@@ -56,7 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       channels: state => state.channels,
       messages: state => state.messages,
@@ -81,9 +80,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', [
+    ...mapActions('channel', [
       'getChannels',
-      'getMessageFromWs',
+      'onReceiveWebsocketEvent',
+      'sendMessage',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
@@ -96,24 +96,18 @@ export default {
       'getTags'
     ]),
 
-    connectWS() {
+    connectToWebsocket() {
       const _this = this;
-      consumer.subscriptions.create({ channel: 'ConversationChannel' }, {
-        received(data) {
-          this.appendNewMessage(data);
-        },
-
-        appendNewMessage(data) {
-          _this.getMessageFromWs(data);
-          // if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
-          //   this.autoActiveChannel();
-          // }
-          // this.$store.dispatch('global/getBadge');
-          },
+      consumer.subscriptions.create(
+        { channel: 'ConversationChannel' },
+        {
+          received(data) {
+            _this.onReceiveWebsocketEvent(data);
+          }
         }
-      )
+      );
     },
-    
+
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
       await this.setMessageParams({ channelId: this.activeChannel.id });
@@ -136,67 +130,56 @@ export default {
     },
 
     // getChannels() {
-      // this.ws = new WebSocketClient();
-      // this.ws.open();
-      // this.ws.onopen = () => {
-      //   if (this.activeChannel) {
-        // this.autoActiveChannel();
-        // this.$store.dispatch('global/getBadge');
-      //   }
-      // };
-      // this.ws.onmessage = (message) => {
-      //   const mess = JSON.parse(message);
-      //   console.log('onmessage', mess);
-      //   this.getMessageFromWs(mess);
-      //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
-      //     this.autoActiveChannel();
-      //   }
-      //   this.$store.dispatch('global/getBadge');
-      // };
+    // this.ws = new WebSocketClient();
+    // this.ws.open();
+    // this.ws.onopen = () => {
+    //   if (this.activeChannel) {
+    // this.autoActiveChannel();
+    // this.$store.dispatch('global/getBadge');
+    //   }
+    // };
+    // this.ws.onmessage = (message) => {
+    //   const mess = JSON.parse(message);
+    //   console.log('onmessage', mess);
+    //   this.onReceiveWebsocketEvent(mess);
+    //   if (mess.payload && mess.payload.channel && this.activeChannel && this.activeChannel.id === mess.payload.channel.id && !this.unreadChannelId) {
+    //     this.autoActiveChannel();
+    //   }
+    //   this.$store.dispatch('global/getBadge');
+    // };
     // },
 
-    sendMessage(message) {
-      this.sendMessageToWs(message);
-      if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
-        message.content.source = 'sender';
-        this.pushMessage(message.content);
-      }
+    onSendMessage(message) {
+      // this.sendMessage(message);
+      // this.sendMessageToWs(message);
+      // if (message.content.line_content && message.content.line_content.type !== 'video' && message.content.line_content.type !== 'audio') {
+      //   message.content.source = 'sender';
+      //   this.pushMessage(message.content);
+      // }
     },
 
     sendMediaMessage(message) {
       this.pushMessage(message.content);
-      this.sendMessageToWs(message);
     },
 
-    sendMessageToWs(message) {
-      this.updateChannels({ status: 'add_message', channel: message.channel });
-      console.log('sendMessage', message);
-      if (this.ws) {
-        this.ws.send(JSON.stringify({
-          action: 'message_send',
-          payload: message
-        }));
-      }
-    },
+    // activeChannel(e) {
+    //   console.log(e, 'activeChannel');
+    //   this.$nextTick(() => {
+    //     this.setUnreadChannelId(null);
+    //     this.ws.send(JSON.stringify({
+    //       action: 'message_read',
+    //       payload: this.activeChannel
+    //     }));
+    //   });
+    // },
 
-    activeChannel(e) {
-      console.log(e, 'activeChannel');
-      this.$nextTick(() => {
-        this.setUnreadChannelId(null);
-        this.ws.send(JSON.stringify({
-          action: 'message_read',
-          payload: this.activeChannel
-        }));
-      });
-    },
+    // autoActiveChannel() {
+    //   this.activeChannel();
+    // },
 
-    autoActiveChannel() {
-      this.activeChannel();
-    },
-
-    clickActiveChannel(isRefresh) {
+    switchChannel(isRefresh) {
       this.isPc = !this.isPc;
-      if (isRefresh) { this.activeChannel(0); }
+      // if (isRefresh) { this.activeChannel(0); }
     },
 
     showChannels() {

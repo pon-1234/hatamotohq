@@ -14,7 +14,6 @@
           <input type="text" name="name" class="form-control" v-model="autoResponseData.name" placeholder="自動応答名を入力してください" v-validate="'required'" data-vv-as="自動応答名">
           <error-message :message="errors.first('name')"></error-message>
         </div>
-          
         <div class="form-group">
           <label class="mb10">設定</label>
           <div class="flex start ai_center">
@@ -37,10 +36,10 @@
           <div class="card-body">
             <div class="form-group d-flex flex-column">
               <label class="mb10">キーワード<required-mark/></label>
-              <b-form-tags class="bot-tag" input-id="tags-basic" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
-                placeholder="キーワードを入力してください" separator=" ,;" :disabled="(autoResponseData.keyword_status !=='enable')" :add-button-text="'追加'" >
+              <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
+                placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
               </b-form-tags>
-              <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="{required: autoResponseData.keyword_status =='enable'}"/>
+              <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
               <div>
                 <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
               </div>
@@ -49,7 +48,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="card">
           <div class="card-header left-border">
             <h3>反応時のアクションを設定する</h3>
@@ -61,22 +60,20 @@
                 <div>
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
-                <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
-
-                <message-content-distribution
+                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"
                   :key="index"
                   v-bind:data="item"
                   v-bind:index="index"
                   v-bind:countMessages="autoResponseData.messages.length"
-                  @input="changeContent"
+                  @input="onMessageContentChanged"
                   @setTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"
                 />
-
                 <div>
                   <div class="btn btn-outline-success" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
                     <i class="fa fa-plus"></i><span> メッセージ追加</span>
@@ -88,7 +85,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="botCreateMessage()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -100,6 +97,9 @@ import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
+  props: {
+    auto_response_id: Number
+  },
   data() {
     return {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
@@ -112,15 +112,7 @@ export default {
         status: 'enable',
         keywords: [],
         keyword_status: 'enable',
-        messages: [
-          {
-            message_type_id: this.MessageTypeIds.Text,
-            content: {
-              type: this.MessageType.Text,
-              text: ''
-            }
-          }
-        ]
+        messages: []
       }
     };
   },
@@ -129,21 +121,20 @@ export default {
   },
 
   async beforeMount() {
-    await this.fetchItem();
+    if (this.auto_response_id) {
+      const autoResponse = await this.getAutoResponse(this.auto_response_id);
+      Object.assign(this.autoResponseData, autoResponse);
+    } else {
+      this.setDefaultMessage();
+    }
     await this.getTags();
-    await this.listTagAssigned();
     this.loading = false;
   },
 
   watch: {
     autoResponseData: {
       handler(val) {
-        this.updateContentMessageDistributions(this.autoResponseData);
-      },
-      deep: true
-    },
-    'autoResponseData.keywords': {
-      handler: function(after, before) {
+        this.setPreviewContent(this.autoResponseData);
       },
       deep: true
     }
@@ -151,32 +142,18 @@ export default {
 
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     ...mapActions('autoResponse', [
+      'getAutoResponse',
       'createAutoResponse',
-      'updateContentMessageDistributions'
+      'updateAutoResponse',
+      'setPreviewContent'
     ]),
 
-    ...mapActions('global', [
-      'fetchUserData',
-      'getActionObject'
-    ]),
-
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
-
-    async fetchItem() {
-      await this.fetchUserData();
-      await this.getActionObject();
-    },
-
-    async botCreateMessage() {
+    async submitCreate() {
       const result = await this.$validator.validateAll();
-      this.setIsSubmitChange();
 
       if (!result) {
         $('input, textarea').each(
@@ -194,11 +171,26 @@ export default {
         folder_id: Util.getQueryParamsUrl('folder_id'),
         ...this.autoResponseData
       };
-      await this.createAutoResponse(data);
-      // window.location.href = process.env.MIX_ROOT_PATH + '/bots?is_created=true';
+      if (this.auto_response_id) {
+        await this.updateAutoResponse(data);
+      } else {
+        await this.createAutoResponse(data);
+      }
     },
 
-    changeContent({ index, content }) {
+    setDefaultMessage() {
+      this.autoResponseData.messages.push(
+        {
+          message_type_id: this.MessageTypeIds.Text,
+          content: {
+            type: this.MessageType.Text,
+            text: ''
+          }
+        }
+      );
+    },
+
+    onMessageContentChanged({ index, content }) {
       this.autoResponseData.messages.splice(index, 1, content);
     },
 
@@ -256,12 +248,15 @@ export default {
 </script>
 <style lang="scss"  scoped>
   ::v-deep {
-    #tags-basic {
+    #tags-limit {
       border: none;
       background-color: rgba(255, 255, 255, 0)!important;
     }
     .bot-tag.disabled {
       background-color: #ccc !important;
+    }
+    .b-form-tags-button {
+      width: 80px !important;
     }
   }
 </style>

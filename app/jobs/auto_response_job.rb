@@ -3,44 +3,44 @@
 class AutoResponseJob < ApplicationJob
   queue_as :default
 
-  def perform(payload)
-    message_text = payload[:event][:message][:text]
-
-    auto_response_ids = AutoResponseKeyword
-      .select('auto_responses.id')
-      .joins(:auto_response)
-      .references(:auto_response)
-      .where(auto_responses: { line_account_id: payload[:line_account_id] })
-      .where("? LIKE  CONCAT('%', auto_response_keywords.keyword ,'%')", message_text)
-      .uniq
+  def perform(message_id)
+    message = Message.find(message_id)
+    auto_response_ids = hit_auto_responses(message)
     return if auto_response_ids.blank?
 
-    # # Send auto response message if keyword is hitted
-    message_content = []
-    auto_response_ids.each do |auto_response_id|
-      auto_response_messages = AutoResponse.where(id: auto_response_id, status: 'enable')&.first.auto_response_messages
-      next if auto_response_messages.empty?
+    # Send auto response message if keyword is hit
+    auto_responses = AutoResponse.where(id: auto_response_ids, status: 'enable')
+    reply_content = []
+    auto_responses.each do |auto_response|
+      reply_messages = auto_response.auto_response_messages
+      next if reply_messages.blank?
 
-      auto_response_messages.each do |message|
-        message_content << {
-          data: {
-            content: {
-              line_content: message.content,
-              line_timestamp: Time.now.to_i * 1000
-            }
-          }
+      reply_messages.each do |message|
+        reply_content << {
+          message: message.content
         }
       end
     end
-    return if message_content.blank?
-    # # Rebuild payload
+    return if reply_content.blank?
+    # Rebuild payload
     payload = {
-      channel_id: payload[:channel_id],
-      line_account_id: payload[:line_account_id],
-      line_friend_id: payload[:line_friend_id],
-      reply_token: payload[:event][:replyToken],
-      messages: message_content
+      channel_id: message.channel_id,
+      line_account_id: message.channel.line_account_id,
+      line_friend_id: message.sender.id,
+      reply_token: message.reply_token,
+      messages: reply_content
     }
     PushMessageToLineJob.perform_later(payload)
   end
+
+  private
+    def hit_auto_responses(message)
+      AutoResponseKeyword
+        .select('auto_responses.id')
+        .joins(:auto_response)
+        .references(:auto_response)
+        .where(auto_responses: { line_account_id: message.channel.line_account_id })
+        .where("? LIKE  CONCAT('%', auto_response_keywords.keyword ,'%')", message.text)
+        .uniq
+    end
 end

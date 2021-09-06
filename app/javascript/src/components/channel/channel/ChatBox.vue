@@ -1,6 +1,6 @@
 <template>
-  <div  class="container" v-if="activeChannel">
-    <div class="nav-element">
+  <div class="container" v-if="activeChannel">
+    <div class="nav-element" hidden>
       <!-- left -->
       <div class="left">
           <div class="avatar">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="messages">
-      <div class="content" style="padding: 10px 0;" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+      <div class="content direct-chat-messages" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
         <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadmoreMessage">
         <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
           <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
@@ -30,11 +30,11 @@
               </div>
             </div>
           </div>
-          <talk-message-content-view  :data="message" @unread="setUnreadMessage"/>
+          <chat-item  :message="message" @unread="setUnreadMessage"></chat-item>
         </div>
       </div>
       <div class="box-input" style="position: relative">
-        <div  class="emoji" v-if="isOpenStickers">
+        <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
             <select-package-sticker @input="changePackageId" />
           </div>
@@ -44,7 +44,7 @@
               v-bind:sticker="sticker"
               v-bind:animation="animation"
               :key="index"
-              @input="selectSticker"
+              @input="onSendStickerMessage"
             />
           </div>
         </div>
@@ -90,10 +90,10 @@
         </div>
       </div>
     </div>
-    <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/>
-    <modal-select-message-template @setTemplate="selectMessageTemplate"/>
-    <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/>
-    <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/>
+    <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
+    <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
+    <!-- <modal-select-scenario-template @changeSelectedTemplate="selectScenarioTemplate" type="normal" id="modal-scenario-template"/> -->
+    <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
     <div class="empty" ></div>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       textMessage: '',
-      isOpenStickers: false,
+      openedStickerPane: false,
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
@@ -158,7 +158,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('talk', {
+    ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       isLoadmoreMessage: state => state.isLoadmoreMessage,
@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('talk', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
+    ...mapActions('channel', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
     ...mapActions('global', ['getStickers']),
 
     scrollToBottom() {
@@ -190,51 +190,24 @@ export default {
     async loadMoreMessages() {
       const messageDisplay = this.$refs.messageDisplay;
       if (messageDisplay.scrollTop < 10 && !this.isLoadmoreMessage) {
+        const lastElement = messageDisplay.firstElementChild.id;
         const page = this.messageParams.page + 1;
         this.currentScrollTop = messageDisplay.scrollHeight;
         if (page > this.totalPages) return;
         this.setMessageParams({ page: page });
         await this.getMessages(this.messageParams);
         this.$nextTick(() => {
-          messageDisplay.scrollTop = this.currentScrollTop;
+          document.getElementById(lastElement).scrollIntoView();
         });
       }
     },
 
-    sendTextMessage() {
-      if (this.textMessage.trim()) {
-        // eslint-disable-next-line no-undef
-        const channel = _.cloneDeep(this.activeChannel);
-        channel.last_message = this.textMessage;
-        channel.last_timetamp = new Date().getTime();
-
-        this.setActiveChannel(channel);
-        const message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'text',
-              text: this.textMessage
-            },
-            line_timestamp: new Date().getTime()
-          }
-        };
-
-        this.$emit('sendMessage', message);
-      }
-
-      this.textMessage = '';
-    },
-
     openSticker() {
-      this.isOpenStickers = !this.isOpenStickers;
+      this.openedStickerPane = !this.openedStickerPane;
       this.getStickers({ packageId: null });
     },
     clickMessagesContent() {
-      this.isOpenStickers = false;
+      this.openedStickerPane = false;
       this.getStickers({ packageId: null });
     },
 
@@ -243,29 +216,40 @@ export default {
       this.getStickers({ packageId: option.packageId });
     },
 
-    selectSticker(sticker) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_message = 'スタンプメッセージ';
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-      const message = {
-        channel: channel,
-        content: {
-          key: new Date().getTime(),
-          is_bot_sender: 0,
-          attr: 'chat-reverse',
-          line_content: {
-            type: 'sticker',
-            packageId: sticker.package_id,
-            stickerId: sticker.line_emoji_id,
-            stickerResourceType: 'STATIC'
+    // Send a text message from input
+    sendTextMessage() {
+      if (this.textMessage.trim()) {
+        const message = {
+          channel_id: this.activeChannel.id,
+          message: {
+            type: 'text',
+            text: this.textMessage
           },
-          line_timestamp: new Date().getTime()
-        }
+          timestamp: new Date().getTime()
+        };
+
+        this.$emit('onSendMessage', message);
+      }
+
+      this.textMessage = '';
+    },
+    // Send a sticker message
+    onSendStickerMessage(sticker) {
+      // close stickers pane
+      this.openedStickerPane = false;
+
+      const message = {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'sticker',
+          packageId: sticker.package_id,
+          stickerId: sticker.line_emoji_id,
+          stickerResourceType: 'STATIC'
+        },
+        timestamp: new Date().getTime()
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     onDropMessage(event) {
@@ -300,7 +284,7 @@ export default {
                 previewImageUrl: URL.createObjectURL(file)
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       } else if (this.VideoType.indexOf(file.type) !== -1) {
@@ -321,7 +305,7 @@ export default {
               },
               duration: 0
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       } else if (this.AudioType.indexOf(file.type) !== -1) {
@@ -342,12 +326,12 @@ export default {
                 originalContentUrl: URL.createObjectURL(file)
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
       if (message) {
-        this.$emit('sendMessage', message);
+        this.$emit('onSendMessage', message);
         this.sendMedia({ key: message.content.key, file: file, channelId: channel.id });
       }
     },
@@ -377,7 +361,7 @@ export default {
                 previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -401,7 +385,7 @@ export default {
               },
               duration: 0
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -424,7 +408,7 @@ export default {
                 originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl
               }
             },
-            line_timestamp: new Date().getTime()
+            timestamp: new Date().getTime()
           }
         };
       }
@@ -443,8 +427,8 @@ export default {
 
     isDateTimeMessage(currentMessage, lastMessage) {
       if (currentMessage && currentMessage.created_at && lastMessage && lastMessage.created_at) {
-        const currentTime = moment(moment(parseInt(currentMessage.line_timestamp)).format('YYYY-MM-DD'));
-        const lastTime = moment(moment(parseInt(lastMessage.line_timestamp)).format('YYYY-MM-DD'));
+        const currentTime = moment(moment(parseInt(currentMessage.timestamp)).format('YYYY-MM-DD'));
+        const lastTime = moment(moment(parseInt(lastMessage.timestamp)).format('YYYY-MM-DD'));
         const dif = currentTime.diff(lastTime, 'days');
         if (dif >= 1) {
           return true;
@@ -454,7 +438,7 @@ export default {
     },
 
     getDateTimeMessage(value) {
-      return moment(parseInt(value.line_timestamp)).format('YYYY年MM月DD日');
+      return moment(parseInt(value.timestamp)).format('YYYY年MM月DD日');
     },
 
     selectMessageTemplate(template) {
@@ -471,7 +455,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectScenarioTemplate(template) {
@@ -485,7 +469,7 @@ export default {
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     },
 
     selectFlexMessageTemplate(template) {
@@ -501,11 +485,11 @@ export default {
           is_bot_sender: 0,
           attr: 'chat-reverse',
           line_content: { ...content, id: template.id },
-          line_timestamp: new Date().getTime()
+          timestamp: new Date().getTime()
         }
       };
 
-      this.$emit('sendMessage', message);
+      this.$emit('onSendMessage', message);
     }
   }
 };

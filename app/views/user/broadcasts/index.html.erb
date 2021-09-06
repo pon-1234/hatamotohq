@@ -12,10 +12,11 @@
           <%# Header %>
             <thead>
               <tr>
-                <th class="fw-150">日時</th>
+                <th class="fw-200">日時</th>
                 <th>タイトル</th>
                 <th class="fw-120">状況</th>
                 <th>配信先</th>
+                <th>配信数</th>
                 <th class="fw-200"></th>
               </tr>
             </thead>
@@ -29,10 +30,8 @@
                   <td><%= broadcast.title %></td>
                   <td><%= render_broadcast_status(broadcast.status).html_safe %></td>
                   <td><span class="d-flex flex-wrap align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
+                  <td>0</td>
                   <td>
-                    <%= link_to user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
-                      詳細
-                    <% end %>
                     <% if broadcast.editable? %>
                       <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
                         編集

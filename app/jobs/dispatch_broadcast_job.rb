@@ -31,12 +31,12 @@ class DispatchBroadcastJob < ApplicationJob
     end
 
     # Deliver messages via line api
-    if !post_message_broadcast(line_account, nomalized_messages_data)
+    if !send_broadcast(line_account, nomalized_messages_data)
       broadcast.update_status('error')
       return
     end
     nomalized_messages_data.each do |content|
-      insert_delivered_message(line_account, content)
+      insert_delivered_message(channels, content)
     end
   end
 
@@ -46,24 +46,27 @@ class DispatchBroadcastJob < ApplicationJob
     line_account = broadcast.line_account
 
     friends = filter_friend_by_conditions(broadcast)
+    channels = Channel.where(line_friend_id: friends.map(&:id))
     messages = broadcast.broadcast_messages
 
     nomalized_messages_data = []
     messages.each do |message|
       nomalized_messages_data << normalize_message_content(message.content)
     end
-    if !post_message_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
+    if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')
-      nil
+    end
+    nomalized_messages_data.each do |content|
+      insert_delivered_message(channels, content)
     end
   end
 
   private
-    def post_message_broadcast(line_account, messages_data)
+    def send_broadcast(line_account, messages_data)
       LineApi::PostMessageBroadcast.new(line_account.line_channel_id, line_account.line_channel_secret, messages_data).perform
     end
 
-    def post_message_multicast(line_account, messages_data, friend_ids)
+    def send_multicast(line_account, messages_data, friend_ids)
       friend_ids.in_groups_of(400, false) do |ids|
         LineApi::PostMessageMulticast.new(line_account.line_channel_id, line_account.line_channel_secret, messages_data, ids).perform
       end
@@ -72,12 +75,13 @@ class DispatchBroadcastJob < ApplicationJob
     def filter_friend_by_conditions(broadcast)
       conditions = broadcast.conditions
       add_friend_date_cond = conditions['add_friend_date']
+      friends = broadcast.line_account.line_friends
       if conditions['type']&.eql?('specific')
-        friends = broadcast.line_account.line_friends.created_at_gteq(add_friend_date_cond['start_date']).created_at_lteq(add_friend_date_cond['end_date'])
+        friends = friends.created_at_gteq(add_friend_date_cond['start_date']).created_at_lteq(add_friend_date_cond['end_date'])
       end
       # filter by tags
       unless broadcast.tags.empty?
-        friends.where(tags: { id: broadcast.tag_ids })
+        friends = friends.joins(:tags).references(:tags).where(tags: { id: broadcast.tag_ids })
       end
       friends
     end
@@ -171,7 +175,14 @@ class DispatchBroadcastJob < ApplicationJob
       # }
     end
 
-    def insert_delivered_message(line_account, message_content)
+    def insert_delivered_message(channels, message_content)
+      message_params = {
+        message: message_content.with_indifferent_access,
+        timestamp: Time.now.to_i
+      }
+      channels.each do |channel|
+        Messages::MessageBuilder.new(nil, channel, message_params).perform
+      end
       # slug = content['type'] == 'text' ? content['text'] : nil
       # $savedData = [
       #       'line_account_id' => $lineAccount->id,
@@ -180,7 +191,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'attr' => 'chat-reverse',
       #       'line_message_id' => $now,
       #       'line_content' => json_encode($lineContent),
-      #       'line_timestamp' => $now.'000',
+      #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),
       #       'slug' => $slug,
@@ -201,7 +212,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'attr' => 'chat-log',
       #       'line_message_id' => $now,
       #       'line_content' => json_encode($savedLog),
-      #       'line_timestamp' => $now.'000',
+      #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),
       #     ];

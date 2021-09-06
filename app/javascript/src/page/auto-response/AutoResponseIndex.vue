@@ -23,15 +23,15 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="w25" >自動応答名</th>
-                    <th class="w25">キーワード</th>
+                    <th>自動応答名</th>
+                    <th>キーワード</th>
                     <th>メッセージ</th>
-                    <th class="fw-120">操作</th>
-                    <th class="fw-180">登録日</th>
-                    <th class="fw-100">状況</th>
+                    <th>操作</th>
+                    <th>登録日</th>
+                    <th>状況</th>
                   </tr>
                 </thead>
-                <tbody style="min-height: 60vh;">
+                <tbody>
                   <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
                     <td>{{auto_response.name}}</td>
                     <td>
@@ -40,12 +40,12 @@
                     </td>
                     <td>
                       <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
-                        <message-content-view :data="item.content" ></message-content-view>
+                        <message-content :data="item.content" ></message-content>
                       </div>
                     </td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-warning">編集</button>
+                        <button type="button" class="btn btn-warning" @click="openEdit(auto_response)">編集</button>
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                         <div class="dropdown-menu bg-white" role="menu" style="">
                           <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
@@ -60,10 +60,10 @@
                     <td>{{ formattedDate(auto_response.created_at) }}</td>
                     <td>
                       <template v-if="auto_response.status === 'enable'">
-                        <span class="badge badge-success">有効</span>
+                        <span class="badge badge-success p-2">有効</span>
                       </template>
                       <template v-else>
-                        <span class="badge badge-warning">無効</span>
+                        <span class="badge badge-warning p-2">無効</span>
                       </template>
                     </td>
                   </tr>
@@ -73,6 +73,7 @@
           </div>
       </div>
     </div>
+    <loading-indicator :loading="loading"></loading-indicator>
     <div class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -91,7 +92,7 @@
               <dt>内容</dt>
               <dd>
                 <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
-                  <message-content-view :data="item.content" ></message-content-view>
+                  <message-content :data="item.content" ></message-content>
                 </div>
               </dd>
             </dl>
@@ -118,12 +119,14 @@ export default {
       messageDetail: null,
       isPc: true,
       selectedFolder: 0,
-      auto_responses: []
+      auto_responses: [],
+      loading: true
     };
   },
 
-  beforeMount() {
-    this.$store.dispatch('autoResponse/getAutoResponses');
+  async beforeMount() {
+    await this.$store.dispatch('autoResponse/getAutoResponses');
+    this.loading = false;
   },
 
   computed: {
@@ -226,6 +229,10 @@ export default {
           this.auto_responses = this.folders[this.selectedFolder].auto_responses;
         }).fail(e => {
         });
+    },
+
+    openEdit(autoResponse) {
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`;
     },
 
     formattedDate(date) {

@@ -3,7 +3,6 @@
     <text-message
       v-if="data.type === 'text' "
       v-bind:data="data.text"
-      v-bind:className="'baloon'"
     />
 
     <log-message

@@ -1,0 +1,26 @@
+[Unit]
+Description=Puma HTTP Server for line-insight (production)
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=sudo
+UMask=0002
+
+WorkingDirectory=/home/deploy/apps/line-insight/current
+ExecStart=/bin/bash -lc 'exec /home/deploy/.rbenv/shims/bundle exec puma -C /home/deploy/apps/line-insight/shared/puma.rb'
+ExecReload=/bin/kill -TSTP $MAINPID
+StandardOutput=append:/home/deploy/apps/line-insight/shared/log/puma_access.log
+StandardError=append:/home/deploy/apps/line-insight/shared/log/puma_error.log
+
+
+
+
+Restart=always
+RestartSec=1
+
+SyslogIdentifier=puma
+
+[Install]
+WantedBy=multi-user.target

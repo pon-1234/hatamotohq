@@ -28,7 +28,7 @@
           <div class="form-border">
             <div class="form-group" v-if="refresh_content">
               <label>メッセージ本文</label>
-                <message-content-distribution
+                <message-editor
                 :isDisplayTemplate="true"
                   v-for="(item, index) in scenarioMessageData.messages"
                   :key="index"
@@ -97,11 +97,11 @@ export default {
               text: ''
             }
           }
-        ],
+        ]
       },
       current_page_template: 1,
       refresh_content: true,
-      scenario: null,
+      scenario: null
     };
   },
 
@@ -126,7 +126,7 @@ export default {
   methods: {
     ...mapActions('scenario', [
       'createScenarioMessage',
-      'updateContentMessageDistributions'
+      'setPreviewContent'
     ]),
     ...mapActions('messageTemplate', [
       'fetchListMessageTemplate',
@@ -154,7 +154,7 @@ export default {
 
     changeContent({ index, content }) {
       this.scenarioMessageData.messages[index] = content;
-      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
+      this.setPreviewContent(this.scenarioMessageData.messages);
       // this.validate(this.talk);
     },
     async submit() {
@@ -203,7 +203,7 @@ export default {
 
       this.scenarioMessageData.messages.splice(0, 1, template);
 
-      this.updateContentMessageDistributions(this.scenarioMessageData.messages);
+      this.setPreviewContent(this.scenarioMessageData.messages);
 
       this.$nextTick(() => {
         this.refresh_content = true;

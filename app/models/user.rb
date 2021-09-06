@@ -56,6 +56,14 @@ class User < ApplicationRecord
   # Scope
   enum status: { actived: 'actived', blocked: 'blocked' }
 
+  def push_event_data
+    {
+      id: id,
+      name: name,
+      avatar_url: avatar_url
+    }
+  end
+
   def ensure_authentication_token
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
@@ -69,6 +77,10 @@ class User < ApplicationRecord
 
   def execute_after_create
     create_line_account
+  end
+
+  def display_name
+    name
   end
 
   private

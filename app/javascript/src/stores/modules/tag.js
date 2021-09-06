@@ -169,7 +169,6 @@ export const actions = {
   async createTag(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-
       if (query.type === 'folder') {
         const formData = { name: query.name, type: 'tag' };
         const response = await Folder.createFolder(formData);

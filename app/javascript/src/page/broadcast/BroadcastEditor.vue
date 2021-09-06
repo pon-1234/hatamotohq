@@ -48,7 +48,6 @@
             </div>
           </div>
         </div>
-        
         <div class="card">
           <div class="card-header left-border">
             <h3 class="card-title">配信日時</h3>
@@ -95,10 +94,10 @@
             <div v-if="refresh_content">
               <div class="mb-2">
                 <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-                <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">
-                <message-content-distribution
+                <message-editor
                   :isDisplayTemplate="true"
                   v-bind:data="item"
                   v-bind:index="index"
@@ -120,7 +119,6 @@
             </div>
           </div>
         </div>
-
 
         <div>
           <div class="row-form-btn d-flex">
@@ -211,30 +209,24 @@ export default {
     await this.fetchItem();
     await this.getTags();
     await this.listTagAssigned();
-    this.loading = false
-  },
-
-  computed: {
-    ...mapState('message', {
-      message: state => state.message
-    })
+    this.loading = false;
   },
 
   watch: {
     broadcastData: {
       handler(val) {
         console.log('handler watch change message', val);
-        this.setMessageDistributions(val);
+        this.setPreviewContent(val);
       },
       deep: true
     }
   },
   methods: {
-    ...mapActions('message', [
+    ...mapActions('broadcast', [
       'createBroadcast',
       'updateBroadcast',
       'getBroadcast',
-      'setMessageDistributions'
+      'setPreviewContent'
     ]),
     ...mapActions('tag', [
       'getTags',
@@ -247,13 +239,12 @@ export default {
     async fetchItem() {
       if (this.broadcast_id) {
         this.refresh_tag = false;
-        await this.getBroadcast({ id: this.broadcast_id });
+        const broadcast = await this.getBroadcast(this.broadcast_id);
+        Object.assign(this.broadcastData, broadcast);
 
-        if (this.message.status === 'done') {
+        if (this.broadcastData.status === 'done') {
           window.location.href = process.env.MIX_ROOT_PATH + '/streams';
         }
-
-        Object.assign(this.broadcastData, this.message);
 
         this.$nextTick(() => {
           this.refresh_tag = true;
@@ -360,7 +351,6 @@ export default {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
         }, 500);
       }
-
     },
     onReceiveUpdateBroadcastResponse(success) {
       if (success) {
@@ -374,7 +364,6 @@ export default {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
         }, 500);
       }
-
     },
 
     selectTemplate(template) {

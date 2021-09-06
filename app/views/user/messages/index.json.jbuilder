@@ -9,9 +9,6 @@ end
 
 json.data do
   json.array! @messages do |message|
-    json.id message.id
-    json.line_message_id message.line_message_id
-    json.line_timestamp message.line_timestamp
-    json.line_content message.line_content
+    json.partial! 'models/message', message: message
   end
 end

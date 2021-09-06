@@ -1,21 +1,25 @@
 export default {
-  getAutoResponses: (query = {}) => {
+  list: () => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/auto_responses`,
       method: 'GET',
-      dataType: "json",
+      dataType: 'json',
       contentType: 'application/json'
     });
   },
-  getDetail: (query = {}) => {
-    query._pid = btoa('/automessage/' + query.id);
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  get: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
   },
-  createAutoResponse: (query) => {
+  create: (data) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(data),
       contentType: 'application/json'
     });
   },

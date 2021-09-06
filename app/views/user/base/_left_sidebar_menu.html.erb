@@ -67,6 +67,16 @@
           </li>
         </ul>
 
+        <!-- Auto Response -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-clipboard-list"></i><p>テンプレート</p>'.html_safe,
+              user_templates_path,
+              class: "nav-link #{controller?("user/templates") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
         <!-- Tag Management -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
