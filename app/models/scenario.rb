@@ -10,7 +10,7 @@
 #  description             :string(255)
 #  mode                    :string(255)      default("date")
 #  scenario_messages_count :integer
-#  status                  :string(255)      default("disable")
+#  status                  :string(255)      default(NULL)
 #  title                   :string(255)
 #  type                    :string(255)      default(NULL)
 #  created_at              :datetime         not null
