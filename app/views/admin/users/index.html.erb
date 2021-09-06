@@ -1,17 +1,32 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <div class="card-header d-flex">
+      <div class="card-header row">
        <!-- Start: search condition -->
-        <%= link_to new_admin_user_path do %>
-          <button type="button" class="btn btn-info mr-2"><i class="fa fa-plus"></i> new user </button>
-        <% end %>
-        <%= search_form_for @q, url: search_admin_users_path do |f| %>
-          <div class="d-flex">
-            <%= f.search_field :name_or_company_name_or_email_cont, placeholder: "Text", class: "form-control search-box mw-300 mr-2" %>
-            <button class="btn btn-info btn-normal m-auto search-button" type="submit">検索</button>
-          </div>
-        <% end %>
+        <div class="col-xl-auto col-md-12 p-0 mb-xl-0 mb-md-2">
+          <%= link_to new_admin_user_path do %>
+            <button type="button" class="btn btn-info mr-2"><i class="fa fa-plus"></i> new user </button>
+          <% end %>
+        </div>
+        <div class="col-xl-8 col-md-12 p-0">
+          <%= search_form_for @q, url: search_admin_users_path do |f| %>
+            <div class="d-flex">
+              <div class="p-0 mr-2 w-50">
+                <%= f.search_field :name_or_company_name_or_email_cont, placeholder: "Text", class: "form-control search-box mw-300 mr-2" %>
+              </div>
+              <div class="p-0 mr-2">
+                <%= f.select :status_eq, 
+                  options_for_select([["有効", "actived"], ["無効", "blocked"]], @params.present? && @params[:status_eq]),
+                  { include_blank: "すべて" },
+                  { class: "form-control filter-box"} 
+                %>
+              </div>
+              <div class="p-0">
+                <button class="btn btn-info btn-normal m-auto search-button" type="submit">検索</button>
+              </div>
+            </div>
+          <% end %>
+        </div>
         <!-- End: search condition -->
       </div>
       <div class="card-body">
