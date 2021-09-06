@@ -46,6 +46,10 @@ class LineAccount < ApplicationRecord
     create_default_folder
   end
 
+  before_destroy do
+    destroy_default_folder
+  end
+
   private
     def generate_webhook_url
       loop do
@@ -64,5 +68,10 @@ class LineAccount < ApplicationRecord
       Folder.create(name: '未分類', line_account: self, type: :survey)
       Folder.create(name: '未分類', line_account: self, type: :survey_profile)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)
+    end
+
+    def destroy_default_folder
+      folders = Folder.where(line_account_id: self.id)
+      folders.destroy_all
     end
 end

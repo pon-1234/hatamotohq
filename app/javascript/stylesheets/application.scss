@@ -10,12 +10,8 @@
 @import "./register.css";
 @import "./slick/slick.css";
 @import "./slick/slick-theme.css";
-
 * {
-  font-family: Lucida Grande, Hiragino Kaku Gothic ProN,
-    "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA",
-    "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
+  font-family: Lucida Grande, Hiragino Kaku Gothic ProN, "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA", "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings, Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
 }
 
 // Override bootstrap
@@ -44,7 +40,7 @@
   border-color: #d43f3a;
 }
 
-.btn-group-xs > .btn,
+.btn-group-xs>.btn,
 .btn-xs {
   padding: 1px 5px;
   font-size: 12px !important;
@@ -82,11 +78,12 @@ td {
   }
 }
 
-.table > tbody > tr > td {
+.table>tbody>tr>td {
   line-height: 1.4;
   vertical-align: middle;
   border-top: 1px solid #ddd;
 }
+
 // START: card view
 .card {
   .left-border {
@@ -201,7 +198,6 @@ td {
   .mw-#{$i} {
     min-width: $width;
   }
-
   .w-#{$i} {
     width: $width;
   }
@@ -215,6 +211,7 @@ td {
   text-align: center;
   text-align: -webkit-center;
 }
+
 .wh-50 {
   width: 50px;
   height: 50px;
@@ -251,8 +248,8 @@ td {
   padding: 5px;
   font-size: 12px !important;
 }
-// END: Tags
 
+// END: Tags
 .radio-group {
   display: flex;
   label {
@@ -273,8 +270,8 @@ td {
 
 // Datetime picker theme
 .theme-success .vdatetime-popup__header,
-.theme-success .vdatetime-calendar__month__day--selected > span > span,
-.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
+.theme-success .vdatetime-calendar__month__day--selected>span>span,
+.theme-success .vdatetime-calendar__month__day--selected:hover>span>span {
   background: #28a745;
 }
 
@@ -282,4 +279,59 @@ td {
 .theme-success .vdatetime-time-picker__item--selected,
 .theme-success .vdatetime-popup__actions__button {
   color: #28a745;
+}
+
+// Btn toggle
+.btn-toggle {
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 2.5rem;
+    height: 1.25rem;
+    input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 0px;
+      bottom: 0px;
+      background-color: white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+    input:checked+.slider {
+      background-color: #17a2b8;
+    }
+    input:focus+.slider {
+      box-shadow: 0 0 1px #17a2b8;
+    }
+    input:checked+.slider:before {
+      -webkit-transform: translateX(20px);
+      -ms-transform: translateX(20px);
+      transform: translateX(20px);
+    }
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  }
 }

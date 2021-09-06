@@ -497,6 +497,7 @@ ActiveRecord::Schema.define(version: 2021_09_01_071029) do
     t.string 'phone_number'
     t.string 'address'
     t.text 'note'
+    t.string 'status'
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
     t.datetime 'remember_created_at'
