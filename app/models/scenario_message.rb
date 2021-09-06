@@ -52,6 +52,6 @@ class ScenarioMessage < ApplicationRecord
         self.is_initial = true
       end
     rescue StandardError => e
-      logger.error 'Time is not parsable'
+      logger.error e.message
     end
 end

@@ -14,5 +14,23 @@ class ScenarioSchedulerJob < ApplicationJob
   end
 
   def schedule(message)
+    if message.is_initial?
+      deliver_now(message)
+    end
+
+    deliver_later(message)
+  end
+
+  def deliver_now(message)
+    payload = {
+      channel_id: @channel.id,
+      messages: [message.content]
+    }
+    p '------'
+    p payload
+    PushMessageToLineJob.perform_later(payload)
+  end
+
+  def deliver_later(message)
   end
 end
