@@ -5,7 +5,8 @@ class Admin::UsersController < Admin::ApplicationController
 
   # GET /admin/users
   def index
-    @q = User.ransack(params[:q])
+    @params = params[:q]
+    @q = User.ransack(@params)
     @users = @q.result.page(params[:page])
   end
 
