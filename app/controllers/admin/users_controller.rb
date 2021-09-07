@@ -18,14 +18,17 @@ class Admin::UsersController < Admin::ApplicationController
   # POST /admin/users
   def create
     # TODO
-    unique = !User.exists?(email: params[:email])
-    return render json: { unique: unique } if !unique
-
     @user = User.new(user_params)
-    if @user.save!
-      redirect_to admin_user_path(@user), flash: { success: 'create success' }
+    if @user.save
+      respond_to do |format|
+        format.html { redirect_to admin_user_path(@user), flash: { success: 'create success' } }
+        format.json { render json: @user }
+      end
     else
-      redirect_to admin_users_path, flash: { error: @user.first_error_message }
+      respond_to do |format|
+        format.html { redirect_to admin_users_path, flash: { error: @user.first_error_message } }
+        format.json { render json: { message: 'errors', errors: @user.first_error_message }, status: 400 }
+      end
     end
   end
 
@@ -37,8 +40,8 @@ class Admin::UsersController < Admin::ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to edit_admin_user_path(@user), flash: { error: 'update error' } }
-        format.json { render json: { message: 'errors', errors: @user.errors }, status: 400 }
+        format.html { redirect_to edit_admin_user_path(@user), flash: { error: @user.first_error_message } }
+        format.json { render json: { message: 'errors', errors: @user.first_error_message }, status: 400 }
       end
     end
   end
@@ -47,7 +50,7 @@ class Admin::UsersController < Admin::ApplicationController
     if @user.destroy
       redirect_to admin_users_path, flash: { success: 'destroy success' }
     else
-      redirect_to admin_users_path, flash: { error: 'destroy error' }
+      redirect_to admin_users_path, flash: { error: @user.first_error_message }
     end
   end
 

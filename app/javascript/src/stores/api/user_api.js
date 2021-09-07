@@ -4,7 +4,8 @@ export default {
       url: process.env.MIX_ROOT_PATH + '/admin/users/',
       method: 'POST',
       data: JSON.stringify(query),
-      contentType: 'application/json'
+      contentType: 'application/json',
+      dataType: 'json'
     });
   },
   updateUser: (query) => {

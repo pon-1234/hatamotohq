@@ -65,7 +65,7 @@ export default {
         typeJson: true
       };
       await this.updateUser(data);
-      window.toastr.success('管理者の状況を変更しました。');
+      window.toastr.success('status changed');
       setTimeout(() => {
         location.reload();
       }, 1500);

@@ -14,8 +14,7 @@
             <div class="col-12">
               <ValidationProvider name="メールアドレス" rules="required" v-slot="{ errors }">
                 <input type="text" class="form-control" name="user[email]" placeholder="入力してください" v-model="userFormData.email">
-                <span class="error-explanation" v-if="!isEmailUnique"> メールアドレスは既存しています。 </span>
-                <span class="error-explanation" v-else>{{ errors[0] }}</span>
+                <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
@@ -113,17 +112,29 @@ export default {
         address: null,
         phone_number: null
       },
-      isEmailUnique: true,
       enabled: true
     };
   },
   methods: {
     ...mapActions('user', ['createUser']),
 
-    async onSubmit(e) {
+    onSubmit(e) {
       this.submitted = true;
-      const res = await this.createUser(this.userFormData);
-      this.isEmailUnique = !!res && res.unique;
+      this.createUser(this.userFormData).then((response) => {
+        this.onReceiveCreateUserResponse(null, response.id);
+      }).catch((error) => {
+        this.onReceiveCreateUserResponse(error.responseJSON.errors, null);
+      });
+    },
+    onReceiveCreateUserResponse(messageError, id) {
+      if (messageError) {
+        window.toastr.error(messageError);
+      } else {
+        window.toastr.success('create user success');
+        setTimeout(() => {
+          window.location.href = `${this.userRootUrl}/admin/users/${id}`;
+        }, 750);
+      }
     },
     onActive() {
       this.enabled ? this.userFormData.status = 'actived' : this.userFormData.status = 'blocked';

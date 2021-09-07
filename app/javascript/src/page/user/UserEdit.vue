@@ -143,23 +143,12 @@ export default {
 
     async onSubmit(e) {
       this.submitted = true;
-      const formData = Object.assign({}, this.userFormData);
-
-      delete formData.email;
-
+      const formData = _.omit(this.userFormData, ['email']);
       await this.updateUser(formData);
     },
     async onUpdatePassword() {
       this.submitted = true;
-      const formData = Object.assign({}, this.userFormData);
-
-      delete formData.email;
-      delete formData.name;
-      delete formData.company_name;
-      delete formData.address;
-      delete formData.phone_number;
-      delete formData.status;
-
+      const formData = _.pick(this.userFormData, ['id', 'password', 'password_confirmation']);
       await this.updateUser(formData);
     },
     onActive() {

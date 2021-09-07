@@ -52,6 +52,7 @@ class User < ApplicationRecord
   validates :address, length: { maximum: 255 }, allow_nil: true
   validates :company_name, length: { maximum: 255 }, allow_nil: true
   validates :note, length: { maximum: 2000 }, allow_nil: true
+  validates :email, uniqueness: true
 
   # Scope
   enum status: { actived: 'actived', blocked: 'blocked' }
