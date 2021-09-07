@@ -1,9 +1,9 @@
 export default {
-  getValidate(data) {
+  createUser(query) {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/admin/users/validate_unique',
+      url: process.env.MIX_ROOT_PATH + '/admin/users/',
       method: 'POST',
-      data: JSON.stringify(data),
+      data: JSON.stringify(query),
       contentType: 'application/json'
     });
   },
@@ -12,8 +12,8 @@ export default {
       url: process.env.MIX_ROOT_PATH + '/admin/users/' + query.id,
       method: 'PATCH',
       data: JSON.stringify(query),
-      dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      dataType: query.typeJson ? 'json' : ''
     });
   }
 };

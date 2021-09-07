@@ -18,11 +18,14 @@ class Admin::UsersController < Admin::ApplicationController
   # POST /admin/users
   def create
     # TODO
+    unique = !User.exists?(email: params[:email])
+    return render json: { unique: unique } if !unique
+
     @user = User.new(user_params)
-    if @user.save
+    if @user.save!
       redirect_to admin_user_path(@user), flash: { success: 'create success' }
     else
-      redirect_to admin_users_path, flash: { error: 'create errors' }
+      redirect_to admin_users_path, flash: { error: @user.first_error_message }
     end
   end
 
@@ -54,20 +57,9 @@ class Admin::UsersController < Admin::ApplicationController
     end
   end
 
-  def validate_unique
-    if params[:user_id].present?
-      user = User.find_by(email: params[:email])
-      unique = !user.present? || user.id === params[:user_id]
-    else
-      unique = !User.exists?(email: params[:email])
-    end
-    render json: { unique: unique }
-  end
-
   private
     def user_params
-      params.require(:user)
-      .permit(
+      params.permit(
         :email,
         :name,
         :status,

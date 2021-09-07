@@ -7,11 +7,7 @@
         </a>
         <h5 class="m-auto font-weight-bold">Edit user</h5>
       </div>
-      <ValidationObserver ref="observer" v-slot="{ validate }">
-        <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="getAction()" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="authenticity_token" :value="csrfToken">
-          <input type="hidden" name="_method" value="patch" />
-          <input type="hidden" name="user[id]" :value="userFormData.id">
+      <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
           <div class="card-body">
             <div class="card">
               <div class="card-header left-border"><h3 class="card-title">user's information</h3></div>
@@ -20,8 +16,7 @@
                   <label class="col-12">メールアドレス<required-mark/></label>
                   <div class="col-12">
                     <ValidationProvider name="メールアドレス" rules="required" v-slot="{ errors }">
-                      <input type="text" class="form-control" name="user[email]" placeholder="入力してください" v-model="userFormData.email" @change="getValidateUnique()">
-                      <span class="error-explanation" v-if="!isEmailUnique"> メールアドレスは既存しています。 </span>
+                      <input type="text" class="form-control" name="user[email]" placeholder="入力してください" v-model="userFormData.email" disabled>
                       <span class="error-explanation">{{ errors[0] }}</span>
                     </ValidationProvider>
                   </div>
@@ -78,42 +73,36 @@
             </div>
           </div>
           <div class="card-footer row-form-btn d-flex">
-            <button type="submit" class="btn btn-info mr-2">update</button>
+            <button type="submit" class="btn btn-info mr-2" :disabled="invalid" @click="validate().then(onSubmit)">update</button>
           </div>
-        </form>
       </ValidationObserver>
     </div>
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">Change password</h3></div>
         <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
-          <form ref="changePassword" @submit.prevent="validate().then(onUpdatePassword)" :action="getAction()" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="authenticity_token" :value="csrfToken">
-            <input type="hidden" name="_method" value="patch" />
-            <input type="hidden" name="user[id]" :value="userFormData.id">
-            <div class="card-body">
-              <div class="form-group row">
-                <label class="col-12">パスワード<required-mark/></label>
-                <div class="col-12">
-                  <ValidationProvider name="パスワード" rules="required|min:8|max:128" type="password" v-slot="{ errors }" vid="password">
-                    <input type="text" class="form-control" name="user[password]" placeholder="入力してください" v-model="userFormData.password">
-                    <span class="error-explanation">{{ errors[0] }}</span>
-                  </ValidationProvider>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-12">パスワード（確認用）<required-mark/></label>
-                <div class="col-12">
-                  <ValidationProvider name="パスワード（確認用）" rules="required|min:8|max:128|confirmed:password" type="password" v-slot="{ errors }">
-                    <input type="text" class="form-control" name="user[password_confirmation]" placeholder="入力してください" v-model="userFormData.passwordConfirmation">
-                    <span class="error-explanation">{{ errors[0] }}</span>
-                  </ValidationProvider>
-                </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-12">パスワード<required-mark/></label>
+              <div class="col-12">
+                <ValidationProvider name="パスワード" rules="required|min:8|max:128" type="password" v-slot="{ errors }" vid="password">
+                  <input type="text" class="form-control" name="user[password]" placeholder="入力してください" v-model="userFormData.password">
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
               </div>
             </div>
-            <div class="card-footer row-form-btn d-flex">
-              <button type="submit" class="btn btn-info mr-2" :disabled="invalid">change password</button>
+            <div class="form-group row">
+              <label class="col-12">パスワード（確認用）<required-mark/></label>
+              <div class="col-12">
+                <ValidationProvider name="パスワード（確認用）" rules="required|min:8|max:128|confirmed:password" type="password" v-slot="{ errors }">
+                  <input type="text" class="form-control" name="user[password_confirmation]" placeholder="入力してください" v-model="userFormData.password_confirmation">
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
             </div>
-          </form>
+          </div>
+          <div class="card-footer row-form-btn d-flex">
+            <button type="submit" class="btn btn-info mr-2" :disabled="invalid" @click="validate().then(onUpdatePassword)">change password</button>
+          </div>
         </ValidationObserver>
     </div>
   </div>
@@ -135,14 +124,14 @@ export default {
         id: null,
         email: null,
         password: null,
-        passwordConfirmation: null,
+        password_confirmation: null,
         name: null,
         status: 'actived',
         company_name: null,
         address: null,
-        phone_number: null
+        phone_number: null,
+        typeJson: false
       },
-      isEmailUnique: true,
       enabled: true
     };
   },
@@ -150,26 +139,28 @@ export default {
     Object.assign(this.userFormData, this.user);
   },
   methods: {
-    ...mapActions('user', ['validateUnique']),
+    ...mapActions('user', ['updateUser']),
 
     async onSubmit(e) {
-      if (!this.isEmailUnique) {
-        return;
-      }
       this.submitted = true;
-      this.$refs.form.submit();
-    },
-    getAction() {
-      return `${this.userRootUrl}/admin/users/${this.user.id}`;
-    },
-    async getValidateUnique() {
-      const data = { email: this.userFormData.email, user_id: this.userFormData.id };
-      const res = await this.validateUnique(data);
-      this.isEmailUnique = !!res && res.unique;
+      const formData = Object.assign({}, this.userFormData);
+
+      delete formData.email;
+
+      await this.updateUser(formData);
     },
     async onUpdatePassword() {
       this.submitted = true;
-      this.$refs.changePassword.submit();
+      const formData = Object.assign({}, this.userFormData);
+
+      delete formData.email;
+      delete formData.name;
+      delete formData.company_name;
+      delete formData.address;
+      delete formData.phone_number;
+      delete formData.status;
+
+      await this.updateUser(formData);
     },
     onActive() {
       this.enabled ? this.userFormData.status = 'actived' : this.userFormData.status = 'blocked';

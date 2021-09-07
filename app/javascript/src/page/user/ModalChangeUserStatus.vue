@@ -61,7 +61,8 @@ export default {
     async onSubmit() {
       const data = {
         id: this.user.id,
-        status: (this.user.status === 'blocked') ? 'actived' : 'blocked'
+        status: (this.user.status === 'blocked') ? 'actived' : 'blocked',
+        typeJson: true
       };
       await this.updateUser(data);
       window.toastr.success('管理者の状況を変更しました。');
@@ -74,22 +75,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btn-modal-delete {
-  background: #fb7c7c;
-}
-
-.btn-modal  {
-  color: #fff;
-  padding: 10px 10px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 200px;
-  letter-spacing: .1em;
-  display: block;
-  width: 100%;
-}
-
-.modal-title {
-  font-size: 16px;
-}
 </style>

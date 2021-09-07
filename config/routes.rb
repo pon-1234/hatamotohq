@@ -58,7 +58,6 @@ Rails.application.routes.draw do
     namespace :admin, path: Subdomain::AdminConstraint.path do
       root to: 'users#index'
       resources :users do
-        post :validate_unique, on: :collection
         get :search, on: :collection
         get :delete_confirm, on: :member
       end
