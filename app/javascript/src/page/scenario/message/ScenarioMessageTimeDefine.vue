@@ -33,17 +33,20 @@
         <div class="d-flex align-items-center" style="gap: 5px;">
           <!-- MODE: date -->
           <template v-if="!is_initial && mode === 'date'">
-            <input
-              v-model="date"
-              class="form-control"
-              min="1"
-              style="width:5em;"
-              autocomplete="off"
-              name="step"
-              type="number"
-              @change="$emit('update:date', date)"
-            />
-            <span>日後</span>
+            <template v-if="!zeroday">
+              <input
+                v-model="date"
+                class="form-control"
+                min="1"
+                style="width:5em;"
+                autocomplete="off"
+                name="step"
+                type="number"
+                @change="$emit('update:date', date)"
+              />
+              <span>日後</span>
+            </template>
+            <template v-else><span class="font-weight-bold">開始当日</span></template>
             <datetime
               style="width:6em;"
               v-model="selectedTime"
@@ -56,17 +59,19 @@
 
           <!-- MODE: ELAPSED TIME -->
           <template v-if="!is_initial && mode === 'elapsed_time'">
-            <input
-              v-model="date"
-              class="form-control"
-              min="1"
-              style="width:5em;"
-              autocomplete="off"
-              name="step"
-              type="number"
-              @change="$emit('update:date', date)"
-            />
-            <span>日と</span>
+            <template v-if="!zeroday">
+              <input
+                v-model.number="date"
+                class="form-control"
+                min="1"
+                style="width:5em;"
+                autocomplete="off"
+                name="step"
+                type="number"
+                @change="$emit('update:date', date)"
+              />
+              <span>日と</span>
+            </template>
             <datetime
               style="width:6em;"
               v-model="selectedTime"
@@ -84,11 +89,22 @@
             style="width:4em;"
             autocomplete="off"
             type="number"
-            value="1"
-            v-model="order"
+            v-model.number="order"
             @change="$emit('update:order', order)"
           />
           <span>通目</span>
+        </div>
+        <div class="mt-2" v-if="!is_initial">
+          <label role="button">
+            <input
+              class="mr-1 mt-1"
+              v-model="zeroday"
+              name="zeroday"
+              type="checkbox"
+              v-bind:value="false"
+              @change="date = zeroday ? 0 : 1"
+            /> 開始当日
+          </label>
         </div>
       </div>
       <div class="col-sm-8" v-if="is_initial === 'true'"></div>
@@ -114,14 +130,27 @@ export default {
 
   data() {
     return {
-      selectedTime: '00:00'
+      selectedTime: '00:00',
+      zeroday: false
     };
+  },
+
+  created() {
+    this.zeroday = this.date === 0;
   },
 
   watch: {
     selectedTime: function(val) {
       const timeOnly = moment(val).format('HH:mm');
       this.$emit('update:time', timeOnly);
+    },
+
+    date: function(val) {
+      this.$emit('update:date', this.date);
+    },
+
+    order: function(val) {
+      this.$emit('update:order', this.order);
     }
   }
 };

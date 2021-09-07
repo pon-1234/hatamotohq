@@ -5,8 +5,8 @@ class PushMessageToLineJob < ApplicationJob
   MAX_MSG_IN_REQUEST = 5
 
   def perform(payload)
-    @line_account = LineAccount.find(payload[:line_account_id])
     @channel = Channel.find(payload[:channel_id])
+    @line_account = @channel.line_account
     @reply_token = payload[:reply_token]
     messages = payload[:messages]
     # Send using reply token
@@ -15,55 +15,41 @@ class PushMessageToLineJob < ApplicationJob
       reply_messages = messages.shift(MAX_MSG_IN_REQUEST)
       send_reply_messages(reply_messages)
     end
-
     # Send remaining message
     send_messages(messages)
   end
 
   def send_reply_messages(messages)
-    message_content_arr = []
-    messages.each do |message|
-      message_content = message[:message]
-      message_content_arr << message_content
-    end
-    return if message_content_arr.empty?
-
+    return if messages.empty?
     success = LineApi::PostMessageReply.new(
       @line_account.line_channel_id,
       @line_account.line_channel_secret,
-      message_content_arr,
+      messages,
       @reply_token
     ).perform
     return unless success
-    store_messages(message_content_arr)
+    store_messages(messages)
   end
 
   def send_messages(messages)
     messages.in_groups_of(MAX_MSG_IN_REQUEST, false) do |grouped_messages|
-      message_content_arr = []
-      grouped_messages.each do |message|
-        message_content = message[:message]
-        message_content_arr << message_content
-      end
-      return if message_content_arr.empty?
-
       success = LineApi::PostMessagePush.new(
         @line_account.line_channel_id,
         @line_account.line_channel_secret,
-        message_content_arr,
+        grouped_messages,
         @channel.line_friend.line_user_id
       ).perform
       return unless success
-      store_messages(message_content_arr)
+      store_messages(grouped_messages)
     end
   end
 
-  def store_messages(message_content_arr)
-    message_content_arr.each do |message_content|
+  def store_messages(messages)
+    messages.each do |message|
       # Normalized message params
       message_params = {
         replyToken: @reply_token,
-        message: message_content.with_indifferent_access,
+        message: message.with_indifferent_access,
         timestamp: Time.now.to_i
       }
       Messages::MessageBuilder.new(nil, @channel, message_params).perform

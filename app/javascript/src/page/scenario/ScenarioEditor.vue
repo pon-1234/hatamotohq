@@ -35,7 +35,7 @@
                 <label class="mb10">配信</label>
                 <div class="flex start ai_center">
                   <div class="toggle-switch btn-scenario01">
-                    <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enable" false-value="disable" ref="status">
+                    <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioData.status" true-value="enabled" false-value="disabled" ref="status">
                     <label for="scenario-onoff" class="toggle-label">
                       <span></span>
                     </label>
@@ -49,8 +49,8 @@
               <div class="form-group">
                 <label>配信先</label>
                 <div class="radio-group mb10">
-                  <label><input type="radio" name="send" value="all"  :checked="target === 'all'"  @click="changeDeliverTarget('all')">全員</label>
-                  <label><input type="radio" name="send" value="sort" :checked="target === 'tags'" @click="changeDeliverTarget('tags')">条件で絞り込む</label>
+                  <label><input type="radio" name="target" value="all" v-model="target">全員</label>
+                  <label><input type="radio" name="target" value="tags" v-model="target">条件で絞り込む</label>
                 </div>
                 <div v-if="target === 'tags'">
                   <label>タグ</label>
@@ -66,25 +66,22 @@
                 <label>配信開始</label>
                 <div class="radio-group">
                   <label>
-                    <input type="radio" value="send" v-model="scenarioData.type" @change="changeScenarioType('send')">選択なし
+                    <input type="radio" value="manual" v-model="scenarioData.type">選択なし
                   </label>
                   <label>
-                    <input type="radio"  value="auto" v-model="scenarioData.type" @change="changeScenarioType('auto')">友達追加時
+                    <input type="radio"  value="auto" v-model="scenarioData.type">友達追加時
                   </label>
                 </div>
               </div>
 
               <div class="form-group">
-                <label>配信タイミング</label>
+                <label>配信タイミング</label><span class="text-xs">（作成後に変更不可）</span>
                 <div class="radio-group">
-                  <!-- <label v-if="scenarioData.type !== 'no_selection'">
-                    <input type="radio" value="now" v-model="scenarioData.mode">購読開始直後
-                  </label> -->
                   <label>
-                    <input type="radio" value="date" v-model="scenarioData.mode">経過時間で指定
+                    <input type="radio" value="date" v-model="scenarioData.mode" :disabled="scenario_id">経過時間で指定
                   </label>
                   <label>
-                    <input type="radio" value="elapsed_time" v-model="scenarioData.mode">時刻で指定
+                    <input type="radio" value="elapsed_time" v-model="scenarioData.mode" :disabled="scenario_id">時刻で指定
                   </label>
                 </div>
               </div>
@@ -116,7 +113,6 @@
   </div>
 </template>
 <script>
-import Util from '@/core/util';
 import { mapActions } from 'vuex';
 
 export default {
@@ -135,9 +131,9 @@ export default {
         title: '',
         description: '',
         tags: null,
-        status: 'disable',
-        mode: 'date',
-        type: 'send', // or 'auto'
+        status: 'disabled',
+        mode: 'date', // or 'elapsed_time'
+        type: 'manual', // or 'auto'
         after_action: this.ActionMessage.default
       }
     };
@@ -164,21 +160,9 @@ export default {
     ]),
 
     async getScenarioDetail() {
-      const query = {
-        id: this.scenario_id
-      };
-
-      const response = await this.getScenario(query);
+      const response = await this.getScenario(this.scenario_id);
       this.scenarioData = response;
-    },
-
-    changeScenarioType(value) {
-      console.log(value);
-      if (value === 'no_selection') {
-        this.scenarioData.mode = 'delay';
-      } else {
-        this.scenarioData.mode = 'delay';
-      }
+      this.target = this.scenarioData.tags.length > 0 ? 'tags' : 'all';
     },
 
     changeDeliverTarget(target) {
@@ -190,11 +174,7 @@ export default {
 
     async saveScenario(status) {
       if (status !== 'draft') {
-        if (this.$refs.status.checked) {
-          this.scenarioData.status = 'enable';
-        } else {
-          this.scenarioData.status = 'disable';
-        }
+        this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
           $('input, textarea').each(
@@ -215,16 +195,20 @@ export default {
         this.scenarioData.status = status;
       }
 
-      this.scenarioData.folderId = Util.getQueryParamsUrl('folder_id');
-
-      this.scenarioData.type = this.type || 'send';
+      this.scenarioData.type = this.scenarioData.type || 'manual';
       if (!this.scenario_id) {
-        const scenarioId = await this.createScenario(this.scenarioData);
+        const scenarioId = await this.createScenario(this.normalized());
         this.onReceiveCreateScenarioResponse(!!scenarioId);
       } else {
-        const scenarioId = await this.updateScenario(this.scenarioData);
+        const scenarioId = await this.updateScenario(this.normalized());
         this.onReceiveUpdateScenarioResponse(!!scenarioId);
       }
+    },
+
+    normalized() {
+      const payload = _.omit(this.scenarioData, ['tags']);
+      payload.tag_ids = this.target === 'tags' ? this.scenarioData.tags.map(_ => _.id) : [];
+      return payload;
     },
 
     addListTag(data) {

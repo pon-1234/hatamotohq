@@ -2,7 +2,7 @@
   <div class="scenario-talk create-content">
     <div class="row-ttl01 flex ai_center  flex-wrap justify-content-between">
       <div class="d-flex flex-column">
-        <h4 class="hdg3">ステップ配信トーク編集</h4>
+        <h4 class="hdg3">シナリオ配信トーク編集</h4>
         <h4 class="hdg3 hdg3-small" v-if="scenario" style="word-break: break-word;">ステップ名: {{scenario.title}}</h4>
         <div class="d-flex talk-priority align-items-center">
           <h4 class="hdg3 d-flex align-items-center" v-if="talk">配信No.:<input type="number" class="form-control" v-model="talk.priority" v-validate="'required'" min='1'>&nbsp;通目</h4>

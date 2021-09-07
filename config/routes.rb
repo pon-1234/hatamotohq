@@ -17,7 +17,10 @@ Rails.application.routes.draw do
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
       resources :channels do
-        resources :messages
+        get :scenarios, on: :member
+        resources :messages do
+          post :send_scenario, on: :collection
+        end
       end
       resources :friends do
         get :search, on: :collection

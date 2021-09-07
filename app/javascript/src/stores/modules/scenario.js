@@ -10,16 +10,11 @@ export const actions = {
   setPreviewContent(context, message) {
     context.dispatch('preview/setMessages', message, { root: true });
   },
-  getList(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return ScenarioApi.getList(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
+
+  async getScenarios(_) {
+    return await ScenarioApi.manual();
   },
+
   async createScenario(context, query) {
     let scenarioId = null;
     try {
@@ -68,8 +63,8 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  async getScenario(_, query) {
-    return await ScenarioApi.getScenario(query);
+  async getScenario(_, id) {
+    return await ScenarioApi.get(id);
   },
   getTalks(_, query) {
     _.dispatch('system/setLoading', true, { root: true });

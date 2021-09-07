@@ -29,7 +29,7 @@
       </li>
       <li>
         <a :href="`${MIX_ROOT_PATH}/scenarios`"  :class="getClassName(appUrl + '/scenarios')">
-          <i class="fas fa-book"></i>ステップ配信
+          <i class="fas fa-book"></i>シナリオ配信
         </a>
       </li>
       <li>
@@ -52,7 +52,7 @@
             class="fas fa-clipboard-list"></i>テンプレート管理</a>
         <ul class="list-unstyled collapse"  :class="isDisplay ? 'open-list': 'close-list'">
           <!--<li>-->
-            <!--<a :href="`${MIX_ROOT_PATH}/template/scenarios`" :class="getClassName(appUrl +  '/template/scenarios')">ステップ配信</a>-->
+            <!--<a :href="`${MIX_ROOT_PATH}/template/scenarios`" :class="getClassName(appUrl +  '/template/scenarios')">シナリオ配信</a>-->
           <!--</li>-->
           <li>
             <a :href="`${MIX_ROOT_PATH}/template/streams`" :class="getClassName(appUrl +  '/template/streams')">メッセージ配信</a>

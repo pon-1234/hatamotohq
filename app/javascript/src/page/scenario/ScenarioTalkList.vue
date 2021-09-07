@@ -2,7 +2,7 @@
   <div>
     <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
       <div class="d-flex flex-column" style="flex: 1; margin-bottom: 10px;">
-        <h4 class="hdg3">ステップ配信メッセージ一覧</h4>
+        <h4 class="hdg3">シナリオ配信メッセージ一覧</h4>
         <h4 class="hdg3 hdg3-small" v-if="scenario" style="word-break: break-all; max-width: 80%">ステップ名:{{scenario.title}}</h4>
 
         <div style="display: block">
@@ -157,11 +157,11 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        window.toastr.success('ステップ配信 メッセージの変更は完成しました');
+        window.toastr.success('シナリオ配信 メッセージの変更は完成しました');
       }
 
       if (Util.getQueryParamsUrl('is_created') === 'true') {
-        window.toastr.success('ステップ配信 メッセージを登録しました');
+        window.toastr.success('シナリオ配信 メッセージを登録しました');
       } else if (Util.getQueryParamsUrl('is_created') === 'false') {
         window.toastr.error('シナリオの数が上限に達しています。登録できません。');
       }

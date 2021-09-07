@@ -31,10 +31,13 @@
 class ScenarioMessage < ApplicationRecord
   belongs_to :scenario, counter_cache: true
 
+  # Validation
   validates_presence_of :content, :message_type_id
 
   # Scope
   scope :ordered, -> { order(is_initial: :desc, date: :asc, time: :asc, order: :asc) }
+
+  before_save :execute_before_save
 
   def clone_to(scenario_id)
     new_message = self.dup
@@ -42,4 +45,13 @@ class ScenarioMessage < ApplicationRecord
     new_message.save!
     new_message
   end
+
+  private
+    def execute_before_save
+      if date == 0 && time.to_time.seconds_since_midnight == 0
+        self.is_initial = true
+      end
+    rescue StandardError => e
+      logger.error e.message
+    end
 end

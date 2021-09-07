@@ -141,11 +141,7 @@ export default {
     ]),
 
     getScenario() {
-      const query = {
-        id: this.scenario_id
-      };
-
-      this.$store.dispatch('scenario/getScenario', query).then((res) => {
+      this.$store.dispatch('scenario/getScenario', this.scenario_id).then((res) => {
         this.scenario = res;
       }).catch((err) => {
         console.log(err);

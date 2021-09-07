@@ -27,7 +27,7 @@ class User::FriendsController < User::ApplicationController
     @friend = LineFriend.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render 'user/friends/show.json.jbuilder' }
+      format.json
     end
   end
 

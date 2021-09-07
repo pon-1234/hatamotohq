@@ -7,9 +7,9 @@ class CreateScenarios < ActiveRecord::Migration[6.0]
       t.references :folder, foreign_key: true
       t.string :title
       t.string :description
-      t.string :status, default: 'disable'
+      t.string :status, default: 'disabled'
       t.string :mode, default: 'date'
-      t.string :type, default: 'send' # or 'auto'
+      t.string :type, default: 'manual' # or 'auto'
       t.json :after_action
       t.integer :scenario_messages_count
       t.timestamps
