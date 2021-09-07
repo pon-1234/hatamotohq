@@ -3,9 +3,9 @@
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/admin/users`" class="text-info">
-          <i class="fa fa-arrow-left"></i> Back to list
+          <i class="fa fa-arrow-left"></i> ユーザー一覧
         </a>
-        <h5 class="m-auto font-weight-bold">Create user</h5>
+        <h5 class="m-auto font-weight-bold">新規ユーザー登録</h5>
       </div>
       <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
         <div class="card-body">
@@ -28,27 +28,27 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">address<required-mark/></label>
+            <label class="col-12">住所<required-mark/></label>
             <div class="col-12">
-              <ValidationProvider name="address" rules="required|max:255" v-slot="{ errors }">
+              <ValidationProvider name="住所" rules="required|max:255" v-slot="{ errors }">
                 <input type="text" class="form-control" name="user[address]" placeholder="入力してください" v-model="userFormData.address">
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">phone_number<required-mark/></label>
+            <label class="col-12">電話番号<required-mark/></label>
             <div class="col-12">
-              <ValidationProvider name="phone_number" rules="required|min:10|max:11" v-slot="{ errors }">
+              <ValidationProvider name="電話番号" rules="required|min:10|max:11" v-slot="{ errors }">
                 <input type="number" class="form-control" name="user[phone_number]" placeholder="入力してください" v-model="userFormData.phone_number">
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">company_name</label>
+            <label class="col-12">会社名</label>
             <div class="col-12">
-              <ValidationProvider name="company_name" rules="max:255" v-slot="{ errors }">
+              <ValidationProvider name="会社名" rules="max:255" v-slot="{ errors }">
                 <input type="text" class="form-control" name="user[company_name]" placeholder="入力してください" v-model="userFormData.company_name">
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -86,7 +86,7 @@
           </div>
         </div>
         <div class="card-footer row-form-btn d-flex">
-          <button type="submit" class="btn btn-info mr-2" :disabled="invalid" @click="validate().then(onSubmit)">create</button>
+          <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit)">登録</button>
         </div>
       </ValidationObserver>
     </div>
@@ -124,14 +124,14 @@ export default {
         this.onReceiveCreateUserResponse(null, error.responseJSON.message);
       });
     },
-    onReceiveCreateUserResponse(id, messageError) {
+    onReceiveCreateUserResponse(id, errorMessage) {
       if (id) {
-        window.toastr.success('create user success');
+        window.toastr.success('ユーザー登録は完了しました。');
         setTimeout(() => {
           window.location.href = `${this.userRootUrl}/admin/users/${id}`;
         }, 750);
       } else {
-        window.toastr.error(messageError);
+        window.toastr.error(errorMessage);
       }
     },
     onActive() {

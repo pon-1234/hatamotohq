@@ -4,9 +4,9 @@
       <div class="card-header d-flex align-items-center">
         <%= link_to admin_users_path, class: "text-info" do %>
           <i class="fa fa-arrow-left"></i>
-          Back to list
+          ユーザー一覧
         <% end %>
-        <h5 class="m-auto font-weight-bold">User detail</h5>
+        <h5 class="m-auto font-weight-bold">ユーザー詳細</h5>
       </div>
       <div class="card-body row">
         <div class="offset-xl-3 col-xl-6 text-center">
@@ -26,15 +26,15 @@
                   <td><%= @user.name %></td>
                 </tr>
                 <tr>
-                  <th class="fw-300">address</th>
+                  <th class="fw-300">住所</th>
                   <td><%= @user.address %></td>
                 </tr>
                 <tr>
-                  <th class="fw-300">phone_number</th>
+                  <th class="fw-300">電話番号</th>
                   <td><%= @user.phone_number %></td>
                 </tr>
                 <tr>
-                  <th class="fw-300">company_name</th>
+                  <th class="fw-300">会社名</th>
                   <td><%= @user.company_name %></td>
                 </tr>
                 <tr>
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <%= link_to "編集", edit_admin_user_path(@user), class: "btn btn-info m-auto" %>
+        <%= link_to "編集", edit_admin_user_path(@user), class: "btn btn-info m-auto fw-120" %>
       </div>
     </div>
   </div>

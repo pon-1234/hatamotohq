@@ -10,6 +10,7 @@ class Admin::UsersController < Admin::ApplicationController
     @users = @q.result.page(params[:page])
   end
 
+  # GET /admin/users/search
   def search
     index
     render :index
@@ -17,26 +18,23 @@ class Admin::UsersController < Admin::ApplicationController
 
   # POST /admin/users
   def create
-    # TODO
     @user = User.new(user_params)
-    if @user.save
-      render 'admin/users/create_success.json.jbuilder'
-    else
+    if !@user.save
       render_bad_request_with_message(@user.first_error_message)
     end
   end
 
+  # PATCH /admin/users/:id
   def update
-    if @user.update(user_params)
-      render 'admin/users/update_success.json.jbuilder'
-    else
+    if !@user.update(user_params)
       render_bad_request_with_message(@user.first_error_message)
     end
   end
 
+  # DELETE /admin/users/:id
   def destroy
     if @user.destroy
-      redirect_to admin_users_path, flash: { success: 'destroy success' }
+      redirect_to admin_users_path, flash: { success: 'ユーザー削除は完了しました。' }
     else
       redirect_to admin_users_path, flash: { error: @user.first_error_message }
     end

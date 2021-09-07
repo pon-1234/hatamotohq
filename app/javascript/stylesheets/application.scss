@@ -11,7 +11,10 @@
 @import "./slick/slick.css";
 @import "./slick/slick-theme.css";
 * {
-  font-family: Lucida Grande, Hiragino Kaku Gothic ProN, "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA", "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings, Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
+  font-family: Lucida Grande, Hiragino Kaku Gothic ProN,
+    "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA",
+    "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
 }
 
 // Override bootstrap
@@ -40,7 +43,7 @@
   border-color: #d43f3a;
 }
 
-.btn-group-xs>.btn,
+.btn-group-xs > .btn,
 .btn-xs {
   padding: 1px 5px;
   font-size: 12px !important;
@@ -51,6 +54,12 @@
 .btn-group {
   button {
     padding: 2px 5px !important;
+  }
+}
+
+.text-sm {
+  .form-control {
+    font-size: 0.875rem !important;
   }
 }
 
@@ -78,7 +87,7 @@ td {
   }
 }
 
-.table>tbody>tr>td {
+.table > tbody > tr > td {
   line-height: 1.4;
   vertical-align: middle;
   border-top: 1px solid #ddd;
@@ -270,8 +279,8 @@ td {
 
 // Datetime picker theme
 .theme-success .vdatetime-popup__header,
-.theme-success .vdatetime-calendar__month__day--selected>span>span,
-.theme-success .vdatetime-calendar__month__day--selected:hover>span>span {
+.theme-success .vdatetime-calendar__month__day--selected > span > span,
+.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
   background: #28a745;
 }
 
@@ -315,13 +324,13 @@ td {
       -webkit-transition: 0.4s;
       transition: 0.4s;
     }
-    input:checked+.slider {
+    input:checked + .slider {
       background-color: #17a2b8;
     }
-    input:focus+.slider {
+    input:focus + .slider {
       box-shadow: 0 0 1px #17a2b8;
     }
-    input:checked+.slider:before {
+    input:checked + .slider:before {
       -webkit-transform: translateX(20px);
       -ms-transform: translateX(20px);
       transform: translateX(20px);
