@@ -109,16 +109,12 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import Util from '@/core/util.js';
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
   props: ['user'],
-  components: { ValidationObserver, ValidationProvider },
   data() {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
-      csrfToken: Util.getCsrfToken(),
       submitted: false,
       userFormData: {
         id: null,
@@ -129,27 +125,53 @@ export default {
         status: 'actived',
         company_name: null,
         address: null,
-        phone_number: null,
-        typeJson: false
+        phone_number: null
       },
       enabled: true
     };
   },
   created() {
     Object.assign(this.userFormData, this.user);
+    this.userFormData.status === 'actived' ? this.enabled = true : this.enabled = false;
   },
   methods: {
     ...mapActions('user', ['updateUser']),
 
-    async onSubmit(e) {
+    onSubmit(e) {
       this.submitted = true;
       const formData = _.omit(this.userFormData, ['email']);
-      await this.updateUser(formData);
+      this.updateUser(formData).then((response) => {
+        this.onReceiveUpdateUserResponse(response.id, 'update');
+      }).catch((error) => {
+        this.onReceiveUpdateUserResponse(null);
+      });
     },
-    async onUpdatePassword() {
+    onUpdatePassword() {
       this.submitted = true;
       const formData = _.pick(this.userFormData, ['id', 'password', 'password_confirmation']);
-      await this.updateUser(formData);
+      this.updateUser(formData).then((response) => {
+        this.onReceiveUpdateUserResponse(response.id, 'password');
+      }).catch((error) => {
+        this.onReceiveUpdateUserResponse(null);
+      });
+    },
+    onReceiveUpdateUserResponse(id, status) {
+      if (id) {
+        if (status === 'update') {
+          window.toastr.success('create user success');
+        } else {
+          window.toastr.success('change password success');
+        }
+        setTimeout(() => {
+          window.location.href = `${this.userRootUrl}/admin/users/${id}`;
+        }, 750);
+      } else {
+        if (status === 'update') {
+          window.toastr.error('create user errors');
+        } else {
+          window.toastr.error('change password errors');
+        }
+      }
     },
     onActive() {
       this.enabled ? this.userFormData.status = 'actived' : this.userFormData.status = 'blocked';

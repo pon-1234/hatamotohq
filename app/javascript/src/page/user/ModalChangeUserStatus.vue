@@ -61,14 +61,13 @@ export default {
     async onSubmit() {
       const data = {
         id: this.user.id,
-        status: (this.user.status === 'blocked') ? 'actived' : 'blocked',
-        typeJson: true
+        status: (this.user.status === 'blocked') ? 'actived' : 'blocked'
       };
       await this.updateUser(data);
       window.toastr.success('status changed');
       setTimeout(() => {
         location.reload();
-      }, 1500);
+      }, 750);
     }
   }
 };

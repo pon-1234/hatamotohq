@@ -94,10 +94,8 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
-  components: { ValidationObserver, ValidationProvider },
   data() {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
@@ -121,19 +119,19 @@ export default {
     onSubmit(e) {
       this.submitted = true;
       this.createUser(this.userFormData).then((response) => {
-        this.onReceiveCreateUserResponse(null, response.id);
+        this.onReceiveCreateUserResponse(response.id, null);
       }).catch((error) => {
-        this.onReceiveCreateUserResponse(error.responseJSON.errors, null);
+        this.onReceiveCreateUserResponse(null, error.responseJSON.message);
       });
     },
-    onReceiveCreateUserResponse(messageError, id) {
-      if (messageError) {
-        window.toastr.error(messageError);
-      } else {
+    onReceiveCreateUserResponse(id, messageError) {
+      if (id) {
         window.toastr.success('create user success');
         setTimeout(() => {
           window.location.href = `${this.userRootUrl}/admin/users/${id}`;
         }, 750);
+      } else {
+        window.toastr.error(messageError);
       }
     },
     onActive() {

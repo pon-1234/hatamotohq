@@ -14,7 +14,7 @@ export default {
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json',
-      dataType: query.typeJson ? 'json' : ''
+      dataType: 'json'
     });
   }
 };

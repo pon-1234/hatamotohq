@@ -20,29 +20,17 @@ class Admin::UsersController < Admin::ApplicationController
     # TODO
     @user = User.new(user_params)
     if @user.save
-      respond_to do |format|
-        format.html { redirect_to admin_user_path(@user), flash: { success: 'create success' } }
-        format.json { render json: @user }
-      end
+      render 'admin/users/create_success.json.jbuilder'
     else
-      respond_to do |format|
-        format.html { redirect_to admin_users_path, flash: { error: @user.first_error_message } }
-        format.json { render json: { message: 'errors', errors: @user.first_error_message }, status: 400 }
-      end
+      render_bad_request_with_message(@user.first_error_message)
     end
   end
 
   def update
     if @user.update(user_params)
-      respond_to do |format|
-        format.html { redirect_to admin_user_path(@user), flash: { success: 'update success' } }
-        format.json { render json: @user }
-      end
+      render 'admin/users/update_success.json.jbuilder'
     else
-      respond_to do |format|
-        format.html { redirect_to edit_admin_user_path(@user), flash: { error: @user.first_error_message } }
-        format.json { render json: { message: 'errors', errors: @user.first_error_message }, status: 400 }
-      end
+      render_bad_request_with_message(@user.first_error_message)
     end
   end
 
