@@ -41,8 +41,8 @@ class Broadcast < ApplicationRecord
   }.freeze
 
   belongs_to :line_account
-  has_many :broadcast_messages
-  has_many :taggings, as: :taggable
+  has_many :broadcast_messages, dependent: :destroy
+  has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
   validates :title, presence: { unless: :draft? }, length: { maximum: 255 }
@@ -56,6 +56,10 @@ class Broadcast < ApplicationRecord
 
   def editable?
     self.draft? || self.pending?
+  end
+
+  def destroyable?
+    !self.sending?
   end
 
   def update_status(status)

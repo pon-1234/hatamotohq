@@ -2,6 +2,8 @@
 
 class User::BroadcastsController < User::ApplicationController
   load_and_authorize_resource
+  before_action :find_broadcast, only: [:show, :update, :destroy]
+
   include User::BroadcastsHelper
 
   # GET /user/broadcasts
@@ -19,7 +21,6 @@ class User::BroadcastsController < User::ApplicationController
 
   # GET /user/broadcasts/:id
   def show
-    @broadcast = Broadcast.find(params[:id])
   end
 
   # GET /user/broadcasts/new
@@ -47,9 +48,7 @@ class User::BroadcastsController < User::ApplicationController
 
   # PATCH /user/broadcasts/:id
   def update
-    @broadcast = Broadcast.find(params[:id])
     return render_permission_denied unless @broadcast.editable?
-
     @broadcast = update_broadcast(@broadcast, broadcast_params)
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
@@ -60,6 +59,21 @@ class User::BroadcastsController < User::ApplicationController
   rescue => e
     logger.error e.message
     render_bad_request
+  end
+
+  # DELETE /user/scenarios/:id
+  def destroy
+    if @broadcast.destroyable? && @broadcast.destroy
+      redirect_to user_broadcasts_path, flash: { success: '一斉配信の削除は成功しました。' }
+    else
+      redirect_to user_broadcasts_path, flash: { error: '一斉配信の削除は失敗しました。' }
+    end
+  end
+
+  def delete_confirm
+    respond_to do |format|
+      format.js
+    end
   end
 
   private
@@ -79,5 +93,9 @@ class User::BroadcastsController < User::ApplicationController
       params.require(:messages).map do |p|
         p.permit(:message_type_id, content: {})
       end
+    end
+
+    def find_broadcast
+      @broadcast = Broadcast.find(params[:id])
     end
 end

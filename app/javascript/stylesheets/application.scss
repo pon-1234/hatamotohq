@@ -32,6 +32,10 @@
   border-color: #2e6da4;
 }
 
+.btn-primary:disabled {
+  border-color: #a9a9a9;
+}
+
 .btn-warning {
   border-color: #cc8521;
   background: #d18f32;

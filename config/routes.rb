@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       end
       resources :broadcasts do
         get :search, on: :collection
+        get :delete_confirm, on: :member
       end
       resources :scenarios do
         get :search, on: :collection

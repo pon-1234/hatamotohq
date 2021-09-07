@@ -57,7 +57,7 @@
                       </div>
                     </td>
 
-                    <td>{{ formattedDate(auto_response.created_at) }}</td>
+                    <td><span>{{ formattedDate(auto_response.created_at) }}</span></td>
                     <td>
                       <template v-if="auto_response.status === 'enable'">
                         <span class="badge badge-success p-2">有効</span>
@@ -108,7 +108,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment-timezone';
 import { mapState, mapActions } from 'vuex';
 import Util from '@/core/util';
 
@@ -236,7 +235,7 @@ export default {
     },
 
     formattedDate(date) {
-      return moment(date).format('YYYY年MM月DD日');
+      return Util.formattedDate(date);
     }
   }
 };
