@@ -10,9 +10,11 @@ export const actions = {
   setPreviewContent(context, message) {
     context.dispatch('preview/setMessages', message, { root: true });
   },
+
   async getScenarios(_) {
-    return await ScenarioApi.listManual();
+    return await ScenarioApi.manual();
   },
+
   async createScenario(context, query) {
     let scenarioId = null;
     try {

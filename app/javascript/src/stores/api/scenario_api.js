@@ -1,5 +1,5 @@
 export default {
-  listManual: () => {
+  manual: () => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/manual`,
       method: 'GET',

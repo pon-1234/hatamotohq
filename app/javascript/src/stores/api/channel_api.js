@@ -18,6 +18,15 @@ export default {
     });
   },
 
+  availableScenarios: (channelId) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/scenarios`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   sendMessage: (channelId, payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages`,

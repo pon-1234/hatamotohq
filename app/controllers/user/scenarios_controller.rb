@@ -13,11 +13,6 @@ class User::ScenariosController < User::ApplicationController
     @scenarios = @q.result.page(params[:page])
   end
 
-  # GET /user/scenarios/manual
-  def manual
-    @scenarios = Scenario.accessible_by(current_ability).type_manual.enabled
-  end
-
   # GET /user/scenarios/search
   def search
     index

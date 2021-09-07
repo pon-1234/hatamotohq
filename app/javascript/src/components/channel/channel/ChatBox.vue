@@ -62,7 +62,7 @@
                     <i class="fas fa-plus"></i>
                   </template>
                 <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
-                <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">ステップ配信</b-dropdown-item>
+                <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">シナリオ配信</b-dropdown-item>
                 <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item>
               </b-dropdown>
             </li>
@@ -92,7 +92,7 @@
     </div>
     <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
     <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
-    <modal-select-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"/>
+    <modal-send-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >

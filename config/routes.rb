@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
       resources :channels do
+        get :scenarios, on: :member
         resources :messages do
           post :send_scenario, on: :collection
         end
@@ -29,7 +30,6 @@ Rails.application.routes.draw do
       end
       resources :scenarios do
         get :search, on: :collection
-        get :manual, on: :collection
         resources :messages, controller: 'scenario_messages' do
           get :delete_confirm, on: :member
         end

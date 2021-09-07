@@ -183,16 +183,17 @@ export const actions = {
     default:
     }
   },
-
+  // Get available scenario of the channel
+  async getAvailableScenarios(context, channelId) {
+    return await ChannelAPI.availableScenarios(channelId);
+  },
   // Send a text message to the active channel
   async sendMessage(context, payload) {
-    const response = await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
-    return response;
+    return await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
   },
   // Send a scenario to the active channel
   async sendScenario(context, payload) {
-    const response = await ChannelAPI.sendScenario(context.state.activeChannel.id, payload);
-    return response;
+    return await ChannelAPI.sendScenario(context.state.activeChannel.id, payload);
   },
 
   pushMessage(context, message) {

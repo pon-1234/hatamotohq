@@ -16,9 +16,9 @@ class ScenarioSchedulerJob < ApplicationJob
   def schedule(message)
     if message.is_initial?
       deliver_now(message)
+    else
+      deliver_later(message)
     end
-
-    deliver_later(message)
   end
 
   def deliver_now(message)
@@ -26,11 +26,29 @@ class ScenarioSchedulerJob < ApplicationJob
       channel_id: @channel.id,
       messages: [message.content]
     }
-    p '------'
-    p payload
     PushMessageToLineJob.perform_later(payload)
   end
 
   def deliver_later(message)
+    time = message.time.to_time
+    case @scenario.mode
+    when 'date'
+      schedule_at = (Time.zone.today + message.date).change({ hour: time.hour, min: time.min })
+      create_scenario_event(message, schedule_at)
+    when 'elapsed_time'
+      schedule_at = Time.zone.now + date.day + time.hour.hour + time.min.min
+      create_scenario_event(message, schedule_at)
+    end
+  end
+
+  def create_scenario_event(message, schedule_at)
+    scenario_event = ScenarioEvent.new(
+      line_account: @channel.line_account,
+      scenario: @scenario,
+      channel: @channel,
+      scenario_message: message,
+      schedule_at: schedule_at
+    )
+    scenario_event.save!
   end
 end

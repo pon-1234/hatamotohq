@@ -51,4 +51,11 @@ class LineFriend < ApplicationRecord
   def avatar_url
     line_picture_url
   end
+
+  def available_scenarios
+    all = Scenario.type_manual.enabled.where(line_account_id: self.line_account_id)
+    without_tag = all.select { |_| _.tags.blank? }
+    with_tag = all.joins(:tags).references(:tags).where(tags: { id: self.tag_ids })
+    without_tag + with_tag
+  end
 end

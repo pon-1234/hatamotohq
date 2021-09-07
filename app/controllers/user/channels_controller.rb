@@ -2,6 +2,9 @@
 
 class User::ChannelsController < User::ApplicationController
   load_and_authorize_resource
+  before_action :find_channel, only: [:scenarios]
+
+  # GET /user/channels
   def index
     @channels = Channel.all.page(params[:page])
     respond_to do |format|
@@ -9,4 +12,14 @@ class User::ChannelsController < User::ApplicationController
       format.json
     end
   end
+
+  # GET /user/channels/:channel_id/scenarios
+  def scenarios
+    @scenarios = @channel.line_friend.available_scenarios
+  end
+
+  private
+    def find_channel
+      @channel = Channel.find(params[:id])
+    end
 end
