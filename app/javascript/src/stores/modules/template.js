@@ -1,5 +1,5 @@
 
-import Message from '../api/messageTemplate_api';
+import TemplateAPI from '../api/template_api';
 import Global from '../api/global_api';
 
 export const state = {
@@ -70,7 +70,7 @@ export const actions = {
     context.dispatch('system/setLoading', true, { root: true });
     let messageData = null;
     try {
-      const res = await Message.getMessageById(query);
+      const res = await TemplateAPI.getMessageById(query);
       if (res) {
         messageData = {
           id: res.id,
@@ -90,7 +90,7 @@ export const actions = {
     context.dispatch('system/setLoading', true, { root: true });
     let messageIdData = null;
     try {
-      const response = await Message.sendMessage(query);
+      const response = await TemplateAPI.sendMessage(query);
 
       if (response && response.id) {
         messageIdData = response.id;
@@ -112,7 +112,7 @@ export const actions = {
     context.dispatch('system/setLoading', true, { root: true });
     let messageIdData = null;
     try {
-      const response = await Message.updateMessage(query);
+      const response = await TemplateAPI.updateMessage(query);
 
       if (response && response.id) {
         messageIdData = response.id;
@@ -137,7 +137,7 @@ export const actions = {
     let perPage = 0;
 
     try {
-      const response = await Message.getListMessage(query);
+      const response = await TemplateAPI.getListMessage(query);
 
       if (response) {
         messagesData = response;
@@ -156,7 +156,7 @@ export const actions = {
   },
 
   getListMessageTemplate(context, query = {}) {
-    return Message.getListMessage(query).done((res) => {
+    return TemplateAPI.getListMessage(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -173,7 +173,7 @@ export const actions = {
   async  deleteMessage(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      const response = await Message.deleteMessage(query);
+      const response = await TemplateAPI.deleteMessage(query);
       if (response && response.message === 'success') {
         context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
         context.commit('DELETE_MESSAGE', { index: query.index, folder_id: query.folder_id });
@@ -190,7 +190,7 @@ export const actions = {
   async copyMessage(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
-      const response = await Message.copyMessage(query);
+      const response = await TemplateAPI.copyMessage(query);
       if (response) {
         context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
         context.commit('COPY_MESSAGE', { index: query.index, message: response });

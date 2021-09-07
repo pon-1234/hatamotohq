@@ -157,19 +157,19 @@ export default {
         }).fail(e => {
         });
     },
-    getMedias(page = 1) {
+    async getMedias(page = 1) {
       const query = {
         page: page,
         type: this.filter
       };
-      this.$store
-        .dispatch('media/getMedias', query)
-        .done(res => {
-          this.medias = res.data;
-          this.perPage = res.meta.per_page;
-          this.totalRows = res.meta.total;
-        }).fail(e => {
-        });
+      try {
+        const res = await this.$store.dispatch('media/getMedias', query);
+        this.medias = res.data;
+        this.perPage = res.meta.per_page;
+        this.totalRows = res.meta.total;
+      } catch (error) {
+        console.log('----------------', error);
+      }
     },
 
     uploadMedia() {

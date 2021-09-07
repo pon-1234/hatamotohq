@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class User::MediasController < User::ApplicationController
+  # GET /user/medias
+  def index
+    @media_arr = Media.all
+  end
+
+  # POST /user/medias
   def create
     @media = Media.new(media_params)
     @media.line_account = current_user.line_account

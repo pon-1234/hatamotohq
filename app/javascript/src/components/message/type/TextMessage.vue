@@ -52,6 +52,7 @@ export default {
     border-radius: 1rem;
     position: relative;
     background: #edeff0;
+    max-width: 300px !important;
   }
 
   .user, .bot, .friend {

@@ -26,7 +26,7 @@
                     <th>自動応答名</th>
                     <th>キーワード</th>
                     <th>メッセージ</th>
-                    <th>操作</th>
+                    <th class="fw-100">操作</th>
                     <th>登録日</th>
                     <th>状況</th>
                   </tr>
@@ -39,7 +39,7 @@
                       <span class="mr-1" v-for="(tag, index) in auto_response.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
                     </td>
                     <td>
-                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
+                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index" class="mt-2">
                         <message-content :data="item.content" ></message-content>
                       </div>
                     </td>
