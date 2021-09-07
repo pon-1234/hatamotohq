@@ -27,7 +27,6 @@ import { mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
-  name: 'MessageContent',
   computed: {
     ...mapState('global', {
       user: state => state.user
