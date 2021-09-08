@@ -36,7 +36,7 @@
                   <img alt="Avatar" class="user-avatar" src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>">
                   <%= line_friend.line_name %>
                 </td>
-                <td><%= line_friend.created_at.strftime('%Y年%m月%d日 %H:%M') %></td>
+                <td><%= formatted_time(line_friend.created_at) %></td>
                 <td>なし</td>
                 <td>
                   <%= render_friend_status(line_friend.status) %>

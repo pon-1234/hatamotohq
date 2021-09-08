@@ -1,129 +1,125 @@
 <template>
-  <div>
-    <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
-      <h3 class="hdg3">プロフィール</h3>
-    </div>
-    <div class="profile-detail row" v-if="isRendering && friend">
-      <div class="col-lg-4">
-        <div class="card card-success card-outline">
-          <div class="card-body box-profile">
-            <!-- profile image -->
-            <div class="text-center">
-              <img class="profile-user-img img-fluid img-circle" :src="friend.line_picture_url ? friend.line_picture_url : '/img/no-image-profile.png'" alt="User profile picture">
+  <div class="card">
+    <div class="card-body">
+      <div class="profile-detail row" v-if="isRendering && friend">
+        <div class="col-lg-4">
+          <div class="card card-success card-outline">
+            <div class="card-body box-profile">
+              <!-- profile image -->
+              <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle" :src="friend.line_picture_url ? friend.line_picture_url : '/img/no-image-profile.png'" alt="User profile picture">
+              </div>
+              <!-- line user name -->
+              <h3 class="profile-username text-center">{{ friend.line_name }}</h3>
+              <ul class="list-group list-group-unbordered mb-3">
+                <!-- status (active/block) -->
+                <li class="list-group-item">
+                  <b>ステータス</b> <span class="float-right"><friend-status :status='friend.status'></friend-status></span>
+                </li>
+                <!-- go to chat button -->
+                <li class="list-group-item">
+                  <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`"><i class="fas fa-comment-dots"></i> メッセージ</a>
+                </li>
+                <!-- friend addition time -->
+                <li class="list-group-item">
+                  <b>登録日</b><span class="float-right">{{ formatDateTime(friend.created_at) }}</span>
+                </li>
+              </ul>
             </div>
-            <!-- line user name -->
-            <h3 class="profile-username text-center">{{ friend.line_name }}</h3>
-            <ul class="list-group list-group-unbordered mb-3">
-              <!-- status (active/block) -->
-              <li class="list-group-item">
-                <b>ステータス</b> <span class="float-right"><friend-status :status='friend.status'></friend-status></span>
-              </li>
-              <!-- go to chat button -->
-              <li class="list-group-item">
-                <b>トーク</b><a class="float-right" :href="`/talks/to/${channel_id}`"><i class="fas fa-comment-dots"></i> メッセージ</a>
-              </li>
-              <!-- friend addition time -->
-              <li class="list-group-item">
-                <b>登録日</b><span class="float-right">{{ friend.created_at }}</span>
-              </li>
-            </ul>
+            <!-- /.card-body -->
           </div>
-          <!-- /.card-body -->
+          <!-- /.card -->
         </div>
-        <!-- /.card -->
-      </div>
-      <div class="col-lg-8">
-        <div class="card card-success">
-          <div class="card-header">
-            <h3 class="card-title">詳細情報</h3>
+        <div class="col-lg-8">
+          <div class="card card-success">
+            <div class="card-header">
+              <h3 class="card-title">詳細情報</h3>
+            </div>
+            <div class="card-body">
+              <strong><i class="fas fa-book mr-1"></i> 表示名</strong>
+              <p class="text-muted mt-2">
+                <input type="text" placeholder="表示名" class="form-control" v-model="friend.display_name" ref="displayName">
+              </p>
+              <hr>
+
+              <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
+              <p class="text-muted mt-2">
+                <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friend.note"></textarea>
+              </p>
+              <hr>
+
+              <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
+              <p class="text-muted mt-2">
+                <input-tag :data="friend.tags" @input="selectTags" :allTags="true"/>
+              </p>
+              <hr>
+
+              <div class="btn btn-block btn-success" @click="saveInfo()">更新</div>
+            </div>
           </div>
-          <div class="card-body">
-            <strong><i class="fas fa-book mr-1"></i> 表示名</strong>
-            <p class="text-muted mt-2">
-              <input type="text" placeholder="表示名" class="form-control" v-model="friend.display_name" ref="displayName">
-            </p>
-            <hr>
-
-            <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
-            <p class="text-muted mt-2">
-              <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friend.note"></textarea>
-            </p>
-            <hr>
-
-            <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
-            <p class="text-muted mt-2">
-              <input-tag :data="friend.tags" @input="selectTags" :allTags="true"/>
-            </p>
-            <hr>
-
-            <div class="btn btn-block btn-success" @click="saveInfo()">更新</div>
+        </div>
+        <!-- <div class="col-lg-12">
+          <div class="tabs">
+            <div @click="currentTab = '友だち情報名'" :class="{'active': currentTab === '友だち情報名'}">友だち情報名</div>
+            <div @click="currentTab = '回答一覧'" :class="{'active': currentTab === '回答一覧'}">回答一覧</div>
+            <div style="flex: 1"></div>
           </div>
-          <!-- /.card-body -->
-        </div>
-        <!-- /.card -->
-      </div>
-      <div class="col-lg-12">
-        <div class="tabs">
-          <div @click="currentTab = '友だち情報名'" :class="{'active': currentTab === '友だち情報名'}">友だち情報名</div>
-          <div @click="currentTab = '回答一覧'" :class="{'active': currentTab === '回答一覧'}">回答一覧</div>
-          <div style="flex: 1"></div>
-        </div>
-        <div class="tab-content">
-          <div v-if="currentTab === '友だち情報名'">
-            <table class="tbl-linebot01" id="table-friend"
-                style="width: 100%; max-width: initial;">
-              <tbody>
-                <tr v-for="(profile, index) in  friend.survey_profile" :key="index">
-                  <th>{{profile.field_name}}</th>
-                  <td>
-                    <div v-if="profile.content !== null">
-                      <!--render-->
-                      <div v-if="profile.content.type === 'file'">
-                        <img style="width: 150px; margin-bottom: 10px; height: 150px; object-fit: contain"
-                          :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
-                          v-if="profile.content.content.mine_type!=null && profile.content.content.mine_type.includes('image/')">
-                        <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
-                        <div>
-                          <input type="hidden" v-model="friend.survey_profile[index].content.content.alias">
-                          <button type="button" class="btn btn-secondary"
-                            @click="openAddFileModal(index)">
-                            <i class="fa fa-upload"></i> ファイルをアップロード
-                          </button>
+          <div class="tab-content">
+            <div v-if="currentTab === '友だち情報名'">
+              <table class="tbl-linebot01" id="table-friend"
+                  style="width: 100%; max-width: initial;">
+                <tbody>
+                  <tr v-for="(profile, index) in  friend.survey_profile" :key="index">
+                    <th>{{profile.field_name}}</th>
+                    <td>
+                      <div v-if="profile.content !== null">
+                        <div v-if="profile.content.type === 'file'">
+                          <img style="width: 150px; margin-bottom: 10px; height: 150px; object-fit: contain"
+                            :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
+                            v-if="profile.content.content.mine_type!=null && profile.content.content.mine_type.includes('image/')">
+                          <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
+                          <div>
+                            <input type="hidden" v-model="friend.survey_profile[index].content.content.alias">
+                            <button type="button" class="btn btn-secondary"
+                              @click="openAddFileModal(index)">
+                              <i class="fa fa-upload"></i> ファイルをアップロード
+                            </button>
+                          </div>
+                          <div v-if="profile.content.content.name">
+                            <a style="color: #28a745"
+                              :href="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
+                              target="_blank">
+                              <i
+                                class="fa fa-download"></i><span>{{trimMidString(profile.content.content.name, 25, 10)}}</span>
+                            </a>
+                          </div>
                         </div>
-                        <div v-if="profile.content.content.name">
-                          <a style="color: #28a745"
-                            :href="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
-                            target="_blank">
-                            <i
-                              class="fa fa-download"></i><span>{{trimMidString(profile.content.content.name, 25, 10)}}</span>
-                          </a>
+                        <div v-else-if="profile.content.type === 'date'" class="input-group newgroup-inputs">
+                          <datetime
+                            type="date"
+                            v-model="friend.survey_profile[index].content.content"
+                            :input-class="{'form-control': true}">
+                          </datetime>
                         </div>
-                      </div>
-                      <div v-else-if="profile.content.type === 'date'" class="input-group newgroup-inputs">
-                        <datetime
-                          type="date"
-                          v-model="friend.survey_profile[index].content.content"
-                          :input-class="{'form-control': true}">
-                        </datetime>
-                      </div>
-                      <div v-else style="input-group newgroup-inputs">
-                        <input type="text" placeholder="" class="form-control"
-                          @click.stop
-                          v-model="friend.survey_profile[index].content.content"
-                        >
-                      </div>
+                        <div v-else style="input-group newgroup-inputs">
+                          <input type="text" placeholder="" class="form-control"
+                            @click.stop
+                            v-model="friend.survey_profile[index].content.content"
+                          >
+                        </div>
 
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="text-center mt-5" v-if="friend.survey_profile && friend.survey_profile.length === 0">データがありません。</div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center mt-5" v-if="friend.survey_profile && friend.survey_profile.length === 0">データがありません。</div>
+            </div>
+            <div v-if="currentTab === '回答一覧'" class="tbl-admin01 table-responsive fz14 text-center" style="overflow-x: scroll">
+              <friend-survey-answer :friendId="friendId"></friend-survey-answer>
+            </div>
           </div>
-          <div v-if="currentTab === '回答一覧'" class="tbl-admin01 table-responsive fz14 text-center" style="overflow-x: scroll">
-            <friend-survey-answer :friendId="friendId"></friend-survey-answer>
-          </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -132,10 +128,8 @@
 <script>
 import moment from 'moment';
 import { mapActions } from 'vuex';
-import ModalUploadFile from './ModalUploadFile.vue';
 
 export default {
-  components: { ModalUploadFile },
   props: {
     friend: Object,
     channel_id: Number
@@ -177,7 +171,7 @@ export default {
     },
 
     formatDateTime(time) {
-      return moment(time).format('YYYY年MM月DD日 HH:mm:ss');
+      return moment(time).format('YYYY.MM.DD HH:mm');
     },
 
     editDisplayName() {

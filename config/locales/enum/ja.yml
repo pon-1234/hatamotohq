@@ -26,8 +26,8 @@ ja:
     line_friend:
       status:
         active: 有効
-        block: ブロック
-        mute: ミュート
+        blocked: ブロック中
+        muted: ミュート中
     scenario:
       mode:
         elapsed_time: 経過時間

@@ -13,6 +13,12 @@ class User::ChannelsController < User::ApplicationController
     end
   end
 
+  # GET /user/channels/:id
+  def show
+    @channel_id = params[:id]
+    index
+  end
+
   # GET /user/channels/:channel_id/scenarios
   def scenarios
     @scenarios = @channel.line_friend.available_scenarios

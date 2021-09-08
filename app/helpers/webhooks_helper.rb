@@ -31,13 +31,11 @@ module WebhooksHelper
       line_friend = LineFriend.where(line_account: line_account, line_user_id: friend_id).first
       return false if line_friend.nil?
       # Change friend status to block if existing in db
-      line_friend.status = 'block'
-      line_friend.save
+      line_friend.update_columns(status: 'blocked')
       # Change channel status to block
       channel = Channel.where(line_account: line_account, line_friend: line_friend).first
       return false if channel.nil?
-      channel.status = 'block'
-      channel.save
+      channel.update_columns(status: 'blocked')
       true
     end
 
