@@ -35,8 +35,9 @@ class LineAccount < ApplicationRecord
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
   has_many :channels
   has_many :line_friends, dependent: :destroy
+  has_many :folders, dependent: :destroy
 
-  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }, _prefix: true
+  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
 
   before_create do
     self.webhook_url = generate_webhook_url if self.webhook_url.nil?
@@ -44,10 +45,6 @@ class LineAccount < ApplicationRecord
 
   after_create do
     create_default_folder
-  end
-
-  before_destroy do
-    destroy_default_folder
   end
 
   private
@@ -68,10 +65,5 @@ class LineAccount < ApplicationRecord
       Folder.create(name: '未分類', line_account: self, type: :survey)
       Folder.create(name: '未分類', line_account: self, type: :survey_profile)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)
-    end
-
-    def destroy_default_folder
-      folders = Folder.where(line_account_id: self.id)
-      folders.destroy_all
     end
 end

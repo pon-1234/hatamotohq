@@ -8,14 +8,14 @@ export const getters = {};
 
 export const actions = {
   createUser(_, query) {
-    return UserApi.createUser(query).done((res) => {
+    return UserApi.create(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
     });
   },
   updateUser(_, query) {
-    return UserApi.updateUser(query).done((res) => {
+    return UserApi.update(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);

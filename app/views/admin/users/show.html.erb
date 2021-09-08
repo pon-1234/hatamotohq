@@ -40,7 +40,7 @@
                 <tr>
                   <th>状況</th>
                   <td>
-                    <span class="badge <%= @user.status.eql?('actived') ? 'badge-success' : (@user.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @user.status_i18n %></span>
+                    <span class="badge <%= @user.status.eql?('active') ? 'badge-success' : (@user.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @user.status_i18n %></span>
                   </td>
                 </tr>
               </tbody>

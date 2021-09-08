@@ -20,12 +20,12 @@ ja:
         android: Android
       status:
         inactive: 非アクティブ
-        actived: 有効
+        active: 有効
         blocked: 無効
         deleting: 削除中
     line_friend:
       status:
-        active: 正常
+        active: 有効
         block: ブロック
         mute: ミュート
     scenario:

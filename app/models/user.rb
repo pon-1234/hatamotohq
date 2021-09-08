@@ -22,7 +22,7 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
 #  sign_in_count          :integer          default(0), not null
-#  status                 :string(255)      default("actived")
+#  status                 :string(255)      default("active")
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -55,7 +55,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   # Scope
-  enum status: { actived: 'actived', blocked: 'blocked' }
+  enum status: { active: 'active', blocked: 'blocked' }
 
   def push_event_data
     {

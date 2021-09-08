@@ -4,7 +4,7 @@
       <div class="modal-content p-2">
         <div class="modal-header">
           <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'blocked'">こちらのユーザーをブロック解除してよろしいですが?</label>
-          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'actived'">こちらのユーザーをブロックしてよろしいですが?</label>
+          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'active'">こちらのユーザーをブロックしてよろしいですが?</label>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -27,7 +27,7 @@
         </div>
         <div class="modal-footer d-flex justify-content-center">
           <a class="btn btn-info" data-dismiss="modal" @click="onSubmit()">
-            <span v-if="user && user.status === 'actived'">ブロックする</span>
+            <span v-if="user && user.status === 'active'">ブロックする</span>
             <span v-else>ブロックを解除する</span>
           </a>
         </div>
@@ -54,14 +54,14 @@ export default {
     shownModal() {
       if ($('#inputValue').val()) {
         const currUserId = $('#inputValue').val();
-        this.user = this.users.find(e => Number(e.id) === Number(currUserId));
+        this.user = this.users.find(e => e.id === Number(currUserId));
       }
     },
 
     async onSubmit() {
       const data = {
         id: this.user.id,
-        status: (this.user.status === 'blocked') ? 'actived' : 'blocked'
+        status: (this.user.status === 'blocked') ? 'active' : 'blocked'
       };
       await this.updateUser(data);
       window.toastr.success('ユーザー状況の変更は完了しました。');

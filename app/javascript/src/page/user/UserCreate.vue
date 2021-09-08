@@ -104,7 +104,7 @@ export default {
         email: null,
         password: null,
         password_confirmation: null,
-        status: 'actived',
+        status: 'active',
         name: null,
         company_name: null,
         address: null,
@@ -135,7 +135,7 @@ export default {
       }
     },
     onActive() {
-      this.enabled ? this.userFormData.status = 'actived' : this.userFormData.status = 'blocked';
+      this.enabled ? this.userFormData.status = 'active' : this.userFormData.status = 'blocked';
     }
   }
 };

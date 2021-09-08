@@ -122,7 +122,7 @@ export default {
         password: null,
         password_confirmation: null,
         name: null,
-        status: 'actived',
+        status: 'active',
         company_name: null,
         address: null,
         phone_number: null
@@ -132,7 +132,7 @@ export default {
   },
   created() {
     Object.assign(this.userFormData, this.user);
-    this.userFormData.status === 'actived' ? this.enabled = true : this.enabled = false;
+    this.userFormData.status === 'active' ? this.enabled = true : this.enabled = false;
   },
   methods: {
     ...mapActions('user', ['updateUser']),
@@ -163,7 +163,7 @@ export default {
       }, 750);
     },
     onActive() {
-      this.enabled ? this.userFormData.status = 'actived' : this.userFormData.status = 'blocked';
+      this.enabled ? this.userFormData.status = 'active' : this.userFormData.status = 'blocked';
     }
   }
 };

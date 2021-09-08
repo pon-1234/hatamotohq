@@ -520,7 +520,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_160907) do
     t.datetime 'last_sign_in_at'
     t.string 'current_sign_in_ip'
     t.string 'last_sign_in_ip'
-    t.string 'status', default: 'actived'
+    t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'authentication_token'
