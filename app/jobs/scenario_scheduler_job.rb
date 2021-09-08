@@ -7,7 +7,6 @@ class ScenarioSchedulerJob < ApplicationJob
     @channel = Channel.find(channel_id)
     @scenario = Scenario.find(scenario_id)
     messages = @scenario.scenario_messages.enabled.ordered
-    byebug
     return if messages.empty?
     messages.each do |message|
       schedule(message)

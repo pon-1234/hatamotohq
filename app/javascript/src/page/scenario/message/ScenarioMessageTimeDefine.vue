@@ -32,7 +32,7 @@
         <span class="mb-2">配信タイミング</span>
         <div class="d-flex align-items-center" style="gap: 5px;">
           <!-- MODE: date -->
-          <template v-if="!is_initial && mode === 'elapsed_time'">
+          <template v-if="!is_initial && mode === 'time'">
             <template v-if="!zeroday">
               <input
                 v-model="date"
@@ -58,7 +58,7 @@
           </template>
 
           <!-- MODE: ELAPSED TIME -->
-          <template v-if="!is_initial && mode === 'date'">
+          <template v-if="!is_initial && mode === 'elapsed_time'">
             <template v-if="!zeroday">
               <input
                 v-model.number="date"
