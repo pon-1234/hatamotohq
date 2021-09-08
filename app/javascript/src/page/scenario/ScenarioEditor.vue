@@ -78,10 +78,10 @@
                 <label>配信タイミング</label><span class="text-xs">（作成後に変更不可）</span>
                 <div class="radio-group">
                   <label>
-                    <input type="radio" value="date" v-model="scenarioData.mode" :disabled="scenario_id">経過時間で指定
+                    <input type="radio" value="elapsed_time" v-model="scenarioData.mode" :disabled="scenario_id">経過時間で指定
                   </label>
                   <label>
-                    <input type="radio" value="elapsed_time" v-model="scenarioData.mode" :disabled="scenario_id">時刻で指定
+                    <input type="radio" value="time" v-model="scenarioData.mode" :disabled="scenario_id">時刻で指定
                   </label>
                 </div>
               </div>
@@ -132,7 +132,7 @@ export default {
         description: '',
         tags: null,
         status: 'disabled',
-        mode: 'date', // or 'elapsed_time'
+        mode: 'elapsed_time', // or 'time'
         type: 'manual', // or 'auto'
         after_action: this.ActionMessage.default
       }

@@ -19,5 +19,11 @@ staging:
   WorkerDispatchBroadcast:
     cron: "0 * * * * *" # Runs every minute
     include_metadata: true
-    description: "This job dispatch broadcast that was enqueued"
+    description: "This worker dispatch broadcast that was enqueued"
+    enabled: true
+
+  WorkerDispatchBroadcast:
+    cron: "0 * * * * *" # Runs every minute
+    include_metadata: true
+    description: "This worker dispatch scenario event that was enqueued"
     enabled: true

@@ -30,8 +30,8 @@ ja:
         mute: ミュート
     scenario:
       mode:
-        date: 経過時間
-        elapsed_time: 時刻
+        elapsed_time: 経過時間
+        time: 時刻
       status:
         enabled: 稼働中
         disabled: 停止中

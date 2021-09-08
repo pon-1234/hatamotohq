@@ -8,7 +8,7 @@ class CreateScenarios < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :description
       t.string :status, default: 'disabled'
-      t.string :mode, default: 'date'
+      t.string :mode, default: 'time' # or 'elapsed_time'
       t.string :type, default: 'manual' # or 'auto'
       t.json :after_action
       t.integer :scenario_messages_count

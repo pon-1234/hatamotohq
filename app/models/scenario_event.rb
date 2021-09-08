@@ -38,4 +38,5 @@ class ScenarioEvent < ApplicationRecord
 
   # Scope
   scope :before, ->(time) { where('schedule_at <= ?', time) }
+  scope :ordered, -> { order(order: :asc) }
 end

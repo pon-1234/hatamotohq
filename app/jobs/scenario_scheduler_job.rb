@@ -7,6 +7,7 @@ class ScenarioSchedulerJob < ApplicationJob
     @channel = Channel.find(channel_id)
     @scenario = Scenario.find(scenario_id)
     messages = @scenario.scenario_messages.enabled.ordered
+    byebug
     return if messages.empty?
     messages.each do |message|
       schedule(message)
@@ -37,6 +38,7 @@ class ScenarioSchedulerJob < ApplicationJob
       create_scenario_event(message, schedule_at)
     when 'elapsed_time'
       schedule_at = Time.zone.now + date.day + time.hour.hour + time.min.min
+      byebug
       create_scenario_event(message, schedule_at)
     end
   end
@@ -47,7 +49,9 @@ class ScenarioSchedulerJob < ApplicationJob
       scenario: @scenario,
       channel: @channel,
       scenario_message: message,
-      schedule_at: schedule_at
+      schedule_at: schedule_at,
+      order: message.order,
+      status: 'queued'
     )
     scenario_event.save!
   end
