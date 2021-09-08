@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content p-2">
         <div class="modal-header">
-          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'blocked'">Are you sure you want to unblock this user?</label>
-          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'actived'">Are you sure you want to block this user?</label>
+          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'blocked'">こちらのユーザーをブロック解除してよろしいですが?</label>
+          <label class="modal-title" id="exampleModalLongTitle" v-if="user && user.status === 'actived'">こちらのユーザーをブロックしてよろしいですが?</label>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -12,9 +12,9 @@
         <div class="modal-body">
           <table class="table table-bordered table-striped">
             <thead>
-              <th class="mw-150">管理者ID</th>
-              <th class="mw-150">管理者メール</th>
-              <th class="mw-150">管理者名</th>
+              <th class="mw-150">ユーザーID</th>
+              <th class="mw-150">メールアドレス</th>
+              <th class="mw-150">氏名</th>
             </thead>
             <tbody>
               <tr>
@@ -64,7 +64,7 @@ export default {
         status: (this.user.status === 'blocked') ? 'actived' : 'blocked'
       };
       await this.updateUser(data);
-      window.toastr.success('status changed');
+      window.toastr.success('ユーザー状況の変更は完了しました。');
       setTimeout(() => {
         location.reload();
       }, 750);
