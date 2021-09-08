@@ -30,14 +30,14 @@ class ScenarioSchedulerJob < ApplicationJob
   end
 
   def deliver_later(message)
+    date = message.date
     time = message.time.to_time
     case @scenario.mode
-    when 'date'
-      schedule_at = (Time.zone.today + message.date).change({ hour: time.hour, min: time.min })
+    when 'time'
+      schedule_at = (Time.zone.today + message.date).change({ hour: time.hour, minute: time.min, second: 0 })
       create_scenario_event(message, schedule_at)
     when 'elapsed_time'
-      schedule_at = Time.zone.now + date.day + time.hour.hour + time.min.min
-      byebug
+      schedule_at = Time.zone.now.change({ second: 0 }) + date.day + time.hour.hour + time.min.minute
       create_scenario_event(message, schedule_at)
     end
   end

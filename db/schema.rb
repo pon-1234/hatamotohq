@@ -336,7 +336,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_152756) do
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
   end
 
-  create_table 'scenario_events', id: false, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+  create_table 'scenario_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'scenario_id'
     t.bigint 'scenario_message_id'
@@ -354,7 +354,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_152756) do
 
   create_table 'scenario_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'scenario_id'
-    t.string 'status', default: 'disable'
+    t.string 'status', default: 'disabled'
     t.string 'name'
     t.json 'content'
     t.integer 'message_type_id'
@@ -376,7 +376,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_152756) do
     t.string 'title'
     t.string 'description'
     t.string 'status', default: 'disabled'
-    t.string 'mode', default: 'date'
+    t.string 'mode', default: 'time'
     t.string 'type', default: 'manual'
     t.json 'after_action'
     t.integer 'scenario_messages_count'

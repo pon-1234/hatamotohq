@@ -22,7 +22,7 @@ staging:
     description: "This worker dispatch broadcast that was enqueued"
     enabled: true
 
-  WorkerDispatchBroadcast:
+  WorkerDispatchScenarioMessage:
     cron: "0 * * * * *" # Runs every minute
     include_metadata: true
     description: "This worker dispatch scenario event that was enqueued"

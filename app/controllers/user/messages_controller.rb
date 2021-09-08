@@ -13,11 +13,7 @@ class User::MessagesController < User::ApplicationController
     user = Current.user
     mb = Messages::MessageBuilder.new(user, @channel, message_params)
     @message = mb.perform
-    payload = {
-      channel_id: @channel.id,
-      messages: [@message.line_content]
-    }
-    PushMessageToLineJob.perform_later(payload)
+    push_message_to_line
   rescue StandardError => e
     render_could_not_create_error(e.message)
   end
@@ -53,5 +49,16 @@ class User::MessagesController < User::ApplicationController
         :channel_id,
         :scenario_id
       )
+    end
+
+    # Call line api to send the message to friend
+    def push_message_to_line
+      line_account = Current.user.line_account
+      LineApi::PostMessagePush.new(
+        line_account.line_channel_id,
+        line_account.line_channel_secret,
+        [@message.line_content],
+        @channel.line_friend.line_user_id
+      ).perform
     end
 end

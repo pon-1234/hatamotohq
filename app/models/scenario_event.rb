@@ -4,6 +4,7 @@
 #
 # Table name: scenario_events
 #
+#  id                  :bigint           not null, primary key
 #  order               :integer
 #  schedule_at         :datetime
 #  status              :string(255)
@@ -39,4 +40,14 @@ class ScenarioEvent < ApplicationRecord
   # Scope
   scope :before, ->(time) { where('schedule_at <= ?', time) }
   scope :ordered, -> { order(order: :asc) }
+
+  def deliver_now
+    payload = {
+      channel_id: self.channel.id,
+      messages: [self.scenario_message.content]
+    }
+    self.update_columns(status: 'sending')
+    PushMessageToLineJob.perform_now(payload)
+    self.destroy
+  end
 end

@@ -4,6 +4,7 @@
 #
 # Table name: scenario_events
 #
+#  id                  :bigint           not null, primary key
 #  order               :integer
 #  schedule_at         :datetime
 #  status              :string(255)
