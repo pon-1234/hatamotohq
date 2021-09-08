@@ -1,6 +1,6 @@
 import '../stylesheets/application'; // This file will contain your custom CSS
 import Vue from 'vue';
-import VeeValidate, { Validator } from 'vee-validate';
+import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';
 import 'bootstrap';
 import Chartkick from 'vue-chartkick';
@@ -63,6 +63,8 @@ Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
 // START: vee-validation configuration
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 Validator.localize('ja', ja);
 // END: vee-validation configuration

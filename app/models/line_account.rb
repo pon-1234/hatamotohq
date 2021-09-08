@@ -35,8 +35,9 @@ class LineAccount < ApplicationRecord
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
   has_many :channels
   has_many :line_friends, dependent: :destroy
+  has_many :folders, dependent: :destroy
 
-  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }, _prefix: true
+  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
 
   before_create do
     self.webhook_url = generate_webhook_url if self.webhook_url.nil?

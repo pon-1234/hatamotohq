@@ -22,6 +22,7 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string(255)
 #  sign_in_count          :integer          default(0), not null
+#  status                 :string(255)      default("active")
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -43,7 +44,7 @@ class User < ApplicationRecord
 
   include Avatarable
 
-  has_one :line_account, class_name: 'LineAccount', foreign_key: 'owner_id'
+  has_one :line_account, class_name: 'LineAccount', foreign_key: 'owner_id', dependent: :destroy
 
   # Validations
   validates :name, length: { maximum: 255 }, allow_nil: true
@@ -51,9 +52,10 @@ class User < ApplicationRecord
   validates :address, length: { maximum: 255 }, allow_nil: true
   validates :company_name, length: { maximum: 255 }, allow_nil: true
   validates :note, length: { maximum: 2000 }, allow_nil: true
+  validates :email, uniqueness: true
 
   # Scope
-  enum status: { active: 'active', block: 'block' }, _prefix: true
+  enum status: { active: 'active', blocked: 'blocked' }
 
   def push_event_data
     {

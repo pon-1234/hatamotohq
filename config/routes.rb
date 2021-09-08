@@ -61,7 +61,10 @@ Rails.application.routes.draw do
     }
     namespace :admin, path: Subdomain::AdminConstraint.path do
       root to: 'users#index'
-      resources :users
+      resources :users do
+        get :search, on: :collection
+        get :delete_confirm, on: :member
+      end
     end
 
     require 'sidekiq/web'

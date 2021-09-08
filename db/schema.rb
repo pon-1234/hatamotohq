@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_152756) do
+ActiveRecord::Schema.define(version: 2021_09_07_160907) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -520,6 +520,7 @@ ActiveRecord::Schema.define(version: 2021_09_05_152756) do
     t.datetime 'last_sign_in_at'
     t.string 'current_sign_in_ip'
     t.string 'last_sign_in_ip'
+    t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'authentication_token'
