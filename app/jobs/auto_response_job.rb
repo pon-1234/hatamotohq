@@ -10,25 +10,16 @@ class AutoResponseJob < ApplicationJob
 
     # Send auto response message if keyword is hit
     auto_responses = AutoResponse.where(id: auto_response_ids, status: 'enable')
-    reply_content = []
+    reply_messages = []
     auto_responses.each do |auto_response|
-      reply_messages = auto_response.auto_response_messages
-      next if reply_messages.blank?
-
-      reply_messages.each do |message|
-        reply_content << {
-          message: message.content
-        }
-      end
+      reply_messages << auto_response.auto_response_messages.pluck(:content)
     end
-    return if reply_content.blank?
+
     # Rebuild payload
     payload = {
       channel_id: message.channel_id,
-      line_account_id: message.channel.line_account_id,
-      line_friend_id: message.sender.id,
       reply_token: message.reply_token,
-      messages: reply_content
+      messages: reply_messages
     }
     PushMessageToLineJob.perform_later(payload)
   end

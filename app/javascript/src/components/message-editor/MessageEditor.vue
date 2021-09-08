@@ -168,7 +168,6 @@ export default {
     },
     changeContentMessage(content) {
       this.defaults.content = content;
-      console.log('changeContentMessage', this.defaults);
       this.$emit('input', { index: this.index, content: this.defaults });
     },
 

@@ -4,9 +4,7 @@ class User::FoldersController < User::ApplicationController
   def create
     @folder = Folder.new(folder_params)
     @folder.line_account = Current.user.line_account
-    if @folder.save!
-      render 'user/folders/create_success.json.jbuilder'
-    else
+    if !@folder.save
       render_bad_request
     end
   end

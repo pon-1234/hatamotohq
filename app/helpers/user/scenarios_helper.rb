@@ -11,9 +11,9 @@ module User::ScenariosHelper
     return '' if status.blank?
     status_i18n = I18n.t('enums.scenario.status.' + status)
     case status
-    when 'enable'
+    when 'enabled'
       "<span class='badge badge-primary p-2'>#{status_i18n}</span>"
-    when 'disable'
+    when 'disabled'
       "<span class='badge badge-warning p-2'>#{status_i18n}</span>"
     when 'draft'
       "<span class='badge badge-secondary p-2'>#{status_i18n}</span>"

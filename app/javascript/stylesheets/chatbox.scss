@@ -21,7 +21,6 @@
   width: calc(100% - 50px);
   display: flex;
   height: 100%;
-  /* min-width: 600px; */
   padding: 0;
   margin-left: 0 !important;
 }
@@ -1049,12 +1048,6 @@
   font-family: monospace;
 }
 
-.talk .btn-primary {
-  background: #388038;
-  color: white;
-  border: 0;
-}
-
 .talk .btn-default {
   color: #212529;
   background-color: #cfd4da;
@@ -1086,29 +1079,6 @@
 
 .talk .setting.active + body {
   overflow: hidden;
-}
-
-.talk table {
-  width: 100%;
-  border: none;
-}
-
-.talk table th {
-  color: #495057;
-  background-color: #edeff0;
-  border-color: #dee2e6;
-  vertical-align: bottom;
-  border-bottom: 1px solid #dee2e6;
-  padding: 0.75rem;
-  text-align: left;
-  border-top: 1px solid #dee2e6;
-}
-
-.talk table td {
-  padding: 0.75rem;
-  vertical-align: top;
-  border-top: 1px solid #dee2e6;
-  word-break: break-word;
 }
 
 .talk .text-truncate-2 {

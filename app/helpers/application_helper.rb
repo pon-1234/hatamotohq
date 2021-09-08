@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def formatted_time(time)
-    time&.strftime('%Y-%m-%d %H:%M')
+    time&.strftime('%Y.%m.%d %H:%M')
   end
 
   def mobile_device?

@@ -49,13 +49,14 @@ export default {
   }
 
   .balloon {
+    border-radius: 1rem;
     position: relative;
+    background: #edeff0;
+    max-width: 300px !important;
   }
 
   .user, .bot, .friend {
     .balloon {
-      border-radius: 1rem;
-      display: inline-block;
       background: #edeff0;
     }
     .balloon::after {
@@ -87,7 +88,6 @@ export default {
   .bot {
     .balloon {
       background: #edeff0;
-
     }
     .balloon::after {
       left: auto;

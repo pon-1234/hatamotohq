@@ -17,7 +17,7 @@
                 <th class="fw-120">状況</th>
                 <th>配信先</th>
                 <th>配信数</th>
-                <th class="fw-200"></th>
+                <th class="fw-150"></th>
               </tr>
             </thead>
             <%# Data %>
@@ -31,11 +31,12 @@
                   <td><%= render_broadcast_status(broadcast.status).html_safe %></td>
                   <td><span class="d-flex flex-wrap align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
                   <td>0</td>
-                  <td>
-                    <% if broadcast.editable? %>
-                      <%= link_to edit_user_broadcast_path(broadcast), class: "btn btn-primary btn-xs mr-2" do %>
-                        編集
-                      <% end %>
+                  <td class="text-center">
+                    <%= link_to edit_user_broadcast_path(broadcast) do %>
+                      <%= button_tag "編集", class: "btn btn-primary btn-xs mr-2", disabled: !broadcast.editable? %>
+                    <% end %>
+                    <%= link_to delete_confirm_user_broadcast_path(broadcast), remote: true do %>
+                      <%= button_tag "削除", class: "btn btn-danger btn-xs", disabled: !broadcast.destroyable? %>
                     <% end %>
                   </td>
                 </tr>
@@ -54,3 +55,5 @@
     </div>
   </div>
 </div>
+
+<div id='confirmDelContent'></div>

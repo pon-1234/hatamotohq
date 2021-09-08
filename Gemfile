@@ -22,7 +22,6 @@ gem 'activerecord_json_validator'
 gem 'paranoia', '~> 2.2'
 gem 'ransack'
 gem 'seed-fu'
-gem 'draper'
 gem 'cancancan'
 
 # Search engine

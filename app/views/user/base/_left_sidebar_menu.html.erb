@@ -67,7 +67,7 @@
           </li>
         </ul>
 
-        <!-- Auto Response -->
+        <!-- Template -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
             <%= link_to '<i class="nav-icon fas fa-clipboard-list"></i><p>テンプレート</p>'.html_safe,
@@ -77,12 +77,22 @@
           </li>
         </ul>
 
-        <!-- Tag Management -->
+        <!-- Tag -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
             <%= link_to '<i class="nav-icon fas fa-tag"></i><p>タグ管理</p>'.html_safe,
               user_tags_path,
               class: "nav-link #{controller?("user/tags") ? 'active' : ''}"
+            %>
+          </li>
+        </ul>
+
+        <!-- Media -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <%= link_to '<i class="nav-icon fas fa-images"></i><p>コンテンツ管理</p>'.html_safe,
+              user_medias_path,
+              class: "nav-link #{controller?("user/medias") ? 'active' : ''}"
             %>
           </li>
         </ul>

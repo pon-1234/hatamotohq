@@ -17,10 +17,6 @@ class Messages::MessageBuilder
     @message.sender = @sender
     @message.save!
     @message
-  rescue => e
-    byebug
-    p '---------------'
-    p e.message
   end
 
   private

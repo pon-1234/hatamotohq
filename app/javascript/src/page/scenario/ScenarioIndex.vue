@@ -3,7 +3,7 @@
     <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
       <div class="col-l flex">
         <h3 class="hdg3" v-if="title">{{title}}</h3>
-        <h3 class="hdg3" v-else>ステップ配信一覧</h3>
+        <h3 class="hdg3" v-else>シナリオ配信一覧</h3>
       </div>
     </div>
     <div>
@@ -196,11 +196,11 @@ export default {
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
       if (Util.getQueryParamsUrl('is_updated') === 'true') {
-        window.toastr.success('ステップ配信の変更は完成しました');
+        window.toastr.success('シナリオ配信の変更は完成しました');
       }
 
       if (Util.getQueryParamsUrl('is_created') === 'true') {
-        window.toastr.success('ステップ配信を登録しました');
+        window.toastr.success('シナリオ配信を登録しました');
       }
     }
   },

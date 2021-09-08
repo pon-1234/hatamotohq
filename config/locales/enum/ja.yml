@@ -33,8 +33,8 @@ ja:
         date: 経過時間
         elapsed_time: 時刻
       status:
-        enable: 稼働中
-        disable: 停止中
+        enabled: 稼働中
+        disabled: 停止中
         draft: 下書き
     admin:
       status:

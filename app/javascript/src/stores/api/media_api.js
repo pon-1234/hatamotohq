@@ -1,8 +1,14 @@
 export default {
-  getMedias: (query) => {
-    query._pid = btoa('/medias');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  list: (query) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/medias',
+      method: 'GET',
+      query: query,
+      dataType: 'json',
+      contentType: 'application/json'
+    });
   },
+
   mediasDelete: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/medias/delete'),

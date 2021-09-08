@@ -41,21 +41,25 @@ class Broadcast < ApplicationRecord
   }.freeze
 
   belongs_to :line_account
-  has_many :broadcast_messages
-  has_many :taggings, as: :taggable
+  has_many :broadcast_messages, dependent: :destroy
+  has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
-  validates :title, presence: { unless: :status_draft? }, length: { maximum: 255 }
-  validates :schedule_at, presence: { unless: :status_draft? }
+  validates :title, presence: { unless: :draft? }, length: { maximum: 255 }
+  validates :schedule_at, presence: { unless: :draft? }
 
-  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }, _prefix: true
+  enum status: { draft: 'draft', pending: 'pending', sending: 'sending', done: 'done', error: 'error', canceled: 'canceled' }
   enum type: { all: 'all', condition: 'condition' }, _prefix: :broadcast_type # type_condition is already defined by Active Record
 
   # Get all broadcast to dispatch. The broadcast have status pending and schedule_at < now
   scope :dispatchable, -> { where(status: :pending).where('schedule_at <= ?', Time.zone.now) }
 
   def editable?
-    self.status_draft? || self.status_pending?
+    self.draft? || self.pending?
+  end
+
+  def destroyable?
+    !self.sending?
   end
 
   def update_status(status)

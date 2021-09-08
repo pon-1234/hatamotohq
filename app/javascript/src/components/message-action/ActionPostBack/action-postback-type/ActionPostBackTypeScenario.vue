@@ -1,16 +1,16 @@
 <template>
   <section>
     <label class="w-100 mt20">
-      ステップ配信
+      シナリオ配信
     </label>
 
     <div class="btn-template mb20 fz14">
       <a data-v-7189f7fd="" data-toggle="modal" :data-target="'#'+ name" class="btn-block">{{currentTemplate.title}}</a>
       <input type="hidden" v-model="currentTemplate.scenario_id" :name="name+'_scenario_id'"  v-validate="'required'" />
-      <span v-if="errors.first(name+'_scenario_id')" class="is-validate-label">ステップ配信は必須です</span>
+      <span v-if="errors.first(name+'_scenario_id')" class="is-validate-label">シナリオ配信は必須です</span>
     </div>
 
-    <modal-select-scenario-template @changeSelectedTemplate="changeSelectedTemplate" :id="name" type="normal"/>
+    <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"/>
   </section>
 
 </template>
@@ -22,7 +22,7 @@ export default {
       default: () => {
         return {
           scenario_id: null,
-          title: 'ステップ配信一覧から選択'
+          title: 'シナリオ配信一覧から選択'
         };
       }
     },
@@ -54,7 +54,7 @@ export default {
 
     this.currentTemplate = {
       scenario_id: this.value.scenario_id,
-      title: this.value.scenario_id == null ? 'ステップ配信一覧から選択' : this.value.title
+      title: this.value.scenario_id == null ? 'シナリオ配信一覧から選択' : this.value.title
     };
   },
 
@@ -73,7 +73,7 @@ export default {
   },
 
   methods: {
-    changeSelectedTemplate(scenario) {
+    onSelectScenario(scenario) {
       this.currentTemplate = { scenario_id: scenario.id, ...scenario };
       this.$emit('input', {
         title: scenario.title,

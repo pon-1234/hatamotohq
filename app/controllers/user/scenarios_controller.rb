@@ -9,7 +9,7 @@ class User::ScenariosController < User::ApplicationController
   # GET /user/scenarios
   def index
     @params = params[:q]
-    @q = Scenario.accessible_by(current_ability).order(id: :desc).ransack(params[:q])
+    @q = Scenario.accessible_by(current_ability).ransack(params[:q])
     @scenarios = @q.result.page(params[:page])
   end
 
@@ -22,7 +22,7 @@ class User::ScenariosController < User::ApplicationController
   # GET /user/scenarios/:id
   def show
     respond_to do |format|
-      format.json { render 'user/scenarios/show_success.json.jbuilder' }
+      format.json
     end
   end
 
@@ -33,9 +33,7 @@ class User::ScenariosController < User::ApplicationController
   # POST /user/scenarios
   def create
     @scenario = build_scenario(scenario_params)
-    if @scenario.save!
-      render 'user/scenarios/create_success.json.jbuilder'
-    else
+    if !@scenario.save
       render_bad_request_with_message(@scenario.first_error_message)
     end
   end
@@ -47,9 +45,7 @@ class User::ScenariosController < User::ApplicationController
 
   # PATCH /user/scenarios/:id
   def update
-    if @scenario.update(scenario_params.except(:mode))
-      render 'user/scenarios/update_success.json.jbuilder'
-    else
+    if !@scenario.update(update_params)
       render_bad_request_with_message(@scenario.first_error_message)
     end
   end
@@ -97,9 +93,13 @@ class User::ScenariosController < User::ApplicationController
         :mode,
         :type,
         :status,
-        tags: [],
+        tag_ids: [],
         after_action: {}
       )
+    end
+
+    def update_params
+      scenario_params.except(:mode)
     end
 
     def find_scenario

@@ -26,7 +26,7 @@
                     <th>自動応答名</th>
                     <th>キーワード</th>
                     <th>メッセージ</th>
-                    <th>操作</th>
+                    <th class="fw-100">操作</th>
                     <th>登録日</th>
                     <th>状況</th>
                   </tr>
@@ -39,7 +39,7 @@
                       <span class="mr-1" v-for="(tag, index) in auto_response.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
                     </td>
                     <td>
-                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index">
+                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index" class="mt-2">
                         <message-content :data="item.content" ></message-content>
                       </div>
                     </td>
@@ -57,7 +57,7 @@
                       </div>
                     </td>
 
-                    <td>{{ formattedDate(auto_response.created_at) }}</td>
+                    <td><span>{{ formattedDate(auto_response.created_at) }}</span></td>
                     <td>
                       <template v-if="auto_response.status === 'enable'">
                         <span class="badge badge-success p-2">有効</span>
@@ -108,7 +108,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment-timezone';
 import { mapState, mapActions } from 'vuex';
 import Util from '@/core/util';
 
@@ -236,7 +235,7 @@ export default {
     },
 
     formattedDate(date) {
-      return moment(date).format('YYYY年MM月DD日');
+      return Util.formattedDate(date);
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <filter-message type="template" @input="changeFilter" :folderId="messages[selectedFolder] && messages[selectedFolder].id"/>
+    <!-- <filter-message type="template" @input="changeFilter" :folderId="messages[selectedFolder] && messages[selectedFolder].id"/> -->
     <div>
       <folder-left
         type="template_message"
@@ -122,7 +122,7 @@ export default {
   },
 
   computed: {
-    ...mapState('messageTemplate', {
+    ...mapState('template', {
       messages: state =>
         state.messages,
       params: state =>
@@ -138,7 +138,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('messageTemplate', [
+    ...mapActions('template', [
       'fetchListMessageTemplate',
       'copyMessage',
       'deleteMessage',

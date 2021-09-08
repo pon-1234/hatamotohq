@@ -28,6 +28,14 @@ class Util {
     return tokenDom ? tokenDom.content : null;
   }
 
+  static formattedDate(date) {
+    return moment(date).format('YYYY.MM.DD');
+  }
+
+  static formattedDatetime(datetime) {
+    return moment(datetime).format('YYYY.MM.DD hh:mm');
+  }
+
   static checkMediaSize(file) {
     const error = {
       status: true,
