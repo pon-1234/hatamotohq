@@ -62,25 +62,12 @@ class Message < ApplicationRecord
   private
     def execute_after_create_commit
       set_conversation_activity
-      push_message_to_line
       dispatch_create_events
       send_reply
     end
 
     def set_conversation_activity
       channel.update_columns(last_activity_at: created_at, last_message: line_content)
-    end
-
-    def push_message_to_line
-      line_account = channel.line_account
-      # Push message to line
-      success = LineApi::PostMessagePush.new(
-        line_account.line_channel_id,
-        line_account.line_channel_secret,
-        [line_content],
-        channel.line_friend.line_user_id
-      ).perform
-      # TODO update status
     end
 
     def dispatch_create_events

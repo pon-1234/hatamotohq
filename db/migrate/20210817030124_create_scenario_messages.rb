@@ -4,7 +4,7 @@ class CreateScenarioMessages < ActiveRecord::Migration[6.0]
   def change
     create_table :scenario_messages do |t|
       t.references :scenario, foreign_key: true
-      t.string :status, default: 'disable'
+      t.string :status, default: 'disabled'
       t.string :name
       t.json :content
       t.integer :message_type_id

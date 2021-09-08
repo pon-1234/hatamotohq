@@ -12,7 +12,7 @@
 #  name            :string(255)
 #  order           :integer
 #  pause           :boolean
-#  status          :string(255)      default("disable")
+#  status          :string(255)      default("disabled")
 #  step            :integer
 #  time            :string(255)
 #  created_at      :datetime         not null
@@ -36,6 +36,7 @@ class ScenarioMessage < ApplicationRecord
 
   # Scope
   scope :ordered, -> { order(is_initial: :desc, date: :asc, time: :asc, order: :asc) }
+  enum status: { enabled: 'enabled', disabled: 'disabled' }
 
   before_save :execute_before_save
 

@@ -13,6 +13,11 @@ class User::MessagesController < User::ApplicationController
     user = Current.user
     mb = Messages::MessageBuilder.new(user, @channel, message_params)
     @message = mb.perform
+    payload = {
+      channel_id: @channel.id,
+      messages: [@message.line_content]
+    }
+    PushMessageToLineJob.perform_later(payload)
   rescue StandardError => e
     render_could_not_create_error(e.message)
   end

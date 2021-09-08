@@ -48,6 +48,7 @@ class User::ScenarioMessagesController < User::ApplicationController
         :time,
         :order,
         :message_type_id,
+        :status,
         content: {}
       )
     end

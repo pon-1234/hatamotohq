@@ -35,4 +35,7 @@ class ScenarioEvent < ApplicationRecord
   belongs_to :channel
 
   enum status: { queued: 'queued', sending: 'sending', done: 'done', error: 'error' }
+
+  # Scope
+  scope :before, ->(time) { where('schedule_at <= ?', time) }
 end

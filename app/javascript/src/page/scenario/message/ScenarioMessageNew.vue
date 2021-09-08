@@ -44,7 +44,9 @@
               <label class="mb10">配信</label>
               <div class="flex start ai_center">
                 <div class="toggle-switch btn-scenario01">
-                  <input id="scenario-onoff" class="toggle-input" type="checkbox" v-model="scenarioMessageData.status">
+                  <input id="scenario-onoff" class="toggle-input" type="checkbox"
+                    v-model="scenarioMessageData.status" true-value="enabled"
+                    false-value="disabled">
                   <label for="scenario-onoff" class="toggle-label">
                     <span></span>
                   </label>
@@ -82,12 +84,13 @@ export default {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       scenarioMessageData: {
+        scenario_id: this.scenario_id,
+        name: '',
         is_initial: false,
         date: 1,
         time: '00:00',
         order: 1,
-        name: '',
-        status: true,
+        status: 'enabled', // or 'disabled'
         // Each scenario message contains only one message, but we use array to reuse component
         messages: [
           {
@@ -169,28 +172,16 @@ export default {
         return;
       };
 
-      // Build message body
-      const body = {
-        scenario_id: this.scenario_id,
-        name: this.scenarioMessageData.name,
-        is_initial: this.scenarioMessageData.is_initial,
-        order: this.scenarioMessageData.order,
-        date: this.scenarioMessageData.date,
-        time: this.scenarioMessageData.time,
-        status: Util.stringStatus(this.scenarioMessageData.status),
-        ...this.scenarioMessageData.messages[0]
-      };
-
-      const messageId = await this.createScenarioMessage(body);
-      // if (this.type === 'template') {
-      //   window.location.href = process.env.MIX_ROOT_PATH + '/template/scenarios/' + this.scenario_id + '?is_created=true';
-      // } else {
+      const payload = _.omit(this.scenarioMessageData, ['messages']);
+      const messageContent = this.scenarioMessageData.messages[0];
+      payload.message_type_id = messageContent.message_type_id;
+      payload.content = messageContent.content;
+      const messageId = await this.createScenarioMessage(payload);
       if (messageId) {
         Util.showSuccessThenRedirect('シナリオにメッセージを追加しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
       } else {
         Util.showErrorThenRedirect('シナリオにメッセージの追加は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
       }
-      // }
     },
 
     selectTemplate({ index, template }) {
