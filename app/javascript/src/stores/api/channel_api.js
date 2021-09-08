@@ -10,8 +10,7 @@ export default {
 
   channelMessages: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,
-      query: query,
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages?page=${query.page}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'

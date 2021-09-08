@@ -177,8 +177,17 @@ export default {
   },
 
   methods: {
-    ...mapActions('channel', ['getMessages', 'setMessageParams', 'setActiveChannel', 'sendMedia', 'unreadMessage', 'setUnreadChannelId']),
-    ...mapActions('global', ['getStickers']),
+    ...mapActions('channel', [
+      'getMessages',
+      'setMessageParams',
+      'setActiveChannel',
+      'sendMedia',
+      'unreadMessage',
+      'setUnreadChannelId'
+    ]),
+    ...mapActions('global', [
+      'getStickers'
+    ]),
 
     scrollToBottom() {
       setTimeout(() => {
@@ -195,7 +204,7 @@ export default {
         this.currentScrollTop = messageDisplay.scrollHeight;
         if (page > this.totalPages) return;
         this.setMessageParams({ page: page });
-        await this.getMessages(this.messageParams);
+        await this.getMessages({ page: page });
         this.$nextTick(() => {
           document.getElementById(lastElement).scrollIntoView();
         });
@@ -206,6 +215,7 @@ export default {
       this.openedStickerPane = !this.openedStickerPane;
       this.getStickers({ packageId: null });
     },
+
     clickMessagesContent() {
       this.openedStickerPane = false;
       this.getStickers({ packageId: null });

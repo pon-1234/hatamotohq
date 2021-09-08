@@ -7,6 +7,6 @@ class AddColumnsToUsers < ActiveRecord::Migration[6.0]
     add_column :users, :phone_number, :string, after: :company_name
     add_column :users, :address, :string, after: :phone_number
     add_column :users, :note, :text, after: :address
-    add_column :users, :status, :string, after: :note
+    add_column :users, :status, :string, after: :note, default: 'active'
   end
 end

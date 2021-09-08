@@ -10,9 +10,9 @@
 #  description             :string(255)
 #  mode                    :string(255)      default("date")
 #  scenario_messages_count :integer
-#  status                  :string(255)      default(NULL)
+#  status                  :string(255)      default("disabled")
 #  title                   :string(255)
-#  type                    :string(255)      default(NULL)
+#  type                    :string(255)      default("manual")
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  folder_id               :bigint

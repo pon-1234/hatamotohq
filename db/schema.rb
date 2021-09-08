@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_07_160907) do
+ActiveRecord::Schema.define(version: 2021_09_05_152756) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -375,9 +375,9 @@ ActiveRecord::Schema.define(version: 2021_09_07_160907) do
     t.bigint 'folder_id'
     t.string 'title'
     t.string 'description'
-    t.string 'status', default: 'disable'
+    t.string 'status', default: 'disabled'
     t.string 'mode', default: 'date'
-    t.string 'type', default: 'send'
+    t.string 'type', default: 'manual'
     t.json 'after_action'
     t.integer 'scenario_messages_count'
     t.datetime 'created_at', precision: 6, null: false
@@ -512,6 +512,7 @@ ActiveRecord::Schema.define(version: 2021_09_07_160907) do
     t.string 'phone_number'
     t.string 'address'
     t.text 'note'
+    t.string 'status', default: 'active'
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
     t.datetime 'remember_created_at'
@@ -520,7 +521,6 @@ ActiveRecord::Schema.define(version: 2021_09_07_160907) do
     t.datetime 'last_sign_in_at'
     t.string 'current_sign_in_ip'
     t.string 'last_sign_in_ip'
-    t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.string 'authentication_token'
