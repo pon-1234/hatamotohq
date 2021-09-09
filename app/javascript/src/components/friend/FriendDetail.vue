@@ -1,20 +1,25 @@
 <template>
   <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <a :href="friendIndexPath" class="text-info">
+        <i class="fa fa-arrow-left"></i> 友達一覧
+      </a>
+    </div>
     <div class="card-body">
-      <div class="profile-detail row" v-if="isRendering && friend">
+      <div class="profile-detail row" v-if="isRendering && friendData">
         <div class="col-lg-4">
           <div class="card card-success card-outline">
             <div class="card-body box-profile">
               <!-- profile image -->
               <div class="text-center">
-                <img class="profile-user-img img-fluid img-circle" :src="friend.line_picture_url ? friend.line_picture_url : '/img/no-image-profile.png'" alt="User profile picture">
+                <img class="profile-user-img img-fluid img-circle" :src="friendData.line_picture_url ? friendData.line_picture_url : '/img/no-image-profile.png'" alt="User profile picture">
               </div>
               <!-- line user name -->
-              <h3 class="profile-username text-center">{{ friend.line_name }}</h3>
+              <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
               <ul class="list-group list-group-unbordered mb-3">
                 <!-- status (active/block) -->
                 <li class="list-group-item">
-                  <b>ステータス</b> <span class="float-right"><friend-status :status='friend.status'></friend-status></span>
+                  <b>ステータス</b> <span class="float-right"><friend-status :status='friendData.status'></friend-status></span>
                 </li>
                 <!-- go to chat button -->
                 <li class="list-group-item">
@@ -22,7 +27,7 @@
                 </li>
                 <!-- friend addition time -->
                 <li class="list-group-item">
-                  <b>登録日</b><span class="float-right">{{ formatDateTime(friend.created_at) }}</span>
+                  <b>登録日</b><span class="float-right">{{ formatDateTime(friendData.created_at) }}</span>
                 </li>
               </ul>
             </div>
@@ -38,19 +43,19 @@
             <div class="card-body">
               <strong><i class="fas fa-book mr-1"></i> 表示名</strong>
               <p class="text-muted mt-2">
-                <input type="text" placeholder="表示名" class="form-control" v-model="friend.display_name" ref="displayName">
+                <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName">
               </p>
               <hr>
 
               <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
               <p class="text-muted mt-2">
-                <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friend.note"></textarea>
+                <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friendData.note"></textarea>
               </p>
               <hr>
 
               <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
               <p class="text-muted mt-2">
-                <input-tag :data="friend.tags" @input="selectTags" :allTags="true"/>
+                <input-tag :data="friendData.tags" @input="selectTags" :allTags="true"/>
               </p>
               <hr>
 
@@ -131,11 +136,13 @@ import { mapActions } from 'vuex';
 
 export default {
   props: {
-    friend: Object,
+    friend_id: Number,
     channel_id: Number
   },
   data() {
     return {
+      friendData: null,
+      friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
       MIX_SERVEY_MEDIA_FLEXA_URL: process.env.MIX_SERVEY_MEDIA_FLEXA_URL,
       isRendering: true,
       isShowDisplayName: false,
@@ -147,17 +154,18 @@ export default {
     };
   },
 
-  async created() {
+  async beforeMount() {
+    const response = await this.getFriend(this.friend_id);
+    this.friendData = _.cloneDeep(response);
     await this.getTags();
   },
-  mounted() {
-  },
+
   methods: {
     ...mapActions('tag', [
       'getTags'
     ]),
     ...mapActions('friend', [
-      'getfriend',
+      'getFriend',
       'editLineInfo'
     ]),
 
@@ -167,7 +175,7 @@ export default {
     },
 
     selectTags(tags) {
-      this.friend.tags = tags;
+      this.friendData.tags = tags;
     },
 
     formatDateTime(time) {
@@ -196,10 +204,10 @@ export default {
 
     saveInfo() {
       const formData = {
-        id: this.friend.id,
-        display_name: this.friend.display_name,
-        note: this.friend.note,
-        tag_ids: this.friend.tags ? this.friend.tags.map(_ => _.id) : []
+        id: this.friendData.id,
+        display_name: this.friendData.display_name,
+        note: this.friendData.note,
+        tag_ids: this.friendData.tags ? this.friendData.tags.map(_ => _.id) : []
       };
       this.editLineInfo(formData).then((res) => {
         window.toastr.success('友だち情報の更新が成功しました。');
@@ -236,10 +244,10 @@ export default {
 
     async updateStatusFromBot() {
       await this.$store.dispatch('friend/updateStatusFromBot', {
-        id: this.friend.id,
+        id: this.friendData.id,
         status_from_bot: this.destinationStatusFromBot
       }).done(res => {
-        this.friend.status_from_bot = this.destinationStatusFromBot;
+        this.friendData.status_from_bot = this.destinationStatusFromBot;
       })
         .fail(e => {
         });
@@ -251,134 +259,10 @@ export default {
     },
 
     changeFile(file) {
-      this.friend.survey_profile[this.field_index].content.content.alias = file.alias;
-      this.friend.survey_profile[this.field_index].content.content.mine_type = file.type;
-      this.friend.survey_profile[this.field_index].content.content.name = file.name;
+      this.friendData.survey_profile[this.field_index].content.content.alias = file.alias;
+      this.friendData.survey_profile[this.field_index].content.content.mine_type = file.type;
+      this.friendData.survey_profile[this.field_index].content.content.name = file.name;
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-  ::v-deep {
-    .current-status {
-      width: 150px;
-      .multiple {
-        line-height: 4px;
-      }
-    }
-    .change-status {
-      span {
-        width: 120px;
-        margin-top: -5px;
-        background-color: #00B900;
-        color: #ffffff;
-
-        &.hide-btn {
-          margin-right:5px;
-        }
-
-        &.current-btn {
-          background-color: #5c5c5c;
-        }
-      }
-    }
-
-    .btn-modal-delete {
-        background: #00B900;
-        color: #ffffff;
-        width: 150px;
-    }
-
-    .btn-modal-cancel {
-        background: #e5e5e5;
-        color: #5c5c5c;
-        width: 150px;
-    }
-
-    .btn-common01 {
-      max-width: 120px;
-      background: #00B900;
-    }
-    .profile-detail {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    a {
-      cursor: pointer;
-    }
-
-    table.tbl-linebot01 {
-      display: flex;
-      margin: 0;
-
-      tbody {
-        padding: 0 20px;
-        width: 100%;
-      }
-      th {
-        padding-top: 10px;
-        vertical-align: text-top;
-        max-width: 150px;
-        min-width: 150px;
-        word-break: break-word;
-      }
-      tr td {
-        padding: 10px 0;
-        height: 45px;
-        width: 100%;
-      }
-
-      tr td span{
-        vertical-align: text-top;
-      }
-    }
-
-    .profile-detail .tabs{
-      display: flex;
-      width: 100%;
-    }
-    .profile-detail .tabs>div{
-      cursor: pointer;
-      padding: 10px 20px;
-      color: grey;
-      border: 2px;
-      border-bottom: 2px solid #28a745;
-    }
-    .profile-detail .tabs>div:hover{
-      color: #28a745;
-    }
-    .profile-detail .tabs>div.active
-    {
-      color: #28a745;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      border-bottom: 0px;
-      border-top: 2px solid;
-      border-left: 2px solid;
-      border-right: 2px solid;
-      /*border-bottom-color: ;*/
-    }
-    .tab-content{
-      padding-top: 10px;
-      width: 100%;
-    }
-
-    @media only screen and (max-width: 911px) {
-      .profile-detail {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      th {
-        max-width: 100px !important;
-        min-width: 100px !important;
-      }
-
-      tbody {
-        padding: 20px 0px !important;
-      }
-    }
-
-  }
-</style>

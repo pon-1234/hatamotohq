@@ -91,7 +91,7 @@ export default {
       'getMessages',
       'setUnreadChannelId',
       'resetMessages']),
-    ...mapActions('friend', ['getFriendDetail']),
+    ...mapActions('friend', ['getFriend']),
     ...mapActions('tag', [
       'getTags'
     ]),
@@ -154,7 +154,7 @@ export default {
     },
 
     async showFriendDetail(query) {
-      await this.getFriendDetail(query);
+      await this.getFriend(query);
       $('#modal-detail-friend').modal('show');
     },
 

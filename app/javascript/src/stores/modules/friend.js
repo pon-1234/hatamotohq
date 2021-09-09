@@ -1,11 +1,11 @@
-import FriendApi from '../api/friend_api';
+import FriendAPI from '../api/friend_api';
 
 export const state = {
   friend: null
 };
 
 export const mutations = {
-  SET_FRIEND(state, friend) {
+  setFriend(state, friend) {
     state.friend = friend;
   }
 };
@@ -15,7 +15,7 @@ export const getters = {};
 export const actions = {
   getList(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return FriendApi.getList(query).done((res) => {
+    return FriendAPI.getList(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -25,7 +25,7 @@ export const actions = {
   },
 
   editTag(_, query) {
-    return FriendApi.editTag(query).done((res) => {
+    return FriendAPI.editTag(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -34,7 +34,7 @@ export const actions = {
 
   editLineInfo(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return FriendApi.editLineInfo(query).done((res) => {
+    return FriendAPI.editLineInfo(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -46,7 +46,7 @@ export const actions = {
   fetchFriends(_, query = {}) {
     _.dispatch('system/setLoading', true, { root: true });
 
-    return FriendApi.fetchFriends(query).done((res) => {
+    return FriendAPI.fetchFriends(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -55,26 +55,21 @@ export const actions = {
     });
   },
 
-  async getFriendDetail(context, query, showLoading = true) {
-    if (showLoading) {
-      context.dispatch('system/setLoading', true, { root: true });
-    }
-
-    let friendData = null;
+  async getFriend(context, id) {
+    let friend = null;
     try {
-      friendData = await FriendApi.getFriendDetail(query);
-      context.dispatch('system/setLoading', false, { root: true });
-      context.commit('SET_FRIEND', friendData);
-      return friendData;
+      friend = await FriendAPI.get(id);
+      context.commit('setFriend', friend);
+      return friend;
     } catch (error) {
       console.log(error);
-      return error;
+      return error.responseJSON;
     }
   },
 
   updateStatusFromBot(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return FriendApi.updateStatusFromBot(query).done((res) => {
+    return FriendAPI.updateStatusFromBot(query).done((res) => {
       _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
       return Promise.resolve(res);
     }).fail((err) => {
@@ -87,7 +82,7 @@ export const actions = {
 
   getFiles(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return FriendApi.getFiles(query).done((res) => {
+    return FriendAPI.getFiles(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);

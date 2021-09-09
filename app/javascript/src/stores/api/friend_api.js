@@ -10,15 +10,13 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
-  getFriendDetail: (query) => {
-    console.log('-------');
-    console.log(query);
-    // return window.$.ajax({
-    //   url: `${process.env.MIX_ROOT_PATH}/user/friends/${query.id}`,
-    //   method: 'GET',
-    //   dataType: "json",
-    //   contentType: 'application/json'
-    // });
+  get: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
   },
 
   editTag: (query) => {
