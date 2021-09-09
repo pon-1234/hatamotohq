@@ -1,74 +1,64 @@
 <template>
-  <section>
-    <div class="form-common01 imagemap">
-      <!--Editor-->
-      <div>
-        <div class="d-flex-sm" style="justify-content: center">
-          <div class="w-fix-260" style="height: 260px !important;">
-            <input type="text" v-model="backgroundUrl" :name="'image-url'+index" v-validate="'required'" style="width: 0px; height: 0px; border: none;"/>
+  <div>
+    <!--Editor-->
+    <div class="d-flex">
+      <div class="fw-260 fh-260">
+        <input type="text" v-model="backgroundUrl" :name="'image-url'+index" v-validate="'required'" style="width: 0px; height: 0px; border: none;"/>
 
-            <imagemap-view
-              :background="backgroundUrl"
-              :template-id="templateId"
-              :class="errors.first('image-url'+index) ? 'is-validate' : ''"
-              @click="expandAction" />
-            <span v-if="errors.first('image-url'+index)" class="is-validate-label">背景画像は必須です</span>
+        <imagemap-view
+          :background="backgroundUrl"
+          :template-id="templateId"
+          :class="errors.first('image-url'+index) ? 'is-validate' : ''"
+          @click="expandAction" />
+        <span v-if="errors.first('image-url'+index)" class="is-validate-label">背景画像は必須です</span>
 
-            <div class="my-2">
-              <button type="button" class="btn-block btn btn-secondary"
-                      data-toggle="modal" :data-target="'#'+index+'_imagemapTemplateSelectorModal'">
-                テンプレートを選択
-              </button>
-            </div>
-            <div class="my-2">
-              <button type="button" class="btn-block btn btn-secondary"
-                      data-toggle="modal" :data-target="'#'+index+'_imagemapModalUploadImage'">
-                背景画像をアップロード
-              </button>
-            </div>
-
-            <div class="my-2">
-              <button type="button" class="btn-block btn btn-secondary"
-                      @click="isShowEditor = true">
-                一式の個別画像を編集
-              </button>
-            </div>
-            <span class="invalid-feedback d-block" style="display: none;"></span></div>
-          <div class="flex-1 ml-4 w-max-800">
-            <div>
-              <div data-vv-name="atLestLink" class="d-flex-sm justify-content-between align-items-center mb-3"
-                   aria-required="false" aria-invalid="true">
-                <h4 class="mb-0">アクション</h4>
-              </div>
-              <div class="invalid-feedback d-block" style="display: none;"></div>
-              <div id="accordion">
-                <div v-for="(item, index) in actionObjects" v-bind:key="index" >
-                  <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'is-validate': '' ">
-                    <div class="p-2" @click="expandAction(item.key, false, index)">
-                      <h5 class="m-0">
-                        <button type="button"
-                                class="btn-block btn-link text-left btn btn-outline-block">
-                          <i class="fas mr-2 fa-angle-right" style="width: 20px"
-                             v-if="!item.expand"></i>
-                          <i class="fas mr-2 fa-angle-down" style="width: 20px" v-else></i>{{item.key}}
-                        </button>
-                      </h5>
-                    </div>
-                    <div v-show="item.expand">
+        <button type="button"
+          class="btn-block btn btn-secondary mt-2"
+          data-toggle="modal"
+          :data-target="`#imagemapTemplateSelectorModal${index}`">
+          テンプレートを選択
+        </button>
+        <button type="button" class="btn-block btn btn-secondary mt-2"
+                data-toggle="modal" :data-target="'#'+index+'_imagemapModalUploadImage'">
+          背景画像をアップロード
+        </button>
+        <button type="button" class="btn-block btn btn-secondary mt-2"
+                @click="isShowEditor = true">
+          一式の個別画像を編集
+        </button>
+      </div>
+      <div class="flex-1 ml-4 w-max-800">
+        <div>
+          <div data-vv-name="atLestLink" class="d-flex-sm justify-content-between align-items-center mb-3"
+                aria-required="false" aria-invalid="true">
+            <h4 class="mb-0">アクション</h4>
+          </div>
+          <div id="accordion">
+            <div v-for="(item, index) in actionObjects" v-bind:key="index" >
+              <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'is-validate': '' ">
+                <div class="p-2" @click="expandAction(item.key, false, index)">
+                  <h5 class="m-0">
+                    <button type="button"
+                            class="btn-block btn-link text-left btn btn-outline-block">
+                      <i class="fas mr-2 fa-angle-right" style="width: 20px"
+                          v-if="!item.expand"></i>
+                      <i class="fas mr-2 fa-angle-down" style="width: 20px" v-else></i>{{item.key}}
+                    </button>
+                  </h5>
+                </div>
+                <div v-show="item.expand">
+                  <div>
+                    <div class="card-body pt-0 accordion-0 center">
                       <div>
-                        <div class="card-body pt-0 accordion-0 center">
-                          <div>
-                            <message-action-type
-                              :index="index"
-                              :value="item.action"
-                              :supports="['message', 'uri', 'survey']"
-                              :labelRequired="false"
-                              :showTitle="false"
-                              :name="'imagemap_action_'+index"
-                              @input="item.action = $event"
-                            />
-                          </div>
-                        </div>
+                        <message-action-type
+                          :index="index"
+                          :value="item.action"
+                          :supports="['message', 'uri', 'survey']"
+                          :labelRequired="false"
+                          :showTitle="false"
+                          :name="'imagemap_action_'+index"
+                          @input="item.action = $event"
+                        />
                       </div>
                     </div>
                   </div>
@@ -81,10 +71,15 @@
     </div>
 
     <imagemap-template-selector
-      :id="index+'_imagemapTemplateSelectorModal'"
+      :id="'imagemapTemplateSelectorModal' + index"
       :selectionId="templateId"
-      @accept="templateChange" />
-    <media-modal @input="changeLineMediaAlias" :data="{type: 'imagemap'}" :id="index+'_imagemapModalUploadImage'"/>
+      @accept="templateChange">
+    </imagemap-template-selector>
+    <media-modal
+      @input="changeLineMediaAlias"
+      :data="{type: 'imagemap'}"
+      :id="index+'_imagemapModalUploadImage'">
+    </media-modal>
     <rich-menu-modal-editor-image
       v-if="isShowEditor"
       :templateId="templateId"
@@ -92,7 +87,7 @@
       @close="isShowEditor = false"
       @input="exportImage"
     ></rich-menu-modal-editor-image>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -262,7 +257,7 @@ export default {
     },
 
     b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
-      const byteCharacters = atob(b64Data);
+      const byteCharacters = Buffer.from(b64Data, 'base64');
       const byteArrays = [];
 
       for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {

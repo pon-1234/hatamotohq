@@ -189,15 +189,6 @@ td {
 }
 
 @for $i from 1 through 300 {
-  $width: 0px + $i;
-  .fw-#{$i} {
-    width: $width;
-    min-width: $width;
-    max-width: $width;
-  }
-}
-
-@for $i from 1 through 300 {
   $height: 0px + $i;
   .fh-#{$i} {
     height: $height;
@@ -206,11 +197,20 @@ td {
   }
 }
 
-@for $i from 101 through 300 {
+@for $i from 101 through 1200 {
   $width: 0px + $i;
+  .fw-#{$i} {
+    width: $width;
+    min-width: $width;
+    max-width: $width;
+  }
   .mw-#{$i} {
     min-width: $width;
   }
+  .mxw-#{i} {
+    max-width: $width;
+  }
+
   .w-#{$i} {
     width: $width;
   }

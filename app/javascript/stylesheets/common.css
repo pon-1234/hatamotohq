@@ -1411,17 +1411,6 @@ button:disabled{
 .w-max-900 {max-width: 900px !important;}
 .w-max-880 {max-width: 880px !important;}
 
-.flex-1 {-webkit-box-flex: 1 !important;flex: 1 !important;}
-.flex-wrap {flex-wrap: wrap !important;}
-.flex-shrink-0 {flex-shrink: 0 !important;}
-
-
-.text-left {text-align: left !important;}
-.text-muted {color: #adb5bd !important;}
-.text-white {color: #fff !important;}
-.text-pre-line {white-space: pre-line;}
-.text-white {color: #fff !important;}
-
 .btn-link {font-weight: 400;color: #00B900;background-color: transparent;}
 .btn-block {display: block;width: 100%;}
 .btn-outline-primary {background-color: transparent;background-image: none;color: #00B900;border-color: #00B900;}
@@ -1432,11 +1421,9 @@ button:disabled{
     align-items: center !important;
 }
 
-
 .bg-dark-20 {
     background-color: rgba(53,58,64,0.2) !important;
 }
-
 
 h2, .h2 {
     font-size: 1.875rem;
