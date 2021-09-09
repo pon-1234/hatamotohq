@@ -14,26 +14,15 @@ ja:
         avatar: アバター
         postal_code: 郵便番号
         phone_number: 電話番号
+      tag:
+        name: タグ名
+      folder:
+        name: フォルダ名
       media:
         file: ファイル
       device:
         token: トークン
         os: OS
-      calo_target_master:
-        age_from: 年齢範囲開始
-        age_to: 年齢範囲終了
-        m_mets_1: METs目標
-        m_target_1: 男性目標
-        m_mets_2: METs目標
-        m_target_2: 男性目標
-        m_mets_3: METs目標
-        m_target_3: 男性目標
-        fm_mets_1: METs目標
-        fm_target_1: 女性目標
-        fm_mets_2: METs目標
-        fm_target_2: 女性目標
-        fm_mets_3: METs目標
-        fm_target_3: 女性目標
     models:
       user: ユーザー
       group: グループ

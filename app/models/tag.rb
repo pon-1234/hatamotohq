@@ -31,5 +31,5 @@ class Tag < ApplicationRecord
   has_many :friends, through: :taggable
   has_many :broadcasts, through: :taggable
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: :folder_id }
 end

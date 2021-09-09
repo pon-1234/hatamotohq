@@ -24,7 +24,7 @@
               <div class="tag-scroll folder-list">
                 <div class="folder-item new-folder" v-if="isAddMoreFolder">
                   <div class="input-group newgroup-inputs">
-                  <input type="text"  placeholder="フォルダ名" v-model="folder_data.name" class="form-control" @click.stop ref="folderName"
+                  <input type="text"  placeholder="フォルダ名" v-model="folderData.name" class="form-control" @click.stop ref="folderName"
                     @keyup.enter='entersubmitAddNewFolder'
                     @compositionend="compositionend($event)"
                     @compositionstart="compositionstart($event)"
@@ -72,8 +72,8 @@
                       <td style="min-width: 200px; vertical-align: middle;">
                         <div class="folder-item">
                           <div class="input-group newgroup-inputs">
-                            <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tag_data.name" ref="tagName"
-                              @keyup.enter='enterSubmitAddNewTag'
+                            <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
+                              @keyup.enter='showNewTagInput'
                               @compositionend="compositionend($event)"
                               @compositionstart="compositionstart($event)"
                               >
@@ -114,11 +114,11 @@ import moment from 'moment';
 export default {
   data() {
     return {
-      folder_data: {
+      folderData: {
         type: 'folder',
         name: null
       },
-      tag_data: {
+      tagData: {
         name: null,
         folder_id: null
       },
@@ -188,7 +188,7 @@ export default {
       if (this.isAddMoreTag) {
         this.isAddMoreTag = false;
       }
-      this.folder_data.name = '';
+      this.folderData.name = '';
     },
 
     addTag() {
@@ -196,7 +196,7 @@ export default {
       if (this.isAddMoreFolder) {
         this.isAddMoreFolder = false;
       }
-      this.tag_data.name = '';
+      this.tagData.name = '';
     },
 
     submitEditTag(value) {
@@ -205,10 +205,11 @@ export default {
       this.editTag(value);
     },
 
-    submitCreateTag(value) {
+    async submitCreateTag(value) {
       this.isAddMoreFolder = false;
       this.isAddMoreTag = false;
-      this.createTag(value);
+      const response = await this.createTag(value);
+      this.onReceiveCreateTagResponse(response);
     },
 
     setSelectedTag(value) {
@@ -216,22 +217,22 @@ export default {
     },
 
     submitCreateFolder() {
-      if (this.folder_data.name) {
-        this.submitCreateTag(this.folder_data);
-        this.folder_data.name = '';
+      if (this.folderData.name) {
+        this.submitCreateTag(this.folderData);
+        this.folderData.name = '';
       }
     },
 
     submitAddNewTag() {
-      if (this.tag_data.name) {
-        this.tag_data.folder_id = this.tags[this.selected_tag].id;
-        this.submitCreateTag(this.tag_data);
-        this.tag_data.name = '';
+      if (this.tagData.name) {
+        this.tagData.folder_id = this.tags[this.selected_tag].id;
+        this.submitCreateTag(this.tagData);
+        this.tagData.name = '';
       }
     },
 
     getCreatedAt(item) {
-      return moment().format('YYYY年MM月DD日');
+      return moment().format('YYYY.MM.DD');
     },
 
     detailFriends(value) {
@@ -246,7 +247,7 @@ export default {
       this.$refs.buttonAddFolder.click();
     },
 
-    enterSubmitAddNewTag(e) {
+    showNewTagInput(e) {
       if (!this.isEnter) {
         this.isEnter = true;
         return;
@@ -260,6 +261,14 @@ export default {
 
     compositionstart() {
       this.isEnter = true;
+    },
+
+    onReceiveCreateTagResponse(response) {
+      if (response && response.id) {
+        window.toastr.success('フォルダまたはタグの作成は完了しました。');
+      } else {
+        window.toastr.error(response.message);
+      }
     }
   }
 };

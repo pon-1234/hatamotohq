@@ -15,7 +15,7 @@ class User::TagsController < User::ApplicationController
   def create
     @tag = Tag.new(tag_params)
     if !@tag.save
-      render_bad_request
+      render_bad_request_with_message(@tag.first_error_message)
     end
   end
 

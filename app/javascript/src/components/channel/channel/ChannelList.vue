@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       showChannels: [],
-      currentIndexChannel: 0,
+      curChannelIndex: 0,
       isLastChannel: false,
       hiddenChannels: [],
       PER_PAGE: 20
@@ -39,7 +39,7 @@ export default {
   watch: {
     channels: {
       handler(val) {
-        this.currentIndexChannel = 0;
+        this.curChannelIndex = 0;
         const lengthShowChannel = val.length;
         this.isLastChannel = false;
         this.showChannels = [];
@@ -65,32 +65,28 @@ export default {
       await this.getMessages(this.messageParams);
     },
 
-    // TODO: refactor this dummy
     getChannelsFromCache(channels, perPage = 0) {
       if (perPage === 0) {
         perPage = this.PER_PAGE;
       }
       let isBreak = false;
-      let index = 0; // bộ đến mỗi page
+      let index = 0;
       const lengthChannel = channels.length;
 
-      for (; this.currentIndexChannel < lengthChannel; this.currentIndexChannel++) {
-        const channel = channels[this.currentIndexChannel];
-        // nếu có message thì push
-        if (channel.last_message) {
-          this.showChannels.push(channel);
-          index++;
-          if (index >= perPage) {
-            isBreak = true;
-            break;
-          }
+      for (; this.curChannelIndex < lengthChannel; this.curChannelIndex++) {
+        const channel = channels[this.curChannelIndex];
+        this.showChannels.push(channel);
+        index++;
+        if (index >= perPage) {
+          isBreak = true;
+          break;
         }
       }
 
       if (!isBreak) {
         this.isLastChannel = true;
       }
-      this.currentIndexChannel += 1;
+      this.curChannelIndex += 1;
     },
 
     async loadMoreChannel() {
@@ -103,13 +99,7 @@ export default {
           return;
         }
 
-        // lấy thêm channel
         this.getChannelsFromCache(this.channels);
-
-        // if (this.currentPage >= this.totalPages) return;
-        // await this.getChannels({
-        //   page: this.currentPage + 1
-        // });
       }
     }
   }

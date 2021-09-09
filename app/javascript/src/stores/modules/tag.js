@@ -63,14 +63,14 @@ export const mutations = {
     state.tags = value;
   },
 
-  ADD_NEW_FOLDER(state, value) {
+  pushFolder(state, value) {
     if (value && !value.tags_count) {
       value.tags_count = 0;
     }
     state.tags.push(value);
   },
 
-  ADD_NEW_TAG(state, value) {
+  pushTag(state, value) {
     state.tags.forEach(element => {
       if (element.id === value.folder_id) {
         element.tags_count += 1;
@@ -159,34 +159,30 @@ export const actions = {
   },
 
   addNewFolder(context, payload) {
-    context.commit('ADD_NEW_FOLDER', payload);
+    context.commit('pushFolder', payload);
   },
 
   addNewTag(context, payload) {
-    context.commit('ADD_NEW_TAG', payload);
+    context.commit('pushTag', payload);
   },
 
   async createTag(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
+    let response = null;
     try {
       if (query.type === 'folder') {
         const formData = { name: query.name, type: 'tag' };
-        const response = await Folder.createFolder(formData);
-        response.tags_count = 0;
+        response = await Folder.createFolder(formData);
         response.tags = [];
-        context.commit('ADD_NEW_FOLDER', response);
-        context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
+        response.tags_count = 0;
+        context.commit('pushFolder', response);
       } else {
-        const response = await Tag.createTag(query);
-        context.commit('ADD_NEW_TAG', response);
-        context.dispatch('system/setSuccess', { status: true, message: 'タグを登録しました' }, { root: true });
+        response = await Tag.createTag(query);
+        context.commit('pushTag', response);
       }
+      return response;
     } catch (error) {
-      if (error.responseText) {
-        context.dispatch('system/setSuccess', { status: false, message: JSON.parse(error.responseText).name }, { root: true });
-      }
+      return error.responseJSON;
     }
-    context.dispatch('system/setLoading', false, { root: true });
   }
 
 };

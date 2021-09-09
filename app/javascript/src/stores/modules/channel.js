@@ -124,7 +124,6 @@ export const getters = {
 
 export const actions = {
   async getChannels(context, query = {}) {
-    context.dispatch('system/setLoading', true, { root: true });
     context.commit('setLoadMoreChannel', true);
 
     try {
@@ -135,7 +134,6 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-    context.dispatch('system/setLoading', false, { root: true });
     context.commit('setLoadMoreChannel', false);
   },
 

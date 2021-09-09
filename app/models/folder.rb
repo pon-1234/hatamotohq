@@ -27,5 +27,6 @@ class Folder < ApplicationRecord
   has_many :auto_responses, dependent: :destroy
 
   # Validation
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: [:line_account_id, :type] }
+  validates :type, presence: true
 end

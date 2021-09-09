@@ -5,7 +5,7 @@ class User::FoldersController < User::ApplicationController
     @folder = Folder.new(folder_params)
     @folder.line_account = Current.user.line_account
     if !@folder.save
-      render_bad_request
+      render_bad_request_with_message(@folder.first_error_message)
     end
   end
 

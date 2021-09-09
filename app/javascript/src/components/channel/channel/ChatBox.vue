@@ -16,7 +16,7 @@
     </div>
     <div class="messages">
       <div class="content direct-chat-messages" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadmoreMessage">
+        <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
         <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
           <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
             <div class="chatsys-content">
@@ -161,7 +161,7 @@ export default {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
-      isLoadmoreMessage: state => state.isLoadmoreMessage,
+      isLoadMoreMessage: state => state.isLoadMoreMessage,
       messageParams: state => state.messageParams,
       totalPages: state => state.totalPages,
       currentPage: state => state.currentPage,
@@ -198,7 +198,7 @@ export default {
 
     async loadMoreMessages() {
       const messageDisplay = this.$refs.messageDisplay;
-      if (messageDisplay.scrollTop < 10 && !this.isLoadmoreMessage) {
+      if (messageDisplay.scrollTop < 10 && !this.isLoadMoreMessage) {
         const lastElement = messageDisplay.firstElementChild.id;
         const page = this.messageParams.page + 1;
         this.currentScrollTop = messageDisplay.scrollHeight;

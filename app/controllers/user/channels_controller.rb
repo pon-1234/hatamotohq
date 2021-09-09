@@ -6,7 +6,7 @@ class User::ChannelsController < User::ApplicationController
 
   # GET /user/channels
   def index
-    @channels = Channel.all.page(params[:page])
+    @channels = Channel.all.page(params[:page]).per(50)
     respond_to do |format|
       format.html
       format.json

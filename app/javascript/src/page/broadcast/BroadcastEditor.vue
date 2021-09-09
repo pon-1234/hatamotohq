@@ -215,7 +215,6 @@ export default {
   watch: {
     broadcastData: {
       handler(val) {
-        console.log('handler watch change message', val);
         this.setPreviewContent(val);
       },
       deep: true
