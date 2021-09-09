@@ -196,20 +196,14 @@ export const actions = {
     }
   },
 
-  async uploadImagemap(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let keyData = '';
+  async uploadImageMap(context, payload) {
     try {
-      const response = await MediaApi.uploadImagemap({ file: query.file });
-
+      const response = await MediaApi.uploadImageMap(payload.file);
+      console.log('----- uploaded image map ------', response);
       if (response && response.id) {
-        keyData = response.id;
-        context.dispatch('system/setLoading', false, { root: true });
-        context.commit('SET_KEY', keyData);
-        return Promise.resolve(keyData);
+        return response;
       }
     } catch (error) {
-      context.dispatch('system/setLoading', false, { root: true });
       console.log(error);
       return Promise.reject(error);
     }

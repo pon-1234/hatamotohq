@@ -106,7 +106,6 @@ export default {
       isShowEditor: false,
       templateId: this.data.templateId,
       templateValue: this.data.templateValue,
-      line_media_alias: null,
       actionObjects: this.data.actions,
       backgroundUrl: this.data.baseUrl,
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -164,11 +163,6 @@ export default {
       });
     },
 
-    line_media_alias(val) {
-      this.backgroundUrl = process.env.MIX_MEDIA_FLEXA_URL + '/' + val;
-      this.publish(this.actionObjects);
-    },
-
     actionObjects: {
       handler(val) {
         this.publish(val);
@@ -191,7 +185,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('global', ['uploadImagemap']),
+    ...mapActions('global', ['uploadImageMap']),
     firstWhere(array, cond) {
       for (const o of array) {
         if (cond(o)) {
@@ -257,10 +251,11 @@ export default {
       // remove header
       data = data.replace('data:image/jpeg;base64,', '');
       // upload image
-      this.uploadImagemap({
+      this.uploadImageMap({
         file: this.b64toBlob(data)
       }).then((res) => {
-        this.line_media_alias = res;
+        this.backgroundUrl = res.url;
+        this.publish(this.actionObjects);
       }).catch((err) => {
         console.log(err);
       });

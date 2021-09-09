@@ -18,7 +18,8 @@ class User::MediasController < User::ApplicationController
   private
     def media_params
       params.permit(
-        :file
+        :file,
+        :type
       )
     end
 end

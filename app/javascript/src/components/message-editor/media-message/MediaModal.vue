@@ -190,7 +190,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('global', ['sendMedia', 'uploadImageForRichMenu', 'uploadImagemap']),
+    ...mapActions('global', ['sendMedia', 'uploadImageForRichMenu', 'uploadImageMap']),
     getMaxSize() {
       if (this.defaults.type === this.MessageType.Image || this.defaults.type === this.MessageType.Imagemap) return '10M';
       if (this.data.type === 'richmenu') return '1M';
@@ -290,7 +290,7 @@ export default {
 
       if (this.data.type === 'imagemap') {
         // imagemap
-        await this.uploadImagemap({ file: this.inputFile });
+        await this.uploadImageMap({ file: this.inputFile });
 
         if (this.media_url) {
           this.errorMessage = null;

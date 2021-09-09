@@ -22,11 +22,18 @@
 class Media < ApplicationRecord
   include Rails.application.routes.url_helpers
   include ActiveModel::Validations
+  include MediaType
 
   belongs_to :line_account
   has_one_attached :file
-  validates :file, attached: true, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
+  validates :file, attached: false, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
+  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_image_map?
   validates_with MediaValidator
+
+  before_create do
+    # Set default type to common
+    self.type ||= :common
+  end
 
   def url
     url_for(file) if file.attached?
