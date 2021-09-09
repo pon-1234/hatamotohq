@@ -10,7 +10,7 @@
       v-model="content.text" class="w-100 form-control"
       @keyup="changeValue($event)" v-validate="'required'"/>
 
-    <span  v-if="errors.first(name+'_postback_text')"  class="is-validate-label">内容は必須です</span>
+    <span  v-if="errors.first(name+'_postback_text')"  class="invalid-box-label">内容は必須です</span>
   </section>
 </template>
 <script>

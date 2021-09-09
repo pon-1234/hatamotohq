@@ -7,7 +7,7 @@
     <div class="btn-template mb20 fz14">
       <a data-v-7189f7fd="" data-toggle="modal" :data-target="'#'+ name" class="btn-block">{{currentTemplate.title}}</a>
       <input type="hidden" v-model="currentTemplate.scenario_id" :name="name+'_scenario_id'"  v-validate="'required'" />
-      <span v-if="errors.first(name+'_scenario_id')" class="is-validate-label">シナリオ配信は必須です</span>
+      <span v-if="errors.first(name+'_scenario_id')" class="invalid-box-label">シナリオ配信は必須です</span>
     </div>
 
     <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"/>

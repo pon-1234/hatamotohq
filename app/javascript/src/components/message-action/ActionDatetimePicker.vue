@@ -1,24 +1,37 @@
 <template>
   <div>
     <div v-if="showTitle" style="display: contents">
-      <label class="w-100 mt20" >
+      <label class="w-100 mt20">
         ラベル
-        <required-mark v-if="labelRequired"/>
+        <required-mark v-if="labelRequired" />
       </label>
       <div class="w-100">
-        <input type="text" name="datetime-label" placeholder="ラベルを入力してください" maxlength="12" v-model="data.label" class="w-100 form-control" @keyup="changeValue" v-validate="{required: labelRequired && showTitle}"/>
-        <span v-if="errors.first('datetime-label')" class="is-validate-label">ラベルは必須です</span>
+        <input
+          type="text"
+          name="datetime-label"
+          placeholder="ラベルを入力してください"
+          maxlength="12"
+          v-model="data.label"
+          class="w-100 form-control"
+          @keyup="changeValue"
+          v-validate="{ required: labelRequired && showTitle }"
+        />
+        <span v-if="errors.first('datetime-label')" class="invalid-box-label"
+          >ラベルは必須です</span
+        >
       </div>
     </div>
     <label class="w-100 mt20">
       モード
     </label>
     <div class="w-100">
-      <select v-model="data.mode" class="form-control w-100 form-control"  @change="changeValue">
+      <select
+        v-model="data.mode"
+        class="form-control w-100 form-control"
+        @change="changeValue"
+      >
         <option v-for="(item, index) in modes" :key="index" :value="item.value">
-          {{
-            item.text
-          }}
+          {{ item.text }}
         </option>
       </select>
     </div>
@@ -65,10 +78,7 @@ export default {
       this.$emit('input', this.data);
     }
   }
-
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

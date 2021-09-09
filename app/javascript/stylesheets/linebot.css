@@ -1266,17 +1266,6 @@
     line-height: normal;
 }
 
-.is-validate {
-    border: 1px solid red!important;
-    border-radius: 4px;
-}
-
-.is-validate-label {
-  color: #a94442;
-  font-size: 10px;
-  font-weight: bold;
-}
-
 textarea[aria-invalid="true"],
 select[aria-invalid="true"],
 input[aria-invalid="true"] {

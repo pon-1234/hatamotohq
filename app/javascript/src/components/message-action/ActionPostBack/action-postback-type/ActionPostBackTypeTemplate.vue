@@ -12,7 +12,7 @@
         </a>
       <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-else>テンプレートから作成</a>
       <input type="hidden" v-model="currentTemplate.template_id"  :name="name+'_template_id'" v-validate="'required'" />
-      <span  v-if="errors.first(name+'_template_id')"  class="is-validate-label">テンプレートは必須です</span>
+      <span  v-if="errors.first(name+'_template_id')"  class="invalid-box-label">テンプレートは必須です</span>
     </div>
 
     <modal-select-message-template @setTemplate="selectTemplate" :id="name"/>

@@ -9,7 +9,7 @@
           <label>アンケート名<required-mark/></label>
           <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control"
                  placeholder="" v-validate="'required'">
-          <span v-if="errors.first('survey-name')" class="is-validate-label">アンケート名は必須です</span>
+          <span v-if="errors.first('survey-name')" class="invalid-box-label">アンケート名は必須です</span>
         </div>
 
         <div class="form-group">
@@ -17,7 +17,7 @@
           <select class="form-control" name="survey-folder" v-model="surveyData.folder_id" v-validate="'required'">
             <option v-for="(folder, index) of folders" :key="index" :value="folder.id">{{folder.name}}</option>
           </select>
-          <span v-if="errors.first('survey-folder')" class="is-validate-label">フォルダは必須です</span>
+          <span v-if="errors.first('survey-folder')" class="invalid-box-label">フォルダは必須です</span>
         </div>
 
         <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
@@ -27,7 +27,7 @@
           <label>タイトル<required-mark/></label>
           <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control"
                  placeholder="" v-validate="'required'">
-          <span v-if="errors.first('survey-title')" class="is-validate-label">タイトルは必須です</span>
+          <span v-if="errors.first('survey-title')" class="invalid-box-label">タイトルは必須です</span>
         </div>
 
         <div class="form-group">
@@ -35,7 +35,7 @@
           <textarea rows="5" v-model.trim="surveyData.description" type="text" name="survey-description"
                     class="form-control"
                     placeholder="" v-validate="'required'"></textarea>
-          <span v-if="errors.first('survey-description')" class="is-validate-label">説明は必須です</span>
+          <span v-if="errors.first('survey-description')" class="invalid-box-label">説明は必須です</span>
         </div>
       </div>
       <div class="form-border">
@@ -65,7 +65,7 @@
                     class="form-control"
                     placeholder="" v-validate="'required'">
                     </textarea>
-          <span v-if="errors.first('survey-success-message')" class="is-validate-label">回答後の文章は必須です</span>
+          <span v-if="errors.first('survey-success-message')" class="invalid-box-label">回答後の文章は必須です</span>
         </div>
       </div>
       <div class="form-border">

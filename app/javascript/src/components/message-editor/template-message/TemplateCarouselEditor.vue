@@ -35,10 +35,10 @@
                     <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"><i  class="glyphicon glyphicon-remove"></i></span>
                   </div>
                 </div>
-                <div class="carousel-content" @click="changeSelected(index)"  :class="errors.items.find(item=>item.field.includes('template_carousel_'+index))? 'is-validate': ''">
+                <div class="carousel-content" @click="changeSelected(index)"  :class="errors.items.find(item=>item.field.includes('template_carousel_'+index))? 'invalid-box': ''">
                   <div class="carousel-thumb" :style="{ backgroundImage: 'url(' + item.thumbnailImageUrl + ')'}" v-if="item.thumbnailImageUrl" >
                   </div>
-                  <div v-if="isThumbnail && 'thumbnailImageUrl' in item && !item.thumbnailImageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'is-validate':'' ">
+                  <div v-if="isThumbnail && 'thumbnailImageUrl' in item && !item.thumbnailImageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'invalid-box':'' ">
                     (画像未登録)
                   <input type="hidden" v-model="item.thumbnailImageUrl" :name="'image-url-'+index" v-validate="'required'" />
                   </div>
@@ -71,12 +71,12 @@
               <div class="form-group">
                 <label>パネル{{ selected + 1}}タイトル <span class="label label-danger" v-if="requiredTitle">必須</span></label>
                 <input type="text" :name="'carousel-title'+indexColumn" placeholder="タイトル" class="form-control" v-model="column.title" maxlength='40' v-validate="{required: requiredTitle}">
-                <span v-if="errors.first('carousel-title'+indexColumn)" class="is-validate-label">タイトルは必須です</span>
+                <span v-if="errors.first('carousel-title'+indexColumn)" class="invalid-box-label">タイトルは必須です</span>
               </div>
               <div class="form-group">
                 <label>パネル{{ selected + 1}}本文</label><span class="label label-danger">必須</span>
                 <textarea  :name="'carousel-text'+indexColumn" placeholder="本文を入力してください" class="form-control" v-model="column.text" maxlength='60' v-validate="'required'"> </textarea>
-                <span v-if="errors.first('carousel-text'+indexColumn)" class="is-validate-label">本文は必須です</span>
+                <span v-if="errors.first('carousel-text'+indexColumn)" class="invalid-box-label">本文は必須です</span>
               </div>
             </div>
             <div class="col-sm-7">
@@ -112,7 +112,7 @@
               <div class="col-sm-3">
               <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
                 <li v-for="(item, index) in column.actions" :key="index" :class="selectedAction == index? 'active': ''" @click="changeActiveAction(index)">
-                  <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'is-validate': ''">
+                  <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'invalid-box': ''">
                     ボタン{{index + 1}}
                     <span v-if="column.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeCurrentAction(index)"><i class="fas fa-times"></i></span>
                   </div>

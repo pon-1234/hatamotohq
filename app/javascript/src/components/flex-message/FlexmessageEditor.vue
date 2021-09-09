@@ -1,40 +1,47 @@
 <template>
-  <div class="d-flex flex-column" style="">
-    <div class="form-group " v-show="htmlPreview !== null">
-      <label>メッセージ通知文</label>
-      <input type="text" name="altText" class="form-control alt-text-input" placeholder="メッセージ通知文を入力してください"  v-validate="{required: isValidate}" v-model="altText"/>
+  <div>
+      <div class="form-group">
+      <label>代替テキスト</label>
+      <input type="text" :name="`altText${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
+      <error-message :message="errors.first(`altText${index}`)"></error-message>
     </div>
-    <div  class="flex-container">
-      <div class="form-group flex-message preview" v-show="htmlPreview !== null">
-        <div v-html="data.html_template"></div>
+    <div class="d-flex flex-column" style="">
+      <div class="form-group " v-show="htmlPreview !== null">
+        <label>メッセージ通知文</label>
+        <input type="text" name="altText" class="form-control alt-text-input" placeholder="メッセージ通知文を入力してください"  v-validate="{required: isValidate}" v-model="altText"/>
       </div>
-      <div class="col-sm-6 form-group controls">
-        <div  v-for="item in mapObject" :key="item.id" class="group-action-flex-message" :class="item.id" @click="changeActive(item.id)">
-          <flexmessage-text-action v-if="item.type === 'text'"
-            :data="item"
-            :name="item.id"
-            @input="editObject" />
+      <div  class="flex-container">
+        <div class="form-group flex-message preview" v-show="htmlPreview !== null">
+          <div v-html="data.html_template"></div>
+        </div>
+        <div class="col-sm-6 form-group controls">
+          <div  v-for="item in mapObject" :key="item.id" class="group-action-flex-message" :class="item.id" @click="changeActive(item.id)">
+            <flexmessage-text-action v-if="item.type === 'text'"
+              :data="item"
+              :name="item.id"
+              @input="editObject" />
 
-          <flexmessage-button-action v-if="item.type === 'button'"
-            :data="item"
-            :name="item.id"
-            @input="editObject" />
+            <flexmessage-button-action v-if="item.type === 'button'"
+              :data="item"
+              :name="item.id"
+              @input="editObject" />
 
-          <flexmessage-image-action v-if="item.type === 'image'"
-            :data="item"
-            :name="item.id"
-            :aspectMode="aspectMode"
-            @input="editObject" />
+            <flexmessage-image-action v-if="item.type === 'image'"
+              :data="item"
+              :name="item.id"
+              :aspectMode="aspectMode"
+              @input="editObject" />
 
-          <flexmessage-box-action v-if="item.type === 'box'"
-            :data="item"
-            :name="item.id"
-            @input="editObject" />
+            <flexmessage-box-action v-if="item.type === 'box'"
+              :data="item"
+              :name="item.id"
+              @input="editObject" />
 
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </template>
 
@@ -45,15 +52,12 @@ import Util from '@/core/util';
 export default {
   props: {
     data: Object,
-    altTextData: {
-      type: String,
-      default: ''
-    },
     isValidate: Boolean
   },
   inject: ['parentValidator'],
   data() {
     return {
+      altText: '',
       mapObject: {},
       currentEditor: null,
       htmlPreview: null,
@@ -79,19 +83,7 @@ export default {
     this.setup();
   },
 
-  computed: {
-    altText: {
-      get() {
-        return this.altTextData;
-      },
-      set(val) {
-        this.$emit('altText', val);
-      }
-    }
-  },
-
   methods: {
-
     setup() {
       if (this.data && this.data.json_template == null) return;
       this.currentEditor = null;
@@ -298,6 +290,7 @@ export default {
     emitObject() {
       console.log('emitObject', this.jsonPreview);
       this.$emit('input', {
+        altText: this.altText,
         passedObject: this.passedObject,
         html_template: this.htmlPreview.html(),
         json_template: JSON.stringify(this.jsonPreview),

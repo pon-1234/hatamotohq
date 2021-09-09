@@ -11,11 +11,11 @@
           :background="background"
           :template-id="templateId"
           :typeTemplate="typeTemplate"
-          :class="errors.first('image-url') ? 'is-validate' : ''"
+          :class="errors.first('image-url') ? 'invalid-box' : ''"
           @click="expandAction">
         </rich-menu-preview>
         <div class="my-2">
-          <span v-if="errors.first('image-url')" class="is-validate-label">背景画像は必須です</span>
+          <span v-if="errors.first('image-url')" class="invalid-box-label">背景画像は必須です</span>
           <button type="button" class="btn-block btn btn-secondary"
                   data-toggle="modal" data-target="#modalRichmenuTemplateChoose">
             テンプレートを選択
@@ -45,7 +45,7 @@
           <div id="accordion">
             <div v-for="(item, index) in actionObjects" v-bind:key="index">
               <div class="card mb-2"
-                   :class="errors.items.find(item=>item.field.includes('richmenu_type_'+index)) ? 'is-validate': '' ">
+                   :class="errors.items.find(item=>item.field.includes('richmenu_type_'+index)) ? 'invalid-box': '' ">
                 <div class="p-2" @click="expandAction(item.key, false, index)">
                   <h5 class="m-0">
                     <button type="button"

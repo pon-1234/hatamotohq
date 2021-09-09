@@ -3,14 +3,14 @@
     <div class="form-group">
       <label>タイトル<required-mark/></label>
       <input type="text" placeholder="タイトルを入力してください" name="location-title" class="form-control" max="100" v-model="defaults.title" v-validate="'required'">
-      <span v-if="errors.first('location-title')" class="is-validate-label">タイトルは必須です</span>
+      <span v-if="errors.first('location-title')" class="invalid-box-label">タイトルは必須です</span>
     </div>
     <div class="form-group">
       <label>住所<required-mark/></label>
       <div class="d-flex" style="align-items: flex-start;" >
         <div class="flex column flex-grow-1">
           <textarea class="form-control" rows="2" maxlength="90" placeholder="住所を入力してください"  v-model="defaults.address" v-validate="'required'" name="location-description"></textarea>
-          <span v-if="errors.first('location-description')" class="is-validate-label mt-1">住所は必須です</span>
+          <span v-if="errors.first('location-description')" class="invalid-box-label mt-1">住所は必須です</span>
         </div>
         <div class="btn btn-outline-success ml-2" style="" @click="getMarker">ピンの住所を検出</div>
       </div>

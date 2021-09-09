@@ -1,6 +1,7 @@
 <template>
   <div>
-    <action-object-selector :title="'Action Type'"
+    <action-object-selector
+      :title="'Action Type'"
       :data="action"
       :supports="supports"
       @input="changeAction"

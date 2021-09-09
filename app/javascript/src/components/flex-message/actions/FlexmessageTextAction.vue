@@ -27,7 +27,7 @@
               :value="size"
               @change="changeSize"
               classes="form-control" />
-            <span v-if="errors.first('size_'+name)" class="is-validate-label">サイズが無効です</span>
+            <span v-if="errors.first('size_'+name)" class="invalid-box-label">サイズが無効です</span>
           </div>
         </div>
       </div>

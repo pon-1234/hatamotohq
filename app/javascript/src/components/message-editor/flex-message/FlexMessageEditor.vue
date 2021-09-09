@@ -4,7 +4,7 @@
       <div v-if="isLoading" style="padding: 20px">
         Loading...
       </div>
-      <div v-else class="flex-content" :class="errors.first('flex-template' + index)?'is-validate':'' ">
+      <div v-else class="flex-content" :class="errors.first('flex-template' + index)?'invalid-box':'' ">
         <div v-if="flexMessageHtml == null">
           <a data-toggle="modal"
              :data-target="'#flexMessageModal_'+index"
@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <span v-if="errors.first('flex-template' + index)" class="is-validate-label">Flexメッセージは必須です</span>
+    <span v-if="errors.first('flex-template' + index)" class="invalid-box-label">Flexメッセージは必須です</span>
     <modal-select-flex-message-template :name="'flexMessageModal_'+index" @input="pickFlexmessage"/>
     <input type="hidden" v-model="flexMessageHtml" :name="'flex-template' + index" v-validate="'required'" />
   </div>

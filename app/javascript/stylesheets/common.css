@@ -1572,10 +1572,6 @@ select{
     appearance: none;
 }
 
-.is-validate, .is-validate .border-primary{
-    border-color: #ed0a08 !important;
-}
-
 .flex-column {
     flex-direction: column;
 }

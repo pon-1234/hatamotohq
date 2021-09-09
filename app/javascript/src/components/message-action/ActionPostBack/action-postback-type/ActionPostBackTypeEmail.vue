@@ -17,14 +17,14 @@
                  placeholder="メールアドレスを入力してください。"
                  separator=" ,;" >
     </b-form-tags>
-    <span v-if="errors.first(name+'_postback_email')"  class="is-validate-label">宛先が必須です。</span>
+    <span v-if="errors.first(name+'_postback_email')"  class="invalid-box-label">宛先が必須です。</span>
 
     <label class="w-100 mt20">
       内容
     </label>
 
     <textarea class="form-control w-100"  :name="name+'_postback_text_email'"  rows="4" v-model="form.text" placeholder="入力してください" v-validate="'required'"></textarea>
-    <span v-if="errors.first(name+'_postback_text_email')" class="is-validate-label">内容は必須です</span>
+    <span v-if="errors.first(name+'_postback_text_email')" class="invalid-box-label">内容は必須です</span>
 
     <label class="w-100 mt20">
       注意

@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label>タイトル<required-mark/></label>
                     <input v-model.trim="title" name="title" type="text" class="form-control" placeholder="タイトルを入力してください" v-validate="'required'">
-                    <span v-if="errors.first('title')" class="is-validate-label">タイトルは必須です</span>
+                    <span v-if="errors.first('title')" class="invalid-box-label">タイトルは必須です</span>
                 </div>
             </div>
 
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label>メニューバーのテキスト<required-mark/></label>
                     <input v-model.trim="chatBarText" name="richmenu-title" type="text" class="form-control" placeholder="タイトルを入力してください" v-validate="'required'">
-                    <span v-if="errors.first('richmenu-title')" class="is-validate-label">タイトルは必須です</span>
+                    <span v-if="errors.first('richmenu-title')" class="invalid-box-label">タイトルは必須です</span>
                 </div>
             </div>
 
@@ -56,7 +56,7 @@
                             <button class="btn btn-secondary" @click="resetTime">リセット</button>
                         </div>
                     </div>
-                    <span v-if="messageErrorDateTime" class="is-validate-label">{{messageErrorDateTime}}</span>
+                    <span v-if="messageErrorDateTime" class="invalid-box-label">{{messageErrorDateTime}}</span>
                 </div>
             </div>
 

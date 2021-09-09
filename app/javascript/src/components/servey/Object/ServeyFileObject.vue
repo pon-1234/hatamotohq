@@ -9,7 +9,7 @@
                        class="form-control"
                        maxlength="140"
                        placeholder="" v-validate="'required'">
-                <span v-if="errors.first(name+'-text')" class="is-validate-label">質問名は必須です</span>
+                <span v-if="errors.first(name+'-text')" class="invalid-box-label">質問名は必須です</span>
             </div>
         </div>
         <div class="form-group clearfix">
@@ -20,7 +20,7 @@
                        type="text"
                        class="form-control"
                        placeholder="">
-                <span v-if="errors.first(name+'-subtext')" class="is-validate-label">質問補足は必須です</span>
+                <span v-if="errors.first(name+'-subtext')" class="invalid-box-label">質問補足は必須です</span>
             </div>
         </div>
 

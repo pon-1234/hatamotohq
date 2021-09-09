@@ -4,7 +4,7 @@
       <div class="form-group">
         <label>タイトル<required-mark/></label>
         <input type="text" class="form-control"  name="template-title" placeholder="タイトルを入力してください" v-model="message_data.title" v-validate="'required'" />
-        <span v-if="errors.first('template-title')" class="is-validate-label">タイトルは必須です</span>
+        <span v-if="errors.first('template-title')" class="invalid-box-label">タイトルは必須です</span>
       </div>
     </div>
     <div class="form-border">

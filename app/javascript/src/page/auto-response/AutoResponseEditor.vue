@@ -36,14 +36,14 @@
           <div class="card-body">
             <div class="form-group d-flex flex-column">
               <label class="mb10">キーワード<required-mark/></label>
-              <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'is-validate' : ''"
+              <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'invalid-box' : ''"
                 placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
               </b-form-tags>
               <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
               <div>
                 <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
               </div>
-              <span class="is-validate-label"  v-if="error"><b>{{ error.keyword}}</b>のキーワードが<b>{{error.name}}</b>で設定されているため設定できません。</span>
+              <span class="invalid-box-label"  v-if="error"><b>{{ error.keyword}}</b>のキーワードが<b>{{error.name}}</b>で設定されているため設定できません。</span>
               <error-message class="w-100" :message="errors.first('keywords')"></error-message>
             </div>
           </div>

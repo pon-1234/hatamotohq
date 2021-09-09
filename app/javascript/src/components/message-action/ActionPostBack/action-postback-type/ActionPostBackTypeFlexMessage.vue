@@ -11,7 +11,7 @@
         </a>
       <a data-toggle="modal" :data-target="'#'+name" class="btn-block" v-else>Flexメッセージから作成</a>
       <input type="hidden" v-model="currentTemplate.flex_message_id"  :name="name+'_flex_message_id'" v-validate="'required'" />
-      <span  v-if="errors.first(name+'_flex_message_id')"  class="is-validate-label">Flexメッセージは必須です</span>
+      <span  v-if="errors.first(name+'_flex_message_id')"  class="invalid-box-label">Flexメッセージは必須です</span>
     </div>
 
     <modal-select-flex-message-template :name="name" @input="selectTemplate"/>

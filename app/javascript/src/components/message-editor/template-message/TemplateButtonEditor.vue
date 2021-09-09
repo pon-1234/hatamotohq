@@ -5,27 +5,27 @@
         <label class="mt-2">
           タイトル<required-mark/>
         </label>
-        <input class="input-age form-control" placeholder="タイトルを入力してください" type="text" maxlength="40" v-model="defaults.title" v-validate="'required'" :name="'button-title'+ indexParent"/>
-        <span v-if="errors.first('button-title' + indexParent)" class="is-validate-label">タイトルは必須です</span>
+        <input class="input-age form-control" placeholder="タイトルを入力してください" type="text" maxlength="40" v-model="templateData.title" v-validate="'required'" :name="'button-title'+ indexParent"/>
+        <span v-if="errors.first('button-title' + indexParent)" class="invalid-box-label">タイトルは必須です</span>
       </div>
       <div class="d-flex group-title col-md-6">
         <label class="mt-2">
           テキスト<required-mark/>
         </label>
-        <input class="input-age form-control" placeholder="テキストを入力してください" :name="'button-text'+indexParent" type="text" maxlength="60" v-model="defaults.text" v-validate="'required'"/>
-        <span v-if="errors.first('button-text'+indexParent)" class="is-validate-label">テキストは必須です</span>
+        <input class="input-age form-control" placeholder="テキストを入力してください" :name="'button-text'+indexParent" type="text" maxlength="60" v-model="templateData.text" v-validate="'required'"/>
+        <span v-if="errors.first('button-text'+indexParent)" class="invalid-box-label">テキストは必須です</span>
       </div>
 
       <div class="row col-12" style="margin-top: 15px !important;">
         <div class="col-sm-3">
           <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
-            <li v-for="(item, index) in defaults.actions" :key="index" :class="selected == index? 'active': ''" @click="changeSelected(index)">
-              <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'is-validate': ''">
+            <li v-for="(item, index) in templateData.actions" :key="index" :class="selected == index? 'active': ''" @click="changeSelected(index)">
+              <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'invalid-box': ''">
                 ボタン{{index + 1}}
-                <span v-if="defaults.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeAction(index)"><i class="fas fa-times"></i></span>
+                <span v-if="templateData.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeAction(index)"><i class="fas fa-times"></i></span>
               </div>
             </li>
-            <li v-if="defaults.actions.length < 4">
+            <li v-if="templateData.actions.length < 4">
               <div class="nav-button btn btn-outline-success justify-content-center" @click="addMoreAction">
                 <i class="fa fa-plus"></i> 追加
               </div>
@@ -38,7 +38,7 @@
               <h3 class="card-title">選択肢{{ selected + 1 }}</h3>
             </div>
             <div class="card-body">
-              <div v-for="(item, index) in defaults.actions" :key="index" v-show="index === selected">
+              <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">
                 <message-action-type
                   :name="indexParent + 'template_button_' + index"
                   :value="item"
@@ -61,10 +61,11 @@ export default {
     return {
       selected: 0,
       action_type: 'message',
-      defaults: {
+      templateData: {
         type: this.TemplateMessageType.Buttons,
         title: '',
         text: '',
+        altText: '',
         actions: [
           this.ActionMessage.default
         ]
@@ -74,12 +75,12 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     if (this.data) {
-      Object.assign(this.defaults, this.data);
-      this.action_type = this.defaults.actions[0].type;
+      Object.assign(this.templateData, this.data);
+      this.action_type = this.templateData.actions[0].type;
     }
   },
   watch: {
-    defaults: {
+    templateData: {
       handler(val) {
         this.$emit('input', val);
       },
@@ -88,22 +89,22 @@ export default {
   },
   methods: {
     addMoreAction() {
-      this.selected = this.defaults.actions.length;
-      this.defaults.actions.push(this.ActionMessage.default);
+      this.selected = this.templateData.actions.length;
+      this.templateData.actions.push(this.ActionMessage.default);
     },
 
     changeSelected(index) {
       this.selected = index;
-      this.action_type = this.defaults.actions[index].type;
+      this.action_type = this.templateData.actions[index].type;
     },
 
     removeAction(index) {
-      this.defaults.actions.splice(index, 1);
+      this.templateData.actions.splice(index, 1);
       this.selected = 0;
     },
 
     changeAction(index, data) {
-      this.defaults.actions.splice(index, 1, data);
+      this.templateData.actions.splice(index, 1, data);
     }
   }
 };

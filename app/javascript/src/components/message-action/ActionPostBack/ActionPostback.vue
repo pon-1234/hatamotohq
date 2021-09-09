@@ -15,7 +15,7 @@
           v-validate="{required: labelRequired && showTitle}"
           @keyup="changeLabel"
           />
-        <span  v-if="errors.first(name+'_label')" class="is-validate-label">ラベルは必須です</span>
+        <span  v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
       </div>
     </div> -->
 

@@ -33,6 +33,9 @@ export default {
       ]
     };
   },
+  created() {
+    // this.$emit('input', 7);
+  },
   computed: {
     selected: {
       get() {

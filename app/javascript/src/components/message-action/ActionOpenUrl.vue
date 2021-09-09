@@ -3,23 +3,43 @@
     <div v-if="showTitle" style="display: contents">
       <label class="w-100 mt20">
         ラベル
-        <required-mark v-if="labelRequired"/>
+        <required-mark v-if="labelRequired" />
       </label>
       <div class="w-100">
-        <input :name="name+'_label'" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="value.label"
-               class="w-100 form-control" @keyup="changeValue" v-validate="{required: labelRequired && showTitle}"/>
-        <span v-if="errors.first(name+'_label')" class="is-validate-label">ラベルは必須です</span>
+        <input
+          :name="name + '_label'"
+          placeholder="ラベルを入力してください"
+          type="text"
+          maxlength="12"
+          v-model="value.label"
+          class="w-100 form-control"
+          @keyup="changeValue"
+          data-vv-as="ラベル"
+          v-validate="{ required: labelRequired && showTitle }"
+        />
+        <error-message :message="error.first(name + '_label')"></error-message>
       </div>
     </div>
-    <label class="w-100 mt20">
-      Url
-      <required-mark/>
-    </label>
-    <div class="w-100">
-      <input :name="name+'_value'" type="text" maxlength="1000" v-model="value.uri" placeholder="https://example.com"  class="w-100 form-control" @keyup="changeValue" v-validate="{url: {require_protocol: true }, required:true}" />
-      <input type="hidden" v-model="value.uri" v-validate="{required:true, url: {require_protocol: true }}" :name="name+'_value'">
-      <span v-if="!value.uri" class="is-validate-label">Urlは必須です</span>
-      <span v-else-if="errors.first(name+'_value')" class="is-validate-label">Urlが正しいURLではありません</span>
+    <label class="mt-4">URL<required-mark /></label>
+    <div>
+      <input
+        :name="name + '_value'"
+        type="text"
+        maxlength="1000"
+        v-model="value.uri"
+        placeholder="https://example.com"
+        class="w-100 form-control"
+        @keyup="changeValue"
+        data-vv-as="URL"
+        v-validate="{ url: { require_protocol: true }, required: true }"
+      />
+      <!-- <input
+        type="hidden"
+        v-model="value.uri"
+        v-validate="{ required: true, url: { require_protocol: true } }"
+        :name="name + '_value'"
+      /> -->
+      <error-message :message="errors.first(name + '_value')"></error-message>
     </div>
   </div>
 </template>
@@ -61,10 +81,7 @@ export default {
       return Util.regexUrl();
     }
   }
-
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

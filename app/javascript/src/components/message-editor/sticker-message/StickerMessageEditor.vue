@@ -17,7 +17,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="border text-center" :class="errors.first('sticker-id' + index)?'is-validate':'' ">
+      <div class="border text-center" :class="errors.first('sticker-id' + index)?'invalid-box':'' ">
         <div class="figure figure-grid-sm my-4">
           <a
             class="select-sticker"
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-      <span v-if="errors.first('sticker-id' + index)" class="is-validate-label">スタンプは必須です</span>
+      <span v-if="errors.first('sticker-id' + index)" class="invalid-box-label">スタンプは必須です</span>
     </div>
     <!-- Modal -->
     <sticker-modal name="stickerModalCenter" @input="selectSticker" />

@@ -12,7 +12,7 @@
           type="text"
           v-model="defaults.text"
           v-validate="'required'">
-        <span v-if="errors.first('confirm-label'+indexParent)" class="is-validate-label">質問文は必須です</span>
+        <span v-if="errors.first('confirm-label'+indexParent)" class="invalid-box-label">質問文は必須です</span>
       </div>
     </div>
     <div class="col-md-6" v-for="(item, index) in defaults.actions" :key="index">

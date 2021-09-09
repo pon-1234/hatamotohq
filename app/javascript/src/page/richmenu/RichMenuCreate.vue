@@ -9,7 +9,7 @@
         <div class="form-group">
           <label>タイトル<required-mark/></label>
           <input v-model.trim="title" type="text" name="title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required'">
-          <span v-if="errors.first('title')" class="is-validate-label">タイトルは必須です</span>
+          <span v-if="errors.first('title')" class="invalid-box-label">タイトルは必須です</span>
         </div>
       </div>
 
@@ -17,8 +17,8 @@
         <div class="form-group">
           <label>メニューバーのテキスト<required-mark/></label>
           <input v-model.trim="chatBarText" type="text" name="richmenu-title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required|max:14'">
-          <span v-if="errors.firstByRule('richmenu-title', 'required')" class="is-validate-label">タイトルは必須です</span>
-          <span v-else-if="errors.firstByRule('richmenu-title', 'max')" class="is-validate-label">14文字までしか入らないです</span>
+          <span v-if="errors.firstByRule('richmenu-title', 'required')" class="invalid-box-label">タイトルは必須です</span>
+          <span v-else-if="errors.firstByRule('richmenu-title', 'max')" class="invalid-box-label">14文字までしか入らないです</span>
         </div>
       </div>
 
@@ -46,7 +46,7 @@
             <input type="hidden" :value="end_date" name="end_date" v-validate="'required'">
               &nbsp;&nbsp;<button class="btn btn-secondary" @click="resetTime">リセット</button>
           </div>
-          <span v-if="messageErrorDateTime"  class="is-validate-label">{{messageErrorDateTime}}</span>
+          <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
         </div>
       </div>
 

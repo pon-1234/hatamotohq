@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="form-group">
+      <label>代替テキスト</label>
+      <input type="text" :name="`altText${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
+      <error-message :message="errors.first(`altText${index}`)"></error-message>
+    </div>
+
     <!--Editor-->
     <div class="d-flex">
       <div class="fw-260">
@@ -8,9 +14,9 @@
         <imagemap-view
           :background="backgroundUrl"
           :template-id="templateId"
-          :class="errors.first('image-url'+index) ? 'fh-260 is-validate' : 'fh-260'"
+          :class="errors.first('image-url'+index) ? 'fh-260 invalid-box' : 'fh-260'"
           @click="expandAction" />
-        <span v-if="errors.first('image-url'+index)" class="is-validate-label">背景画像は必須です</span>
+        <span v-if="errors.first('image-url'+index)" class="invalid-box-label">背景画像は必須です</span>
 
         <button type="button"
           class="btn-block btn btn-secondary mt-2"
@@ -31,7 +37,7 @@
         <h5>アクション</h5>
         <div id="accordion">
           <div v-for="(item, index) in actionObjects" v-bind:key="index" >
-            <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'is-validate': '' ">
+            <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'invalid-box': '' ">
               <div class="p-2" @click="expandAction(item.key, false, index)">
                 <h5 class="m-0">
                   <button type="button"
@@ -70,11 +76,11 @@
       :selectionId="templateId"
       @accept="templateChange">
     </imagemap-template-selector>
-    <media-modal
+    <!-- <media-modal
       @input="changeLineMediaAlias"
       :data="{type: 'imagemap'}"
       :id="index+'_imagemapModalUploadImage'">
-    </media-modal>
+    </media-modal> -->
     <rich-menu-modal-editor-image
       v-if="isShowEditor"
       :templateId="templateId"
@@ -96,6 +102,7 @@ export default {
       isShowEditor: false,
       templateId: this.data.templateId,
       templateValue: this.data.templateValue,
+      altText: this.data.altText,
       actionObjects: this.data.actions,
       backgroundUrl: this.data.baseUrl,
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -226,14 +233,13 @@ export default {
         baseUrl: this.backgroundUrl,
         templateId: this.templateId,
         templateValue: this.templateValue,
+        altText: this.altText,
         baseSize: {
           width: 1040,
           height: 1040
         },
         actions: actions
       };
-
-      console.log(params);
 
       this.$emit('input', params);
     },

@@ -135,7 +135,7 @@
             >下書き保存</button>
           </div>
         </div>
-        <message-preview />
+        <!-- <message-preview /> -->
       </div>
 
       <loading-indicator :loading="loading" />
@@ -340,12 +340,12 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateBroadcastResponse(success) {
       if (success) {
-        window.toastr.success('一斉配信の作成は完了しました。');
+        window.toastr.success('一斉配信の保存は完了しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
         }, 500);
       } else {
-        window.toastr.error('一斉配信の作成は失敗しました。');
+        window.toastr.error('一斉配信の保存は失敗しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
         }, 500);

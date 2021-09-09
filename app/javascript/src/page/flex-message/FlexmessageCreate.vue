@@ -8,7 +8,7 @@
         <label class="col-sm-4 text-right m-auto">Flexメッセージ名</label>
         <div class="col-sm-8">
           <input class="form-control" name="flex-title" v-model.trim="name" placeholder="Flex メッセージ名を入力してください" type="text" v-validate="{required: isValidate}">
-          <span v-if="errors.first('flex-title')" class="is-validate-label">Flexメッセージ名は必須です</span>
+          <span v-if="errors.first('flex-title')" class="invalid-box-label">Flexメッセージ名は必須です</span>
         </div>
       </div>
 

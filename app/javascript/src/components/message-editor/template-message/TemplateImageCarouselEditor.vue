@@ -35,7 +35,7 @@
                         </div>
                         <div class="carousel-content" @click="changeSelected(index)">
                           <div class="carousel-thumb" :style="{ backgroundImage: 'url(' + item.imageUrl + ')'}" v-if="item.imageUrl"></div>
-                          <div v-if="!item.imageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'is-validate':'' ">(画像未登録)</div>
+                          <div v-if="!item.imageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'invalid-box':'' ">(画像未登録)</div>
                           <input type="hidden" v-model="item.imageUrl" :name="'image-url-'+index" v-validate="'required'" />
                         </div>
                       </div>

@@ -8,7 +8,7 @@
       <div class="w-100">
         <input :name="name+'_label'" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="value.label"
                class="w-100 form-control" @keyup="changeValue" v-validate="{required: labelRequired && showTitle}"/>
-        <span v-if="errors.first(name+'_label')" class="is-validate-label">ラベルは必須です</span>
+        <span v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
       </div>
     </div>
     <label class="w-100 mt20">
@@ -17,7 +17,7 @@
     </label>
     <div class="w-100">
       <textarea :name="name+'_value'" placeholder="テキストを入力してください" type="text" maxlength="300" v-model="value.text" class="w-100 form-control"  @keyup="changeValue" v-validate="'required'"/>
-      <span v-if="errors.first(name+'_value')" class="is-validate-label">テキストは必須です</span>
+      <span v-if="errors.first(name+'_value')" class="invalid-box-label">テキストは必須です</span>
     </div>
   </div>
 </template>

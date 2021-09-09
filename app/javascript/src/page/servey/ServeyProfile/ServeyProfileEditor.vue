@@ -18,7 +18,7 @@
               <div class="w-100">
                 <input name="label" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="data.field_name"
                        class="w-100 form-control" v-validate="'required'"/>
-                <span v-if="errors.has('label')" class="is-validate-label">友だち情報名は必須です</span>
+                <span v-if="errors.has('label')" class="invalid-box-label">友だち情報名は必須です</span>
               </div>
               <label style="margin-top: 20px">
                 形式
@@ -29,7 +29,7 @@
                     {{item}}
                   </option>
                 </select>
-                <span v-if="errors.has('selectBox')" class="is-validate-label">形式は必須です</span>
+                <span v-if="errors.has('selectBox')" class="invalid-box-label">形式は必須です</span>
               </div>
               <div class="d-flex justify-content-center" style="margin-top: 40px">
                 <button type="submit" class="btn btn-submit btn-block" @click="submitForm()">保存</button>

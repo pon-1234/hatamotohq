@@ -38,7 +38,7 @@
     </div>
 
     <div v-else>
-      <div class="border text-center" :class="errors.first('media-template' + index)?'is-validate':'' ">
+      <div class="border text-center" :class="errors.first('media-template' + index)?'invalid-box':'' ">
         <div class="figure figure-grid-sm my-4">
           <a
             href="#"
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      <span v-if="errors.first('media-template' + index)" class="is-validate-label">ファイルは必須です</span>
+      <span v-if="errors.first('media-template' + index)" class="invalid-box-label">ファイルは必須です</span>
 
       <media-modal v-bind:data="data" @input="addMedia" />
     </div>
