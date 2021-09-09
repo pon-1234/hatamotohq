@@ -50,7 +50,7 @@
               </div>
             </div>
           </div>
-          <div class="flex-1">
+          <div class="flex-grow-1">
             <div class="btn btn-primary btn-sm" @click="addTag">
               <i class="fa fa-plus"></i> 新しいタグ
             </div>

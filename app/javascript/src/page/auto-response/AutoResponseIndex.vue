@@ -11,66 +11,67 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-          <div class="flex-1">
-            <div class="tag-header">
-              <div class="col-r">
-                <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
-                  <i class="fa fa-plus"></i> 新規作成
-                </a>
-              </div>
-            </div>
-            <div class="mt-2">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>自動応答名</th>
-                    <th>キーワード</th>
-                    <th>メッセージ</th>
-                    <th class="fw-100">操作</th>
-                    <th>登録日</th>
-                    <th>状況</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
-                    <td>{{auto_response.name}}</td>
-                    <td>
-                      <div><small>どれか1つにマッチ</small></div>
-                      <span class="mr-1" v-for="(tag, index) in auto_response.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
-                    </td>
-                    <td>
-                      <div v-for="(item, index) in auto_response.messages" v-bind:key="index" class="mt-2">
-                        <message-content :data="item.content" ></message-content>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-warning" @click="openEdit(auto_response)">編集</button>
-                        <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
-                        <div class="dropdown-menu bg-white" role="menu" style="">
-                          <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
-                          <div class="dropdown-divider"></div>
-                          <a role="button" class="dropdown-item" >自動応答を編集する</a>
-                          <div class="dropdown-divider"></div>
-                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(auto_response)">自動応答を削除する</a>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td><span>{{ formattedDate(auto_response.created_at) }}</span></td>
-                    <td>
-                      <template v-if="auto_response.status === 'enable'">
-                        <span class="badge badge-success p-2">有効</span>
-                      </template>
-                      <template v-else>
-                        <span class="badge badge-warning p-2">無効</span>
-                      </template>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="flex-grow-1">
+          <div class="tag-header">
+            <div class="col-r">
+              <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
+                <i class="fa fa-plus"></i> 新規作成
+              </a>
             </div>
           </div>
+          <div class="mt-2">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>自動応答名</th>
+                  <th>キーワード</th>
+                  <th>メッセージ</th>
+                  <th class="fw-100">操作</th>
+                  <th>登録日</th>
+                  <th>状況</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="auto_response in auto_responses" v-bind:key="auto_response.id">
+                  <td>{{auto_response.name}}</td>
+                  <td>
+                    <div><small>どれか1つにマッチ</small></div>
+                    <span class="mr-1" v-for="(tag, index) in auto_response.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
+                  </td>
+                  <td>
+                    <div v-for="(item, index) in auto_response.messages" v-bind:key="index" class="mt-2">
+                      <message-content :data="item.content" ></message-content>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-warning" @click="openEdit(auto_response)">編集</button>
+                      <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+                      <div class="dropdown-menu bg-white" role="menu" style="">
+                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(auto_response)">{{ auto_response.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
+                        <div class="dropdown-divider"></div>
+                        <a role="button" class="dropdown-item" >自動応答を編集する</a>
+                        <div class="dropdown-divider"></div>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(auto_response)">自動応答を削除する</a>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td><span>{{ formattedDate(auto_response.created_at) }}</span></td>
+                  <td>
+                    <template v-if="auto_response.status === 'enable'">
+                      <span class="badge badge-success p-2">有効</span>
+                    </template>
+                    <template v-else>
+                      <span class="badge badge-warning p-2">無効</span>
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="text-center mt-5">自動応答はありません。</div>
+          </div>
+        </div>
       </div>
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
