@@ -3,9 +3,9 @@
 Sidekiq::Extensions.enable_delay!
 
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
+  config.redis = { url: ENV['REDIS_URL'], namespace: 'lineinsight' }
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
+  config.redis = { url: ENV['REDIS_URL'], namespace: 'lineinsight' }
 end

@@ -55,6 +55,7 @@ gem 'kaminari'
 # Worker
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
+gem 'redis-namespace'
 
 # Push notification
 gem 'fcm'
