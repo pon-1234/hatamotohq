@@ -65,7 +65,7 @@ namespace :deploy do
   task :sidekiq_restart do
     on roles(:app) do
       execute "cd #{current_path}"
-      execute :sudo, :systemctl, :restart, :sidekiq
+      execute :sudo, :systemctl, :restart, 'lineinsight-sidekiq'
     end
   end
 
