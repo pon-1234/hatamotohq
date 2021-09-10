@@ -69,14 +69,14 @@
           <div class="carousel-group-action row">
             <div class="col-sm-5 p-0">
               <div class="form-group">
-                <label>パネル{{ selected + 1}}タイトル <span class="label label-danger" v-if="requiredTitle">必須</span></label>
-                <input type="text" :name="'carousel-title'+indexColumn" placeholder="タイトル" class="form-control" v-model="column.title" maxlength='40' v-validate="{required: requiredTitle}">
-                <span v-if="errors.first('carousel-title'+indexColumn)" class="invalid-box-label">タイトルは必須です</span>
+                <label>パネル{{ selected + 1}}タイトル <required-mark></required-mark></label>
+                <input type="text" :name="'carousel-title'+indexColumn" placeholder="タイトル" class="form-control" v-model="column.title" maxlength='40' v-validate="{required: requiredTitle}" data-vv-as="タイトル">
+                <error-message :message="errors.first('carousel-title'+indexColumn)"></error-message>
               </div>
               <div class="form-group">
-                <label>パネル{{ selected + 1}}本文</label><span class="label label-danger">必須</span>
-                <textarea  :name="'carousel-text'+indexColumn" placeholder="本文を入力してください" class="form-control" v-model="column.text" maxlength='60' v-validate="'required'"> </textarea>
-                <span v-if="errors.first('carousel-text'+indexColumn)" class="invalid-box-label">本文は必須です</span>
+                <label>パネル{{ selected + 1}}本文</label><required-mark></required-mark>
+                <textarea  :name="'carousel-text'+indexColumn" placeholder="本文を入力してください" class="form-control" v-model="column.text" maxlength='60' v-validate="'required'" data-vv-as="本文"> </textarea>
+                <error-message :message="errors.first('carousel-text'+indexColumn)"></error-message>
               </div>
             </div>
             <div class="col-sm-7">
@@ -178,8 +178,11 @@
   </div>
 </template>
 <script>
+import ErrorMessage from '../../common/ErrorMessage.vue';
+import RequiredMark from '../../common/RequiredMark.vue';
 
 export default {
+  components: { RequiredMark, ErrorMessage },
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
   data() {
@@ -224,7 +227,7 @@ export default {
           });
         }
 
-        this.requiredTitle = !!val.columns.find(item => item.title);
+        // this.requiredTitle = !!val.columns.find(item => item.title); // TODO: need to clear
 
         this.$emit('input', value);
       },

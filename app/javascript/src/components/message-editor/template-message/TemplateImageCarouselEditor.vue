@@ -1,91 +1,88 @@
 <template>
-  <div>
-    <div class="border template-carousel row">
-      <div class="col-md-12">
-        <div class="panel panel-default pb20 mb-0">
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'active' : ''" @click="changeSelected(index)">
-              <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
-                  パネル{{ index + 1}}
-                <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
-                  <i class="fa fa-times"></i>
-                </span>
-              </a>
-            </li>
-            <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
-              <span>
-                <i class="fa fa-plus"></i>追加
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default pb20 mb-0">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'active' : ''" @click="changeSelected(index)">
+            <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
+                パネル{{ index + 1}}
+              <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
+                <i class="fa fa-times"></i>
               </span>
-            </li>
-          </ul>
+            </a>
+          </li>
+          <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+            <span>
+              <i class="fa fa-plus"></i>追加
+            </span>
+          </li>
+        </ul>
 
-          <div class="panel-body">
-            <div class="carousel-body" hidden>
-              <div class="list-carousel d-flex align-items-center">
-                <div class="carousel-group d-flex align-items-center">
-                  <div v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'carousel-preview active': 'carousel-preview'">
-                     <div class="carousel-header">
-                        <span class="carousel-header-title">{{index+1}}枚目</span>
-                        <div class="carousel-header-action">
-                          <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"><i  class="glyphicon glyphicon-arrow-left"></i></span>
-                          <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"><i  class="glyphicon glyphicon-arrow-right"></i></span>
-                          <span class="action-item" @click="copyColumn(index, item)"><i  class="fas fa-copy glyphicon"></i></span>
-                          <span class="action-item" @click="addMoreColumn(index)"><i  class="glyphicon glyphicon-plus"></i></span>
-                          <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"><i  class="glyphicon glyphicon-remove"></i></span>
-                        </div>
-                        <div class="carousel-content" @click="changeSelected(index)">
-                          <div class="carousel-thumb" :style="{ backgroundImage: 'url(' + item.imageUrl + ')'}" v-if="item.imageUrl"></div>
-                          <div v-if="!item.imageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'invalid-box':'' ">(画像未登録)</div>
-                          <input type="hidden" v-model="item.imageUrl" :name="'image-url-'+index" v-validate="'required'" />
-                        </div>
+        <div class="panel-body">
+          <div class="carousel-body" hidden>
+            <div class="list-carousel d-flex align-items-center">
+              <div class="carousel-group d-flex align-items-center">
+                <div v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'carousel-preview active': 'carousel-preview'">
+                    <div class="carousel-header">
+                      <span class="carousel-header-title">{{index+1}}枚目</span>
+                      <div class="carousel-header-action">
+                        <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"><i  class="glyphicon glyphicon-arrow-left"></i></span>
+                        <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"><i  class="glyphicon glyphicon-arrow-right"></i></span>
+                        <span class="action-item" @click="copyColumn(index, item)"><i  class="fas fa-copy glyphicon"></i></span>
+                        <span class="action-item" @click="addMoreColumn(index)"><i  class="glyphicon glyphicon-plus"></i></span>
+                        <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"><i  class="glyphicon glyphicon-remove"></i></span>
                       </div>
-                  </div>
+                      <div class="carousel-content" @click="changeSelected(index)">
+                        <div class="carousel-thumb" :style="{ backgroundImage: 'url(' + item.imageUrl + ')'}" v-if="item.imageUrl"></div>
+                        <div v-if="!item.imageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'invalid-box':'' ">(画像未登録)</div>
+                        <input type="hidden" v-model="item.imageUrl" :name="'image-url-'+index" v-validate="'required'" />
+                      </div>
+                    </div>
                 </div>
-                <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="defaults.columns.length < 10">
-                  <i class="glyphicon glyphicon-plus-sign"></i>
-                  <span class="count-carousel">({{defaults.columns.length}} / 10)</span>
-                </div>
+              </div>
+              <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="defaults.columns.length < 10">
+                <i class="glyphicon glyphicon-plus-sign"></i>
+                <span class="count-carousel">({{defaults.columns.length}} / 10)</span>
               </div>
             </div>
-            <div class="carousel-group-action row" v-for="(column, indexColum) in defaults.columns" v-show="selected === indexColum" :key="indexColum">
-              <div class="col-sm-5">
-                <div class="form-group" >
-                  <label>選択後の挙動</label>
-                  <message-action-type
-                    :name="'image_carousel' + indexColum"
-                    :value="column.action"
-                    @input="changeActionColumn(indexColum, $event)"
-                     :labelRequired="false"
-                  />
-                </div>
+          </div>
+          <div class="carousel-group-action row" v-for="(column, indexColum) in defaults.columns" v-show="selected === indexColum" :key="indexColum">
+            <div class="col-sm-8">
+              <div class="form-group" >
+                <label>選択後の挙動</label>
+                <message-action-type
+                  :name="'image_carousel' + indexColum"
+                  :value="column.action"
+                  @input="changeActionColumn(indexColum, $event)"
+                    :labelRequired="false"
+                />
               </div>
-              <div class="col-sm-4">
-                <div class="group-button-thumb form-group">
-                  <label>画像<required-mark></required-mark></label>
-                  <div class="btn btn-info btn-block uploadfile-thumb" data-toggle="modal" :data-target="'#imageModalCenter'+ indexParent">
-                    <i class="glyphicon glyphicon-picture"></i>
-                    画像選択
-                    <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
-                  </div>
-                  <div class="btn btn-default btn-sm" @click="removeCurrentThumb(indexColum)" v-if="column.imageUrl">
-                    このパネルの画像を削除
-                  </div>
-                  <div class="btn btn-info btn-sm" @click="coppyAllThumb(indexColum)" v-if="column.imageUrl">
-                    全パネルにこの画像をコピー
-                  </div>
-                  <div class="btn btn-default btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
-                    全パネルの画像を削除
-                  </div>
-                  <!-- error message if no image is selected -->
-                  <input type="hidden" v-model="column.imageUrl" :name="'image-url-'+indexColum" v-validate="'required'" data-vv-as="パネル画像"/>
-                  <template v-if="errors.first('image-url-'+ indexColum)">
-                    <error-message message="パネルの画像は必須項目です"></error-message>
-                  </template>
+            </div>
+            <div class="col-sm-4">
+              <div class="group-button-thumb form-group">
+                <label>画像<required-mark></required-mark></label>
+                <div class="btn btn-info btn-block uploadfile-thumb" data-toggle="modal" :data-target="'#imageModalCenter'+ indexParent">
+                  <i class="glyphicon glyphicon-picture"></i>
+                  画像選択
+                  <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
                 </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="form-group">
-                  <img v-if="column.imageUrl" :src="column.imageUrl" class="image-carousel-thumb" >
+                <div class="btn btn-default btn-sm" @click="removeCurrentThumb(indexColum)" v-if="column.imageUrl">
+                  このパネルの画像を削除
+                </div>
+                <div class="btn btn-info btn-sm" @click="coppyAllThumb(indexColum)" v-if="column.imageUrl">
+                  全パネルにこの画像をコピー
+                </div>
+                <div class="btn btn-default btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
+                  全パネルの画像を削除
+                </div>
+                <!-- error message if no image is selected -->
+                <input type="hidden" v-model="column.imageUrl" :name="'image-url-'+indexColum" v-validate="'required'" data-vv-as="パネル画像"/>
+                <template v-if="errors.first('image-url-'+ indexColum)">
+                  <error-message message="パネルの画像は必須項目です"></error-message>
+                </template>
+                <!-- image preview -->
+                <div class="form-group text-center">
+                  <img v-if="column.imageUrl" :src="column.imageUrl" class="mw-250" >
                   <span v-if="errorMessageUploadFile" class="label error-message-upload">{{errorMessageUploadFile}}</span>
                 </div>
               </div>
@@ -385,10 +382,6 @@ export default {
 
   .carousel-group-action{
     padding: 15px;
-  }
-
-  .image-carousel-thumb {
-    max-width: 150px;
   }
 
   // Panel tab
