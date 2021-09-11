@@ -3,7 +3,7 @@
     <b-form-tags v-model="value" no-outer-focus class="mb-2 position-relative"  :add-button-text="'追加'" remove-on-delete>
       <template v-slot="{ tags, disabled, addTag }" >
         <i :class="isFocus?'fas fa-angle-up float-r':'fas fa-angle-down float-r'" class="down icon-action" @click.stop="showDropDown"></i>
-        <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+        <ul class="list-inline d-inline-block mb-2">
           <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
               @remove="removeTag(tag, addTag)"
@@ -32,8 +32,8 @@
                 </thead>
               </table>
               <div class="tag-scroll folder-list">
-                <div v-for="(item, index) in tags_options" :key="index" :class="selected_folder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
-                  <i :class="selected_folder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
+                <div v-for="(item, index) in tags_options" :key="index" :class="selectedFolder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
+                  <i :class="selectedFolder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
                   <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
                 </div>
               </div>
@@ -45,7 +45,7 @@
                 <!--<thead>-->
                 <!--<tr>-->
                   <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                  <!--<th v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</th>-->
+                  <!--<th v-if="tags_options[selectedFolder]">{{tags_options[selectedFolder].name}}</th>-->
                 <!--</tr>-->
                 <!--</thead>-->
               <!--</table>-->
@@ -53,13 +53,13 @@
                 <div class="x-btn-back">
                   <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
                 <div class="x-title"
-                      v-if="tags_options[selected_folder]">{{tags_options[selected_folder].name}}</div>
+                      v-if="tags_options[selectedFolder]">{{tags_options[selectedFolder].name}}</div>
               </div>
 
               <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
                 <div v-for="(item, index) in availableOptions"
-                  :key="index" :class="selected_tag.find(el=>el.id === item.id)? 'folder-item active':'folder-item'"
-                  @click="changeSelectedTag({item, addTag})">
+                  :key="index" :class="selectedTags.find(el=>el.id === item.id)? 'folder-item active':'folder-item'"
+                  @click="onTagSelected({item, addTag})">
                   <span class="tag-label">{{item.name}}</span> <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span> <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span> <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
                 </div>
               </div>
@@ -79,24 +79,31 @@ import { mapState } from 'vuex';
 import ClickOutside from 'vue-click-outside';
 
 export default {
-  props: ['data', 'allTags'],
+  props: ['tags', 'allTags'],
   data() {
     return {
       value: [],
-      selected_folder: 0,
+      selectedFolder: 0,
       isFocus: false,
       search: '',
-      selected_tag: [],
+      selectedTags: [],
       isPc: true
     };
   },
+
   created() {
-    if (this.data) {
-      // eslint-disable-next-line no-undef
-      this.selected_tag = _.cloneDeep(this.data);
-      this.selected_tag.forEach(element => {
-        this.value.push(element.name);
-      });
+    this.selectedTags = _.cloneDeep(this.tags);
+    this.value = this.selectedTags.map(_ => _.name);
+  },
+
+  watch: {
+    tags: {
+      handler(val) {
+        if (!val) return;
+        console.log('--------wtf-------', val);
+        this.selectedTags = _.cloneDeep(val);
+        this.value = this.selectedTags.map(_ => _.name);
+      }
     }
   },
   computed: {
@@ -112,7 +119,7 @@ export default {
 
     availableOptions() {
       const criteria = this.criteria;
-      const options = this.tags_options[this.selected_folder].tags;
+      const options = this.tags_options[this.selectedFolder].tags;
       if (criteria) {
         return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1);
       }
@@ -131,27 +138,27 @@ export default {
       return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || (rect.top + window.scrollY) < 100;
     },
     changeSelected(index) {
-      this.selected_folder = index;
+      this.selectedFolder = index;
       this.isPc = true;
     },
 
-    changeSelectedTag({ item, addTag }) {
-      if (this.selected_tag.find(el => el.id === item.id)) {
-        this.selected_tag = this.selected_tag.filter(el => el.id !== item.id);
+    onTagSelected({ item, addTag }) {
+      if (this.selectedTags.find(el => el.id === item.id)) {
+        this.selectedTags = this.selectedTags.filter(el => el.id !== item.id);
         this.value = this.value.filter(el => el !== item.name);
       } else {
-        this.selected_tag.push(item);
+        this.selectedTags.push(item);
         this.value.push(item.name);
       }
-      this.$emit('input', this.selected_tag);
+      this.$emit('input', this.selectedTags);
       addTag();
     },
 
     removeTag(name, addTag) {
       this.value = this.value.filter(el => el !== name);
-      this.selected_tag = this.selected_tag.filter(el => el.name !== name);
+      this.selectedTags = this.selectedTags.filter(el => el.name !== name);
       addTag();
-      this.$emit('input', this.selected_tag);
+      this.$emit('input', this.selectedTags);
     },
 
     focusForm() {
@@ -244,10 +251,6 @@ export default {
   padding-left: 0px!important;
   border: none !important;;
   margin-bottom: 0px;
-}
-
-.d-inline-block {
-  display: contents;
 }
 
 .tag-content-left, .tag-content-right {

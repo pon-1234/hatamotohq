@@ -31,7 +31,8 @@ class LineFriend < ApplicationRecord
   has_many :tags, through: :taggings
   has_many :messages, as: :sender
 
-  enum status: { active: 'active', blocked: 'blocked', inactive: 'inactive', muted: 'muted' }
+  # Scope
+  enum status: { active: 'active', blocked: 'blocked', muted: 'muted' }
   scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
   scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
 

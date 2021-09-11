@@ -46,7 +46,7 @@
             </tbody>
           </table>
           <div v-if="isShowTags" class="select-tags-user">
-            <input-tag :data="friendDetail.tags" @input="selectTags" :allTags="true"/>
+            <input-tag :tags="friendDetail.tags" @input="selectTags" :allTags="true"/>
           </div>
         </div>
         <div class="modal-footer flex center">

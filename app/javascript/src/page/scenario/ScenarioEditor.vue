@@ -55,7 +55,7 @@
                 <div v-if="target === 'tags'">
                   <label>タグ</label>
                   <div>
-                    <input-tag :data="scenarioData.tags" @input="addListTag"/>
+                    <input-tag :tags="scenarioData.tags" @input="addListTag"/>
                   </div>
                 </div>
               </div>

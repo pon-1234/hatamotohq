@@ -27,7 +27,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     nomalized_messages_data = []
     messages.each do |message|
-      nomalized_messages_data << normalize_message_content(message.content)
+      nomalized_messages_data << MessageNormalizer.new(message.content).perform
     end
 
     # Deliver messages via line api
@@ -51,7 +51,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     nomalized_messages_data = []
     messages.each do |message|
-      nomalized_messages_data << normalize_message_content(message.content)
+      nomalized_messages_data << MessageNormalizer.new(message.content).perform
     end
     if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')
@@ -84,95 +84,6 @@ class DispatchBroadcastJob < ApplicationJob
         friends = friends.joins(:tags).references(:tags).where(tags: { id: broadcast.tag_ids })
       end
       friends
-    end
-
-    def normalize_message_content(message_content)
-      message_type = message_content['type']
-      return message_content if message_type != 'text'
-
-      if message_type == 'flex' && message_content['id'].present?
-        message_content = normalize_flex_message_content(message_content)
-      end
-
-      message_content = handle_postback(message_content)
-      message_content = handle_media(message_content)
-
-      # if ($messageContent['type'] === 'flex' && $message['id']) {
-      #   $flexMessage = FlexMessage::query()->where('id', $messageContent['id'])->first();
-      #   if ($flexMessage) {
-      #     $flexMessageSended = FlexMessageSendedLog::query()->create([
-      #       'flex_message_id' => $flexMessage->id,
-      #       'line_account_id' => $lineAccount->id,
-      #       'html_template' => $flexMessage->html_template,
-      #     ]);
-      #     $messageContent['id'] = $flexMessageSended->id;
-      #   }
-      # }
-    end
-
-    def normalize_flex_message_content(message_content)
-      flex_message_id = message_content['id']
-      flex_message = FlexMessage.find(flex_message_id)
-      if flex_message.present?
-        message_content = JSON.parse(flex_message.json_message)
-        message_content['id'] = flex_message_id
-      end
-    end
-
-    def handle_postback(message_content)
-      #     $messageContent = collect($messageContent)->recursive(function ($o) {
-      #     if (isset($o['label'])) {
-      #         $o['label'] = empty($o['label']) ? NULL : $o['label'];
-      #     }
-      #   if (isset($o['type'])) {
-      #     if (($o['type'] === 'postback' || $o['type'] == 'datetimepicker')) {
-      #       $val = json_decode(base64_decode($o['data']), true);
-      #       // lấy data
-      #         if ($o['type'] === 'postback') {
-      #             $val['displayText'] = $o['displayText'] = empty($o['displayText']) ? NULL : $o['displayText'];
-      #         }
-
-      #       $o['data'] = base64_encode(json_encode($val));
-      #       $hash = md5($o['data'] );
-      #       // checksum
-      #       PostbackChecksum::query()->firstOrCreate([
-      #         'hash' => $hash,
-      #       ], [
-      #         'hash' => $hash,
-      #         'data' => $o['data'],
-      #       ]);
-
-      #       $o['data'] = $hash;
-      #     } elseif ($o['type'] === 'survey') {
-      #       $content = $o['content'];
-      #       $o['type'] = 'uri';
-      #       $o['uri'] = env('APP_FLEXA_URL').'/surveys/liff?code='.$content['code'];
-      #       unset($o['data']);
-      #       unset($o['content']);
-      #     }
-      #   }
-      #   return $o;
-      # })->toArray();
-      message_content
-    end
-
-    def handle_media(message_content)
-      message_content
-      # if (in_array($messageContent['type'], ["image", "video"])) {
-      #   $messageContent["contentProvider"] = [
-      #     "type" => "external",
-      #     "originalContentUrl" => $messageContent["originalContentUrl"],
-      #     "previewImageUrl" => $messageContent["previewImageUrl"]
-      #   ];
-      # }
-
-      # if (in_array($messageContent['type'], ["audio"])) {
-      #   $messageContent["contentProvider"] = [
-      #     "type" => "external",
-      #     "originalContentUrl" => $messageContent["originalContentUrl"],
-      #     "duration" => $messageContent["duration"]
-      #   ];
-      # }
     end
 
     def insert_delivered_message(channels, message_content)

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_05_152756) do
+ActiveRecord::Schema.define(version: 2021_09_10_091744) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -307,11 +307,12 @@ ActiveRecord::Schema.define(version: 2021_09_05_152756) do
     t.index ['sender_type', 'sender_id'], name: 'index_messages_on_sender_type_and_sender_id'
   end
 
-  create_table 'postback_checksums', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.string 'hash'
-    t.string 'data'
+  create_table 'postback_mappers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.string 'key'
+    t.json 'value'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.index ['key'], name: 'index_postback_mappers_on_key'
   end
 
   create_table 'rich_menus', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|

@@ -111,10 +111,10 @@ export default {
     },
 
     emitData() {
-      this.$emit('input', Util.jsonToBase64({
+      this.$emit('input', {
         type: this.currentPostBackType,
         content: this.content
-      }));
+      });
     },
 
     changeSelected() {
@@ -122,7 +122,7 @@ export default {
     },
 
     setupData() {
-      const data = Util.base64ToJson(this.value);
+      const data = this.value;
       this.content = data.content;
       this.currentPostBackType = data.type || 'no-action';
     }

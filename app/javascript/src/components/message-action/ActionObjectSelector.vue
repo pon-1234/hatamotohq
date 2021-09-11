@@ -76,12 +76,12 @@ export default {
         option = {
           type: this.ActionObjectsType.Postback,
           label: null,
-          data: Util.jsonToBase64({
+          data: {
             type: 'text',
             content: {
               text: null
             }
-          })
+          }
         };
         break;
 

@@ -294,12 +294,12 @@ export const PostbackTypes = {
 export const ActionMessage = {
   default: {
     type: 'postback',
-    data: Util.jsonToBase64({
+    data: {
       messages: [
-        Util.jsonToBase64({ type: 'no-action' })
+        { type: 'no-action' }
       ],
       tags: { type: 'tag', content: { tag_ids: [] } }
-    })
+    }
   }
 };
 

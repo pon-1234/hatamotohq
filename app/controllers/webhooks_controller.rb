@@ -29,6 +29,7 @@ class WebhooksController < ApplicationController
           :timestamp,
           :replyToken,
           :mode,
+          postback: {},
           message: {},
           source: {},
         ]

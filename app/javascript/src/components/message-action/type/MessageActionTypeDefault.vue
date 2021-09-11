@@ -42,29 +42,27 @@
         class="fa fa-plus"></i> アクションの追加
       </button>
     </div>
-
+    <div class="divider mt-4"></div>
     <div>
       <label class="w-100 mt20">
         タグ設定
       </label>
-      <div class="tag-content row">
-        <div class="col-md-6 d-flex-auto">
-          <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグを追加</label>
+      <div class="row">
+        <div class="col-md-6 d-flex-auto p-0">
+          <span>タグを追加</span>
           <action-post-back-type-tag
-            v-if="refreshTag"
-            :value="tagContent.content"
+            :value="assignTagsData.tags"
             :name="name + '_tag'"
-            @input="updateTagContent">
+            @input="onAssignTagsDataChanged">
           </action-post-back-type-tag>
         </div>
 
         <div class="col-md-6 d-flex-auto">
-          <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグをはずす</label>
+          <span>タグをはずす</span>
           <action-post-back-type-tag
-            v-if="refreshTag"
-            :value="tagDeleteContent.content"
+            :value="unassignTagsData.tags"
             :name="name + '_tag_delete'"
-            @input="deleteTagContent">
+            @input="onUnassignTagsDataChanged">
           </action-post-back-type-tag>
         </div>
       </div>
@@ -73,7 +71,7 @@
 </template>
 
 <script>
-import Util from '../../../core/util';
+import ModalTagsVue from '../../common/ModalTags.vue';
 
 export default {
   props: {
@@ -93,12 +91,11 @@ export default {
       data: {},
       label: null,
       displayText: null,
-      tagContent: { type: 'tag', content: { tag_ids: [] } },
-      tagDeleteContent: { type: 'tag_delete', content: { tag_ids: [] } },
-      messages: [Util.jsonToBase64({
+      assignTagsData: { type: 'assign_tag', tags: [] },
+      unassignTagsData: { type: 'unassign_tag', tags: [] },
+      messages: [{
         type: 'no-action'
-      })],
-      refreshTag: true
+      }]
     };
   },
   inject: ['parentValidator'],
@@ -108,44 +105,31 @@ export default {
     this.setup();
   },
 
-  watch: {
-    value: {
-      deep: true,
-      handler(val) {
-        this.setup();
-        console.log(val, 'watch', name);
-        // this.refreshTag = false;
-        // this.$nextTick(() => {
-        //   this.refreshTag = true;
-        // });
-      }
-    }
-  },
-
   methods: {
     setup() {
       if (this.value) {
-        const data = Util.base64ToJson(this.value.data);
+        const data = this.value.data;
         this.label = this.value.label || null;
         this.messages = data.messages;
         this.displayText = this.value.displayText || null;
-        this.tagContent = data.tag || { type: 'tag', content: { tag_ids: [] } };
-        this.tagDeleteContent = data.tag_delete || { type: 'tag_delete', content: { tag_ids: [] } };
+        const tagActions = data.tag;
+        this.assignTagsData = tagActions.find(_ => _.type === 'assign_tag') || { type: 'assign_tag', tags: [] };
+        this.unassignTagsData = tagActions.find(_ => _.type === 'unassign_tag') || { type: 'unassign_tag', tags: [] };
       }
     },
-    updateTagContent(content) {
-      this.tagContent = {
-        type: 'tag',
-        content: content
+    onAssignTagsDataChanged(tags) {
+      this.assignTagsData = {
+        type: 'assign_tag',
+        tags: tags
       };
 
       this.updateData();
     },
 
-    deleteTagContent(content) {
-      this.tagDeleteContent = {
-        type: 'tag_delete',
-        content: content
+    onUnassignTagsDataChanged(tags) {
+      this.unassignTagsData = {
+        type: 'unassign_tag',
+        tags: tags
       };
 
       this.updateData();
@@ -157,9 +141,9 @@ export default {
     },
 
     addMessage() {
-      this.messages.push(Util.jsonToBase64({
+      this.messages.push({
         type: 'no-action'
-      }));
+      });
 
       this.updateData();
     },
@@ -199,12 +183,11 @@ export default {
         type: 'postback',
         label: this.label,
         displayText: this.displayText,
-        data: Util.jsonToBase64({
+        data: {
           displayText: this.displayText,
-          tag: this.tagContent,
-          tag_delete: this.tagDeleteContent,
-          messages: this.messages
-        })
+          messages: this.messages,
+          tag: [this.assignTagsData, this.unassignTagsData]
+        }
       });
     }
   }
