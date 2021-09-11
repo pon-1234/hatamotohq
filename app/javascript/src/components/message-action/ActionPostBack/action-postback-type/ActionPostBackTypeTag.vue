@@ -25,27 +25,6 @@ export default {
     }
   },
 
-  created() {
-    console.log('----------------------', this.value);
-  },
-
-  // data() {
-  //   return {
-  //     refreshTag: true
-  //   };
-  // },
-
-  // watch: {
-  //   value(val) {
-  //     this.refreshTag = false;
-  //     this.$nextTick(() => {
-  //       this.tagIds = Array.isArray(val.tag_ids) ? val.tag_ids : [];
-
-  //       this.refreshTag = true;
-  //     });
-  //   }
-  // },
-
   computed: {
     ...mapState('global', {
       tags: state => state.tags

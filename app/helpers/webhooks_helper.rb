@@ -64,14 +64,13 @@ module WebhooksHelper
       # Get mapper key
       key = @event[:postback][:data]
       action = PostbackMapper.where(key: key)&.first&.value
-      byebug
       return false if action.blank?
 
       if action[:displayText].present?
         # TODO: send text message
       end
-      
-      return PostbackHandler.new(@line_account, @event, action).perform
+
+      PostbackHandler.new(@line_account, @event, action).perform
     end
 
     private

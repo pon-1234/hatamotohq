@@ -100,7 +100,6 @@ export default {
     tags: {
       handler(val) {
         if (!val) return;
-        console.log('--------wtf-------', val);
         this.selectedTags = _.cloneDeep(val);
         this.value = this.selectedTags.map(_ => _.name);
       }

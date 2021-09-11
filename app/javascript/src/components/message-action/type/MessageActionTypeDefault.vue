@@ -91,8 +91,8 @@ export default {
       data: {},
       label: null,
       displayText: null,
-      assignTagsData: { type: 'assign_tag', tags: [] },
-      unassignTagsData: { type: 'unassign_tag', tags: [] },
+      assignTagsData: { type: 'assign', tags: [] },
+      unassignTagsData: { type: 'unassign', tags: [] },
       messages: [{
         type: 'no-action'
       }]
@@ -107,19 +107,20 @@ export default {
 
   methods: {
     setup() {
-      if (this.value) {
-        const data = this.value.data;
-        this.label = this.value.label || null;
-        this.messages = data.messages;
-        this.displayText = this.value.displayText || null;
-        const tagActions = data.tag;
-        this.assignTagsData = tagActions.find(_ => _.type === 'assign_tag') || { type: 'assign_tag', tags: [] };
-        this.unassignTagsData = tagActions.find(_ => _.type === 'unassign_tag') || { type: 'unassign_tag', tags: [] };
+      if (!this.value) return;
+      const data = this.value.data;
+      this.label = this.value.label || null;
+      this.messages = data.messages;
+      this.displayText = this.value.displayText || null;
+      const tagActions = data.tag;
+      if (tagActions) {
+        this.assignTagsData = tagActions.find(_ => _.type === 'assign') || { type: 'assign', tags: [] };
+        this.unassignTagsData = tagActions.find(_ => _.type === 'unassign') || { type: 'unassign', tags: [] };
       }
     },
     onAssignTagsDataChanged(tags) {
       this.assignTagsData = {
-        type: 'assign_tag',
+        type: 'assign',
         tags: tags
       };
 
@@ -128,7 +129,7 @@ export default {
 
     onUnassignTagsDataChanged(tags) {
       this.unassignTagsData = {
-        type: 'unassign_tag',
+        type: 'unassign',
         tags: tags
       };
 
