@@ -127,6 +127,10 @@
     min-width: $width;
     max-width: $width;
   }
+}
+
+@for $i from 101 through 1200 {
+  $width: 0px + $i;
   .mw-#{$i} {
     min-width: $width;
   }

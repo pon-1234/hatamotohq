@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < Admin::ApplicationController
-  before_action :find_user, only: [:show, :edit, :update, :destroy, :delete_confirm]
+  before_action :find_user, only: [:show, :edit, :update, :destroy, :delete_confirm, :sso]
 
   # GET /admin/users
   def index
@@ -44,6 +44,12 @@ class Admin::UsersController < Admin::ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  # GET /admin/users/:id/sso
+  def sso
+    sign_in @user
+    redirect_to user_root_path
   end
 
   private
