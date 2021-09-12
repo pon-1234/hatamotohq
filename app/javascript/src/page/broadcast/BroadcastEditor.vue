@@ -143,7 +143,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
 

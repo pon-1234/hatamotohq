@@ -16,11 +16,8 @@
 </template>
 <script>
 import Util from '@/core/util';
-import DateRangePicker from 'vue2-daterange-picker';
-
 export default {
   props: ['data'],
-  components: { DateRangePicker },
   data() {
     return {
       options_prefecture: this.Prefecture,

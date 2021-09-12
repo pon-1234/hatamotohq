@@ -8,7 +8,7 @@
 export default {
   computed: {
     badge() {
-      return this.$store.getters['global/BADGE'];
+      return this.$store.getters['global/badge'];
     }
   },
 

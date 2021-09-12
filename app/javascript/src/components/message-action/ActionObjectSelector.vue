@@ -156,7 +156,7 @@ export default {
 
   computed: {
     action_objects() {
-      const objects = this.$store.getters['global/ACTION_OBJECTS'];
+      const objects = this.$store.getters['global/actionObjects'];
       return objects != null
         ? objects.filter(item => (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback')
         : null;

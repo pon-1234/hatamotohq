@@ -1,4 +1,3 @@
-import Util from './util';
 
 export const MessageTypeIds = {
   Text: 1,

@@ -61,14 +61,9 @@
 
 <script>
 import Util from '@/core/util.js';
-import { Datetime } from 'vue-datetime';
 
 export default {
   props: ['bot'],
-
-  components: {
-    Datetime
-  },
 
   data() {
     return {
