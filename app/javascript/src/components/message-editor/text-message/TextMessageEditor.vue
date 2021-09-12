@@ -1,21 +1,25 @@
 <template>
   <div class="pos">
     <span class="title-editor">絵文字</span>
-    <input :name="'message-editor'+index" type="text" v-model='input_value' v-validate="'required'" style="width: 0px; height: 0px; border: none;"/>
-    <div :class="errors.first('message-editor'+index)?'invalid-box':'' ">
-      <textarea
-        ref='textarea'
-        class='form-control'
-        rows='5'
-        placeholder='テキストを入力してください'
-        v-model='input_value'
-      ></textarea>
-    </div>
-    <span v-if="errors.first('message-editor'+index)" class="invalid-box-label">テキストは必須です</span>
+    <input
+      :name="'message-editor' + index"
+      type="text"
+      v-model="input_value"
+      v-validate="'required'"
+      data-vv-as="本文"
+      class="d-none"
+    />
+    <textarea
+      ref="textarea"
+      class="form-control"
+      rows="5"
+      placeholder="本文を入力してください"
+      v-model="input_value"
+    ></textarea>
+    <error-message :message="errors.first('message-editor' + index)"></error-message>
   </div>
 </template>
 <script>
-
 export default {
   props: ['value', 'index'],
   inject: ['parentValidator'],
@@ -58,24 +62,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep{
+::v-deep {
   .emojionearea-button {
-    left: -4px!important;
-    top: -26px!important;
+    left: -4px !important;
+    top: -26px !important;
   }
 
   .emojionearea-picker-position-bottom {
-    left: -20px!important;
-    top: 10px!important;
+    left: -20px !important;
+    top: 10px !important;
   }
 
   .emojionearea-wrapper::after {
-    left: 20px!important;
+    left: 20px !important;
   }
 }
 
 .title-editor {
   margin-left: 30px;
   font-size: 12px;
+
 }
 </style>

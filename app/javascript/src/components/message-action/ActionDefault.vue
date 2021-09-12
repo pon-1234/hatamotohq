@@ -1,12 +1,9 @@
 <template>
   <div>
-    <label class="w-100 mt20">
-      ラベル
-      <required-mark/>
-    </label>
-    <div class="w-100">
-      <input type="text" maxlength="20" placeholder="ラベルを入力してください" v-model="value.label" class="gw-100 form-control"  @keyup="changeValue" v-validate="'required'" name="action-default"/>
-      <span v-if="errors.first('action-default')" class="invalid-box-label">ラベルは必須です</span>
+    <label class="mt-4">ラベル<required-mark/></label>
+    <div>
+      <input type="text" maxlength="20" placeholder="ラベルを入力してください" v-model="value.label" class="gw-100 form-control"  @keyup="changeValue" v-validate="'required'" data-vv-as="ラベル" name="action-default"/>
+      <error-message :message="errors.first('action-default')"></error-message>
     </div>
   </div>
 </template>
@@ -21,9 +18,7 @@ export default {
     changeValue() {
       this.$emit('input', this.value);
     }
-
   }
-
 };
 </script>
 

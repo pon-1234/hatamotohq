@@ -1266,12 +1266,6 @@
     line-height: normal;
 }
 
-textarea[aria-invalid="true"],
-select[aria-invalid="true"],
-input[aria-invalid="true"] {
-    border-color: red;
-}
-
 .cursor-pointer{
     cursor: pointer;
 }

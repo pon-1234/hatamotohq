@@ -48,20 +48,24 @@
         :value="content"
         :name="name"
         @input="updateContent" />
-      <action-post-back-type-email v-if="currentPostBackType==='email'"
+
+      <action-postback-email
+        v-if="currentPostBackType === 'email'"
         :value="content"
         :name="name"
-        @input="updateContent" />
-      <action-post-back-type-tag v-if="currentPostBackType==='tag'"
+        @input="updateContent">
+      </action-postback-email>
+
+      <action-postback-tag
+        v-if="currentPostBackType==='tag'"
         :value="content"
         :name="name"
-        @input="updateContent" />
+        @input="updateContent">
+      </action-postback-tag>
     </div>
   </div>
 </template>
 <script>
-
-import Util from '../../../core/util';
 
 export default {
   props: {

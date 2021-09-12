@@ -3,43 +3,70 @@
     <div v-if="showTitle">
       <label class="w-100 mt10">
         ラベル
-        <required-mark v-if="labelRequired"/>
+        <required-mark v-if="labelRequired" />
       </label>
       <div class="w-100">
-        <input type="text" :name="name+'_label'" placeholder="ラベルを入力してください" maxlength="12" v-model="label"
-               class="w-100 form-control" v-validate="{required: labelRequired && showTitle}" @keyup="changeLabel"/>
-        <span v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
+        <input
+          type="text"
+          :name="name + '_label'"
+          placeholder="ラベルを入力してください"
+          maxlength="12"
+          v-model="label"
+          class="w-100 form-control"
+          v-validate="{ required: labelRequired && showTitle }"
+          data-vv-as="ラベル"
+          @keyup="changeLabel"
+        />
+        <error-message :message="errors.first(name + '_label')"></error-message>
       </div>
     </div>
 
     <div class="form-group mt-2" v-if="showLaunchMesasge">
       <label>選択時のメッセージ</label>
-      <input type="text" placeholder="選択時のメッセージを入力してください" v-model="displayText"
-        class="w-100 form-control" @keyup="changeDisplayText($event)"/>
+      <input
+        type="text"
+        placeholder="選択時のメッセージを入力してください"
+        v-model="displayText"
+        class="w-100 form-control"
+        @keyup="changeDisplayText($event)"
+      />
     </div>
 
     <div class="message-item" v-for="(message, index) in messages" :key="index">
       <div class="d-flex">
-        <label style="flex: 1">アクション{{index + 1}}</label>
-        <div tyle="float:right" class="d-inline-block" v-if="messages.length > 1">
+        <label style="flex: 1">アクション{{ index + 1 }}</label>
+        <div
+          tyle="float:right"
+          class="d-inline-block"
+          v-if="messages.length > 1"
+        >
           <a class="btn btn-default" @click="moveUpMessage(index)">
-            <i class="fa fa-arrow-up"></i></a>
+            <i class="fa fa-arrow-up"></i
+          ></a>
           <a class="btn btn-default" @click="moveDownMessage(index)">
-            <i class="fa fa-arrow-down"></i></a>
+            <i class="fa fa-arrow-down"></i
+          ></a>
           <a class="btn btn-default" @click="removeMessage(index)">
-            <i class="fa fa-minus"></i></a>
+            <i class="fa fa-minus"></i
+          ></a>
         </div>
       </div>
-      <action-postback :showTitle="false"
-                       :value="message"
-                       :name="name+'_postback_'+index"
-                       :labelRequired="false"
-                       @input="changeAction(index, $event)">
+      <action-postback
+        :showTitle="false"
+        :value="message"
+        :name="name + '_postback_' + index"
+        :labelRequired="false"
+        @input="changeAction(index, $event)"
+      >
       </action-postback>
     </div>
     <div class="text-center mt-4" v-if="messages.length < 3">
-      <button class="btn btn-outline-success" type="button" @click="addMessage()"><i
-        class="fa fa-plus"></i> アクションの追加
+      <button
+        class="btn btn-outline-success"
+        type="button"
+        @click="addMessage()"
+      >
+        <i class="fa fa-plus"></i> アクションの追加
       </button>
     </div>
     <div class="divider mt-4"></div>
@@ -50,20 +77,22 @@
       <div class="row">
         <div class="col-md-6 d-flex-auto p-0">
           <span>タグを追加</span>
-          <action-post-back-type-tag
+          <action-postback-tag
             :value="assignTagsData.tags"
             :name="name + '_tag'"
-            @input="onAssignTagsDataChanged">
-          </action-post-back-type-tag>
+            @input="onAssignTagsDataChanged"
+          >
+          </action-postback-tag>
         </div>
 
         <div class="col-md-6 d-flex-auto">
           <span>タグをはずす</span>
-          <action-post-back-type-tag
+          <action-postback-tag
             :value="unassignTagsData.tags"
             :name="name + '_tag_delete'"
-            @input="onUnassignTagsDataChanged">
-          </action-post-back-type-tag>
+            @input="onUnassignTagsDataChanged"
+          >
+          </action-postback-tag>
         </div>
       </div>
     </div>
@@ -71,9 +100,9 @@
 </template>
 
 <script>
-import ModalTagsVue from '../../common/ModalTags.vue';
-
+import ErrorMessage from '../../common/ErrorMessage.vue';
 export default {
+  components: { ErrorMessage },
   props: {
     value: Object,
     labelRequired: Boolean,
@@ -93,9 +122,11 @@ export default {
       displayText: null,
       assignTagsData: { type: 'assign', tags: [] },
       unassignTagsData: { type: 'unassign', tags: [] },
-      messages: [{
-        type: 'no-action'
-      }]
+      messages: [
+        {
+          type: 'no-action'
+        }
+      ]
     };
   },
   inject: ['parentValidator'],
@@ -114,8 +145,13 @@ export default {
       this.displayText = this.value.displayText || null;
       const tagActions = data.tag;
       if (tagActions) {
-        this.assignTagsData = tagActions.find(_ => _.type === 'assign') || { type: 'assign', tags: [] };
-        this.unassignTagsData = tagActions.find(_ => _.type === 'unassign') || { type: 'unassign', tags: [] };
+        this.assignTagsData = tagActions.find((_) => _.type === 'assign') || {
+          type: 'assign',
+          tags: []
+        };
+        this.unassignTagsData = tagActions.find(
+          (_) => _.type === 'unassign'
+        ) || { type: 'unassign', tags: [] };
       }
     },
     onAssignTagsDataChanged(tags) {
@@ -196,62 +232,61 @@ export default {
 </script>
 
 <style type="text/scss" scoped>
+.d-flex-auto {
+  flex-direction: column;
+}
+
+.tag-content {
+  border: 1px solid #cecece;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.tag {
+  vertical-align: middle;
+  flex: 1;
+  width: calc(100% - 117px);
+  display: inline-block;
+}
+
+@media (max-width: 1290px) {
   .d-flex-auto {
-    flex-direction: column;
+    flex-direction: row;
+    margin-top: 10px;
   }
 
-  .tag-content{
-    border: 1px solid #cecece;
-    padding: 10px 20px;
-    border-radius: 5px;
+  .d-flex-auto > label {
+    width: 100% !important;
   }
-
   .tag {
-    vertical-align: middle;
-    flex: 1;
-    width: calc(100% - 117px);
-    display: inline-block;
+    width: 100%;
   }
+}
 
-  @media (max-width: 1290px) {
-    .d-flex-auto {
-      flex-direction: row;
-      margin-top: 10px;
-    }
+.mt-4 {
+  margin-top: 10px;
+}
 
-    .d-flex-auto > label {
-      width: 100% !important;
-    }
-    .tag {
-      width: 100%;
-    }
+.btn-default {
+  font-size: 10px;
+}
 
-  }
+.btn-add {
+  width: 200px;
+  border: 1px solid #ededed;
+  background: white;
+  color: #1b1b1b;
+}
 
-  .mt-4 {
-    margin-top: 10px;
-  }
+.btn-add:hover {
+  background: white;
+  color: #1b1b1b;
+}
 
-  .btn-default {
-    font-size: 10px;
-  }
-
-  .btn-add {
-    width: 200px;
-    border: 1px solid #ededed;
-    background: white;
-    color: #1b1b1b;
-  }
-
-  .btn-add:hover {
-    background: white;
-    color: #1b1b1b;
-  }
-
-  .message-item {
-    border: 1px solid #cecece;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 10px;
-  }
+.message-item {
+  border: 1px solid #cecece;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
 </style>

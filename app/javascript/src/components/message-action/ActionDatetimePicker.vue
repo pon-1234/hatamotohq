@@ -15,10 +15,9 @@
           class="w-100 form-control"
           @keyup="changeValue"
           v-validate="{ required: labelRequired && showTitle }"
+          data-vv-as="ラベル"
         />
-        <span v-if="errors.first('datetime-label')" class="invalid-box-label"
-          >ラベルは必須です</span
-        >
+        <error-message :message="errors.first('datetime-label')"></error-message>
       </div>
     </div>
     <label class="w-100 mt20">
@@ -38,7 +37,9 @@
   </div>
 </template>
 <script>
+import ErrorMessage from '../common/ErrorMessage.vue';
 export default {
+  components: { ErrorMessage },
   props: {
     value: Object,
     showTitle: {

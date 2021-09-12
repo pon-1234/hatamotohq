@@ -7,11 +7,24 @@ class PostbackHandler
     @action = action
     friend_id = @event[:source][:userId]
     @friend = LineFriend.find_by(line_account: @line_account, line_user_id: friend_id)
+    @reply_token = @event['replyToken']
   end
 
   def perform
+    handle_message_action(@action['messages']) if @action['messages'].present?
     handle_tag_action(@action['tag']) if @action['tag'].present?
     true
+  end
+
+  def handle_message_action(actions)
+    actions.each do |action|
+      case action['type']
+      when 'text'
+        send_text_message(action['content'])
+      when 'email'
+        send_email(action['content'])
+      end
+    end
   end
 
   def handle_tag_action(tag_actions)
@@ -22,6 +35,21 @@ class PostbackHandler
   end
 
   private
+    def send_text_message(content)
+      messages = [{ type: 'text', text: content['text'] }]
+      # Rebuild payload
+      payload = {
+        channel_id: @friend.channel.id,
+        reply_token: @reply_token,
+        messages: messages
+      }
+      PushMessageToLineJob.perform_later(payload)
+    end
+
+    def send_email(content)
+      UserMailer.postback_email(@friend.id, content).deliver_later
+    end
+
     def assign_tag(action)
       assign_ids = action['tags'].pluck('id')
       @friend.tag_ids = @friend.tag_ids | assign_ids

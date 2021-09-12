@@ -1,5 +1,5 @@
 <template>
-  <span class="error-explanation">{{ message }}</span>
+  <span class="mt-2 error-explanation">{{ message }}</span>
 </template>
 
 <script>

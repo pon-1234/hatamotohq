@@ -1,5 +1,5 @@
 <template>
-  <div class="mw-1200" >
+  <div class="mxw-1200" >
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/broadcasts`" class="text-info">
@@ -13,7 +13,7 @@
             <h3 class="card-title">配信先</h3>
           </div>
           <div class="card-body">
-            <div class="radio-group mt-2 mb-2">
+            <div class="radio-group">
               <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
               <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
             </div>
@@ -25,10 +25,10 @@
             </div>
 
             <div v-if="broadcastData.type !== 'all'">
-              <div class="divider"></div>
+              <div class="divider mt-2"></div>
               <div class="mt-2">
                 <label>状態</label>
-                <div class="radio-group mt-2 mb-2">
+                <div class="radio-group">
                   <label>
                     <input
                       type="radio"

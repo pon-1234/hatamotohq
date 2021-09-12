@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="radio-group mt-2 mb-2">
+    <div class="radio-group">
       <label v-if="isSupportPostBack">
         <input type="radio" :name="name+'_message_action_type'" value="default" :checked="type==='default'" @change="changeType('default')"> カスタムアクション
       </label>
