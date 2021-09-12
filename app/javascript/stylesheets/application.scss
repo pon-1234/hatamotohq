@@ -107,7 +107,7 @@
   min-width: 100px;
 }
 
-@for $i from 1 through 300 {
+@for $i from 1 through 1200 {
   $height: 0px + $i;
   .h-#{$i} {
     height: $height;
@@ -120,7 +120,7 @@
   }
 }
 
-@for $i from 101 through 1200 {
+@for $i from 1 through 1200 {
   $width: 0px + $i;
   .fw-#{$i} {
     width: $width;
@@ -137,10 +137,6 @@
   .w-#{$i} {
     width: $width;
   }
-}
-
-.mxw-1200 {
-  max-width: 1200px;
 }
 
 .text-c {
