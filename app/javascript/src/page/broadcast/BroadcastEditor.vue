@@ -1,5 +1,5 @@
 <template>
-  <div class="mw-1200" >
+  <div class="mxw-1200" >
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/broadcasts`" class="text-info">
@@ -13,22 +13,22 @@
             <h3 class="card-title">配信先</h3>
           </div>
           <div class="card-body">
-            <div class="radio-group mt-2 mb-2">
+            <div class="radio-group">
               <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
               <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
             </div>
             <div v-show="broadcastData.type !== 'all'">
-              <label>タグ</label>
-              <div class="list-checkbox-tag" v-if="refresh_tag">
-                <input-tag :data="broadcastData.tags" @input="addListTag"/>
+              <label>タグ設定</label>
+              <div class="list-checkbox-tag">
+                <input-tag :tags="broadcastData.tags" @input="addListTag"/>
               </div>
             </div>
 
             <div v-if="broadcastData.type !== 'all'">
-              <div class="divider"></div>
+              <div class="divider mt-2"></div>
               <div class="mt-2">
                 <label>状態</label>
-                <div class="radio-group mt-2 mb-2">
+                <div class="radio-group">
                   <label>
                     <input
                       type="radio"
@@ -135,7 +135,7 @@
             >下書き保存</button>
           </div>
         </div>
-        <message-preview />
+        <message-preview hidden></message-preview>
       </div>
 
       <loading-indicator :loading="loading" />
@@ -143,7 +143,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
 
@@ -182,7 +182,6 @@ export default {
         type: 'all'
       },
       refresh_content: true,
-      refresh_tag: true,
       currentDate: moment().tz('Asia/Tokyo').format()
     };
   },
@@ -206,9 +205,9 @@ export default {
   },
 
   async beforeMount() {
-    await this.fetchItem();
     await this.getTags();
     await this.listTagAssigned();
+    await this.fetchItem();
     this.loading = false;
   },
 
@@ -237,17 +236,11 @@ export default {
 
     async fetchItem() {
       if (this.broadcast_id) {
-        this.refresh_tag = false;
         const broadcast = await this.getBroadcast(this.broadcast_id);
         Object.assign(this.broadcastData, broadcast);
-
         if (this.broadcastData.status === 'done') {
           window.location.href = process.env.MIX_ROOT_PATH + '/streams';
         }
-
-        this.$nextTick(() => {
-          this.refresh_tag = true;
-        });
 
         if (this.broadcastData.deliver_now) {
           this.changeStartDateForNow();
@@ -324,15 +317,15 @@ export default {
           return;
         };
       }
+
       // Normalize data
-      const broadcastDataData = _.cloneDeep(this.broadcastData);
-      broadcastDataData.tag_ids = broadcastDataData.tags.map(_ => _.id);
-      delete broadcastDataData.tags;
+      const payload = _.omit(this.broadcastData, ['tags']);
+      payload.tag_ids = this.broadcastData.tags.map(_ => _.id);
       if (!this.broadcast_id) {
-        const broadcastId = await this.createBroadcast(broadcastDataData);
+        const broadcastId = await this.createBroadcast(payload);
         this.onReceiveCreateBroadcastResponse(!!broadcastId);
       } else {
-        const broadcastId = await this.updateBroadcast(broadcastDataData);
+        const broadcastId = await this.updateBroadcast(payload);
         this.onReceiveUpdateBroadcastResponse(!!broadcastId);
       }
     },
@@ -382,11 +375,7 @@ export default {
     },
 
     resetListTag() {
-      this.refresh_tag = false;
       this.broadcastData.tags = [];
-      this.$nextTick(() => {
-        this.refresh_tag = true;
-      });
     }
   }
 };

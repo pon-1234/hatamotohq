@@ -1623,11 +1623,6 @@ select{
     content: "\f0c5";
 }
 
-textarea[aria-invalid="true"]{
-    box-shadow: initial !important;
-    border-color: red !important;
-}
-
 .glyphicon-plus:before {
     content: "\2b";
     vertical-align: initial !important;

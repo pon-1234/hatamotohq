@@ -491,6 +491,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fcm
+  hashie
   httparty
   image_processing
   jbuilder (~> 2.7)

@@ -8,6 +8,7 @@ module WebhooksHelper
     @line_account = LineAccount.find_by(webhook_url: key)
     return false if @line_account.nil?
 
+    @friend_id = @event[:source][:userId]
     type = @event[:type]
     case type
     when 'follow'
@@ -23,15 +24,13 @@ module WebhooksHelper
 
   private
     def handle_follow
-      friend_id = @event[:source][:userId]
-      line_friend = add_friend(friend_id)
+      line_friend = add_friend(@friend_id)
       line_friend.present?
     end
 
     def handle_unfollow
-      friend_id = @event[:source][:userId]
       # Check if friend alredy in db
-      line_friend = LineFriend.where(line_account: @line_account, line_user_id: friend_id).first
+      line_friend = LineFriend.where(line_account: @line_account, line_user_id: @friend_id).first
       return false if line_friend.nil?
       # Change friend status to block if existing in db
       line_friend.update_columns(status: 'blocked')
@@ -44,11 +43,10 @@ module WebhooksHelper
 
     def handle_message
       # Get user profile
-      friend_id = @event[:source][:userId]
-      line_friend = LineFriend.where(line_account: @line_account, line_user_id: friend_id).first
+      line_friend = LineFriend.where(line_account: @line_account, line_user_id: @friend_id).first
       # Store friend data if does not exists
       unless line_friend
-        line_friend = add_friend(friend_id)
+        line_friend = add_friend(@friend_id)
         return false if line_friend.nil?
       end
       # Bot could not send to itself
@@ -57,13 +55,22 @@ module WebhooksHelper
       # Create a message
       message = create_message(channel, line_friend, @event)
       # Increase unread message count by 1
-      update_channel_last_message(channel, @event)
+      update_channel_last_message(channel)
     rescue => e
       logger.error(e)
     end
 
     def handle_postback
-      true
+      # Get mapper key
+      key = @event[:postback][:data]
+      action = PostbackMapper.where(key: key)&.first&.value
+      return false if action.blank?
+
+      if action[:displayText].present?
+        # TODO: send text message
+      end
+
+      PostbackHandler.new(@line_account, @event, action).perform
     end
 
     private

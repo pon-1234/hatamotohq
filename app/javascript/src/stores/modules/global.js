@@ -6,8 +6,8 @@ export const state = {
   stickers: [],
   stickersHistories: [],
   user: null,
-  media_url: null,
-  media_preview_url: null,
+  mediaUrl: null,
+  mediaPreviewUrl: null,
   key: '',
   action_objects: null,
   action_objects_expired: null,
@@ -15,46 +15,46 @@ export const state = {
 };
 
 export const mutations = {
-  SET_USER(state, user) {
+  setUser(state, user) {
     state.user = user;
   },
 
-  SET_STICKERS(state, stickers) {
+  setStickers(state, stickers) {
     state.stickers = stickers;
   },
 
-  SET_STICKERS_HISTORIES(state, stickers) {
+  setStickerLogs(state, stickers) {
     state.stickersHistories = state.stickersHistories.concat(stickers);
   },
 
-  SET_MEDIA_URL(state, url) {
-    state.media_url = url;
+  setMediaUrl(state, url) {
+    state.mediaUrl = url;
   },
 
-  SET_MEDIA_PREVIEW_URL(state, url) {
-    state.media_preview_url = url;
+  setMediaPreviewUrl(state, url) {
+    state.mediaPreviewUrl = url;
   },
 
   SET_KEY(state, key) {
     state.key = key;
   },
 
-  SET_ACTION_OBJECTS(state, actionObjects) {
+  setActionObjects(state, actionObjects) {
     state.action_objects = actionObjects;
   },
 
-  SET_ACTION_OBJECTS_EXPIRED(state, actionObjects) {
+  setActionObjects_EXPIRED(state, actionObjects) {
     state.action_objects_expired = actionObjects;
   },
 
-  SET_BADGE(state, val) {
+  setBadge(state, val) {
     state.badge = val;
   }
 };
 
 export const getters = {
-  ACTION_OBJECTS: state => state.action_objects,
-  BADGE: state => state.badge
+  actionObjects: state => state.action_objects,
+  badge: state => state.badge
 };
 
 export const actions = {
@@ -73,7 +73,7 @@ export const actions = {
     }
 
     context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_USER', userData);
+    context.commit('setUser', userData);
   },
 
   async sendMedia(context, query) {
@@ -86,10 +86,10 @@ export const actions = {
     if (response && !response.id) {
       window.toastr.error('Could not upload media');
     }
-    const media_url = response.url;
-    const media_preview_url = response.preview_url;
-    context.commit('SET_MEDIA_URL', media_url);
-    context.commit('SET_MEDIA_PREVIEW_URL', media_preview_url);
+    const mediaUrl = response.url;
+    const mediaPreviewUrl = response.preview_url;
+    context.commit('setMediaUrl', mediaUrl);
+    context.commit('setMediaPreviewUrl', mediaPreviewUrl);
     return response;
   },
 
@@ -105,13 +105,13 @@ export const actions = {
         } else {
           // Call api to load stickers
           stickersData = await Global.getStickers(query);
-          context.commit('SET_STICKERS', stickersData);
+          context.commit('setStickers', stickersData);
         }
       } catch (error) {
         console.log(error);
       }
       // TODO fixme
-      context.commit('SET_STICKERS_HISTORIES', stickersData);
+      context.commit('setStickerLogs', stickersData);
     }
   },
 
@@ -126,15 +126,15 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-    context.commit('SET_ACTION_OBJECTS', data);
+    context.commit('setActionObjects', data);
   },
 
   getBadge(context) {
     Global.getBadge().then((res) => {
       // save
-      context.commit('SET_BADGE', res.badge);
+      context.commit('setBadge', res.badge);
     }).catch(() => {
-      context.commit('SET_BADGE', false);
+      context.commit('setBadge', false);
     });
   },
 
@@ -199,7 +199,6 @@ export const actions = {
   async uploadImageMap(context, payload) {
     try {
       const response = await MediaApi.uploadImageMap(payload.file);
-      console.log('----- uploaded image map ------', response);
       if (response && response.id) {
         return response;
       }

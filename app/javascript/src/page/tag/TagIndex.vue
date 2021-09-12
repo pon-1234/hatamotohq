@@ -65,9 +65,6 @@
                     </tr>
                   </thead>
                   <tbody v-if="tags && tags[selected_tag]">
-                    <tr class="text-center" v-if="tags[selected_tag].tags.length === 0">
-                      <td colspan="3">データはありません。</td>
-                    </tr>
                     <tr v-if="isAddMoreTag" class="tag-item">
                       <td style="min-width: 200px; vertical-align: middle;">
                         <div class="folder-item">
@@ -96,6 +93,7 @@
                     />
                   </tbody>
                 </table>
+                <div v-if="tags[selected_tag].tags.length === 0" class="mt-4 text-md">データはありません</div>
               </div>
             </div>
           </div>

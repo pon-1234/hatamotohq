@@ -40,28 +40,35 @@
       <action-post-back-type-template v-if="currentPostBackType==='template'"
         :value="content"
         @input="updateContent" :name="name" />
-      <action-post-back-type-scenario v-if="currentPostBackType==='scenario'"
+      <action-postback-scenario
+        v-if="currentPostBackType==='scenario'"
         :value="content"
         :name="name"
-        @input="updateContent" />
+        @input="updateContent">
+      </action-postback-scenario>
+
       <action-post-back-type-flex-message v-if="currentPostBackType==='flexMessage'"
         :value="content"
         :name="name"
         @input="updateContent" />
-      <action-post-back-type-email v-if="currentPostBackType==='email'"
+
+      <action-postback-email
+        v-if="currentPostBackType === 'email'"
         :value="content"
         :name="name"
-        @input="updateContent" />
-      <action-post-back-type-tag v-if="currentPostBackType==='tag'"
+        @input="updateContent">
+      </action-postback-email>
+
+      <action-postback-tag
+        v-if="currentPostBackType==='tag'"
         :value="content"
         :name="name"
-        @input="updateContent" />
+        @input="updateContent">
+      </action-postback-tag>
     </div>
   </div>
 </template>
 <script>
-
-import Util from '../../../core/util';
 
 export default {
   props: {
@@ -111,10 +118,10 @@ export default {
     },
 
     emitData() {
-      this.$emit('input', Util.jsonToBase64({
+      this.$emit('input', {
         type: this.currentPostBackType,
         content: this.content
-      }));
+      });
     },
 
     changeSelected() {
@@ -122,7 +129,7 @@ export default {
     },
 
     setupData() {
-      const data = Util.base64ToJson(this.value);
+      const data = this.value;
       this.content = data.content;
       this.currentPostBackType = data.type || 'no-action';
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="mw-1200">
+  <div class="mxw-1200">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/scenarios`" class="text-info">
@@ -55,7 +55,7 @@
                 <div v-if="target === 'tags'">
                   <label>タグ</label>
                   <div>
-                    <input-tag :data="scenarioData.tags" @input="addListTag"/>
+                    <input-tag :tags="scenarioData.tags" @input="addListTag"/>
                   </div>
                 </div>
               </div>
@@ -73,7 +73,9 @@
                   </label>
                 </div>
               </div>
-
+            </div>
+            <div class="divider"></div>
+            <div class="mt-2">
               <div class="form-group">
                 <label>配信タイミング</label><span class="text-xs">（作成後に変更不可）</span>
                 <div class="radio-group">

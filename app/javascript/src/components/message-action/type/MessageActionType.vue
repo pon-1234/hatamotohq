@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="radio-group mt-2 mb-2">
-      <label v-if="isSupportPostBack">
+    <div class="radio-group">
+      <label v-if="isSupportPostback">
         <input type="radio" :name="name+'_message_action_type'" value="default" :checked="type==='default'" @change="changeType('default')"> カスタムアクション
       </label>
-      <label v-if="isSupportPostBack">
+      <label v-if="isSupportPostback">
         <input type="radio" :name="name+'_message_action_type'" value="basic" :checked="type==='basic'" @change="changeType('basic')"> 基本アクション
       </label>
     </div>
 
     <div>
-      <message-action-type-default v-if="type==='default' && isSupportPostBack"
+      <message-action-type-default v-if="type==='default' && isSupportPostback"
         :name="name"
         :value="data"
         :labelRequired="labelRequired"
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       type: 'default',
-      isSupportPostBack: true,
+      isSupportPostback: true,
       data: this.ActionMessage.default,
       tempData: {
         default: null,
@@ -99,7 +99,7 @@ export default {
 
     if (this.supports && !this.supports.includes('postback')) {
       this.type = 'basic';
-      this.isSupportPostBack = false;
+      this.isSupportPostback = false;
     }
   },
 

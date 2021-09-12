@@ -1,5 +1,5 @@
 <template>
-  <div class="mw-1200" >
+  <div class="mxw-1200" >
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/admin/users`" class="text-info">

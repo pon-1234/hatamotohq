@@ -5,15 +5,24 @@
         <label class="mt-2">
           タイトル<required-mark/>
         </label>
-        <input class="input-age form-control" placeholder="タイトルを入力してください" type="text" maxlength="40" v-model="templateData.title" v-validate="'required'" :name="'button-title'+ indexParent"/>
-        <span v-if="errors.first('button-title' + indexParent)" class="invalid-box-label">タイトルは必須です</span>
+        <input class="form-control" placeholder="タイトルを入力してください" type="text" maxlength="40" v-model="templateData.title" v-validate="'required'" data-vv-as="タイトル" :name="'button-title'+ indexParent"/>
+        <error-message :message="errors.first('button-title' + indexParent)"></error-message>
       </div>
+
       <div class="d-flex group-title col-md-6">
         <label class="mt-2">
           テキスト<required-mark/>
         </label>
-        <input class="input-age form-control" placeholder="テキストを入力してください" :name="'button-text'+indexParent" type="text" maxlength="60" v-model="templateData.text" v-validate="'required'"/>
-        <span v-if="errors.first('button-text'+indexParent)" class="invalid-box-label">テキストは必須です</span>
+        <input
+          class="form-control"
+          placeholder="テキストを入力してください"
+          :name="'button-text'+indexParent"
+          type="text"
+          maxlength="60"
+          v-model="templateData.text"
+          v-validate="'required'"
+          data-vv-as="テキスト"/>
+        <error-message :message="errors.first('button-text'+indexParent)"></error-message>
       </div>
 
       <div class="row col-12" style="margin-top: 15px !important;">
@@ -40,7 +49,7 @@
             <div class="card-body">
               <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">
                 <message-action-type
-                  :name="indexParent + 'template_button_' + index"
+                  :name="'parent_' + indexParent + 'template_button_' + index"
                   :value="item"
                   @input="changeAction(index, $event)"
                 />

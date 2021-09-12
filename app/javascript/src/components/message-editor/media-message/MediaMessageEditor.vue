@@ -55,17 +55,18 @@
           </div>
         </div>
       </div>
-      <span v-if="errors.first('media-template' + index)" class="invalid-box-label">ファイルは必須です</span>
-
+      <error-message :message="errors.first('media-template' + index)"></error-message>
       <media-modal v-bind:data="data" @input="addMedia" />
     </div>
-    <input type="hidden" v-model="data.originalContentUrl" :name="'media-template' + index" v-validate="'required'" />
+    <input type="hidden" v-model="data.originalContentUrl" :name="'media-template' + index" v-validate="'required'" data-vv-as="ファイル" />
   </div>
 </template>
 <script>
 import Util from '@/core/util';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 
 export default {
+  components: { ErrorMessage },
   props: ['data', 'index'],
   inject: ['parentValidator'],
   created() {

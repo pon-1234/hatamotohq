@@ -79,7 +79,7 @@
                   <div class="box-form01 box-form-sort" :style="tags && tags.length >= 0? {display: 'block'}:{display: 'none'}">
                       <label>タグ</label>
                       <div class="list-checkbox-tag" v-if="refresh_tag">
-                        <input-tag :data="tags" @input="addListTag"/>
+                        <input-tag :tags="tags" @input="addListTag"/>
                       </div>
                   </div>
               </div>

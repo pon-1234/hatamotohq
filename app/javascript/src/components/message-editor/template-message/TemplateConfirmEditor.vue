@@ -11,11 +11,13 @@
           autocomplete="off"
           type="text"
           v-model="defaults.text"
-          v-validate="'required'">
-        <span v-if="errors.first('confirm-label'+indexParent)" class="invalid-box-label">質問文は必須です</span>
+          v-validate="'required'"
+          data-vv-as="質問文"
+        >
+        <error-message :message="errors.first('confirm-label'+indexParent)"></error-message>
       </div>
     </div>
-    <div class="col-md-6" v-for="(item, index) in defaults.actions" :key="index">
+    <div class="col-xl-6" v-for="(item, index) in defaults.actions" :key="index">
       <div class="card card-outline card-success">
         <div class="card-header"><h3 class="card-title">選択肢{{index+1}}</h3></div>
         <div class="card-body">

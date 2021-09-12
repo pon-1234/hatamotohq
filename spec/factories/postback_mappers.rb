@@ -2,13 +2,19 @@
 
 # == Schema Information
 #
-# Table name: postback_checksums
+# Table name: postback_mappers
 #
 #  id         :bigint           not null, primary key
-#  data       :string(255)
-#  hash       :string(255)
+#  key        :string(255)
+#  value      :json
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class PostbackChecksum < ApplicationRecord
+# Indexes
+#
+#  index_postback_mappers_on_key  (key)
+#
+FactoryBot.define do
+  factory :postback_mapper do
+  end
 end

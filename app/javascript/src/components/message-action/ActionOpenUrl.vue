@@ -14,10 +14,10 @@
           v-model="value.label"
           class="w-100 form-control"
           @keyup="changeValue"
-          data-vv-as="ラベル"
           v-validate="{ required: labelRequired && showTitle }"
+          data-vv-as="ラベル"
         />
-        <error-message :message="error.first(name + '_label')"></error-message>
+        <error-message :message="errors.first(name + '_label')"></error-message>
       </div>
     </div>
     <label class="mt-4">URL<required-mark /></label>
@@ -30,8 +30,8 @@
         placeholder="https://example.com"
         class="w-100 form-control"
         @keyup="changeValue"
-        data-vv-as="URL"
         v-validate="{ url: { require_protocol: true }, required: true }"
+        data-vv-as="URL"
       />
       <!-- <input
         type="hidden"

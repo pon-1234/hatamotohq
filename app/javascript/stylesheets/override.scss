@@ -1,0 +1,111 @@
+// Override bootstrap
+.btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+.badge-primary,
+.btn-primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+
+.btn:disabled {
+  border-color: #a9a9a9;
+}
+
+.btn-warning {
+  border-color: #cc8521;
+  background: #d18f32;
+  color: #ffffff;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+
+.btn-group-xs > .btn,
+.btn-xs {
+  padding: 1px 5px;
+  font-size: 12px !important;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.btn-group {
+  button {
+    padding: 2px 5px !important;
+  }
+}
+
+.text-sm {
+  .form-control {
+    font-size: 0.875rem !important;
+  }
+}
+
+a.sort_link {
+  color: #212529;
+}
+
+table,
+thead,
+tr,
+tbody,
+th,
+td {
+  vertical-align: middle;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.index {
+  thead {
+    border-top: 2px solid #999;
+    background-color: #eee;
+  }
+}
+
+.table > tbody > tr > td {
+  line-height: 1.4;
+  vertical-align: middle;
+  border-top: 1px solid #ddd;
+}
+
+.b-form-tags-button {
+  width: 80px !important;
+}
+
+// START: Pagination
+.page-item .page-link {
+  background-color: white;
+  border-color: #d7dadc;
+  color: #6e767d;
+}
+
+.page-item.active .page-link {
+  background-color: white;
+  border-color: #17a2b8;
+  color: #17a2b8;
+}
+// END: Pagination
+
+// START: Datetime picker theme
+.theme-success .vdatetime-popup__header,
+.theme-success .vdatetime-calendar__month__day--selected > span > span,
+.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
+  background: #28a745;
+}
+
+.theme-success .vdatetime-year-picker__item--selected,
+.theme-success .vdatetime-time-picker__item--selected,
+.theme-success .vdatetime-popup__actions__button {
+  color: #28a745;
+}
+// END: Datetime picker theme

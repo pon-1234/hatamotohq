@@ -70,7 +70,7 @@
                 <div style="width: calc(100% - 200px)" v-if="!isBlink">
                     <div v-if="item.action.type==='tag'">
                         <input-tag
-                                :data="item.action.content ? item.action.content.tag_ids : null"
+                                :tags="item.action.content ? item.action.content.tag_ids : null"
                                 :allTags="true"
                                 @input="item.action.content ? item.action.content.tag_ids = $event : item.action.content = {tag_ids: $event}"
                         >

@@ -3,69 +3,98 @@
     <div v-if="showTitle">
       <label class="w-100 mt10">
         ラベル
-        <required-mark v-if="labelRequired"/>
+        <required-mark v-if="labelRequired" />
       </label>
       <div class="w-100">
-        <input type="text" :name="name+'_label'" placeholder="ラベルを入力してください" maxlength="12" v-model="label"
-               class="w-100 form-control" v-validate="{required: labelRequired && showTitle}" @keyup="changeLabel"/>
-        <span v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
+        <input
+          type="text"
+          :name="name + '_label'"
+          placeholder="ラベルを入力してください"
+          maxlength="12"
+          v-model="label"
+          class="w-100 form-control"
+          v-validate="{ required: labelRequired && showTitle }"
+          data-vv-as="ラベル"
+          @keyup="changeLabel"
+        />
+        <error-message :message="errors.first(name + '_label')"></error-message>
       </div>
     </div>
 
     <div class="form-group mt-2" v-if="showLaunchMesasge">
       <label>選択時のメッセージ</label>
-      <input type="text" placeholder="選択時のメッセージを入力してください" v-model="displayText"
-        class="w-100 form-control" @keyup="changeDisplayText($event)"/>
+      <input
+        type="text"
+        placeholder="選択時のメッセージを入力してください"
+        v-model="displayText"
+        class="w-100 form-control"
+        @keyup="changeDisplayText($event)"
+      />
     </div>
 
     <div class="message-item" v-for="(message, index) in messages" :key="index">
       <div class="d-flex">
-        <label style="flex: 1">アクション{{index + 1}}</label>
-        <div tyle="float:right" class="d-inline-block" v-if="messages.length > 1">
+        <label style="flex: 1">アクション{{ index + 1 }}</label>
+        <div
+          tyle="float:right"
+          class="d-inline-block"
+          v-if="messages.length > 1"
+        >
           <a class="btn btn-default" @click="moveUpMessage(index)">
-            <i class="fa fa-arrow-up"></i></a>
+            <i class="fa fa-arrow-up"></i
+          ></a>
           <a class="btn btn-default" @click="moveDownMessage(index)">
-            <i class="fa fa-arrow-down"></i></a>
+            <i class="fa fa-arrow-down"></i
+          ></a>
           <a class="btn btn-default" @click="removeMessage(index)">
-            <i class="fa fa-minus"></i></a>
+            <i class="fa fa-minus"></i
+          ></a>
         </div>
       </div>
-      <action-postback :showTitle="false"
-                       :value="message"
-                       :name="name+'_postback_'+index"
-                       :labelRequired="false"
-                       @input="changeAction(index, $event)">
+      <action-postback
+        :showTitle="false"
+        :value="message"
+        :name="name + '_postback_' + index"
+        :labelRequired="false"
+        @input="changeAction(index, $event)"
+      >
       </action-postback>
     </div>
     <div class="text-center mt-4" v-if="messages.length < 3">
-      <button class="btn btn-outline-success" type="button" @click="addMessage()"><i
-        class="fa fa-plus"></i> アクションの追加
+      <button
+        class="btn btn-outline-success"
+        type="button"
+        @click="addMessage()"
+      >
+        <i class="fa fa-plus"></i> アクションの追加
       </button>
     </div>
-
+    <div class="divider mt-4"></div>
     <div>
       <label class="w-100 mt20">
         タグ設定
       </label>
-      <div class="tag-content row">
-        <div class="col-md-6 d-flex-auto">
-          <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグを追加</label>
-          <action-post-back-type-tag
-            v-if="refreshTag"
-            :value="tagContent.content"
+      <div class="row m-0">
+        <div class="col-md-6 d-flex-auto p-0">
+          <span>タグを追加</span>
+          <action-postback-tag
+            class="mt-2"
+            :value="assignTagsData.tags"
             :name="name + '_tag'"
-            @input="updateTagContent">
-          </action-post-back-type-tag>
+            @input="onAssignTagsDataChanged"
+          >
+          </action-postback-tag>
         </div>
 
         <div class="col-md-6 d-flex-auto">
-          <label class="d-inline-block" style="width: 110px;vertical-align: middle; font-weight: 500;">タグをはずす</label>
-          <action-post-back-type-tag
-            v-if="refreshTag"
-            :value="tagDeleteContent.content"
+          <span>タグをはずす</span>
+          <action-postback-tag
+            class="mt-2"
+            :value="unassignTagsData.tags"
             :name="name + '_tag_delete'"
-            @input="deleteTagContent">
-          </action-post-back-type-tag>
+            @input="onUnassignTagsDataChanged"
+          >
+          </action-postback-tag>
         </div>
       </div>
     </div>
@@ -73,9 +102,9 @@
 </template>
 
 <script>
-import Util from '../../../core/util';
-
+import ErrorMessage from '../../common/ErrorMessage.vue';
 export default {
+  components: { ErrorMessage },
   props: {
     value: Object,
     labelRequired: Boolean,
@@ -93,12 +122,13 @@ export default {
       data: {},
       label: null,
       displayText: null,
-      tagContent: { type: 'tag', content: { tag_ids: [] } },
-      tagDeleteContent: { type: 'tag_delete', content: { tag_ids: [] } },
-      messages: [Util.jsonToBase64({
-        type: 'no-action'
-      })],
-      refreshTag: true
+      assignTagsData: { type: 'assign', tags: [] },
+      unassignTagsData: { type: 'unassign', tags: [] },
+      messages: [
+        {
+          type: 'no-action'
+        }
+      ]
     };
   },
   inject: ['parentValidator'],
@@ -108,44 +138,37 @@ export default {
     this.setup();
   },
 
-  watch: {
-    value: {
-      deep: true,
-      handler(val) {
-        this.setup();
-        console.log(val, 'watch', name);
-        // this.refreshTag = false;
-        // this.$nextTick(() => {
-        //   this.refreshTag = true;
-        // });
-      }
-    }
-  },
-
   methods: {
     setup() {
-      if (this.value) {
-        const data = Util.base64ToJson(this.value.data);
-        this.label = this.value.label || null;
-        this.messages = data.messages;
-        this.displayText = this.value.displayText || null;
-        this.tagContent = data.tag || { type: 'tag', content: { tag_ids: [] } };
-        this.tagDeleteContent = data.tag_delete || { type: 'tag_delete', content: { tag_ids: [] } };
+      if (!this.value) return;
+      const data = this.value.data;
+      this.label = this.value.label || null;
+      this.messages = data.messages;
+      this.displayText = this.value.displayText || null;
+      const tagActions = data.tag;
+      if (tagActions) {
+        this.assignTagsData = tagActions.find((_) => _.type === 'assign') || {
+          type: 'assign',
+          tags: []
+        };
+        this.unassignTagsData = tagActions.find(
+          (_) => _.type === 'unassign'
+        ) || { type: 'unassign', tags: [] };
       }
     },
-    updateTagContent(content) {
-      this.tagContent = {
-        type: 'tag',
-        content: content
+    onAssignTagsDataChanged(tags) {
+      this.assignTagsData = {
+        type: 'assign',
+        tags: tags
       };
 
       this.updateData();
     },
 
-    deleteTagContent(content) {
-      this.tagDeleteContent = {
-        type: 'tag_delete',
-        content: content
+    onUnassignTagsDataChanged(tags) {
+      this.unassignTagsData = {
+        type: 'unassign',
+        tags: tags
       };
 
       this.updateData();
@@ -157,9 +180,9 @@ export default {
     },
 
     addMessage() {
-      this.messages.push(Util.jsonToBase64({
+      this.messages.push({
         type: 'no-action'
-      }));
+      });
 
       this.updateData();
     },
@@ -199,12 +222,11 @@ export default {
         type: 'postback',
         label: this.label,
         displayText: this.displayText,
-        data: Util.jsonToBase64({
+        data: {
           displayText: this.displayText,
-          tag: this.tagContent,
-          tag_delete: this.tagDeleteContent,
-          messages: this.messages
-        })
+          messages: this.messages,
+          tag: [this.assignTagsData, this.unassignTagsData]
+        }
       });
     }
   }
@@ -212,62 +234,61 @@ export default {
 </script>
 
 <style type="text/scss" scoped>
+.d-flex-auto {
+  flex-direction: column;
+}
+
+.tag-content {
+  border: 1px solid #cecece;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.tag {
+  vertical-align: middle;
+  flex: 1;
+  width: calc(100% - 117px);
+  display: inline-block;
+}
+
+@media (max-width: 1290px) {
   .d-flex-auto {
-    flex-direction: column;
+    flex-direction: row;
+    margin-top: 10px;
   }
 
-  .tag-content{
-    border: 1px solid #cecece;
-    padding: 10px 20px;
-    border-radius: 5px;
+  .d-flex-auto > label {
+    width: 100% !important;
   }
-
   .tag {
-    vertical-align: middle;
-    flex: 1;
-    width: calc(100% - 117px);
-    display: inline-block;
+    width: 100%;
   }
+}
 
-  @media (max-width: 1290px) {
-    .d-flex-auto {
-      flex-direction: row;
-      margin-top: 10px;
-    }
+.mt-4 {
+  margin-top: 10px;
+}
 
-    .d-flex-auto > label {
-      width: 100% !important;
-    }
-    .tag {
-      width: 100%;
-    }
+.btn-default {
+  font-size: 10px;
+}
 
-  }
+.btn-add {
+  width: 200px;
+  border: 1px solid #ededed;
+  background: white;
+  color: #1b1b1b;
+}
 
-  .mt-4 {
-    margin-top: 10px;
-  }
+.btn-add:hover {
+  background: white;
+  color: #1b1b1b;
+}
 
-  .btn-default {
-    font-size: 10px;
-  }
-
-  .btn-add {
-    width: 200px;
-    border: 1px solid #ededed;
-    background: white;
-    color: #1b1b1b;
-  }
-
-  .btn-add:hover {
-    background: white;
-    color: #1b1b1b;
-  }
-
-  .message-item {
-    border: 1px solid #cecece;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 10px;
-  }
+.message-item {
+  border: 1px solid #cecece;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
 </style>

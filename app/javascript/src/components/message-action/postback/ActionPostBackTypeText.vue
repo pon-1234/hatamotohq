@@ -1,16 +1,18 @@
 <template>
   <section>
-    <label class="w-100 mt20">
-      内容
-      <required-mark/>
-    </label>
-    <textarea :name="name+'_postback_text'"
-      placeholder="テキストを入力してください"
-      type="text" rows="4"
-      v-model="content.text" class="w-100 form-control"
-      @keyup="changeValue($event)" v-validate="'required'"/>
-
-    <span  v-if="errors.first(name+'_postback_text')"  class="invalid-box-label">内容は必須です</span>
+    <label class="mt-4">本文<required-mark/></label>
+    <textarea
+      :name="name+'_postback_text'"
+      placeholder="本文を入力してください"
+      type="text"
+      rows="4"
+      v-model="content.text"
+      class="form-control"
+      @keyup="changeValue($event)"
+      v-validate="'required'"
+      data-vv-as="本文"
+    />
+    <error-message :message="errors.first(name+'_postback_text')"></error-message>
   </section>
 </template>
 <script>
@@ -56,10 +58,5 @@ export default {
       this.$emit('input', { text: $event.target.value });
     }
   }
-
 };
 </script>
-
-<style scoped>
-
-</style>

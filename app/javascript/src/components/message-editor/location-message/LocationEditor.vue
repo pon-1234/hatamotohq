@@ -1,22 +1,41 @@
 <template>
   <div>
     <div class="form-group">
-      <label>タイトル<required-mark/></label>
-      <input type="text" placeholder="タイトルを入力してください" name="location-title" class="form-control" max="100" v-model="defaults.title" v-validate="'required'">
-      <span v-if="errors.first('location-title')" class="invalid-box-label">タイトルは必須です</span>
+      <label>タイトル<required-mark /></label>
+      <input
+        type="text"
+        placeholder="タイトルを入力してください"
+        name="location-title"
+        class="form-control"
+        max="100"
+        v-model="defaults.title"
+        v-validate="'required'"
+        data-vv-as="タイトル"
+      />
+      <error-message :message="errors.first('location-title')"></error-message>
     </div>
     <div class="form-group">
-      <label>住所<required-mark/></label>
-      <div class="d-flex" style="align-items: flex-start;" >
+      <label>住所<required-mark /></label>
+      <div class="d-flex" style="align-items: flex-start;">
         <div class="flex column flex-grow-1">
-          <textarea class="form-control" rows="2" maxlength="90" placeholder="住所を入力してください"  v-model="defaults.address" v-validate="'required'" name="location-description"></textarea>
-          <span v-if="errors.first('location-description')" class="invalid-box-label mt-1">住所は必須です</span>
+          <textarea
+            class="form-control"
+            rows="2"
+            maxlength="90"
+            placeholder="住所を入力してください"
+            v-model="defaults.address"
+            v-validate="'required'"
+            data-vv-as="住所"
+            name="location-description"
+          ></textarea>
+          <error-message :message="errors.first('location-description')"></error-message>
         </div>
-        <div class="btn btn-outline-success ml-2" style="" @click="getMarker">ピンの住所を検出</div>
+        <div class="btn btn-outline-success ml-2" style="" @click="getMarker">
+          ピンの住所を検出
+        </div>
       </div>
-      <br/>
     </div>
-    <br>
+    <br />
     <gmap-map
       v-if="rerender"
       ref="map"
@@ -26,13 +45,16 @@
       style="width:100%;  height: 400px;"
       @center_changed="changeCenter"
     >
-    <div slot="visible">
-        <div class="box-search" style="top: 10px; left:12px; width: 300px; position: absolute; z-index: 0">
+      <div slot="visible">
+        <div
+          class="box-search"
+          style="top: 10px; left:12px; width: 300px; position: absolute; z-index: 0"
+        >
           <gmap-autocomplete
             @place_changed="setPlace"
-            :options="{fields: ['geometry']}"
+            :options="{ fields: ['geometry'] }"
             class="form-control"
-            >
+          >
           </gmap-autocomplete>
         </div>
       </div>
@@ -40,14 +62,16 @@
         :key="index"
         v-for="(m, index) in markers"
         :position="m.position"
-        @click="center=m.position"
+        @click="center = m.position"
       ></gmap-marker>
     </gmap-map>
   </div>
 </template>
 
 <script>
+import ErrorMessage from '../../common/ErrorMessage.vue';
 export default {
+  components: { ErrorMessage },
   inject: ['parentValidator'],
   props: ['data'],
   data() {
@@ -118,35 +142,43 @@ export default {
       const theLocations = this.markers;
       const _this = this;
       // eslint-disable-next-line no-undef
-      return Promise.all(_.map(theLocations, addr => {
-        // eslint-disable-next-line no-undef
-        var geocoder = new google.maps.Geocoder();
+      return Promise.all(
+        _.map(theLocations, (addr) => {
+          // eslint-disable-next-line no-undef
+          var geocoder = new google.maps.Geocoder();
 
-        var locationss = {
-          lat: parseFloat(addr.position.lat),
-          lng: parseFloat(addr.position.lng)
-        };
+          var locationss = {
+            lat: parseFloat(addr.position.lat),
+            lng: parseFloat(addr.position.lng)
+          };
 
-        return new Promise(function(resolve, reject) {
-          geocoder.geocode({ location: locationss }, function(results, status) {
-            if (status === 'OK') {
-              if (results[0]) {
-                _this.defaults.address = results[0].formatted_address.substring(0, 89);
-                return results[0].formatted_address;
-              } else {
-                console.log(status);
-                window.alert('検出できませんでした');
-                return null;
+          return new Promise(function(resolve, reject) {
+            geocoder.geocode({ location: locationss }, function(
+              results,
+              status
+            ) {
+              if (status === 'OK') {
+                if (results[0]) {
+                  _this.defaults.address = results[0].formatted_address.substring(
+                    0,
+                    89
+                  );
+                  return results[0].formatted_address;
+                } else {
+                  console.log(status);
+                  window.alert('検出できませんでした');
+                  return null;
+                }
               }
-            }
+            });
           });
-        });
-      })).then(data => {
+        })
+      ).then((data) => {
         console.log(data);
       });
     },
     geolocate() {
-      navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition((position) => {
         this.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -191,19 +223,24 @@ export default {
       secondChild.style.margin = '5px';
       secondChild.style.width = '18px';
       secondChild.style.height = '18px';
-      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
+      secondChild.style.backgroundImage =
+        'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
       secondChild.style.backgroundSize = '180px 18px';
       secondChild.style.backgroundPosition = '0px 0px';
       secondChild.style.backgroundRepeat = 'no-repeat';
       secondChild.id = 'you_location_img';
       firstChild.appendChild(secondChild);
-      window.google.maps.event.addListener(this.$refs.map.$mapObject, 'center_changed', function() {
-        secondChild.style['background-position'] = '0 0';
-      });
+      window.google.maps.event.addListener(
+        this.$refs.map.$mapObject,
+        'center_changed',
+        function() {
+          secondChild.style['background-position'] = '0 0';
+        }
+      );
       var ref = this;
       firstChild.addEventListener('click', function() {
         ref.rerender = false;
-        navigator.geolocation.getCurrentPosition(position => {
+        navigator.geolocation.getCurrentPosition((position) => {
           const marker = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -217,7 +254,9 @@ export default {
         });
       });
       controlDiv.index = 1;
-      this.$refs.map.$mapObject.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+      this.$refs.map.$mapObject.controls[
+        window.google.maps.ControlPosition.RIGHT_BOTTOM
+      ].push(controlDiv);
     }
   }
 };
@@ -227,7 +266,7 @@ export default {
   .btn-add {
     display: block;
     color: white;
-    background: linear-gradient(90deg, #04DC04 0%, #00B900 50%, #00af00 100%);
+    background: linear-gradient(90deg, #04dc04 0%, #00b900 50%, #00af00 100%);
     border-radius: 5px;
     padding: 9px 10px;
     line-height: 1;
@@ -237,5 +276,4 @@ export default {
     height: 30px;
   }
 }
-
 </style>

@@ -24,6 +24,9 @@ gem 'ransack'
 gem 'seed-fu'
 gem 'cancancan'
 
+# Hashie is a collection of classes and mixins that make Ruby hashes more powerful.
+gem 'hashie'
+
 # Search engine
 gem 'searchkick'
 

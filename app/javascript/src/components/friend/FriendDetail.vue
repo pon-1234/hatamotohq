@@ -55,7 +55,7 @@
 
               <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
               <p class="text-muted mt-2">
-                <input-tag :data="friendData.tags" @input="selectTags" :allTags="true"/>
+                <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true"/>
               </p>
               <hr>
 
