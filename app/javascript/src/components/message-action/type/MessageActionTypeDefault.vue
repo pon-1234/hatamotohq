@@ -74,10 +74,11 @@
       <label class="w-100 mt20">
         タグ設定
       </label>
-      <div class="row">
+      <div class="row m-0">
         <div class="col-md-6 d-flex-auto p-0">
           <span>タグを追加</span>
           <action-postback-tag
+            class="mt-2"
             :value="assignTagsData.tags"
             :name="name + '_tag'"
             @input="onAssignTagsDataChanged"
@@ -88,6 +89,7 @@
         <div class="col-md-6 d-flex-auto">
           <span>タグをはずす</span>
           <action-postback-tag
+            class="mt-2"
             :value="unassignTagsData.tags"
             :name="name + '_tag_delete'"
             @input="onUnassignTagsDataChanged"
