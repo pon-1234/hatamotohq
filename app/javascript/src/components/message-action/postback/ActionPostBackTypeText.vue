@@ -3,7 +3,7 @@
     <label class="mt-4">本文<required-mark/></label>
     <textarea
       :name="name+'_postback_text'"
-      placeholder="テキストを入力してください"
+      placeholder="本文を入力してください"
       type="text"
       rows="4"
       v-model="content.text"
@@ -58,10 +58,5 @@ export default {
       this.$emit('input', { text: $event.target.value });
     }
   }
-
 };
 </script>
-
-<style scoped>
-
-</style>

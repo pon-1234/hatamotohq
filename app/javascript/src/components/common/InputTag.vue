@@ -92,8 +92,10 @@ export default {
   },
 
   created() {
-    this.selectedTags = _.cloneDeep(this.tags);
-    this.value = this.selectedTags.map(_ => _.name);
+    if (this.tags) {
+      this.selectedTags = _.cloneDeep(this.tags);
+      this.value = this.selectedTags.map(_ => _.name);
+    }
   },
 
   watch: {

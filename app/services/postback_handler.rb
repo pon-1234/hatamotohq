@@ -23,6 +23,8 @@ class PostbackHandler
         send_text_message(action['content'])
       when 'email'
         send_email(action['content'])
+      when 'scenario'
+        send_scenario(action['content'])
       end
     end
   end
@@ -48,6 +50,11 @@ class PostbackHandler
 
     def send_email(content)
       UserMailer.postback_email(@friend.id, content).deliver_later
+    end
+
+    def send_scenario(content)
+      scenario_id = content['scenario_id']
+      ScenarioSchedulerJob.perform_later(@friend.channel.id, scenario_id)
     end
 
     def assign_tag(action)

@@ -49,7 +49,7 @@
             <div class="card-body">
               <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">
                 <message-action-type
-                  :name="indexParent + 'template_button_' + index"
+                  :name="'parent_' + indexParent + 'template_button_' + index"
                   :value="item"
                   @input="changeAction(index, $event)"
                 />

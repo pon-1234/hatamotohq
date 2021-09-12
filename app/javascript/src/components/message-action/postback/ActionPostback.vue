@@ -40,10 +40,13 @@
       <action-post-back-type-template v-if="currentPostBackType==='template'"
         :value="content"
         @input="updateContent" :name="name" />
-      <action-post-back-type-scenario v-if="currentPostBackType==='scenario'"
+      <action-postback-scenario
+        v-if="currentPostBackType==='scenario'"
         :value="content"
         :name="name"
-        @input="updateContent" />
+        @input="updateContent">
+      </action-postback-scenario>
+
       <action-post-back-type-flex-message v-if="currentPostBackType==='flexMessage'"
         :value="content"
         :name="name"

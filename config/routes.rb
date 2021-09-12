@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
       resources :scenarios do
         get :search, on: :collection
+        get :manual, on: :collection
         resources :messages, controller: 'scenario_messages' do
           get :delete_confirm, on: :member
         end

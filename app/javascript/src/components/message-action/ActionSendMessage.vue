@@ -11,21 +11,18 @@
         <error-message :message="errors.first(name+'_label')"></error-message>
       </div>
     </div>
-    <label class="w-100 mt20">
-      テキスト
-      <required-mark/>
-    </label>
-    <div class="w-100">
+    <label class="w-100 mt-4">本文<required-mark/></label>
+    <div>
       <textarea
         :name="name+'_value'"
-        placeholder="テキストを入力してください"
+        placeholder="本文を入力してください"
         type="text"
         maxlength="300"
         v-model="value.text"
         class="w-100 form-control"
         @keyup="changeValue"
         v-validate="'required'"
-        data-vv-as="テキスト"/>
+        data-vv-as="本文"/>
       <error-message :message="errors.first(name+'_value')"></error-message>
     </div>
   </div>
@@ -57,10 +54,5 @@ export default {
       this.$emit('input', this.value);
     }
   }
-
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

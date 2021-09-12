@@ -85,6 +85,11 @@ class User::ScenariosController < User::ApplicationController
     end
   end
 
+  # GET /user/scenarios/manual
+  def manual
+    @scenarios = Scenario.accessible_by(current_ability).type_manual
+  end
+
   private
     def scenario_params
       params.permit(

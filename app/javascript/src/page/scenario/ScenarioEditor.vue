@@ -73,7 +73,9 @@
                   </label>
                 </div>
               </div>
-
+            </div>
+            <div class="divider"></div>
+            <div class="mt-2">
               <div class="form-group">
                 <label>配信タイミング</label><span class="text-xs">（作成後に変更不可）</span>
                 <div class="radio-group">

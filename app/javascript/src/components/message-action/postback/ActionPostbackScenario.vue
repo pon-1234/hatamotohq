@@ -5,12 +5,12 @@
     </label>
 
     <div class="btn-template mb20 fz14">
-      <a data-v-7189f7fd="" data-toggle="modal" :data-target="'#'+ name" class="btn-block">{{currentTemplate.title}}</a>
-      <input type="hidden" v-model="currentTemplate.scenario_id" :name="name+'_scenario_id'"  v-validate="'required'" />
-      <span v-if="errors.first(name+'_scenario_id')" class="invalid-box-label">シナリオ配信は必須です</span>
+      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary btn-block">{{currentTemplate.title}}</div>
+      <input type="hidden" v-model="currentTemplate.scenario_id" :name="name+'_scenario_id'"  v-validate="'required'" data-vv-as="シナリオ配信" />
+      <error-message :message="errors.first(name+'_scenario_id')"></error-message>
     </div>
 
-    <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"/>
+    <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"></modal-select-scenario>
   </section>
 
 </template>
@@ -43,9 +43,7 @@ export default {
       current_page_scenario: 0,
       total_scenario: 0,
       per_page_scenario: 10,
-
       isScenarioLoading: false
-
     };
   },
 
