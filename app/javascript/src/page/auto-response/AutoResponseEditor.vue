@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200" >
+  <div class="fw-1200">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${MIX_ROOT_PATH}/user/broadcasts`" class="text-info">

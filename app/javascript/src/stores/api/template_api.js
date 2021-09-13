@@ -1,4 +1,13 @@
 export default {
+  list: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/templates`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   getMessageById: (query) => {
     const qr = {
       _pid: btoa('/messageTemplates/' + query.id)

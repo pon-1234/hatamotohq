@@ -2,12 +2,9 @@
 
 # == Schema Information
 #
-# Table name: message_templates
+# Table name: templates
 #
 #  id              :bigint           not null, primary key
-#  content         :text(4294967295)
-#  deleted_at      :datetime
-#  message_type    :string(255)
 #  title           :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -16,13 +13,19 @@
 #
 # Indexes
 #
-#  index_message_templates_on_folder_id        (folder_id)
-#  index_message_templates_on_line_account_id  (line_account_id)
+#  index_templates_on_folder_id        (folder_id)
+#  index_templates_on_line_account_id  (line_account_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (folder_id => folders.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
-class MessageTemplate < ApplicationRecord
+class Template < ApplicationRecord
+  belongs_to :folder
+  has_many :template_messages
+
+  accepts_nested_attributes_for :template_messages
+
+  enum type: { message: 'message' }, _prefix: true
 end

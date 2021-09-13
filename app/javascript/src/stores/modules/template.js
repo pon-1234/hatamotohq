@@ -1,8 +1,10 @@
 
 import TemplateAPI from '../api/template_api';
+import FolderAPI from '../api/folder_api';
 import Global from '../api/global_api';
 
 export const state = {
+  folders: [],
   messages: [],
   total: 0,
   per_page: 0,
@@ -14,6 +16,17 @@ export const state = {
 };
 
 export const mutations = {
+  pushFolder(state, folder) {
+    folder.templates = [];
+    state.folders.push(folder);
+  },
+
+  setFolders(state, { folders, total, perPage }) {
+    state.folders = folders;
+    state.total = total;
+    state.perPage = perPage;
+  },
+
   SET_MESSAGES_DATA(state, { messages, total, perPage }) {
     state.messages = messages;
     state.total = total;
@@ -37,11 +50,6 @@ export const mutations = {
     state.messages = state.messages.filter(item => item.id !== index);
   },
 
-  ADD_NEW_MESSAGE(state, params) {
-    params.message_templates = [];
-    state.messages.push(params);
-  },
-
   COPY_MESSAGE(state, params) {
     state.messages.find(item => item.id === params.message.folder_id).message_templates.splice(0, 0, params.message);
   },
@@ -61,9 +69,22 @@ export const getters = {
 };
 
 export const actions = {
-  setMessage(context, message) {
+  setMessagePreview(context, message) {
     context.commit('SET_MESSAGE', message);
     context.dispatch('preview/setMessages', message.message_content_distribution_templates, { root: true });
+  },
+
+  async getTemplates(context, query) {
+    let templates = null;
+    const total = 1;
+    const perPage = 1;
+    try {
+      const res = await TemplateAPI.list(query);
+      templates = res;
+    } catch (error) {
+      console.log(error);
+    }
+    context.commit('setFolders', { folders: templates, total, perPage });
   },
 
   async getMessageById(context, query) {
@@ -86,7 +107,7 @@ export const actions = {
     context.commit('SET_MESSAGE', messageData);
   },
 
-  async sendMessage(context, query) {
+  async createTemplate(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let messageIdData = null;
     try {
@@ -205,20 +226,12 @@ export const actions = {
   },
 
   async createFolder(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
     try {
-      const response = await Global.createFolder(query);
-      if (response) {
-        context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
-        context.commit('ADD_NEW_MESSAGE', response);
-      } else {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
+      const response = await FolderAPI.createFolder(query);
+      context.commit('pushFolder', response);
     } catch (error) {
-      console.log(error);
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
+      return null;
     }
-    context.dispatch('system/setLoading', false, { root: true });
   },
 
   async editFolder(context, query) {
