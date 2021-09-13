@@ -168,7 +168,7 @@ export default {
         return;
       };
       const data = {
-        folder_id: Util.getQueryParamsUrl('folder_id'),
+        folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
       };
       if (this.auto_response_id) {

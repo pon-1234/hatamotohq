@@ -10,13 +10,13 @@
       <div class="card-body">
         <div class="form-border">
           <div class="form-group">
-            <label>タイトル<required-mark/></label>
-            <input type="text" class="form-control"  name="template-title" placeholder="タイトルを入力してください" v-model="templateData.title" v-validate="'required'" data-vv-as="タイトル"/>
+            <label>テンプレート名<required-mark/></label>
+            <input type="text" class="form-control"  name="template-title" placeholder="テンプレート名を入力してください" v-model="templateData.name" v-validate="'required'" data-vv-as="テンプレート名"/>
             <error-message :message="errors.first('template-title')"></error-message>
           </div>
         </div>
         <div class="form-border">
-          <div v-if="refresh_content">
+          <div>
             <message-editor
               :isDisplayTemplate="false"
               v-for="(item, index) in templateData.messages"
@@ -34,26 +34,26 @@
 
         <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="_addMessage()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-flex">
         <button
           type="submit"
           class="btn btn-submit btn-success fw-120"
-          @click="createMessage"
+          @click="submitSaveTemplate"
         >保存</button>
-        <div v-if="template_id"><a class="btn btn-danger" data-toggle="modal" data-target="#modal-confirm">削除</a></div>
+        <div v-if="template_id"><a class="btn btn-danger fw-120 ml-2" data-toggle="modal" data-target="#modal-confirm">削除</a></div>
       </div>
+
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
     <message-preview />
-    <modal-confirm v-bind:title="'このメッセージを削除します。よろしいですか？'" type='delete' @input="deleteMessageTemplate"/>
+    <modal-confirm v-bind:title="'このメッセージを削除します。よろしいですか？'" type='delete' @input="deleteTemplateTemplate"/>
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import Util from '@/core/util';
-import ErrorMessage from '../../components/common/ErrorMessage.vue';
 
 export default {
-  components: { ErrorMessage },
   props: ['template_id'],
   provide() {
     return { parentValidator: this.$validator };
@@ -61,11 +61,10 @@ export default {
   data() {
     return {
       templateData: {
-        title: '',
+        name: '',
         messages: []
       },
-      refresh_tag: true,
-      refresh_content: true
+      loading: true
     };
   },
   created() {
@@ -86,12 +85,7 @@ export default {
     await this.fetchItem();
     await this.getTags();
     await this.listTagAssigned();
-  },
-
-  computed: {
-    ...mapState('messageTemplate', {
-      message: state => state.message
-    })
+    this.loading = false;
   },
 
   watch: {
@@ -105,10 +99,10 @@ export default {
 
   methods: {
     ...mapActions('template', [
-      'sendMessage',
-      'updateMessage',
-      'deleteMessage',
-      'getMessageById',
+      'getTemplate',
+      'createTemplate',
+      'updateTemplate',
+      'deleteTemplate',
       'setMessagePreview'
     ]),
 
@@ -132,11 +126,7 @@ export default {
     },
 
     removeContent({ index }) {
-      this.refresh_content = false;
       this.templateData.messages.splice(index, 1);
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
     },
 
     moveTopMessage(index) {
@@ -148,28 +138,18 @@ export default {
       });
     },
     moveBottomMessage(index) {
-      this.refresh_content = false;
       const option = this.templateData.messages[index];
       this.templateData.messages[index] = this.templateData.messages.splice(index + 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
     },
 
     async fetchItem() {
       if (this.template_id) {
-        this.refresh_tag = false;
-        await this.getMessageById({ id: this.template_id });
-        Object.assign(this.templateData, this.message);
-        console.log(this.templateData);
+        const response = await this.getTemplate(this.template_id);
+        Object.assign(this.templateData, response);
 
         if (this.templateData.tags && this.templateData.tags.length === 0) {
           this.templateData.tags = null;
         }
-
-        this.$nextTick(() => {
-          this.refresh_tag = true;
-        });
       }
     },
 
@@ -177,7 +157,7 @@ export default {
       this.templateData.messages.splice(index, 1, content);
     },
 
-    async createMessage() {
+    async submitSaveTemplate() {
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
 
@@ -197,23 +177,32 @@ export default {
         return;
       }
 
-      const makeValue = {
+      const payload = {
         id: this.template_id,
-        title: this.templateData.title,
-        folder_id: Util.getQueryParamsUrl('folder_id'),
-        messages: this.templateData.messages
+        folder_id: Util.getParamFromUrl('folder_id'),
+        name: this.templateData.name,
+        template_messages_attributes: this.templateData.messages
       };
 
       if (!this.template_id) {
-        await this.createTemplate(makeValue);
-        window.location.href = process.env.MIX_ROOT_PATH + '/user/templates';
+        const response = await this.createTemplate(payload);
+        if (response) {
+          Util.showSuccessThenRedirect('テンプレートの作成は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+        } else {
+          window.toastr.error('エラーを発生しました。');
+        }
       } else {
-        await this.updateMessage(makeValue);
+        const response = await this.updateTemplate(payload);
+        if (response) {
+          Util.showSuccessThenRedirect('テンプレートの変更は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+        } else {
+          window.toastr.error('エラーを発生しました。');
+        }
       }
     },
 
-    async deleteMessageTemplate() {
-      await this.deleteMessage({ id: this.template_id });
+    async deleteTemplateTemplate() {
+      await this.deleteTemplate({ id: this.template_id });
       window.location.href = process.env.MIX_ROOT_PATH + '/template/streams';
     }
   }

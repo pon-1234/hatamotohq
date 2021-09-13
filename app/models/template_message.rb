@@ -4,13 +4,13 @@
 #
 # Table name: template_messages
 #
-#  id          :bigint           not null, primary key
-#  content     :json
-#  order       :integer          default(0)
-#  type        :string(255)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  template_id :bigint
+#  id              :bigint           not null, primary key
+#  content         :json
+#  order           :integer          default(0)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  message_type_id :integer
+#  template_id     :bigint
 #
 # Indexes
 #
@@ -21,5 +21,9 @@
 #  fk_rails_...  (template_id => templates.id)
 #
 class TemplateMessage < ApplicationRecord
-  belongs_to :template
+  belongs_to :template, inverse_of: :template_messages
+
+  # Validation
+  validates :message_type_id, presence: true
+  validates :content, presence: true
 end

@@ -5,7 +5,7 @@ class CreateTemplates < ActiveRecord::Migration[6.0]
     create_table :templates do |t|
       t.references :line_account, foreign_key: true
       t.references :folder, foreign_key: true
-      t.string :title
+      t.string :name
       t.string :type
       t.timestamps
     end

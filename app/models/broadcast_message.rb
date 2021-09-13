@@ -22,4 +22,7 @@
 #
 class BroadcastMessage < ApplicationRecord
   belongs_to :broadcast
+
+  # Validation
+  validates :content, presence: true
 end

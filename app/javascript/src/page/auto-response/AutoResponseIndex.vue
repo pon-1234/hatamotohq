@@ -69,7 +69,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5">自動応答はありません。</div>
+            <div class="text-center mt-5" v-if="autoResponses.length === 0">自動応答はありません。</div>
           </div>
         </div>
       </div>
@@ -149,11 +149,11 @@ export default {
 
   created() {
     if (PerformanceNavigation.type !== PerformanceNavigation.TYPE_RELOAD) {
-      if (Util.getQueryParamsUrl('is_updated') === 'true') {
+      if (Util.getParamFromUrl('is_updated') === 'true') {
         window.toastr.success('自動応答メッセージの変更は完成しました');
       }
 
-      if (Util.getQueryParamsUrl('is_created') === 'true') {
+      if (Util.getParamFromUrl('is_created') === 'true') {
         window.toastr.success('自動応答を登録しました');
       }
     }

@@ -11,7 +11,6 @@ export const state = {
   params: {
     page: 1
   },
-  message: null,
   message_id: null
 };
 
@@ -31,11 +30,6 @@ export const mutations = {
     state.messages = messages;
     state.total = total;
     state.per_page = perPage;
-  },
-
-  SET_MESSAGE(state, message) {
-    // eslint-disable-next-line no-undef
-    state.message = _.cloneDeep(message);
   },
 
   SET_MESSAGE_ID(state, messageId) {
@@ -69,9 +63,8 @@ export const getters = {
 };
 
 export const actions = {
-  setMessagePreview(context, message) {
-    context.commit('SET_MESSAGE', message);
-    context.dispatch('preview/setMessages', message.message_content_distribution_templates, { root: true });
+  setMessagePreview(context, template) {
+    context.dispatch('preview/setMessages', template.messages, { root: true });
   },
 
   async getTemplates(context, query) {
@@ -87,69 +80,32 @@ export const actions = {
     context.commit('setFolders', { folders: templates, total, perPage });
   },
 
-  async getMessageById(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageData = null;
+  async getTemplate(_, id) {
     try {
-      const res = await TemplateAPI.getMessageById(query);
-      if (res) {
-        messageData = {
-          id: res.id,
-          title: res.title,
-          message_content_distribution_templates: res.contents
-        };
-      }
+      return await TemplateAPI.get(id);
     } catch (error) {
-      console.log(error);
+      return null;
     }
+  },
 
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE', messageData);
+  async updateTemplate(context, query) {
+    try {
+      const response = await TemplateAPI.update(query);
+      return response;
+    } catch (error) {
+      return null;
+    }
   },
 
   async createTemplate(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageIdData = null;
     try {
-      const response = await TemplateAPI.sendMessage(query);
-
-      if (response && response.id) {
-        messageIdData = response.id;
-        context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      }
-
-      if (!messageIdData) {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
+      const response = await TemplateAPI.create(query);
+      return response;
     } catch (error) {
-      console.log(error);
+      return null;
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE_ID', messageIdData);
   },
 
-  async updateMessage(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageIdData = null;
-    try {
-      const response = await TemplateAPI.updateMessage(query);
-
-      if (response && response.id) {
-        messageIdData = response.id;
-        context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      }
-
-      if (!messageIdData) {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE_ID', messageIdData.id);
-  },
 
   async fetchListMessageTemplate(context, query = {}) {
     context.dispatch('system/setLoading', true, { root: true });

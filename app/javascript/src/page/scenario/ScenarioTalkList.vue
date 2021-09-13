@@ -156,13 +156,13 @@ export default {
   },
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
-      if (Util.getQueryParamsUrl('is_updated') === 'true') {
+      if (Util.getParamFromUrl('is_updated') === 'true') {
         window.toastr.success('シナリオ配信 メッセージの変更は完成しました');
       }
 
-      if (Util.getQueryParamsUrl('is_created') === 'true') {
+      if (Util.getParamFromUrl('is_created') === 'true') {
         window.toastr.success('シナリオ配信 メッセージを登録しました');
-      } else if (Util.getQueryParamsUrl('is_created') === 'false') {
+      } else if (Util.getParamFromUrl('is_created') === 'false') {
         window.toastr.error('シナリオの数が上限に達しています。登録できません。');
       }
     }
