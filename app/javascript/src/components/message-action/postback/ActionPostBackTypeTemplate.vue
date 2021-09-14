@@ -15,7 +15,7 @@
       <span  v-if="errors.first(name+'_template_id')"  class="invalid-box-label">テンプレートは必須です</span>
     </div>
 
-    <modal-select-message-template @setTemplate="selectTemplate" :id="name"/>
+    <modal-select-template @setTemplate="selectTemplate" :id="name"/>
   </section>
 </template>
 <script>

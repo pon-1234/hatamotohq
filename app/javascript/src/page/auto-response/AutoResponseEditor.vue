@@ -60,7 +60,7 @@
                 <div>
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
-                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <!-- <modal-select-template @setTemplate="selectTemplate" id="modal-template"/> -->
                 <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"

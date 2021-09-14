@@ -94,7 +94,7 @@
             <div v-if="refresh_content">
               <div class="mb-2">
                 <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <!-- <modal-select-template @setTemplate="selectTemplate" id="modal-template"/> -->
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">
                 <message-editor

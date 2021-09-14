@@ -1,7 +1,8 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="d-flex">
+      <span class="tex-sm">1対1トーク・シナリオ配信・一斉配信・自動応答などで使用できるテンプレートを登録・管理することが出来ます。</span>
+      <div class="d-flex mt-2">
         <folder-left
           type="template_message"
           :data="folders"
@@ -36,11 +37,11 @@
                       <button type="button" class="btn btn-warning" @click="openEdit(template)">編集</button>
                       <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                       <div class="dropdown-menu bg-white" role="menu" style="">
-                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(template)">{{ template.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
+                        <a role="button" class="dropdown-item">テンプレートを編集</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" >自動応答を編集する</a>
+                        <a role="button" class="dropdown-item">テンプレートをコビー</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(template)">自動応答を削除する</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(template)">テンプレートを削除</a>
                       </div>
                     </div>
                   </td>

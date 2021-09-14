@@ -13,7 +13,7 @@
             テンプレートから作成
           </button>
         </div>
-        <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/>
+        <modal-select-template @setTemplate="selectTemplate" id="modal-template"/>
 
       </div>
       <div class="row-ttl02 flex">
