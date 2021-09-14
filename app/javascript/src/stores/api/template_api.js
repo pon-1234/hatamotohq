@@ -35,24 +35,19 @@ export default {
     });
   },
 
-  getListMessage: (query) => {
-    query._pid = btoa('/messageTemplates');
-
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-
-  deleteMessage: (query) => {
+  delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/messageTemplates/' + query.id + '/delete'),
+      url: process.env.MIX_ROOT_PATH + '/user/templates/' + id,
       method: 'DELETE'
     });
   },
 
-  copyMessage: (query) => {
-    const qr = {
-      _pid: btoa('/messageTemplates/' + query.id + '/copy')
-    };
-
-    return window.$.get(process.env.MIX_ROOT_PATH, qr);
-  }
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/templates/${id}/copy`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
 };

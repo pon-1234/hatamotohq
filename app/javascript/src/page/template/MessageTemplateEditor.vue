@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200">
+  <div class="mxw-1200" ref="myComponent">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${MIX_ROOT_PATH}/user/templates`" class="text-info">
@@ -16,11 +16,11 @@
           </div>
         </div>
         <div class="form-border">
-          <div>
+          <div :key="componentKey">
             <message-editor
               :isDisplayTemplate="false"
               v-for="(item, index) in templateData.messages"
-              :key="index"
+              :key="item.id"
               v-bind:data="item"
               v-bind:index="index"
               v-bind:countMessages="templateData.messages.length"
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="_addMessage()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
+        <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="submitCreateTemplate()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
       </div>
       <div class="card-footer d-flex">
         <button
@@ -40,7 +40,6 @@
           class="btn btn-submit btn-success fw-120"
           @click="submitSaveTemplate"
         >保存</button>
-        <div v-if="template_id"><a class="btn btn-danger fw-120 ml-2" data-toggle="modal" data-target="#modal-confirm">削除</a></div>
       </div>
 
       <loading-indicator :loading="loading"></loading-indicator>
@@ -64,7 +63,8 @@ export default {
         name: '',
         messages: []
       },
-      loading: true
+      loading: true,
+      componentKey: 0
     };
   },
   created() {
@@ -115,7 +115,11 @@ export default {
       'setIsSubmitChange'
     ]),
 
-    _addMessage() {
+    forceRerender() {
+      this.componentKey += 1;
+    },
+
+    submitCreateTemplate() {
       this.templateData.messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
@@ -130,16 +134,18 @@ export default {
     },
 
     moveTopMessage(index) {
-      this.refresh_content = false;
-      const option = this.templateData.messages[index];
-      this.templateData.messages[index] = this.templateData.messages.splice(index - 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      const temp1 = this.templateData.messages[index - 1];
+      const temp2 = this.templateData.messages[index];
+      this.$set(this.templateData.messages, index - 1, temp2);
+      this.$set(this.templateData.messages, index, temp1);
+      this.forceRerender();
     },
     moveBottomMessage(index) {
-      const option = this.templateData.messages[index];
-      this.templateData.messages[index] = this.templateData.messages.splice(index + 1, 1, option)[0];
+      const temp1 = this.templateData.messages[index + 1];
+      const temp2 = this.templateData.messages[index];
+      this.$set(this.templateData.messages, index + 1, temp2);
+      this.$set(this.templateData.messages, index, temp1);
+      this.forceRerender();
     },
 
     async fetchItem() {
