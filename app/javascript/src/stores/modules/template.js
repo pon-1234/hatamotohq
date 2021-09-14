@@ -106,32 +106,6 @@ export const actions = {
     }
   },
 
-
-  async fetchListMessageTemplate(context, query = {}) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messagesData = null;
-    let total = 0;
-    let perPage = 0;
-
-    try {
-      const response = await TemplateAPI.getListMessage(query);
-
-      if (response) {
-        messagesData = response;
-      }
-
-      if (response && response.meta) {
-        total = response.meta.total;
-        perPage = response.meta.per_page;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGES_DATA', { messages: messagesData, total, perPage });
-  },
-
   getListMessageTemplate(context, query = {}) {
     return TemplateAPI.getListMessage(query).done((res) => {
       return Promise.resolve(res);
