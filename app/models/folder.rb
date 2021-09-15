@@ -25,6 +25,7 @@ class Folder < ApplicationRecord
   belongs_to :line_account
   has_many :tags, dependent: :destroy
   has_many :auto_responses, dependent: :destroy
+  has_many :templates, dependent: :destroy
 
   # Validation
   validates :name, presence: true, uniqueness: { scope: [:line_account_id, :type] }

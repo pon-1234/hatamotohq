@@ -107,7 +107,7 @@
   min-width: 100px;
 }
 
-@for $i from 1 through 1200 {
+@for $i from 1 through 1000 {
   $height: 0px + $i;
   .h-#{$i} {
     height: $height;
@@ -120,7 +120,7 @@
   }
 }
 
-@for $i from 1 through 1200 {
+@for $i from 1 through 400 {
   $width: 0px + $i;
   .fw-#{$i} {
     width: $width;
@@ -129,7 +129,7 @@
   }
 }
 
-@for $i from 101 through 1200 {
+@for $i from 101 through 400 {
   $width: 0px + $i;
   .mw-#{$i} {
     min-width: $width;
@@ -137,10 +137,13 @@
   .mxw-#{i} {
     max-width: $width;
   }
-
   .w-#{$i} {
     width: $width;
   }
+}
+
+.mxw-1200 {
+  max-width: 1200px !important;
 }
 
 .text-c {
@@ -151,18 +154,6 @@
 .wh-50 {
   width: 50px;
   height: 50px;
-}
-
-.mxw-100px {
-  max-width: 100px;
-}
-
-.mxw-200px {
-  max-width: 200px;
-}
-
-.mxw-300px {
-  max-width: 300px;
 }
 
 .text-prewrap {

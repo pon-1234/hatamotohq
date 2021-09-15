@@ -223,7 +223,7 @@ export default {
         chatBarText: this.chatBarText,
         selected: this.selected ? 1 : 0,
         areas: this.areas,
-        folder_id: Util.getQueryParamsUrl('folder_id')
+        folder_id: Util.getParamFromUrl('folder_id')
       };
 
       if (this.tags) {

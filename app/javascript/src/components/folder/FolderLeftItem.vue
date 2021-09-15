@@ -61,7 +61,7 @@ export default {
       }
 
       if (this.type === 'template_message') {
-        return this.data.message_templates.length;
+        return this.data.templates.length;
       }
 
       if (this.type === 'rich_menu') {

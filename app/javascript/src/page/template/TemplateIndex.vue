@@ -1,9 +1,10 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="d-flex">
+      <span class="tex-sm">1対1トーク・シナリオ配信・一斉配信・自動応答などで使用できるテンプレートを登録・管理することが出来ます。</span>
+      <div class="d-flex mt-2">
         <folder-left
-          type="auto_response"
+          type="template_message"
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolder"
@@ -14,7 +15,7 @@
         <div class="flex-grow-1">
           <div class="tag-header">
             <div class="col-r">
-              <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
+              <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/templates/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
                 <i class="fa fa-plus"></i> 新規作成
               </a>
             </div>
@@ -23,53 +24,37 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>自動応答名</th>
-                  <th>キーワード</th>
-                  <th>メッセージ</th>
-                  <th class="fw-100">操作</th>
-                  <th>登録日</th>
-                  <th>状況</th>
+                  <th>テンプレート名</th>
+                  <th>メッセージ数</th>
+                  <th class="fw-120">操作</th>
+                  <th class="fw-150">フォルダ</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
-                  <td>{{autoResponse.name}}</td>
-                  <td>
-                    <div><small>どれか1つにマッチ</small></div>
-                    <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
-                  </td>
-                  <td>
-                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2">
-                      <message-content :data="item.content" ></message-content>
-                    </div>
-                  </td>
+                <tr v-for="template in templates" v-bind:key="template.id">
+                  <td>{{template.name}}</td>
+                  <td>{{template.template_messages_count}}</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-warning" @click="openEdit(autoResponse)">編集</button>
+                      <button type="button" class="btn btn-warning" @click="openEdit(template)">編集</button>
                       <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                       <div class="dropdown-menu bg-white" role="menu" style="">
-                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
+                        <a role="button" class="dropdown-item">テンプレートを編集</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" >自動応答を編集する</a>
+                        <a role="button" class="dropdown-item">テンプレートをコビー</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(autoResponse)">自動応答を削除する</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(template)">テンプレートを削除</a>
                       </div>
                     </div>
                   </td>
-
-                  <td><span>{{ formattedDate(autoResponse.created_at) }}</span></td>
                   <td>
-                    <template v-if="autoResponse.status === 'enable'">
-                      <span class="badge badge-success p-2">有効</span>
-                    </template>
-                    <template v-else>
-                      <span class="badge badge-warning p-2">無効</span>
-                    </template>
+                    <div>{{ selectedFolder.name }}xxx</div>
+                    <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="autoResponses.length === 0">自動応答はありません。</div>
+            <div class="text-center mt-5" v-if="templates.length === 0">テンプレートはありません。</div>
           </div>
         </div>
       </div>
@@ -81,25 +66,25 @@
           <div class="modal-body">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p class="mb10 fz14">以下の自動応答メッセージを削除します。よろしいですか？</p>
-            <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between" v-if="autoResponse">
+            <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between" v-if="messageDetail">
               <dt>タイトル</dt>
-              <dd>{{autoResponse.title}}</dd>
+              <dd>{{messageDetail.title}}</dd>
               <dt>キーワード</dt>
               <dd>
                 <ul class="list-tag list-unstyled no-mgn">
-                  <li class="tag mr-1" v-for="tag in tags(autoResponse.keyword)" v-bind:key="tag">{{tag}}</li>
+                  <li class="tag mr-1" v-for="tag in tags(messageDetail.keyword)" v-bind:key="tag">{{tag}}</li>
                 </ul>
               </dd>
               <dt>内容</dt>
               <dd>
-                <div v-for="(item, index) in autoResponse.messages" v-bind:key="index">
+                <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
                   <message-content :data="item.content" ></message-content>
                 </div>
               </dd>
             </dl>
           </div>
           <div class="modal-footer flex center">
-            <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="submitDeleteAutoResponse(autoResponse)">削除</button>
+            <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="deleteBotMessage(messageDetail)">削除</button>
             <button type="button" class="btn btn-common01 btn-modal-cancel" data-dismiss="modal">キャンセル</button>
           </div>
         </div>
@@ -116,16 +101,16 @@ export default {
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      autoResponse: null,
+      messageDetail: null,
       isPc: true,
       selectedFolder: 0,
-      autoResponses: [],
+      templates: [],
       loading: true
     };
   },
 
   async beforeMount() {
-    await this.$store.dispatch('autoResponse/getAutoResponses');
+    await this.$store.dispatch('template/getTemplates');
     this.loading = false;
   },
 
@@ -133,7 +118,7 @@ export default {
     ...mapState('system', {
       success: state => state.success
     }),
-    ...mapState('autoResponse', {
+    ...mapState('template', {
       folders: state => state.folders
     })
   },
@@ -141,7 +126,7 @@ export default {
   watch: {
     folders: {
       handler(val) {
-        this.autoResponses = val[this.selectedFolder] ? val[this.selectedFolder].auto_responses : [];
+        this.templates = val[this.selectedFolder] ? val[this.selectedFolder].templates : [];
       },
       deep: true
     }
@@ -161,15 +146,15 @@ export default {
 
   methods: {
     ...mapActions('autoResponse', [
-      'deleteAutoResponse',
+      'botDelete',
       'updateAutoResponse',
-      'createFolder',
       'deleteFolder',
-      'editFolder'
+      'editFolder',
+      'createFolder'
     ]),
 
     showModal(message) {
-      this.autoResponse = message;
+      this.messageDetail = message;
     },
 
     tags(strtag) {
@@ -181,9 +166,9 @@ export default {
       await this.updateAutoResponse(payload);
     },
 
-    async submitDeleteAutoResponse() {
-      if (this.autoResponse) {
-        await this.deleteAutoResponse({ id: this.autoResponse.id, folder_id: this.autoResponse.folder_id });
+    async deleteBotMessage() {
+      if (this.messageDetail) {
+        await this.botDelete({ id: this.messageDetail.id, folder_id: this.messageDetail.folder_id });
       }
     },
 
@@ -200,7 +185,7 @@ export default {
     async changeSelectedFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
-      this.autoResponses = this.folders[index].autoResponses;
+      this.templates = this.folders[index].templates;
     },
 
     submitUpdateFolder(value) {
@@ -213,7 +198,7 @@ export default {
     },
 
     async submitCreateFolder(value) {
-      this.$store.dispatch('autoResponse/createFolder', value);
+      this.createFolder(value);
     },
 
     backToFolder() {
@@ -226,13 +211,13 @@ export default {
         .done(res => {
           this.deleteFolder(this.folders[this.selectedFolder].id);
           this.selectedFolder -= 1;
-          this.autoResponses = this.folders[this.selectedFolder].autoResponses;
+          this.templates = this.folders[this.selectedFolder].templates;
         }).fail(e => {
         });
     },
 
     openEdit(autoResponse) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`;
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/templates/${autoResponse.id}/edit`;
     },
 
     formattedDate(date) {

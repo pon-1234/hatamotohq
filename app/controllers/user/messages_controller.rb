@@ -25,6 +25,13 @@ class User::MessagesController < User::ApplicationController
     render_success
   end
 
+  # POST /user/channels/:channel_id/messages/send_template
+  def send_template
+    template = Template.find(template_params[:template_id])
+    SendTemplateJob.perform_later(@channel.id, template.id)
+    render_success
+  end
+
   private
     def find_channel
       @channel = Channel.find(message_params[:channel_id])
@@ -48,6 +55,13 @@ class User::MessagesController < User::ApplicationController
       params.permit(
         :channel_id,
         :scenario_id
+      )
+    end
+
+    def template_params
+      params.permit(
+        :channel_id,
+        :template_id
       )
     end
 

@@ -1,16 +1,31 @@
 <template>
   <div class="card">
     <div class="card-body talk">
-      <talk-menu-bar @input="showChannels"/>
+      <talk-menu-bar @input="showChannels" />
       <div class="container">
         <div id="chatbox" class="chatbox active">
           <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
-          <chat-box @onSendMessage="sendMessage" @onSendScenario="sendScenario" @sendMediaMessage="sendMediaMessage" :class="getRightItem()" @showFriendDetail="showFriendDetail"/>
+          <chat-box
+            @onSendMessage="sendMessage"
+            @onSendScenario="sendScenario"
+            @onSendTemplate="sendTemplate"
+            @sendMediaMessage="sendMediaMessage"
+            :class="getRightItem()"
+            @showFriendDetail="showFriendDetail"
+          />
         </div>
       </div>
     </div>
-    <talk-modal-search :id="'TalkModalSearch'" @input="fetchItem"></talk-modal-search>
-    <modal-friend-detail :data="friend" :talk="true" @changeTilteChannel="changeTilteActiveChannel" v-if="rerender"/>
+    <talk-modal-search
+      :id="'TalkModalSearch'"
+      @input="fetchItem"
+    ></talk-modal-search>
+    <modal-friend-detail
+      :data="friend"
+      :talk="true"
+      @changeTilteChannel="changeTilteActiveChannel"
+      v-if="rerender"
+    />
   </div>
 </template>
 <script>
@@ -44,7 +59,10 @@ export default {
       const scrollHeight = $(document).height();
       const scrollPosition = $(window).height() + $(window).scrollTop();
       if (scrollHeight - scrollPosition <= 77) {
-        $('div.talk').css('top', scrollHeight - $('div.talk').height() - 185 - 77 - 30);
+        $('div.talk').css(
+          'top',
+          scrollHeight - $('div.talk').height() - 185 - 77 - 30
+        );
         $('div.talk').addClass('bottom');
       } else {
         $('div.talk').css('top', '185px');
@@ -55,14 +73,14 @@ export default {
 
   computed: {
     ...mapState('channel', {
-      activeChannel: state => state.activeChannel,
-      channels: state => state.channels,
-      messages: state => state.messages,
-      messageParams: state => state.messageParams,
-      unreadChannelId: state => state.unreadChannelId
+      activeChannel: (state) => state.activeChannel,
+      channels: (state) => state.channels,
+      messages: (state) => state.messages,
+      messageParams: (state) => state.messageParams,
+      unreadChannelId: (state) => state.unreadChannelId
     }),
     ...mapState('friend', {
-      friend: state => state.friend
+      friend: (state) => state.friend
     })
   },
 
@@ -84,17 +102,17 @@ export default {
       'onReceiveWebsocketEvent',
       'sendMessage',
       'sendScenario',
+      'sendTemplate',
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
       'setMessageParams',
       'getMessages',
       'setUnreadChannelId',
-      'resetMessages']),
-    ...mapActions('friend', ['getFriend']),
-    ...mapActions('tag', [
-      'getTags'
+      'resetMessages'
     ]),
+    ...mapActions('friend', ['getFriend']),
+    ...mapActions('tag', ['getTags']),
 
     connectToWebsocket() {
       const _this = this;
@@ -168,22 +186,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 @media (max-width: 991px) {
   .item-pc {
-    display: none!important;
+    display: none !important;
   }
   .item-hidden {
-    display: none!important;
+    display: none !important;
   }
 }
 
 @media (min-width: 992px) {
-
   .item-hidden {
     display: block;
   }
-  .bottom{
+  .bottom {
     right: 0px;
     left: 0px;
     position: relative;
@@ -193,6 +209,6 @@ export default {
 }
 
 .container {
-background: white;
+  background: white;
 }
 </style>

@@ -1,28 +1,35 @@
 
 import TemplateAPI from '../api/template_api';
+import FolderAPI from '../api/folder_api';
 import Global from '../api/global_api';
 
 export const state = {
+  folders: [],
   messages: [],
   total: 0,
   per_page: 0,
   params: {
     page: 1
   },
-  message: null,
   message_id: null
 };
 
 export const mutations = {
+  pushFolder(state, folder) {
+    folder.templates = [];
+    state.folders.push(folder);
+  },
+
+  setFolders(state, { folders, total, perPage }) {
+    state.folders = folders;
+    state.total = total;
+    state.perPage = perPage;
+  },
+
   SET_MESSAGES_DATA(state, { messages, total, perPage }) {
     state.messages = messages;
     state.total = total;
     state.per_page = perPage;
-  },
-
-  SET_MESSAGE(state, message) {
-    // eslint-disable-next-line no-undef
-    state.message = _.cloneDeep(message);
   },
 
   SET_MESSAGE_ID(state, messageId) {
@@ -35,11 +42,6 @@ export const mutations = {
 
   REMOVE_MESSAGE_FROM_LIST_MESSAGE(state, index) {
     state.messages = state.messages.filter(item => item.id !== index);
-  },
-
-  ADD_NEW_MESSAGE(state, params) {
-    params.message_templates = [];
-    state.messages.push(params);
   },
 
   COPY_MESSAGE(state, params) {
@@ -61,98 +63,47 @@ export const getters = {
 };
 
 export const actions = {
-  setMessage(context, message) {
-    context.commit('SET_MESSAGE', message);
-    context.dispatch('preview/setMessages', message.message_content_distribution_templates, { root: true });
+  setMessagePreview(context, template) {
+    context.dispatch('preview/setMessages', template.messages, { root: true });
   },
 
-  async getMessageById(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageData = null;
+  async getTemplates(context, query) {
+    let templates = null;
+    const total = 1;
+    const perPage = 1;
     try {
-      const res = await TemplateAPI.getMessageById(query);
-      if (res) {
-        messageData = {
-          id: res.id,
-          title: res.title,
-          message_content_distribution_templates: res.contents
-        };
-      }
+      const res = await TemplateAPI.list(query);
+      templates = res;
     } catch (error) {
       console.log(error);
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE', messageData);
+    context.commit('setFolders', { folders: templates, total, perPage });
   },
 
-  async sendMessage(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageIdData = null;
+  async getTemplate(_, id) {
     try {
-      const response = await TemplateAPI.sendMessage(query);
-
-      if (response && response.id) {
-        messageIdData = response.id;
-        context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      }
-
-      if (!messageIdData) {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
+      return await TemplateAPI.get(id);
     } catch (error) {
-      console.log(error);
+      return null;
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE_ID', messageIdData);
   },
 
-  async updateMessage(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messageIdData = null;
+  async updateTemplate(context, query) {
     try {
-      const response = await TemplateAPI.updateMessage(query);
-
-      if (response && response.id) {
-        messageIdData = response.id;
-        context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      }
-
-      if (!messageIdData) {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
+      const response = await TemplateAPI.update(query);
+      return response;
     } catch (error) {
-      console.log(error);
+      return null;
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGE_ID', messageIdData.id);
   },
 
-  async fetchListMessageTemplate(context, query = {}) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let messagesData = null;
-    let total = 0;
-    let perPage = 0;
-
+  async createTemplate(context, query) {
     try {
-      const response = await TemplateAPI.getListMessage(query);
-
-      if (response) {
-        messagesData = response;
-      }
-
-      if (response && response.meta) {
-        total = response.meta.total;
-        perPage = response.meta.per_page;
-      }
+      const response = await TemplateAPI.create(query);
+      return response;
     } catch (error) {
-      console.log(error);
+      return null;
     }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('SET_MESSAGES_DATA', { messages: messagesData, total, perPage });
   },
 
   getListMessageTemplate(context, query = {}) {
@@ -205,20 +156,12 @@ export const actions = {
   },
 
   async createFolder(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
     try {
-      const response = await Global.createFolder(query);
-      if (response) {
-        context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
-        context.commit('ADD_NEW_MESSAGE', response);
-      } else {
-        context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      }
+      const response = await FolderAPI.createFolder(query);
+      context.commit('pushFolder', response);
     } catch (error) {
-      console.log(error);
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
+      return null;
     }
-    context.dispatch('system/setLoading', false, { root: true });
   },
 
   async editFolder(context, query) {

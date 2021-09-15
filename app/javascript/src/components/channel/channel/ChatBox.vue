@@ -91,7 +91,7 @@
       </div>
     </div>
     <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
-    <!-- <modal-select-message-template @setTemplate="selectMessageTemplate"/> -->
+    <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
     <modal-send-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
@@ -451,21 +451,13 @@ export default {
       return moment(parseInt(value.timestamp)).format('YYYY年MM月DD日');
     },
 
-    selectMessageTemplate(template) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-
-      const message = {
-        channel: channel,
-        content: {
-          type: 'template',
-          templateId: template.id
-        }
+    onSelectTemplate(template) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        template_id: template.id
       };
 
-      this.$emit('onSendMessage', message);
+      this.$emit('onSendTemplate', payload);
     },
 
     onSelectScenario(scenario) {

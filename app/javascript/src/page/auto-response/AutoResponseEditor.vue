@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200" >
+  <div class="fw-1200">
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${MIX_ROOT_PATH}/user/broadcasts`" class="text-info">
@@ -60,7 +60,7 @@
                 <div>
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
-                <!-- <modal-select-message-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <!-- <modal-select-template @setTemplate="selectTemplate" id="modal-template"/> -->
                 <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"
@@ -69,7 +69,7 @@
                   v-bind:index="index"
                   v-bind:countMessages="autoResponseData.messages.length"
                   @input="onMessageContentChanged"
-                  @setTemplate="selectTemplate"
+                  @selectTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"
@@ -168,7 +168,7 @@ export default {
         return;
       };
       const data = {
-        folder_id: Util.getQueryParamsUrl('folder_id'),
+        folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
       };
       if (this.auto_response_id) {

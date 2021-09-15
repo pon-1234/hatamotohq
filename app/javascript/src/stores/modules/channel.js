@@ -187,11 +187,27 @@ export const actions = {
   },
   // Send a text message to the active channel
   async sendMessage(context, payload) {
-    return await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
+    try {
+      return await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
+    } catch (error) {
+      console.log(error);
+    }
   },
   // Send a scenario to the active channel
-  async sendScenario(context, payload) {
-    return await ChannelAPI.sendScenario(context.state.activeChannel.id, payload);
+  async sendScenario(_, payload) {
+    try {
+      return await ChannelAPI.sendScenario(payload);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async sendTemplate(_, payload) {
+    try {
+      return await ChannelAPI.sendTemplate(payload);
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   pushMessage(context, message) {

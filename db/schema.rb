@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_10_091744) do
+ActiveRecord::Schema.define(version: 2021_09_15_031309) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -492,6 +492,28 @@ ActiveRecord::Schema.define(version: 2021_09_10_091744) do
     t.index ['line_account_id'], name: 'index_tags_on_line_account_id'
   end
 
+  create_table 'template_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'template_id'
+    t.integer 'message_type_id'
+    t.json 'content'
+    t.integer 'order', default: 0
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['template_id'], name: 'index_template_messages_on_template_id'
+  end
+
+  create_table 'templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.bigint 'folder_id'
+    t.string 'name'
+    t.integer 'template_messages_count', default: 0
+    t.string 'type'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['folder_id'], name: 'index_templates_on_folder_id'
+    t.index ['line_account_id'], name: 'index_templates_on_line_account_id'
+  end
+
   create_table 'unread_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'channel_id'
@@ -578,6 +600,9 @@ ActiveRecord::Schema.define(version: 2021_09_10_091744) do
   add_foreign_key 'taggings', 'tags'
   add_foreign_key 'tags', 'folders'
   add_foreign_key 'tags', 'line_accounts'
+  add_foreign_key 'template_messages', 'templates'
+  add_foreign_key 'templates', 'folders'
+  add_foreign_key 'templates', 'line_accounts'
   add_foreign_key 'unread_messages', 'channels'
   add_foreign_key 'unread_messages', 'line_accounts'
   add_foreign_key 'unread_messages', 'messages', column: 'last_message_id'

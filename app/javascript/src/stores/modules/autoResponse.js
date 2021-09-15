@@ -10,12 +10,12 @@ export const state = {
 };
 
 export const mutations = {
-  CREATE_FOLDER(state, folder) {
+  pushFolder(state, folder) {
     folder.auto_responses = [];
     state.folders.push(folder);
   },
 
-  SET_FOLDERS(state, { folders, total, perPage }) {
+  setFolders(state, { folders, total, perPage }) {
     state.folders = folders;
     state.total = total;
     state.perPage = perPage;
@@ -65,7 +65,7 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-    context.commit('SET_FOLDERS', { folders: autoResponses, total, perPage });
+    context.commit('setFolders', { folders: autoResponses, total, perPage });
   },
 
   async getAutoResponse(context, id) {
@@ -80,7 +80,7 @@ export const actions = {
     await AutoResponseAPI.updateAutoResponse(autoResponse);
   },
 
-  async botDelete(context, query) {
+  async deleteAutoResponse(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {
       await AutoResponseAPI.botDelete(query);
@@ -92,10 +92,10 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  async createFolder(context, payload) {
+  async pushFolder(context, payload) {
     try {
-      const res = await FolderAPI.createFolder(payload);
-      context.commit('CREATE_FOLDER', res);
+      const res = await FolderAPI.pushFolder(payload);
+      context.commit('pushFolder', res);
       return res;
     } catch (error) {
       return null;

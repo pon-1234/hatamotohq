@@ -4,7 +4,7 @@
       {{this.field_name || '選択'}}
     </div>
     <modal-select-survey-profile-template :type="type" :id="`${name}-modal-survey-profile-template`"
-                                          @setTemplate="pick($event)"></modal-select-survey-profile-template>
+                                          @selectTemplate="pick($event)"></modal-select-survey-profile-template>
   </div>
 
 </template>

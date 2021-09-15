@@ -170,7 +170,7 @@ export default {
 
   created() {
     if (performance.navigation.type !== performance.navigation.TYPE_RELOAD) {
-      if (Util.getQueryParamsUrl('is_updated') === 'true') {
+      if (Util.getParamFromUrl('is_updated') === 'true') {
         window.toastr.success('アカウントのパスワードを変更しました');
       }
     }

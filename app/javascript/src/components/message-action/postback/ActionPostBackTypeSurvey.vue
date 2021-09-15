@@ -15,7 +15,7 @@
       <span v-if="errors.first(name+'_survey_code')" class="invalid-box-label">テンプレートは必須です</span>
     </div>
 
-    <modal-select-survey-template @setTemplate="selectTemplate" :id="name"></modal-select-survey-template>
+    <modal-select-survey-template @selectTemplate="selectTemplate" :id="name"></modal-select-survey-template>
   </section>
 </template>
 <script>

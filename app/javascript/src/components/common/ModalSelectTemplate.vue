@@ -5,40 +5,32 @@
         <div class="modal-body overflow-hidden">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <label class="mb15">テンプレートを選択してください</label>
-          <div class=" template-list-content" v-if="messageTemplates && messageTemplates.length">
+          <div class="d-flex" v-if="folders && folders.length">
             <folder-left
               type="template_message"
               :isPerview="true"
-              :data="messageTemplates"
+              :data="folders"
               :isPc="isPc"
-              :selectedFolder="selectedTemplate"
+              :selectedFolder="selectedFolder"
               @changeSelectedFolder="changeSelectedFolderTemplate"
               />
-            <div :class="getClassRightTag()">
+            <div class="flex-grow-1">
               <div class="list-content">
-                <!--<table class="table table-tags-header">-->
-                  <!--<thead>-->
-                    <!--<tr>-->
-                      <!--<th class="w5"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                      <!--<th v-if="messageTemplates[selectedTemplate]">{{messageTemplates[selectedTemplate].name}}</th>-->
-                    <!--</tr>-->
-                  <!--</thead>-->
-                <!--</table>-->
-
                 <div class="x-tag-header">
                   <div class="x-btn-back">
                     <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
                   <div class="x-title"
-                       v-if="messageTemplates[selectedTemplate]">{{messageTemplates[selectedTemplate].name}}
+                       v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}
                   </div>
                 </div>
 
-                <div class="list-scroll message-template-list" v-if="messageTemplates && messageTemplates[this.selectedTemplate]">
+                <div class="list-scroll message-template-list" v-if="folders && folders[this.selectedFolder]">
                   <table class="table table-hover table-messages-template">
-                    <tbody v-if="messageTemplates[this.selectedTemplate].message_templates && messageTemplates[this.selectedTemplate].message_templates.length">
-                      <tr  v-for="(item, index) in messageTemplates[this.selectedTemplate].message_templates"  :key="index" @click="selectTemplate(item)" class="folder-item" data-dismiss="modal">
-                        <td class="message-title">
-                          {{item.title}}
+                    <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
+                      <tr v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" class="folder-item" data-dismiss="modal">
+                        <td class="d-flex w-100">
+                          <div>{{item.name}}</div>
+                          <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >選択</div>
                         </td>
                       </tr>
                     </tbody>
@@ -67,34 +59,25 @@ export default {
 
   data() {
     return {
-      selectedTemplate: 0,
+      selectedFolder: 0,
       isPc: true
     };
   },
 
   computed: {
-    ...mapState('messageTemplate', {
-      messageTemplates: state => state.messages
+    ...mapState('template', {
+      folders: state => state.folders
     })
   },
 
-  created() {
-    this.fetchListMessageTemplate();
+  async beforeMount() {
+    await this.getTemplates();
   },
 
   methods: {
-    ...mapActions('messageTemplate', [
-      'fetchListMessageTemplate'
+    ...mapActions('template', [
+      'getTemplates'
     ]),
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
 
     backToFolder() {
       this.isPc = false;
@@ -103,11 +86,11 @@ export default {
     selectTemplate(template) {
       // eslint-disable-next-line no-undef
       const data = _.cloneDeep(template);
-      this.$emit('setTemplate', data);
+      this.$emit('selectTemplate', data);
     },
 
     changeSelectedFolderTemplate(index) {
-      this.selectedTemplate = index;
+      this.selectedFolder = index;
       this.isPc = true;
     }
 
