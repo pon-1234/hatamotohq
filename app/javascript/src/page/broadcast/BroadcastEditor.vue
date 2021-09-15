@@ -135,7 +135,7 @@
             >下書き保存</button>
           </div>
         </div>
-        <message-preview hidden></message-preview>
+        <message-preview></message-preview>
       </div>
 
       <loading-indicator :loading="loading" />

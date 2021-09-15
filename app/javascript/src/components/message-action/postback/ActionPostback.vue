@@ -29,17 +29,20 @@
       </select>
     </div>
     <div class="w-100">
-      <action-post-back-type-survey v-if="currentPostBackType==='survey'"
-                                    :value="content"
-                                    :name="name"
-                                    @input="updateContent"/>
-      <action-post-back-type-text v-if="currentPostBackType==='text'"
+      <action-postback-text
+        v-if="currentPostBackType==='text'"
         :value="content"
         :name="name"
-        @input="updateContent" />
-      <action-post-back-type-template v-if="currentPostBackType==='template'"
+        @input="updateContent">
+      </action-postback-text>
+
+      <action-postback-template
+        v-if="currentPostBackType==='template'"
         :value="content"
-        @input="updateContent" :name="name" />
+        @input="updateContent"
+        :name="name">
+      </action-postback-template>
+
       <action-postback-scenario
         v-if="currentPostBackType==='scenario'"
         :value="content"
@@ -65,6 +68,13 @@
         :name="name"
         @input="updateContent">
       </action-postback-tag>
+
+      <action-post-back-type-survey
+        v-if="currentPostBackType==='survey'"
+        :value="content"
+        :name="name"
+        @input="updateContent">
+      </action-post-back-type-survey>
     </div>
   </div>
 </template>

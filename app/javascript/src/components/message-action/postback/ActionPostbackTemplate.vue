@@ -1,18 +1,18 @@
 <template>
   <section>
-    <label class="w-100 mt20">
+    <label class="w-100 mt-4">
       コンテンツ
       <required-mark/>
     </label>
 
-    <div class="btn-template mb20 fz14">
-      <div data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-if="currentTemplate.template_id">
+    <div class="mb-4">
+      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary mw-150" v-if="currentTemplate.template_id">
         <message-content :data="currentTemplate.content" v-if="currentTemplate.content" />
         <span v-else>{{currentTemplate.name}}</span>
       </div>
-      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary btn-block" v-else>テンプレートを選択</div>
-      <input type="hidden" v-model="currentTemplate.template_id"  :name="name+'_template_id'" v-validate="'required'" />
-      <span  v-if="errors.first(name+'_template_id')"  class="invalid-box-label">テンプレートは必須です</span>
+      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary mw-150" v-else>テンプレートを選択</div>
+      <input type="hidden" v-model="currentTemplate.template_id" :name="name+'_template_id'" v-validate="'required'" data-vv-as="テンプレート"/>
+      <error-message class="w-100" :message="errors.first(name+'_template_id')"></error-message>
     </div>
 
     <modal-select-template @selectTemplate="selectTemplate" :id="name"/>
@@ -26,7 +26,7 @@ export default {
       default: () => {
         return {
           template_id: null,
-          title: 'テンプレートから作成'
+          name: 'テンプレートから作成'
         };
       }
     },
@@ -41,7 +41,7 @@ export default {
     return {
       currentTemplate: {
         template_id: null,
-        title: null
+        name: null
       }
     };
   },
@@ -52,7 +52,7 @@ export default {
     if (this.value.template_id) {
       this.currentTemplate = {
         template_id: this.value.template_id,
-        title: this.value.title
+        name: this.value.name
       };
     }
   },
@@ -62,7 +62,7 @@ export default {
       handler(val) {
         if (this.value.template_id) {
           this.$emit('input', {
-            title: val.title,
+            name: val.name,
             template_id: this.value.template_id
           });
         }
@@ -75,7 +75,7 @@ export default {
     selectTemplate(template) {
       this.currentTemplate = { template_id: template.id, ...template };
       this.$emit('input', {
-        title: template.title,
+        name: template.name,
         template_id: template.id
       });
     }

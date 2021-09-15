@@ -7,7 +7,7 @@
         </a>
         <h5 class="m-auto font-weight-bold">新規登録</h5>
       </div>
-      <div class="card-body">
+      <div class="card-body" :key="componentKey">
         <div class="card">
           <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
           <div class="card-body">
@@ -128,6 +128,7 @@ export default {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
+      componentKey: 0,
       target: 'all', // or 'tags'
       scenarioData: {
         title: '',
@@ -145,8 +146,9 @@ export default {
     await this.getTags();
     await this.listTagAssigned();
     if (this.scenario_id) {
-      this.getScenarioDetail();
+      await this.getScenarioDetail();
     }
+    this.forceRerender();
     this.loading = false;
   },
 
@@ -160,6 +162,10 @@ export default {
       'getTags',
       'listTagAssigned'
     ]),
+
+    forceRerender() {
+      this.componentKey += 1;
+    },
 
     async getScenarioDetail() {
       const response = await this.getScenario(this.scenario_id);
