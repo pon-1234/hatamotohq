@@ -30,7 +30,7 @@
                       <tr v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" class="folder-item" data-dismiss="modal">
                         <td class="d-flex w-100">
                           <div>{{item.name}}</div>
-                          <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >選択</div>
+                          <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >送信</div>
                         </td>
                       </tr>
                     </tbody>
