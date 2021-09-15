@@ -48,7 +48,7 @@
     </div>
 
     <modal-select-survey-template
-      @setTemplate="selectTemplate"
+      @selectTemplate="selectTemplate"
       :id="name"
     ></modal-select-survey-template>
   </section>

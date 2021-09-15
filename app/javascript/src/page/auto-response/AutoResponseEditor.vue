@@ -69,7 +69,7 @@
                   v-bind:index="index"
                   v-bind:countMessages="autoResponseData.messages.length"
                   @input="onMessageContentChanged"
-                  @setTemplate="selectTemplate"
+                  @selectTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"

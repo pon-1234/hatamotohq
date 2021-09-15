@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         get :scenarios, on: :member
         resources :messages do
           post :send_scenario, on: :collection
+          post :send_template, on: :collection
         end
       end
       resources :friends do

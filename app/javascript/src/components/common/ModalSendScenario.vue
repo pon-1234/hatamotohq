@@ -26,7 +26,7 @@
                 <td>{{ scenario.title }}</td>
                 <td>{{ scenario.scenario_messages_count || 0 }}</td>
                 <td>
-                  <div role="button" class="btn btn-primary btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">選択</div>
+                  <div role="button" class="btn btn-primary btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">送信</div>
                 </td>
               </tr>
             </tbody>

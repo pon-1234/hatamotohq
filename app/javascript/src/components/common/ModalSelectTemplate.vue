@@ -27,9 +27,10 @@
                 <div class="list-scroll message-template-list" v-if="folders && folders[this.selectedFolder]">
                   <table class="table table-hover table-messages-template">
                     <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
-                      <tr  v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" @click="selectTemplate(item)" class="folder-item" data-dismiss="modal">
-                        <td class="message-title">
-                          {{item.name}}
+                      <tr v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" class="folder-item" data-dismiss="modal">
+                        <td class="d-flex w-100">
+                          <div>{{item.name}}</div>
+                          <div class="btn btn-info btn-xs ml-auto " @click="selectTemplate(item)" >送信</div>
                         </td>
                       </tr>
                     </tbody>
@@ -85,7 +86,7 @@ export default {
     selectTemplate(template) {
       // eslint-disable-next-line no-undef
       const data = _.cloneDeep(template);
-      this.$emit('setTemplate', data);
+      this.$emit('selectTemplate', data);
     },
 
     changeSelectedFolderTemplate(index) {

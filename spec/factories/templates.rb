@@ -4,13 +4,14 @@
 #
 # Table name: templates
 #
-#  id              :bigint           not null, primary key
-#  name            :string(255)
-#  type            :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  folder_id       :bigint
-#  line_account_id :bigint
+#  id                      :bigint           not null, primary key
+#  name                    :string(255)
+#  template_messages_count :integer          default(0)
+#  type                    :string(255)
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  folder_id               :bigint
+#  line_account_id         :bigint
 #
 # Indexes
 #

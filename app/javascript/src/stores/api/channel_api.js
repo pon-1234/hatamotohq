@@ -36,9 +36,19 @@ export default {
     });
   },
 
-  sendScenario: (channelId, payload) => {
+  sendScenario: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages/send_scenario`,
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_scenario`,
+      method: 'POST',
+      data: JSON.stringify(payload),
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  sendTemplate: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_template`,
       method: 'POST',
       data: JSON.stringify(payload),
       dataType: 'json',

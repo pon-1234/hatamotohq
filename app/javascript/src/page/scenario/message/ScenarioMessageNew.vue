@@ -34,7 +34,7 @@
                   :key="index"
                   v-bind:data="item"
                   v-bind:index="index"
-                  @setTemplate="selectTemplate"
+                  @selectTemplate="selectTemplate"
                   @input="changeContent"
                 />
             </div>

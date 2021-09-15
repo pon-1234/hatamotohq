@@ -53,6 +53,7 @@ class User::TemplatesController < User::ApplicationController
         :name,
         template_messages_attributes: [
           :id,
+          :order,
           :message_type_id,
           content: {}
         ]

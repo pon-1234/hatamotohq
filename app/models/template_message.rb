@@ -21,7 +21,9 @@
 #  fk_rails_...  (template_id => templates.id)
 #
 class TemplateMessage < ApplicationRecord
-  belongs_to :template, inverse_of: :template_messages
+  default_scope { order(order: :asc) }
+
+  belongs_to :template, counter_cache: true, inverse_of: :template_messages
 
   # Validation
   validates :message_type_id, presence: true

@@ -103,7 +103,7 @@
                   v-bind:index="index"
                   v-bind:countMessages="broadcastData.messages.length"
                   @input="changeContent"
-                  @setTemplate="selectTemplate"
+                  @selectTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"

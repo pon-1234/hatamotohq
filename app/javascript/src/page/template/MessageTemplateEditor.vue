@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="submitCreateTemplate()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
+        <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="addMessageBlock()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
       </div>
       <div class="card-footer d-flex">
         <button
@@ -119,7 +119,7 @@ export default {
       this.componentKey += 1;
     },
 
-    submitCreateTemplate() {
+    addMessageBlock() {
       this.templateData.messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {
@@ -183,11 +183,15 @@ export default {
         return;
       }
 
+      const orderedMessages = this.templateData.messages.map((message, index) => {
+        message.order = index;
+        return message;
+      });
       const payload = {
         id: this.template_id,
         folder_id: Util.getParamFromUrl('folder_id'),
         name: this.templateData.name,
-        template_messages_attributes: this.templateData.messages
+        template_messages_attributes: orderedMessages
       };
 
       if (!this.template_id) {

@@ -134,7 +134,7 @@ export default {
       console.log(survey, 'survey');
       // eslint-disable-next-line no-undef
       const data = _.cloneDeep(survey);
-      this.$emit('setTemplate', data);
+      this.$emit('selectTemplate', data);
     }
 
   }

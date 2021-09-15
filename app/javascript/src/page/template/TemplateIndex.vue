@@ -25,6 +25,7 @@
               <thead>
                 <tr>
                   <th>テンプレート名</th>
+                  <th>メッセージ数</th>
                   <th class="fw-120">操作</th>
                   <th class="fw-150">フォルダ</th>
                 </tr>
@@ -32,6 +33,7 @@
               <tbody>
                 <tr v-for="template in templates" v-bind:key="template.id">
                   <td>{{template.name}}</td>
+                  <td>{{template.template_messages_count}}</td>
                   <td>
                     <div class="btn-group">
                       <button type="button" class="btn btn-warning" @click="openEdit(template)">編集</button>
