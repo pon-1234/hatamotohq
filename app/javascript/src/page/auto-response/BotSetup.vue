@@ -1,61 +1,64 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">LINE公式アカウント連携設定</h3>
-        </div>
-        <ValidationObserver v-slot="{ invalid }">
-        <form ref="form" @submit.prevent="onSubmit" :action="getAction()" method="post">
-          <input type="hidden" name="authenticity_token" :value="csrfToken">
-          <div class="card-body offset-xl-2 col-xl-8">
-            <div class="form-group row">
-              <label class="col-4">管理用の名前（自由に記載してください)</label>
-              <div class="col-8">
-                <ValidationProvider name="管理用の名前" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="bot[line_name]" v-model="botForm.line_name">
-                  <span class="error-explanation">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-4">LINE公式アカウントID</label>
-              <div class="col-8">
-                <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="bot[line_user_id]" v-model="botForm.line_user_id">
-                  <span class="error-explanation">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-4">チャネルID</label>
-              <div class="col-8">
-                <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="bot[line_channel_id]" v-model="botForm.line_channel_id">
-                  <span class="error-explanation">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-4">チャネルシークレット</label>
-              <div class="col-8">
-                <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="bot[line_channel_secret]" v-model="botForm.line_channel_secret">
-                  <span class="error-explanation">{{ errors[0] }}</span>
-                </ValidationProvider>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer text-center">
-            <submit-button object="ボット" action="設定" :submitted="submitted" :disabled="invalid"></submit-button>
-          </div>
-        </form>
-        </ValidationObserver>
-      </div>
+  <div class="card card-success mxw-1200 mt-5 mx-auto">
+    <div class="card-header">
+      <h3 class="card-title">LINE公式アカウント連携設定</h3>
     </div>
+    <ValidationObserver v-slot="{ validate, invalid }">
+    <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="getAction()" method="post">
+      <input type="hidden" name="authenticity_token" :value="csrfToken">
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-4">管理用の名前（自由に記載してください)<required-mark></required-mark></label>
+          <div class="col-8">
+            <ValidationProvider name="管理用の名前" rules="required" v-slot="{ errors }">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_name]" v-model="botForm.line_name">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+
+        <div class="form-group row mt-4">
+          <label class="col-4">LINE公式アカウントID<required-mark></required-mark></label>
+          <div class="col-8">
+            <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_user_id]" v-model="botForm.line_user_id">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+
+        <div class="form-group row mt-4">
+          <label class="col-4">チャネルID<required-mark></required-mark></label>
+          <div class="col-8">
+            <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_channel_id]" v-model="botForm.line_channel_id">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+
+        <div class="form-group row mt-4">
+          <label class="col-4">チャネルシークレット<required-mark></required-mark></label>
+          <div class="col-8">
+            <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_channel_secret]" v-model="botForm.line_channel_secret">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+
+        <div class="form-group row mt-4">
+          <label class="col-4">Webhook URL</label>
+          <div class="col-8">
+            <input type="text" class="form-control" :value="webhookUrl" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <submit-button object="ボット" action="設定" :submitted="submitted" :disabled="invalid"></submit-button>
+      </div>
+    </form>
+    </ValidationObserver>
   </div>
 </template>
 
@@ -63,7 +66,7 @@
 import Util from '@/core/util.js';
 
 export default {
-  props: ['bot'],
+  props: ['webhook_url'],
 
   data() {
     return {
@@ -78,6 +81,13 @@ export default {
       submitted: false
     };
   },
+
+  computed: {
+    webhookUrl() {
+      return `${this.userRootUrl}/webhooks/${this.webhook_url}`;
+    }
+  },
+
   methods: {
     async onSubmit(e) {
       this.submitted = true;

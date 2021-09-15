@@ -6,11 +6,11 @@
     </label>
 
     <div class="btn-template mb20 fz14">
-      <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-if="currentTemplate.template_id">
+      <div data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-if="currentTemplate.template_id">
         <message-content :data="currentTemplate.content" v-if="currentTemplate.content" />
-        <span v-else>{{currentTemplate.title}}</span>
-        </a>
-      <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-else>テンプレートから作成</a>
+        <span v-else>{{currentTemplate.name}}</span>
+      </div>
+      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary btn-block" v-else>テンプレートを選択</div>
       <input type="hidden" v-model="currentTemplate.template_id"  :name="name+'_template_id'" v-validate="'required'" />
       <span  v-if="errors.first(name+'_template_id')"  class="invalid-box-label">テンプレートは必須です</span>
     </div>

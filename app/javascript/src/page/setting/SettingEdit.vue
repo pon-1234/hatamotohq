@@ -55,7 +55,7 @@
             <div class="form-group row">
               <label class="col-12">Webhook URL</label>
               <div class="col-12">
-                <input type="text" class="form-control" placeholder="入力してください" :value="WebhookUrl()" disabled>
+                <input type="text" class="form-control" placeholder="入力してください" :value="webhookUrl()" disabled>
               </div>
             </div>
             <div class="form-group row">
@@ -112,7 +112,7 @@ export default {
     getAction() {
       return `${this.userRootUrl}/user/setting`;
     },
-    WebhookUrl() {
+    webhookUrl() {
       return `${this.userRootUrl}/webhooks/${this.line_account.webhook_url}`;
     }
   }

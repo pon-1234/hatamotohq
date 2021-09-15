@@ -17,8 +17,6 @@ class LineApi::PostMessageBroadcast < LineApi::BaseRequest
       body: { messages: @messages }.to_json
     }
     response = self.class.post('/bot/message/broadcast', options)
-    p '---------------------'
-    p response
     response.code == 200
   end
 end

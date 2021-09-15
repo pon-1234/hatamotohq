@@ -13,7 +13,6 @@ class PostbackHandler
   def perform
     handle_message_action(@action['messages']) if @action['messages'].present?
     handle_tag_action(@action['tag']) if @action['tag'].present?
-    true
   end
 
   def handle_message_action(actions)
@@ -25,6 +24,8 @@ class PostbackHandler
         send_email(action['content'])
       when 'scenario'
         send_scenario(action['content'])
+      when 'template'
+        send_template(action['content'])
       end
     end
   end
@@ -55,6 +56,11 @@ class PostbackHandler
     def send_scenario(content)
       scenario_id = content['scenario_id']
       ScenarioSchedulerJob.perform_later(@friend.channel.id, scenario_id)
+    end
+
+    def send_template(content)
+      template_id = content['template_id']
+      SendTemplateJob.perform_later(@friend.channel.id, template_id)
     end
 
     def assign_tag(action)

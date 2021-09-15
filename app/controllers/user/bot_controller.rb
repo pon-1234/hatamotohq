@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class User::BotController < User::ApplicationController
+  layout 'auth'
   skip_before_action :ensure_bot_initialized
   include User::BotHelper
   include LineApi
 
   def setup
+    @bot = Current.user.line_account
   end
 
   def register
