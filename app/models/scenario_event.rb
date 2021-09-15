@@ -5,9 +5,11 @@
 # Table name: scenario_events
 #
 #  id                  :bigint           not null, primary key
+#  content             :json
 #  order               :integer
 #  schedule_at         :datetime
 #  status              :string(255)
+#  type                :string(255)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  channel_id          :bigint
@@ -32,22 +34,42 @@
 class ScenarioEvent < ApplicationRecord
   belongs_to :line_account
   belongs_to :scenario
-  belongs_to :scenario_message
+  belongs_to :scenario_message, required: false # root message can be deleted
   belongs_to :channel
 
+  # Scope
   enum status: { queued: 'queued', sending: 'sending', done: 'done', error: 'error' }
+  enum type: { message: 'message', after_action: 'after_action' }, _prefix: true
 
   # Scope
   scope :before, ->(time) { where('schedule_at <= ?', time) }
   scope :ordered, -> { order(order: :asc) }
 
   def deliver_now
-    payload = {
-      channel_id: self.channel.id,
-      messages: [self.scenario_message.content]
-    }
-    self.update_columns(status: 'sending')
-    PushMessageToLineJob.perform_now(payload)
-    self.destroy
+    case self.type
+    when 'message'
+      deliver_message
+    when 'after_action'
+      deliver_after_action
+    end
+    execute_after_deliver
   end
+
+  private
+    def deliver_message
+      payload = {
+        channel_id: self.channel.id,
+        messages: [self.content]
+      }
+      self.update_columns(status: 'sending')
+      PushMessageToLineJob.perform_now(payload)
+    end
+
+    def deliver_after_action
+      ActionHandlerJob.perform_now(self.channel.line_friend, self.content)
+    end
+
+    def execute_after_deliver
+      self.destroy
+    end
 end

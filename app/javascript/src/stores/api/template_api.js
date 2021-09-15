@@ -49,5 +49,5 @@ export default {
       dataType: 'json',
       contentType: 'application/json'
     });
-  },
+  }
 };

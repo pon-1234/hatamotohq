@@ -102,9 +102,7 @@
 </template>
 
 <script>
-import ErrorMessage from '../../common/ErrorMessage.vue';
 export default {
-  components: { ErrorMessage },
   props: {
     value: Object,
     labelRequired: Boolean,

@@ -39,7 +39,7 @@
                       <button type="button" class="btn btn-warning" @click="openEdit(template)">編集</button>
                       <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                       <div class="dropdown-menu bg-white" role="menu" style="">
-                        <a role="button" class="dropdown-item">テンプレートを編集</a>
+                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
                         <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item">テンプレートをコビー</a>
                         <div class="dropdown-divider"></div>
@@ -217,7 +217,7 @@ export default {
     },
 
     openEdit(autoResponse) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/templates/${autoResponse.id}/edit`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${autoResponse.id}/edit`);
     },
 
     formattedDate(date) {
