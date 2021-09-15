@@ -1,6 +1,6 @@
 <template>
   <div @click="focusForm" v-click-outside="blurInputTag">
-    <b-form-tags v-model="value" no-outer-focus class="mb-2 position-relative"  :add-button-text="'追加'" remove-on-delete>
+    <b-form-tags v-model="value" :disabled="disabled" no-outer-focus class="mb-2 position-relative" :add-button-text="'追加'" remove-on-delete>
       <template v-slot="{ tags, disabled, addTag }" >
         <i :class="isFocus?'fas fa-angle-up float-r':'fas fa-angle-down float-r'" class="down icon-action" @click.stop="showDropDown"></i>
         <ul class="list-inline d-inline-block mb-2">
@@ -14,6 +14,7 @@
           </li>
         </ul>
         <b-form-input
+          :disabled="disabled"
           v-model="search"
           ref="inputTag"
           class="input-text-tag "
@@ -21,7 +22,7 @@
           autocomplete="off"
           placeholder="タグ名を入力"
           ></b-form-input>
-        <div class="w-100 dropdown-tag row" v-if="isFocus" :class="{top: isShowTop()}">
+        <div class="w-100 dropdown-tag row" v-if="!disabled && isFocus" :class="{top: isShowTop()}">
           <div :class="getClassLeftTag()">
             <div class="tag-content">
               <table class="table table-tags-header">
@@ -79,7 +80,7 @@ import { mapState } from 'vuex';
 import ClickOutside from 'vue-click-outside';
 
 export default {
-  props: ['tags', 'allTags'],
+  props: ['tags', 'allTags', 'disabled'],
   data() {
     return {
       value: [],

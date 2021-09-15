@@ -90,7 +90,6 @@ export default {
           // eslint-disable-next-line no-undef
           this.friendDetail = _.cloneDeep(this.data);
           this.tags = this.data.tags;
-          this.displayName = this.friendDetail.line_customer.display_name ? this.friendDetail.line_customer.display_name : this.friendDetail.line_customer.line_name;
           this.isShowDisplayName = true;
         }
       },

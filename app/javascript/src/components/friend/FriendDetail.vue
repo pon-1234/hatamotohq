@@ -36,31 +36,33 @@
           <!-- /.card -->
         </div>
         <div class="col-lg-8">
-          <div class="card card-success">
-            <div class="card-header">
+          <div class="card card-success card-outline">
+            <div class="card-header d-flex align-items-center">
               <h3 class="card-title">詳細情報</h3>
+              <div v-if="!editing" @click="editing = true" class="btn btn-sm btn-outline-success ml-auto">編集</div>
             </div>
             <div class="card-body">
               <strong><i class="fas fa-book mr-1"></i> 表示名</strong>
               <p class="text-muted mt-2">
-                <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName">
+                <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName" :disabled="!editing">
               </p>
               <hr>
 
               <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
               <p class="text-muted mt-2">
-                <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friendData.note"></textarea>
+                <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friendData.note" :disabled="!editing"></textarea>
               </p>
               <hr>
 
               <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
               <p class="text-muted mt-2">
-                <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true"/>
+                <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" :disabled="!editing"/>
               </p>
               <hr>
 
-              <div class="btn btn-block btn-success" @click="saveInfo()">更新</div>
+              <div class="btn btn-block btn-success" @click="onSave()" v-show="editing">更新</div>
             </div>
+            <loading-indicator :loading="loading"></loading-indicator>
           </div>
         </div>
         <!-- <div class="col-lg-12">
@@ -150,14 +152,18 @@ export default {
       destinationStatusFromBot: '',
       buttonText: '',
       field_index: null,
-      currentTab: '友だち情報名'
+      currentTab: '友だち情報名',
+      loading: false,
+      editing: false
     };
   },
 
   async beforeMount() {
+    this.loading = true;
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
     await this.getTags();
+    this.loading = false;
   },
 
   methods: {
@@ -202,7 +208,8 @@ export default {
       this.isEnter = true;
     },
 
-    saveInfo() {
+    onSave() {
+      this.loading = true;
       const formData = {
         id: this.friendData.id,
         display_name: this.friendData.display_name,
@@ -213,6 +220,9 @@ export default {
         window.toastr.success('友だち情報の更新が成功しました。');
       }).catch(() => {
         window.toastr.error('友だち情報の更新が失敗しました。');
+      }).finally(() => {
+        this.editing = false;
+        this.loading = false;
       });
     },
 
