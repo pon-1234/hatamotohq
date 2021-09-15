@@ -44,7 +44,7 @@
 
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
-    <message-preview />
+    <message-preview></message-preview>
     <modal-confirm v-bind:title="'このメッセージを削除します。よろしいですか？'" type='delete' @input="deleteTemplateTemplate"/>
   </div>
 </template>

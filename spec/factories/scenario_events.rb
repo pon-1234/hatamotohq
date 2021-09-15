@@ -5,9 +5,11 @@
 # Table name: scenario_events
 #
 #  id                  :bigint           not null, primary key
+#  content             :json
 #  order               :integer
 #  schedule_at         :datetime
 #  status              :string(255)
+#  type                :string(255)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  channel_id          :bigint

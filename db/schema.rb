@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_031309) do
+ActiveRecord::Schema.define(version: 2021_09_15_102524) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -341,6 +341,8 @@ ActiveRecord::Schema.define(version: 2021_09_15_031309) do
     t.bigint 'line_account_id'
     t.bigint 'scenario_id'
     t.bigint 'scenario_message_id'
+    t.string 'type'
+    t.json 'content'
     t.bigint 'channel_id'
     t.datetime 'schedule_at'
     t.integer 'order'

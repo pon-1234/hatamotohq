@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkerDispatchScenarioMessage
+class WorkerDispatchScenarioEvent
   include Sidekiq::Worker
 
   def perform(*args)
