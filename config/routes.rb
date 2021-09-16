@@ -35,6 +35,7 @@ Rails.application.routes.draw do
         get :manual, on: :collection
         resources :messages, controller: 'scenario_messages' do
           get :delete_confirm, on: :member
+          post :import, on: :collection
         end
         get :delete_confirm, on: :member
         get :copy_confirm, on: :member
