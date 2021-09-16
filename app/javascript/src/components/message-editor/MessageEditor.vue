@@ -175,18 +175,6 @@ export default {
       this.$emit('remove', { index: this.index });
     },
 
-    // selectTemplate(template) {
-    //   // eslint-disable-next-line no-undef
-    //   const data = _.cloneDeep(template);
-    //   this.$emit('setTemplate', {
-    //     index: this.index,
-    //     template: {
-    //       message_type_id: data.message_type_id,
-    //       content: data.content
-    //     }
-    //   });
-    // },
-
     moveTopMessage() {
       this.$emit('moveTopMessage', this.index);
     },

@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" :key="msgContentKey">
           <div class="card-header left-border">
             <div class="card-title">配信メッセージ設定</div>
           </div>
@@ -94,7 +94,7 @@
             <div v-if="refresh_content">
               <div class="mb-2">
                 <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
-                <!-- <modal-select-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">
                 <message-editor
@@ -103,7 +103,6 @@
                   v-bind:index="index"
                   v-bind:countMessages="broadcastData.messages.length"
                   @input="changeContent"
-                  @selectTemplate="selectTemplate"
                   @remove="removeContent"
                   @moveTopMessage="moveTopMessage"
                   @moveBottomMessage="moveBottomMessage"
@@ -156,6 +155,7 @@ export default {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
+      msgContentKey: 0,
       broadcastData: {
         conditions: {
           type: 'all',
@@ -226,6 +226,9 @@ export default {
       'getBroadcast',
       'setPreviewContent'
     ]),
+    ...mapActions('template', [
+      'getTemplate'
+    ]),
     ...mapActions('tag', [
       'getTags',
       'listTagAssigned'
@@ -233,6 +236,10 @@ export default {
     ...mapActions('system', [
       'setIsSubmitChange'
     ]),
+
+    forceRerender() {
+      this.msgContentKey++;
+    },
 
     async fetchItem() {
       if (this.broadcast_id) {
@@ -358,16 +365,10 @@ export default {
       }
     },
 
-    selectTemplate(template) {
-      Object.assign(this.broadcastData, {
-        title: template.title,
-        messages: template.contents
-      });
-      this.refresh_content = false;
-
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+    async onSelectTemplate(template) {
+      const templateData = await this.getTemplate(template.id);
+      this.broadcastData.messages = templateData.messages;
+      this.forceRerender();
     },
 
     addListTag(data) {
