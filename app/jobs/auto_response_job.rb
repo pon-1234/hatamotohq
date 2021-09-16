@@ -12,7 +12,7 @@ class AutoResponseJob < ApplicationJob
     auto_responses = AutoResponse.where(id: auto_response_ids, status: 'enable')
     reply_messages = []
     auto_responses.each do |auto_response|
-      reply_messages << auto_response.auto_response_messages.pluck(:content)
+      reply_messages += auto_response.auto_response_messages.pluck(:content)
     end
 
     # Rebuild payload
@@ -21,7 +21,7 @@ class AutoResponseJob < ApplicationJob
       reply_token: message.reply_token,
       messages: reply_messages
     }
-    PushMessageToLineJob.perform_later(payload)
+    PushMessageToLineJob.perform_now(payload)
   end
 
   private
@@ -31,7 +31,7 @@ class AutoResponseJob < ApplicationJob
         .joins(:auto_response)
         .references(:auto_response)
         .where(auto_responses: { line_account_id: message.channel.line_account_id })
-        .where("? LIKE  CONCAT('%', auto_response_keywords.keyword ,'%')", message.text)
+        .where("? LIKE  CONCAT('%', auto_response_keywords.keyword ,'%')", message.text&.downcase)
         .uniq
     end
 end

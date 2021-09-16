@@ -25,4 +25,8 @@ class AutoResponseKeyword < ApplicationRecord
 
   # Validation
   validates :keyword, presence: true, length: { maximum: 255 }
+
+  before_save do
+    self.keyword = self.keyword.downcase
+  end
 end
