@@ -16,13 +16,13 @@
       </div>
     </div>
     <div v-if="isEdit && active">
-      <div class="input-group newgroup-inputs">
+      <div class="input-group d-flex">
         <input type="text"  placeholder="フォルダ名" class="form-control" @click.stop :value="data.name" ref="folderName"
           @keyup.enter='enterSubmitChangeName'
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
         >
-          <span class="input-group-btn">
+          <span class="ml-auto">
             <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">
               決定
             </button>

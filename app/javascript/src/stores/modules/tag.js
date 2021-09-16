@@ -1,5 +1,5 @@
 import Tag from '../api/tag_api';
-import Folder from '../api/folder_api';
+import FolderAPI from '../api/folder_api';
 
 export const state = {
   folders: [],
@@ -55,21 +55,15 @@ export const mutations = {
     state.folders = folders;
   },
 
-  pushFolder(state, value) {
-    if (value && !value.tags_count) {
-      value.tags_count = 0;
-    }
-    state.tags.push(value);
+  pushFolder(state, folder) {
+    folder.tags_count = 0;
+    folder.tags = [];
+    state.folders.push(folder);
   },
 
-  pushTag(state, value) {
-    state.tags.forEach(element => {
-      if (element.id === value.folder_id) {
-        element.tags_count += 1;
-        value.line_friend_count = 0;
-        element.tags.splice(0, 0, value);
-      }
-    });
+  pushTag(state, tag) {
+    const folder = state.folders.find(_ => _.id === tag.folder_id);
+    folder.tags.push(tag);
   }
 };
 
@@ -144,31 +138,22 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  addNewFolder(context, payload) {
-    context.commit('pushFolder', payload);
-  },
-
-  addNewTag(context, payload) {
-    context.commit('pushTag', payload);
-  },
-
-  async createTag(context, query) {
-    let response = null;
+  async createFolder(context, payload) {
     try {
-      if (query.type === 'folder') {
-        const formData = { name: query.name, type: 'tag' };
-        response = await Folder.createFolder(formData);
-        response.tags = [];
-        response.tags_count = 0;
-        context.commit('pushFolder', response);
-      } else {
-        response = await Tag.createTag(query);
-        context.commit('pushTag', response);
-      }
-      return response;
+      const folder = await FolderAPI.createFolder(payload);
+      context.commit('pushFolder', folder);
+      return folder;
     } catch (error) {
-      return error.responseJSON;
+      return null;
+    }
+  },
+
+  async createTag(context, payload) {
+    try {
+      const response = await Tag.createTag(payload);
+      context.commit('pushTag', response);
+    } catch (error) {
+      return null;
     }
   }
-
 };

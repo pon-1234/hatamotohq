@@ -1,10 +1,10 @@
 <template>
   <div class="folder-item">
     <div  class="d-flex align-items-center" v-if="!isEdit">
-      <span>
+      <span class="flex-grow-1">
         {{data.name}}
       </span>
-      <div class="btn-group ml-auto">
+      <div class="btn-group flex-1">
         <button type="button" class="btn btn-primary">操作</button>
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
         <div class="dropdown-menu" role="menu" style="">

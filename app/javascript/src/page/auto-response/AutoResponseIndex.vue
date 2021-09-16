@@ -116,10 +116,10 @@ export default {
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      autoResponse: null,
       isPc: true,
       selectedFolderIndex: 0,
       autoResponses: [],
+      autoResponse: null,
       loading: true
     };
   },

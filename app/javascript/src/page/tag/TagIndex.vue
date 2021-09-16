@@ -25,7 +25,7 @@
                     <th class="fw-200">作成日</th>
                   </tr>
                 </thead>
-                <tbody v-if="folders && folders[selectedFolderIndex]">
+                <tbody v-if="curFolder">
                   <tr v-if="isAddMoreTag" class="tag-item">
                     <td class="mw-200 vetical-align-middle">
                       <div class="folder-item">
@@ -36,7 +36,7 @@
                             @compositionstart="compositionstart($event)"
                             >
                           <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" @click="submitAddNewTag" ref="buttonAddTag">
+                            <button type="button" class="btn btn-default" @click="submitCreateTag" ref="buttonAddTag">
                               決定
                             </button>
                           </span>
@@ -47,7 +47,7 @@
                     <td class="text-center">{{getCreatedAt()}}</td>
                   </tr>
                   <tag-item
-                    v-for="(item, index) in folders[selectedFolderIndex].tags"
+                    v-for="(item, index) in curFolder.tags"
                     :data="item"
                     :key="index"
                     @deleteTag="setSelectedTag"
@@ -56,7 +56,7 @@
                   />
                 </tbody>
               </table>
-              <div v-if="folders[selectedFolderIndex] && folders[selectedFolderIndex].tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
+              <div v-if="curFolder && curFolder.tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
             </div>
           </div>
         </div>
@@ -98,7 +98,11 @@ export default {
   computed: {
     ...mapState('tag', {
       folders: state => state.folders
-    })
+    }),
+
+    curFolder() {
+      return this.folders[this.selectedFolderIndex];
+    }
   },
   watch: {
     folders: {
@@ -112,7 +116,9 @@ export default {
     ...mapActions('tag', [
       'getTags',
       'deleteTag',
-      'addNewFolder',
+      'createFolder',
+      'updateFolder',
+      'deleteFolder',
       'addNewTag',
       'editTag',
       'createTag'
@@ -157,32 +163,41 @@ export default {
       this.editTag(value);
     },
 
-    async submitCreateTag(value) {
-      this.isAddMoreFolder = false;
-      this.isAddMoreTag = false;
-      const response = await this.createTag(value);
-      this.onReceiveCreateTagResponse(response);
-    },
+    // async submitCreateTag(value) {
+    //   this.isAddMoreFolder = false;
+    //   this.isAddMoreTag = false;
+    //   const response = await this.createTag(value);
+    //   this.onReceiveCreateTagResponse(response);
+    // },
 
     setSelectedTag(value) {
       this.tagSelected = value;
     },
 
-    submitCreateFolder() {
-      if (this.folderData.name) {
-        this.submitCreateTag(this.folderData);
-        this.folderData.name = '';
+    async submitCreateFolder(value) {
+      this.createFolder(value);
+    },
+
+    submitUpdateFolder() {
+
+    },
+
+    submitCreateTag() {
+      if (this.tagData.name) {
+        const payload = {
+          folder_id: this.folders[this.selectedFolderIndex].id,
+          name: this.tagData.name
+        };
+        this.createTag(payload);
+        this.resetTagInput();
       }
     },
 
-    submitUpdateFolder() {},
-
-    submitAddNewTag() {
-      if (this.tagData.name) {
-        this.tagData.folder_id = this.folders[this.selectedFolderIndex].id;
-        this.submitCreateTag(this.tagData);
-        this.tagData.name = '';
-      }
+    resetTagInput() {
+      this.tagData = {
+        name: null,
+        folder_id: null
+      };
     },
 
     getCreatedAt(item) {

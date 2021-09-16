@@ -18,17 +18,17 @@
       </div>
       <div class="tag-scroll folder-list">
         <div class="folder-item new-folder" v-if="isAddMoreFolder">
-          <div class="input-group newgroup-inputs">
-          <input type="text"
-            placeholder="フォルダ名"
-            class="form-control"
-            v-model="folderData.name"
-            @click.stop ref="folderName"
-            @keyup.enter='enterSubmitAddNewFolder'
-            @compositionend="compositionend($event)"
-            @compositionstart="compositionstart($event)"
+          <div class="input-group d-flex">
+            <input type="text"
+              placeholder="フォルダ名"
+              class="form-control"
+              v-model="folderData.name"
+              @click.stop ref="folderName"
+              @keyup.enter='enterSubmitAddNewFolder'
+              @compositionend="compositionend($event)"
+              @compositionstart="compositionstart($event)"
             >
-            <span class="input-group-btn">
+            <span class="ml-auto">
               <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">
                 決定
               </button>

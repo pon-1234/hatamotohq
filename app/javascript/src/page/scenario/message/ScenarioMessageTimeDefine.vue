@@ -121,11 +121,26 @@ export default {
     Datetime
   },
   props: {
-    mode: String,
-    is_initial: String,
-    date: Number,
-    time: String,
-    order: Number
+    mode: {
+      type: String,
+      default: 'time'
+    },
+    is_initial: {
+      type: Boolean,
+      default: false
+    },
+    date: {
+      type: Number,
+      default: 0
+    },
+    time: {
+      type: String,
+      default: '00:00'
+    },
+    order: {
+      type: Number,
+      default: 1
+    }
   },
 
   data() {

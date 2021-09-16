@@ -5,7 +5,7 @@
         <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
         <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{data.name}}</span><span>({{getCountContent()}})</span>
 
-        <!-- <div class="dropdown" v-if="active && data.name != '未分類' && !isPerview">
+        <div class="dropdown" v-if="active && data.name != '未分類' && !isPerview">
           <div class="btn-group">
             <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">編集</button>
             <div class="dropdown-menu bg-white" role="menu" style="">
@@ -14,22 +14,22 @@
               <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteFolder" @click="deleteFolder">フォルダを削除</a>
             </div>
           </div>
-        </div> -->
+        </div>
       </span>
     </div>
     <div v-if="isEdit && active">
-      <div class="input-group newgroup-inputs">
+      <div class="input-group d-flex">
         <input type="text"  placeholder="フォルダ名" class="form-control" @click.stop :value="data.name" ref="folderName"
           @keyup.enter='enterSubmitChangeName'
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
-          >
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">
-              決定
-            </button>
-          </span>
-        </div>
+        >
+        <span class="ml-auto">
+          <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">
+            決定
+          </button>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +44,10 @@ export default {
   },
   methods: {
     getCountContent() {
+      if (this.type === 'tag') {
+        return this.data.tags.length;
+      }
+
       if (this.type === 'scenario' || this.type === 'template_scenario') {
         return this.data.scenarios.length;
       }
@@ -123,7 +127,6 @@ export default {
     height: 50px;
     min-height: 50px;
   }
-
   .active{
     background-color: #e0e0e0;
   }
