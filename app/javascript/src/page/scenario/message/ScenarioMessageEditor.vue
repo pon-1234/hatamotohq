@@ -176,34 +176,12 @@ export default {
       const messageContent = this.scenarioMessageData.messages[0];
       payload.message_type_id = messageContent.message_type_id;
       payload.content = messageContent.content;
-      const messageId = await this.createScenarioMessage(payload);
+      const messageId = await this.createMessage(payload);
       if (messageId) {
         Util.showSuccessThenRedirect('シナリオにメッセージを追加しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
       } else {
         Util.showErrorThenRedirect('シナリオにメッセージの追加は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
       }
-    },
-
-    selectTemplate({ index, template }) {
-      // eslint-disable-next-line no-undef
-      this.refresh_content = false;
-
-      this.scenarioMessageData.messages.splice(0, 1, template);
-
-      this.setPreviewContent(this.scenarioMessageData.messages);
-
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
-    },
-
-    getListMessageTemplate() {
-      this.fetchListMessageTemplate(this.param_template);
-    },
-
-    changeListTemplate(page) {
-      this.setParams({ page: page });
-      this.fetchListMessageTemplate(this.param_template);
     }
   }
 };

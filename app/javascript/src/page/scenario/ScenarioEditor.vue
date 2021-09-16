@@ -205,11 +205,11 @@ export default {
 
       this.scenarioData.type = this.scenarioData.type || 'manual';
       if (!this.scenario_id) {
-        const scenarioId = await this.createScenario(this.normalized());
-        this.onReceiveCreateScenarioResponse(!!scenarioId);
+        const scenario = await this.createScenario(this.normalized());
+        this.onReceiveCreateScenarioResponse(!!scenario);
       } else {
-        const scenarioId = await this.updateScenario(this.normalized());
-        this.onReceiveUpdateScenarioResponse(!!scenarioId);
+        const scenario = await this.updateScenario(this.normalized());
+        this.onReceiveUpdateScenarioResponse(!!scenario);
       }
     },
 

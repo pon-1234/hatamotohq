@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class User::ScenarioMessagesController < User::ApplicationController
-  before_action :find_scenario, only: [:index, :create]
+  before_action :find_scenario, only: [:index, :create, :import]
   before_action :find_message, only: [:destroy, :delete_confirm]
+
+  include User::ScenarioMessagesHelper
 
   # GET /user/scenarios/:scenario_id/messages
   def index
@@ -21,6 +23,14 @@ class User::ScenarioMessagesController < User::ApplicationController
     if !@message.save
       render_bad_request_with_message(@message.first_error_message)
     end
+  end
+
+  # POST /user/scenarios/:scenario_id/messages/import
+  # Import scenario messages from message template
+  def import
+    template = Template.find(params[:template_id])
+    import_messages_from_template(@scenario, template)
+    render_success
   end
 
   # DELETE /user/scenarios/:scenario_id/messages/:id

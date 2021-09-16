@@ -55,12 +55,12 @@
           </div>
           <div class="card-body">
             <div class="form-border">
-              <div class="form-group" v-if="refresh_content">
+              <div class="form-group" :key="msgContentKey">
                 <label>メッセージ本文</label>
                 <div>
                   <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 </div>
-                <!-- <modal-select-template @setTemplate="selectTemplate" id="modal-template"/> -->
+                <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
                 <message-editor
                   :isDisplayTemplate="true"
                   v-for="(item, index) in autoResponseData.messages"
@@ -105,8 +105,8 @@ export default {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       loading: true,
+      msgContentKey: 0,
       error: null,
-      refresh_content: true,
       autoResponseData: {
         name: '',
         status: 'enable',
@@ -151,6 +151,14 @@ export default {
       'updateAutoResponse',
       'setPreviewContent'
     ]),
+
+    ...mapActions('template', [
+      'getTemplate'
+    ]),
+
+    forceRerender() {
+      this.msgContentKey++;
+    },
 
     async submitCreate() {
       const result = await this.$validator.validateAll();
@@ -204,44 +212,26 @@ export default {
       });
     },
 
-    selectTemplate(template) {
-      // eslint-disable-next-line no-undef
-      this.refresh_content = false;
-
-      Object.assign(this.autoResponseData, {
-        name: template.name,
-        messages: template.contents
-      });
-
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+    async onSelectTemplate(template) {
+      const templateData = await this.getTemplate(template.id);
+      this.autoResponseData.messages = this.autoResponseData.messages.concat(templateData.messages);
+      this.forceRerender();
     },
 
     removeContent(index) {
       this.autoResponseData.messages.splice(index, 1);
-      console.log('aaaa');
-      this.refresh_content = false;
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     },
 
     moveTopMessage(index) {
-      this.refresh_content = false;
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index - 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     },
     moveBottomMessage(index) {
-      this.refresh_content = false;
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index + 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     }
   }
 };

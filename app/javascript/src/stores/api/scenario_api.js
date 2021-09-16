@@ -15,7 +15,7 @@ export default {
       contentType: 'application/json'
     });
   },
-  createScenario: (query) => {
+  create: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/scenarios',
       method: 'POST',
@@ -23,7 +23,7 @@ export default {
       contentType: 'application/json'
     });
   },
-  scenarioEdit: (scenarioData) => {
+  update: (scenarioData) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenarioData.id}`,
       method: 'PATCH',
@@ -31,7 +31,7 @@ export default {
       contentType: 'application/json'
     });
   },
-  scenarioDelete: (query = {}) => {
+  delete: (query = {}) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/delete'),
       method: 'DELETE',
@@ -39,7 +39,7 @@ export default {
       contentType: 'application/json'
     });
   },
-  scenarioCopy: (query) => {
+  copy: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/copy'),
       method: 'POST',
@@ -55,19 +55,19 @@ export default {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id);
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
-  createScenarioMessage: (data) => {
+  createMessage: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${data.scenario_id}/messages`,
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/messages`,
       method: 'POST',
-      data: JSON.stringify(data),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },
-  createScenarioMessageFromTemplate: (query) => {
+  createMessagesFromTemplate: (payload) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/addFromTemplate'),
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/messages/import`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },

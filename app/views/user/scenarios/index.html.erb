@@ -25,7 +25,7 @@
                 <tr>
                   <td><%= scenario.mode_i18n %></td>
                   <td><%= scenario.title %></td>
-                  <td><%= render_scenario_status(scenario.status).html_safe %></td>
+                  <td><%= render_scenario_status(scenario.status) %></td>
                   <td><%= scenario.scenario_messages_count || 0 %></td>
                   <td>
                     <%= link_to edit_user_scenario_path(scenario), class: "btn btn-warning btn-xs mr-1" do %>
