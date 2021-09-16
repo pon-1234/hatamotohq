@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 class User::ScenarioMessagesController < User::ApplicationController
-  before_action :find_scenario, only: [:index, :create, :import]
-  before_action :find_message, only: [:destroy, :delete_confirm]
+  before_action :find_scenario, only: [:index, :create, :update, :import]
+  before_action :find_message, only: [:show, :update, :destroy, :delete_confirm]
 
   include User::ScenarioMessagesHelper
 
   # GET /user/scenarios/:scenario_id/messages
   def index
     @messages = @scenario.scenario_messages.ordered.page(params[:page])
+  end
+
+  # GET /user/scenarios/:scenario_id/messages/:id
+  def show
   end
 
   # GET /user/scenarios/:scenario_id/messages/new
@@ -21,6 +25,19 @@ class User::ScenarioMessagesController < User::ApplicationController
     @message = ScenarioMessage.new(message_params)
     @message.scenario = @scenario
     if !@message.save
+      render_bad_request_with_message(@message.first_error_message)
+    end
+  end
+
+  # GET /user/scenarios/:scenario_id/messages/:id/edit
+  def edit
+    @scenario_id = params[:scenario_id]
+    @message_id = params[:id]
+  end
+
+  # PATCH /user/scenarios/:scenario_id/messages/:id
+  def update
+    if !@message.update!(message_params)
       render_bad_request_with_message(@message.first_error_message)
     end
   end
@@ -52,6 +69,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   private
     def message_params
       params.permit(
+        :id,
         :name,
         :is_initial,
         :date,

@@ -137,6 +137,7 @@ export default {
 
   created() {
     this.zeroday = this.date === 0;
+    this.selectedTime = this.time || '00:00';
   },
 
   watch: {

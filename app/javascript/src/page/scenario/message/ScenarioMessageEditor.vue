@@ -1,6 +1,6 @@
 <template>
   <div class="mxw-1200">
-    <div class="card">
+    <div class="card" :key="componentKey">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/scenarios/${scenario_id}/messages`" class="text-info" v-if="!loading">
           <i class="fa fa-arrow-left"></i> メッセージ一覧
@@ -20,13 +20,13 @@
         <div class="form-common01">
           <div class="form-border">
             <div class="form-group">
-              <label>タイトル<required-mark/></label>
-              <input type="text" name="talk-title" class="form-control" placeholder="タイトルを入力してください" v-model="scenarioMessageData.name" v-validate="'required'">
-              <span v-if="errors.first('talk-title')" class="invalid-box-label">タイトルは必須です</span>
+              <label>メッセージ名<required-mark/></label>
+              <input type="text" name="message-name" class="form-control" placeholder="メッセージ名を入力してください" v-model="scenarioMessageData.name" v-validate="'required'" data-vv-as="メッセージ名">
+              <error-message :message="errors.first('message-name')"></error-message>
             </div>
           </div>
           <div class="form-border">
-            <div class="form-group" v-if="refresh_content">
+            <div class="form-group">
               <label>メッセージ本文</label>
                 <message-editor
                 :isDisplayTemplate="true"
@@ -35,7 +35,7 @@
                   v-bind:data="item"
                   v-bind:index="index"
                   @selectTemplate="selectTemplate"
-                  @input="changeContent"
+                  @input="onMessageContentChanged"
                 />
             </div>
           </div>
@@ -58,9 +58,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success" @click="submit()" >保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submit()" >保存</button>
       </div>
-      <loading-indicator :loading="loading"/>
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
     <message-preview />
   </div>
@@ -70,11 +70,22 @@ import {
   MessageTypeIds,
   MessageType
 } from '@/core/constant';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
-  props: ['scenario_id'],
+  props: {
+    scenario_id: {
+      type: Number,
+      required: true
+    },
+
+    message_id: {
+      type: Number,
+      required: false
+    }
+  },
+
   provide() {
     return { parentValidator: this.$validator };
   },
@@ -83,7 +94,9 @@ export default {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
+      componentKey: 0,
       scenarioMessageData: {
+        id: null,
         scenario_id: this.scenario_id,
         name: '',
         is_initial: false,
@@ -91,8 +104,7 @@ export default {
         time: '00:00',
         order: 1,
         status: 'enabled', // or 'disabled'
-        // Each scenario message contains only one message, but we use array to reuse component
-        messages: [
+        messages: [ // Each scenario message contains only one message, but we use array to reuse component
           {
             message_type_id: MessageTypeIds.Text,
             content: {
@@ -103,37 +115,25 @@ export default {
         ]
       },
       current_page_template: 1,
-      refresh_content: true,
       scenario: null
     };
   },
 
-  computed: {
-    ...mapState('messageTemplate', {
-      message_templates: state => state.messages,
-      total_templates: state => state.total,
-      per_page_template: state =>
-        state.per_page,
-      param_template: state =>
-        state.params
-    })
-  },
-
   async beforeMount() {
-    await this.getScenario();
+    await this.fetchItem();
     await this.getTags();
     await this.listTagAssigned();
     this.loading = false;
+    this.forceRerender();
   },
 
   methods: {
     ...mapActions('scenario', [
-      'createScenarioMessage',
+      'getScenario',
+      'getScenarioMessage',
+      'createMessage',
+      'updateMessage',
       'setPreviewContent'
-    ]),
-    ...mapActions('messageTemplate', [
-      'fetchListMessageTemplate',
-      'setParams'
     ]),
     ...mapActions('tag', [
       'getTags',
@@ -143,18 +143,31 @@ export default {
       'setIsSubmitChange'
     ]),
 
-    getScenario() {
-      this.$store.dispatch('scenario/getScenario', this.scenario_id).then((res) => {
-        this.scenario = res;
-      }).catch((err) => {
-        console.log(err);
-      });
+    forceRerender() {
+      this.componentKey++;
     },
 
-    changeContent({ index, content }) {
+    async fetchItem() {
+      this.scenario = await this.getScenario(this.scenario_id);
+      if (this.message_id) {
+        const query = {
+          scenario_id: this.scenario_id,
+          id: this.message_id
+        };
+        const messageData = await this.getScenarioMessage(query);
+        if (messageData) {
+          this.scenarioMessageData = _.omit(messageData, ['message_type_id', 'content']);
+          this.scenarioMessageData.messages = [{
+            message_type_id: messageData.message_type_id,
+            content: messageData.content
+          }];
+        }
+      }
+    },
+
+    onMessageContentChanged({ index, content }) {
       this.scenarioMessageData.messages[index] = content;
       this.setPreviewContent(this.scenarioMessageData.messages);
-      // this.validate(this.talk);
     },
     async submit() {
       const result = await this.$validator.validateAll();
@@ -176,42 +189,20 @@ export default {
       const messageContent = this.scenarioMessageData.messages[0];
       payload.message_type_id = messageContent.message_type_id;
       payload.content = messageContent.content;
-      const messageId = await this.createMessage(payload);
-      if (messageId) {
-        Util.showSuccessThenRedirect('シナリオにメッセージを追加しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+
+      let response = null;
+      if (this.message_id) {
+        response = await this.updateMessage(payload);
       } else {
-        Util.showErrorThenRedirect('シナリオにメッセージの追加は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+        response = await this.createMessage(payload);
+      }
+
+      if (response) {
+        Util.showSuccessThenRedirect('シナリオにメッセージを保存しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+      } else {
+        Util.showErrorThenRedirect('シナリオにメッセージの保存は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
       }
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-.talk-priority {
-  .hdg3 {
-    flex: none!important;
-  }
-  input {
-    width: 60px;
-  }
-}
-
-::v-deep {
-  .date-time-picker {
-    display: inline-block;
-  }
-
-  #time-select-wrapper {
-    max-width: 150px!important;
-  }
-}
-
-.priority-input {
-  width: 50px!important;
-}
-
-.delivery-timing-input {
-  font-size: 17px;
-  padding: 4px 12px!important;
-}
-</style>

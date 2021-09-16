@@ -40,7 +40,7 @@
                   <td><message-content :data="<%= message.content.to_json %>"></message-content></td>
                   <td><%= render_scenario_message_status(message.status) %></td>
                   <td>
-                    <div class="btn btn-warning btn-xs">編集</div>
+                    <%= link_to '編集', edit_user_scenario_message_path(@scenario, message), class: "btn btn-warning btn-xs" %>
                     <%= link_to '削除', delete_confirm_user_scenario_message_path(scenario_id: @scenario.id, id: message), remote: true, class: "btn btn-danger btn-xs" %>
                   </td>
                 </tr>

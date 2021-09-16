@@ -69,6 +69,22 @@ export const actions = {
     }
   },
 
+  async updateMessage(_, payload) {
+    try {
+      return await ScenarioApi.updateMessage(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getScenarioMessage(_, query) {
+    try {
+      return await ScenarioApi.getScenarioMessage(query);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async createMessagesFromTemplate(_, payload) {
     try {
       return await ScenarioApi.createMessagesFromTemplate(payload);

@@ -7,6 +7,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   get: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${id}`,
@@ -15,6 +16,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   create: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/scenarios',
@@ -23,6 +25,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   update: (scenarioData) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenarioData.id}`,
@@ -31,6 +34,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   delete: (query = {}) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/delete'),
@@ -39,6 +43,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   copy: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/copy'),
@@ -47,6 +52,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   getTalks: (query) => {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages');
     return window.$.get(process.env.MIX_ROOT_PATH, query);
@@ -55,6 +61,7 @@ export default {
     query._pid = btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id);
     return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
+
   createMessage: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/messages`,
@@ -63,6 +70,16 @@ export default {
       contentType: 'application/json'
     });
   },
+
+  updateMessage: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/messages/${payload.id}`,
+      method: 'PATCH',
+      data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
+  },
+
   createMessagesFromTemplate: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/messages/import`,
@@ -71,6 +88,16 @@ export default {
       contentType: 'application/json'
     });
   },
+
+  getScenarioMessage: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages/${query.id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   talkDelete: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/talks/scenarios/' + query.id + '/messages/' + query.talk_id + '/delete'),
