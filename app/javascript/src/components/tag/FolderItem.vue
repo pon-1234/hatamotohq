@@ -11,7 +11,7 @@
         </button>
         <ul class="dropdown-menu" role="menu">
             <li role="presentation" @click.stop="changeName"><a role="menuitem" tabindex="-1">名前を変える</a></li>
-            <li role="presentation" @click="deleteFolder"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modal-confirm-delete-folder">フォルダを削除</a></li>
+            <li role="presentation" @click="deleteFolder"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modalDeleteFolder">フォルダを削除</a></li>
         </ul>
       </div>
     </div>

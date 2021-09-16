@@ -8,9 +8,9 @@ export default {
     });
   },
 
-  deleteFolder: (query) => {
+  deleteFolder: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/folders/' + query.id,
+      url: `${process.env.MIX_ROOT_PATH}/user/folders/${id}`,
       method: 'DELETE'
     });
   },

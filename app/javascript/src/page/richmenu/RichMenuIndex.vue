@@ -116,7 +116,7 @@
                 </div>
             </div>
         </div>
-        <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modal-confirm-delete-folder' type='delete' @input="submitDeleteFolder"/>
+        <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteFolder"/>
     </div>
 </template>
 

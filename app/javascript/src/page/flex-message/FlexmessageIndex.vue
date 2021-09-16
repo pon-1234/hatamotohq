@@ -119,7 +119,7 @@
       <modal-confirm title="以下のメッセージを削除します。よろしいですか？" id='modal-confirm-delete-flexmessage' type='delete'
                      @input="submitDeleteFlexMessage"/>
 
-      <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modal-confirm-delete-folder' type='delete' @input="submitDeleteFolder"/>
+      <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteFolder"/>
 
     </div>
   </div>
@@ -212,7 +212,7 @@ export default {
       });
     },
     deleteFolder(folder) {
-      window.$('#modal-confirm-delete-folder').modal('show');
+      window.$('#modalDeleteFolder').modal('show');
       this.currentFolder = folder;
     },
 

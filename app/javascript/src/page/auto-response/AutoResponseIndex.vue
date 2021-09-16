@@ -6,15 +6,15 @@
           type="auto_response"
           :data="folders"
           :isPc="isPc"
-          :selectedFolder="selectedFolder"
-          @changeSelectedFolder="changeSelectedFolder"
+          :selectedFolder="selectedFolderIndex"
+          @changeSelectedFolder="onSelectedFolderChanged"
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
         <div class="flex-grow-1">
           <div class="tag-header">
             <div class="col-r">
-              <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
+              <a v-if="folders && folders.length && folders[selectedFolderIndex]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary">
                 <i class="fa fa-plus"></i> 新規作成
               </a>
             </div>
@@ -52,7 +52,7 @@
                         <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item" >自動応答を編集する</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(autoResponse)">自動応答を削除する</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAutoResponse" @click="showModal(autoResponse)">自動応答を削除する</a>
                       </div>
                     </div>
                   </td>
@@ -75,37 +75,37 @@
       </div>
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
-    <div class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p class="mb10 fz14">以下の自動応答メッセージを削除します。よろしいですか？</p>
-            <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between" v-if="autoResponse">
-              <dt>タイトル</dt>
-              <dd>{{autoResponse.title}}</dd>
-              <dt>キーワード</dt>
-              <dd>
-                <ul class="list-tag list-unstyled no-mgn">
-                  <li class="tag mr-1" v-for="tag in tags(autoResponse.keyword)" v-bind:key="tag">{{tag}}</li>
-                </ul>
-              </dd>
-              <dt>内容</dt>
-              <dd>
-                <div v-for="(item, index) in autoResponse.messages" v-bind:key="index">
-                  <message-content :data="item.content" ></message-content>
-                </div>
-              </dd>
-            </dl>
-          </div>
-          <div class="modal-footer flex center">
-            <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="submitDeleteAutoResponse(autoResponse)">削除</button>
-            <button type="button" class="btn btn-common01 btn-modal-cancel" data-dismiss="modal">キャンセル</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modal-confirm-delete-folder' type='delete' @input="submitDeleteFolder"/>
+
+    <!-- START: Delete folder modal -->
+    <modal-confirm id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
+      <template v-slot:content v-if="folders[selectedFolderIndex]">
+        <span>フォルダ名：{{ folders[selectedFolderIndex].name }}</span>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete folder modal -->
+
+    <!-- START: Delete auto response modal -->
+    <modal-confirm id='modalDeleteAutoResponse' type='delete' @confirm="submitDeleteAutoResponse(autoResponse)">
+      <template v-slot:content>
+        <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between" v-if="autoResponse">
+          <dt>タイトル</dt>
+          <dd>{{autoResponse.name}}</dd>
+          <dt>キーワード</dt>
+          <dd>
+            <ul class="list-tag list-unstyled no-mgn">
+              <li class="tag mr-1" v-for="tag in tags(autoResponse.keywords)" v-bind:key="tag">{{tag}}</li>
+            </ul>
+          </dd>
+          <dt>内容</dt>
+          <dd>
+            <div v-for="(item, index) in autoResponse.messages" v-bind:key="index">
+              <message-content :data="item.content" ></message-content>
+            </div>
+          </dd>
+        </dl>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete auto response modal -->
   </div>
 </template>
 <script>
@@ -118,21 +118,18 @@ export default {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       autoResponse: null,
       isPc: true,
-      selectedFolder: 0,
+      selectedFolderIndex: 0,
       autoResponses: [],
       loading: true
     };
   },
 
   async beforeMount() {
-    await this.$store.dispatch('autoResponse/getAutoResponses');
+    await this.getAutoResponses();
     this.loading = false;
   },
 
   computed: {
-    ...mapState('system', {
-      success: state => state.success
-    }),
     ...mapState('autoResponse', {
       folders: state => state.folders
     })
@@ -141,26 +138,15 @@ export default {
   watch: {
     folders: {
       handler(val) {
-        this.autoResponses = val[this.selectedFolder] ? val[this.selectedFolder].auto_responses : [];
+        this.autoResponses = val[this.selectedFolderIndex] ? val[this.selectedFolderIndex].auto_responses : [];
       },
       deep: true
     }
   },
 
-  created() {
-    if (PerformanceNavigation.type !== PerformanceNavigation.TYPE_RELOAD) {
-      if (Util.getParamFromUrl('is_updated') === 'true') {
-        window.toastr.success('自動応答メッセージの変更は完成しました');
-      }
-
-      if (Util.getParamFromUrl('is_created') === 'true') {
-        window.toastr.success('自動応答を登録しました');
-      }
-    }
-  },
-
   methods: {
-    ...mapActions('auto_response', [
+    ...mapActions('autoResponse', [
+      'getAutoResponses',
       'deleteAutoResponse',
       'updateAutoResponse',
       'createFolder',
@@ -168,8 +154,8 @@ export default {
       'editFolder'
     ]),
 
-    showModal(message) {
-      this.autoResponse = message;
+    showModal(autoResponse) {
+      this.autoResponse = autoResponse;
     },
 
     tags(strtag) {
@@ -187,20 +173,10 @@ export default {
       }
     },
 
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
-
-    changeSelectedFolder(index) {
-      this.selectedFolder = index;
+    onSelectedFolderChanged(index) {
+      this.selectedFolderIndex = index;
       this.isPc = true;
-      this.autoResponses = this.folders[index].autoResponses;
+      this.autoResponses = this.folders[index].auto_responses;
     },
 
     submitUpdateFolder(value) {
@@ -216,19 +192,15 @@ export default {
       this.$store.dispatch('autoResponse/createFolder', value);
     },
 
-    backToFolder() {
-      this.isPc = false;
+    async submitDeleteFolder() {
+      const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
+      if (response) {
+        this.onSelectedFolderChanged(0);
+      }
     },
 
-    submitDeleteFolder() {
-      this.$store
-        .dispatch('global/deleteFolder', { id: this.folders[this.selectedFolder].id, type: 'auto_message' })
-        .done(res => {
-          this.deleteFolder(this.folders[this.selectedFolder].id);
-          this.selectedFolder -= 1;
-          this.autoResponses = this.folders[this.selectedFolder].autoResponses;
-        }).fail(e => {
-        });
+    backToFolder() {
+      this.isPc = false;
     },
 
     openEdit(autoResponse) {

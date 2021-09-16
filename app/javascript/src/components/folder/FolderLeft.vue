@@ -21,7 +21,8 @@
           <div class="input-group newgroup-inputs">
           <input type="text"
             placeholder="フォルダ名"
-            v-model="folderData.name" class="form-control"
+            class="form-control"
+            v-model="folderData.name"
             @click.stop ref="folderName"
             @keyup.enter='enterSubmitAddNewFolder'
             @compositionend="compositionend($event)"

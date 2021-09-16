@@ -42,8 +42,8 @@ export const mutations = {
     }
   },
 
-  DELETE_MESSAGE(state, index) {
-    state.folders = state.folders.filter(item => item.id !== index);
+  deleteFolder(state, id) {
+    state.folders = state.folders.filter(item => item.id !== id);
   }
 };
 
@@ -106,7 +106,13 @@ export const actions = {
     context.commit('EDIT_MESSAGE', payload);
   },
 
-  deleteFolder(context, payload) {
-    context.commit('DELETE_MESSAGE', payload);
+  async deleteFolder(context, id) {
+    try {
+      const response = await FolderAPI.deleteFolder(id);
+      context.commit('deleteFolder', id);
+      return response;
+    } catch (error) {
+      return null;
+    }
   }
 };

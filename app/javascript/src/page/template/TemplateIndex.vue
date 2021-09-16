@@ -6,15 +6,15 @@
           type="template_message"
           :data="folders"
           :isPc="isPc"
-          :selectedFolder="selectedFolder"
-          @changeSelectedFolder="changeSelectedFolder"
+          :selectedFolder="selectedFolderIndex"
+          @changeSelectedFolder="onSelectedFolderChanged"
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
         <div class="flex-grow-1">
           <div class="tag-header">
             <div class="col-r">
-              <a v-if="folders && folders.length && folders[selectedFolder]" :href="MIX_ROOT_PATH + '/user/templates/new?folder_id='+folders[selectedFolder].id" class="btn btn-primary">
+              <a v-if="folders && folders.length && folders[selectedFolderIndex]" :href="MIX_ROOT_PATH + '/user/templates/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary">
                 <i class="fa fa-plus"></i> 新規作成
               </a>
             </div>
@@ -42,12 +42,12 @@
                         <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item">テンプレートをコビー</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="showModal(template)">テンプレートを削除</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="showConfirmDeleteModal(template)">テンプレートを削除</a>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <div>{{ selectedFolder.name }}xxx</div>
+                    <div>{{ folders[selectedFolderIndex].name }}</div>
                     <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
                   </td>
                 </tr>
@@ -59,37 +59,24 @@
       </div>
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
-    <div class="modal fade modal-delete modal-common01" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p class="mb10 fz14">以下の自動応答メッセージを削除します。よろしいですか？</p>
-            <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between" v-if="messageDetail">
-              <dt>タイトル</dt>
-              <dd>{{messageDetail.title}}</dd>
-              <dt>キーワード</dt>
-              <dd>
-                <ul class="list-tag list-unstyled no-mgn">
-                  <li class="tag mr-1" v-for="tag in tags(messageDetail.keyword)" v-bind:key="tag">{{tag}}</li>
-                </ul>
-              </dd>
-              <dt>内容</dt>
-              <dd>
-                <div v-for="(item, index) in messageDetail.messages" v-bind:key="index">
-                  <message-content :data="item.content" ></message-content>
-                </div>
-              </dd>
-            </dl>
-          </div>
-          <div class="modal-footer flex center">
-            <button type="button" class="btn btn-common01 btn-modal-delete" data-dismiss="modal" @click="deleteBotMessage(messageDetail)">削除</button>
-            <button type="button" class="btn btn-common01 btn-modal-cancel" data-dismiss="modal">キャンセル</button>
-          </div>
+
+    <!-- START: Delete folder modal -->
+    <modal-confirm id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
+      <template v-slot:content v-if="folders[selectedFolderIndex]">
+        <span>フォルダ名：{{ folders[selectedFolderIndex].name }}</span>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete folder modal -->
+
+    <!-- START: Delete auto response modal -->
+    <modal-confirm id='modalDeleteTemplate' type='delete' @confirm="submitDeleteTemplate(template)">
+      <template v-slot:content>
+        <div v-if="template">
+          {{template.name}}
         </div>
-      </div>
-    </div>
-    <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modal-confirm-delete-folder' type='delete' @input="submitDeleteFolder"/>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete auto response modal -->
   </div>
 </template>
 <script>
@@ -100,16 +87,16 @@ export default {
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      messageDetail: null,
       isPc: true,
-      selectedFolder: 0,
+      selectedFolderIndex: 0,
       templates: [],
+      template: null,
       loading: true
     };
   },
 
   async beforeMount() {
-    await this.$store.dispatch('template/getTemplates');
+    await this.getTemplates();
     this.loading = false;
   },
 
@@ -125,26 +112,15 @@ export default {
   watch: {
     folders: {
       handler(val) {
-        this.templates = val[this.selectedFolder] ? val[this.selectedFolder].templates : [];
+        this.templates = val[this.selectedFolderIndex] ? val[this.selectedFolderIndex].templates : [];
       },
       deep: true
     }
   },
 
-  created() {
-    if (PerformanceNavigation.type !== PerformanceNavigation.TYPE_RELOAD) {
-      if (Util.getParamFromUrl('is_updated') === 'true') {
-        window.toastr.success('自動応答メッセージの変更は完成しました');
-      }
-
-      if (Util.getParamFromUrl('is_created') === 'true') {
-        window.toastr.success('自動応答を登録しました');
-      }
-    }
-  },
-
   methods: {
     ...mapActions('template', [
+      'getTemplates',
       'botDelete',
       'updateAutoResponse',
       'deleteFolder',
@@ -152,8 +128,8 @@ export default {
       'createFolder'
     ]),
 
-    showModal(message) {
-      this.messageDetail = message;
+    showConfirmDeleteModal(template) {
+      this.template = template;
     },
 
     tags(strtag) {
@@ -166,23 +142,13 @@ export default {
     },
 
     async deleteBotMessage() {
-      if (this.messageDetail) {
-        await this.botDelete({ id: this.messageDetail.id, folder_id: this.messageDetail.folder_id });
+      if (this.template) {
+        await this.botDelete({ id: this.template.id, folder_id: this.template.folder_id });
       }
     },
 
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
-
-    async changeSelectedFolder(index) {
-      this.selectedFolder = index;
+    onSelectedFolderChanged(index) {
+      this.selectedFolderIndex = index;
       this.isPc = true;
       this.templates = this.folders[index].templates;
     },
@@ -206,11 +172,11 @@ export default {
 
     submitDeleteFolder() {
       this.$store
-        .dispatch('global/deleteFolder', { id: this.folders[this.selectedFolder].id, type: 'auto_message' })
+        .dispatch('global/deleteFolder', { id: this.folders[this.selectedFolderIndex].id, type: 'auto_message' })
         .done(res => {
-          this.deleteFolder(this.folders[this.selectedFolder].id);
-          this.selectedFolder -= 1;
-          this.templates = this.folders[this.selectedFolder].templates;
+          this.deleteFolder(this.folders[this.selectedFolderIndex].id);
+          this.selectedFolderIndex -= 1;
+          this.templates = this.folders[this.selectedFolderIndex].templates;
         }).fail(e => {
         });
     },
