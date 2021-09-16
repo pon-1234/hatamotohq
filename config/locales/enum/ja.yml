@@ -11,10 +11,6 @@ ja:
         male: 男性
         female: 女性
         unknown: 不明
-      medical_exam_status:
-        none: 未受診
-        first: 受診済（初回申告）
-        many: 受診済（2回目以降申告）
       os:
         ios: iOS
         android: Android
@@ -36,6 +32,10 @@ ja:
         enabled: 稼働中
         disabled: 停止中
         draft: 下書き
+    scenario_message:
+      status:
+        enabled: 稼働中
+        disabled: 停止中
     admin:
       status:
         active: 有効
