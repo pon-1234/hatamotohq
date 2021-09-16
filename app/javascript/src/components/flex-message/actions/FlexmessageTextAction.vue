@@ -19,7 +19,7 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label">サイズ変更</label>
           <div class="col-sm-8">
-            <input-suggest
+            <input-with-suggestion
               type="text"
               :name="'size_'+name"
               :validate="{regex: getRegexFontSize()}"
