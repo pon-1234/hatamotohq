@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="card-body">
-      <div class="profile-detail row" v-if="isRendering && friendData">
+      <div class="profile-detail row" v-if="friendData">
         <div class="col-lg-4">
           <div class="card card-success card-outline">
             <div class="card-body box-profile">
@@ -32,6 +32,7 @@
               </ul>
             </div>
             <!-- /.card-body -->
+            <loading-indicator :loading="loading"></loading-indicator>
           </div>
           <!-- /.card -->
         </div>
@@ -143,23 +144,27 @@ export default {
   },
   data() {
     return {
-      friendData: null,
+      friendData: {
+        status: 'enabled',
+        line_name: '',
+        line_picture_url: '',
+        display_name: '',
+        note: ''
+      },
       friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
       MIX_SERVEY_MEDIA_FLEXA_URL: process.env.MIX_SERVEY_MEDIA_FLEXA_URL,
-      isRendering: true,
       isShowDisplayName: false,
       confirmedText: '',
       destinationStatusFromBot: '',
       buttonText: '',
       field_index: null,
       currentTab: '友だち情報名',
-      loading: false,
+      loading: true,
       editing: false
     };
   },
 
   async beforeMount() {
-    this.loading = true;
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
     await this.getTags();
@@ -174,11 +179,6 @@ export default {
       'getFriend',
       'editLineInfo'
     ]),
-
-    reRender() {
-      this.isRendering = false;
-      this.$nextTick(() => { this.isRendering = true; });
-    },
 
     selectTags(tags) {
       this.friendData.tags = tags;

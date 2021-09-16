@@ -31,7 +31,7 @@
                   <td><%= render_broadcast_status(broadcast.status).html_safe %></td>
                   <td><span class="d-flex flex-wrap align-items-center"><%= render_broadcast_condition(broadcast).html_safe %></span></td>
                   <td>0</td>
-                  <td class="text-center">
+                  <td>
                     <%= link_to edit_user_broadcast_path(broadcast) do %>
                       <%= button_tag "編集", class: "btn btn-primary btn-xs mr-2", disabled: !broadcast.editable? %>
                     <% end %>

@@ -35,8 +35,8 @@
                   <td>{{template.template_messages_count}}</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-warning" @click="openEdit(template)">編集</button>
-                      <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+                      <button type="button" class="btn btn-primary" @click="openEdit(template)">編集</button>
+                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                       <div class="dropdown-menu bg-white" role="menu" style="">
                         <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
                         <div class="dropdown-divider"></div>

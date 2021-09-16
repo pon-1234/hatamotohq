@@ -1,5 +1,5 @@
 export default {
-  getTags: (query = {}) => {
+  getTags: () => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags',
       method: 'GET',

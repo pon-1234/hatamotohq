@@ -45,8 +45,8 @@
                   </td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-warning" @click="openEdit(autoResponse)">編集</button>
-                      <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+                      <button type="button" class="btn btn-primary" @click="openEdit(autoResponse)">編集</button>
+                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                       <div class="dropdown-menu bg-white" role="menu" style="">
                         <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
                         <div class="dropdown-divider"></div>

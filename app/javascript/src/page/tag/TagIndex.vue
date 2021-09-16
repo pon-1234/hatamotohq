@@ -1,108 +1,72 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="tag-list">
-        <div class="d-flex">
-          <div class="fw-300">
-            <div class="tag-header">
-              <div class="group_list_head">
-                <div class="add_group btn btn-sm btn-success" @click="addMoreFolder">
-                  <i class="fa fa-plus"></i> 新しいフォルダ
-                </div>
-              </div>
-            </div>
-            <div class="tag-content">
-              <div class="folder-list-title">
-                <table class="table table-tags-header">
-                  <thead class="thead-light">
-                    <tr>
-                      <th scope="col">フォルダ</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-              <div class="tag-scroll folder-list">
-                <div class="folder-item new-folder" v-if="isAddMoreFolder">
-                  <div class="input-group newgroup-inputs">
-                  <input type="text"  placeholder="フォルダ名" v-model="folderData.name" class="form-control" @click.stop ref="folderName"
-                    @keyup.enter='entersubmitAddNewFolder'
-                    @compositionend="compositionend($event)"
-                    @compositionstart="compositionstart($event)"
-                    >
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonAddFolder">
-                        決定
-                      </button>
-                    </span>
-                  </div>
-                </div>
-
-                <folder-item
-                  v-for="(item, index) in tags"
-                  :data="item"
-                  :active="selected_tag == index"
-                  :index="index"
-                  :key="index"
-                  @changeSelected="changeSelectedFolder(index)"
-                  @editTag="submitEditTag"
-                  @deleteTag="setSelectedTag"
-                  />
-              </div>
-            </div>
+      <div class="d-flex">
+        <folder-left
+          type="tag"
+          :data="folders"
+          :isPc="isPc"
+          :selectedFolder="selectedFolderIndex"
+          @changeSelectedFolder="onSelectedFolderChanged"
+          @submitUpdateFolder="submitUpdateFolder"
+          @submitCreateFolder="submitCreateFolder"
+          />
+        <div class="flex-grow-1">
+          <div class="btn btn-primary btn-sm" @click="addTag">
+            <i class="fa fa-plus"></i> 新しいタグ
           </div>
-          <div class="flex-grow-1">
-            <div class="btn btn-primary btn-sm" @click="addTag">
-              <i class="fa fa-plus"></i> 新しいタグ
-            </div>
-            <div class="tag-content">
-              <div class="tag-scroll tag-list">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th  style="min-width: 200px;"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
-                      <th class="fw-150">メンバー数</th>
-                      <th class="fw-200">作成日</th>
-                    </tr>
-                  </thead>
-                  <tbody v-if="tags && tags[selected_tag]">
-                    <tr v-if="isAddMoreTag" class="tag-item">
-                      <td style="min-width: 200px; vertical-align: middle;">
-                        <div class="folder-item">
-                          <div class="input-group newgroup-inputs">
-                            <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
-                              @keyup.enter='showNewTagInput'
-                              @compositionend="compositionend($event)"
-                              @compositionstart="compositionstart($event)"
-                              >
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-default" @click="submitAddNewTag" ref="buttonAddTag">
-                                決定
-                              </button>
-                            </span>
-                          </div>
+          <div class="tag-content">
+            <div class="tag-scroll tag-list">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="mw-200"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
+                    <th class="fw-150">メンバー数</th>
+                    <th class="fw-200">作成日</th>
+                  </tr>
+                </thead>
+                <tbody v-if="folders && folders[selectedFolderIndex]">
+                  <tr v-if="isAddMoreTag" class="tag-item">
+                    <td class="mw-200 vetical-align-middle">
+                      <div class="folder-item">
+                        <div class="input-group newgroup-inputs">
+                          <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
+                            @keyup.enter='showNewTagInput'
+                            @compositionend="compositionend($event)"
+                            @compositionstart="compositionstart($event)"
+                            >
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" @click="submitAddNewTag" ref="buttonAddTag">
+                              決定
+                            </button>
+                          </span>
                         </div>
-                      </td>
-                      <td class="text-center">0人</td>
-                      <td class="text-center">{{getCreatedAt()}}</td>
-                    </tr>
-                    <tag-item :data="item" v-for="(item, index) in tags[selected_tag].tags"
-                      :key="index"
-                      @deleteTag="setSelectedTag"
-                      @editTag="submitEditTag"
-                      @detailFriends="detailFriends"
-                    />
-                  </tbody>
-                </table>
-                <div v-if="tags[selected_tag].tags.length === 0" class="mt-4 text-md">データはありません</div>
-              </div>
+                      </div>
+                    </td>
+                    <td class="text-center">0人</td>
+                    <td class="text-center">{{getCreatedAt()}}</td>
+                  </tr>
+                  <tag-item
+                    v-for="(item, index) in folders[selectedFolderIndex].tags"
+                    :data="item"
+                    :key="index"
+                    @deleteTag="setSelectedTag"
+                    @editTag="submitEditTag"
+                    @detailFriends="detailFriends"
+                  />
+                </tbody>
+              </table>
+              <div v-if="folders[selectedFolderIndex] && folders[selectedFolderIndex].tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
             </div>
           </div>
         </div>
-        <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
-        <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modal-confirm-tag" @input="submitDeleteTag"/>
-        <modal-list-friends-tag :friends="friends"/>
       </div>
+      <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
+      <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modal-confirm-tag" @input="submitDeleteTag"/>
+      <modal-list-friends-tag :friends="friends"/>
     </div>
+
+    <loading-indicator :loading="loading"></loading-indicator>
   </div>
 </template>
 <script>
@@ -112,15 +76,13 @@ import moment from 'moment';
 export default {
   data() {
     return {
-      folderData: {
-        type: 'folder',
-        name: null
-      },
+      loading: true,
       tagData: {
         name: null,
         folder_id: null
       },
-      selected_tag: 0,
+      tags: [],
+      selectedFolderIndex: 0,
       isAddMoreFolder: false,
       isAddMoreTag: false,
       isPc: true,
@@ -130,27 +92,18 @@ export default {
     };
   },
   async beforeMount() {
-    await this.getTags({ low: false });
-
-    if (this.tags && this.tags.length === 0) {
-    }
+    await this.getTags();
+    this.loading = false;
   },
   computed: {
     ...mapState('tag', {
-      tags: state => state.tags
-    }),
-    ...mapState('system', {
-      success: state => state.success
+      folders: state => state.folders
     })
   },
   watch: {
-    success: {
+    folders: {
       handler(val) {
-        if (val.status) {
-          window.toastr.success(val.message);
-        } else {
-          window.toastr.error(val.message);
-        }
+        this.tags = val[this.selectedFolderIndex] ? val[this.selectedFolderIndex].tags : [];
       },
       deep: true
     }
@@ -168,15 +121,16 @@ export default {
     backToFolder() {
       this.isPc = false;
     },
-    async changeSelectedFolder(index) {
-      this.selected_tag = index;
+
+    async onSelectedFolderChanged(index) {
+      this.selectedFolderIndex = index;
       this.isAddMoreTag = false;
       this.isPc = true;
     },
 
     submitDeleteTag() {
       if (this.tagSelected.type === 'folder') {
-        this.selected_tag = 0;
+        this.selectedFolderIndex = 0;
       }
       this.deleteTag(this.tagSelected);
     },
@@ -221,9 +175,11 @@ export default {
       }
     },
 
+    submitUpdateFolder() {},
+
     submitAddNewTag() {
       if (this.tagData.name) {
-        this.tagData.folder_id = this.tags[this.selected_tag].id;
+        this.tagData.folder_id = this.folders[this.selectedFolderIndex].id;
         this.submitCreateTag(this.tagData);
         this.tagData.name = '';
       }

@@ -2,20 +2,16 @@ import Tag from '../api/tag_api';
 import Folder from '../api/folder_api';
 
 export const state = {
-  tags: [],
+  folders: [],
   tagsAssigned: [],
   friendsTag: []
 };
 
 export const mutations = {
-  EDIT_FOLDER(state, folder) {
-    state.tags.forEach((element, index) => {
-      if (element.id === folder.id) {
-        folder.tags_count = element.tags_count;
-        folder.tags = element.tags;
-        state.tags.splice(index, 1, folder);
-      }
-    });
+  editFolder(state, folder) {
+    const old = state.folders.find(_ => _.id === folder.id);
+    old.tags_count = folder.tags_count;
+    old.tags = folder.tags;
   },
 
   EDIT_TAG(state, tag) {
@@ -55,12 +51,8 @@ export const mutations = {
     state.friendsTag = friendsTag;
   },
 
-  SET_TAGS_ASSIGNED(state, tagsAssigned) {
-    state.tagsAssigned = tagsAssigned;
-  },
-
-  SET_TAGS(state, value) {
-    state.tags = value;
+  setFolders(state, folders) {
+    state.folders = folders;
   },
 
   pushFolder(state, value) {
@@ -85,20 +77,14 @@ export const getters = {
 };
 
 export const actions = {
-  async getTags(context, query = {}) {
-    context.dispatch('system/setLoading', true, { root: true });
-
-    let data = null;
+  async getTags(context) {
     try {
-      if (query.low === undefined) {
-        query.low = true;
-      }
-      data = await Tag.getTags(query);
-      context.commit('SET_TAGS', data);
+      const folders = await Tag.getTags();
+      context.commit('setFolders', folders);
+      return folders;
     } catch (error) {
       console.log(error);
     }
-    context.dispatch('system/setLoading', false, { root: true });
   },
 
   async getFriendsByTag(context, query) {
@@ -118,7 +104,7 @@ export const actions = {
     let data = null;
     try {
       data = await Tag.getTags(query);
-      context.commit('SET_TAGS_ASSIGNED', data);
+      context.commit('setTags_ASSIGNED', data);
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +116,7 @@ export const actions = {
     try {
       const response = await Tag.editTag(query);
       if (response.type === 'folder') {
-        context.commit('EDIT_FOLDER', response);
+        context.commit('editFolder', response);
         context.dispatch('system/setSuccess', { status: true, message: 'フォルダの変更は完成しました' }, { root: true });
       } else {
         context.commit('EDIT_TAG', response);
