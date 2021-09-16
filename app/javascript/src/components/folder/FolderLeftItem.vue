@@ -1,7 +1,7 @@
 <template>
   <div @click="changeSelected" :class="getClassName()">
-    <div  class="d-flex align-items-center" v-if="!isEdit || !active" style="width: 100%;">
-      <span style="display: flex; width: 100%">
+    <div  class="d-flex align-items-center w-100" v-if="!isEdit || !active">
+      <span class="d-flex w-100">
         <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
         <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{data.name}}</span><span>({{getCountContent()}})</span>
         <template v-if="data.type == 'survey'">
@@ -17,14 +17,15 @@
         </template>
         <template v-else>
            <div class="dropdown" v-if="active && data.name != '未分類' && !isPerview">
-          <button type="button" class="btn dropdown-toggle btn-default action-tags" data-toggle="dropdown" aria-expanded="false">
-              編集<span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li role="presentation" @click.stop="changeName"><a role="menuitem" tabindex="-1">名前を変える</a></li>
-            <li role="presentation" @click="deleteFolder"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modal-confirm-delete-folder">フォルダを削除</a></li>
-          </ul>
-        </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">編集</button>
+              <div class="dropdown-menu bg-white" role="menu" style="">
+                <a role="button" class="dropdown-item" @click.stop="changeName">名前を変える</a>
+                <div class="dropdown-divider"></div>
+                <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modal-delete" @click="deleteFolder">フォルダを削除</a>
+              </div>
+            </div>
+          </div>
         </template>
       </span>
     </div>
@@ -71,9 +72,11 @@ export default {
       if (this.type === 'auto_response') {
         return this.data.auto_responses.length;
       }
+
       if (this.type === 'survey') {
         return this.data.surveys.length;
       }
+
       if (this.type === 'survey_profile') {
         return this.data.survey_profile_templates.length;
       }

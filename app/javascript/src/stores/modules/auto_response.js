@@ -92,9 +92,9 @@ export const actions = {
     context.dispatch('system/setLoading', false, { root: true });
   },
 
-  async pushFolder(context, payload) {
+  async createFolder(context, payload) {
     try {
-      const res = await FolderAPI.pushFolder(payload);
+      const res = await FolderAPI.createFolder(payload);
       context.commit('pushFolder', res);
       return res;
     } catch (error) {

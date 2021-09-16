@@ -58,10 +58,10 @@ class LineAccount < ApplicationRecord
     def create_default_folder
       Folder.create(name: '未分類', line_account: self, type: :tag)
       Folder.create(name: '未分類', line_account: self, type: :auto_response)
-      Folder.create(name: '未分類', line_account: self, type: :message_template)
+      Folder.create(name: '未分類', line_account: self, type: :template_message)
       Folder.create(name: '未分類', line_account: self, type: :rich_menu)
       Folder.create(name: '未分類', line_account: self, type: :scenario)
-      Folder.create(name: '未分類', line_account: self, type: :scenario_template)
+      Folder.create(name: '未分類', line_account: self, type: :template_scenario)
       Folder.create(name: '未分類', line_account: self, type: :survey)
       Folder.create(name: '未分類', line_account: self, type: :survey_profile)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)

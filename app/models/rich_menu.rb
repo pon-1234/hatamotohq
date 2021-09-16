@@ -34,4 +34,5 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class RichMenu < ApplicationRecord
+  belongs_to :line_account
 end

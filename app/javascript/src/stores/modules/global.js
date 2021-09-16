@@ -1,6 +1,7 @@
 import Global from '../api/global_api';
-import RichMenuApi from '../api/richmenu_api';
-import MediaApi from '../api/media_api';
+import RichMenuAPI from '../api/richmenu_api';
+import MediaAPI from '../api/media_api';
+import FolderAPI from '../api/folder_api';
 
 export const state = {
   stickers: [],
@@ -138,50 +139,11 @@ export const actions = {
     });
   },
 
-  createFolder(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    return Global.createFolder(query).done((res) => {
-      context.dispatch('system/setSuccess', { status: true, message: 'フォルダを登録しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      context.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
-  editFolder(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    return Global.editFolder(query).done((res) => {
-      context.dispatch('system/setSuccess', { status: true, message: 'フォルダの変更は完成しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      context.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
-  deleteFolder(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    return Global.deleteFolder(query).done((res) => {
-      context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      context.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
   async uploadImageForRichMenu(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let keyData = '';
     try {
-      const response = await RichMenuApi.uploadImage({ file: query.file });
+      const response = await RichMenuAPI.uploadImage({ file: query.file });
       context.dispatch('system/setLoading', false, { root: true });
 
       if (response && response.id) {
@@ -198,7 +160,7 @@ export const actions = {
 
   async uploadImageMap(context, payload) {
     try {
-      const response = await MediaApi.uploadImageMap(payload.file);
+      const response = await MediaAPI.uploadImageMap(payload.file);
       if (response && response.id) {
         return response;
       }

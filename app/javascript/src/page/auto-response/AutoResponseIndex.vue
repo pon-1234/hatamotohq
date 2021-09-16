@@ -69,7 +69,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="autoResponses.length === 0">自動応答はありません。</div>
+            <div class="text-center mt-5" v-if="!autoResponses || autoResponses.length === 0">自動応答はありません。</div>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('autoResponse', [
+    ...mapActions('auto_response', [
       'deleteAutoResponse',
       'updateAutoResponse',
       'createFolder',
@@ -197,7 +197,7 @@ export default {
       return className;
     },
 
-    async changeSelectedFolder(index) {
+    changeSelectedFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
       this.autoResponses = this.folders[index].autoResponses;

@@ -1,7 +1,6 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <span class="tex-sm">1対1トーク・シナリオ配信・一斉配信・自動応答などで使用できるテンプレートを登録・管理することが出来ます。</span>
       <div class="d-flex mt-2">
         <folder-left
           type="template_message"
@@ -145,7 +144,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('autoResponse', [
+    ...mapActions('template', [
       'botDelete',
       'updateAutoResponse',
       'deleteFolder',

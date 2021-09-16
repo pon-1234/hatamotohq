@@ -6,7 +6,7 @@ module FolderType
   included do
     enum type: {
       tag: 'tag',
-      message_template: 'message_template',
+      template_message: 'template_message',
       auto_response: 'auto_response',
       rich_menu: 'rich_menu',
       scenario: 'scenario',
