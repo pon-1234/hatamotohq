@@ -61,6 +61,13 @@ export const mutations = {
     state.folders.push(folder);
   },
 
+  updateFolder(state, folder) {
+    folder.tags = [];
+    folder.tags_count = 0;
+    const index = state.folders.findIndex(_ => _.id === folder.id);
+    state.folders.splice(index, 1, folder);
+  },
+
   pushTag(state, tag) {
     const folder = state.folders.find(_ => _.id === tag.folder_id);
     folder.tags.push(tag);
@@ -87,18 +94,6 @@ export const actions = {
     try {
       data = await Tag.getFriendsByTag(query);
       context.commit('SET_FRIENDS_TAG', data);
-    } catch (error) {
-      console.log(error);
-    }
-    context.dispatch('system/setLoading', false, { root: true });
-  },
-
-  async listTagAssigned(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let data = null;
-    try {
-      data = await Tag.getTags(query);
-      context.commit('setTags_ASSIGNED', data);
     } catch (error) {
       console.log(error);
     }
@@ -148,10 +143,29 @@ export const actions = {
     }
   },
 
+  async updateFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.updateFolder(payload);
+      context.commit('updateFolder', folder);
+      return folder;
+    } catch (error) {
+      return null;
+    }
+  },
+
   async createTag(context, payload) {
     try {
       const response = await Tag.createTag(payload);
       context.commit('pushTag', response);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateTag(context, payload) {
+    try {
+      const response = await Tag.updateTag(payload);
+      context.commit('updateTag', response);
     } catch (error) {
       return null;
     }

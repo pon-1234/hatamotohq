@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
 class User::FoldersController < User::ApplicationController
-  before_action :find_folder, only: [:destroy]
+  before_action :find_folder, only: [:update, :destroy]
 
   # POST /user/folders
   def create
-    @folder = Folder.new(folder_params)
+    @folder = Folder.new(create_params)
     @folder.line_account = Current.user.line_account
     if !@folder.save!
       render_bad_request_with_message(@folder.first_error_message)
     end
+  end
+
+  # PATCH /user/folders/:id
+  def update
+    @folder.update(update_params)
   end
 
   # DELETE /user/folders/:id
@@ -19,10 +24,16 @@ class User::FoldersController < User::ApplicationController
   end
 
   private
-    def folder_params
+    def create_params
       params.permit(
         :name,
         :type
+      )
+    end
+
+    def update_params
+      params.permit(
+        :name
       )
     end
 

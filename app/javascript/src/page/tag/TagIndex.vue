@@ -78,6 +78,7 @@ export default {
     return {
       loading: true,
       tagData: {
+        id: null,
         name: null,
         folder_id: null
       },
@@ -120,9 +121,13 @@ export default {
       'updateFolder',
       'deleteFolder',
       'addNewTag',
-      'editTag',
-      'createTag'
+      'createTag',
+      'updateTag'
     ]),
+
+    forceRerender() {
+      this.contentKey++;
+    },
 
     backToFolder() {
       this.isPc = false;
@@ -175,15 +180,15 @@ export default {
     },
 
     async submitCreateFolder(value) {
-      this.createFolder(value);
+      await this.createFolder(value);
     },
 
-    submitUpdateFolder() {
-
+    async submitUpdateFolder(value) {
+      await this.updateFolder(value);
     },
 
     submitCreateTag() {
-      if (this.tagData.name) {
+      if (this.tagData.name && this.tagData.name.trim().length > 0) {
         const payload = {
           folder_id: this.folders[this.selectedFolderIndex].id,
           name: this.tagData.name
@@ -195,6 +200,7 @@ export default {
 
     resetTagInput() {
       this.tagData = {
+        id: null,
         name: null,
         folder_id: null
       };

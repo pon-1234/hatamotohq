@@ -24,10 +24,10 @@ export default {
     });
   },
 
-  editFolder: (query) => {
+  updateFolder: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/folders/' + query.id,
-      method: 'PUT',
+      method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
     });

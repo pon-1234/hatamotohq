@@ -32,6 +32,15 @@ export default {
     });
   },
 
+  updateTag: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/tags/${query.id}`,
+      method: 'PATCH',
+      data: JSON.stringify(query),
+      contentType: 'application/json'
+    });
+  },
+
   editTag: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags/' + query.id,

@@ -91,7 +91,8 @@ export default {
       selectedFolderIndex: 0,
       templates: [],
       template: null,
-      loading: true
+      loading: true,
+      contentKey: 0
     };
   },
 
@@ -124,9 +125,13 @@ export default {
       'botDelete',
       'updateAutoResponse',
       'deleteFolder',
-      'editFolder',
-      'createFolder'
+      'createFolder',
+      'updateFolder'
     ]),
+
+    forceRerender() {
+      this.contentKey++;
+    },
 
     showConfirmDeleteModal(template) {
       this.template = template;
@@ -153,17 +158,12 @@ export default {
       this.templates = this.folders[index].templates;
     },
 
-    submitUpdateFolder(value) {
-      this.$store
-        .dispatch('global/editFolder', value)
-        .done(res => {
-          this.editFolder(res);
-        }).fail(e => {
-        });
+    async submitCreateFolder(folder) {
+      this.createFolder(folder);
     },
 
-    async submitCreateFolder(value) {
-      this.createFolder(value);
+    async submitUpdateFolder(folder) {
+      await this.updateFolder(folder);
     },
 
     backToFolder() {
