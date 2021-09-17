@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_102524) do
+ActiveRecord::Schema.define(version: 2021_09_17_122032) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -321,20 +321,21 @@ ActiveRecord::Schema.define(version: 2021_09_15_102524) do
     t.string 'line_menu_id', comment: 'richMenuId'
     t.string 'template_id'
     t.string 'name'
-    t.string 'size'
-    t.string 'title'
-    t.string 'line_chat_bar_text', comment: 'chatBarText'
+    t.json 'size'
+    t.string 'chat_bar_text'
     t.string 'selected'
-    t.text 'areas', size: :medium
+    t.json 'areas'
     t.string 'status', default: 'pending'
-    t.boolean 'is_active'
+    t.boolean 'enabled'
     t.datetime 'start_at'
     t.datetime 'end_at'
+    t.bigint 'media_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['folder_id'], name: 'index_rich_menus_on_folder_id'
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
+    t.index ['media_id'], name: 'index_rich_menus_on_media_id'
   end
 
   create_table 'scenario_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -579,6 +580,7 @@ ActiveRecord::Schema.define(version: 2021_09_15_102524) do
   add_foreign_key 'messages', 'channels'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
+  add_foreign_key 'rich_menus', 'media', column: 'media_id'
   add_foreign_key 'scenario_events', 'channels'
   add_foreign_key 'scenario_events', 'line_accounts'
   add_foreign_key 'scenario_events', 'scenario_messages'

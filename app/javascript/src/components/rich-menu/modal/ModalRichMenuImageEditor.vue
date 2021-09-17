@@ -11,13 +11,12 @@
               aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body mh-100 overflow-y-auto">
-            <richmenu-image-editor :templateId="templateId" :editor="editor" @save="saveImage"></richmenu-image-editor>
+            <rich-menu-image-editor :templateId="templateId" :editor="editor" @save="saveImage"></rich-menu-image-editor>
           </div>
         </div>
       </div>
     </div>
-    <modal-confirm id="modalConfirmCloseEditor" type="confirm" title="画像は保存されません。よろしいでしょうか。"
-                   @input="closeEditor()"></modal-confirm>
+    <modal-confirm id="modalConfirmCloseEditor" type="confirm" title="画像は保存されません。よろしいでしょうか。" @confirm="closeEditor()"></modal-confirm>
   </div>
 </template>
 

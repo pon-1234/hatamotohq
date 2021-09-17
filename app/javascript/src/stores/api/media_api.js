@@ -8,6 +8,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   uploadImageMap: (file) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -20,6 +21,20 @@ export default {
       contentType: false
     });
   },
+
+  uploadRichMenu: (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 'menu');
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/medias`,
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false
+    });
+  },
+
   mediasDelete: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/medias/delete'),

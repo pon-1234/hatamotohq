@@ -16,6 +16,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'browser', require: 'browser/browser'
 gem 'httparty'
+# gem 'line-bot-api'
 
 # Active Model
 gem 'activerecord_json_validator'

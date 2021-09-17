@@ -7,58 +7,69 @@
       <h5 class="m-auto font-weight-bold">新規登録</h5>
     </div>
     <div class="card-body">
-      <div class="form-common01">
-        <div class="form-group">
-          <label>リッチメニュー名<required-mark/></label>
-          <input v-model.trim="name" type="text" name="name" class="form-control" placeholder="リッチメニュー名を入力してください" v-validate="'required'" data-vv-as="リッチメニュー名">
-          <error-message :message="errors.first('name')"></error-message>
+      <div class="card">
+        <div class="card-header left-border">
+          <h3 class="card-title">基本設定</h3>
         </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>リッチメニュー名<required-mark/></label>
+            <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー名を入力してください" v-validate="'required'" data-vv-as="リッチメニュー名">
+            <error-message :message="errors.first('name')"></error-message>
+          </div>
 
-        <div class="form-group">
-          <label>メニューバーのテキスト<required-mark/></label>
-          <input v-model.trim="chatBarText" type="text" name="richmenu-title" class="form-control" placeholder="メニューバーのテキストを入力してください" v-validate="'required|max:14'" data-vv-as="メニューバーのテキスト">
-          <error-message :message="errors.first('richmenu-title')"></error-message>
-        </div>
+          <div class="form-group">
+            <label>メニューバーのテキスト<required-mark/></label>
+            <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="メニューバーのテキストを入力してください" v-validate="'required|max:14'" data-vv-as="メニューバーのテキスト">
+            <error-message :message="errors.first('richmenu-title')"></error-message>
+          </div>
 
-        <div class="form-border">
           <div class="form-group">
             <label>表示期間<required-mark/></label>
-            <div class="d-flex align-items-center mb20" >
+            <div class="d-flex align-items-center">
               <datetime
                 type="datetime"
-                v-model="start_date"
+                v-model="richMenuData.start_at"
+                input-class="form-control"
+                class="theme-success mw-200"
                 value-zone="Asia/Tokyo"
-                :input-class="{'error-date date-input': !start_date, 'date-input': start_date}">
-              </datetime>
-              <input type="hidden" :value="start_date" name="start-date" v-validate="'required'">
-              &nbsp;&nbsp;<span>~</span>&nbsp;&nbsp;
-            </div>
-            <div class="d-flex align-items-center mb20">
+                :phrases="{ok: '確定', cancel: '閉じる'}"
+              ></datetime>
+              <span class="mx-2">~</span>
               <datetime
                 type="datetime"
-                v-model="end_date"
+                v-model="richMenuData.end_at"
+                input-class="form-control"
+                class="theme-success mw-200"
                 value-zone="Asia/Tokyo"
-                :min-datetime="start_date"
-                :input-class="{'error-date date-input': !end_date, 'date-input': end_date}">
+                :min-datetime="richMenuData.start_at"
+                :phrases="{ok: '確定', cancel: '閉じる'}"
+              >
               </datetime>
-              <input type="hidden" :value="end_date" name="end_date" v-validate="'required'">
-                &nbsp;&nbsp;<button class="btn btn-secondary" @click="resetTime">リセット</button>
+              <input type="hidden" :value="richMenuData.start_at" name="start-date" v-validate="'required'" data-vv-as="開始時間">
+              <input type="hidden" :value="richMenuData.end_at" name="end-date" v-validate="'required'" data-vv-as="終了時間">
+              <button class="btn btn-secondary ml-2" @click="resetTime">リセット</button>
             </div>
             <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
           </div>
         </div>
+      </div>
 
-        <!--Editor-->
-        <rich-menu-type
-          :background="backgroundUrl"
-          :templateId="templateId"
-          :templateValue="templateValue"
-          :typeTemplate="typeTemplate"
-          @input="richMenu"
-          @backgroundAliasChange="line_media_alias = $event">
-        </rich-menu-type>
+      <!--Editor-->
+      <rich-menu-type
+        @input="richMenu"
+        :background="backgroundUrl"
+        :templateId="richMenuData.template_id"
+        :templateValue="templateValue"
+        :templateType="templateType"
+        @onMediaChanged="onMediaChanged($event)">
+      </rich-menu-type>
 
-        <div class="form-border">
+      <div class="card">
+        <div class="card-header left-border">
+          <h3 class="card-title">配信設定</h3>
+        </div>
+        <div class="card-body">
           <div class="form-group">
             <label>配信先</label>
             <div class="row-form01 row-form-send mb10">
@@ -72,8 +83,7 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="form-border">
+          <divider></divider>
           <div class="form-group">
             <label class="mb10">設定</label>
             <div class="flex start ai_center">
@@ -86,17 +96,16 @@
             </div>
           </div>
         </div>
-        <div class="form-bottom">
-          <div class="row-form-btn flex start">
-            <button @click="submitRichMenu" class="btn btn-submit btn-block">保存</button>
-          </div>
-        </div>
       </div>
+
+    </div>
+    <div class="card-footer">
+      <button @click="submitRichMenu" class="btn btn-success fw-120">保存</button>
     </div>
 
     <loading-indicator :loading="loading"></loading-indicator>
 
-    <modal-rich-menu-template-selection :selectionId="templateId" @accept="templateChange"></modal-rich-menu-template-selection>
+    <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
     <!-- <media-modal :data="{type: 'richmenu'}" @input="changeLineMediaAlias" /> -->
     <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
   </div>
@@ -106,25 +115,33 @@
 import Util from '@/core/util';
 import moment from 'moment';
 import { mapActions } from 'vuex';
+import { Datetime } from 'vue-datetime';
 
 export default {
+  components: {
+    Datetime
+  },
   props: [],
   data() {
     return {
       loading: true,
-      templateId: 201,
+      contentKey: 0,
+      richMenuData: {
+        folder_id: Util.getParamFromUrl('folder_id'),
+        media_id: null,
+        name: null,
+        template_id: 201,
+        chat_bar_text: null,
+        areas: [],
+        start_at: moment().format('YYYY-MM-DD'),
+        end_at: moment().add(1, 'days').format('YYYY-MM-DD')
+
+      },
       templateValue: 6,
-      line_media_alias: null,
+      templateType: 'large',
       backgroundUrl: null,
-      title: null,
-      chatBarText: null,
       selected: false,
-      areas: [],
-      start_date: moment().format('YYYY-MM-DD'),
-      end_date: moment().format('YYYY-MM-DD'),
       tags: null,
-      refresh_tag: true,
-      typeTemplate: 'large',
       messageErrorDateTime: ''
     };
   },
@@ -139,12 +156,9 @@ export default {
   },
 
   watch: {
-    line_media_alias(val) {
-      this.backgroundUrl = process.env.MIX_MEDIA_FLEXA_URL + '/' + val;
-    },
-    start_date(val) {
-      if (val > this.end_date) {
-        this.end_date = val;
+    start_at(val) {
+      if (val > this.richMenuData.end_at) {
+        this.richMenuData.end_at = val;
       }
     }
   },
@@ -153,33 +167,41 @@ export default {
     ...mapActions('tag', [
       'getTags'
     ]),
+    ...mapActions('richmenu', [
+      'createRichMenu'
+    ]),
 
-    templateChange(data) {
-      this.templateId = data.id;
-      this.templateValue = data.value;
-      this.typeTemplate = data.type;
+    forceRerender() {
+      this.contentKey++;
     },
 
-    changeLineMediaAlias(alias) {
-      this.line_media_alias = alias;
+    templateChange(data) {
+      this.templateValue = data.value;
+      this.richMenuData.template_id = data.id;
+      this.templateType = data.type;
+    },
+
+    onMediaChanged(event) {
+      this.richMenuData.media_id = event.id;
+      this.backgroundUrl = event.preview_url;
     },
 
     disabledMaxDate() {
-      if (this.end_date) { return { from: new Date(this.end_date) }; }
+      if (this.richMenuData.end_at) { return { from: new Date(this.richMenuData.end_at) }; }
     },
 
     disabledMinDate() {
-      return { to: new Date(this.start_date) };
+      return { to: new Date(this.richMenuData.start_at) };
     },
 
     richMenu(input) {
-      this.areas = input;
+      this.richMenuData.areas = input;
     },
 
     async submitRichMenu() {
       let isError = !(await this.$validator.validateAll());
       // validate areas
-      for (const area of this.areas) {
+      for (const area of this.richMenuData.areas) {
         if (Util.checkConditionActionElement(area.action)) {
           area.expand = true;
           isError = true;
@@ -188,8 +210,8 @@ export default {
         }
       }
 
-      const datetimeStart = moment(this.start_date).format('YYYY-MM-DD HH:mm');
-      const datetimeEnd = moment(this.end_date).format('YYYY-MM-DD HH:mm');
+      const datetimeStart = moment(this.richMenuData.start_at).format('YYYY-MM-DD HH:mm');
+      const datetimeEnd = moment(this.richMenuData.end_at).format('YYYY-MM-DD HH:mm');
 
       if (moment(datetimeStart).isAfter(datetimeEnd)) {
         isError = true;
@@ -211,44 +233,38 @@ export default {
         return;
       }
 
-      const data = {
-        start_date: datetimeStart,
-        end_date: datetimeEnd,
-        line_media_alias: this.line_media_alias,
-        templateId: this.templateId,
-        size: {
-          width: 2500,
-          height: 1686
-        },
-        title: this.title,
-        chatBarText: this.chatBarText,
-        selected: this.selected ? 1 : 0,
-        areas: this.areas,
-        folder_id: Util.getParamFromUrl('folder_id')
+      const payload = _.cloneDeep(this.richMenuData);
+      payload.size = {
+        width: 2500,
+        height: 1686
       };
 
+      // const data = {
+      //   folder_id: 1,
+      //   media_id: this.richMenuData.media_id,
+      //   name: this.richMenuData.name,
+      //   chat_bar_text: this.richMenuData.chat_bar_text,
+      //   start_time: datetimeStart,
+      //   end_time: datetimeEnd,
+      //   template_id: this.richMenuData.template_id,
+      //   size: {
+      //     width: 2500,
+      //     height: 1686
+      //   },
+      //   selected: this.selected ? 1 : 0,
+      //   areas: this.richMenuData.areas
+      // };
+
       if (this.tags) {
-        data.tags = this.tags;
+        payload.tags = this.tags;
       }
 
-      if (this.typeTemplate === 'compact') {
-        data.size.width = 2500;
-        data.size.height = 843;
+      if (this.templateType === 'compact') {
+        payload.size.height = 843;
       }
 
-      this.$store.dispatch('richmenu/createRichmenu', data).then((res) => {
-        // thanh cong
-        window.location.href = process.env.MIX_ROOT_PATH + '/richmenus';
-      }).catch((err) => {
-        if (err.status === 400 || err.status === 422) {
-          // show dialog error
-          $('#modal-alert').modal('show');
-        } else if (err.status === 422) {
-          window.toastr.error('');
-        }
-      });
-
-      console.log('submit', JSON.stringify(data));
+      const response = await this.createRichMenu(payload);
+      console.log('---response---', response);
     },
 
     getPlaceholderDate() {
@@ -256,8 +272,8 @@ export default {
     },
 
     resetTime() {
-      this.start_date = null;
-      this.end_date = null;
+      this.richMenuData.start_at = moment().format('YYYY-MM-DD');
+      this.richMenuData.end_at = moment().add(1, 'days').format('YYYY-MM-DD');
     },
 
     resetListTag() {

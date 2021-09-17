@@ -1,7 +1,6 @@
 import Global from '../api/global_api';
 import RichMenuAPI from '../api/richmenu_api';
 import MediaAPI from '../api/media_api';
-import FolderAPI from '../api/folder_api';
 
 export const state = {
   stickers: [],
@@ -158,12 +157,18 @@ export const actions = {
     }
   },
 
-  async uploadImageMap(context, payload) {
+  async uploadImageMap(_, payload) {
     try {
-      const response = await MediaAPI.uploadImageMap(payload.file);
-      if (response && response.id) {
-        return response;
-      }
+      return await MediaAPI.uploadImageMap(payload.file);
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(error);
+    }
+  },
+
+  async uploadRichMenu(_, payload) {
+    try {
+      return await MediaAPI.uploadRichMenu(payload.file);
     } catch (error) {
       console.log(error);
       return Promise.reject(error);

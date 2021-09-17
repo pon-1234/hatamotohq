@@ -52,15 +52,12 @@ export const actions = {
     }
   },
 
-  createRichmenu(_, data) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return RichMenuAPI.createRichmenu(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(() => {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
+  async createRichMenu(_, payload) {
+    try {
+      return await RichMenuAPI.create(payload);
+    } catch (error) {
+      return null;
+    }
   },
 
   editRichmenu(_, data) {

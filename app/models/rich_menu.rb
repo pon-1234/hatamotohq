@@ -4,36 +4,54 @@
 #
 # Table name: rich_menus
 #
-#  id                              :bigint           not null, primary key
-#  areas                           :text(16777215)
-#  deleted_at                      :datetime
-#  end_at                          :datetime
-#  is_active                       :boolean
-#  line_chat_bar_text(chatBarText) :string(255)
-#  name                            :string(255)
-#  selected                        :string(255)
-#  size                            :string(255)
-#  start_at                        :datetime
-#  status                          :string(255)      default("pending")
-#  title                           :string(255)
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
-#  folder_id                       :bigint
-#  line_account_id                 :bigint
-#  line_menu_id(richMenuId)        :string(255)
-#  template_id                     :string(255)
+#  id                       :bigint           not null, primary key
+#  areas                    :json
+#  chat_bar_text            :string(255)
+#  deleted_at               :datetime
+#  enabled                  :boolean
+#  end_at                   :datetime
+#  name                     :string(255)
+#  selected                 :string(255)
+#  size                     :json
+#  start_at                 :datetime
+#  status                   :string(255)      default("pending")
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  folder_id                :bigint
+#  line_account_id          :bigint
+#  line_menu_id(richMenuId) :string(255)
+#  media_id                 :bigint
+#  template_id              :string(255)
 #
 # Indexes
 #
 #  index_rich_menus_on_folder_id        (folder_id)
 #  index_rich_menus_on_line_account_id  (line_account_id)
+#  index_rich_menus_on_media_id         (media_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (folder_id => folders.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
+#  fk_rails_...  (media_id => media.id)
 #
 class RichMenu < ApplicationRecord
   belongs_to :line_account
   belongs_to :folder
+  belongs_to :media
+
+  # Validation
+  validates :name, presence: true, length: { maximum: 255 }
+  validates_presence_of :start_at, :end_at, :size, :areas
+  # validate :time_is_not_overlapped
+
+  private
+    def time_is_not_overlapped
+      RichMenu.where(line_account: self.line_account).each do |r|
+        if !((end_at <= r.start_at) || (start_at >= r.end_at))
+          next if id.present? && id == c.id
+          errors.add(:time, '別の時間範囲を選択してください。 選択した範囲がオーバーラップしました。')
+        end
+      end
+    end
 end
