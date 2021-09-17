@@ -27,7 +27,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     nomalized_messages_data = []
     messages.each do |message|
-      nomalized_messages_data << MessageNormalizer.new(message.content).perform
+      nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
 
     # Deliver messages via line api
@@ -51,7 +51,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     nomalized_messages_data = []
     messages.each do |message|
-      nomalized_messages_data << MessageNormalizer.new(message.content).perform
+      nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
     if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       broadcast.update_status('error')

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MessageNormalizer
+class Normalizer::MessageNormalizer
   def initialize(message_content)
     @message_content = message_content
   end
@@ -11,7 +11,8 @@ class MessageNormalizer
     if message_type == 'flex' && @message_content['id'].present?
       normalize_flex_message
     end
-    normalize_postback
+
+    Normalizer::PostbackNormalizer.new(@message_content).perform
 
     # Return normalized content
     @message_content
@@ -27,19 +28,19 @@ class MessageNormalizer
     # TODO
   end
 
-  def normalize_postback
-    @message_content.extend Hashie::Extensions::DeepLocate
-    # Find all postback action
-    actions = @message_content.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('postback') }
-    actions.each do |action|
-      # Line API limit postback data's length to 300 character
-      # we have to cache the postback data in database and restore it
-      # when receiving postback event
-      hash = Digest::MD5.hexdigest action['data'].to_json
-      PostbackMapper.create(key: hash, value: action['data'])
-      action['data'] = hash
-    end
-  end
+  # def normalize_postback
+  #   @message_content.extend Hashie::Extensions::DeepLocate
+  #   # Find all postback action
+  #   actions = @message_content.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('postback') }
+  #   actions.each do |action|
+  #     # Line API limit postback data's length to 300 character
+  #     # we have to cache the postback data in database and restore it
+  #     # when receiving postback event
+  #     hash = Digest::MD5.hexdigest action['data'].to_json
+  #     PostbackMapper.create(key: hash, value: action['data'])
+  #     action['data'] = hash
+  #   end
+  # end
 
   def handle_media
     # if (in_array($messageContent['type'], ["image", "video"])) {

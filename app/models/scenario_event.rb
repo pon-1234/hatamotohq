@@ -59,14 +59,18 @@ class ScenarioEvent < ApplicationRecord
     def deliver_message
       payload = {
         channel_id: self.channel.id,
-        messages: [self.content]
+        messages: [normalized]
       }
       self.update_columns(status: 'sending')
       PushMessageToLineJob.perform_now(payload)
     end
 
     def deliver_after_action
-      ActionHandlerJob.perform_now(self.channel.line_friend, self.content)
+      ActionHandlerJob.perform_now(self.channel.line_friend, normalized)
+    end
+
+    def normalized
+      Normalizer::MessageNormalizer.new(self.content).perform
     end
 
     def execute_after_deliver

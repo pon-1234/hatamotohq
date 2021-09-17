@@ -23,9 +23,10 @@ class ScenarioSchedulerJob < ApplicationJob
   end
 
   def deliver_now(message)
+    normalized = Normalizer::MessageNormalizer.new(message.content).perform
     payload = {
       channel_id: @channel.id,
-      messages: [message.content]
+      messages: [normalized]
     }
     PushMessageToLineJob.perform_later(payload)
   end
@@ -64,7 +65,7 @@ class ScenarioSchedulerJob < ApplicationJob
       channel: @channel,
       scenario_message: message,
       type: 'message',
-      content: message.line_content,
+      content: message.content,
       schedule_at: schedule_at,
       order: message.order,
       status: 'queued'
