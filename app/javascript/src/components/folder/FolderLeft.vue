@@ -1,22 +1,20 @@
 <template>
   <div class="fw-300">
     <div v-if="!isPerview">
-      <div class="add_group btn btn-success" @click="addMoreFolder">
+      <div class="btn btn-success btn-sm" @click="addMoreFolder">
         <i class="fa fa-plus"></i>
           新しいフォルダ
       </div>
     </div>
-    <div class="mt-2 tag-content" :class="!isPerview?'':'tag-content-preview'">
-      <div class="folder-list-title">
-        <table class="table table-tags-header">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col" style="height: 42px;">フォルダ</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="tag-scroll folder-list">
+    <div class="mt-2" :class="!isPerview?'':'tag-content-preview'">
+      <table class="table index mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col" class="fh-42">フォルダ</th>
+          </tr>
+        </thead>
+      </table>
+      <div class="d-flex m-0 overflow-auto flex-column folder-list">
         <div class="folder-item new-folder" v-if="isAddMoreFolder">
           <div class="input-group d-flex">
             <input type="text"
@@ -112,14 +110,7 @@ export default {
 <style lang="scss" scoped>
 .folder-list {
   border-right: thin solid #ccc;
-}
-
-.tag-header {
-  height: 40px;
-  color: white;
-  button {
-    color: black!important;
-  }
+  min-height: 80vh;
 }
 
 .tag-content-preview {
@@ -133,14 +124,6 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  .tag-scroll {
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: auto;
-    margin: 0 0;
-    display: flex;
-    flex-direction: column;
-  }
 }
 
 .tag-content-left {

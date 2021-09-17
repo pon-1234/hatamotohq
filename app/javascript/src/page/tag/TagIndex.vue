@@ -13,51 +13,49 @@
           />
         <div class="flex-grow-1">
           <div class="btn btn-primary btn-sm" @click="addTag">
-            <i class="fa fa-plus"></i> 新しいタグ
+            <i class="fa fa-plus"></i> 新規登録
           </div>
-          <div class="tag-content">
-            <div class="tag-scroll tag-list">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th class="mw-200"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
-                    <th class="fw-150">メンバー数</th>
-                    <th class="fw-200">作成日</th>
-                  </tr>
-                </thead>
-                <tbody v-if="curFolder">
-                  <tr v-if="isAddMoreTag" class="tag-item">
-                    <td class="mw-200 vetical-align-middle">
-                      <div class="folder-item">
-                        <div class="input-group newgroup-inputs">
-                          <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
-                            @keyup.enter='showNewTagInput'
-                            @compositionend="compositionend($event)"
-                            @compositionstart="compositionstart($event)"
-                            >
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" @click="submitCreateTag" ref="buttonAddTag">
-                              決定
-                            </button>
-                          </span>
-                        </div>
+          <div class="mt-2">
+            <table class="table index">
+              <thead>
+                <tr>
+                  <th class="mw-200"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
+                  <th class="fw-150">メンバー数</th>
+                  <th class="fw-200">作成日</th>
+                </tr>
+              </thead>
+              <tbody v-if="curFolder">
+                <tr v-if="isAddMoreTag" class="tag-item">
+                  <td class="mw-200 vetical-align-middle">
+                    <div class="folder-item">
+                      <div class="input-group newgroup-inputs">
+                        <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
+                          @keyup.enter='showNewTagInput'
+                          @compositionend="compositionend($event)"
+                          @compositionstart="compositionstart($event)"
+                          >
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-default" @click="submitCreateTag" ref="buttonAddTag">
+                            決定
+                          </button>
+                        </span>
                       </div>
-                    </td>
-                    <td class="text-center">0人</td>
-                    <td class="text-center">{{getCreatedAt()}}</td>
-                  </tr>
-                  <tag-item
-                    v-for="(item, index) in curFolder.tags"
-                    :data="item"
-                    :key="index"
-                    @deleteTag="setSelectedTag"
-                    @editTag="submitEditTag"
-                    @detailFriends="detailFriends"
-                  />
-                </tbody>
-              </table>
-              <div v-if="curFolder && curFolder.tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
-            </div>
+                    </div>
+                  </td>
+                  <td class="text-center">0人</td>
+                  <td class="text-center">{{getCreatedAt()}}</td>
+                </tr>
+                <tag-item
+                  v-for="(item, index) in curFolder.tags"
+                  :data="item"
+                  :key="index"
+                  @deleteTag="setSelectedTag"
+                  @editTag="submitEditTag"
+                  @detailFriends="detailFriends"
+                />
+              </tbody>
+            </table>
+            <div v-if="curFolder && curFolder.tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
           </div>
         </div>
       </div>

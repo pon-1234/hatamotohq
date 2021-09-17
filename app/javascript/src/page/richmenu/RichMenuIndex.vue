@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <div class="d-flex mt-2">
+      <div class="d-flex">
         <folder-left
           type="rich_menu"
           :data="folders"
@@ -13,60 +13,34 @@
         />
 
         <div class="flex-grow-1">
-          <div class="tag-header" v-if="curFolder">
-            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
+          <div v-if="curFolder">
+            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary btn-sm">
               <i class="fa fa-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2">
-            <table class="table">
+            <table class="table index">
               <thead>
                 <tr>
-                  <th>タイトル</th>
-                  <th>表示期間</th>
-                  <th>ステータス</th>
-                  <th></th>
+                  <th class="w-30p">リッチメニュー名</th>
+                  <th class="w-5p">状況</th>
+                  <th class="w-15p">メニュー初期状態</th>
+                  <th class="w-30p">画像</th>
+                  <th class="w-10p">メンバー数</th>
+                  <th class="w-10p">フォルダ</th>
                 </tr>
               </thead>
               <tbody v-if="curFolder">
                 <tr
-                  v-for="(item, index) in curFolder.rich_menus"
+                  v-for="(richmenu, index) in curFolder.rich_menus"
                   v-bind:key="index"
                 >
-                  <td class="text-left">{{ item.title }}</td>
-                  <td class="">
-                    {{ formatDateTime(item.start_date) }} ～
-                    {{ formatDateTime(item.end_date) }}
+                  <td class="text-left">{{ richmenu.name }}</td>
+                  <td>
+                    {{ richmenu.status }}
                   </td>
-                  <td class="">
-                    <span v-if="item.status === 'DONE'"
-                      ><span class="status complete" v-if="item.selected"
-                        >予約済み</span
-                      ><span v-else class="status reserve"
-                        >停止中</span
-                      ></span
-                    >
-                    <span
-                      class="status draft"
-                      v-else-if="item.status === 'PENDING'"
-                      >処理中</span
-                    >
-                    <span
-                      class="status error"
-                      v-else-if="item.status === 'ERROR'"
-                      >エラー</span
-                    >
-                    <span
-                      class="status sending"
-                      v-else-if="item.status === 'ACTIVE'"
-                      >設定中</span
-                    >
-                    <span
-                      class="status complete"
-                      v-else-if="item.status === 'EXPIRED'"
-                      >期限切れ</span
-                    >
-                    <span class="status reserve" v-else>X</span>
+                  <td>
+                    <img :src="richmenu.image_url" class="fw-120 fh-81">
                   </td>
                   <td class=" row-btn text-right">
                     <div
@@ -75,7 +49,7 @@
                       title="複製"
                     >
                       <a
-                        :href="MIX_ROOT_PATH + '/richmenus/' + item.id"
+                        :href="MIX_ROOT_PATH + '/richmenus/' + richmenu.id"
                         class="btn-more btn-more-linebot btn-block"
                         data-toggle="tooltip"
                         title="編集"
@@ -92,7 +66,7 @@
                         class="btn-more btn-more-linebot btn-block"
                         data-toggle="modal"
                         data-target="#modal-delete"
-                        @click="curRichMenu = item"
+                        @click="curRichMenu = richmenu"
                       >
                         <i class="fas fa-trash-alt"></i>
                       </button>
@@ -220,15 +194,15 @@ export default {
         richMenuId: this.curRichMenu.id
       });
 
-      this.folders[this.selectedFolderIndex].rich_menus.deleteWhere(
-        (item) => item.id === this.curRichMenu.id
+      this.folders[this.selectedFolderIndex].richmenus.deleteWhere(
+        (richmenu) => richmenu.id === this.curRichMenu.id
       );
     },
 
     async changeSelectedFolder(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
-      this.foldersContent = this.folders[this.selectedFolderIndex].rich_menus;
+      this.foldersContent = this.folders[this.selectedFolderIndex].richmenus;
     },
 
     async submitUpdateFolder(value) {
@@ -246,7 +220,7 @@ export default {
       //   .dispatch('global/createFolder', value)
       //   .done((res) => {
       //     const data = res;
-      //     data.rich_menus = [];
+      //     data.richmenus = [];
       //     this.folders.push(data);
       //   })
       //   .fail((e) => {});
@@ -330,16 +304,16 @@ export default {
   margin-bottom: 0px !important;
 }
 
-.item-sm {
+.richmenu-sm {
   display: none;
 }
 
 @media (max-width: 991px) {
-  .item-pc {
+  .richmenu-pc {
     display: none !important;
   }
 
-  .item-sm {
+  .richmenu-sm {
     display: inline-block !important;
   }
 

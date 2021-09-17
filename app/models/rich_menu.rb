@@ -45,6 +45,10 @@ class RichMenu < ApplicationRecord
   validates_presence_of :start_at, :end_at, :size, :areas
   # validate :time_is_not_overlapped
 
+  def image_url
+    media.url
+  end
+
   private
     def time_is_not_overlapped
       RichMenu.where(line_account: self.line_account).each do |r|

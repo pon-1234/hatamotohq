@@ -11,16 +11,16 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-        <div class="flex-grow-1">
-          <div class="tag-header">
-            <div class="col-r">
-              <a v-if="folders && folders.length && folders[selectedFolderIndex]" :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary">
-                <i class="fa fa-plus"></i> 新規作成
-              </a>
-            </div>
+        <div class="flex-grow-1 mh-1000">
+          <div class="col-r">
+            <a v-if="folders && folders.length && folders[selectedFolderIndex]"
+              :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary btn-sm"
+            >
+              <i class="fa fa-plus"></i> 新規作成
+            </a>
           </div>
           <div class="mt-2">
-            <table class="table">
+            <table class="table index">
               <thead>
                 <tr>
                   <th>自動応答名</th>

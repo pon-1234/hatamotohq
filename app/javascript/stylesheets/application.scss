@@ -107,6 +107,13 @@
   min-width: 100px;
 }
 
+@for $i from 1 through 100 {
+  $width: 0% + $i;
+  .w-#{$i}p {
+    width: $width;
+  }
+}
+
 @for $i from 1 through 1000 {
   $height: 0px + $i;
   .h-#{$i} {
@@ -117,6 +124,10 @@
     height: $height;
     min-height: $height;
     max-height: $height;
+  }
+
+  .mh-#{i} {
+    min-height: $height;
   }
 }
 
