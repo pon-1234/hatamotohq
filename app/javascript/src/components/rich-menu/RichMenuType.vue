@@ -1,73 +1,71 @@
 <template>
-  <div class="w-100">
-    <div class="d-flex-sm align-items-center mt-4 mb-3">
-      <h3 class="w-fix-260 mb-0">内容</h3>
+  <div class="card">
+    <div class="card-header left-border">
+      <h3 class="card-title">本文設定</h3>
     </div>
-    <div class="d-flex-sm" style="justify-content: center">
-      <div class="fw-260">
-        <input type="text" v-model="background" :name="'image-url'" v-validate="'required'" class="d-none"/>
-        <rich-menu-preview
-          :background="background"
-          :template-id="templateId"
-          :typeTemplate="typeTemplate"
-          :class="errors.first('image-url') ? 'invalid-box' : ''"
-          @click="expandAction">
-        </rich-menu-preview>
-        <div class="my-2">
-          <span v-if="errors.first('image-url')" class="invalid-box-label">背景画像は必須です</span>
-          <button type="button" class="btn-block btn btn-secondary" data-toggle="modal" data-target="#modalRichMenuTemplateSelection">
-            テンプレートを選択
-          </button>
-        </div>
-        <div class="my-2">
-          <button type="button" class="btn-block btn btn-secondary"
-                  data-toggle="modal" data-target="#imageModalCenter">
-            背景画像をアップロード
-          </button>
-        </div>
-        <div class="my-2">
-          <button type="button" class="btn-block btn btn-secondary"
-                  @click="showEditor()">
-            一式の個別画像を編集
-          </button>
-        </div>
-        <span class="invalid-feedback d-block" style="display: none;"></span>
-      </div>
-      <div class="flex-grow-1 ml-4 mxw-800">
-        <div>
-          <div data-vv-name="atLestLink" class="d-flex-sm justify-content-between align-items-center mb-3"
-               aria-required="false" aria-invalid="true">
-            <h4 class="mb-0">アクション</h4>
-
+    <div class="card-body">
+      <div class="d-flex-sm" style="justify-content: center">
+        <div class="fw-260">
+          <input type="text" v-model="background" :name="'image-url'" v-validate="'required'" class="d-none" data-vv-as="背景画像"/>
+          <rich-menu-preview
+            :background="background"
+            :template-id="templateId"
+            :typeTemplate="typeTemplate"
+            :class="errors.first('image-url') ? 'invalid-box' : ''"
+            @click="expandAction">
+          </rich-menu-preview>
+          <error-message :message="errors.first('image-url')"></error-message>
+          <div class="my-2">
+            <button type="button" class="btn-block btn btn-secondary" data-toggle="modal" data-target="#modalRichMenuTemplateSelection">
+              テンプレートを選択
+            </button>
           </div>
-          <div class="invalid-feedback d-block" style="display: none;"></div>
-          <div id="accordion">
-            <div v-for="(item, index) in actionObjects" v-bind:key="index">
-              <div class="card mb-2"
-                   :class="errors.items.find(item=>item.field.includes('richmenu_type_'+index)) ? 'invalid-box': '' ">
-                <div class="p-2" @click="expandAction(item.key, false, index)">
-                  <h5 class="m-0">
-                    <button type="button"
-                            class="btn-block btn-link text-left btn btn-outline-block">
-                      <i class="fas mr-2 fa-angle-right" style="width: 20px"
-                         v-if="!item.expand && !errors.items.find(item=>item.field.includes('richmenu_type_'+index))"></i>
-                      <i class="fas mr-2 fa-angle-down" style="width: 20px" v-else></i>{{item.key}}
-                    </button>
-                  </h5>
-                </div>
-                <div v-show="item.expand || errors.items.find(item=>item.field.includes('richmenu_type_'+index))">
-                  <div>
-                    <div class="card-body pt-0 accordion-0 center">
-                      <div>
-                        <message-action-type
-                          class="kv-select form-group"
-                          :name="'richmenu_type_'+index"
-                          :value="item.action"
-                          :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
-                          :labelRequired="false"
-                          :showTitle="false"
-                          @input="item.action = $event">
-                        </message-action-type>
+          <div class="my-2">
+            <button type="button" class="btn-block btn btn-secondary"
+                    data-toggle="modal" data-target="#imageModalCenter">
+              背景画像をアップロード
+            </button>
+          </div>
+          <div class="my-2">
+            <button type="button" class="btn-block btn btn-secondary"
+                    @click="showEditor()">
+              一式の個別画像を編集
+            </button>
+          </div>
+          <span class="invalid-feedback d-block" style="display: none;"></span>
+        </div>
+        <div class="flex-grow-1 ml-4 mxw-800">
+          <h5>アクション設定</h5>
+          <div>
+            <div class="invalid-feedback d-block" style="display: none;"></div>
+            <div id="accordion">
+              <div v-for="(item, index) in actionObjects" v-bind:key="index">
+                <div class="card mb-2"
+                    :class="errors.items.find(item=>item.field.includes('richmenu_type_'+index)) ? 'invalid-box': '' ">
+                  <div class="p-2" @click="expandAction(item.key, false, index)">
+                    <h5 class="m-0">
+                      <button type="button"
+                              class="btn-block btn-link text-left btn btn-outline-block">
+                        <i class="fas mr-2 fa-angle-right" style="width: 20px"
+                          v-if="!item.expand && !errors.items.find(item=>item.field.includes('richmenu_type_'+index))"></i>
+                        <i class="fas mr-2 fa-angle-down" style="width: 20px" v-else></i>{{item.key}}
+                      </button>
+                    </h5>
+                  </div>
+                  <div v-show="item.expand || errors.items.find(item=>item.field.includes('richmenu_type_'+index))">
+                    <div>
+                      <div class="card-body pt-0 accordion-0 center">
+                        <div>
+                          <message-action-type
+                            class="kv-select form-group"
+                            :name="'richmenu_type_'+index"
+                            :value="item.action"
+                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+                            :labelRequired="false"
+                            :showTitle="false"
+                            @input="item.action = $event">
+                          </message-action-type>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -79,12 +77,12 @@
       </div>
     </div>
 
-    <rich-menu-modal-editor-image
+    <modal-rich-menu-image-editor
       v-if="isShowEditor"
       :templateId="templateId"
       @close="isShowEditor = false"
       @input="exportImage"
-    ></rich-menu-modal-editor-image>
+    ></modal-rich-menu-image-editor>
   </div>
 </template>
 
@@ -168,7 +166,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('global', ['uploadImageForRichMenu']),
+    ...mapActions('global', ['uploadRichMenu']),
 
     expandAction(key, isAutoCollapse = true, index) {
       const field = this.errors.items.find(item => item.field.includes('richmenu_type_' + index));
@@ -200,10 +198,10 @@ export default {
       // remove header
       data = data.replace('data:image/jpeg;base64,', '');
       // upload image
-      this.uploadImageForRichMenu({
+      this.uploadRichMenu({
         file: this.b64toBlob(data)
-      }).then((res) => {
-        this.$emit('backgroundAliasChange', res);
+      }).then((response) => {
+        this.$emit('onMediaChanged', response);
       }).catch((err) => {
         console.log(err);
       });
@@ -247,28 +245,6 @@ export default {
     line-height: 1.5;
     border-radius: 2px;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-
-  .card {
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 4px;
-    padding: 5px;
-  }
-
-  .card-body {
-    -webkit-box-flex: 1;
-    flex: 1 1 auto;
-    padding: 1.25rem;
   }
 
   .col-form-label {

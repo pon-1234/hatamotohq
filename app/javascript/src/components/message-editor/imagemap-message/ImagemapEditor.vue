@@ -33,7 +33,7 @@
         </button>
       </div>
       <div class="flex-grow-1 ml-4">
-        <h5>アクション</h5>
+        <h5>アクション設定</h5>
         <div id="accordion">
           <div v-for="(item, index) in actionObjects" v-bind:key="index" >
             <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'invalid-box': '' ">
@@ -80,13 +80,13 @@
       :data="{type: 'imagemap'}"
       :id="index+'_imagemapModalUploadImage'">
     </media-modal> -->
-    <rich-menu-modal-editor-image
+    <rich-menu-image-editor
       v-if="isShowEditor"
       :templateId="templateId"
       editor="imagemap"
       @close="isShowEditor = false"
       @input="exportImage"
-    ></rich-menu-modal-editor-image>
+    ></rich-menu-image-editor>
   </div>
 </template>
 

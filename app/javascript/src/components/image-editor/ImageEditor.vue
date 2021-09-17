@@ -204,7 +204,6 @@ export default {
       this.canvasRender();
     },
     setupCrop() {
-      console.log(this.width, 'zxczxc');
       this.rectPath = new Path2D();
       this.cropType = this.cropTypes[this.object.crop_type_index];
       this.rectPath.rect(this.wCenter - this.cropType.w / 2, this.hCenter - this.cropType.h / 2, this.cropType.w, this.cropType.h);

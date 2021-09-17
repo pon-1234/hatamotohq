@@ -10,7 +10,8 @@
           <slot name="content"></slot>
         </div>
         <div class="modal-footer">
-          <div class="btn btn-danger" data-dismiss="modal" @click="confirm"> {{ type === 'delete' ? '削除' : 'はい' }}</div>
+          <div class="btn btn-primary" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">はい</div>
+          <div class="btn btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</div>
         </div>
       </div>
     </div>

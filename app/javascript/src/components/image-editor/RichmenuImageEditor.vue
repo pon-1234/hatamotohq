@@ -6,10 +6,8 @@
           <p v-if="editor==='richmenu'">リッチメニュー</p>
           <p v-else>BOT</p>
         </div>
-        <div class="bg-text-mess" :style="styleAuto()">
-        </div>
-        <div v-if="editor==='richmenu'">
-          <table v-if="templateId===201" style="width: 300px">
+        <div v-if="editor==='richmenu'" style="height: 400px !important" class="d-flex flex-column justify-content-center">
+          <table v-if="templateId===201" style="width: 300px; height: 200px;">
             <tbody>
             <tr>
               <td style="width: 100px;">
@@ -192,7 +190,7 @@
 
             </tbody>
           </table>
-          <table v-if="templateId===1001" style="width: 300px; margin-top: 100px">
+          <table v-if="templateId===1001" style="width: 300px;">
             <tbody>
             <tr>
               <td style="width: 100px;">
@@ -216,7 +214,7 @@
             </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1002" style="width: 300px; margin-top: 100px">
+          <table v-if="templateId===1002" style="width: 300px;">
             <tbody>
             <tr>
               <td style="width: 100px;">
@@ -234,7 +232,7 @@
             </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1003" style="width: 300px; margin-top: 100px">
+          <table v-if="templateId===1003" style="width: 300px;">
             <tbody>
             <tr>
               <td style="width: 200px;">
@@ -252,7 +250,7 @@
             </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1004" style="width: 300px; margin-top: 100px">
+          <table v-if="templateId===1004" style="width: 300px;">
             <tbody>
             <tr>
               <td style="width: 150px;">
@@ -270,7 +268,7 @@
             </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1005" style="width: 300px; margin-top: 100px">
+          <table v-if="templateId===1005" style="width: 300px;">
             <tbody>
             <tr>
               <td style="width: 300px;">
@@ -597,8 +595,6 @@ export default {
             cache: null
           });
         }
-      } else {
-        alert('zxczxcxzc');
       }
       // this.chooseActive(0);
       this.chooseActive(0);
@@ -738,12 +734,6 @@ export default {
 
     td {
       padding: 0 !important;
-    }
-
-    .bg-text-mess {
-      height: 150px;
-      width: 100%;
-      background: #F5F5F5;
     }
 
     .line-nav-bar {
