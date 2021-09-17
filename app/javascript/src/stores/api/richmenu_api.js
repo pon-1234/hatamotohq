@@ -1,9 +1,18 @@
 export default {
-  createRichmenu: (data) => {
+  list: () => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/add'),
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  create: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus`,
       method: 'POST',
-      data: JSON.stringify(data),
+      data: JSON.stringify(query),
       contentType: 'application/json'
     });
   },
@@ -15,11 +24,6 @@ export default {
       data: JSON.stringify(data),
       contentType: 'application/json'
     });
-  },
-
-  getList: (query) => {
-    query._pid = btoa('/richmenus');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   getDetail: (richMenuId) => {

@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="w-100">
     <div class="d-flex-sm align-items-center mt-4 mb-3">
       <h3 class="w-fix-260 mb-0">内容</h3>
     </div>
     <div class="d-flex-sm" style="justify-content: center">
-      <div class="w-fix-260">
-        <input type="text" v-model="background" :name="'image-url'" v-validate="'required'"
-               style="width: 0px; height: 0px; border: none;"/>
+      <div class="fw-260">
+        <input type="text" v-model="background" :name="'image-url'" v-validate="'required'" class="d-none"/>
         <rich-menu-preview
           :background="background"
           :template-id="templateId"
@@ -33,8 +32,9 @@
             一式の個別画像を編集
           </button>
         </div>
-        <span class="invalid-feedback d-block" style="display: none;"></span></div>
-      <div class="flex-1 ml-4 w-max-800">
+        <span class="invalid-feedback d-block" style="display: none;"></span>
+      </div>
+      <div class="flex-grow-1 ml-4 mxw-800">
         <div>
           <div data-vv-name="atLestLink" class="d-flex-sm justify-content-between align-items-center mb-3"
                aria-required="false" aria-invalid="true">

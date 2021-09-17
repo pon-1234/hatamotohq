@@ -1,23 +1,60 @@
-import RichMenuApi from '../api/richmenu_api';
+import RichMenuAPI from '../api/richmenu_api';
+import FolderAPI from '../api/folder_api';
 
-export const state = {};
+export const state = {
+  folders: []
+};
 
-export const mutations = {};
+export const mutations = {
+  pushFolder(state, folder) {
+    state.folders.push(folder);
+  },
+
+  setFolders(state, folders) {
+    state.folders = folders;
+  },
+
+  updateFolder(state, folder) {
+    const index = state.folders.findIndex(_ => _.id === folder.id);
+    state.folders.splice(index, 1, folder);
+  }
+};
 
 export const getters = {};
 
 export const actions = {
-  getList(_, query) {
-    return RichMenuApi.getList(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async getRichMenus(context, query) {
+    try {
+      const folders = await RichMenuAPI.list(query);
+      context.commit('setFolders', folders);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async createFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.create(payload);
+      folder.rich_menus = [];
+      context.commit('pushFolder', folder);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.update(payload);
+      folder.rich_menus = [];
+      context.commit('updateFolder', folder);
+    } catch (error) {
+      return null;
+    }
   },
 
   createRichmenu(_, data) {
     _.dispatch('system/setLoading', true, { root: true });
-    return RichMenuApi.createRichmenu(data).done((res) => {
+    return RichMenuAPI.createRichmenu(data).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -29,7 +66,7 @@ export const actions = {
   editRichmenu(_, data) {
     _.dispatch('system/setLoading', true, { root: true });
 
-    return RichMenuApi.editRichmenu(data).done((res) => {
+    return RichMenuAPI.editRichmenu(data).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -39,7 +76,7 @@ export const actions = {
   },
 
   getDetail(_, rickMenuId) {
-    return RichMenuApi.getDetail(rickMenuId).done((res) => {
+    return RichMenuAPI.getDetail(rickMenuId).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -48,7 +85,7 @@ export const actions = {
 
   destroyRichmenu(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return RichMenuApi.destroyRichmenu(query).done((res) => {
+    return RichMenuAPI.destroyRichmenu(query).done((res) => {
       _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
       return Promise.resolve(res);
     }).fail((err) => {

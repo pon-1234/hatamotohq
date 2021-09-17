@@ -1,96 +1,95 @@
 <template>
-  <section>
-    <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
-      <h3 class="hdg3">リッチメニュー新規作成</h3>
+  <div class="card">
+    <div class="card-header d-flex align-items-center">
+      <a :href="`${userRootUrl}/user/rich_menus`" class="text-info">
+        <i class="fa fa-arrow-left"></i> リッチメニュー一覧
+      </a>
+      <h5 class="m-auto font-weight-bold">新規登録</h5>
     </div>
-
-    <div class="form-common01">
-      <div class="form-border">
+    <div class="card-body">
+      <div class="form-common01">
         <div class="form-group">
-          <label>タイトル<required-mark/></label>
-          <input v-model.trim="title" type="text" name="title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required'">
-          <span v-if="errors.first('title')" class="invalid-box-label">タイトルは必須です</span>
+          <label>リッチメニュー名<required-mark/></label>
+          <input v-model.trim="name" type="text" name="name" class="form-control" placeholder="リッチメニュー名を入力してください" v-validate="'required'" data-vv-as="リッチメニュー名">
+          <error-message :message="errors.first('name')"></error-message>
         </div>
-      </div>
 
-      <div class="form-border">
         <div class="form-group">
           <label>メニューバーのテキスト<required-mark/></label>
-          <input v-model.trim="chatBarText" type="text" name="richmenu-title" class="form-control" placeholder="タイトルを入力してください"   v-validate="'required|max:14'">
-          <span v-if="errors.firstByRule('richmenu-title', 'required')" class="invalid-box-label">タイトルは必須です</span>
-          <span v-else-if="errors.firstByRule('richmenu-title', 'max')" class="invalid-box-label">14文字までしか入らないです</span>
+          <input v-model.trim="chatBarText" type="text" name="richmenu-title" class="form-control" placeholder="メニューバーのテキストを入力してください" v-validate="'required|max:14'" data-vv-as="メニューバーのテキスト">
+          <error-message :message="errors.first('richmenu-title')"></error-message>
         </div>
-      </div>
 
-      <div class="form-border">
-        <div class="form-group">
-          <label>表示期間<required-mark/></label>
-          <div class="d-flex align-items-center mb20" >
-            <datetime
-              type="datetime"
-              v-model="start_date"
-              value-zone="Asia/Tokyo"
-              :input-class="{'error-date date-input': !start_date, 'date-input': start_date}">
-            </datetime>
-            <input type="hidden" :value="start_date" name="start-date" v-validate="'required'">
-            &nbsp;&nbsp;<span>~</span>&nbsp;&nbsp;
+        <div class="form-border">
+          <div class="form-group">
+            <label>表示期間<required-mark/></label>
+            <div class="d-flex align-items-center mb20" >
+              <datetime
+                type="datetime"
+                v-model="start_date"
+                value-zone="Asia/Tokyo"
+                :input-class="{'error-date date-input': !start_date, 'date-input': start_date}">
+              </datetime>
+              <input type="hidden" :value="start_date" name="start-date" v-validate="'required'">
+              &nbsp;&nbsp;<span>~</span>&nbsp;&nbsp;
+            </div>
+            <div class="d-flex align-items-center mb20">
+              <datetime
+                type="datetime"
+                v-model="end_date"
+                value-zone="Asia/Tokyo"
+                :min-datetime="start_date"
+                :input-class="{'error-date date-input': !end_date, 'date-input': end_date}">
+              </datetime>
+              <input type="hidden" :value="end_date" name="end_date" v-validate="'required'">
+                &nbsp;&nbsp;<button class="btn btn-secondary" @click="resetTime">リセット</button>
+            </div>
+            <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
           </div>
-          <div class="d-flex align-items-center mb20">
-            <datetime
-              type="datetime"
-              v-model="end_date"
-              value-zone="Asia/Tokyo"
-              :min-datetime="start_date"
-              :input-class="{'error-date date-input': !end_date, 'date-input': end_date}">
-            </datetime>
-            <input type="hidden" :value="end_date" name="end_date" v-validate="'required'">
-              &nbsp;&nbsp;<button class="btn btn-secondary" @click="resetTime">リセット</button>
-          </div>
-          <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
         </div>
-      </div>
 
-      <!--Editor-->
-      <div class="form-border">
-        <rich-menu-type :background="backgroundUrl"
-                        :templateId="templateId"
-                        :templateValue="templateValue"
-                        :typeTemplate="typeTemplate"
-                        @input="richMenu"
-                        @backgroundAliasChange="line_media_alias = $event"/>
-      </div>
+        <!--Editor-->
+        <rich-menu-type
+          :background="backgroundUrl"
+          :templateId="templateId"
+          :templateValue="templateValue"
+          :typeTemplate="typeTemplate"
+          @input="richMenu"
+          @backgroundAliasChange="line_media_alias = $event">
+        </rich-menu-type>
 
-      <div class="form-border">
-        <div class="form-group">
-          <label>配信先</label>
-          <div class="row-form01 row-form-send mb10">
-            <label><input type="radio" name="send" value="all" :checked="!tags" @click="resetListTag">全員</label>
-            <label><input type="radio" name="send" value="sort" :checked="tags && tags.length >= 0">タグで絞り込む</label>
-          </div>
-          <div class="box-form01 box-form-sort" :style="tags && tags.length >= 0? {display: 'block'}:{display: 'none'}">
-            <label>タグ</label>
-            <div class="list-checkbox-tag" v-if="refresh_tag">
-              <input-tag :tags="tags" @input="addListTag"/>
+        <div class="form-border">
+          <div class="form-group">
+            <label>配信先</label>
+            <div class="row-form01 row-form-send mb10">
+              <label><input type="radio" name="send" value="all" :checked="!tags" @click="resetListTag">全員</label>
+              <label><input type="radio" name="send" value="sort" :checked="tags && tags.length >= 0">タグで絞り込む</label>
+            </div>
+            <div class="box-form01 box-form-sort" :style="tags && tags.length >= 0? {display: 'block'}:{display: 'none'}">
+              <label>タグ</label>
+              <div class="list-checkbox-tag" v-if="refresh_tag">
+                <input-tag :tags="tags" @input="addListTag"/>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-border">
-        <div class="form-group">
-          <label class="mb10">設定</label>
-          <div class="flex start ai_center">
-            <div class="toggle-switch btn-keyword01">
-              <input v-model="selected" id="keyword-onoff-setting01" class="toggle-input" type="checkbox">
-              <label for="keyword-onoff-setting01" class="toggle-label">
-                <span></span>
-              </label>
+        <div class="form-border">
+          <div class="form-group">
+            <label class="mb10">設定</label>
+            <div class="flex start ai_center">
+              <div class="toggle-switch btn-keyword01">
+                <input v-model="selected" id="keyword-onoff-setting01" class="toggle-input" type="checkbox">
+                <label for="keyword-onoff-setting01" class="toggle-label">
+                  <span></span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-bottom">
-        <div class="row-form-btn flex start">
-          <button @click="submitRichMenu" class="btn btn-submit btn-block">保存</button>
+        <div class="form-bottom">
+          <div class="row-form-btn flex start">
+            <button @click="submitRichMenu" class="btn btn-submit btn-block">保存</button>
+          </div>
         </div>
       </div>
     </div>
@@ -98,15 +97,17 @@
     <rich-menu-modal-template-choose :selectionId="templateId" @accept="templateChange" />
     <media-modal :data="{type: 'richmenu'}" @input="changeLineMediaAlias" />
     <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
-  </section>
+  </div>
 </template>
 
 <script>
 import Util from '@/core/util';
 import moment from 'moment';
 import { mapActions } from 'vuex';
+import ErrorMessage from '../../components/common/ErrorMessage.vue';
 
 export default {
+  components: { ErrorMessage },
   props: [],
   data() {
     return {
@@ -133,7 +134,6 @@ export default {
 
   async beforeMount() {
     await this.getTags();
-    await this.listTagAssigned();
   },
 
   watch: {
@@ -149,8 +149,7 @@ export default {
 
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     templateChange(data) {

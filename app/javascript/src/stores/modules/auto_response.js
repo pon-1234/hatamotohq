@@ -94,7 +94,7 @@ export const actions = {
 
   async createFolder(context, payload) {
     try {
-      const res = await FolderAPI.createFolder(payload);
+      const res = await FolderAPI.create(payload);
       context.commit('pushFolder', res);
       return res;
     } catch (error) {

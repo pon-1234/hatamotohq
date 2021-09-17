@@ -15,7 +15,7 @@ export default {
     });
   },
 
-  createFolder: (query) => {
+  create: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/folders',
       method: 'POST',
@@ -24,7 +24,7 @@ export default {
     });
   },
 
-  updateFolder: (query) => {
+  update: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/folders/' + query.id,
       method: 'PATCH',

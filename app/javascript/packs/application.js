@@ -2,7 +2,6 @@ import '../stylesheets/application'; // This file will contain your custom CSS
 import Vue from 'vue';
 import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';
-import 'bootstrap';
 import Chartkick from 'vue-chartkick';
 import { Datetime } from 'vue-datetime';
 import { Settings } from 'luxon';

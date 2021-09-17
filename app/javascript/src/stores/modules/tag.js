@@ -135,7 +135,7 @@ export const actions = {
 
   async createFolder(context, payload) {
     try {
-      const folder = await FolderAPI.createFolder(payload);
+      const folder = await FolderAPI.create(payload);
       context.commit('pushFolder', folder);
       return folder;
     } catch (error) {
@@ -145,7 +145,7 @@ export const actions = {
 
   async updateFolder(context, payload) {
     try {
-      const folder = await FolderAPI.updateFolder(payload);
+      const folder = await FolderAPI.update(payload);
       context.commit('updateFolder', folder);
       return folder;
     } catch (error) {

@@ -35,4 +35,5 @@
 #
 class RichMenu < ApplicationRecord
   belongs_to :line_account
+  belongs_to :folder
 end

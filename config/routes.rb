@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       resources :auto_responses
       resources :templates
       resources :folders
+      resources :rich_menus
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
       get '/action_objects', to: 'action_objects#index'

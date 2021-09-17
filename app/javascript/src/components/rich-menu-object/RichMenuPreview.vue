@@ -1,6 +1,6 @@
 <template>
   <div
-    class="richmenu-preview wrapper d-flex-sm justify-content-center align-items-center position-relative cursor-pointer bg-white"
+    class="richmenu-preview d-flex-sm justify-content-center align-items-center position-relative cursor-pointer bg-white"
     :style="typeTemplate == 'compact' || templateId > 1000 ? { cursor: 'pointer', height: '86px'} : {cursor: 'pointer', height: '172.554px'}">
 
     <img :src="background || '/img/richmenu-default.png'" class="w-100 h-100 position-absolute">
