@@ -111,7 +111,7 @@
           :title="'以下のリッチメニューを削除します。よろしいですか？'"
           :type="'delete'"
           @input="deleteRichMenu" />
-        <rich-menu-modal-template-choose :selectionId="templateId" @accept="templateChange" />
+        <modal-richmenu-template-selection :selectionId="templateId" @accept="templateChange" />
         <media-modal :data="{type: 'richmenu'}" @input="changeLineMediaAlias" />
         <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
     </section>

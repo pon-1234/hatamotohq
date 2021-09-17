@@ -33,8 +33,8 @@
                 </thead>
               </table>
               <div class="tag-scroll folder-list">
-                <div v-for="(item, index) in tags_options" :key="index" :class="selectedFolder== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
-                  <i :class="selectedFolder== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
+                <div v-for="(item, index) in folders" :key="index" :class="selectedFolderIndex== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
+                  <i :class="selectedFolderIndex== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
                   <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
                 </div>
               </div>
@@ -46,7 +46,7 @@
                 <!--<thead>-->
                 <!--<tr>-->
                   <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                  <!--<th v-if="tags_options[selectedFolder]">{{tags_options[selectedFolder].name}}</th>-->
+                  <!--<th v-if="folders[selectedFolderIndex]">{{folders[selectedFolderIndex].name}}</th>-->
                 <!--</tr>-->
                 <!--</thead>-->
               <!--</table>-->
@@ -54,7 +54,7 @@
                 <div class="x-btn-back">
                   <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
                 <div class="x-title"
-                      v-if="tags_options[selectedFolder]">{{tags_options[selectedFolder].name}}</div>
+                      v-if="curFolder">{{curFolder.name}}</div>
               </div>
 
               <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       value: [],
-      selectedFolder: 0,
+      selectedFolderIndex: 0,
       isFocus: false,
       search: '',
       selectedTags: [],
@@ -110,18 +110,20 @@ export default {
   },
   computed: {
     ...mapState('tag', {
-      tags_options(state) {
-        return this.allTags ? state.tags : state.tagsAssigned;
-      }
+      folders: state => state.folders
     }),
 
     criteria() {
       return this.search.trim().toLowerCase();
     },
 
+    curFolder() {
+      return this.folders[this.selectedFolderIndex];
+    },
+
     availableOptions() {
       const criteria = this.criteria;
-      const options = this.tags_options[this.selectedFolder].tags;
+      const options = this.folders[this.selectedFolderIndex].tags;
       if (criteria) {
         return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1);
       }
@@ -140,7 +142,7 @@ export default {
       return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || (rect.top + window.scrollY) < 100;
     },
     changeSelected(index) {
-      this.selectedFolder = index;
+      this.selectedFolderIndex = index;
       this.isPc = true;
     },
 

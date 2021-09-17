@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card mxw-1200">
     <div class="card-header d-flex align-items-center">
       <a :href="`${userRootUrl}/user/rich_menus`" class="text-info">
         <i class="fa fa-arrow-left"></i> リッチメニュー一覧
@@ -94,8 +94,10 @@
       </div>
     </div>
 
-    <rich-menu-modal-template-choose :selectionId="templateId" @accept="templateChange" />
-    <media-modal :data="{type: 'richmenu'}" @input="changeLineMediaAlias" />
+    <loading-indicator :loading="loading"></loading-indicator>
+
+    <modal-rich-menu-template-selection :selectionId="templateId" @accept="templateChange"></modal-rich-menu-template-selection>
+    <!-- <media-modal :data="{type: 'richmenu'}" @input="changeLineMediaAlias" /> -->
     <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
   </div>
 </template>
@@ -104,13 +106,12 @@
 import Util from '@/core/util';
 import moment from 'moment';
 import { mapActions } from 'vuex';
-import ErrorMessage from '../../components/common/ErrorMessage.vue';
 
 export default {
-  components: { ErrorMessage },
   props: [],
   data() {
     return {
+      loading: true,
       templateId: 201,
       templateValue: 6,
       line_media_alias: null,
@@ -134,6 +135,7 @@ export default {
 
   async beforeMount() {
     await this.getTags();
+    this.loading = false;
   },
 
   watch: {

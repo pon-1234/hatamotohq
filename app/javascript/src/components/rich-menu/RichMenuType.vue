@@ -15,8 +15,7 @@
         </rich-menu-preview>
         <div class="my-2">
           <span v-if="errors.first('image-url')" class="invalid-box-label">背景画像は必須です</span>
-          <button type="button" class="btn-block btn btn-secondary"
-                  data-toggle="modal" data-target="#modalRichmenuTemplateChoose">
+          <button type="button" class="btn-block btn btn-secondary" data-toggle="modal" data-target="#modalRichMenuTemplateSelection">
             テンプレートを選択
           </button>
         </div>
@@ -67,10 +66,8 @@
                           :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
                           :labelRequired="false"
                           :showTitle="false"
-                          @input="item.action = $event"
-                        >
+                          @input="item.action = $event">
                         </message-action-type>
-
                       </div>
                     </div>
                   </div>
