@@ -21,6 +21,11 @@ export const mutations = {
     folder.templates_count = 0;
     const index = state.folders.findIndex(_ => _.id === folder.id);
     state.folders.splice(index, 1, folder);
+  },
+
+  deleteFolder(state, id) {
+    const index = state.folders.findIndex(_ => _.id === id);
+    state.folders.splice(index, 1);
   }
 };
 
@@ -98,7 +103,7 @@ export const actions = {
 
   async deleteFolder(context, id) {
     try {
-      const response = await FolderAPI.deleteFolder(id);
+      const response = await FolderAPI.delete(id);
       context.commit('deleteFolder', id);
       return response;
     } catch (error) {

@@ -25,8 +25,9 @@
                   <th class="w-30p">リッチメニュー名</th>
                   <th class="w-5p">状況</th>
                   <th class="w-15p">メニュー初期状態</th>
-                  <th class="w-30p">画像</th>
+                  <th class="w-20p">画像</th>
                   <th class="w-10p">メンバー数</th>
+                  <th class="w-10p">操作</th>
                   <th class="w-10p">フォルダ</th>
                 </tr>
               </thead>
@@ -35,42 +36,33 @@
                   v-for="(richmenu, index) in curFolder.rich_menus"
                   v-bind:key="index"
                 >
-                  <td class="text-left">{{ richmenu.name }}</td>
+                  <td class="font-weight-bold">{{ richmenu.name }}</td>
                   <td>
-                    {{ richmenu.status }}
+                    <div class="badge badge-success">有効</div>
                   </td>
+                  <td>表示しない</td>
                   <td>
                     <img :src="richmenu.image_url" class="fw-120 fh-81">
                   </td>
-                  <td class=" row-btn text-right">
-                    <div
-                      class="btn-copy01"
-                      data-toggle="tooltip"
-                      title="複製"
-                    >
-                      <a
-                        :href="MIX_ROOT_PATH + '/richmenus/' + richmenu.id"
-                        class="btn-more btn-more-linebot btn-block"
-                        data-toggle="tooltip"
-                        title="編集"
-                      >
-                        <i class="fas fa-edit"></i>
-                      </a>
+                  <td>0</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-primary" @click="openEdit(richmenu)">編集</button>
+                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
+                      <div class="dropdown-menu bg-white" role="menu" style="">
+                        <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
+                        <div class="dropdown-divider"></div>
+                        <a role="button" class="dropdown-item" @click="openEdit(richmenu)">無効にする</a>
+                        <div class="dropdown-divider"></div>
+                        <a role="button" class="dropdown-item">リッチメニューをコビー</a>
+                        <div class="dropdown-divider"></div>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichmenu" @click="showConfirmDeleteModal(richmenu)">リッチメニューを削除</a>
+                      </div>
                     </div>
-                    <div
-                      class="btn-delete01"
-                      data-toggle="tooltip"
-                      title="削除"
-                    >
-                      <button
-                        class="btn-more btn-more-linebot btn-block"
-                        data-toggle="modal"
-                        data-target="#modal-delete"
-                        @click="curRichMenu = richmenu"
-                      >
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
+                  </td>
+                  <td>
+                    <div>{{ curFolder.name }}</div>
+                    <div>{{ richmenu.created_at }}</div>
                   </td>
                 </tr>
               </tbody>
@@ -205,25 +197,12 @@ export default {
       this.foldersContent = this.folders[this.selectedFolderIndex].richmenus;
     },
 
-    async submitUpdateFolder(value) {
-      this.$store
-        .dispatch('global/editFolder', value)
-        .done((res) => {
-          this.folders[this.selectedFolderIndex].name = res.name;
-        })
-        .fail((e) => {});
-    },
-
     async submitCreateFolder(folder) {
       await this.createFolder(folder);
-      // this.$store
-      //   .dispatch('global/createFolder', value)
-      //   .done((res) => {
-      //     const data = res;
-      //     data.richmenus = [];
-      //     this.folders.push(data);
-      //   })
-      //   .fail((e) => {});
+    },
+
+    async submitUpdateFolder(folder) {
+      await this.updateFolder(folder);
     },
 
     backToFolder() {

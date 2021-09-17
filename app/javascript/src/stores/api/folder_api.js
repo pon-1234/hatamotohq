@@ -8,13 +8,6 @@ export default {
     });
   },
 
-  deleteFolder: (id) => {
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/folders/${id}`,
-      method: 'DELETE'
-    });
-  },
-
   create: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/folders',
@@ -30,6 +23,13 @@ export default {
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
+    });
+  },
+
+  delete: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/folders/${id}`,
+      method: 'DELETE'
     });
   }
 };

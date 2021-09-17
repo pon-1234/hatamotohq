@@ -26,7 +26,7 @@
 class Template < ApplicationRecord
   # Association
   belongs_to :folder
-  has_many :template_messages, inverse_of: :template
+  has_many :template_messages, inverse_of: :template, dependent: :destroy
 
   accepts_nested_attributes_for :template_messages, allow_destroy: true
   # Validation

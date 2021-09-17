@@ -12,8 +12,8 @@
           @submitCreateFolder="submitCreateFolder"
           />
         <div class="flex-grow-1">
-          <a v-if="folders && folders.length && folders[selectedFolderIndex]"
-            :href="MIX_ROOT_PATH + '/user/templates/new?folder_id='+folders[selectedFolderIndex].id"
+          <a v-if="folders && folders.length && curFolder"
+            :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
             class="btn btn-primary btn-sm"
           >
             <i class="fa fa-plus"></i> 新規作成
@@ -46,7 +46,7 @@
                     </div>
                   </td>
                   <td>
-                    <div>{{ folders[selectedFolderIndex].name }}</div>
+                    <div>{{ curFolder.name }}</div>
                     <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
                   </td>
                 </tr>
@@ -61,8 +61,8 @@
 
     <!-- START: Delete folder modal -->
     <modal-confirm id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
-      <template v-slot:content v-if="folders[selectedFolderIndex]">
-        <span>フォルダ名：{{ folders[selectedFolderIndex].name }}</span>
+      <template v-slot:content v-if="curFolder">
+        <span>フォルダ名：{{ curFolder.name }}</span>
       </template>
     </modal-confirm>
     <!-- END: Delete folder modal -->
@@ -106,7 +106,11 @@ export default {
     }),
     ...mapState('template', {
       folders: state => state.folders
-    })
+    }),
+
+    curFolder() {
+      return this.folders[this.selectedFolderIndex];
+    }
   },
 
   watch: {
@@ -158,26 +162,20 @@ export default {
     },
 
     async submitCreateFolder(folder) {
-      this.createFolder(folder);
+      await this.createFolder(folder);
     },
 
     async submitUpdateFolder(folder) {
       await this.updateFolder(folder);
     },
 
-    backToFolder() {
-      this.isPc = false;
+    async submitDeleteFolder() {
+      await this.deleteFolder(this.curFolder.id);
+      this.onSelectedFolderChanged(0);
     },
 
-    submitDeleteFolder() {
-      this.$store
-        .dispatch('global/deleteFolder', { id: this.folders[this.selectedFolderIndex].id, type: 'auto_message' })
-        .done(res => {
-          this.deleteFolder(this.folders[this.selectedFolderIndex].id);
-          this.selectedFolderIndex -= 1;
-          this.templates = this.folders[this.selectedFolderIndex].templates;
-        }).fail(e => {
-        });
+    backToFolder() {
+      this.isPc = false;
     },
 
     openEdit(autoResponse) {
