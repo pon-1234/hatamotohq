@@ -12,19 +12,66 @@
           <h3 class="card-title">基本設定</h3>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label>リッチメニュー名<required-mark/></label>
-            <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー名を入力してください" v-validate="'required'" data-vv-as="リッチメニュー名">
-            <error-message :message="errors.first('name')"></error-message>
+          <div class="form-group d-flex align-items-start">
+            <div class="d-flex fw-300 align-items-center">
+              <span class="font-weight-bold">リッチメニュー名<required-mark/></span>
+              <div v-b-tooltip.hover title="タイトルは管理画面のみで使用され、ユーザーには表示されません。" class="ml-2">
+                <i class="text-md far fa-question-circle"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー（ホーム）" v-validate="'required'" data-vv-as="リッチメニュー名">
+              <error-message :message="errors.first('name')"></error-message>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>メニューバーのテキスト<required-mark/></label>
-            <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="メニューバーのテキストを入力してください" v-validate="'required|max:14'" data-vv-as="メニューバーのテキスト">
-            <error-message :message="errors.first('richmenu-title')"></error-message>
+          <div class="form-group d-flex align-items-start mt-2">
+            <div class="d-flex fw-300 align-items-center">
+              <span class="font-weight-bold">トークルームメニュー<required-mark/></span>
+              <div v-b-tooltip.hover title="チャットルームの下部にあるメニューバーに表示するテキストです。" class="ml-2">
+                <i class="text-md far fa-question-circle"></i>
+              </div>
+            </div>
+            <div class="flex-grow-1">
+              <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="トップメニュー" v-validate="'required|max:14'" data-vv-as="トークルームメニュー">
+              <error-message :message="errors.first('richmenu-title')"></error-message>
+            </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group d-flex align-items-start mt-2">
+            <div class="d-flex fw-300 align-items-center">
+              <span class="font-weight-bold">メニューの初期状態<required-mark/></span>
+              <div v-b-tooltip.hover title="チャットルームを開いたときに、リッチメニューを表示するかしないかを選択します。" class="ml-2">
+                <i class="text-md far fa-question-circle"></i>
+              </div>
+            </div>
+            <div class="radio-group flex-grow-1 flex-column">
+              <div class="radio">
+                <label class="">
+                  <input
+                    v-model="richMenuData.selected"
+                    name="selected"
+                    type="radio"
+                    v-bind:value="true"
+                  />
+                  表示する
+                </label>
+              </div>
+              <div class="radio">
+                <label class="">
+                  <input
+                    v-model="richMenuData.selected"
+                    name="selected"
+                    type="radio"
+                    v-bind:value="false"
+                  />
+                  表示しない
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="form-group">
             <label>表示期間<required-mark/></label>
             <div class="d-flex align-items-center">
               <datetime
@@ -51,7 +98,7 @@
               <button class="btn btn-secondary ml-2" @click="resetTime">リセット</button>
             </div>
             <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -83,18 +130,6 @@
               </div>
             </div>
           </div>
-          <divider></divider>
-          <div class="form-group">
-            <label class="mb10">設定</label>
-            <div class="flex start ai_center">
-              <div class="toggle-switch btn-keyword01">
-                <input v-model="selected" id="keyword-onoff-setting01" class="toggle-input" type="checkbox">
-                <label for="keyword-onoff-setting01" class="toggle-label">
-                  <span></span>
-                </label>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -115,15 +150,12 @@
 import Util from '@/core/util';
 import moment from 'moment';
 import { mapActions } from 'vuex';
-import { Datetime } from 'vue-datetime';
 
 export default {
-  components: {
-    Datetime
-  },
   props: [],
   data() {
     return {
+      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       richMenuData: {
@@ -133,14 +165,14 @@ export default {
         template_id: 201,
         chat_bar_text: null,
         areas: [],
-        start_at: moment().format('YYYY-MM-DD'),
-        end_at: moment().add(1, 'days').format('YYYY-MM-DD')
-
+        // start_at: moment().format('YYYY-MM-DD'),
+        // end_at: moment().add(1, 'days').format('YYYY-MM-DD')
+        selected: false
       },
       templateValue: 6,
       templateType: 'large',
       backgroundUrl: null,
-      selected: false,
+
       tags: null,
       messageErrorDateTime: ''
     };
@@ -264,7 +296,12 @@ export default {
       }
 
       const response = await this.createRichMenu(payload);
-      console.log('---response---', response);
+      if (response) {
+        Util.showSuccessThenRedirect(
+          'リッチメニュの登録は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/rich_menus`
+        );
+      }
     },
 
     getPlaceholderDate() {
