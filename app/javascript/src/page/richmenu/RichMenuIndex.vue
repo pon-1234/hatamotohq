@@ -67,6 +67,7 @@
                 </tr>
               </tbody>
             </table>
+            <div class="text-center mt-5" v-if="curFolder.rich_menus.length === 0"><b>リッチメニューはありません。</b></div>
           </div>
         </div>
       </div>

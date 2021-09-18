@@ -42,6 +42,7 @@ class User::RichMenusController < User::ApplicationController
         :start_at,
         :end_at,
         :template_id,
+        :selected,
         areas: [
           :key,
           bounds: {},

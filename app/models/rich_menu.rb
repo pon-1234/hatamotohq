@@ -42,7 +42,7 @@ class RichMenu < ApplicationRecord
 
   # Validation
   validates :name, presence: true, length: { maximum: 255 }
-  validates_presence_of :size, :areas, :selected
+  validates_presence_of :size, :areas
   # validate :time_is_not_overlapped
 
   # Scope

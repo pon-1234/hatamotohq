@@ -1,0 +1,1 @@
+json.partial! 'models/rich_menu', rich_menu: @rich_menu

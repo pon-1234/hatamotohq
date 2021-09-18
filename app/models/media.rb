@@ -28,7 +28,7 @@ class Media < ApplicationRecord
   has_one_attached :file
   validates :file, attached: false, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_image_map?
-  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_rich_menu?
+  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_menu?
   validates_with MediaValidator
 
   before_create do

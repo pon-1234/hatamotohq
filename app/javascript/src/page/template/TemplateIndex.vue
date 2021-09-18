@@ -52,7 +52,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="templates.length === 0">テンプレートはありません。</div>
+            <div class="text-center mt-5" v-if="templates.length === 0"><b>テンプレートはありません。</b></div>
           </div>
         </div>
       </div>
