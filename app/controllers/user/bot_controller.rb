@@ -11,7 +11,7 @@ class User::BotController < User::ApplicationController
   end
 
   def register
-    if valid_bot?(bot_params[:line_channel_id], bot_params[:line_channel_secret])
+    if valid_bot?(bot_params[:channel_id], bot_params[:channel_secret])
       line_account = current_user.line_account
       line_account.bot_initialized = true
       line_account.update!(bot_params)
@@ -27,8 +27,8 @@ class User::BotController < User::ApplicationController
         .permit(
           :line_name,
           :line_user_id,
-          :line_channel_id,
-          :line_channel_secret
+          :channel_id,
+          :channel_secret
         )
     end
 end

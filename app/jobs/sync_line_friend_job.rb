@@ -4,7 +4,7 @@ class SyncLineFriendJob < ApplicationJob
   queue_as :default
 
   def perform(line_account, friend_id)
-    data = LineApi::GetProfile.new(line_account.line_channel_id, line_account.line_channel_secret, friend_id).perform
+    data = LineApi::GetProfile.new(line_account).perform(friend_id)
 
     # Create or update friend info
     line_friend = LineFriend.find_or_initialize_by(line_account: line_account, line_user_id: data['userId'])

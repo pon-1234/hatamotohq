@@ -11,7 +11,7 @@
 #  enabled                  :boolean
 #  end_at                   :datetime
 #  name                     :string(255)
-#  selected                 :string(255)
+#  selected                 :boolean
 #  size                     :json
 #  start_at                 :datetime
 #  status                   :string(255)      default("pending")
@@ -42,8 +42,13 @@ class RichMenu < ApplicationRecord
 
   # Validation
   validates :name, presence: true, length: { maximum: 255 }
-  validates_presence_of :start_at, :end_at, :size, :areas
+  validates_presence_of :size, :areas, :selected
   # validate :time_is_not_overlapped
+
+  # Scope
+  enum status: { pending: 'pending', done: 'done', error: 'error' }
+
+  after_create_commit :execute_after_create_commit
 
   def image_url
     media.url
@@ -57,5 +62,9 @@ class RichMenu < ApplicationRecord
           errors.add(:time, '別の時間範囲を選択してください。 選択した範囲がオーバーラップしました。')
         end
       end
+    end
+
+    def execute_after_create_commit
+      DispatchRichMenuJob.perform_later(self.id)
     end
 end

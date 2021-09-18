@@ -43,13 +43,13 @@
             <div class="form-group row">
               <label class="col-12">チャネルID</label>
               <div class="col-12">
-                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.line_channel_id" disabled>
+                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_id" disabled>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-12">チャネルシークレット</label>
               <div class="col-12">
-                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.line_channel_secret" disabled>
+                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_secret" disabled>
               </div>
             </div>
             <div class="form-group row">
@@ -93,8 +93,8 @@ export default {
         line_user_id: null,
         line_name: null,
         display_name: null,
-        line_channel_id: null,
-        line_channel_secret: null,
+        channel_id: null,
+        channel_secret: null,
         liff_id: null
       }
     };

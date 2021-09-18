@@ -78,14 +78,14 @@ module WebhooksHelper
       # The existing friend in LINE system may not exists in this system, so when sending
       # a message from LINE we need to check and store friend if needs
       def add_friend(friend_id)
-        user_profile = LineApi::GetProfile.new(@line_account.line_channel_id, @line_account.line_channel_secret, friend_id).perform
+        user_profile = LineApi::GetProfile.new(@line_account).perform(friend_id)
         # Return if could not file user profile
         return nil if user_profile.nil?
         line_friend = LineFriend.find_or_initialize_by(line_account: @line_account, line_user_id: friend_id)
         line_friend.line_picture_url = user_profile['pictureUrl']
         line_friend.line_name = user_profile['displayName']
         line_friend.display_name = line_friend.display_name || line_friend.line_name
-        line_friend.save
+        line_friend.save!
 
         # Create or reopen channel
         channel = Channel.find_or_initialize_by(line_account: @line_account, line_friend: line_friend)

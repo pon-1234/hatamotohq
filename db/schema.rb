@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_122032) do
+ActiveRecord::Schema.define(version: 2021_09_18_051830) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -95,23 +95,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['broadcast_id'], name: 'index_broadcast_messages_on_broadcast_id'
-  end
-
-  create_table 'broadcast_template_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'broadcast_template_id'
-    t.string 'message_type'
-    t.text 'content', size: :long
-    t.integer 'sort_order', default: 0
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['broadcast_template_id'], name: 'index_broadcast_template_messages_on_broadcast_template_id'
-  end
-
-  create_table 'broadcast_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_broadcast_templates_on_line_account_id'
   end
 
   create_table 'broadcasts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -206,8 +189,8 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
     t.string 'line_user_id'
     t.string 'line_name'
     t.string 'display_name'
-    t.string 'line_channel_id'
-    t.string 'line_channel_secret'
+    t.string 'channel_id'
+    t.string 'channel_secret'
     t.string 'line_channel_access_token'
     t.string 'invite_url'
     t.string 'webhook_url'
@@ -267,29 +250,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
     t.index ['line_account_id'], name: 'index_media_on_line_account_id'
   end
 
-  create_table 'message_content_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'message_template_id'
-    t.string 'message_type'
-    t.text 'content', size: :long
-    t.integer 'num', default: 0
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['message_template_id'], name: 'index_message_content_templates_on_message_template_id'
-  end
-
-  create_table 'message_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'folder_id'
-    t.string 'title'
-    t.text 'content', size: :long
-    t.string 'message_type'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.datetime 'deleted_at'
-    t.index ['folder_id'], name: 'index_message_templates_on_folder_id'
-    t.index ['line_account_id'], name: 'index_message_templates_on_line_account_id'
-  end
-
   create_table 'messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'channel_id'
     t.string 'sender_type'
@@ -323,7 +283,7 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
     t.string 'name'
     t.json 'size'
     t.string 'chat_bar_text'
-    t.string 'selected'
+    t.boolean 'selected'
     t.json 'areas'
     t.string 'status', default: 'pending'
     t.boolean 'enabled'
@@ -562,8 +522,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
   add_foreign_key 'auto_responses', 'folders'
   add_foreign_key 'auto_responses', 'line_accounts'
   add_foreign_key 'broadcast_messages', 'broadcasts'
-  add_foreign_key 'broadcast_template_messages', 'broadcast_templates'
-  add_foreign_key 'broadcast_templates', 'line_accounts'
   add_foreign_key 'broadcasts', 'line_accounts'
   add_foreign_key 'channel_participants', 'channels'
   add_foreign_key 'channels', 'line_accounts'
@@ -575,8 +533,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_122032) do
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
-  add_foreign_key 'message_templates', 'folders'
-  add_foreign_key 'message_templates', 'line_accounts'
   add_foreign_key 'messages', 'channels'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'

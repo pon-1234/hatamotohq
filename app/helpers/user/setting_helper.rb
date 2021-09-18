@@ -5,8 +5,8 @@ module User::SettingHelper
     line_account.as_json(only: [
       :line_name,
       :display_name,
-      :line_channel_id,
-      :line_channel_secret,
+      :channel_id,
+      :channel_secret,
       :webhook_url,
       :liff_id
     ])

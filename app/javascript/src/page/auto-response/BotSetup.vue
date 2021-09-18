@@ -31,7 +31,7 @@
           <label class="col-4">チャネルID<required-mark></required-mark></label>
           <div class="col-8">
             <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_channel_id]" v-model="botForm.line_channel_id">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[channel_id]" v-model="botForm.channel_id">
               <span class="error-explanation">{{ errors[0] }}</span>
             </ValidationProvider>
           </div>
@@ -41,7 +41,7 @@
           <label class="col-4">チャネルシークレット<required-mark></required-mark></label>
           <div class="col-8">
             <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_channel_secret]" v-model="botForm.line_channel_secret">
+              <input type="text" class="form-control" placeholder="入力してください" name="bot[channel_secret]" v-model="botForm.channel_secret">
               <span class="error-explanation">{{ errors[0] }}</span>
             </ValidationProvider>
           </div>
@@ -75,8 +75,8 @@ export default {
       botForm: {
         line_name: null,
         line_user_id: null,
-        line_channel_id: null,
-        line_channel_secret: null
+        channel_id: null,
+        channel_secret: null
       },
       submitted: false
     };

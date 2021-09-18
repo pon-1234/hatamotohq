@@ -2,21 +2,8 @@
 
 # Get a list of users who added your LINE Official Account as a friend
 class LineApi::PostMessageBroadcast < LineApi::BaseRequest
-  def initialize(channel_id, channel_secret, messages)
-    @messages = messages
-    super(channel_id, channel_secret)
-  end
-
-  def perform
-    headers = {
-      'Authorization' => "Bearer #{@access_token}",
-      'Content-Type' => 'application/json'
-    }
-    options = {
-      headers: headers,
-      body: { messages: @messages }.to_json
-    }
-    response = self.class.post('/bot/message/broadcast', options)
-    response.code == 200
+  def perform(messages)
+    response = client.broadcast(messages)
+    response.code == HTTP_OK
   end
 end

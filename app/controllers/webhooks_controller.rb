@@ -10,11 +10,11 @@ class WebhooksController < ApplicationController
     return render_bad_request if events.blank? || key.blank?
     # only handle first event
     event = events.first
-    if handle_event(event, key)
-      render_success
-    else
-      render_server_error
-    end
+    handle_event(event, key)
+    render_success
+  rescue StandardError => e
+    logger.error(e)
+    render_server_error
   end
 
   def push

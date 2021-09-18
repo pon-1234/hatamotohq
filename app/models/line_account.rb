@@ -6,19 +6,19 @@
 #
 #  id                        :bigint           not null, primary key
 #  bot_initialized           :boolean          default(FALSE)
+#  channel_secret            :string(255)
 #  deleted_at                :datetime
 #  display_name              :string(255)
 #  invite_url                :string(255)
 #  line_channel_access_token :string(255)
-#  line_channel_secret       :string(255)
 #  line_name                 :string(255)
 #  note                      :text(65535)
 #  status                    :string(255)      default("inactive")
 #  webhook_url               :string(255)
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
+#  channel_id                :string(255)
 #  liff_id                   :string(255)
-#  line_channel_id           :string(255)
 #  line_user_id              :string(255)
 #  owner_id                  :bigint
 #
@@ -61,7 +61,6 @@ class LineAccount < ApplicationRecord
       Folder.create(name: '未分類', line_account: self, type: :template_message)
       Folder.create(name: '未分類', line_account: self, type: :rich_menu)
       Folder.create(name: '未分類', line_account: self, type: :scenario)
-      Folder.create(name: '未分類', line_account: self, type: :template_scenario)
       Folder.create(name: '未分類', line_account: self, type: :survey)
       Folder.create(name: '未分類', line_account: self, type: :survey_profile)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)
