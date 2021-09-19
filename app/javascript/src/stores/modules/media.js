@@ -8,7 +8,12 @@ export const getters = {};
 
 export const actions = {
   async getMedias(_, query) {
-    return await MediaApi.list(query);
+    try {
+      return await MediaApi.list(query);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
 
   mediasDelete(_, query) {

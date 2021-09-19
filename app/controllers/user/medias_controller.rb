@@ -3,7 +3,12 @@
 class User::MediasController < User::ApplicationController
   # GET /user/medias
   def index
-    @media_arr = Media.all
+    @q = Media.ransack(params[:q])
+    @medias = @q.result.page(params[:page]).per(18)
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # POST /user/medias

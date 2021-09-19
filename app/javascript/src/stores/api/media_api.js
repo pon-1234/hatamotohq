@@ -1,9 +1,8 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/medias',
+      url: `${process.env.MIX_ROOT_PATH}/user/medias?page=${query.page}&q[type_in]=${query.types}`,
       method: 'GET',
-      query: query,
       dataType: 'json',
       contentType: 'application/json'
     });

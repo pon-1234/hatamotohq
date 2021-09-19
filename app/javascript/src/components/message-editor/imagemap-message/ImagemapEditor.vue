@@ -75,11 +75,13 @@
       :selectionId="templateId"
       @accept="templateChange">
     </imagemap-template-selector>
-    <!-- <media-modal
+
+    <media-modal
       @input="changeLineMediaAlias"
       :data="{type: 'imagemap'}"
       :id="index+'_imagemapModalUploadImage'">
-    </media-modal> -->
+    </media-modal>
+
     <rich-menu-image-editor
       v-if="isShowEditor"
       :templateId="templateId"

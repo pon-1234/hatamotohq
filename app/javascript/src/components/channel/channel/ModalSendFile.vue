@@ -173,18 +173,19 @@ export default {
         type: this.typesFilter
       };
 
-      this.$store
-        .dispatch('media/getMedias', query)
-        .done(res => {
-          this.medias = res.data;
-          this.perPage = res.meta.per_page;
-          this.totalRows = res.meta.total;
-          this.isRendered = false;
-          this.$nextTick(() => {
-            this.isRendered = true;
-          });
-        }).fail(e => {
-        });
+      const response = this.$store.dispatch('media/getMedias', query);
+      this.medias = response.data;
+      this.perPage = response.limit_value;
+      this.totalRows = response.total_count;
+
+      console.log(response);
+      // this.medias = res.data;
+      // this.perPage = res.meta.limit_value;
+      // this.totalRows = res.meta.total_count;
+      // this.isRendered = false;
+      // this.$nextTick(() => {
+      //   this.isRendered = true;
+      // });
     },
 
     getUrlMedia(type, alias) {

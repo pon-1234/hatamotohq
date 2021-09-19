@@ -1,18 +1,16 @@
 <template>
   <div
-    class="modal fade modal-template modal-common01"
+    class="modal fade"
     :id="id ? id: 'imageModalCenter'"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">
-            <label>アップロードする</label>
-          </h4>
+          <h4 class="modal-title">アップロードする</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" ref="close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -27,13 +25,10 @@
                     <p>
                       <label>ここにファイルをドラッグ＆ドロップ</label>
                       <br />または
-
                     </p>
                     <div class="custom-file w-fix-200">
                       <div class="custom-file-input h-100 w-100">
                         <input
-                          id="KvInputFile"
-                          name="KvInputFile"
                           :accept="tailOfFile()"
                           :maxsize="getMaxSize()"
                           type="file"
@@ -85,39 +80,37 @@
                 </small>
               </b-card-text>
             </b-tab>
-            <b-tab title="アップロード済み">
-              <b-card-text>
-                <div class="tab-media d-flex flex-column border">
-                  <div class=" medias-content" v-if="isMediaPreviewRendered">
-                    <div v-for="(media, index) in medias" :key="index" :class="defaults.type === 'video' || defaults.type === 'audio'? 'col-xs-12 col-sm-6 col-md-4 text-center' : 'col-xs-12 col-sm-3 col-md-2 text-center' ">
-                      <media-preview
-                        class="thumb-item"
-                        :type="defaults.type"
-                        :src="getUrlMedia(media.alias)"
-                        :duration="getDuration(media)"
-                        @click.native="selectMedia(media)"
-                        :width="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'200px'"
-                        :height="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'100px'"
-                        />
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <b-pagination
-                      v-model="currentPage"
-                      :total-rows="totalRows"
-                      :per-page="perPage"
-                      @change="getMedias"
-                      aria-controls="my-table"
-                    ></b-pagination>
-                  </div>
-                </div>
-                <small
-                  class="form-text text-muted text-pre-line small error"
-                  v-if="errorMessageImageMap"
+            <b-tab title="アップロード済み" :key="contentKey">
+              <div class="row">
+                <div v-for="(media, index) in medias" :key="index"
+                  class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
                 >
-                {{errorMessageImageMap}}
-                </small>
-              </b-card-text>
+                  <media-preview
+                    class="thumb-item"
+                    :type="defaults.type"
+                    :src="media.preview_url"
+                    :duration="getDuration(media)"
+                    @click.native="selectMedia(media)"
+                    :width="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'200px'"
+                    :height="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'100px'">
+                  </media-preview>
+                </div>
+              </div>
+              <div class="text-center">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="totalRows"
+                  :per-page="perPage"
+                  @change="getMedias"
+                  aria-controls="my-table"
+                ></b-pagination>
+              </div>
+              <small
+                class="form-text text-muted text-pre-line small error"
+                v-if="errorMessageImageMap"
+              >
+              {{errorMessageImageMap}}
+              </small>
             </b-tab>
           </b-tabs>
 
@@ -127,18 +120,22 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
+// TODO Refactor this shit
 export default {
   props: ['data', 'id'],
   data() {
     return {
+      contentKey: 0,
       defaults: {
         type: 'image',
         originalContentUrl: '',
         previewImageUrl: ''
       },
+      url: null,
+      preview_url: null,
       errorMessage: '',
       errorMessageImageMap: '',
       description: '',
@@ -149,15 +146,8 @@ export default {
       totalRows: 0,
       perPage: 0,
       medias: [],
-      isMediaPreviewRendered: true,
       inputFile: null
     };
-  },
-  computed: {
-    ...mapState('global', {
-      media_url: state => state.media_url,
-      media_preview_url: state => state.media_preview_url
-    })
   },
   created() {
     if (this.data) {
@@ -191,6 +181,11 @@ export default {
   },
   methods: {
     ...mapActions('global', ['sendMedia', 'uploadImageForRichMenu', 'uploadImageMap']),
+
+    forceRerender() {
+      this.contentKey++;
+    },
+
     getMaxSize() {
       if (this.defaults.type === this.MessageType.Image || this.defaults.type === this.MessageType.Imagemap) return '10M';
       if (this.data.type === 'richmenu') return '1M';
@@ -206,6 +201,63 @@ export default {
     },
 
     async addMedia(input) {
+      const validationResult = this.validateFileExtension(input);
+      if (!validationResult) return;
+
+      if (!validationResult.valid) {
+        this.errorMessage = validationResult.message;
+        return;
+      }
+
+      this.inputFile = input;
+
+      if (this.defaults.type === 'audio') {
+        this.rerender = false;
+        this.audioUrl = URL.createObjectURL(input);
+        this.$nextTick(() => {
+          this.rerender = true;
+        });
+      } else {
+        if (this.defaults.type === 'richmenu') {
+          const that = this;
+          const reader = new FileReader();
+          reader.readAsDataURL(input);
+          reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+              const size = this.width + 'x' + this.height;
+              if (that.ImageRichMenuSize.includes(size)) {
+                that.sendMediaToServer();
+              } else {
+                that.errorMessage = '指定されたサイズの画像をアップロードしてください。';
+              }
+            };
+            img.src = e.target.result;
+          };
+        } else if (this.defaults.type === 'imagemap') {
+          const that = this;
+          const reader = new FileReader();
+          reader.readAsDataURL(input);
+          reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+              const size = this.width + 'x' + this.height;
+              if (size === that.ImageImagemapSize) {
+                that.sendMediaToServer();
+              } else {
+                that.errorMessage = 'サイズが1040px × 1040pxの画像をアップロードしてください。';
+              }
+            };
+            img.src = e.target.result;
+          };
+        } else {
+          await this.sendMediaToServer();
+        }
+      }
+      this.errorMessage = '';
+    },
+
+    validateFileExtension(input) {
       if (
         this.defaults.type === this.MessageType.Image &&
         this.ImageType.indexOf(input.type) === -1
@@ -222,61 +274,7 @@ export default {
       ) { return; }
 
       //  Check size media
-      let message = Util.checkMediaSize(input);
-      if (this.defaults.type === 'richmenu') {
-        message = Util.checkRichMenuImage(input);
-      }
-
-      if (message.status) {
-        this.inputFile = input;
-
-        if (this.defaults.type === 'audio') {
-          this.rerender = false;
-          this.audioUrl = URL.createObjectURL(input);
-          this.$nextTick(() => {
-            this.rerender = true;
-          });
-        } else {
-          if (this.defaults.type === 'richmenu') {
-            const that = this;
-            const reader = new FileReader();
-            reader.readAsDataURL(input);
-            reader.onload = function(e) {
-              const img = new Image();
-              img.onload = function() {
-                const size = this.width + 'x' + this.height;
-                if (that.ImageRichMenuSize.includes(size)) {
-                  that.sendMediaToServer();
-                } else {
-                  that.errorMessage = '指定されたサイズの画像をアップロードしてください。';
-                }
-              };
-              img.src = e.target.result;
-            };
-          } else if (this.defaults.type === 'imagemap') {
-            const that = this;
-            const reader = new FileReader();
-            reader.readAsDataURL(input);
-            reader.onload = function(e) {
-              const img = new Image();
-              img.onload = function() {
-                const size = this.width + 'x' + this.height;
-                if (size === that.ImageImagemapSize) {
-                  that.sendMediaToServer();
-                } else {
-                  that.errorMessage = 'サイズが1040px × 1040pxの画像をアップロードしてください。';
-                }
-              };
-              img.src = e.target.result;
-            };
-          } else {
-            await this.sendMediaToServer();
-          }
-        }
-        this.errorMessage = '';
-      } else {
-        this.errorMessage = message.message;
-      }
+      return Util.checkMediaSize(input);
     },
 
     async sendMediaToServer() {
@@ -292,35 +290,35 @@ export default {
         // imagemap
         await this.uploadImageMap({ file: this.inputFile });
 
-        if (this.media_url) {
+        if (this.url) {
           this.errorMessage = null;
-          this.$emit('input', { id: this.media_url });
+          this.$emit('input', { id: this.url });
         }
         this.$refs.close.click();
       } else if (this.data.type === 'richmenu') {
         // richmenu
         await this.uploadImageForRichMenu({ file: this.inputFile });
 
-        if (this.media_url) {
+        if (this.url) {
           this.errorMessage = null;
-          this.$emit('input', this.media_url);
+          this.$emit('input', this.url);
         }
         this.$refs.close.click();
       } else {
         // other
-        await this.sendMedia(query);
-        if (this.media_url) {
+        const response = await this.sendMedia(query);
+        if (response.url) {
           if (
             this.defaults.type === this.MessageType.Image ||
             this.defaults.type === this.MessageType.Video
           ) {
-            this.defaults.originalContentUrl = this.media_url;
-            this.defaults.previewImageUrl = this.media_preview_url;
+            this.defaults.originalContentUrl = response.url;
+            this.defaults.previewImageUrl = response.preview_url;
           }
 
           if (this.defaults.type === this.MessageType.Audio) {
-            this.defaults.originalContentUrl = this.media_url;
-            this.defaults.duration = this.duration;
+            this.defaults.originalContentUrl = response.url;
+            this.defaults.duration = response.duration;
           }
           this.$emit('input', this.defaults);
         }
@@ -333,39 +331,34 @@ export default {
       return media.duration ? Util.getDuration(media) : '00:00';
     },
 
-    getMedias(page = 1) {
-      let temp = [];
+    async getMedias(page = 1) {
+      const types = [];
       if (this.defaults.type.includes('image') || this.defaults.type.includes('imagemap')) {
-        temp = temp.concat(this.ImageType);
+        types.push('image');
       }
       if (this.defaults.type.includes('video')) {
-        temp = temp.concat(this.VideoType);
+        types.push('video');
       }
       if (this.defaults.type.includes('audio')) {
-        temp = temp.concat(this.AudioType);
+        types.push('audio');
       }
       if (this.defaults.type === 'richmenu') {
-        temp = temp.concat('richmenu');
+        types.push('menu');
       }
 
       const query = {
         page: page,
-        type: temp
+        types: types
       };
 
-      this.$store
-        .dispatch('media/getMedias', query)
-        .done(res => {
-          this.medias = res.data;
-          this.perPage = res.meta.per_page;
-          this.totalRows = res.meta.total;
-          this.isMediaPreviewRendered = false;
-
-          this.$nextTick(() => {
-            this.isMediaPreviewRendered = true;
-          });
-        }).fail(e => {
-        });
+      const response = await this.$store.dispatch('media/getMedias', query);
+      this.medias = response.data;
+      this.perPage = response.meta.limit_value;
+      this.totalRows = response.meta.total_count;
+      this.isMediaPreviewRendered = false;
+      this.$nextTick(() => {
+        this.isMediaPreviewRendered = true;
+      });
     },
 
     getUrlMedia(alias) {
@@ -442,14 +435,6 @@ export default {
     display: inline-block;
     height: 40px;
     margin-bottom: 0;
-  }
-
-  .h-100 {
-    height: 100% !important;
-  }
-
-  .w-100 {
-    width: 100% !important;
   }
 
   input {

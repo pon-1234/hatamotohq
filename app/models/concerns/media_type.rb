@@ -5,7 +5,9 @@ module MediaType
 
   included do
     enum type: {
-      common: 'common',
+      image: 'image',
+      audio: 'audio',
+      video: 'video',
       menu: 'menu',
       image_map: 'image_map'
     }, _prefix: :type

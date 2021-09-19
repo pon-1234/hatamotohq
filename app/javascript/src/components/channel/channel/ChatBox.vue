@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <!-- <talk-select-media-modal @sendFile="sendFile" @sendMedia="sendMediaFromManager"/> -->
+    <modal-send-file @sendFile="sendFile" @sendMedia="sendMediaFromManager"></modal-send-file>
     <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
     <modal-send-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->

@@ -73,7 +73,6 @@ export default {
 
   async beforeMount() {
     await this.getTags();
-    await this.listTagAssigned();
   },
 
   mounted() {
@@ -97,8 +96,7 @@ export default {
 
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     indexFolders() {

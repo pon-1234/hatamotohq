@@ -206,7 +206,6 @@ export default {
 
   async beforeMount() {
     await this.getTags();
-    await this.listTagAssigned();
     await this.fetchItem();
     this.loading = false;
   },
@@ -230,8 +229,7 @@ export default {
       'getTemplate'
     ]),
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
     ...mapActions('system', [
       'setIsSubmitChange'

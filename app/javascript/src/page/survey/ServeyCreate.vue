@@ -144,8 +144,7 @@ export default {
   },
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
     ...mapActions('survey', [
       'update',

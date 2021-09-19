@@ -33,7 +33,9 @@ class Media < ApplicationRecord
 
   before_create do
     # Set default type to common
-    self.type ||= :common
+    self.type = :image if self.file.image?
+    self.type = :audio if self.file.audio?
+    self.type = :video if self.file.video?
   end
 
   def url

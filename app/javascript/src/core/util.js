@@ -37,43 +37,27 @@ class Util {
   }
 
   static checkMediaSize(file) {
-    const error = {
-      status: true,
-      message: 'OK'
+    const result = {
+      valid: true
     };
 
     if (ImageType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Image) {
-      error.status = false;
-      error.message = '画像ファイルの最大容量は10MBになります。';
-      return error;
+      result.valid = false;
+      result.message = '画像ファイルの最大容量は10MBになります。';
     } else if (VideoType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Video) {
-      error.status = false;
-      error.message = 'ビデオファイルの最大容量は200MBになります。';
-      return error;
+      result.valid = false;
+      result.message = 'ビデオファイルの最大容量は200MBになります。';
     } else if (AudioType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Audio) {
-      error.status = false;
-      error.message = 'オーディオファイルの最大容量は200MBになります。';
-      return error;
+      result.valid = false;
+      result.message = 'オーディオファイルの最大容量は200MBになります。';
     } else if (PdfType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Pdf) {
-      error.status = false;
-      error.message = 'オーディオファイルの最大容量は10MBになります。';
-      return error;
+      result.valid = false;
+      result.message = 'オーディオファイルの最大容量は10MBになります。';
+    } else if (ImageType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.RichMenu) {
+      result.valid = false;
+      result.message = '画像ファイルの最大容量は1MBになります。';
     }
-    return error;
-  }
-
-  static checkRichMenuImage(file) {
-    const error = {
-      status: true,
-      message: 'OK'
-    };
-
-    if (ImageType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.RichMenu) {
-      error.status = false;
-      error.message = '画像ファイルの最大容量は1MBになります。';
-      return error;
-    }
-    return error;
+    return result;
   }
 
   static getDuration(data) {

@@ -1,7 +1,7 @@
 <template>
   <div class="filter-list">
-    <div class="checkbox-inline" v-for="mt in MediaType" :key="mt.type" style="margin-left: 10px">
-      <label class="form-check-label">
+    <div class="checkbox-inline" v-for="mt in MediaType" :key="mt.type">
+      <label class="form-check-label mr-4">
         <input type="checkbox" :value="mt.type" v-model="checked" class="form-check-input"> {{mt.text}}
       </label>
     </div>

@@ -1,90 +1,93 @@
 <template>
-  <div>
-    <div class="ai_center mb40">
-      <div class="col-l">
-        <h3 class="hdg3">登録メディア一覧</h3>
-        <p>登録した画像や動画などの一覧を管理することが出来ます。(※旧メディア一覧)</p>
-      </div>
-      <div class="media-content">
-        <div class="media-pull">
-          <a  href="#" class="btn btn-info" data-toggle="modal" data-target="#imageModalCenter" @click="showDialog('image')" style="margin-bottom: 0.5em;">
-            画像アップロード
-          </a>
-          <a href="#" class="btn btn-info" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('audio')" style="margin-bottom: 0.5em;">
-            音声アップロード
-          </a>
-          <a href="#" class="btn btn-info" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('video')" style="margin-bottom: 0.5em;">
-            動画アップロード
-          </a>
-          <a href="#" class="btn btn-info" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('richmenu')" style="margin-bottom: 0.5em;">
-            メニュー画像アップロード
-          </a>
-          <a href="#" class="btn btn-info" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('pdf')" style="margin-bottom: 0.5em;">
-            PDFアップロード
-          </a>
-        </div>
-        <div class="pull">
-          <filter-checkbox @input="changefilter"/>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-header">
+      <b class="text-md">登録メディア一覧</b>
     </div>
-    <div class="media">
-      <div class="media-list form-common01">
-        <div class="media-child" v-for="media in this.medias" :key="media.id">
-          <div style="display: block;">
-            <div class="panel panel-default panel-media panel-media-image">
-              <div class="panel-body text-center">
-                <div class="gallery-item">
-                  <expandable-image v-if="media.mine_type.includes('image')"
-                    class="image"
-                    :src="urlmedia + '/' + media.alias"
-                  />
-                  <a class="video" v-else-if="media.mine_type.includes('video')" :href="urlmedia + '/' + media.alias" target="_blank">
-                    <img :src="urlmedia + '/' + media.alias + '/preview'"  border="0" align="center"/>
-                  </a>
+    <div class="card-body">
+      <div class="ai_center mb40">
+        <div class="col-l">
+          <p>登録した画像や動画などの一覧を管理することが出来ます。(※旧メディア一覧)</p>
+        </div>
+        <div class="mt-2 d-flex">
+          <div class="media-pull">
+            <a  href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#imageModalCenter" @click="showDialog('image')">
+              画像アップロード
+            </a>
+            <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('audio')">
+              音声アップロード
+            </a>
+            <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('video')">
+              動画アップロード
+            </a>
+            <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('richmenu')">
+              メニュー画像アップロード
+            </a>
+            <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#imageModalCenter"  @click="showDialog('pdf')">
+              PDFアップロード
+            </a>
+          </div>
+          <div class="ml-auto">
+            <filter-checkbox @input="changefilter"/>
+          </div>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-list form-common01">
+          <div class="media-child" v-for="media in this.medias" :key="media.id">
+            <div style="display: block;">
+              <div class="panel panel-default panel-media panel-media-image">
+                <div class="panel-body text-center">
+                  <div class="gallery-item">
+                    <expandable-image v-if="media.mine_type.includes('image')"
+                      class="image"
+                      :src="urlmedia + '/' + media.alias"
+                    />
+                    <a class="video" v-else-if="media.mine_type.includes('video')" :href="urlmedia + '/' + media.alias" target="_blank">
+                      <img :src="urlmedia + '/' + media.alias + '/preview'"  border="0" align="center"/>
+                    </a>
 
-                  <a class="file" v-else-if="media.mine_type.includes('pdf')||media.mine_type.includes('audio')" :href="urlmedia + '/' + media.alias" target="_blank">
-                    <img :src="urlmedia + '/' + media.alias + '/preview'"  border="0" align="center"/>
-                  </a>
+                    <a class="file" v-else-if="media.mine_type.includes('pdf')||media.mine_type.includes('audio')" :href="urlmedia + '/' + media.alias" target="_blank">
+                      <img :src="urlmedia + '/' + media.alias + '/preview'"  border="0" align="center"/>
+                    </a>
 
+                  </div>
                 </div>
-              </div>
-              <div class="panel-footer">
-                <input class="memberchecks pull-right panel-media-check"  type="checkbox" :value="media"
-                       v-model="selectedMedias" />
-                <p>
-                  <b>{{media.mine_type}}</b>
-                </p>
-                <p>
-                  登録：<b>{{showTime(media.created_at)}}</b>
-                </p>
-                <a :href="urlDownload(media.alias)"  class="panel-download" @click.prevent="downloadItem(media)" >ダウンロード</a>
+                <div class="panel-footer">
+                  <input class="memberchecks pull-right panel-media-check"  type="checkbox" :value="media"
+                        v-model="selectedMedias" />
+                  <p>
+                    <b>{{media.mine_type}}</b>
+                  </p>
+                  <p>
+                    登録：<b>{{showTime(media.created_at)}}</b>
+                  </p>
+                  <a :href="urlDownload(media.alias)"  class="panel-download" @click.prevent="downloadItem(media)" >ダウンロード</a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="media-content">
-      <div class="">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="getMedias"
-          aria-controls="my-table"
-        ></b-pagination>
+      <div class="media-content">
+        <div class="">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            @change="getMedias"
+            aria-controls="my-table"
+          ></b-pagination>
+        </div>
+        <div class="pull">
+          <label for="membercheck_all">
+            <input id="membercheck_all" type="checkbox" value="1" v-model="isCheckAll" @change="checkAll()">
+            全てのメディアをチェック
+          </label>
+          <button class="btn btn-danger btn-sm" :disabled="!(selectedMedias.length > 0)" data-toggle="modal"
+                  data-target="#modal-delete">チェックしたメディアをリストから削除する</button>
+        </div>
       </div>
-      <div class="pull">
-        <label for="membercheck_all">
-          <input id="membercheck_all" type="checkbox" value="1" v-model="isCheckAll" @change="checkAll()">
-          全てのメディアをチェック
-        </label>
-        <button class="btn btn-danger btn-sm" :disabled="!(selectedMedias.length > 0)" data-toggle="modal"
-                data-target="#modal-delete">チェックしたメディアをリストから削除する</button>
-      </div>
     </div>
-
     <modal-confirm title="削除しまか？" id='modal-delete' type='delete' @input="deleteMedia"/>
     <media-management-modal v-bind:data="data" @input="uploadMedia"></media-management-modal>
   </div>

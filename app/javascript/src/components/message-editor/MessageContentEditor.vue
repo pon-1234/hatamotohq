@@ -10,12 +10,12 @@
       :packageId="data.packageId"
       :stickerId="data.stickerId"
       @input="onStickerChanged"
-      :index="index"
-    />
+      :index="index">
+    </sticker-message-editor>
 
     <!-- image/video/audio -->
     <template v-if="['image', 'video', 'audio'].includes(data.type)">
-      <media-message-editor :data="data" @input="onMediaChanged" :index="index"/>
+      <media-message-editor :data="data" @input="onMediaChanged" :index="index"></media-message-editor>
     </template>
 
     <!-- location -->

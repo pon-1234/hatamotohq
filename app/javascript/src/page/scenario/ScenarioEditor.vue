@@ -144,7 +144,6 @@ export default {
 
   async beforeMount() {
     await this.getTags();
-    await this.listTagAssigned();
     if (this.scenario_id) {
       await this.getScenarioDetail();
     }
@@ -159,8 +158,7 @@ export default {
       'updateScenario'
     ]),
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     forceRerender() {

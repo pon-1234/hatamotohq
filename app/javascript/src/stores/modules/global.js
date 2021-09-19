@@ -76,21 +76,12 @@ export const actions = {
     context.commit('setUser', userData);
   },
 
-  async sendMedia(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-
-    const response = await Global.sendMedia({ file: query.file, duration: query.duration });
-
-    context.dispatch('system/setLoading', false, { root: true });
-
-    if (response && !response.id) {
-      window.toastr.error('Could not upload media');
+  async sendMedia(_, query) {
+    try {
+      return await Global.sendMedia({ file: query.file, duration: query.duration });
+    } catch (error) {
+      return null;
     }
-    const mediaUrl = response.url;
-    const mediaPreviewUrl = response.preview_url;
-    context.commit('setMediaUrl', mediaUrl);
-    context.commit('setMediaPreviewUrl', mediaPreviewUrl);
-    return response;
   },
 
   async getStickers(context, query) {

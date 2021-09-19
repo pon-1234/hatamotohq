@@ -5,15 +5,12 @@
 # Table name: tags
 #
 #  id              :bigint           not null, primary key
-#  deleted_at      :datetime
-#  description     :string(255)
+#  line_account_id :bigint
+#  folder_id       :bigint
 #  name            :string(255)
-#  slug            :string(255)
-#  type            :string(255)      default("original")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  folder_id       :bigint
-#  line_account_id :bigint
+#  deleted_at      :datetime
 #
 # Indexes
 #
@@ -26,6 +23,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Tag < ApplicationRecord
+  belongs_to :line_account
   belongs_to :folder
   has_many :taggings, dependent: :destroy
   has_many :friends, through: :taggings, source: :taggable, source_type: 'LineFriend'

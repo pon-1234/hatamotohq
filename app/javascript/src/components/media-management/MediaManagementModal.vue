@@ -41,8 +41,6 @@
                 <div class="custom-file w-fix-200">
                   <div class="custom-file-input h-100 w-100">
                     <input
-                      id="KvInputFile"
-                      name="KvInputFile"
                       :accept="tailOfFile()"
                       :maxsize="getMaxSize()"
                       type="file"

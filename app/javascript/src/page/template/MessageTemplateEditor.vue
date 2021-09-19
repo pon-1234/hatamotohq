@@ -84,7 +84,6 @@ export default {
   async beforeMount() {
     await this.fetchItem();
     await this.getTags();
-    await this.listTagAssigned();
     this.loading = false;
   },
 
@@ -107,8 +106,7 @@ export default {
     ]),
 
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     ...mapActions('system', [

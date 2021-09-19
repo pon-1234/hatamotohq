@@ -188,13 +188,11 @@ export default {
     }
 
     await this.getTags();
-    await this.listTagAssigned();
   },
 
   methods: {
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
 
     templateChange(data) {

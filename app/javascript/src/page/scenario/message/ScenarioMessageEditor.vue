@@ -122,7 +122,6 @@ export default {
   async beforeMount() {
     await this.fetchItem();
     await this.getTags();
-    await this.listTagAssigned();
     this.loading = false;
     this.forceRerender();
   },
@@ -136,8 +135,7 @@ export default {
       'setPreviewContent'
     ]),
     ...mapActions('tag', [
-      'getTags',
-      'listTagAssigned'
+      'getTags'
     ]),
     ...mapActions('system', [
       'setIsSubmitChange'
