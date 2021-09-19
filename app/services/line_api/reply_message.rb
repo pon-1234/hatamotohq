@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Get a list of users who added your LINE Official Account as a friend
-class LineApi::PostMessageReply < LineApi::BaseRequest
+class LineApi::ReplyMessage < LineApi::BaseRequest
   def perform(messages, reply_token)
     response = client.reply_message(reply_token, messages)
     response.code == 200

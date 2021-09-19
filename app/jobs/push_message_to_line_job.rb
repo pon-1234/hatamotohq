@@ -21,14 +21,14 @@ class PushMessageToLineJob < ApplicationJob
 
   def send_reply_messages(messages)
     return if messages.empty?
-    success = LineApi::PostMessageReply.new(@line_account).perform(messages, @reply_token)
+    success = LineApi::ReplyMessage.new(@line_account).perform(messages, @reply_token)
     return unless success
     store_messages(messages)
   end
 
   def send_messages(messages)
     messages.in_groups_of(MAX_MSG_IN_REQUEST, false) do |grouped_messages|
-      success = LineApi::PostMessagePush.new(@line_account).perform(grouped_messages, @channel.line_friend.line_user_id)
+      success = LineApi::PushMessage.new(@line_account).perform(grouped_messages, @channel.line_friend.line_user_id)
 
       return unless success
       store_messages(grouped_messages)

@@ -14,12 +14,13 @@ class DispatchRichMenuJob < ApplicationJob
 
     return unless post_create_richmenu
     return unless post_create_richmenu_content
+    set_default_rich_menu
   end
 
   private
     # Send request to line api to create a new richmenu
     def post_create_richmenu
-      response = LineApi::PostRichmenu.new(@line_account).perform(richmenu_payload)
+      response = LineApi::CreateRichMenu.new(@line_account).perform(richmenu_payload)
       if response.code == '200'
         # Update rich menu id
         json_body = JSON.parse(response.body)
@@ -35,7 +36,11 @@ class DispatchRichMenuJob < ApplicationJob
     # Upload richmenu image to line
     def post_create_richmenu_content
       image_url = @richmenu.image_url
-      response = LineApi::PostRichmenuContent.new(@line_account).perform(@richmenu.line_menu_id, URI.parse(image_url).open)
+      response = LineApi::CreateRichMenuImage.new(@line_account).perform(@richmenu.line_menu_id, URI.parse(image_url).open)
+    end
+
+    def set_default_rich_menu
+      response = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
     end
 
     def richmenu_payload

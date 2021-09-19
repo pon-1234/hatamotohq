@@ -63,12 +63,12 @@ class DispatchBroadcastJob < ApplicationJob
 
   private
     def send_broadcast(line_account, messages_data)
-      LineApi::PostMessageBroadcast.new(line_account).perform(messages_data)
+      LineApi::Broadcast.new(line_account).perform(messages_data)
     end
 
     def send_multicast(line_account, messages_data, friend_ids)
-      friend_ids.in_groups_of(400, false) do |ids|
-        LineApi::PostMessageMulticast.new(line_account).perform(messages_data, ids)
+      friend_ids.in_groups_of(500, false) do |ids|
+        LineApi::Multicast.new(line_account).perform(messages_data, ids)
       end
     end
 
