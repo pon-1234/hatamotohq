@@ -15,7 +15,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body mh-100 overflow-hidden">
+        <div class="modal-body mh-100 overflow-hidden" :key="contentKey">
           <b-tabs>
             <b-tab title="新規アップロード" active @click="changeTapDefault">
               <b-card-text>
@@ -38,7 +38,7 @@
                       </div>
                       <label class="custom-file-label text-left">ファイルを選択</label>
                     </div>
-                    <audio controls   v-if="rerender && defaults.type === 'audio'"  ref="audio"  @loadedmetadata="onTimeUpdate" class="hidden">
+                    <audio controls   v-if="defaults.type === 'audio'"  ref="audio"  @loadedmetadata="onTimeUpdate" class="hidden">
                       <source :src="this.audioUrl">
                     </audio>
                     <span v-if="errorMessage" class="error">{{errorMessage}}</span>
@@ -80,7 +80,7 @@
                 </small>
               </b-card-text>
             </b-tab>
-            <b-tab title="アップロード済み" :key="contentKey">
+            <b-tab title="アップロード済み">
               <div class="row">
                 <div v-for="(media, index) in medias" :key="index"
                   class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2"
@@ -140,7 +140,6 @@ export default {
       errorMessageImageMap: '',
       description: '',
       audioUrl: null,
-      rerender: true,
       duration: null,
       currentPage: 1,
       totalRows: 0,
@@ -180,7 +179,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('global', ['sendMedia', 'uploadImageForRichMenu', 'uploadImageMap']),
+    ...mapActions('global', [
+      'sendMedia',
+      'uploadImageForRichMenu',
+      'uploadImageMap'
+    ]),
 
     forceRerender() {
       this.contentKey++;
@@ -212,11 +215,8 @@ export default {
       this.inputFile = input;
 
       if (this.defaults.type === 'audio') {
-        this.rerender = false;
         this.audioUrl = URL.createObjectURL(input);
-        this.$nextTick(() => {
-          this.rerender = true;
-        });
+        this.forceRerender();
       } else {
         if (this.defaults.type === 'richmenu') {
           const that = this;

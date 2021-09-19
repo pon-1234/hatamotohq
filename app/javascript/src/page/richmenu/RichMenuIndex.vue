@@ -18,7 +18,7 @@
               <i class="fa fa-plus"></i> 新規作成
             </a>
           </div>
-          <div class="mt-2">
+          <div class="mt-2" v-if="curFolder">
             <table class="table index">
               <thead>
                 <tr>
@@ -31,7 +31,7 @@
                   <th class="w-10p">フォルダ</th>
                 </tr>
               </thead>
-              <tbody v-if="curFolder">
+              <tbody>
                 <tr
                   v-for="(richmenu, index) in curFolder.rich_menus"
                   v-bind:key="index"

@@ -6,7 +6,7 @@ class User::RichMenusController < User::ApplicationController
 
   # GET /user/rich_menus
   def index
-    @folders = Folder.accessible_by(current_ability).includes([:rich_menus]).type_rich_menu
+    @folders = Folder.accessible_by(current_ability).includes([rich_menus: [:media]]).type_rich_menu
     respond_to do |format|
       format.html
       format.json
