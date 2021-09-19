@@ -5,23 +5,25 @@
 # Table name: rich_menus
 #
 #  id                       :bigint           not null, primary key
-#  areas                    :json
-#  chat_bar_text            :string(255)
-#  deleted_at               :datetime
-#  enabled                  :boolean
-#  end_at                   :datetime
+#  line_account_id          :bigint
+#  folder_id                :bigint
+#  line_menu_id(richMenuId) :string(255)
+#  template_id              :string(255)
 #  name                     :string(255)
-#  selected                 :boolean
 #  size                     :json
-#  start_at                 :datetime
+#  chat_bar_text            :string(255)
+#  selected                 :boolean
+#  areas                    :json
 #  status                   :string(255)      default("pending")
+#  target                   :string(255)      default("all")
+#  conditions               :json
+#  enabled                  :boolean
+#  start_at                 :datetime
+#  end_at                   :datetime
+#  media_id                 :bigint
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
-#  folder_id                :bigint
-#  line_account_id          :bigint
-#  line_menu_id(richMenuId) :string(255)
-#  media_id                 :bigint
-#  template_id              :string(255)
+#  deleted_at               :datetime
 #
 # Indexes
 #
@@ -47,8 +49,7 @@ class RichMenu < ApplicationRecord
 
   # Scope
   enum status: { pending: 'pending', done: 'done', error: 'error' }
-
-  after_create_commit :execute_after_create_commit
+  enum target: { all: 'all', condition: 'condition' }, _prefix: true
 
   def image_url
     media.url
@@ -62,9 +63,5 @@ class RichMenu < ApplicationRecord
           errors.add(:time, '別の時間範囲を選択してください。 選択した範囲がオーバーラップしました。')
         end
       end
-    end
-
-    def execute_after_create_commit
-      DispatchRichMenuJob.perform_later(self.id)
     end
 end

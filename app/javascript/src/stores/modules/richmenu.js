@@ -60,6 +60,22 @@ export const actions = {
     }
   },
 
+  async updateRichMenu(_, payload) {
+    try {
+      return await RichMenuAPI.update(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getRichMenu(_, id) {
+    try {
+      return await RichMenuAPI.get(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   editRichmenu(_, data) {
     _.dispatch('system/setLoading', true, { root: true });
 

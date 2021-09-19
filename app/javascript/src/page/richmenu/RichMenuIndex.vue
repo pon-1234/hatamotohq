@@ -206,10 +206,6 @@ export default {
       await this.updateFolder(folder);
     },
 
-    backToFolder() {
-      this.isPc = false;
-    },
-
     async submitDeleteFolder() {
       await this.deleteFolder();
       // this.$store
@@ -227,6 +223,14 @@ export default {
       return moment(time)
         .tz(moment.tz.guess())
         .format('YYYY年MM月DD日 HH:mm');
+    },
+
+    backToFolder() {
+      this.isPc = false;
+    },
+
+    openEdit(richmenu) {
+      window.open(`${process.env.MIX_ROOT_PATH}/user/rich_menus/${richmenu.id}/edit`);
     }
   }
 };

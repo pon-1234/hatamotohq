@@ -114,20 +114,17 @@
 
       <div class="card">
         <div class="card-header left-border">
-          <h3 class="card-title">配信設定</h3>
+          <h3 class="card-title">配信先設定</h3>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label>配信先</label>
-            <div class="row-form01 row-form-send mb10">
-              <label><input type="radio" name="send" value="all" :checked="!tags" @click="resetListTag">全員</label>
-              <label><input type="radio" name="send" value="sort" :checked="tags && tags.length >= 0">タグで絞り込む</label>
-            </div>
-            <div class="box-form01 box-form-sort" :style="tags && tags.length >= 0? {display: 'block'}:{display: 'none'}">
-              <label>タグ</label>
-              <div class="list-checkbox-tag" v-if="refresh_tag">
-                <input-tag :tags="tags" @input="addListTag"/>
-              </div>
+          <div class="radio-group">
+            <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="all">全員</label>
+            <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="condition" >タグで絞り込む</label>
+          </div>
+          <div v-if="richMenuData.target === 'condition'">
+            <label>タグ</label>
+            <div class="list-checkbox-tag">
+              <input-tag :tags="tags" @input="addListTag"/>
             </div>
           </div>
         </div>
@@ -152,13 +149,19 @@ import moment from 'moment';
 import { mapActions } from 'vuex';
 
 export default {
-  props: [],
+  props: {
+    rich_menu_id: {
+      type: Number,
+      required: false
+    }
+  },
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      loading: true,
+      loading: false,
       contentKey: 0,
       richMenuData: {
+        id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
         media_id: null,
         name: null,
@@ -167,13 +170,15 @@ export default {
         areas: [],
         // start_at: moment().format('YYYY-MM-DD'),
         // end_at: moment().add(1, 'days').format('YYYY-MM-DD')
-        selected: false
+        selected: false,
+        target: 'all', // or 'condition'
+        conditions: null
       },
       templateValue: 6,
       templateType: 'large',
       backgroundUrl: null,
 
-      tags: null,
+      tags: [],
       messageErrorDateTime: ''
     };
   },
@@ -184,6 +189,9 @@ export default {
 
   async beforeMount() {
     await this.getTags();
+    if (this.rich_menu_id) {
+      await this.fetchRichMenu();
+    }
     this.loading = false;
   },
 
@@ -200,11 +208,21 @@ export default {
       'getTags'
     ]),
     ...mapActions('richmenu', [
-      'createRichMenu'
+      'getRichMenu',
+      'createRichMenu',
+      'updateRichMenu'
     ]),
 
     forceRerender() {
       this.contentKey++;
+    },
+
+    async fetchRichMenu() {
+      const richMenu = await this.getRichMenu(this.rich_menu_id);
+      this.richMenuData = _.omit(richMenu, ['conditions']);
+      this.parseConditions(richMenu.conditions);
+      this.backgroundUrl = richMenu.image_url;
+      this.forceRerender();
     },
 
     templateChange(data) {
@@ -271,37 +289,45 @@ export default {
         height: 1686
       };
 
-      // const data = {
-      //   folder_id: 1,
-      //   media_id: this.richMenuData.media_id,
-      //   name: this.richMenuData.name,
-      //   chat_bar_text: this.richMenuData.chat_bar_text,
-      //   start_time: datetimeStart,
-      //   end_time: datetimeEnd,
-      //   template_id: this.richMenuData.template_id,
-      //   size: {
-      //     width: 2500,
-      //     height: 1686
-      //   },
-      //   selected: this.selected ? 1 : 0,
-      //   areas: this.richMenuData.areas
-      // };
-
-      if (this.tags) {
-        payload.tags = this.tags;
-      }
+      payload.conditions = this.buildConditions();
 
       if (this.templateType === 'compact') {
         payload.size.height = 843;
       }
 
-      const response = await this.createRichMenu(payload);
+      let response = null;
+      if (this.rich_menu_id) {
+        response = await this.updateRichMenu(payload);
+      } else {
+        response = await this.createRichMenu(payload);
+      }
+
       if (response) {
         Util.showSuccessThenRedirect(
-          'リッチメニュの登録は完了しました。',
+          'リッチメニュの保存は完了しました。',
           `${process.env.MIX_ROOT_PATH}/user/rich_menus`
         );
+      } else {
+        window.toastr.error('リッチメニューの保存は失敗しました。');
       }
+    },
+
+    parseConditions(conditions) {
+      if (!conditions) return;
+      const tagCondition = conditions.find(_ => _.type === 'tag');
+      if (tagCondition) {
+        this.tags = tagCondition.data.tags;
+      }
+    },
+
+    buildConditions() {
+      if (this.tags.length === 0) return;
+      return [
+        {
+          type: 'tag',
+          data: { tags: this.tags.map(tag => _.pick(tag, ['id', 'name'])) }
+        }
+      ];
     },
 
     getPlaceholderDate() {

@@ -17,20 +17,22 @@ export default {
     });
   },
 
-  editRichmenu: (data) => {
+  update: (payload) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/' + data.id + '/edit'),
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${payload.id}`,
       method: 'PUT',
-      data: JSON.stringify(data),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },
 
-  getDetail: (richMenuId) => {
-    const query = {
-      _pid: btoa('/richmenus/' + richMenuId)
-    };
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
+  get: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
   },
 
   destroyRichmenu: (data) => {

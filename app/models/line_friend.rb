@@ -36,6 +36,10 @@ class LineFriend < ApplicationRecord
   scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
   scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
 
+  def self.find_all_by_tags(line_account_id, tag_ids)
+    LineAccount.find(line_account_id).line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids })
+  end
+
   def push_event_data
     {
       id: id,
