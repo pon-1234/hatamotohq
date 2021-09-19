@@ -27,9 +27,9 @@
 #
 class Tag < ApplicationRecord
   belongs_to :folder
-  has_many :taggings, as: :taggable, dependent: :destroy
-  has_many :friends, through: :taggable
-  has_many :broadcasts, through: :taggable
+  has_many :taggings, dependent: :destroy
+  has_many :friends, through: :taggings, source: :taggable, source_type: 'LineFriend'
+  has_many :broadcasts, through: :taggings, source: :taggable, source_type: 'Broadcast'
 
   validates :name, presence: true, uniqueness: { scope: :folder_id }
 end

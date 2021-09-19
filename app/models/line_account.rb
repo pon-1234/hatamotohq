@@ -47,6 +47,10 @@ class LineAccount < ApplicationRecord
     create_default_folder
   end
 
+  def latest_messages
+    Message.joins(:channel).references(:channel).where(channels: { line_account_id: self.id }).from_friend.limit(10)
+  end
+
   private
     def generate_webhook_url
       loop do

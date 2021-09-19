@@ -25,7 +25,7 @@ class User::RichMenusController < User::ApplicationController
   def create
     @rich_menu = build_rich_menu(rich_menu_params)
     if @rich_menu.save
-      DispatchRichMenuJob.perform_later(self.id)
+      DispatchRichMenuJob.perform_later(@rich_menu.id)
     else
       render_bad_request_with_message(@rich_menu.first_error_message)
     end

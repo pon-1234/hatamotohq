@@ -69,7 +69,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="!autoResponses || autoResponses.length === 0">自動応答はありません。</div>
+            <div class="text-center mt-5" v-if="!autoResponses || autoResponses.length === 0"><b>自動応答はありません。</b></div>
           </div>
         </div>
       </div>

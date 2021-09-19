@@ -1,1 +1,61 @@
-<home-index :notices="<%= @notices.to_json %>" admin_status="active"></home-index>
+<div class="row">
+  <div class="col-lg-8">
+    <div class="d-flex">
+      <div class="info-box flex-grow-1 mr-2">
+        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">友達数</span>
+          <span class="info-box-number"><%= @friend_count %>人</span>
+        </div>
+      </div>
+
+      <div class="info-box flex-grow-1">
+        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text"><%= Date.today.month %>月のメッセージ送信数</span>
+          <span class="info-box-number">410メッセージ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-md">
+        <b>最新受信メッセージ一覧</b>
+      </div>
+      <div class="card-body p-0">
+        <table class="table index">
+          <thead>
+            <tr>
+              <th>送信日時</th>
+              <th>名前</th>
+              <th>メッセージ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @messages.each do |message| %>
+              <tr>
+                <td><%= formatted_time(message.created_at) %></td>
+                <td><%= message.sender.name %></td>
+                <td><%= message.text %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header text-md">
+        <b>最新情報</b>
+      </div>
+      <div class="card-body">
+        <div>内容</div>
+      </div>
+    </div>
+  </div>
+</div>
