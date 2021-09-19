@@ -2,6 +2,10 @@
 
 module User::BotHelper
   def valid_bot?(channel_id, channel_secret)
-    LineApi::BaseRequest.new(channel_id, channel_secret).access_token.present?
+    config = {
+      channel_id: channel_id,
+      channel_secret: channel_secret
+    }
+    LineApi::BaseRequest.new(config).access_token.present?
   end
 end
