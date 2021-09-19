@@ -6,6 +6,6 @@ module User::BotHelper
       channel_id: channel_id,
       channel_secret: channel_secret
     }
-    LineApi::BaseRequest.new(config).access_token.present?
+    LineApi::BaseRequest.new(config).channel_token.present?
   end
 end
