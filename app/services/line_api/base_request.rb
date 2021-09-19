@@ -10,8 +10,13 @@ class LineApi::BaseRequest
   base_uri 'https://api.line.me/v2'
 
   def initialize(config)
-    @channel_id = config.channel_id
-    @channel_secret = config.channel_secret
+    if config.is_a?(Hash)
+      @channel_id = config[:channel_id]
+      @channel_secret = config[:channel_secret]
+    else
+      @channel_id = config.channel_id
+      @channel_secret = config.channel_secret
+    end
     get_channel_token
   end
 
