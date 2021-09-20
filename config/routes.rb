@@ -70,6 +70,7 @@ Rails.application.routes.draw do
         get :delete_confirm, on: :member
         get :sso, on: :member
       end
+      resources :announcements
     end
 
     require 'sidekiq/web'
