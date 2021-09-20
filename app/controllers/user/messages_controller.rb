@@ -47,7 +47,9 @@ class User::MessagesController < User::ApplicationController
           :packageId,
           :stickerId,
           :stickerResourceType,
-          contentProvider: {}
+          :originalContentUrl,
+          :previewImageUrl,
+          :duration
         ]
       )
     end

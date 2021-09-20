@@ -283,11 +283,8 @@ export default {
         channel_id: this.activeChannel.id,
         message: {
           type: 'image',
-          contentProvider: {
-            type: 'image',
-            originalContentUrl: media.url,
-            previewImageUrl: media.preview_url
-          }
+          originalContentUrl: media.url,
+          previewImageUrl: media.preview_url
         },
         timestamp: new Date().getTime()
       };
@@ -298,11 +295,8 @@ export default {
         channel_id: this.activeChannel.id,
         message: {
           type: 'video',
-          contentProvider: {
-            type: 'video',
-            originalContentUrl: media.url,
-            previewImageUrl: media.preview_url
-          }
+          originalContentUrl: media.url,
+          previewImageUrl: media.preview_url
         },
         timestamp: new Date().getTime()
       };
@@ -313,11 +307,8 @@ export default {
         channel_id: this.activeChannel.id,
         message: {
           type: 'audio',
-          contentProvider: {
-            type: 'audio',
-            originalContentUrl: media.url,
-            duration: media.duration || 0
-          }
+          originalContentUrl: media.url,
+          duration: media.duration || 0
         }
       };
     },

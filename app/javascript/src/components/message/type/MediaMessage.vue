@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="getClassName()">
-        <media-preview :type="data.type" :src="getUrlMedia()" :duration="getDuration()"  v-if="data.contentProvider" :showMedia="true" />
+        <media-preview :type="data.type" :src="data.previewImageUrl" :duration="getDuration()"  v-if="data" :showMedia="true" />
         <media-preview :src="data.originalContentUrl"  :type="data.type" :duration="getDuration()" :showMedia="true" v-else/>
     </div>
   </div>
@@ -28,19 +28,19 @@ export default {
       if (this.data.type === 'audio') {
         return Util.getDuration(this.data);
       }
-    },
-
-    getUrlFromLineId(id) {
-      return Util.getMediaFromLine(id);
-    },
-
-    getUrlMedia() {
-      if (this.data.contentProvider.type === 'line') {
-        return this.getUrlFromLineId(this.data.id);
-      }
-
-      return this.data.originalContentUrl || this.data.contentProvider.originalContentUrl;
     }
+
+    // getUrlFromLineId(id) {
+    //   return Util.getMediaFromLine(id);
+    // },
+
+    // getUrlMedia() {
+    //   if (this.data.contentProvider.type === 'line') {
+    //     return this.getUrlFromLineId(this.data.id);
+    //   }
+
+    //   return this.data.originalContentUrl || this.data.contentProvider.originalContentUrl;
+    // }
 
   }
 };
