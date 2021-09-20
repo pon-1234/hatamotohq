@@ -7,6 +7,7 @@ export const state = {
   friendsTag: []
 };
 
+// TODO need refactor
 export const mutations = {
   editFolder(state, folder) {
     const old = state.folders.find(_ => _.id === folder.id);

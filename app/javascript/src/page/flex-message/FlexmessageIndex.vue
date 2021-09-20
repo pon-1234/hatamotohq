@@ -119,7 +119,7 @@
       <modal-confirm title="以下のメッセージを削除します。よろしいですか？" id='modal-confirm-delete-flexmessage' type='delete'
                      @input="submitDeleteFlexMessage"/>
 
-      <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteFolder"/>
+      <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteFolder"/>
 
     </div>
   </div>

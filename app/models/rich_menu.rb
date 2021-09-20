@@ -51,6 +51,8 @@ class RichMenu < ApplicationRecord
   enum status: { pending: 'pending', done: 'done', error: 'error' }
   enum target: { all: 'all', condition: 'condition' }, _prefix: true
 
+  before_destroy :exec_after_destroy
+
   def image_url
     media.url
   end
@@ -63,5 +65,9 @@ class RichMenu < ApplicationRecord
           errors.add(:time, '別の時間範囲を選択してください。 選択した範囲がオーバーラップしました。')
         end
       end
+    end
+
+    def exec_after_destroy
+      DeleteRichMenuJob.perform_later(self.line_account_id, self.line_menu_id)
     end
 end

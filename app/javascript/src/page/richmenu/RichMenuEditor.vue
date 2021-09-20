@@ -1,7 +1,7 @@
 <template>
   <div class="card mxw-1200">
     <div class="card-header d-flex align-items-center">
-      <a :href="`${userRootUrl}/user/rich_menus`" class="text-info">
+      <a :href="`${MIX_ROOT_PATH}/user/rich_menus`" class="text-info">
         <i class="fa fa-arrow-left"></i> リッチメニュー一覧
       </a>
       <h5 class="m-auto font-weight-bold">新規登録</h5>

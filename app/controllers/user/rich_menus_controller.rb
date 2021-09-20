@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::RichMenusController < User::ApplicationController
-  before_action :find_rich_menu, only: [:show, :update]
+  before_action :find_rich_menu, only: [:show, :update, :destroy]
   include User::RichMenusHelper
 
   # GET /user/rich_menus
@@ -43,6 +43,12 @@ class User::RichMenusController < User::ApplicationController
     else
       render_bad_request_with_message(@rich_menu.first_error_message)
     end
+  end
+
+  # DELETE /user/rich_menus/:id
+  def destroy
+    @rich_menu.destroy!
+    render_success
   end
 
   private

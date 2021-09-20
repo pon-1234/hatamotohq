@@ -105,7 +105,7 @@
     </div>
     <modal-confirm v-bind:title="'コピーしますか？'" type='confirm' @input="copySurvey"></modal-confirm>
     <modal-confirm title="こちらのアンケートを削除しますか？" id="modal-delete-confirm" type='confirm' @input="deleteSurvey"></modal-confirm>
-    <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
+    <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
   </section>
 </template>
 

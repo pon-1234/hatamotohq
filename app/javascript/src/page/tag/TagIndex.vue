@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <modal-confirm title="このフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
+      <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
       <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modal-confirm-tag" @input="submitDeleteTag"/>
       <modal-list-friends-tag :friends="friends"/>
     </div>

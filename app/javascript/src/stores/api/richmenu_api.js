@@ -35,11 +35,10 @@ export default {
     });
   },
 
-  destroyRichmenu: (data) => {
+  delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/' + data.richMenuId + '/destroy'),
-      method: 'DELETE',
-      contentType: 'application/json'
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}`,
+      method: 'DELETE'
     });
   },
 

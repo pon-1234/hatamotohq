@@ -17,6 +17,11 @@ export const mutations = {
   updateFolder(state, folder) {
     const index = state.folders.findIndex(_ => _.id === folder.id);
     state.folders.splice(index, 1, folder);
+  },
+
+  deleteFolder(state, id) {
+    const index = state.folders.findIndex(_ => _.id === id);
+    state.folders.splice(index, 1);
   }
 };
 
@@ -52,6 +57,24 @@ export const actions = {
     }
   },
 
+  async deleteFolder(context, id) {
+    try {
+      const response = await FolderAPI.delete(id);
+      context.commit('deleteFolder', id);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getRichMenu(_, id) {
+    try {
+      return await RichMenuAPI.get(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async createRichMenu(_, payload) {
     try {
       return await RichMenuAPI.create(payload);
@@ -68,45 +91,11 @@ export const actions = {
     }
   },
 
-  async getRichMenu(_, id) {
+  async deleteRichMenu(context, id) {
     try {
-      return await RichMenuAPI.get(id);
+      return await RichMenuAPI.delete(id);
     } catch (error) {
       return null;
     }
-  },
-
-  editRichmenu(_, data) {
-    _.dispatch('system/setLoading', true, { root: true });
-
-    return RichMenuAPI.editRichmenu(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(() => {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
-  getDetail(_, rickMenuId) {
-    return RichMenuAPI.getDetail(rickMenuId).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-
-  destroyRichmenu(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return RichMenuAPI.destroyRichmenu(query).done((res) => {
-      _.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
-      return Promise.resolve(res);
-    }).fail((err) => {
-      _.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
   }
-
 };

@@ -7,7 +7,7 @@
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
-          @changeSelectedFolder="changeSelectedFolder"
+          @changeSelectedFolder="onFolderChanged"
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
@@ -56,7 +56,7 @@
                         <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item">リッチメニューをコビー</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichmenu" @click="showConfirmDeleteModal(richmenu)">リッチメニューを削除</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichMenu" @click="curRichMenuIndex = index">リッチメニューを削除</a>
                       </div>
                     </div>
                   </td>
@@ -74,73 +74,36 @@
     </div>
 
     <loading-indicator :loading="loading"></loading-indicator>
-    <!-- モーダル -->
-    <div
-      class="modal fade modal-delete modal-common01"
-      id="modal-delete"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <p class="mb10 fz14">
-              以下のリッチメニューを削除します。よろしいですか？
-            </p>
-            <dl
-              class="flex group-modal01 no-mgn flex-wrap justify-content-between"
-            >
-              <dt>タイトル</dt>
-              <dd>{{ curRichMenu.title }}</dd>
-              <dt>表示期間</dt>
-              <dd>
-                {{ formatDateTime(curRichMenu.start_date) }} ～
-                {{ formatDateTime(curRichMenu.end_date) }}
-              </dd>
-            </dl>
-          </div>
-          <div class="modal-footer flex center">
-            <button
-              type="button"
-              class="btn btn-common01 btn-modal-delete"
-              @click="deleteRichMenu"
-              data-dismiss="modal"
-            >
-              削除
-            </button>
-            <button
-              type="button"
-              class="btn btn-common01 btn-modal-cancel"
-              data-dismiss="modal"
-            >
-              キャンセル
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- START: modal delete folder -->
     <modal-confirm
-      title="このフォルダを削除します。よろしいですか？"
+      title="こちらのフォルダを削除します。よろしいですか？"
       id="modalDeleteFolder"
       type="delete"
-      @input="submitDeleteFolder"
-    />
+      @confirm="submitDeleteFolder">
+      <template v-slot:content v-if="curFolder">
+        フォルダ名：{{ curFolder.name }}
+      </template>
+    </modal-confirm>
+    <!-- END: modal delete folder -->
+
+    <!-- START: modal delete richmenu -->
+    <modal-confirm
+      title="こちらのリッチメニューを削除します。よろしいですか？"
+      id="modalDeleteRichMenu"
+      type="delete"
+      @confirm="submitDeleteRichMenu">
+      <template v-slot:content v-if="curRichMenu">
+        リッチメニュー名：{{ curRichMenu.name }}
+      </template>
+    </modal-confirm>
+    <!-- START: modal delete richmenu -->
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 import { mapActions, mapState } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   props: [],
@@ -148,15 +111,9 @@ export default {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       loading: true,
-      curRichMenu: {
-        title: '',
-        start_date: '',
-        end_date: ''
-      },
-      isBusy: true,
-      richMenusContent: [],
       isPc: true,
-      selectedFolderIndex: 0
+      selectedFolderIndex: 0,
+      curRichMenuIndex: 0
     };
   },
 
@@ -172,6 +129,10 @@ export default {
 
     curFolder() {
       return this.folders[this.selectedFolderIndex];
+    },
+
+    curRichMenu() {
+      return this.curFolder ? this.curFolder.rich_menus[this.curRichMenuIndex] : null;
     }
   },
 
@@ -179,25 +140,18 @@ export default {
     ...mapActions('richmenu', [
       'getRichMenus',
       'createFolder',
-      'updateFolder'
+      'updateFolder',
+      'deleteFolder',
+      'deleteRichMenu'
     ]),
 
-    async deleteRichMenu() {
-      await this.$store.dispatch('richmenu/destroyRichmenu', {
-        richMenuId: this.curRichMenu.id
-      });
-
-      this.folders[this.selectedFolderIndex].richmenus.deleteWhere(
-        (richmenu) => richmenu.id === this.curRichMenu.id
-      );
-    },
-
-    async changeSelectedFolder(index) {
+    async onFolderChanged(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
       this.foldersContent = this.folders[this.selectedFolderIndex].richmenus;
     },
 
+    // TODO: should move it to folder component
     async submitCreateFolder(folder) {
       await this.createFolder(folder);
     },
@@ -207,16 +161,17 @@ export default {
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder();
-      // this.$store
-      //   .dispatch('global/deleteFolder', {
-      //     id: this.folders[this.selectedFolderIndex].id,
-      //     type: 'scenario'
-      //   })
-      //   .done((res) => {
-      //     this.folders.splice(this.selectedFolderIndex, 1);
-      //   })
-      //   .fail((e) => {});
+      await this.deleteFolder(this.curFolder.id);
+      this.onFolderChanged(0);
+    },
+
+    async submitDeleteRichMenu() {
+      const response = await this.deleteRichMenu(this.curRichMenu.id);
+      if (response) {
+        Util.showSuccessThenRedirect('リッチメニュの削除は完了しました。', window.location.href);
+      } else {
+        window.$toastr.error('リッチメニュの削除は失敗しました。');
+      }
     },
 
     formatDateTime(time) {
