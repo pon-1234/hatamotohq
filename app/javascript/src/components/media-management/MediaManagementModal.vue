@@ -41,7 +41,7 @@
                 <div class="custom-file w-fix-200">
                   <div class="custom-file-input h-100 w-100">
                     <input
-                      :accept="tailOfFile()"
+                      :accept="getMineTypes()"
                       :maxsize="getMaxSize()"
                       type="file"
                       ref="file"
@@ -134,15 +134,15 @@ export default {
     });
   },
   methods: {
-    ...mapActions('global', ['sendMedia', 'uploadImageForRichMenu']),
+    ...mapActions('global', ['sendMedia', 'uploadRichMenu']),
     getMaxSize() {
       if (this.defaults.type === this.MessageType.Image) return '10M';
       if (this.data.type === 'richmenu') return '1M';
       return '200M';
     },
 
-    tailOfFile() {
-      return Util.tailOfFile(this.data.type);
+    getMineTypes() {
+      return Util.getMineTypes(this.data.type);
     },
 
     addFile(e) {
@@ -199,7 +199,7 @@ export default {
     async uploadMedia() {
       if (this.data.type === 'richmenu') {
         // richmenu
-        await this.uploadImageForRichMenu({ file: this.input });
+        await this.uploadRichMenu({ file: this.input });
         this.errorMessage = null;
         this.$refs.close.click();
         this.$emit('input', this.defaults);

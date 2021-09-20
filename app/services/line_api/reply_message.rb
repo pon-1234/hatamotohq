@@ -4,6 +4,6 @@
 class LineApi::ReplyMessage < LineApi::BaseRequest
   def perform(messages, reply_token)
     response = client.reply_message(reply_token, messages)
-    response.code == 200
+    response.code == HTTP_OK
   end
 end

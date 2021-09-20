@@ -29,7 +29,7 @@
                     <div class="custom-file w-fix-200">
                       <div class="custom-file-input h-100 w-100">
                         <input
-                          :accept="tailOfFile()"
+                          :accept="getMineTypes()"
                           :maxsize="getMaxSize()"
                           type="file"
                           ref="file"
@@ -179,9 +179,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('global', [
-      'sendMedia',
-      'uploadImageForRichMenu',
+    ...mapActions('media', [
+      'uploadMedia',
+      'uploadRichMenu',
       'uploadImageMap'
     ]),
 
@@ -297,16 +297,16 @@ export default {
         this.$refs.close.click();
       } else if (this.data.type === 'richmenu') {
         // richmenu
-        await this.uploadImageForRichMenu({ file: this.inputFile });
-
-        if (this.url) {
+        const response = await this.uploadRichMenu(this.inputFile);
+        if (response.url) {
           this.errorMessage = null;
-          this.$emit('input', this.url);
+          const emitData = { id: response.id, preview_url: response.preview_url };
+          this.$emit('input', emitData);
         }
         this.$refs.close.click();
       } else {
-        // other
-        const response = await this.sendMedia(query);
+        // Image, Audio, Video
+        const response = await this.uploadMedia(query);
         if (response.url) {
           if (
             this.defaults.type === this.MessageType.Image ||
@@ -355,10 +355,7 @@ export default {
       this.medias = response.data;
       this.perPage = response.meta.limit_value;
       this.totalRows = response.meta.total_count;
-      this.isMediaPreviewRendered = false;
-      this.$nextTick(() => {
-        this.isMediaPreviewRendered = true;
-      });
+      this.forceRerender();
     },
 
     getUrlMedia(alias) {
@@ -412,8 +409,8 @@ export default {
       });
     },
 
-    tailOfFile() {
-      return Util.tailOfFile(this.defaults.type);
+    getMineTypes() {
+      return Util.getMineTypes(this.defaults.type);
     },
 
     changeTapDefault() {

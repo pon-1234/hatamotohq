@@ -129,7 +129,7 @@ export const actions = {
     });
   },
 
-  async uploadImageForRichMenu(context, query) {
+  async uploadRichMenu(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     let keyData = '';
     try {

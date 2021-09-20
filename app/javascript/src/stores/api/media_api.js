@@ -8,6 +8,22 @@ export default {
     });
   },
 
+  uploadMedia: (payload) => {
+    const formData = new FormData();
+    formData.append('file', payload.file);
+    if (payload.duration) {
+      formData.append('duration', payload.duration);
+    }
+
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/medias',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false
+    });
+  },
+
   uploadImageMap: (file) => {
     const formData = new FormData();
     formData.append('file', file);

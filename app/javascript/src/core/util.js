@@ -355,21 +355,21 @@ class Util {
     return day + '日' + hour + '時' + min + '分';
   }
 
-  static tailOfFile(type) {
+  static getMineTypes(type) {
     if (type === MessageType.Image) {
       return 'image/*';
     }
 
     if (type === 'richmenu' || type === 'imagemap') {
-      return 'image' + '/' + ['jpg', 'jpeg', 'png'];
+      return 'image/jpg,image/jpeg,image/png';
     }
 
     if (type === MessageType.Video) {
-      return 'video' + '/' + ['mp4'];
+      return 'video/mp4';
     }
 
     if (type === 'pdf') {
-      return 'application' + '/' + ['pdf'];
+      return 'application/pdf';
     }
 
     return 'audio' + '/*';
