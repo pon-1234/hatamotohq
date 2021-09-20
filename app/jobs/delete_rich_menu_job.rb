@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DeleteRichMenuJob < ApplicationJob
   queue_as :default
 

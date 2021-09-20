@@ -5,12 +5,12 @@
         {{data.name}}
       </span>
       <div class="btn-group flex-1">
-        <button type="button" class="btn btn-primary">操作</button>
+        <button type="button" class="btn btn-primary" @click="changeName">編集</button>
         <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
         <div class="dropdown-menu" role="menu" style="">
             <a class="dropdown-item" @click="changeName">名前を変える</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" @click="deleteFolder" data-toggle="modal" data-target="#modal-confirm-tag">タグを削除</a>
+            <a class="dropdown-item" @click="deleteFolder" data-toggle="modal" data-target="#modalConfirmDelTag">タグを削除</a>
           </div>
       </div>
     </div>

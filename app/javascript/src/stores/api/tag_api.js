@@ -12,13 +12,6 @@ export default {
     return window.$.get(process.env.MIX_ROOT_PATH + '/user/tags/' + query.id + '/friends');
   },
 
-  deleteTag: (query) => {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/tags/' + query.id,
-      method: 'DELETE'
-    });
-  },
-
   createTag: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags',
@@ -44,6 +37,12 @@ export default {
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
-  }
+  },
 
+  deleteTag: (id) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/tags/' + id,
+      method: 'DELETE'
+    });
+  }
 };

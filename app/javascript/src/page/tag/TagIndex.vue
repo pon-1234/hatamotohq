@@ -7,7 +7,7 @@
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
-          @changeSelectedFolder="onSelectedFolderChanged"
+          @changeSelectedFolder="onFolderChanged"
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
@@ -29,10 +29,12 @@
                   <td class="mw-200 vetical-align-middle">
                     <div class="folder-item">
                       <div class="input-group newgroup-inputs">
-                        <input type="text"  placeholder="タグ名" class="form-control" @click.stop v-model="tagData.name" ref="tagName"
-                          @keyup.enter='showNewTagInput'
-                          @compositionend="compositionend($event)"
-                          @compositionstart="compositionstart($event)"
+                        <input type="text"
+                          placeholder="タグ名"
+                          class="form-control"
+                          @click.stop
+                          v-model="tagData.name"
+                          ref="tagName"
                           >
                         <span class="input-group-btn">
                           <button type="button" class="btn btn-default" @click="submitCreateTag" ref="buttonAddTag">
@@ -49,8 +51,8 @@
                   v-for="(item, index) in curFolder.tags"
                   :data="item"
                   :key="index"
-                  @deleteTag="setSelectedTag"
-                  @editTag="submitEditTag"
+                  @deleteTag="curTagIndex = index"
+                  @editTag="submitUpdateTag"
                   @detailFriends="detailFriends"
                 />
               </tbody>
@@ -59,8 +61,19 @@
           </div>
         </div>
       </div>
-      <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
-      <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modal-confirm-tag" @input="submitDeleteTag"/>
+
+      <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @confirm="submitDeleteFolder">
+        <template v-slot:content v-if="curFolder">
+          <div>フォルダ名：<b>{{ curFolder.name }}</b></div>
+        </template>
+      </modal-confirm>
+
+      <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modalConfirmDelTag" @confirm="submitDeleteTag">
+        <template v-slot:content v-if="curFolder && curTag">
+          <div>フォルダ名：<b>{{ curFolder.name }}</b></div>
+          <div class="mt-2">タグ名：<b>{{ curTag.name }}</b></div>
+        </template>
+      </modal-confirm>
       <modal-list-friends-tag :friends="friends"/>
     </div>
 
@@ -69,6 +82,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
+import Util from '@/core/util';
 import moment from 'moment';
 
 export default {
@@ -85,7 +99,7 @@ export default {
       showFolderInput: false,
       showTagInput: false,
       isPc: true,
-      curTag: null,
+      curTagIndex: 0,
       friends: [],
       isEnter: true
     };
@@ -101,6 +115,10 @@ export default {
 
     curFolder() {
       return this.folders[this.selectedFolderIndex];
+    },
+
+    curTag() {
+      return this.curFolder ? this.curFolder.tags[this.curTagIndex] : null;
     }
   },
   watch: {
@@ -114,13 +132,13 @@ export default {
   methods: {
     ...mapActions('tag', [
       'getTags',
-      'deleteTag',
       'createFolder',
       'updateFolder',
       'deleteFolder',
       'addNewTag',
       'createTag',
-      'updateTag'
+      'updateTag',
+      'deleteTag'
     ]),
 
     forceRerender() {
@@ -131,17 +149,10 @@ export default {
       this.isPc = false;
     },
 
-    async onSelectedFolderChanged(index) {
+    async onFolderChanged(index) {
       this.selectedFolderIndex = index;
       this.showTagInput = false;
       this.isPc = true;
-    },
-
-    submitDeleteTag() {
-      if (this.curTag.type === 'folder') {
-        this.selectedFolderIndex = 0;
-      }
-      this.deleteTag(this.curTag);
     },
 
     addMoreFolder() {
@@ -152,24 +163,6 @@ export default {
       this.folderData.name = '';
     },
 
-    addTag() {
-      this.showTagInput = !this.showTagInput;
-      if (this.showFolderInput) {
-        this.showFolderInput = false;
-      }
-      this.tagData.name = '';
-    },
-
-    submitEditTag(value) {
-      this.showFolderInput = false;
-      this.showTagInput = false;
-      this.editTag(value);
-    },
-
-    setSelectedTag(value) {
-      this.curTag = value;
-    },
-
     async submitCreateFolder(value) {
       await this.createFolder(value);
     },
@@ -178,13 +171,39 @@ export default {
       await this.updateFolder(value);
     },
 
-    submitCreateTag() {
+    async submitDeleteFolder() {
+      await this.deleteFolder(this.curFolder.id);
+      this.onFolderChanged(0);
+    },
+
+    addTag() {
+      this.showTagInput = !this.showTagInput;
+      if (this.showFolderInput) {
+        this.showFolderInput = false;
+      }
+      this.tagData.name = '';
+    },
+
+    async submitUpdateTag(tag) {
+      this.showFolderInput = false;
+      this.showTagInput = false;
+      await this.updateTag(tag);
+    },
+
+    async submitDeleteTag() {
+      const response = await this.deleteTag(this.curTag.id);
+      if (response) {
+        Util.showSuccessThenRedirect('タグの削除は完了しました。', window.location.href);
+      }
+    },
+
+    async submitCreateTag() {
       if (this.tagData.name && this.tagData.name.trim().length > 0) {
         const payload = {
-          folder_id: this.folders[this.selectedFolderIndex].id,
+          folder_id: this.curFolder.id,
           name: this.tagData.name
         };
-        this.createTag(payload);
+        await this.createTag(payload);
         this.resetTagInput();
       }
     },
@@ -206,28 +225,12 @@ export default {
       this.friends = value;
     },
 
-    entersubmitAddNewFolder(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonAddFolder.click();
-    },
-
     showNewTagInput(e) {
       if (!this.isEnter) {
         this.isEnter = true;
         return;
       }
       this.$refs.buttonAddTag.click();
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
     },
 
     onReceiveCreateTagResponse(response) {
