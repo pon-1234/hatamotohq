@@ -26,6 +26,12 @@ export const mutations = {
   deleteFolder(state, id) {
     const index = state.folders.findIndex(_ => _.id === id);
     state.folders.splice(index, 1);
+  },
+
+  deleteTemplate(state, id) {
+    const folder = state.folders.find(folder => folder.templates.some(_ => _.id === id));
+    const index = folder.templates.find(_ => _.id === id);
+    folder.templates.splice(index, 1);
   }
 };
 
@@ -64,21 +70,31 @@ export const actions = {
     }
   },
 
-  async createTemplate(context, query) {
+  async createTemplate(context, payload) {
     try {
-      const response = await TemplateAPI.create(query);
+      const response = await TemplateAPI.create(payload);
       return response;
     } catch (error) {
       return null;
     }
   },
 
-  getListMessageTemplate(context, query = {}) {
-    return TemplateAPI.getListMessage(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async deleteTemplate(context, id) {
+    try {
+      const response = await TemplateAPI.delete(id);
+      context.commit('deleteTemplate', id);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async copyTemplate(context, id) {
+    try {
+      return await TemplateAPI.copy(id);
+    } catch (error) {
+      return null;
+    }
   },
 
   async createFolder(context, payload) {

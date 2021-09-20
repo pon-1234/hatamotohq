@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-body">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <p class="mb10 fz14">以下のメッセージを削除します。よろしいですか？</p>
+          <p class="mb10 fz14">以下のメッセージを削除してもよろしいですか？</p>
           <dl class="flex group-modal01 no-mgn flex-wrap justify-content-between">
             <dt>配信日時</dt>
             <dd>{{formatDateTime(data.schedule_at)}}</dd>

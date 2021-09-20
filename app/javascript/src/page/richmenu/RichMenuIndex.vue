@@ -76,7 +76,7 @@
     <loading-indicator :loading="loading"></loading-indicator>
     <!-- START: modal delete folder -->
     <modal-confirm
-      title="こちらのフォルダを削除します。よろしいですか？"
+      title="こちらのフォルダを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder">
@@ -88,7 +88,7 @@
 
     <!-- START: modal delete richmenu -->
     <modal-confirm
-      title="こちらのリッチメニューを削除します。よろしいですか？"
+      title="こちらのリッチメニューを削除してもよろしいですか？"
       id="modalDeleteRichMenu"
       type="delete"
       @confirm="submitDeleteRichMenu">

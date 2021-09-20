@@ -45,9 +45,7 @@ export default {
   copy: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/templates/${id}/copy`,
-      method: 'GET',
-      dataType: 'json',
-      contentType: 'application/json'
+      method: 'POST'
     });
   }
 };

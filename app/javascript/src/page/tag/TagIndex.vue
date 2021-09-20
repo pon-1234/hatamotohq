@@ -62,13 +62,13 @@
         </div>
       </div>
 
-      <modal-confirm title="こちらのフォルダを削除します。よろしいですか？" id='modalDeleteFolder' type='delete' @confirm="submitDeleteFolder">
+      <modal-confirm title="このフォルダを削除してもよろしいですか？" id='modalDeleteFolder' type='delete' @confirm="submitDeleteFolder">
         <template v-slot:content v-if="curFolder">
           <div>フォルダ名：<b>{{ curFolder.name }}</b></div>
         </template>
       </modal-confirm>
 
-      <modal-confirm title="このタグを削除します。よろしいですか？" type='delete' id="modalConfirmDelTag" @confirm="submitDeleteTag">
+      <modal-confirm title="このタグを削除してもよろしいですか？" type='delete' id="modalConfirmDelTag" @confirm="submitDeleteTag">
         <template v-slot:content v-if="curFolder && curTag">
           <div>フォルダ名：<b>{{ curFolder.name }}</b></div>
           <div class="mt-2">タグ名：<b>{{ curTag.name }}</b></div>

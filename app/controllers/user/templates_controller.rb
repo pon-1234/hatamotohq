@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::TemplatesController < User::ApplicationController
-  before_action :find_template, only: [:show, :update]
+  before_action :find_template, only: [:show, :update, :destroy, :copy]
 
   # GET /user/templates
   def index
@@ -44,6 +44,18 @@ class User::TemplatesController < User::ApplicationController
     unless @template.update!(template_params.except(:folder_id))
       render_bad_request_with_message(@template.first_error_message)
     end
+  end
+
+  # DELETE /user/templates/:id
+  def destroy
+    @template.destroy!
+    render_success
+  end
+
+  # POST /user/templates/:id/copy
+  def copy
+    @template.clone
+    render_success
   end
 
   private

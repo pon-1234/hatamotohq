@@ -11,14 +11,14 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-        <div class="flex-grow-1">
+        <div class="flex-grow-1" :key="contentKey">
           <a v-if="folders && folders.length && curFolder"
             :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
             class="btn btn-primary btn-sm"
           >
             <i class="fa fa-plus"></i> 新規作成
           </a>
-          <div class="mt-2">
+          <div class="mt-2" v-if="curFolder">
             <table class="table index">
               <thead>
                 <tr>
@@ -29,7 +29,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="template in templates" v-bind:key="template.id">
+                <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
                   <td>{{template.name}}</td>
                   <td>{{template.template_messages_count}}</td>
                   <td>
@@ -39,9 +39,9 @@
                       <div class="dropdown-menu bg-white" role="menu" style="">
                         <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item">テンプレートをコビー</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyTemplate" @click="curTemplateIndex = index">テンプレートをコビー</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="showConfirmDeleteModal(template)">テンプレートを削除</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="curTemplateIndex = index">テンプレートを削除</a>
                       </div>
                     </div>
                   </td>
@@ -52,7 +52,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="templates.length === 0"><b>テンプレートはありません。</b></div>
+            <div class="text-center mt-5" v-if="curFolder.templates.length === 0"><b>テンプレートはありません。</b></div>
           </div>
         </div>
       </div>
@@ -60,22 +60,32 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <!-- START: Delete folder modal -->
-    <modal-confirm id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
+    <modal-confirm title="このフォルダを削除してもよろしいですか？" id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
       <template v-slot:content v-if="curFolder">
         <span>フォルダ名：{{ curFolder.name }}</span>
       </template>
     </modal-confirm>
     <!-- END: Delete folder modal -->
 
-    <!-- START: Delete auto response modal -->
-    <modal-confirm id='modalDeleteTemplate' type='delete' @confirm="submitDeleteTemplate(template)">
+    <!-- START: Delete template modal -->
+    <modal-confirm title="このテンプレートを削除してもよろしいですか？" id='modalDeleteTemplate' type='delete' @confirm="submitDeleteTemplate">
       <template v-slot:content>
-        <div v-if="template">
-          {{template.name}}
+        <div v-if="curTemplate">
+          テンプレート名：<b>{{curTemplate.name}}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Delete auto response modal -->
+    <!-- END: Delete template modal -->
+
+    <!-- START: Copy template modal -->
+    <modal-confirm title="このテンプレートをコビーしてもよろしいですか？" id='modalCopyTemplate' type='confirm' @confirm="submitCopyTemplate">
+      <template v-slot:content>
+        <div v-if="curTemplate">
+          テンプレート名：<b>{{curTemplate.name}}</b>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: Copy template modal -->
   </div>
 </template>
 <script>
@@ -88,8 +98,7 @@ export default {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
-      templates: [],
-      template: null,
+      curTemplateIndex: null,
       loading: true,
       contentKey: 0
     };
@@ -110,23 +119,18 @@ export default {
 
     curFolder() {
       return this.folders[this.selectedFolderIndex];
-    }
-  },
+    },
 
-  watch: {
-    folders: {
-      handler(val) {
-        this.templates = val[this.selectedFolderIndex] ? val[this.selectedFolderIndex].templates : [];
-      },
-      deep: true
+    curTemplate() {
+      return this.curFolder ? this.curFolder.templates[this.curTemplateIndex] : null;
     }
   },
 
   methods: {
     ...mapActions('template', [
       'getTemplates',
-      'botDelete',
-      'updateAutoResponse',
+      'deleteTemplate',
+      'copyTemplate',
       'deleteFolder',
       'createFolder',
       'updateFolder'
@@ -144,21 +148,9 @@ export default {
       return typeof (strtag) === 'string' ? (strtag.length > 0 ? strtag.split(',') : []) : strtag;
     },
 
-    async updateAutoResponseStatus(autoResponse) {
-      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' };
-      await this.updateAutoResponse(payload);
-    },
-
-    async deleteBotMessage() {
-      if (this.template) {
-        await this.botDelete({ id: this.template.id, folder_id: this.template.folder_id });
-      }
-    },
-
     onSelectedFolderChanged(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
-      this.templates = this.folders[index].templates;
     },
 
     async submitCreateFolder(folder) {
@@ -172,6 +164,26 @@ export default {
     async submitDeleteFolder() {
       await this.deleteFolder(this.curFolder.id);
       this.onSelectedFolderChanged(0);
+    },
+
+    async submitDeleteTemplate() {
+      const response = await this.deleteTemplate(this.curTemplate.id);
+      if (response) {
+        window.toastr.success('テンプレートの削除は完了しました。');
+      } else {
+        window.toastr.error('テンプレートの削除は失敗しました。');
+      }
+      this.forceRerender();
+    },
+
+    async submitCopyTemplate() {
+      const response = await this.copyTemplate(this.curTemplate.id);
+      if (response) {
+        Util.showSuccessThenRedirect('テンプレートのコビーは完了しました。', window.location.href);
+      } else {
+        Util.showSuccessThenRedirect('テンプレートのコビーは失敗しました。', window.location.href);
+      }
+      this.forceRerender();
     },
 
     backToFolder() {

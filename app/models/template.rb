@@ -34,4 +34,13 @@ class Template < ApplicationRecord
 
   # Scope
   enum type: { message: 'message' }, _prefix: true
+
+  def clone
+    new_template = self.dup
+    new_template.name = self.name + '（コピー）'
+    new_template.template_messages_count = 0
+    new_template.save!
+    self.template_messages.each { |message| message.clone_to(new_template.id) }
+    new_template
+  end
 end

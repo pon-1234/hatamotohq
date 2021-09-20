@@ -42,7 +42,9 @@ Rails.application.routes.draw do
         post :copy, on: :member
       end
       resources :auto_responses
-      resources :templates
+      resources :templates do
+        post :copy, on: :member
+      end
       resources :folders
       resources :rich_menus
       resources :tags
