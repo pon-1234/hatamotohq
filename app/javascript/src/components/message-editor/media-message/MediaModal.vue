@@ -33,7 +33,8 @@
                           :maxsize="getMaxSize()"
                           type="file"
                           ref="file"
-                          @change="addMedia($event.currentTarget.files[0])"
+                          class="fh-50"
+                          @change="addMedia($event)"
                         />
                       </div>
                       <label class="custom-file-label text-left">ファイルを選択</label>
@@ -208,7 +209,9 @@ export default {
       this.addMedia(e.dataTransfer.files[0]);
     },
 
-    async addMedia(input) {
+    async addMedia(event) {
+      // TODO refactor this shit
+      const input = event.currentTarget.files[0];
       this.mediaData.type = Util.convertMineTypeToMediaType(input.type);
       const validationResult = this.validateFileExtension(input);
       if (!validationResult) return;
@@ -261,6 +264,7 @@ export default {
         }
       }
       this.errorMessage = '';
+      event.target.value = '';
     },
 
     validateFileExtension(input) {
@@ -306,7 +310,6 @@ export default {
         this.$emit('input', this.mediaData);
       }
       this.errorMessage = null;
-      this.inputFile.value = '';
       this.$refs.close.click();
     },
 
