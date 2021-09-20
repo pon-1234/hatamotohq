@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_074722) do
+ActiveRecord::Schema.define(version: 2021_09_20_163646) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_074722) do
     t.bigint 'line_friend_id'
     t.string 'title'
     t.string 'avatar'
-    t.json 'last_message'
+    t.string 'last_message'
     t.string 'status', default: '1'
     t.datetime 'last_activity_at'
     t.string 'alias'

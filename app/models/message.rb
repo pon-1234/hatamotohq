@@ -39,6 +39,7 @@ class Message < ApplicationRecord
   validates :type, presence: true
   validates_presence_of :from
 
+  before_create :exec_before_create
   after_create_commit :execute_after_create_commit
 
   def push_event_data
@@ -60,6 +61,12 @@ class Message < ApplicationRecord
   end
 
   private
+    def exec_before_create
+      unless type_text?
+        self.text = I18n.t("messages.sent.#{self.type}")
+      end
+    end
+
     def execute_after_create_commit
       set_conversation_activity
       dispatch_create_events
@@ -67,7 +74,7 @@ class Message < ApplicationRecord
     end
 
     def set_conversation_activity
-      channel.update_columns(last_activity_at: created_at, last_message: line_content)
+      channel.update_columns(last_activity_at: created_at, last_message: self.text)
     end
 
     def dispatch_create_events

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActiveStorage::RepresentationsController < BaseController
+class ActiveStorage::RepresentationsController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
 
   def show

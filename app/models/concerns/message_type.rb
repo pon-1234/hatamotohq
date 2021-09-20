@@ -15,6 +15,6 @@ module MessageType
       imagemap: 'imagemap',
       template: 'template',
       flex: 'flex'
-    }, _suffix: true
+    }, _prefix: true
   end
 end

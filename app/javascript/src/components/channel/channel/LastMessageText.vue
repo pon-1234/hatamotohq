@@ -1,11 +1,11 @@
 <template>
-  <span>{{ message.text }}</span>
+  <span>{{ message }}</span>
 </template>
 
 <script>
 export default {
   props: {
-    message: Object
+    message: String
   }
 };
 </script>
