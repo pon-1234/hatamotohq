@@ -58,7 +58,7 @@ export default {
   methods: {
     ...mapActions('scenario', ['getScenarios']),
     selectScenario(scenario) {
-      this.$emit('onSelectScenario', scenario);
+      this.$emit('selectScenario', scenario);
     }
   }
 };

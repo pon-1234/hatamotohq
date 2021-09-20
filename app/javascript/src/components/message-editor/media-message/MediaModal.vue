@@ -29,7 +29,7 @@
                     <div class="custom-file w-fix-200">
                       <div class="custom-file-input h-100 w-100">
                         <input
-                          :accept="getMineTypes()"
+                          :accept="getAcceptedMineTypes()"
                           :maxsize="getMaxSize()"
                           type="file"
                           ref="file"
@@ -38,17 +38,17 @@
                       </div>
                       <label class="custom-file-label text-left">ファイルを選択</label>
                     </div>
-                    <audio controls   v-if="defaults.type === 'audio'"  ref="audio"  @loadedmetadata="onTimeUpdate" class="hidden">
+                    <audio controls   v-if="mediaData.type === 'audio'"  ref="audio"  @loadedmetadata="onTimeUpdate" class="hidden">
                       <source :src="this.audioUrl">
                     </audio>
                     <span v-if="errorMessage" class="error">{{errorMessage}}</span>
                   </div>
                 </div>
-                <small class="form-text text-muted text-pre-line small" v-if="defaults.type ==='image'">
+                <small class="form-text text-muted text-pre-line small" v-if="mediaData.type ==='image'">
                   ファイル形式：JPG、JPEG、PNG
                   ファイルサイズ：10MB以下
                 </small>
-                <small class="form-text text-muted text-pre-line small" v-if="defaults.type ==='imagemap'">
+                <small class="form-text text-muted text-pre-line small" v-if="mediaData.type ==='imagemap'">
                   ファイル形式：JPG、JPEG、PNG
                   ファイルサイズ：10MB以下
                   <br>
@@ -56,21 +56,21 @@
                 </small>
                 <small
                   class="form-text text-muted text-pre-line small"
-                  v-else-if="defaults.type ==='video'"
+                  v-else-if="mediaData.type ==='video'"
                 >
                   ファイル形式： MP4
                   ファイルサイズ：200MB以下
                 </small>
                 <small
                   class="form-text text-muted text-pre-line small"
-                  v-else-if="defaults.type ==='audio'"
+                  v-else-if="mediaData.type ==='audio'"
                 >
                   ファイル形式：MP3
                   ファイルサイズ：200MB以下
                 </small>
                 <small class="form-text text-muted small"
                   style="display: flex;font-weight: 400;letter-spacing: 0px; margin-top: 20px;"
-                  v-else-if="defaults.type ==='richmenu'"
+                  v-else-if="mediaData.type ==='richmenu'"
                 >
                   ファイル形式：JPG、JPEG、PNG
                   <br>
@@ -87,12 +87,12 @@
                 >
                   <media-preview
                     class="thumb-item"
-                    :type="defaults.type"
+                    :type="mediaData.type"
                     :src="media.preview_url"
                     :duration="getDuration(media)"
                     @click.native="selectMedia(media)"
-                    :width="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'200px'"
-                    :height="defaults.type === 'image' || defaults.type === 'richmenu' || defaults.type === 'imagemap' ? '110px':'100px'">
+                    :width="mediaData.type === 'image' || mediaData.type === 'richmenu' || mediaData.type === 'imagemap' ? '110px':'200px'"
+                    :height="mediaData.type === 'image' || mediaData.type === 'richmenu' || mediaData.type === 'imagemap' ? '110px':'100px'">
                   </media-preview>
                 </div>
               </div>
@@ -125,11 +125,20 @@ import Util from '@/core/util';
 
 // TODO Refactor this shit
 export default {
-  props: ['data', 'id'],
+  props: {
+    types: {
+      type: Array,
+      default: () => ['image', 'audio', 'video']
+    },
+    id: {
+      type: String
+    }
+  },
+
   data() {
     return {
       contentKey: 0,
-      defaults: {
+      mediaData: {
         type: 'image',
         originalContentUrl: '',
         previewImageUrl: ''
@@ -149,10 +158,6 @@ export default {
     };
   },
   created() {
-    if (this.data) {
-      // eslint-disable-next-line no-undef
-      this.defaults = _.cloneDeep(this.data);
-    }
     this.getMedias();
   },
 
@@ -161,7 +166,7 @@ export default {
       handler(val) {
         if (this.data) {
           // eslint-disable-next-line no-undef
-          this.defaults = _.cloneDeep(this.data);
+          this.mediaData = _.cloneDeep(this.data);
         }
       },
       deep: true
@@ -190,9 +195,9 @@ export default {
     },
 
     getMaxSize() {
-      if (this.defaults.type === this.MessageType.Image || this.defaults.type === this.MessageType.Imagemap) return '10M';
-      if (this.data.type === 'richmenu') return '1M';
-      return '200M';
+      if (this.mediaData.type === this.MessageType.Image || this.mediaData.type === this.MessageType.Imagemap) return '10M';
+      if (this.mediaData.type === 'richmenu') return '1M';
+      if (this.mediaData.type === 'video') return '200M';
     },
 
     onTimeUpdate() {
@@ -204,6 +209,7 @@ export default {
     },
 
     async addMedia(input) {
+      this.mediaData.type = Util.convertMineTypeToMediaType(input.type);
       const validationResult = this.validateFileExtension(input);
       if (!validationResult) return;
 
@@ -214,11 +220,11 @@ export default {
 
       this.inputFile = input;
 
-      if (this.defaults.type === 'audio') {
+      if (this.mediaData.type === 'audio') {
         this.audioUrl = URL.createObjectURL(input);
         this.forceRerender();
       } else {
-        if (this.defaults.type === 'richmenu') {
+        if (this.mediaData.type === 'richmenu') {
           const that = this;
           const reader = new FileReader();
           reader.readAsDataURL(input);
@@ -234,7 +240,7 @@ export default {
             };
             img.src = e.target.result;
           };
-        } else if (this.defaults.type === 'imagemap') {
+        } else if (this.mediaData.type === 'imagemap') {
           const that = this;
           const reader = new FileReader();
           reader.readAsDataURL(input);
@@ -259,17 +265,17 @@ export default {
 
     validateFileExtension(input) {
       if (
-        this.defaults.type === this.MessageType.Image &&
+        this.mediaData.type === this.MessageType.Image &&
         this.ImageType.indexOf(input.type) === -1
       ) { return; }
 
       if (
-        this.defaults.type === this.MessageType.Video &&
+        this.mediaData.type === this.MessageType.Video &&
         this.VideoType.indexOf(input.type) === -1
       ) { return; }
 
       if (
-        this.defaults.type === this.MessageType.Audio &&
+        this.mediaData.type === this.MessageType.Audio &&
         this.AudioType.indexOf(input.type) === -1
       ) { return; }
 
@@ -282,49 +288,26 @@ export default {
         file: this.inputFile
       };
 
-      if (this.defaults.type === 'audio') {
+      if (this.mediaData.type === 'audio') {
         query.duration = this.duration;
       }
 
-      if (this.data.type === 'imagemap') {
-        // imagemap
-        await this.uploadImageMap({ file: this.inputFile });
-
-        if (this.url) {
-          this.errorMessage = null;
-          this.$emit('input', { id: this.url });
-        }
-        this.$refs.close.click();
-      } else if (this.data.type === 'richmenu') {
-        // richmenu
-        const response = await this.uploadRichMenu(this.inputFile);
-        if (response.url) {
-          this.errorMessage = null;
-          const emitData = { id: response.id, preview_url: response.preview_url };
-          this.$emit('input', emitData);
-        }
-        this.$refs.close.click();
+      let response = null;
+      if (this.mediaData.type === 'imagemap') {
+        response = await this.uploadImageMap({ file: this.inputFile });
+      } else if (this.mediaData.type === 'richmenu') {
+        response = await this.uploadRichMenu(this.inputFile);
       } else {
-        // Image, Audio, Video
-        const response = await this.uploadMedia(query);
-        if (response.url) {
-          if (
-            this.defaults.type === this.MessageType.Image ||
-            this.defaults.type === this.MessageType.Video
-          ) {
-            this.defaults.originalContentUrl = response.url;
-            this.defaults.previewImageUrl = response.preview_url;
-          }
-
-          if (this.defaults.type === this.MessageType.Audio) {
-            this.defaults.originalContentUrl = response.url;
-            this.defaults.duration = response.duration;
-          }
-          this.$emit('input', this.defaults);
-        }
-
-        this.$refs.close.click();
+        response = await this.uploadMedia(query);
       }
+
+      if (response.url) {
+        this.mediaData = _.pick(response, ['id', 'type', 'url', 'preview_url', 'duration']);
+        this.$emit('input', this.mediaData);
+      }
+      this.errorMessage = null;
+      this.inputFile.value = '';
+      this.$refs.close.click();
     },
 
     getDuration(media) {
@@ -333,16 +316,16 @@ export default {
 
     async getMedias(page = 1) {
       const types = [];
-      if (this.defaults.type.includes('image') || this.defaults.type.includes('imagemap')) {
+      if (this.types.includes('image') || this.types.includes('imagemap')) {
         types.push('image');
       }
-      if (this.defaults.type.includes('video')) {
+      if (this.types.includes('video')) {
         types.push('video');
       }
-      if (this.defaults.type.includes('audio')) {
+      if (this.types.includes('audio')) {
         types.push('audio');
       }
-      if (this.defaults.type === 'richmenu') {
+      if (this.types.includes('richmenu')) {
         types.push('menu');
       }
 
@@ -359,38 +342,38 @@ export default {
     },
 
     getUrlMedia(alias) {
-      return this.defaults.type === 'video' ? Util.makeUrlfromKey(alias).previewImageUrl : Util.makeUrlfromKey(alias).originalContentUrl;
+      return this.mediaData.type === 'video' ? Util.makeUrlfromKey(alias).previewImageUrl : Util.makeUrlfromKey(alias).originalContentUrl;
     },
 
     selectMedia(media) {
       if (
-        this.defaults.type === this.MessageType.Image ||
-            this.defaults.type === this.MessageType.Video
+        this.mediaData.type === this.MessageType.Image ||
+            this.mediaData.type === this.MessageType.Video
       ) {
-        this.defaults.originalContentUrl = Util.makeUrlfromKey(media.alias).originalContentUrl;
-        this.defaults.previewImageUrl = Util.makeUrlfromKey(media.alias).previewImageUrl;
+        this.mediaData.originalContentUrl = media.url;
+        this.mediaData.previewImageUrl = media.preview_url;
       }
 
-      if (this.defaults.type === this.MessageType.Audio) {
-        this.defaults.originalContentUrl = Util.makeUrlfromKey(media.alias).originalContentUrl;
-        this.audioUrl = Util.makeUrlfromKey(media.alias).originalContentUrl;
-        this.defaults.duration = media.duration;
+      if (this.mediaData.type === this.MessageType.Audio) {
+        this.mediaData.originalContentUrl = media.url;
+        this.audioUrl = media.preview_url;
+        this.mediaData.duration = media.duration;
       }
 
-      if (this.defaults.type === 'imagemap') {
+      if (this.mediaData.type === 'imagemap') {
         this.checkSizeImageMap(media).then(() => {
-          this.$emit('input', { id: media.alias });
+          this.$emit('input', media);
           this.errorMessageImageMap = '';
           this.$refs.close.click();
         }).catch(() => {
           this.errorMessageImageMap = 'サイズが1040px × 1040pxの画像をアップロードしてください。';
         });
-      } else if (this.defaults.type === 'richmenu') {
+      } else if (this.mediaData.type === 'richmenu') {
         this.errorMessageImageMap = '';
-        this.$emit('input', media.alias);
+        this.$emit('input', media);
         this.$refs.close.click();
       } else {
-        this.$emit('input', this.defaults);
+        this.$emit('input', this.mediaData);
         this.$refs.close.click();
       }
     },
@@ -409,8 +392,8 @@ export default {
       });
     },
 
-    getMineTypes() {
-      return Util.getMineTypes(this.defaults.type);
+    getAcceptedMineTypes() {
+      return Util.getAcceptedMineTypes(this.types);
     },
 
     changeTapDefault() {

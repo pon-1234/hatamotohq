@@ -41,7 +41,7 @@
                 <div class="custom-file w-fix-200">
                   <div class="custom-file-input h-100 w-100">
                     <input
-                      :accept="getMineTypes()"
+                      :accept="getAcceptedMineTypes()"
                       :maxsize="getMaxSize()"
                       type="file"
                       ref="file"
@@ -141,8 +141,8 @@ export default {
       return '200M';
     },
 
-    getMineTypes() {
-      return Util.getMineTypes(this.data.type);
+    getAcceptedMineTypes() {
+      return Util.getAcceptedMineTypes(this.data.type);
     },
 
     addFile(e) {

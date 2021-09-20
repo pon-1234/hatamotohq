@@ -1,10 +1,9 @@
 import {
   UploadMaxSize,
-  ImageType, VideoType, AudioType,
+  ImageType, VideoType, AudioType, PdfType,
   MessageType,
   ActionObjectsType,
   MessageTypeIds
-  , PdfType
 } from './constant';
 import moment from 'moment';
 
@@ -355,24 +354,45 @@ class Util {
     return day + '日' + hour + '時' + min + '分';
   }
 
-  static getMineTypes(type) {
-    if (type === MessageType.Image) {
-      return 'image/*';
+  /**
+   * Convert mine type to file type, for example: image/png → image
+   * @param {String} mineType the mine type of file
+   */
+  static convertMineTypeToMediaType(mineType) {
+    if (ImageType.includes(mineType)) return 'image';
+    if (VideoType.includes(mineType)) return 'video';
+    if (AudioType.includes(mineType)) return 'audio';
+    if (PdfType.includes(mineType)) return 'pdf';
+  }
+
+  /**
+   * Convert file types to mine types
+   * @param {Array} types array of file type
+   * @returns mine types
+   */
+  static getAcceptedMineTypes(types) {
+    const mineTypes = [];
+    if (types.includes(MessageType.Image)) {
+      mineTypes.push('image/*');
     }
 
-    if (type === 'richmenu' || type === 'imagemap') {
-      return 'image/jpg,image/jpeg,image/png';
+    if (types.includes('richmenu') || types.includes('imagemap')) {
+      mineTypes.push('image/jpg,image/jpeg,image/png');
     }
 
-    if (type === MessageType.Video) {
-      return 'video/mp4';
+    if (types.includes(MessageType.Video)) {
+      mineTypes.push('video/mp4');
     }
 
-    if (type === 'pdf') {
-      return 'application/pdf';
+    if (types.includes(MessageType.Audio)) {
+      mineTypes.push('audio/*');
     }
 
-    return 'audio' + '/*';
+    if (types.includes('pdf')) {
+      mineTypes.push('application/pdf');
+    }
+
+    return mineTypes.join(',');
   }
 
   static regexFontSize() {

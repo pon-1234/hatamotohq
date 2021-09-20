@@ -229,6 +229,7 @@ export const actions = {
   async sendMedia(context, query) {
     try {
       const response = await ChannelAPI.sendMedia(query);
+      console.log('--------------');
       console.log(response);
     } catch (error) {
       console.log(error);

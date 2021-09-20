@@ -90,9 +90,9 @@
         </div>
       </div>
     </div>
-    <modal-send-file @sendFile="sendFile" @sendMedia="sendMediaFromManager"></modal-send-file>
+    <media-modal :types="['image','audio','video']" @input="onSendMedia($event)" @sendMedia="sendMediaFromManager"></media-modal>
     <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
-    <modal-send-scenario @onSelectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
+    <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
@@ -262,6 +262,67 @@ export default {
       this.$emit('onSendMessage', message);
     },
 
+    onSendMedia(media) {
+      let message = null;
+      switch (media.type) {
+      case 'image':
+        message = this.buildImageMessage(media);
+        break;
+      case 'video':
+        message = this.buildVideoMessage(media);
+        break;
+      case 'audio':
+        message = this.buildAudioMessage(media);
+        break;
+      }
+      this.$emit('onSendMessage', message);
+    },
+
+    buildImageMessage(media) {
+      return {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'image',
+          contentProvider: {
+            type: 'external',
+            originalContentUrl: media.url,
+            previewImageUrl: media.preview_url
+          }
+        },
+        timestamp: new Date().getTime()
+      };
+    },
+
+    buildVideoMessage(media) {
+      return {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'video',
+          contentProvider: {
+            type: 'external',
+            originalContentUrl: media.url,
+            previewImageUrl: media.preview_url
+          },
+          duration: 0
+        },
+        timestamp: new Date().getTime()
+      };
+    },
+
+    buildAudioMessage(media) {
+      return {
+        channel_id: this.activeChannel.id,
+        message: {
+          type: 'audio',
+          duration: 0,
+          contentProvider: {
+            type: 'external',
+            originalContentUrl: media.url
+          }
+        }
+      };
+    },
+
     onDropMessage(event) {
       event.preventDefault();
       this.sendMediaToTalk(event.dataTransfer.files);
@@ -269,161 +330,6 @@ export default {
 
     allowDrop(event) {
       event.preventDefault();
-    },
-
-    sendFile(file) {
-      let message = null;
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_message = '';
-      channel.last_timetamp = new Date().getTime();
-      if (this.ImageType.indexOf(file.type) !== -1) {
-        channel.last_message = '画像メッセージ';
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'image',
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: URL.createObjectURL(file),
-                previewImageUrl: URL.createObjectURL(file)
-              }
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      } else if (this.VideoType.indexOf(file.type) !== -1) {
-        channel.last_message = '動画メッセージ';
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'video',
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: URL.createObjectURL(file),
-                previewImageUrl: URL.createObjectURL(file)
-              },
-              duration: 0
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      } else if (this.AudioType.indexOf(file.type) !== -1) {
-        channel.last_message = '音声メッセージ';
-
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'audio',
-              duration: 0,
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: URL.createObjectURL(file)
-              }
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      }
-      if (message) {
-        this.$emit('onSendMessage', message);
-        this.sendMedia({ key: message.content.key, file: file, channelId: channel.id });
-      }
-    },
-
-    sendMediaFromManager(media) {
-      let message = null;
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_message = '';
-      channel.last_timetamp = new Date().getTime();
-      if (this.ImageType.indexOf(media.mine_type) >= 0) {
-        channel.last_message = '画像メッセージ';
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'image',
-              originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl,
-              previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl,
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl,
-                previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl
-              }
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      }
-      if (this.VideoType.indexOf(media.mine_type) >= 0) {
-        channel.last_message = '動画メッセージ';
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'video',
-              originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl,
-              previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl,
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl,
-                previewImageUrl: Util.makeUrlfromKey(media.alias).previewImageUrl
-              },
-              duration: 0
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      }
-      if (this.AudioType.indexOf(media.mine_type) >= 0) {
-        channel.last_message = '音声メッセージ';
-
-        message = {
-          channel: channel,
-          content: {
-            key: new Date().getTime(),
-            statusText: '送信中...',
-            is_bot_sender: 0,
-            attr: 'chat-reverse',
-            line_content: {
-              type: 'audio',
-              duration: media.duration,
-              originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl,
-              contentProvider: {
-                type: 'external',
-                originalContentUrl: Util.makeUrlfromKey(media.alias).originalContentUrl
-              }
-            },
-            timestamp: new Date().getTime()
-          }
-        };
-      }
-
-      this.$emit('sendMediaMessage', message);
     },
 
     showFriendDetail(id) {

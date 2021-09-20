@@ -10,7 +10,7 @@
       <error-message :message="errors.first(name+'_scenario_id')"></error-message>
     </div>
 
-    <modal-select-scenario @onSelectScenario="onSelectScenario" :id="name" type="normal"></modal-select-scenario>
+    <modal-select-scenario @selectScenario="onSelectScenario" :id="name" type="normal"></modal-select-scenario>
   </section>
 
 </template>
