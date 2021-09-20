@@ -284,7 +284,7 @@ export default {
         message: {
           type: 'image',
           contentProvider: {
-            type: 'external',
+            type: 'image',
             originalContentUrl: media.url,
             previewImageUrl: media.preview_url
           }
@@ -299,11 +299,10 @@ export default {
         message: {
           type: 'video',
           contentProvider: {
-            type: 'external',
+            type: 'video',
             originalContentUrl: media.url,
             previewImageUrl: media.preview_url
-          },
-          duration: 0
+          }
         },
         timestamp: new Date().getTime()
       };
@@ -314,10 +313,10 @@ export default {
         channel_id: this.activeChannel.id,
         message: {
           type: 'audio',
-          duration: 0,
           contentProvider: {
-            type: 'external',
-            originalContentUrl: media.url
+            type: 'audio',
+            originalContentUrl: media.url,
+            duration: media.duration || 0
           }
         }
       };
