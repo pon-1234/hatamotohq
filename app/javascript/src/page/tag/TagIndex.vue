@@ -25,7 +25,7 @@
                 </tr>
               </thead>
               <tbody v-if="curFolder">
-                <tr v-if="isAddMoreTag" class="tag-item">
+                <tr v-if="showTagInput" class="tag-item">
                   <td class="mw-200 vetical-align-middle">
                     <div class="folder-item">
                       <div class="input-group newgroup-inputs">
@@ -82,10 +82,10 @@ export default {
       },
       tags: [],
       selectedFolderIndex: 0,
-      isAddMoreFolder: false,
-      isAddMoreTag: false,
+      showFolderInput: false,
+      showTagInput: false,
       isPc: true,
-      tagSelected: null,
+      curTag: null,
       friends: [],
       isEnter: true
     };
@@ -133,48 +133,41 @@ export default {
 
     async onSelectedFolderChanged(index) {
       this.selectedFolderIndex = index;
-      this.isAddMoreTag = false;
+      this.showTagInput = false;
       this.isPc = true;
     },
 
     submitDeleteTag() {
-      if (this.tagSelected.type === 'folder') {
+      if (this.curTag.type === 'folder') {
         this.selectedFolderIndex = 0;
       }
-      this.deleteTag(this.tagSelected);
+      this.deleteTag(this.curTag);
     },
 
     addMoreFolder() {
-      this.isAddMoreFolder = !this.isAddMoreFolder;
-      if (this.isAddMoreTag) {
-        this.isAddMoreTag = false;
+      this.showFolderInput = !this.showFolderInput;
+      if (this.showTagInput) {
+        this.showTagInput = false;
       }
       this.folderData.name = '';
     },
 
     addTag() {
-      this.isAddMoreTag = !this.isAddMoreTag;
-      if (this.isAddMoreFolder) {
-        this.isAddMoreFolder = false;
+      this.showTagInput = !this.showTagInput;
+      if (this.showFolderInput) {
+        this.showFolderInput = false;
       }
       this.tagData.name = '';
     },
 
     submitEditTag(value) {
-      this.isAddMoreFolder = false;
-      this.isAddMoreTag = false;
+      this.showFolderInput = false;
+      this.showTagInput = false;
       this.editTag(value);
     },
 
-    // async submitCreateTag(value) {
-    //   this.isAddMoreFolder = false;
-    //   this.isAddMoreTag = false;
-    //   const response = await this.createTag(value);
-    //   this.onReceiveCreateTagResponse(response);
-    // },
-
     setSelectedTag(value) {
-      this.tagSelected = value;
+      this.curTag = value;
     },
 
     async submitCreateFolder(value) {
@@ -197,6 +190,7 @@ export default {
     },
 
     resetTagInput() {
+      this.showTagInput = false;
       this.tagData = {
         id: null,
         name: null,

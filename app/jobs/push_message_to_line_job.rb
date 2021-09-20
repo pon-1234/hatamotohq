@@ -29,7 +29,6 @@ class PushMessageToLineJob < ApplicationJob
   def send_messages(messages)
     messages.in_groups_of(MAX_MSG_IN_REQUEST, false) do |grouped_messages|
       success = LineApi::PushMessage.new(@line_account).perform(grouped_messages, @channel.line_friend.line_user_id)
-
       return unless success
       store_messages(grouped_messages)
     end
