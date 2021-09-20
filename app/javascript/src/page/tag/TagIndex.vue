@@ -57,7 +57,9 @@
                 />
               </tbody>
             </table>
-            <div v-if="curFolder && curFolder.tags.length === 0" class="mt-4 text-md text-center">データはありません</div>
+            <div v-if="curFolder && curFolder.tags.length === 0" class="mt-5 text-md text-center">
+              <b>タグはありません</b>
+            </div>
           </div>
         </div>
       </div>
