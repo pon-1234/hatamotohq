@@ -129,25 +129,6 @@ export const actions = {
     });
   },
 
-  async uploadRichMenu(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
-    let keyData = '';
-    try {
-      const response = await RichMenuAPI.uploadImage({ file: query.file });
-      context.dispatch('system/setLoading', false, { root: true });
-
-      if (response && response.id) {
-        keyData = response.id;
-        context.commit('SET_KEY', keyData);
-        return Promise.resolve(keyData);
-      }
-    } catch (error) {
-      context.dispatch('system/setLoading', false, { root: true });
-      console.log(error);
-      return Promise.reject(error);
-    }
-  },
-
   async uploadImageMap(_, payload) {
     try {
       return await MediaAPI.uploadImageMap(payload.file);
