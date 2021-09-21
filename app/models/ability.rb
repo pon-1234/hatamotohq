@@ -13,7 +13,15 @@ class Ability
     can [:create], Scenario
 
     # Channel
-    can [:manage], Channel, line_account: user.line_account
+    can [:read], Channel, line_account: user.line_account
+
+    # RichMenu
+    can [:manage], RichMenu, line_account: user.line_account
+    # can [:create],
+
+    # Media
+    can [:manage], Media, line_account: user.line_account
+    can [:create], Media
 
     # Folder
     can [:read, :update, :destroy], Folder, line_account: user.line_account
