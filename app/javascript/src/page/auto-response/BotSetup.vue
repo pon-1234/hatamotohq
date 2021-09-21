@@ -50,7 +50,7 @@
         <div class="form-group row mt-4">
           <label class="col-4">Webhook URL</label>
           <div class="col-8">
-            <input type="text" class="form-control" :value="webhookUrl" disabled>
+            <input-with-copy :text="webhookUrl"></input-with-copy>
           </div>
         </div>
       </div>

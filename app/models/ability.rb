@@ -15,6 +15,9 @@ class Ability
     # Channel
     can [:manage], Channel, line_account: user.line_account
 
+    # Friend
+    can [:manage], LineFriend, line_account: user.line_account
+
     # Folder
     can [:read, :update, :destroy], Folder, line_account: user.line_account
     can [:create], Folder

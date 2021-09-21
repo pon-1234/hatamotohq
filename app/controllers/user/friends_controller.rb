@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class User::FriendsController < User::ApplicationController
+  load_and_authorize_resource :line_friend
   before_action :find_friend, only: [:update]
   include User::FriendsHelper
 
   def index
     @params = params[:q]
-    @q = LineFriend.ransack(params[:q])
+    @q = LineFriend.accessible_by(current_ability).ransack(params[:q])
     @line_friends = @q.result.page(params[:page])
   end
 
