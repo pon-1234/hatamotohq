@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  direct :rails_public_blob do |blob|
+    # Preserve the behaviour of `rails_blob_url` inside these environments
+    # where S3 or the CDN might not be configured
+    if Rails.env.development? || Rails.env.test?
+      route =
+        # ActiveStorage::VariantWithRecord was introduced in Rails 6.1
+        # Remove the second check if you're using an older version
+        if blob.is_a?(ActiveStorage::Variant)
+          :rails_representation
+        else
+          :rails_blob
+        end
+      route_for(route, blob)
+    else
+      # Use an environment variable instead of hard-coding the CDN host
+      File.join(ENV.fetch('CDN_HOST'), blob.key)
+    end
+  end
+
   # webhooks
   post 'webhooks/:key', to: 'webhooks#index'
   post 'webhooks/push', to: 'webhooks#push'
@@ -50,7 +69,9 @@ Rails.application.routes.draw do
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
       get '/action_objects', to: 'action_objects#index'
-      resources :medias
+      resources :medias do
+        post :bulk_delete, on: :collection
+      end
       resources :setting, only: [:index] do
         get :edit, on: :collection
         patch :update, on: :collection
