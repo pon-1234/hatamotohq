@@ -4,7 +4,7 @@ import MediaAPI from '../api/media_api';
 
 export const state = {
   stickers: [],
-  stickersHistories: [],
+  logs: [],
   user: null,
   mediaUrl: null,
   mediaPreviewUrl: null,
@@ -23,8 +23,12 @@ export const mutations = {
     state.stickers = stickers;
   },
 
-  setStickerLogs(state, stickers) {
-    state.stickersHistories = state.stickersHistories.concat(stickers);
+  addLog(state, sticker) {
+    const MAX_LOGS = 30;
+    if (state.logs.length > MAX_LOGS) state.logs.splice(MAX_LOGS - 1, 1);
+    const oldLogIndex = state.logs.findIndex(_ => _.line_emoji_id === sticker.line_emoji_id);
+    state.logs.splice(oldLogIndex, 1);
+    state.logs.unshift(sticker);
   },
 
   setMediaUrl(state, url) {
@@ -86,23 +90,14 @@ export const actions = {
 
   async getStickers(context, query) {
     let stickersData = [];
-    if (query.packageId && context.state.stickersHistories.find(item => parseInt(item.package_id) === query.packageId)) {
-      stickersData = context.state.stickersHistories.filter(item => parseInt(item.package_id) === query.packageId);
-    } else if (query.packageId) {
+    if (!query.packageId) context.commit('setStickers', context.state.logs);
+    if (query.packageId) {
       try {
-        if (context.state.stickers && context.state.stickers.length > 0) {
-          // Load from cache
-          stickersData = context.state.stickers;
-        } else {
-          // Call api to load stickers
-          stickersData = await Global.getStickers(query);
-          context.commit('setStickers', stickersData);
-        }
+        stickersData = await Global.getStickers(query);
+        context.commit('setStickers', stickersData);
       } catch (error) {
         console.log(error);
       }
-      // TODO fixme
-      context.commit('setStickerLogs', stickersData);
     }
   },
 
