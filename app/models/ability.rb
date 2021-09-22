@@ -12,12 +12,16 @@ class Ability
     can [:read, :update, :destroy, :delete_confirm, :search, :copy, :copy_confirm, :manual], Scenario, line_account: user.line_account
     can [:create], Scenario
 
+    # Auto Response
+    can [:manage], AutoResponse, line_account: user.line_account
+    can [:create], AutoResponse
+
     # Channel
     can [:read], Channel, line_account: user.line_account
 
     # RichMenu
     can [:manage], RichMenu, line_account: user.line_account
-    # can [:create],
+    can [:create], RichMenu
 
     # Media
     can [:manage], Media, line_account: user.line_account

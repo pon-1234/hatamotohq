@@ -29,7 +29,7 @@ export default {
     ]),
 
     applyFilter() {
-      this.setFilter(this.selectedTypes.map(_ => _.type));
+      this.setFilter(this.selectedTypes);
       this.$emit('filterChanged');
     }
   }
