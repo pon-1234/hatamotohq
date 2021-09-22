@@ -65,7 +65,7 @@
               <div class="card-body d-flex align-items-center justify-content-center">
                 <div class="text-center">
                   <div :class="mode === 'read' ? 'media-preview' : 'media-preview'">
-                    <template v-if="media.type === 'image'">
+                    <template v-if="media.type === 'image' || media.type === 'richmenu'">
                       <expandable-image
                         v-if="mode === 'manage'"
                         class="image"

@@ -29,12 +29,12 @@ class Media < ApplicationRecord
   has_one_attached :file
   has_one :rich_menu, dependent: :nullify
   validates :file, attached: false, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
-  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_image_map?
-  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_menu?
+  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_imagemap?
+  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
   validates_with MediaValidator
 
   before_create do
-    # Set default type to common
+    next if self.type.present?
     self.type = :image if self.file.image?
     self.type = :audio if self.file.audio?
     self.type = :video if self.file.video?

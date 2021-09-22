@@ -17,7 +17,7 @@ export default {
       options: [
         { type: 'image', text: '画像' },
         { type: 'audio', text: '音声' },
-        { type: 'menu', text: 'メニュー画像' },
+        { type: 'richmenu', text: 'メニュー画像' },
         { type: 'video', text: '動画' }
       ],
       selectedTypes: []

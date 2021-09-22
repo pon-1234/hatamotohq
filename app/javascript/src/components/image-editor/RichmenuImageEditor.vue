@@ -502,16 +502,14 @@
           <p>テキストメッセージ</p>
         </div>
       </div>
-      <div style="" class="editor-divider"></div>
-      <div style="display: flex; flex-direction: column; direction: revert; width: 100%" class="editor-container">
-        <div style="text-align: right; display: flex; height: 50px; justify-content: flex-end">
-          <button style="display: inline-block; height: 30px; " class="btn-close" @click="imageGeneration()"><i
+      <div class="editor-divider"></div>
+      <div class="d-flex flex-column editor-container w-100">
+        <div class="d-flex mb-2">
+          <button class="btn btn-outline-success btn-xs ml-auto mr-1" @click="imageGeneration()"><i
             class="fa fa-download"></i>
             ダウンロード
           </button>
-          <div style="width: 10px"></div>
-          <button style="display: inline-block; height: 30px; " class="btn-save0" @click="imageGeneration(false)"><i class="fa fa-save"></i> 保存
-          </button>
+          <button class="btn btn-xs btn-success" @click="imageGeneration(false)"><i class="fa fa-save"></i> 保存</button>
         </div>
         <image-editor :data="objectLists[selectIndex]" :preview="'#preview_'+objectLists[selectIndex].name"
                       :width="width" :height="height"

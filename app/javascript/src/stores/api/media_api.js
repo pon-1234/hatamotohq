@@ -28,7 +28,7 @@ export default {
   uploadImageMap: (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 'image_map');
+    formData.append('type', 'imagemap');
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/medias`,
       method: 'POST',
@@ -41,7 +41,7 @@ export default {
   uploadRichMenu: (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 'menu');
+    formData.append('type', 'richmenu');
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/medias`,
       method: 'POST',

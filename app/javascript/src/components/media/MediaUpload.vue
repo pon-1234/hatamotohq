@@ -79,9 +79,7 @@ export default {
       'uploadImageMap'
     ]),
     getMaxSize() {
-      if (this.mediatype === this.MessageType.Image) return '10M';
-      if (this.type === 'richmenu') return '1M';
-      return '200M';
+      return Util.getMaxSizeByType(this.mediaData.type);
     },
 
     getAcceptedMineTypes() {
@@ -176,14 +174,14 @@ export default {
         file: this.inputFile
       };
 
-      if (this.mediatype === 'audio') {
+      if (this.mediaData.type === 'audio') {
         query.duration = this.duration;
       }
 
       let response = null;
-      if (this.mediatype === 'imagemap') {
+      if (this.mediaData.type === 'imagemap') {
         response = await this.uploadImageMap({ file: this.inputFile });
-      } else if (this.mediatype === 'richmenu') {
+      } else if (this.mediaData.type === 'richmenu') {
         response = await this.uploadRichMenu(this.inputFile);
       } else {
         response = await this.uploadMedia(query);

@@ -48,7 +48,7 @@ class Util {
       result.message = 'ビデオファイルの最大容量は200MBになります。';
     } else if (type === 'audio' && size > UploadMaxSize.Audio) {
       result.valid = false;
-      result.message = 'オーディオファイルの最大容量は200MBになります。';
+      result.message = 'オーディオファイルの最  大容量は200MBになります。';
     } else if (type === 'pdf' && size > UploadMaxSize.Pdf) {
       result.valid = false;
       result.message = 'オーディオファイルの最大容量は10MBになります。';
@@ -57,6 +57,23 @@ class Util {
       result.message = '画像ファイルの最大容量は1MBになります。';
     }
     return result;
+  }
+
+  static getMaxSizeByType(type) {
+    switch (type) {
+    case 'image':
+      return UploadMaxSize.Image;
+    case 'video':
+      return UploadMaxSize.Video;
+    case 'audio':
+      return UploadMaxSize.Audio;
+    case 'pdf':
+      return UploadMaxSize.Pdf;
+    case 'richmenu':
+      return UploadMaxSize.RichMenu;
+    default:
+      return UploadMaxSize.Image;
+    }
   }
 
   static getDuration(data) {

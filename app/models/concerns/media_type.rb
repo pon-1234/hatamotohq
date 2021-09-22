@@ -8,8 +8,8 @@ module MediaType
       image: 'image',
       audio: 'audio',
       video: 'video',
-      menu: 'menu',
-      image_map: 'image_map',
+      richmenu: 'richmenu',
+      imagemap: 'imagemap',
       pdf: 'pdf'
     }, _prefix: :type
   end
