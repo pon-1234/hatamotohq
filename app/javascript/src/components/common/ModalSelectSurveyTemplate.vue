@@ -199,16 +199,6 @@ export default {
         }
       }
     }
-
-    .table-messages-template {
-      max-width: none;
-      margin-top: 0px;
-      tr {
-        td {
-          vertical-align: middle !important;
-        }
-      }
-    }
   }
 
   ::v-deep {

@@ -40,7 +40,7 @@ class Scenario < ApplicationRecord
 
   enum mode: { time: 'time', elapsed_time: 'elapsed_time' }, _suffix: true
   enum status: { enabled: 'enabled', disabled: 'disabled', draft: 'draft' }
-  enum type: { auto: 'auto', manual: 'manual' }, _prefix: true
+  enum type: { auto: 'auto', manual: 'manual' }
 
   def clone
     new_scenario = self.dup

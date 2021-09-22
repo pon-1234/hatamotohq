@@ -36,6 +36,8 @@ class LineFriend < ApplicationRecord
   scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
   scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
 
+  after_create_commit :exec_after_create_commit
+
   def self.find_all_by_tags(line_account_id, tag_ids)
     LineAccount.find(line_account_id).line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids })
   end
@@ -58,9 +60,14 @@ class LineFriend < ApplicationRecord
   end
 
   def available_scenarios
-    all = Scenario.type_manual.enabled.where(line_account_id: self.line_account_id)
+    all = Scenario.manual.enabled.where(line_account_id: self.line_account_id)
     without_tag = all.select { |_| _.tags.blank? }
     with_tag = all.joins(:tags).references(:tags).where(tags: { id: self.tag_ids })
     without_tag + with_tag
   end
+
+  private
+    def exec_after_create_commit
+      AcquireFriendJob.perform_later(self.id)
+    end
 end

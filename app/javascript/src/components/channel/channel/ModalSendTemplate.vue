@@ -1,10 +1,14 @@
 <template>
-  <div class="modal fade modal-template modal-common01" :id="id? id:'modal-template'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal fade" :id="id? id:'modal-template'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
-        <div class="modal-body overflow-hidden">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <label class="mb15">テンプレートを選択してください</label>
+        <div class="modal-header">
+          <h5 class="modal-title">テンプレートを選択してください</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body mh-400 overflow-hidden">
           <div class="d-flex" v-if="folders && folders.length">
             <folder-left
               type="template_message"
@@ -15,34 +19,31 @@
               @changeSelectedFolder="changeSelectedFolderTemplate"
               />
             <div class="flex-grow-1">
-              <div class="list-content">
-                <div class="x-tag-header">
-                  <div class="x-btn-back">
-                    <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                  <div class="x-title"
-                       v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}
-                  </div>
-                </div>
-
-                <div class="list-scroll message-template-list" v-if="folders && folders[this.selectedFolder]">
-                  <table class="table table-hover table-messages-template">
-                    <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
-                      <tr v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" class="folder-item" data-dismiss="modal">
-                        <td class="d-flex w-100">
-                          <div>{{item.name}}</div>
-                          <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >送信</div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody v-else>
-                      <tr>
-                        <td class="text-center pt40">
-                           データーがありません
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              <div class="table-responsive">
+                <table class="table table-hover index">
+                  <thead>
+                    <tr>
+                      <td>
+                        <span v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}</span>
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
+                    <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
+                      <td class="d-flex w-100">
+                        <div>{{item.name}}</div>
+                        <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >送信</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody v-else>
+                    <tr>
+                      <td class="text-center mt-5">
+                        <b>登録テンプレートはありません。</b>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -153,16 +154,6 @@ export default {
           display: flex;
           flex-direction: column;
         }
-      }
-    }
-  }
-
-  .table-messages-template {
-    max-width: none;
-    margin-top: 0px;
-    tr {
-      td {
-        vertical-align: middle!important;
       }
     }
   }

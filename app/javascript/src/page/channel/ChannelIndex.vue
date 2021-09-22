@@ -1,19 +1,17 @@
 <template>
   <div class="card">
     <div class="card-body talk">
-      <talk-menu-bar @input="showChannels" />
-      <div class="container">
-        <div id="chatbox" class="chatbox active">
-          <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
-          <chat-box
-            @onSendMessage="sendMessage"
-            @onSendScenario="sendScenario"
-            @onSendTemplate="sendTemplate"
-            @sendMediaMessage="sendMediaMessage"
-            :class="getRightItem()"
-            @showFriendDetail="showFriendDetail"
-          />
-        </div>
+      <div id="chatbox" class="chatbox active">
+        <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
+        <chat-box
+          @onSendMessage="sendMessage"
+          @onSendScenario="sendScenario"
+          @onSendTemplate="sendTemplate"
+          @sendMediaMessage="sendMediaMessage"
+          :class="getRightItem()"
+          @showFriendDetail="showFriendDetail"
+        />
+        <channel-friend-detail></channel-friend-detail>
       </div>
     </div>
     <talk-modal-search
@@ -196,6 +194,9 @@ export default {
 }
 
 @media (min-width: 992px) {
+  .chatbox {
+    width: calc(100vw - 250px);
+  }
   .item-hidden {
     display: block;
   }

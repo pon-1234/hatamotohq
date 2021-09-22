@@ -5,7 +5,7 @@ class User::TagsController < User::ApplicationController
   before_action :find_tag, only: [:update, :destroy, :friends]
 
   def index
-    @folders = Folder.accessible_by(current_ability).type_tag
+    @folders = Folder.includes([:tags]).accessible_by(current_ability).type_tag
     respond_to do |format|
       format.html
       format.json

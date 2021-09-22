@@ -1,22 +1,22 @@
 <template>
   <div class="modal fade" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
+      <div class="modal-content mh-400">
         <div class="modal-header">
-          <h4 class="modal-title">シナリオ配信を選択してください。</h4>
+          <h5 class="modal-title">シナリオ配信を選択してください。</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
         <div class="modal-body text-sm">
-          <table class="table table-hover">
+          <table class="table table-hover index">
             <thead>
               <tr>
                 <th>#</th>
                 <th>配信方式</th>
                 <th>シナリオ名</th>
                 <th>メッセージ数</th>
-                <th>選択</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -25,8 +25,8 @@
                 <td>{{ scenario.mode === 'date' ? '時刻' : '経過時間' }}</td>
                 <td>{{ scenario.title }}</td>
                 <td>{{ scenario.scenario_messages_count || 0 }}</td>
-                <td>
-                  <div role="button" class="btn btn-primary btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">送信</div>
+                <td class="text-right">
+                  <div role="button" class="btn btn-info btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">送信</div>
                 </td>
               </tr>
             </tbody>
