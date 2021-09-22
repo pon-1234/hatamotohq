@@ -309,7 +309,8 @@ export default {
           type: 'audio',
           originalContentUrl: media.url,
           duration: media.duration || 0
-        }
+        },
+        timestamp: new Date().getTime()
       };
     },
 

@@ -1,8 +1,8 @@
 <template>
   <div class="upload-container my-auto d-flex flex-column">
-    <div class="border flex-grow-1 d-flex justify-content-center align-items-center" @drop.prevent="addFile" @dragover.prevent>
-      <div class="text-center position-relative" v-if="isPreview">
-        <button class="btn-delete-image" @click="deleteMedia()"><span class="close">×</span></button>
+    <div class="border flex-grow-1 d-flex justify-content-center align-items-center position-relative" @drop.prevent="addFile" @dragover.prevent>
+      <div class="text-center" v-if="isPreview">
+        <button class="btn-delete-media" @click="deleteMedia()"><span class="close">×</span></button>
         <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL">
         <img v-if="mediaData.type === 'image' || mediaData.type === 'richmenu'" :src="fileURL">
         <audio controls v-if="mediaData.type === 'audio'" @loadedmetadata="onTimeUpdate" ref="audio">
@@ -97,10 +97,10 @@ export default {
       this.inputFile = input;
       const mediaType = Util.convertMineTypeToMediaType(input.type);
       if (mediaType === 'image') {
-        if (this.types.includes('richmenu')) this.mediatype = 'richmenu';
-        if (this.types.includes('imagemap')) this.mediatype = 'imagemap';
+        if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
+        if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
       } else {
-        this.mediatype = mediaType;
+        this.mediaData.type = mediaType;
       }
       const validationResult = Util.validateFileSizeByType(this.mediaData.type, input.size);
       if (!validationResult) return;
@@ -296,7 +296,7 @@ export default {
       color: red;
     }
 
-    .btn-delete-image {
+    .btn-delete-media {
       top: 9px;
       right: 8px;
       position: absolute;
