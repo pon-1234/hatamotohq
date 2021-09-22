@@ -76,11 +76,11 @@
       @accept="templateChange">
     </imagemap-template-selector>
 
-    <media-modal
-      @input="changeLineMediaAlias"
+    <modal-select-media
+      @select="onSelectMedia"
       :data="{type: 'imagemap'}"
       :id="index+'_imagemapModalUploadImage'">
-    </media-modal>
+    </modal-select-media>
 
     <rich-menu-image-editor
       v-if="isShowEditor"
@@ -220,7 +220,7 @@ export default {
       this.templateValue = data.value;
     },
 
-    changeLineMediaAlias(input) {
+    onSelectMedia(input) {
       this.line_media_alias = input.id;
     },
 

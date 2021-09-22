@@ -112,6 +112,16 @@
   .w-#{$i}p {
     width: $width;
   }
+
+  $vw: 0vw + $i;
+  .vw-#{i} {
+    width: $vw;
+  }
+
+  $vh: 0vh + $i;
+  .vh-#{i} {
+    height: $vh;
+  }
 }
 
 @for $i from 1 through 1000 {

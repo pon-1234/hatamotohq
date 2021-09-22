@@ -38,6 +38,7 @@ class Media < ApplicationRecord
     self.type = :image if self.file.image?
     self.type = :audio if self.file.audio?
     self.type = :video if self.file.video?
+    self.type = :pdf if self.file.content_type.eql?('application/pdf')
   end
 
   def url

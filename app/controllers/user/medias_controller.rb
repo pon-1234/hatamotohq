@@ -4,7 +4,7 @@ class User::MediasController < User::ApplicationController
   # GET /user/medias
   def index
     @q = Media.with_attached_file.ransack(params[:q])
-    @medias = @q.result.page(params[:page]).per(18)
+    @medias = @q.result.page(params[:page]).per(6)
     respond_to do |format|
       format.html
       format.json
