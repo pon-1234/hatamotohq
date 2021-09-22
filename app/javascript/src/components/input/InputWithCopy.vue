@@ -19,6 +19,7 @@ export default {
   methods: {
     copy() {
       navigator.clipboard.writeText(this.text);
+      window.toastr.success('コビーしました。');
     }
   }
 };

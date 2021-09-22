@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {

@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
   .text-sm {
     font-size: 0.72rem !important;
   }
