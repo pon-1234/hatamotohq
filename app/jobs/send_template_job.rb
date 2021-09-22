@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SendTemplateJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(channel_id, template_id)

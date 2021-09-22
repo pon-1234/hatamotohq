@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DispatchBroadcastJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(broadcast_id)
