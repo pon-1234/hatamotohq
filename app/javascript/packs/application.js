@@ -13,6 +13,7 @@ import vSelect from 'vue-select';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
+import CKEditor from '@ckeditor/ckeditor5-vue2';
 import {
   BootstrapVue,
   DropdownPlugin,
@@ -62,6 +63,8 @@ Vue.use(DropdownPlugin);
 Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
+Vue.use(CKEditor);
+
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
