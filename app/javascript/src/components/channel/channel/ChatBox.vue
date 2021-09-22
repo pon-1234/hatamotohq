@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <media-modal :types="['image','audio','video']" @input="onSendMedia($event)" @sendMedia="sendMediaFromManager"></media-modal>
+    <modal-select-media :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
     <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
     <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
@@ -309,7 +309,8 @@ export default {
           type: 'audio',
           originalContentUrl: media.url,
           duration: media.duration || 0
-        }
+        },
+        timestamp: new Date().getTime()
       };
     },
 

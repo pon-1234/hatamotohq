@@ -5,7 +5,7 @@ class User::TemplatesController < User::ApplicationController
 
   # GET /user/templates
   def index
-    @folders = Folder.accessible_by(current_ability).includes([templates: [:template_messages]]).type_template_message
+    @folders = Folder.accessible_by(current_ability).type_template_message
     respond_to do |format|
       format.html
       format.json

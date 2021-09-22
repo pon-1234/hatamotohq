@@ -51,12 +51,14 @@
             <span v-if="data.type === 'audio'">ボイスメッセージをアップロード</span>
           </a>
           <div class="text-muted opacity-30">
-            <i class="fas fa-image fa-3x"></i>
+            <i v-if="data.type === 'image'" class="fas fa-image fa-2x"></i>
+            <i v-if="data.type === 'video'" class="fas fa-video fa-2x"></i>
+            <i v-if="data.type === 'audio'" class="fas fa-volume-up fa-2x"></i>
           </div>
         </div>
       </div>
       <error-message :message="errors.first('media-template' + index)"></error-message>
-      <media-modal v-bind:data="data" @input="addMedia"></media-modal>
+      <modal-select-media :types="[data.type]" @select="addMedia($event)"></modal-select-media>
     </div>
     <input type="hidden" v-model="data.originalContentUrl" :name="'media-template' + index" v-validate="'required'" data-vv-as="ファイル" />
   </div>
@@ -84,8 +86,14 @@ export default {
 
       this.$emit('input', this.data);
     },
-    addMedia(value) {
-      this.$emit('input', value);
+    addMedia(media) {
+      const messageData = {
+        type: media.type,
+        originalContentUrl: media.url,
+        previewImageUrl: media.preview_url,
+        duration: media.duration
+      };
+      this.$emit('input', messageData);
     },
     getDuration() {
       return Util.getDuration(this.data);

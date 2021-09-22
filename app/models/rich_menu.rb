@@ -54,7 +54,7 @@ class RichMenu < ApplicationRecord
   before_destroy :exec_after_destroy
 
   def image_url
-    media.url
+    media&.url
   end
 
   private

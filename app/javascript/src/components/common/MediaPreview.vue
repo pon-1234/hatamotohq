@@ -1,10 +1,10 @@
 <template>
-  <div class="media-content">
+  <div class="media-content d-flex align-items-center">
     <div class="thumbnail-item" v-if="type === 'image' || type === 'video' || type=== 'richmenu' || type=== 'imagemap'"
          :style="style">
       <div class="play-button" v-if=" type==='video' && !showMedia">
       </div>
-      <div class="" v-else-if=" type==='video' && showMedia">
+      <div v-else-if="type==='video' && showMedia">
         <video :width="style.width" :height="style.height" controls>
           <source :src="src">
         </video>
@@ -118,15 +118,14 @@ export default {
     cursor: pointer;
     display: inline-block;
     position: relative;
+    overflow: hidden;
   }
 
   .play-button {
     height: 30px;
     width: 30px;
-    top: 50%;
-    left: 50%;
-    margin-top: -2rem;
-    margin-left: -2rem;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
     position: absolute;
     background: url("/img/play.png") no-repeat;
     background-size: cover;

@@ -1,8 +1,9 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/medias?page=${query.page}&q[type_in]=${query.types}`,
+      url: `${process.env.MIX_ROOT_PATH}/user/medias`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
@@ -50,16 +51,13 @@ export default {
     });
   },
 
-  mediasDelete: (query) => {
+  bulkDelete: (ids) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/medias/delete'),
+      url: `${process.env.MIX_ROOT_PATH}/user/medias/bulk_delete`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify({ ids: ids }),
+      dataType: 'json',
       contentType: 'application/json'
     });
-  },
-  download: (query) => {
-    query._pid = btoa('/medias/download');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
   }
 };

@@ -23,7 +23,7 @@
 
     <!-- <div class="form-group" v-if="[MessageType.Template, MessageType.Imagemap, MessageType.Flex].includes(data.type)" hidden>
       <label>代替テキスト</label>
-      <input type="text" :name="`${altText}${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="defaults.altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
+      <input type="text" :name="`${altText}${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="messageData.altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
       <error-message :message="errors.first(`${altText}${index}`)"></error-message>
     </div> -->
 
@@ -68,7 +68,7 @@ export default {
   props: ['data', 'index'],
   data() {
     return {
-      defaults: {
+      messageData: {
         type: 'text',
         text: ''
       }
@@ -77,66 +77,67 @@ export default {
   created() {
     if (this.data) {
       // eslint-disable-next-line no-undef
-      this.defaults = _.cloneDeep(this.data);
+      this.messageData = _.cloneDeep(this.data);
     }
   },
   methods: {
     onTextChanged(value) {
-      this.defaults = {
+      this.messageData = {
         type: 'text',
         text: value
       };
-      this.$emit('changeContent', this.defaults);
+      this.$emit('changeContent', this.messageData);
     },
     onStickerChanged(value) {
-      this.defaults = {
+      this.messageData = {
         type: 'sticker',
         packageId: value.packageId,
         stickerId: value.stickerId
       };
-      this.$emit('changeContent', this.defaults);
+      this.$emit('changeContent', this.messageData);
     },
     onMediaChanged(value) {
-      this.defaults = value;
-      this.$emit('changeContent', this.defaults);
+      console.log('----on media changed----', value);
+      this.messageData = value;
+      this.$emit('changeContent', this.messageData);
     },
 
     onTemplateContentChanged(value) {
-      this.defaults.template = value;
+      this.messageData.template = value;
 
-      if (!this.defaults.altText) {
-        if (this.defaults.template.type === 'buttons') {
-          this.defaults.altText = 'ボタンメッセージ';
+      if (!this.messageData.altText) {
+        if (this.messageData.template.type === 'buttons') {
+          this.messageData.altText = 'ボタンメッセージ';
         }
-        if (this.defaults.template.type === 'confirm') {
-          this.defaults.altText = '確認メッセージ';
+        if (this.messageData.template.type === 'confirm') {
+          this.messageData.altText = '確認メッセージ';
         }
-        if (this.defaults.template.type === 'carousel') {
-          this.defaults.altText = 'カルーセルメッセージ';
+        if (this.messageData.template.type === 'carousel') {
+          this.messageData.altText = 'カルーセルメッセージ';
         }
-        if (this.defaults.template.type === 'image_carousel') {
-          this.defaults.altText = '画像カルーセルメッセージ';
+        if (this.messageData.template.type === 'image_carousel') {
+          this.messageData.altText = '画像カルーセルメッセージ';
         }
       }
-      this.$emit('changeContent', this.defaults);
+      this.$emit('changeContent', this.messageData);
     },
 
     onImagemapChanged(value) {
-      this.defaults = value;
-      this.$emit('changeContent', this.defaults);
+      this.messageData = value;
+      this.$emit('changeContent', this.messageData);
     },
 
     onLocationChanged(value) {
-      this.defaults = value;
-      this.$emit('changeContent', this.defaults);
+      this.messageData = value;
+      this.$emit('changeContent', this.messageData);
     },
 
     onFlexChanged(value) {
-      this.defaults = value;
-      if (!this.defaults.altText) {
-        this.defaults.altText = 'Flexメッセージ';
+      this.messageData = value;
+      if (!this.messageData.altText) {
+        this.messageData.altText = 'Flexメッセージ';
       }
-      this.$emit('changeContent', this.defaults);
+      this.$emit('changeContent', this.messageData);
     }
   }
 };

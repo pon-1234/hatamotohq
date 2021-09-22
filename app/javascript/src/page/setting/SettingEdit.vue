@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200" >
+  <div>
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/setting`" class="text-info">
@@ -13,54 +13,54 @@
           <input type="hidden" name="_method" value="patch" />
           <input type="hidden" name="setting[id]" :value="settingFormData.id">
           <div class="card-body">
-            <div class="form-group row">
-              <label class="col-12">LINE公式アカウントID<required-mark/></label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">LINE公式アカウントID<required-mark/></label>
+              <div class="flex-grow-1">
                 <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
                   <input type="text" class="form-control" name="setting[line_user_id]" placeholder="入力してください" v-model="settingFormData.line_user_id">
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">LINEアカウント名<required-mark/></label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">LINEアカウント名<required-mark/></label>
+              <div class="flex-grow-1">
                 <ValidationProvider name="LINEアカウント名" rules="required" v-slot="{ errors }">
                   <input type="text" class="form-control" name="setting[line_name]" placeholder="入力してください" v-model="settingFormData.line_name">
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">表示名<required-mark/></label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">表示名<required-mark/></label>
+              <div class="flex-grow-1">
                 <ValidationProvider name="表示名" rules="required" v-slot="{ errors }">
                   <input type="text" class="form-control" name="setting[display_name]" placeholder="入力してください" v-model="settingFormData.display_name">
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">チャネルID</label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">チャネルID</label>
+              <div class="flex-grow-1">
                 <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_id" disabled>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">チャネルシークレット</label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">チャネルシークレット</label>
+              <div class="flex-grow-1">
                 <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_secret" disabled>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">Webhook URL</label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">Webhook URL</label>
+              <div class="flex-grow-1">
                 <input type="text" class="form-control" placeholder="入力してください" :value="webhookUrl()" disabled>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-12">LIFF ID</label>
-              <div class="col-12">
+            <div class="form-group d-flex">
+              <label class="fw-350">LIFF ID</label>
+              <div class="flex-grow-1">
                 <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.liff_id" disabled>
               </div>
             </div>

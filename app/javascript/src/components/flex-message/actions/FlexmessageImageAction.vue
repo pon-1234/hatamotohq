@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <media-modal @input="uploadImage" :data="{type: 'image'}" :id="'imageModalCenter-'+name" />
+    <modal-select-media @input="uploadImage" :data="{type: 'image'}" :id="'imageModalCenter-'+name" />
   </div>
   </div>
 </template>
