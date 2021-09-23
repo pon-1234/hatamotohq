@@ -93,7 +93,7 @@
             </div>
             <div v-if="refresh_content">
               <div class="mb-2">
-                <a class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</a>
+                <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">

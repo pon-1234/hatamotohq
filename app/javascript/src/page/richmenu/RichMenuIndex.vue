@@ -14,21 +14,21 @@
 
         <div class="flex-grow-1">
           <div v-if="curFolder">
-            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary btn-sm">
+            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
               <i class="fa fa-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2" v-if="curFolder">
-            <table class="table index">
-              <thead>
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
                 <tr>
-                  <th class="w-30p">リッチメニュー名</th>
-                  <th class="w-5p">状況</th>
-                  <th class="w-15p">メニュー初期状態</th>
-                  <th class="w-20p">画像</th>
-                  <th class="w-10p">メンバー数</th>
-                  <th class="w-10p">操作</th>
-                  <th class="w-10p">フォルダ</th>
+                  <th>リッチメニュー名</th>
+                  <th>状況</th>
+                  <th>メニュー初期状態</th>
+                  <th>画像</th>
+                  <th>メンバー数</th>
+                  <th>操作</th>
+                  <th>フォルダ</th>
                 </tr>
               </thead>
               <tbody>
@@ -38,8 +38,12 @@
                 >
                   <td class="font-weight-bold">{{ richmenu.name }}</td>
                   <td>
-                    <div class="badge badge-warning" v-if="richmenu.status === 'disabled'">無効</div>
-                    <div class="badge badge-success" v-else>有効</div>
+                    <template v-if="richmenu.status === 'enabled'">
+                      <i class='mdi mdi-circle text-success'></i> 有効
+                    </template>
+                    <template v-else>
+                      <i class='mdi mdi-circle'></i> 無効
+                    </template>
                   </td>
                   <td>表示しない</td>
                   <td>
@@ -48,16 +52,12 @@
                   <td>0</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" @click="openEdit(richmenu)">編集</button>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
-                      <div class="dropdown-menu bg-white" role="menu" style="">
+                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                      <div class="dropdown-menu">
                         <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
-                        <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalToggleRichMenu" @click="curRichMenuIndex = index">{{ richmenu.status === 'enabled' ? '無効' : '有効' }}にする</a>
-                        <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item">リッチメニューをコビー</a>
-                        <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichMenu" @click="curRichMenuIndex = index">リッチメニューを削除</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyRichMenu" @click="curTemplateIndex = index">リッチメニューをコビー</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichMenu" @click="curTemplateIndex = index">リッチメニューを削除</a>
                       </div>
                     </div>
                   </td>

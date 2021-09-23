@@ -415,9 +415,6 @@ input, select, textarea {
     .nav-top-left a.navbar-brand{
         margin: 0px;
     }
-    .nav-top-right .btn-group {
-        display: none;
-    }
     .nav-bottom {
         display: none;
     }

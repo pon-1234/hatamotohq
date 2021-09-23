@@ -1,13 +1,13 @@
 <template>
   <div class="fw-300">
     <div v-if="!isPerview">
-      <div class="btn btn-success btn-sm" @click="addMoreFolder">
+      <div class="btn btn-success" @click="addMoreFolder">
         <i class="fa fa-plus"></i>
           新しいフォルダ
       </div>
     </div>
     <div class="mt-2" :class="!isPerview?'':'tag-content-preview'">
-      <table class="table index mb-0">
+      <table class="table table-centered mb-0">
         <thead class="thead-light">
           <tr>
             <th scope="col" class="fh-42">フォルダ</th>
@@ -110,7 +110,7 @@ export default {
 <style lang="scss" scoped>
 .folder-list {
   border-right: thin solid #ccc;
-  min-height: 80vh;
+  min-height: 70vh;
 }
 
 .tag-content-preview {

@@ -11,24 +11,24 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-        <div class="flex-grow-1 mh-1000">
+        <div class="flex-grow-1">
           <div class="col-r">
             <a v-if="folders && folders.length && folders[selectedFolderIndex]"
-              :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary btn-sm"
+              :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary"
             >
               <i class="fa fa-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2">
-            <table class="table index">
-              <thead>
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
                 <tr>
                   <th>自動応答名</th>
                   <th>キーワード</th>
                   <th>メッセージ</th>
-                  <th class="fw-100">操作</th>
-                  <th>登録日</th>
                   <th>状況</th>
+                  <th>操作</th>
+                  <th>登録日</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,29 +43,27 @@
                       <message-content :data="item.content" ></message-content>
                     </div>
                   </td>
+
+                  <td>
+                    <template v-if="autoResponse.status === 'enabled'">
+                      <i class='mdi mdi-circle text-success'></i> 有効
+                    </template>
+                    <template v-else>
+                      <i class='mdi mdi-circle'></i> 無効
+                    </template>
+                  </td>
+
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" @click="openEdit(autoResponse)">編集</button>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
-                      <div class="dropdown-menu bg-white" role="menu" style="">
-                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
-                        <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" >自動応答を編集する</a>
-                        <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAutoResponse" @click="showModal(autoResponse)">自動応答を削除する</a>
+                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                      <div class="dropdown-menu">
+                        <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集する</a>
+                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enabled' ? 'OFF' : 'ON'}}にする</a>
+                        <a role="button" class="dropdown-item" @click="showConfirmDeleteModal(autoResponse)">自動応答を削除する</a>
                       </div>
                     </div>
                   </td>
-
                   <td><span>{{ formattedDate(autoResponse.created_at) }}</span></td>
-                  <td>
-                    <template v-if="autoResponse.status === 'enable'">
-                      <span class="badge badge-success p-2">有効</span>
-                    </template>
-                    <template v-else>
-                      <span class="badge badge-warning p-2">無効</span>
-                    </template>
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -154,7 +152,7 @@ export default {
       'editFolder'
     ]),
 
-    showModal(autoResponse) {
+    showConfirmDeleteModal(autoResponse) {
       this.autoResponse = autoResponse;
     },
 
@@ -163,7 +161,7 @@ export default {
     },
 
     async updateAutoResponseStatus(autoResponse) {
-      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' };
+      const payload = { id: autoResponse.id, status: autoResponse.status === 'enabled' ? 'disabled' : 'enabled' };
       await this.updateAutoResponse(payload);
     },
 

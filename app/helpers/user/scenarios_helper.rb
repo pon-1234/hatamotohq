@@ -12,11 +12,11 @@ module User::ScenariosHelper
     status_i18n = I18n.t('enums.scenario.status.' + status)
     case status
     when 'enabled'
-      "<span class='badge badge-primary p-2'>#{status_i18n}</span>".html_safe
+      "<i class='mdi mdi-circle text-primary'></i> #{status_i18n}".html_safe
     when 'disabled'
-      "<span class='badge badge-warning p-2'>#{status_i18n}</span>".html_safe
+      "<i class='mdi mdi-circle text-warning'></i> #{status_i18n}".html_safe
     when 'draft'
-      "<span class='badge badge-secondary p-2'>#{status_i18n}</span>".html_safe
+      "<i class='mdi mdi-circle text-secondary'></i> #{status_i18n}".html_safe
     end
   end
 end

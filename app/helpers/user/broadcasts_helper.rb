@@ -53,15 +53,15 @@ module User::BroadcastsHelper
   def render_broadcast_status(status)
     case status
     when 'pending'
-      '<span class="badge badge-primary p-2">配信予約</span>'
+      '<i class="mdi mdi-circle text-primary"></i> 配信予約'
     when 'sending'
-      '<span class="badge badge-info p-2">配信中</span>'
+      '<i class="mdi mdi-circle text-info"></i> 配信中'
     when 'done'
-      '<span class="badge badge-success p-2">配信済</span>'
+      '<i class="mdi mdi-circle text-success"></i> 配信済'
     when 'error'
-      '<span class="badge badge-danger p-2">エラー</span>'
+      '<i class="mdi mdi-circle text-danger"></i> エラー'
     when 'draft'
-      '<span class="badge badge-secondary p-2">下書き</span>'
+      '<i class="mdi mdi-circle text-secondary"></i> 下書き'
     end
   end
 

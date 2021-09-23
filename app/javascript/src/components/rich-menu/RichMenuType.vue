@@ -4,7 +4,7 @@
       <h3 class="card-title">本文設定</h3>
     </div>
     <div class="card-body">
-      <div class="d-flex-sm" style="justify-content: center">
+      <div class="d-flex" style="justify-content: center">
         <div class="fw-260">
           <input type="text" v-model="background" :name="'image-url'" v-validate="'required'" class="d-none" data-vv-as="背景画像"/>
           <rich-menu-preview
