@@ -20,7 +20,7 @@ export default {
   update: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${payload.id}`,
-      method: 'PUT',
+      method: 'PATCH',
       data: JSON.stringify(payload),
       contentType: 'application/json'
     });

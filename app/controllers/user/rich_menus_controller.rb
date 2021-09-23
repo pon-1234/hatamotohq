@@ -65,6 +65,7 @@ class User::RichMenusController < User::ApplicationController
         :template_id,
         :target,
         :selected,
+        :status,
         areas: [
           :key,
           bounds: {},

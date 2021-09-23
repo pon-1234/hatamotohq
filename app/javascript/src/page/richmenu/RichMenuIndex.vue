@@ -38,7 +38,8 @@
                 >
                   <td class="font-weight-bold">{{ richmenu.name }}</td>
                   <td>
-                    <div class="badge badge-success">有効</div>
+                    <div class="badge badge-warning" v-if="richmenu.status === 'disabled'">無効</div>
+                    <div class="badge badge-success" v-else>有効</div>
                   </td>
                   <td>表示しない</td>
                   <td>
@@ -52,7 +53,7 @@
                       <div class="dropdown-menu bg-white" role="menu" style="">
                         <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
                         <div class="dropdown-divider"></div>
-                        <a role="button" class="dropdown-item" @click="openEdit(richmenu)">無効にする</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalToggleRichMenu" @click="curRichMenuIndex = index">{{ richmenu.status === 'enabled' ? '無効' : '有効' }}にする</a>
                         <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item">リッチメニューをコビー</a>
                         <div class="dropdown-divider"></div>
@@ -96,7 +97,31 @@
         リッチメニュー名：{{ curRichMenu.name }}
       </template>
     </modal-confirm>
-    <!-- START: modal delete richmenu -->
+    <!-- END: modal delete richmenu -->
+
+    <!-- START: modal copy richmenu -->
+    <modal-confirm
+      title="こちらのリッチメニューをコピーしてもよろしいですか？"
+      id="modalCopyRichMenu"
+      type="confirm"
+      @confirm="submitCopyRichMenu">
+      <template v-slot:content v-if="curRichMenu">
+        リッチメニュー名：{{ curRichMenu.name }}
+      </template>
+    </modal-confirm>
+    <!-- END: modal copy richmenu -->
+
+    <!-- START: modal enable/disable richmenu -->
+    <modal-confirm
+      :title="`こちらのリッチメニューを${curRichMenu && curRichMenu.status === 'enabled' ? '無効' : '有効'}にしてもよろしいですか？`"
+      id="modalToggleRichMenu"
+      type="confirm"
+      @confirm="submitToggleRichMenu">
+      <template v-slot:content v-if="curRichMenu">
+        リッチメニュー名：{{ curRichMenu.name }}
+      </template>
+    </modal-confirm>
+    <!-- END: modal delete richmenu -->
   </div>
 </template>
 
@@ -142,6 +167,7 @@ export default {
       'createFolder',
       'updateFolder',
       'deleteFolder',
+      'updateRichMenu',
       'deleteRichMenu'
     ]),
 
@@ -171,6 +197,19 @@ export default {
         Util.showSuccessThenRedirect('リッチメニュの削除は完了しました。', window.location.href);
       } else {
         window.$toastr.error('リッチメニュの削除は失敗しました。');
+      }
+    },
+
+    async submitToggleRichMenu() {
+      const payload = {
+        id: this.curRichMenu.id,
+        status: this.curRichMenu.status === 'enabled' ? 'disabled' : 'enabled'
+      };
+      const response = await this.updateRichMenu(payload);
+      if (response) {
+        Util.showSuccessThenRedirect('リッチメニュ状況の変更は完了しました。', window.location.href);
+      } else {
+        window.$toastr.error('リッチメニュ状況の変更は失敗しました。');
       }
     },
 
