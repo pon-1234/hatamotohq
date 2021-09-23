@@ -59,7 +59,7 @@
 
 <div id='confirmDelContent'></div>
 
-<modal-announcement-show :announcements="<%= @announcements.to_json %>"></modal-announcement-show>
+<modal-announcement-show :announcements="<%= @announcements.to_json %>" :status="`admin`"></modal-announcement-show>
 <input type="hidden" id="inputValue">
 <script>
   function confirmScope(id) {

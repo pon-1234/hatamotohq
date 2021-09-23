@@ -121,6 +121,11 @@ td {
   color: #000000;
   border-bottom: 1px solid #dddddd;
   .output {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
     p {
       margin-bottom: 0;
     }

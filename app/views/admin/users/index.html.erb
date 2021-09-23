@@ -85,7 +85,7 @@
 </div>
 
 <div id='confirmDelContent'></div>
-<modal-change-user-status :users="<%= @users.to_json %>"></modal-change-user-status>
+<modal-change-user-status :users="<%= @users.to_json %>" :status="`user`"></modal-change-user-status>
 <input type="hidden" id="inputValue">
 <script>
   function confirmScope(id) {
