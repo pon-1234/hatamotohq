@@ -1,123 +1,112 @@
-  <aside class="main-sidebar elevation-4 sidebar-light-success">
-    <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link navbar-success">
-      <span class="text-white brand-text font-weight-bold">LINE INSIGHT</span>
-    </a>
+<!-- ========== Left Sidebar Start ========== -->
+<div class="left-side-menu">
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-home"></i><p>ホーム</p>'.html_safe,
-              user_root_path,
-              class: "nav-link #{controller?("user/home") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+  <!-- LOGO -->
+  <a href="index.html" class="logo text-center logo-light">
+    <span class="text-white brand-text font-weight-bold">LINE INSIGHT</span>
+  </a>
 
-        <!-- トーク -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-comment-dots"></i><p>個別トーク</p>'.html_safe,
-              user_channels_path,
-              class: "nav-link #{controller?("user/channels") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+  <!-- LOGO -->
+  <a href="index.html" class="logo text-center logo-dark">
+    <span class="logo-lg">
+      <img src="/images/logo-dark.png" alt="" height="16">
+    </span>
+    <span class="logo-sm">
+      <img src="/images/logo_sm_dark.png" alt="" height="16">
+    </span>
+  </a>
 
-        <!-- Friend List -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-users"></i><p>友達一覧</p>'.html_safe,
-              user_friends_path,
-              class: "nav-link #{controller?("user/friends") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+  <div class="h-100" id="left-side-menu-container" data-simplebar>
 
-        <!-- Broadcast List -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fa fa-paper-plane"></i><p>一斉配信</p>'.html_safe,
-              user_broadcasts_path,
-              class: "nav-link #{controller?("user/broadcasts") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+    <!--- Sidemenu -->
+    <ul class="metismenu side-nav">
 
-        <!-- Scenario List -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fa fa-clipboard-list"></i><p>シナリオ配信</p>'.html_safe,
-              user_scenarios_path,
-              class: "nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <li class="side-nav-item">
+        <%= link_to user_root_path, class: "side-nav-link #{controller?(" user/home") ? 'active' : '' }" do %>
+          <i class="uil-home-alt"></i>
+          <span> ホーム </span>
+        <% end %>
+      </li>
 
-        <!-- Auto Response -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-robot"></i><p>自動応答</p>'.html_safe,
-              user_auto_responses_path,
-              class: "nav-link #{controller?("user/auto_responses") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <li class="side-nav-title side-nav-item">1対1トーク</li>
+      <!-- トーク -->
+      <li class="side-nav-item">
+        <%= link_to user_channels_path, class: "side-nav-link #{controller?(" user/channels") ? 'active' : '' }" do %>
+          <i class="uil-comments-alt"></i>
+          <span class="badge badge-success float-right">4</span>
+          <span> 個別トーク </span>
+        <% end %>
+      </li>
 
-        <!-- Template -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-clipboard-list"></i><p>テンプレート</p>'.html_safe,
-              user_templates_path,
-              class: "nav-link #{controller?("user/templates") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <!-- 友達一覧 -->
+      <li class="side-nav-item">
+        <%= link_to user_friends_path, class: "side-nav-link #{controller?(" user/friends") ? 'active' : '' }" do %>
+          <i class="uil-users-alt"></i>
+          <span> 友達一覧 </span>
+        <% end %>
+      </li>
 
-        <!-- Tag -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-tag"></i><p>タグ管理</p>'.html_safe,
-              user_tags_path,
-              class: "nav-link #{controller?("user/tags") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <li class="side-nav-title side-nav-item">メッセージ</li>
+      <!-- シナリオ -->
+      <li class="side-nav-item">
+        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?(" user/scenarios", "user/scenario_messages" ) ? 'active' : '' }" do %>
+          <i class="uil-message"></i>
+          <span> 一斉配信 </span>
+        <% end %>
+      </li>
 
-        <!-- Rich Menu -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-bars"></i><p>リッチメニュー</p>'.html_safe,
-              user_rich_menus_path,
-              class: "nav-link #{controller?("user/rich_menus") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <!-- 一斉配信 -->
+      <li class="side-nav-item">
+        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?(" user/auto_responses" ) ? 'active' : '' }" do %>
+          <i class="uil-sort-amount-down"></i>
+          <span> シナリオ配信 </span>
+        <% end %>
+      </li>
 
-        <!-- Media -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-images"></i><p>登録メディア一覧</p>'.html_safe,
-              user_medias_path,
-              class: "nav-link #{controller?("user/medias") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
+      <!-- テンプレート -->
+      <li class="side-nav-item">
+        <%= link_to user_templates_path, class: "side-nav-link #{controller?(" user/templates" ) ? 'active' : '' }" do %>
+          <i class="uil-box"></i>
+          <span> テンプレート</span>
+        <% end %>
+      </li>
 
-        <!-- Account Setting -->
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <%= link_to '<i class="nav-icon fas fa-user-circle"></i><p>アカウント設定</p>'.html_safe,
-              user_setting_index_path,
-              class: "nav-link #{controller?("user/setting") ? 'active' : ''}"
-            %>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+      <!-- リッチメニュー -->
+      <li class="side-nav-item">
+        <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?(" user/rich_menus" ) ? 'active' : '' }" do %>
+          <i class="uil-th-large"></i>
+          <span>リッチメニュー</span>
+        <% end %>
+      </li>
+
+      <li class="side-nav-title side-nav-item">友だち属性</li>
+       <!-- リッチメニュー -->
+      <li class="side-nav-item">
+        <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
+          <i class="uil-tag-alt"></i>
+          <span>タグ管理</span>
+        <% end %>
+      </li>
+
+      <li class="side-nav-title side-nav-item">コンテンツ</li>
+      <!-- 登録メディア一覧 -->
+      <li class="side-nav-item">
+        <%= link_to user_medias_path, class: "side-nav-link #{controller?("user/medias" ) ? 'active' : '' }" do %>
+          <i class="uil-scenery"></i>
+          <span>登録メディア一覧</span>
+        <% end %>
+      </li>
+
+      <li class="side-nav-title side-nav-item">設定</li>
+      <li class="side-nav-item">
+        <%= link_to user_setting_index_path, class: "side-nav-link #{controller?("user/setting" ) ? 'active' : '' }" do %>
+          <i class="uil-cog"></i>
+          <span>アカウント設定</span>
+        <% end %>
+      </li>
+    </ul>
+    <div class="clearfix"></div>
+  </div>
+  <!-- Sidebar -left -->
+</div>
+<!-- Left Sidebar End -->

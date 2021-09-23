@@ -14,11 +14,11 @@
 
   <body data-scrollbar-auto-hide="n" class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed text-sm" style="height: auto;">
     <div class="wrapper" id="application">
-      <%= render "user/base/header" %>
       <%= render "user/base/left_sidebar_menu"%>
-      <div class="content-wrapper pt-2">
-        <div class="content container-fluid">
-          <div class="container-fluid" >
+      <div class="content-page">
+        <div class="content">
+          <%= render "user/base/header" %>
+          <div class="container-fluid p-2">
             <%= custom_flash_message %>
             <%= yield %>
           </div>
