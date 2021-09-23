@@ -16,16 +16,15 @@
               />
             <div class="flex-grow-1">
               <div class="list-content">
-                <div class="x-tag-header">
-                  <div class="x-btn-back">
-                    <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                  <div class="x-title"
-                       v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}
-                  </div>
-                </div>
-
-                <div class="list-scroll message-template-list" v-if="folders && folders[this.selectedFolder]">
-                  <table class="table table-hover table-messages-template">
+                <div class="list-scroll" v-if="folders && folders[this.selectedFolder]">
+                  <table class="table table-hover index">
+                    <thead>
+                      <tr>
+                        <td>
+                          <span v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}</span>
+                        </td>
+                      </tr>
+                    </thead>
                     <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
                       <tr v-for="(item, index) in folders[this.selectedFolder].templates"  :key="index" class="folder-item" data-dismiss="modal">
                         <td class="d-flex w-100">
@@ -153,16 +152,6 @@ export default {
           display: flex;
           flex-direction: column;
         }
-      }
-    }
-  }
-
-  .table-messages-template {
-    max-width: none;
-    margin-top: 0px;
-    tr {
-      td {
-        vertical-align: middle!important;
       }
     }
   }

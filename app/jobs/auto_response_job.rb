@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AutoResponseJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(message_id)

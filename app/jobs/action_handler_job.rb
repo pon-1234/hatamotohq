@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ActionHandlerJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(friend, action, reply_token = nil)

@@ -9,7 +9,7 @@ class Ability
     can [:create], Broadcast
 
     # Scenario
-    can [:read, :update, :destroy, :delete_confirm, :search, :copy, :copy_confirm, :manual], Scenario, line_account: user.line_account
+    can [:manage], Scenario, line_account: user.line_account
     can [:create], Scenario
 
     # Auto Response
@@ -17,7 +17,7 @@ class Ability
     can [:create], AutoResponse
 
     # Channel
-    can [:read], Channel, line_account: user.line_account
+    can [:manage], Channel, line_account: user.line_account
 
     # RichMenu
     can [:manage], RichMenu, line_account: user.line_account

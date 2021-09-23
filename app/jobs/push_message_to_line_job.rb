@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PushMessageToLineJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
   MAX_MSG_IN_REQUEST = 5
 
