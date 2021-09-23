@@ -5,18 +5,18 @@
 # Table name: messages
 #
 #  id              :bigint           not null, primary key
-#  from            :string(255)
-#  line_content    :json
-#  reply_token     :string(255)
+#  channel_id      :bigint
 #  sender_type     :string(255)
-#  text            :text(65535)
-#  timestamp       :string(255)
+#  sender_id       :bigint
 #  type            :string(255)
+#  from            :string(255)
+#  text            :text(65535)
+#  line_message_id :string(255)
+#  content         :json
+#  timestamp       :string(255)
+#  reply_token     :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  channel_id      :bigint
-#  line_message_id :string(255)
-#  sender_id       :bigint
 #
 # Indexes
 #
@@ -35,7 +35,7 @@ class Message < ApplicationRecord
 
   belongs_to :channel
   belongs_to :sender, polymorphic: true, required: false
-  validates :line_content, presence: true
+  validates :content, presence: true
   validates :type, presence: true
   validates_presence_of :from
 
@@ -49,7 +49,7 @@ class Message < ApplicationRecord
       from: from,
       type: type_before_type_cast,
       created_at: created_at.to_i,
-      line_content: line_content,
+      content: content,
       timestamp: timestamp
     }
     merge_sender_attributes(data)

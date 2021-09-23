@@ -10,6 +10,10 @@ class PushMessageToLineJob < ApplicationJob
     @line_account = @channel.line_account
     @reply_token = payload[:reply_token]
     messages = payload[:messages]
+    # Normalize message content
+    messages.each do |message|
+      Normalizer::MessageNormalizer.new(message).perform
+    end
     # Send using reply token
     if @reply_token.present?
       # Get the first 5 messages to send using reply token
@@ -55,8 +59,8 @@ class PushMessageToLineJob < ApplicationJob
       flex_message_id = message[:id]
       flex_message = FlexMessage.find_by_id(flex_message_id)
       if flex_message.present?
-        line_content = flex_message.json_message
-        line_content['id'] = flex_message_id
+        content = flex_message.json_message
+        content['id'] = flex_message_id
       end
     end
     # TODO

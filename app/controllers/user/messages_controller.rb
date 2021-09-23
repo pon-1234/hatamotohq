@@ -71,6 +71,6 @@ class User::MessagesController < User::ApplicationController
     # Call line api to send the message to friend
     def push_message_to_line
       line_account = Current.user.line_account
-      LineApi::PushMessage.new(line_account).perform([@message.line_content], @channel.line_friend.line_user_id)
+      LineApi::PushMessage.new(line_account).perform([@message.content], @channel.line_friend.line_user_id)
     end
 end

@@ -378,7 +378,7 @@ export default {
           key: new Date().getTime(),
           is_bot_sender: 0,
           attr: 'chat-reverse',
-          line_content: { ...content, id: template.id },
+          content: { ...content, id: template.id },
           timestamp: new Date().getTime()
         }
       };
