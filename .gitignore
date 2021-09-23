@@ -41,4 +41,5 @@ yarn-debug.log*
 .yarn-integrity
 .env
 /vendor/*
-/dist/*
+/theme/dist
+/theme/node_modules
