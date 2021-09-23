@@ -1,54 +1,66 @@
 <div class="row">
   <div class="col-12">
-    <div class="card">
-      <div class="card-header">
-        <%= link_to new_user_scenario_path do %>
-          <button type="button" class="btn btn-success mr-2"><i class="fa fa-plus"></i> 新規作成</button>
-        <% end %>
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">メッセージ</a></li>
+          <li class="breadcrumb-item active">シナリオ一覧</li>
+        </ol>
       </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-centered mb-0">
-          <%# Header %>
-            <thead>
-              <tr>
-                <th class="mw-120">配信方式</th>
-                <th class="mw-200">シナリオ名</th>
-                <th class="mw-100">状況</th>
-                <th class="mw-120">メッセージ数</th>
-                <th class="fw-300">設定</th>
-              </tr>
-            </thead>
-            <%# Data %>
-            <tbody>
-              <% @scenarios.each do |scenario| %>
-                <tr>
-                  <td><%= scenario.mode_i18n %></td>
-                  <td><%= scenario.title %></td>
-                  <td><%= render_scenario_status(scenario.status) %></td>
-                  <td><%= scenario.scenario_messages_count || 0 %></td>
-                  <td>
-                    <div class="btn-group">
-                      <%= link_to edit_user_scenario_path(scenario), class: "btn btn-primary btn-sm", type: "button" do %>
-                        編集
-                      <% end %>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
-                      <div class="dropdown-menu bg-white" role="menu" style="">
-                        <%= link_to 'シナリオをコピー', copy_confirm_user_scenario_path(scenario), remote: true, class: "dropdown-item", role: "button" %>
-                        <div class="dropdown-divider"></div>
-                        <%= link_to 'シナリオを削除', delete_confirm_user_scenario_path(scenario), remote: true, class: "dropdown-item", role: "button" %>
-                      </div>
-                    </div>
+      <h4 class="page-title">シナリオ一覧</h4>
+    </div>
+  </div>
+</div>
 
-                    <%= link_to user_scenario_messages_path(scenario), class: "btn btn-warning btn-sm mr-1" do %>
-                      配信文設定
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-sm-4">
+            <%= link_to new_user_scenario_path do %>
+              <button type="button" class="btn btn-success btn-rounded mr-2"><i class="fa fa-plus"></i> 新規作成</button>
+            <% end %>
+          </div>
         </div>
+        <table class="table table-centered mb-0">
+          <thead class="thead-light">
+            <tr>
+              <th>配信方式</th>
+              <th>シナリオ名</th>
+              <th>状況</th>
+              <th>メッセージ</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <%# Data %>
+          <tbody>
+            <% @scenarios.each do |scenario| %>
+              <tr>
+                <td><%= scenario.mode_i18n %></td>
+                <td><%= scenario.title %></td>
+                <td><%= render_scenario_status(scenario.status) %></td>
+                <td>
+                  <%= link_to user_scenario_messages_path(scenario), class: "btn btn-light btn-sm mr-1" do %>
+                    配信文設定
+                  <% end %>
+                </td>
+                <td class="table-action">
+                  <%= link_to edit_user_scenario_path(scenario), class:"action-icon" do %>
+                    <i class="mdi mdi-square-edit-outline"></i>
+                  <% end %>
+                  <%= link_to copy_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
+                    <i class="mdi mdi-content-copy"></i>
+                  <% end %>
+                  <%= link_to delete_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
+                    <i class="mdi mdi-delete"></i>
+                  <% end %>
+                  
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
         <%# Pagination %>
         <div class="d-flex justify-content-center mt-4">
           <% if @scenarios.size == 0 %>

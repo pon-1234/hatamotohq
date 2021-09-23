@@ -105,7 +105,7 @@
           <%- if current_user&.avatar.attached? %>
             <img src="<%= rails_blob_url(current_user&.avatar) %>" alt="user-image" class="rounded-circle">
           <% else %>
-            <img src="/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+            <img src="https://icon-library.com/images/user-icon-image/user-icon-image-18.jpg" alt="user-image" class="rounded-circle">
           <% end %>
         </span>
         <span>
@@ -167,11 +167,10 @@
         </span>
         <%- if current_user&.avatar.attached? %>
           <img src="<%= rails_blob_url(current_user&.avatar) %>" class="user-image">
-          <% else %>
-            <img src="https://icon-library.com/images/user-icon-image/user-icon-image-18.jpg" class="user-image"
-              alt="User Image">
-            <% end %>
-              <i class="fa fa-angle-down"></i>
+        <% else %>
+          <img src="https://icon-library.com/images/user-icon-image/user-icon-image-18.jpg" class="user-image"
+            alt="User Image">
+        <% end %>
       </a>
       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
         <%= link_to '<i class="fas fa-sign-out-alt mr-1"></i><p>ログアウト</p>' .html_safe, destroy_user_session_path,

@@ -12,32 +12,31 @@
   </div>
 </div>
 
-<div class="row mb-2">
-  <div class="col-sm-4">
-    <%= link_to new_user_broadcast_path, class: "btn btn-success btn-rounded mb-3" do %>
-      <i class="mdi mdi-plus"></i> 新規作成
-      <% end %>
-  </div>
-  <div class="col-sm-8" hidden>
-    <div class="text-sm-right">
-      <div class="btn-group mb-3">
-        <button type="button" class="btn btn-primary">全て</button>
-      </div>
-      <div class="btn-group mb-3 ml-1">
-        <button type="button" class="btn btn-light">Ongoing</button>
-        <button type="button" class="btn btn-light">Finished</button>
-      </div>
-    </div>
-  </div><!-- end col-->
-</div>
-
 <div class="card">
   <div class="card-body">
+    <div class="row mb-2">
+      <div class="col-sm-4">
+        <%= link_to new_user_broadcast_path, class: "btn btn-success btn-rounded" do %>
+          <i class="mdi mdi-plus"></i> 新規作成
+          <% end %>
+      </div>
+      <div class="col-sm-8" hidden>
+        <div class="text-sm-right">
+          <div class="btn-group mb-3">
+            <button type="button" class="btn btn-primary">全て</button>
+          </div>
+          <div class="btn-group mb-3 ml-1">
+            <button type="button" class="btn btn-light">Ongoing</button>
+            <button type="button" class="btn btn-light">Finished</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-centered mb-0">
-        <thead>
+        <thead class="thead-light">
           <tr>
-            <th>日時</th>
+            <th class="sorting">日時</th>
             <th>タイトル</th>
             <th>状況</th>
             <th>配信先</th>

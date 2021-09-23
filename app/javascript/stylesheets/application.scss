@@ -115,9 +115,18 @@
     width: $vw;
   }
 
+  .mvw-#{$i} {
+    min-width: $vw;
+  }
+
   $vh: 0vh + $i;
   .vh-#{$i} {
     height: $vh;
+  }
+
+  $vh: 0vh + $i;
+  .mvh-#{$i} {
+    min-height: $vh;
   }
 }
 

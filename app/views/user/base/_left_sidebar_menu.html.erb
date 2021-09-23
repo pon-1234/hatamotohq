@@ -21,7 +21,7 @@
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
 
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/home") ? 'mm-active' : '' %>">
         <%= link_to user_root_path, class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
           <i class="uil-home-alt"></i>
           <span> ホーム </span>
@@ -30,7 +30,7 @@
 
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/channels") ? 'mm-active' : '' %>">
         <%= link_to user_channels_path, class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
           <i class="uil-comments-alt"></i>
           <span class="badge badge-success float-right">4</span>
@@ -48,23 +48,31 @@
 
       <li class="side-nav-title side-nav-item">メッセージ</li>
       <!-- シナリオ -->
-      <li class="side-nav-item">
-        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages" ) ? 'active' : '' }" do %>
+      <li class="side-nav-item <%= controller?("user/scenarios", "user/scenario_messages") ? 'mm-active' : '' %>">
+        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : '' }" do %>
           <i class="uil-sort-amount-down"></i>
           <span>シナリオ配信</span>
         <% end %>
       </li>
 
       <!-- 一斉配信 -->
-      <li class="side-nav-item">
-        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
+      <li class="side-nav-item <%= controller?("user/broadcasts") ? 'mm-active' : '' %>">
+        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/broadcasts" ) ? 'active' : '' }" do %>
           <i class="uil-message"></i>
           <span>一斉配信</span>
         <% end %>
       </li>
 
+      <!-- 自動応答 -->
+      <li class="side-nav-item <%= controller?("user/auto_responses") ? 'mm-active' : '' %>">
+        <%= link_to user_auto_responses_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
+          <i class="uil-message"></i>
+          <span>自動応答</span>
+        <% end %>
+      </li>
+
       <!-- テンプレート -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/templates") ? 'mm-active' : '' %>">
         <%= link_to user_templates_path, class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
           <i class="uil-box"></i>
           <span> テンプレート</span>
@@ -72,7 +80,7 @@
       </li>
 
       <!-- リッチメニュー -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/rich_menus") ? 'mm-active' : '' %>">
         <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?("user/rich_menus" ) ? 'active' : '' }" do %>
           <i class="uil-th-large"></i>
           <span>リッチメニュー</span>
@@ -81,7 +89,7 @@
 
       <li class="side-nav-title side-nav-item">友だち属性</li>
        <!-- リッチメニュー -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">
         <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
           <i class="uil-tag-alt"></i>
           <span>タグ管理</span>
@@ -90,7 +98,7 @@
 
       <li class="side-nav-title side-nav-item">コンテンツ</li>
       <!-- 登録メディア一覧 -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/medias") ? 'mm-active' : '' %>">
         <%= link_to user_medias_path, class: "side-nav-link #{controller?("user/medias" ) ? 'active' : '' }" do %>
           <i class="uil-scenery"></i>
           <span>登録メディア一覧</span>
@@ -98,7 +106,7 @@
       </li>
 
       <li class="side-nav-title side-nav-item">設定</li>
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/setting") ? 'mm-active' : '' %>">
         <%= link_to user_setting_index_path, class: "side-nav-link #{controller?("user/setting" ) ? 'active' : '' }" do %>
           <i class="uil-cog"></i>
           <span>アカウント設定</span>
