@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   props: ['name'],
@@ -62,13 +62,12 @@ export default {
   },
   methods: {
     ...mapActions('global', ['getStickers']),
-    ...mapMutations('global', ['addLog']),
+
     changePackageId(option) {
       this.animation = option.animation;
       this.getStickers({ packageId: option.packageId });
     },
     selectSticker(sticker) {
-      this.addLog(sticker);
       // emit sticker
       const data = {
         packageId: sticker.package_id,

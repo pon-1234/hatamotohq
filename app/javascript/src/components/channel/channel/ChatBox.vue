@@ -100,7 +100,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Util from '@/core/util';
 import moment from 'moment';
 
@@ -188,7 +188,6 @@ export default {
     ...mapActions('global', [
       'getStickers'
     ]),
-    ...mapMutations('global', ['addLog']),
 
     scrollToBottom() {
       setTimeout(() => {
@@ -248,8 +247,6 @@ export default {
     onSendStickerMessage(sticker) {
       // close stickers pane
       this.openedStickerPane = false;
-      // push sticker to logs
-      this.addLog(sticker);
 
       const message = {
         channel_id: this.activeChannel.id,
