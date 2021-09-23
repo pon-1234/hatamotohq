@@ -291,10 +291,11 @@ export default {
     max-height: 700px;
   }
 
-  .ck-content figure.image-style-align-right{
+  .ck-content figure.image-style-align-right {
     margin-left: 5%;
   }
-  .ck-content figure.image-style-align-left{
+
+  .ck-content figure.image-style-align-left {
     margin-right: 5%;
   }
 

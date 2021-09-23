@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::AnnouncementsController < Admin::ApplicationController
-  before_action :find_announcement, only: [:edit, :update, :destroy, :delete_confirm]
+  before_action :find_announcement, only: [:show, :edit, :update, :destroy, :delete_confirm]
 
   # GET /admin/announcements
   def index
@@ -20,6 +20,10 @@ class Admin::AnnouncementsController < Admin::ApplicationController
     if !@announcement.save
       render_bad_request_with_message(@announcement.first_error_message)
     end
+  end
+
+  # GET /admin/announcements/:id
+  def show
   end
 
   # GET /admin/announcements/:id/edit

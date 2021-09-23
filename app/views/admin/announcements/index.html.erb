@@ -31,6 +31,10 @@
                         <%= link_to '編集', edit_admin_announcement_path(announcement), class: "btn btn-warning btn-sm" %>
                         <button type="button" class="btn btn-warning dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
                         <div class="dropdown-menu bg-white" role="menu" style="">
+                          <a class="dropdown-item" role="button" data-toggle="modal" data-target="#announcementDetail" onclick="confirmScope(<%= announcement.id %>)">
+                            プレビュー
+                          </a>
+                          <div class="dropdown-divider"></div>
                           <%= link_to '削除', delete_confirm_admin_announcement_path(announcement), remote: true, class: "dropdown-item" %>
                         </div>
                       </div>
@@ -54,3 +58,11 @@
 </div>
 
 <div id='confirmDelContent'></div>
+
+<modal-announcement-show :announcements="<%= @announcements.to_json %>"></modal-announcement-show>
+<input type="hidden" id="inputValue">
+<script>
+  function confirmScope(id) {
+    $('#inputValue').val(id);
+  }
+</script>
