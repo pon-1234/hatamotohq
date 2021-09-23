@@ -40,7 +40,7 @@ class Admin::AnnouncementsController < Admin::ApplicationController
   # DELETE /admin/announcements/:id
   def destroy
     if @announcement.destroy
-      redirect_to admin_announcements_path, flash: { success: 'delete message' }
+      redirect_to admin_announcements_path, flash: { success: 'お知らせの削除は完了しました。' }
     else
       redirect_to admin_announcements_path, flash: { error: @announcement.first_error_message }
     end
