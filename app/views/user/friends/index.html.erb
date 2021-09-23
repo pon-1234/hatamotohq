@@ -15,25 +15,23 @@
         <!-- End: search condition -->
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-striped index">
+        <table class="table table-centered mb-0">
         <%# Header %>
           <thead>
             <tr>
-              <th width="10%" class="text-center"><%= sort_link(@q, :id, 'ID', default_order: :desc) %></th>
-              <th width="15%"><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
-              <th width="15%"><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
-              <th width="30%">タグ</th>
-              <th width="15%">状況</th>
-              <th width="15%"></th>
+              <th><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
+              <th><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
+              <th>タグ</th>
+              <th>状況</th>
+              <th>操作</th>
             </tr>
           </thead>
           <%# Data %>
           <tbody>
             <% @line_friends.each do |line_friend| %>
               <tr>
-                <td class="text-center"><%= link_to line_friend.id, user_friend_path(line_friend) %></td>
-                <td>
-                  <img alt="Avatar" class="user-avatar" src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>">
+                <td class="table-user">
+                  <img src="<%= line_friend.line_picture_url || '/img/no-image-profile.png' %>" alt="table-user" class="mr-2 rounded-circle" />
                   <%= line_friend.line_name %>
                 </td>
                 <td><%= formatted_time(line_friend.created_at) %></td>
@@ -41,9 +39,9 @@
                 <td>
                   <%= render_friend_status(line_friend.status) %>
                 </td>
-                <td class="text-center">
-                  <%= link_to user_friend_path(line_friend), class: "btn btn-primary btn-xs mr-2" do %>
-                    詳細
+                <td class="table-action">
+                  <%= link_to user_friend_path(line_friend), class: "action-icon" do %>
+                    <i class="mdi mdi-pencil"></i>
                   <% end %>
                 </td>
               </tr>

@@ -22,7 +22,7 @@
     <ul class="metismenu side-nav">
 
       <li class="side-nav-item">
-        <%= link_to user_root_path, class: "side-nav-link #{controller?(" user/home") ? 'active' : '' }" do %>
+        <%= link_to user_root_path, class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
           <i class="uil-home-alt"></i>
           <span> ホーム </span>
         <% end %>
@@ -31,7 +31,7 @@
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
       <li class="side-nav-item">
-        <%= link_to user_channels_path, class: "side-nav-link #{controller?(" user/channels") ? 'active' : '' }" do %>
+        <%= link_to user_channels_path, class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
           <i class="uil-comments-alt"></i>
           <span class="badge badge-success float-right">4</span>
           <span> 個別トーク </span>
@@ -40,7 +40,7 @@
 
       <!-- 友達一覧 -->
       <li class="side-nav-item">
-        <%= link_to user_friends_path, class: "side-nav-link #{controller?(" user/friends") ? 'active' : '' }" do %>
+        <%= link_to user_friends_path, class: "side-nav-link #{controller?("user/friends") ? 'active' : '' }" do %>
           <i class="uil-users-alt"></i>
           <span> 友達一覧 </span>
         <% end %>
@@ -49,23 +49,23 @@
       <li class="side-nav-title side-nav-item">メッセージ</li>
       <!-- シナリオ -->
       <li class="side-nav-item">
-        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?(" user/scenarios", "user/scenario_messages" ) ? 'active' : '' }" do %>
-          <i class="uil-message"></i>
-          <span> 一斉配信 </span>
+        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages" ) ? 'active' : '' }" do %>
+          <i class="uil-sort-amount-down"></i>
+          <span>シナリオ配信</span>
         <% end %>
       </li>
 
       <!-- 一斉配信 -->
       <li class="side-nav-item">
-        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?(" user/auto_responses" ) ? 'active' : '' }" do %>
-          <i class="uil-sort-amount-down"></i>
-          <span> シナリオ配信 </span>
+        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
+          <i class="uil-message"></i>
+          <span>一斉配信</span>
         <% end %>
       </li>
 
       <!-- テンプレート -->
       <li class="side-nav-item">
-        <%= link_to user_templates_path, class: "side-nav-link #{controller?(" user/templates" ) ? 'active' : '' }" do %>
+        <%= link_to user_templates_path, class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
           <i class="uil-box"></i>
           <span> テンプレート</span>
         <% end %>
@@ -73,7 +73,7 @@
 
       <!-- リッチメニュー -->
       <li class="side-nav-item">
-        <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?(" user/rich_menus" ) ? 'active' : '' }" do %>
+        <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?("user/rich_menus" ) ? 'active' : '' }" do %>
           <i class="uil-th-large"></i>
           <span>リッチメニュー</span>
         <% end %>
