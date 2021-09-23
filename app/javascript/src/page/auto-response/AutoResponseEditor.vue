@@ -19,8 +19,8 @@
           <div class="flex start ai_center">
             <div class="toggle-switch btn-keyword01">
               <input id="keyword-onoff-setting01" class="toggle-input" type="checkbox"
-                    v-model="autoResponseData.status" true-value="enable"
-                    false-value="disable">
+                    v-model="autoResponseData.status" true-value="enabled"
+                    false-value="disabled">
               <label for="keyword-onoff-setting01" class="toggle-label">
                 <span></span>
               </label>
@@ -109,9 +109,8 @@ export default {
       error: null,
       autoResponseData: {
         name: '',
-        status: 'enable',
+        status: 'enabled',
         keywords: [],
-        keyword_status: 'enable',
         messages: []
       }
     };

@@ -16,8 +16,7 @@
       </div>
       <div class="card-body">
         <table class="table table-centered mb-0">
-        <%# Header %>
-          <thead>
+          <thead class="thead-light">
             <tr>
               <th><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
               <th><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>

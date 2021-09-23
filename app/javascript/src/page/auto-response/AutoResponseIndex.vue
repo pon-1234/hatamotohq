@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
           />
-        <div class="flex-grow-1 mvh-60">
+        <div class="flex-grow-1">
           <div class="col-r">
             <a v-if="folders && folders.length && folders[selectedFolderIndex]"
               :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary"
@@ -26,9 +26,9 @@
                   <th>自動応答名</th>
                   <th>キーワード</th>
                   <th>メッセージ</th>
-                  <th class="fw-100">操作</th>
-                  <th>登録日</th>
                   <th>状況</th>
+                  <th>操作</th>
+                  <th>登録日</th>
                 </tr>
               </thead>
               <tbody>
@@ -45,7 +45,7 @@
                   </td>
 
                   <td>
-                    <template v-if="autoResponse.status === 'enable'">
+                    <template v-if="autoResponse.status === 'enabled'">
                       <i class='mdi mdi-circle text-success'></i> 有効
                     </template>
                     <template v-else>
@@ -54,13 +54,12 @@
                   </td>
 
                   <td>
-
                     <div class="btn-group">
                       <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集する</a>
-                        <a class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enable' ? 'OFF' : 'ON'}}にする</a>
-                        <a class="dropdown-item" @click="showConfirmDeleteModal(autoResponse)">自動応答を削除する</a>
+                        <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集する</a>
+                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)">{{ autoResponse.status === 'enabled' ? 'OFF' : 'ON'}}にする</a>
+                        <a role="button" class="dropdown-item" @click="showConfirmDeleteModal(autoResponse)">自動応答を削除する</a>
                       </div>
                     </div>
                   </td>
@@ -162,7 +161,7 @@ export default {
     },
 
     async updateAutoResponseStatus(autoResponse) {
-      const payload = { id: autoResponse.id, status: autoResponse.status === 'enable' ? 'disable' : 'enable' };
+      const payload = { id: autoResponse.id, status: autoResponse.status === 'enabled' ? 'disabled' : 'enabled' };
       await this.updateAutoResponse(payload);
     },
 

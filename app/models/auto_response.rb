@@ -31,5 +31,5 @@ class AutoResponse < ApplicationRecord
   has_many :auto_response_keywords, dependent: :destroy
   has_many :auto_response_messages, dependent: :destroy
 
-  enum status: { enable: 'enable', disable: 'disable' }, _prefix: true
+  enum status: { enabled: 'enabled', disabled: 'disabled' }
 end
