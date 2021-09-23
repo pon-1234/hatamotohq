@@ -58,7 +58,6 @@
               <a class="home_announcement_btn" role="button" data-toggle="modal" data-target="#announcementDetail" onclick="confirmScope(<%= announcement.id %>)">
                 <span> <%= announcement.announced_at.strftime('%m月%d日') %></span>
                 <span> <%= announcement.title %> </span>
-                <span class="output"> <%= sanitize announcement.body %> </span>
               </a>
             <% end %>
         <%#=

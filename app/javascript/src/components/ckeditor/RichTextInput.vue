@@ -46,7 +46,7 @@ import Font from '@ckeditor/ckeditor5-font/src/font';
 import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
 
 // pending upload image
-// import UploadImageAdapter from '@/utils/upload_image_adapter';
+import UploadImageAdapter from '@/core/upload_image_adapter';
 import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 
 export default {
@@ -265,20 +265,20 @@ export default {
             'tableColumn', 'tableRow', 'mergeTableCells',
             'tableProperties', 'tableCellProperties'
           ]
-        }
-        // extraPlugins: [this.uploader]
+        },
+        extraPlugins: [this.uploader]
       }
     };
   },
   methods: {
     onInput() {
       this.$emit('update:value', this.value);
+    },
+    uploader(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new UploadImageAdapter(loader);
+      };
     }
-    // uploader(editor) {
-    //   editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-    //     return new UploadImageAdapter(loader);
-    //   };
-    // }
   }
 };
 </script>

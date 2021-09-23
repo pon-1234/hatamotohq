@@ -114,4 +114,94 @@ export default {
       }
     }
   }
+  ::v-deep {
+    .image-style-side,
+    .image-style-align-left,
+    .image-style-align-center,
+    .image-style-align-right {
+      max-width: 50%;
+    }
+    .image-style-side {
+      float: right;
+      margin-left: 1.5em;
+    }
+    .image-style-align-left {
+      float: left;
+      margin: 40px 5% 0 0!important;
+    }
+    .image,
+    .image-style-align-center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .image-style-align-right {
+      float: right;
+      margin: 40px 0 0 5%!important;
+    }
+    .image.image_resized {
+      max-width: 100%;
+      display: block;
+      box-sizing: border-box;
+      img {
+        width: 100%;
+      }
+      figcaption {
+        display: block;
+      }
+    }
+    .image {
+      display: table;
+      clear: both;
+      text-align: center;
+      img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        min-width: 50px;
+      }
+      figcaption {
+        display: table-caption;
+        caption-side: bottom;
+        word-break: break-word;
+        color: hsl(0, 0%, 20%);
+        background-color: hsl(0, 0%, 97%);
+        padding: .6em;
+        font-size: .75em;
+        outline-offset: -1px;
+      }
+    }
+    .raw-html-embed {
+      p {
+        display: flex;
+      }
+      a {
+        img {
+          width: 100%;
+          max-width: 100%!important;
+          border: none!important;
+        }
+      }
+    }
+    #output figure.media {
+      width: 100%;
+      height: 500px;
+      clear: both;
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  #output {
+    margin: 50px auto 0;
+    box-sizing: border-box;
+    background: #ffffff;
+    font-feature-settings: 'palt' 1;
+  }
+  @media screen and (max-width: 768px) {
+    #output {
+      margin: 30px auto 0;
+    }
+  }
 </style>

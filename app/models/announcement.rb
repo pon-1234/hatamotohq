@@ -13,6 +13,8 @@
 #  updated_at   :datetime         not null
 #
 class Announcement < ApplicationRecord
+  has_one_attached :image
+
   # Validation
   validates_presence_of :title, length: { maximum: 512 }
   validates_presence_of :body, :announced_at
