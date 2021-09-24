@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 export default {
   props: ['data', 'route', 'permission', 'plan'],
   data() {
@@ -118,42 +118,23 @@ export default {
   },
 
   methods: {
+    ...mapActions('survey', [
+      'getSurveys'
+    ]),
     forceRerender() {
       this.contentKey++;
     },
 
-    getClassRightTag() {
-      let className = 'col-md-8 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
-
-    getSurveys() {
-      this.$store.dispatch('survey/list', {}).done((res) => {
-        console.log(res);
-        this.surveys = res;
-        this.surveyData = JSON.parse(JSON.stringify(res));
-        if (this.surveys.length > this.selectedFolderIndex) {
-          this.surveyContents = this.surveys[this.selectedFolderIndex].surveys;
-        }
-      }).fail(() => {
-      });
-    },
     changeSelectedFolder(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
-      this.surveyContents = this.surveys[index].surveys;
       this.blink();
     },
     submitUpdateFolder(value) {
       this.$store
         .dispatch('global/editFolder', value)
         .done(res => {
-          this.surveys[this.selectedFolderIndex].name = res.name;
+          this.curFolder.name = res.name;
         }).fail(e => {
         });
     },
