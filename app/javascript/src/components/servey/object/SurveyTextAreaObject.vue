@@ -1,46 +1,71 @@
 <template>
-    <section class="form-common01">
-        <div class="form-group clearfix" >
-            <label class="col-sm-3">質問名 <required-mark/></label>
-            <div class="col-sm-9">
-                <input v-model.trim="value.text"
-                       type="text"
-                       :name="name+'-text'"
-                       class="form-control"
-                       maxlength="140"
-                       placeholder="" v-validate="'required'">
-                <span v-if="errors.first(name+'-text')" class="invalid-box-label">質問名は必須です</span>
-            </div>
+  <div>
+    <div class="form-group clearfix d-flex">
+      <span class="fw-200">項目名<required-mark/></span>
+      <div class="flex-grow-1">
+        <input
+          v-model.trim="value.text"
+          type="text"
+          :name="name + '-text'"
+          class="form-control"
+          maxlength="140"
+          placeholder=""
+          v-validate="'required'"
+          data-vv-as="項目名"
+        />
+        <error-message :message="errors.first(name + '-text')"></error-message>
+      </div>
+    </div>
+    <div class="form-group clearfix d-flex">
+      <div class="fw-200 d-flex align-items-center">
+        <span>補足文</span>
+        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
+          <i class="text-md far fa-question-circle"></i>
         </div>
-        <div class="form-group clearfix">
-            <label class="col-sm-3">補足文</label>
-            <div class="col-sm-9">
-                <input v-model.trim="value.sub_text"
-                       :name="name+'-subtext'"
-                       type="text"
-                       class="form-control"
-                       placeholder="">
-                <span v-if="errors.first(name+'-subtext')" class="invalid-box-label">補足文は必須です</span>
-            </div>
+      </div>
+      <div class="flex-grow-1">
+        <input
+          v-model.trim="value.sub_text"
+          :name="name + '-subtext'"
+          type="text"
+          class="form-control"
+          placeholder=""
+          data-vv-as="補足文"
+        />
+        <error-message :message="errors.first(name + '-subtext')"></error-message>
+      </div>
+    </div>
+    <div class="form-group clearfix d-flex">
+      <span class="fw-200">回答の情報登録</span>
+      <div class="flex-grow-1">
+        <select
+          @change="changeProfileInformation"
+          class="form-control"
+          v-model="friendInformationSelected"
+        >
+          <option
+            v-for="(friendInformation, index) in friendInformations"
+            :value="friendInformation"
+            :key="index"
+            >{{ friendInformation.name }}
+          </option>
+        </select>
+        <div v-if="value.profile" style="margin-top: 10px;">
+          <survey-profile-action
+            v-if="value.profile.id === 3"
+            type="text"
+            :field="
+              value.survey_profile_template
+                ? value.survey_profile_template.field_name
+                : null
+            "
+            :name="name + '-infomation'"
+            @input="value.survey_profile_template = $event"
+          ></survey-profile-action>
         </div>
-        <div class="form-group clearfix">
-            <label class="col-sm-3">回答の情報登録</label>
-            <div class="col-sm-9">
-                <select @change="changeProfileInformation" class="form-control" style="max-width: 220px"
-                        v-model="friendInformationSelected">
-                    <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation"
-                            :key="index">{{friendInformation.name}}
-                    </option>
-                </select>
-                <div v-if="value.profile" style="margin-top: 10px;">
-                    <survey-profile-action v-if="value.profile.id === 3" type="text"
-                                           :field="value.survey_profile_template? value.survey_profile_template.field_name: null"
-                                           :name="name+'-infomation'"
-                                           @input="value.survey_profile_template = $event"></survey-profile-action>
-                </div>
-            </div>
-        </div>
-    </section>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
