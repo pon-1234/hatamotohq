@@ -128,7 +128,7 @@ export default {
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      loading: false,
+      loading: true,
       contentKey: 0,
       richMenuData: {
         id: null,

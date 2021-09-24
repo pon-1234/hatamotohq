@@ -45,7 +45,6 @@ class RichMenu < ApplicationRecord
   # Validation
   validates :name, presence: true, length: { maximum: 255 }
   validates_presence_of :size, :areas
-  # validate :time_is_not_overlapped
 
   # Scope
   enum status: { enabled: 'enabled', disabled: 'disabled' }
@@ -58,15 +57,6 @@ class RichMenu < ApplicationRecord
   end
 
   private
-    def time_is_not_overlapped
-      RichMenu.where(line_account: self.line_account).each do |r|
-        if !((end_at <= r.start_at) || (start_at >= r.end_at))
-          next if id.present? && id == c.id
-          errors.add(:time, '別の時間範囲を選択してください。 選択した範囲がオーバーラップしました。')
-        end
-      end
-    end
-
     def exec_after_destroy
       DeleteRichMenuJob.perform_later(self.line_account_id, self.line_menu_id)
     end
