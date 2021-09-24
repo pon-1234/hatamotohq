@@ -12,16 +12,16 @@
           @submitCreateFolder="submitCreateFolder"
           />
         <div class="flex-grow-1">
-          <div class="btn btn-primary btn-sm" @click="addTag">
+          <div class="btn btn-primary" @click="addTag">
             <i class="fa fa-plus"></i> 新規登録
           </div>
           <div class="mt-2">
-            <table class="table index">
-              <thead>
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
                 <tr>
-                  <th class="mw-200"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
-                  <th class="fw-150">メンバー数</th>
-                  <th class="fw-200">作成日</th>
+                  <th><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
+                  <th>メンバー数</th>
+                  <th>作成日</th>
                 </tr>
               </thead>
               <tbody v-if="curFolder">
@@ -37,15 +37,15 @@
                           ref="tagName"
                           >
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-default" @click="submitCreateTag" ref="buttonAddTag">
+                          <button type="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
                             決定
                           </button>
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td class="text-center">0人</td>
-                  <td class="text-center">{{getCreatedAt()}}</td>
+                  <td>0人</td>
+                  <td>{{getCreatedAt()}}</td>
                 </tr>
                 <tag-item
                   v-for="(item, index) in curFolder.tags"

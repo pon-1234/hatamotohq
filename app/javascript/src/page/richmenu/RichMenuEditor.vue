@@ -70,47 +70,18 @@
               </div>
             </div>
           </div>
-
-          <!-- <div class="form-group">
-            <label>表示期間<required-mark/></label>
-            <div class="d-flex align-items-center">
-              <datetime
-                type="datetime"
-                v-model="richMenuData.start_at"
-                input-class="form-control"
-                class="theme-success mw-200"
-                value-zone="Asia/Tokyo"
-                :phrases="{ok: '確定', cancel: '閉じる'}"
-              ></datetime>
-              <span class="mx-2">~</span>
-              <datetime
-                type="datetime"
-                v-model="richMenuData.end_at"
-                input-class="form-control"
-                class="theme-success mw-200"
-                value-zone="Asia/Tokyo"
-                :min-datetime="richMenuData.start_at"
-                :phrases="{ok: '確定', cancel: '閉じる'}"
-              >
-              </datetime>
-              <input type="hidden" :value="richMenuData.start_at" name="start-date" v-validate="'required'" data-vv-as="開始時間">
-              <input type="hidden" :value="richMenuData.end_at" name="end-date" v-validate="'required'" data-vv-as="終了時間">
-              <button class="btn btn-secondary ml-2" @click="resetTime">リセット</button>
-            </div>
-            <span v-if="messageErrorDateTime"  class="invalid-box-label">{{messageErrorDateTime}}</span>
-          </div> -->
         </div>
       </div>
 
       <!--Editor-->
-      <rich-menu-type
+      <rich-menu-content-editor
         @input="richMenu"
         :background="backgroundUrl"
         :templateId="richMenuData.template_id"
         :templateValue="templateValue"
         :templateType="templateType"
         @onMediaChanged="onMediaChanged($event)">
-      </rich-menu-type>
+      </rich-menu-content-editor>
 
       <div class="card">
         <div class="card-header left-border">
@@ -124,7 +95,7 @@
           <div v-if="richMenuData.target === 'condition'">
             <label>タグ</label>
             <div class="list-checkbox-tag">
-              <input-tag :tags="tags" @input="addListTag"/>
+              <input-tag :tags="tags" @input="onTagsChanged"/>
             </div>
           </div>
         </div>
@@ -139,7 +110,6 @@
 
     <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
     <modal-select-media :types="['richmenu']" @select="onMediaChanged($event)"></modal-select-media>
-    <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
   </div>
 </template>
 
@@ -168,8 +138,6 @@ export default {
         template_id: 201,
         chat_bar_text: null,
         areas: [],
-        // start_at: moment().format('YYYY-MM-DD'),
-        // end_at: moment().add(1, 'days').format('YYYY-MM-DD')
         selected: false,
         target: 'all', // or 'condition'
         conditions: null
@@ -178,8 +146,7 @@ export default {
       templateType: 'large',
       backgroundUrl: null,
 
-      tags: [],
-      messageErrorDateTime: ''
+      tags: []
     };
   },
 
@@ -193,14 +160,6 @@ export default {
       await this.fetchRichMenu();
     }
     this.loading = false;
-  },
-
-  watch: {
-    start_at(val) {
-      if (val > this.richMenuData.end_at) {
-        this.richMenuData.end_at = val;
-      }
-    }
   },
 
   methods: {
@@ -258,16 +217,6 @@ export default {
         } else {
           area.expand = false;
         }
-      }
-
-      const datetimeStart = moment(this.richMenuData.start_at).format('YYYY-MM-DD HH:mm');
-      const datetimeEnd = moment(this.richMenuData.end_at).format('YYYY-MM-DD HH:mm');
-
-      if (moment(datetimeStart).isAfter(datetimeEnd)) {
-        isError = true;
-        this.messageErrorDateTime = '開始時間は終了時間の前に設定してください。';
-      } else {
-        this.messageErrorDateTime = '';
       }
 
       if (isError) {
@@ -339,15 +288,7 @@ export default {
       this.richMenuData.end_at = moment().add(1, 'days').format('YYYY-MM-DD');
     },
 
-    resetListTag() {
-      this.refresh_tag = false;
-      this.tags = null;
-      this.$nextTick(() => {
-        this.refresh_tag = true;
-      });
-    },
-
-    addListTag(data) {
+    onTagsChanged(data) {
       this.tags = data;
     }
   }

@@ -6,7 +6,7 @@
            >
         <div class="modal-content h-100 p-0" style="width: 100%">
           <div class="modal-header flex-shrink-0"><h5 class="mb-0"><span v-if="editor === 'richmenu'">リッチメニュー</span><span v-else>画像を作成</span></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="confirmModal()"><span
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modalConfirmCloseEditor"><span
               aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body mh-100 overflow-y-auto">
@@ -30,10 +30,6 @@ export default {
     $('body').css('overflow', 'hidden');
   },
   methods: {
-    confirmModal() {
-      $('#modalConfirmCloseEditor').modal('show');
-    },
-
     closeEditor() {
       $('body').css('overflow', 'initial');
       this.$emit('close');
