@@ -7,4 +7,8 @@ class User::SurveysController < User::ApplicationController
       format.json
     end
   end
+
+  # GET /user/surveys/:id/new
+  def new
+  end
 end
