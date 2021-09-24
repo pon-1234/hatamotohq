@@ -1,112 +1,103 @@
 <template>
-  <section v-if="liff_id">
-    <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
-      <h3 class="hdg3">アンケート</h3>
-    </div>
-    <div class="form-common01">
-      <div class="form-border">
-        <div class="form-group">
-          <label>アンケート名<required-mark/></label>
-          <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control"
-                 placeholder="" v-validate="'required'">
-          <span v-if="errors.first('survey-name')" class="invalid-box-label">アンケート名は必須です</span>
-        </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="form-common01">
+        <div class="form-border">
+          <div class="form-group">
+            <label>フォーム名（管理用）<required-mark/></label>
+            <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required'">
+            <span v-if="errors.first('survey-name')" class="invalid-box-label">アンケート名は必須です</span>
+          </div>
 
-        <div class="form-group">
-          <label>フォルダ<required-mark/></label>
-          <select class="form-control" name="survey-folder" v-model="surveyData.folder_id" v-validate="'required'">
-            <option v-for="(folder, index) of folders" :key="index" :value="folder.id">{{folder.name}}</option>
-          </select>
-          <span v-if="errors.first('survey-folder')" class="invalid-box-label">フォルダは必須です</span>
-        </div>
+          <div class="form-group">
+            <label>フォルダ<required-mark/></label>
+            <select class="form-control" name="survey-folder" v-model="surveyData.folder_id" v-validate="'required'">
+              <option v-for="(folder, index) of folders" :key="index" :value="folder.id">{{folder.name}}</option>
+            </select>
+            <span v-if="errors.first('survey-folder')" class="invalid-box-label">フォルダは必須です</span>
+          </div>
 
-        <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
-                placeholder="" v-validate="'required'">
+          <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
+                  placeholder="" v-validate="'required'">
 
-        <div class="form-group">
-          <label>タイトル<required-mark/></label>
-          <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control"
-                 placeholder="" v-validate="'required'">
-          <span v-if="errors.first('survey-title')" class="invalid-box-label">タイトルは必須です</span>
-        </div>
+          <div class="form-group">
+            <label>タイトル<required-mark/></label>
+            <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control"
+                  placeholder="" v-validate="'required'">
+            <span v-if="errors.first('survey-title')" class="invalid-box-label">タイトルは必須です</span>
+          </div>
 
-        <div class="form-group">
-          <label>説明<required-mark/></label>
-          <textarea rows="5" v-model.trim="surveyData.description" type="text" name="survey-description"
-                    class="form-control"
-                    placeholder="" v-validate="'required'"></textarea>
-          <span v-if="errors.first('survey-description')" class="invalid-box-label">説明は必須です</span>
-        </div>
-      </div>
-      <div class="form-border">
-        <div class="form-group">
-          <label>複数回答</label>
-          <div class="survey">
-            <input type="checkbox" name="multiple_answers" id="multiple_answers" v-model.trim="surveyData.multiple_answers" value="true">
-            <label for="multiple_answers">
-              何度でも回答可能にする
-            </label>
+          <div class="form-group">
+            <label>説明<required-mark/></label>
+            <textarea rows="5" v-model.trim="surveyData.description" type="text" name="survey-description"
+                      class="form-control"
+                      placeholder="" v-validate="'required'"></textarea>
+            <span v-if="errors.first('survey-description')" class="invalid-box-label">説明は必須です</span>
           </div>
         </div>
-      </div>
-
-      <div class="form-border">
-        <survey-editor :data="surveyData.questions"
-                       name="survey-editor"
-                       @input="surveyData.questions = $event">
-        </survey-editor>
-      </div>
-
-      <div class="form-border">
-        <div class="form-group">
-          <label>回答後の文章
-            <required-mark/></label>
-          <textarea v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
-                    class="form-control"
-                    placeholder="" v-validate="'required'">
-                    </textarea>
-          <span v-if="errors.first('survey-success-message')" class="invalid-box-label">回答後の文章は必須です</span>
+        <div class="form-border">
+          <div class="form-group">
+            <label>複数回答</label>
+            <div class="survey">
+              <input type="checkbox" name="multiple_answers" id="multiple_answers" v-model.trim="surveyData.multiple_answers" value="true">
+              <label for="multiple_answers">
+                何度でも回答可能にする
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="form-border">
-        <div class="form-group">
-          <label>回答後のアクション</label>
-          <message-action-type-default
-            name="survey-action"
-            :value="surveyData.action"
-            :labelRequired="false"
-            :showTitle="false"
-            :showLaunchMesasge="false"
-            @input="surveyData.action = $event"
-          ></message-action-type-default>
+
+        <div class="form-border">
+          <survey-editor :data="surveyData.questions"
+                        name="survey-editor"
+                        @input="surveyData.questions = $event">
+          </survey-editor>
         </div>
-      </div>
-      <div class="flex">
-        <form target="_blank" :action="`${route}/preview`" method="POST">
-          <input type="hidden" name="data" :value="JSON.stringify(surveyData)">
-          <button class="btn btn-submit btn-block" type="submit"><i class="fa fa-eye"></i>&nbsp;&nbsp;プレビュー
+
+        <div class="form-border">
+          <div class="form-group">
+            <label>回答後の文章
+              <required-mark/></label>
+            <textarea v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
+                      class="form-control"
+                      placeholder="" v-validate="'required'">
+                      </textarea>
+            <span v-if="errors.first('survey-success-message')" class="invalid-box-label">回答後の文章は必須です</span>
+          </div>
+        </div>
+        <div class="form-border">
+          <div class="form-group">
+            <label>回答後のアクション</label>
+            <message-action-type-default
+              name="survey-action"
+              :value="surveyData.action"
+              :labelRequired="false"
+              :showTitle="false"
+              :showLaunchMesasge="false"
+              @input="surveyData.action = $event"
+            ></message-action-type-default>
+          </div>
+        </div>
+        <div class="flex">
+          <form target="_blank" :action="`${route}/preview`" method="POST">
+            <input type="hidden" name="data" :value="JSON.stringify(surveyData)">
+            <button class="btn btn-submit btn-block" type="submit"><i class="fa fa-eye"></i>&nbsp;&nbsp;プレビュー
+            </button>
+          </form>
+          <div style="width: 20px"></div>
+          <button class="btn btn-submit btn-block" type="button" @click="submit()"><i class="fa fa-save"></i>&nbsp;&nbsp;保存
           </button>
-        </form>
-        <div style="width: 20px"></div>
-        <button class="btn btn-submit btn-block" type="button" @click="submit()"><i class="fa fa-save"></i>&nbsp;&nbsp;保存
-        </button>
-        <div style="width: 20px"></div>
-        <button class="btn btn-submit btn-confirm" type="button" @click="publish()"><i
-          class="fa fa-upload"></i>&nbsp;&nbsp;保存＆公開
-        </button>
+          <div style="width: 20px"></div>
+          <button class="btn btn-submit btn-confirm" type="button" @click="publish()"><i
+            class="fa fa-upload"></i>&nbsp;&nbsp;保存＆公開
+          </button>
+        </div>
       </div>
-    </div>
 
-    <modal-confirm title="公開後、編集できませんがよろしいでしょうか。" id='modal-publish' type='confirm'
-                   @input="submit(true)"/>
-  </section>
-  <section v-else>
-    <div class="liff_box">
-      <p>LIFF IDが入力されていません</p>
-      <p>入力をお願い致します</p>
-      <a href="/information/edit" class="btn btn-link">LIFF IDを入力する</a>
+      <modal-confirm title="公開後、編集できませんがよろしいでしょうか。" id='modal-publish' type='confirm'
+                    @input="submit(true)"/>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -135,12 +126,8 @@ export default {
     };
   },
   async beforeMount() {
-    if (this.plan && this.plan.level === '3') {
-      this.folders = await this.getFolders();
-      await this.getTags({ low: true });
-    } else {
-      window.location.href = '/';
-    }
+    this.folders = await this.getFolders();
+    await this.getTags({ low: true });
   },
   methods: {
     ...mapActions('tag', [
