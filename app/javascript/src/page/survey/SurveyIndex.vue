@@ -12,10 +12,11 @@
           @submitCreateFolder="submitCreateFolder"
         ></folder-left>
         <div class="flex-grow-1" :key="contentKey">
-          <a :href="`${MIX_ROOT_PATH}/user/surveys/new`" class="btn btn-primary">
+          <a
+            :href="`${MIX_ROOT_PATH}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`" class="btn btn-primary">
             <i class="fa fa-plus"></i> 新規作成
           </a>
-          <div class="mt-2" v-if="curFolder">
+          <div class="mt-2">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
@@ -25,7 +26,7 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody v-if="curFolder">
                 <tr v-for="(survey, index) in curFolder.surveys" v-bind:key="index">
                   <td>{{survey.name}}</td>
                   <td>
@@ -65,7 +66,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.surveys.length === 0"><b>回答フォームはありません。</b></div>
+            <div class="text-center mt-5" v-if="!curFolder || curFolder.surveys.length === 0"><b>回答フォームはありません。</b></div>
           </div>
         </div>
       </div>
