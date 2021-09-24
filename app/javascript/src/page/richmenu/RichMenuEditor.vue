@@ -74,14 +74,14 @@
       </div>
 
       <!--Editor-->
-      <rich-menu-type
+      <rich-menu-content-editor
         @input="richMenu"
         :background="backgroundUrl"
         :templateId="richMenuData.template_id"
         :templateValue="templateValue"
         :templateType="templateType"
         @onMediaChanged="onMediaChanged($event)">
-      </rich-menu-type>
+      </rich-menu-content-editor>
 
       <div class="card">
         <div class="card-header left-border">
@@ -160,14 +160,6 @@ export default {
       await this.fetchRichMenu();
     }
     this.loading = false;
-  },
-
-  watch: {
-    start_at(val) {
-      if (val > this.richMenuData.end_at) {
-        this.richMenuData.end_at = val;
-      }
-    }
   },
 
   methods: {
