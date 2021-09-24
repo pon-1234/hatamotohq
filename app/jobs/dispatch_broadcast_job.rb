@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DispatchBroadcastJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(broadcast_id)
@@ -101,7 +102,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'is_bot_sender' => TRUE,
       #       'attr' => 'chat-reverse',
       #       'line_message_id' => $now,
-      #       'line_content' => json_encode($lineContent),
+      #       'content' => json_encode($lineContent),
       #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),
@@ -122,7 +123,7 @@ class DispatchBroadcastJob < ApplicationJob
       #       'is_bot_sender' => TRUE,
       #       'attr' => 'chat-log',
       #       'line_message_id' => $now,
-      #       'line_content' => json_encode($savedLog),
+      #       'content' => json_encode($savedLog),
       #       'timestamp' => $now.'000',
       #       'line_reply_token' => '',
       #       'raw_content' => json_encode($body),

@@ -199,9 +199,9 @@ export default {
     background: #ffffff;
     font-feature-settings: 'palt' 1;
   }
-  @media screen and (max-width: 768px) {
-    #output {
-      margin: 30px auto 0;
+    @media screen and (max-width: 768px) {
+      #output {
+        margin: 30px auto 0;
+      }
     }
-  }
 </style>

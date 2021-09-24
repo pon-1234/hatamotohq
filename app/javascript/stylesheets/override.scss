@@ -1,45 +1,9 @@
-// Override bootstrap
-.btn-success {
-  color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
-}
-
-.badge-primary,
-.btn-primary {
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-
-.btn:disabled {
-  border-color: #a9a9a9;
-}
-
-.btn-warning {
-  border-color: #cc8521;
-  background: #d18f32;
-  color: #ffffff;
-}
-
-.btn-danger {
-  color: #fff;
-  background-color: #d9534f;
-  border-color: #d43f3a;
-}
-
 .btn-group-xs>.btn,
 .btn-xs {
   padding: 1px 5px;
   font-size: 12px !important;
   line-height: 1.5;
   border-radius: 3px;
-}
-
-.btn-group {
-  button {
-    padding: 2px 5px !important;
-  }
 }
 
 .text-sm {

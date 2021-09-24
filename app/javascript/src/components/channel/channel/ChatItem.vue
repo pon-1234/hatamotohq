@@ -7,7 +7,7 @@
       <div class="d-flex">
         <img class="direct-chat-img" alt="friend avatar" :src="message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'">
         <div class="ml-2">
-          <message-content :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
+          <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
         </div>
         <span class="direct-chat-timestamp float-right mt-auto ml-2">{{getTimeMessage(message)}}</span>
       </div>
@@ -22,7 +22,7 @@
           <div class="d-flex float-right">
             <span class="direct-chat-timestamp float-left mt-auto mr-2">{{getTimeMessage(message)}}</span>
             <div class="chat-item mr-0">
-              <message-content :data="message.line_content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
+              <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
       <div class="chat-content">
         <div class="chat-body">
           <div class="chat-main" :class="message.from === 'bot' ? ' is_bot' : ''">
-            <message-content :data="message.line_content" :time="getTimeMessage(data)" :source="message.source || 'sended'"></message-content>
+            <message-content :data="message.content" :time="getTimeMessage(data)" :source="message.source || 'sended'"></message-content>
           </div>
         </div>
       </div>

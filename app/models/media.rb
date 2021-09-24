@@ -20,29 +20,36 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Media < ApplicationRecord
+  default_scope { order(created_at: :desc) }
   include Rails.application.routes.url_helpers
   include ActiveModel::Validations
   include MediaType
 
   belongs_to :line_account
   has_one_attached :file
+  has_one :rich_menu, dependent: :nullify
   validates :file, attached: false, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
-  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_image_map?
-  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_menu?
+  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_imagemap?
+  validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
   validates_with MediaValidator
 
   before_create do
-    # Set default type to common
+    next if self.type.present?
     self.type = :image if self.file.image?
     self.type = :audio if self.file.audio?
     self.type = :video if self.file.video?
+    self.type = :pdf if self.file.content_type.eql?('application/pdf')
   end
 
   def url
-    url_for(file) if file.attached?
+    rails_public_blob_url(file) if file.attached?
   end
 
   def preview_url
-    url_for(file.representation(resize: '240x240')) if file.attached? && file.representable?
+    if file.attached? && file.representable?
+      rails_public_blob_url(file.representation(resize: '240x240').processed)
+    end
+  rescue StandardError => e
+    logger.error('Could not generate preview url')
   end
 end

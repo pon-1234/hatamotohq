@@ -1,5 +1,4 @@
 import Global from '../api/global_api';
-import RichMenuAPI from '../api/richmenu_api';
 import MediaAPI from '../api/media_api';
 
 export const state = {

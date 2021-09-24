@@ -14,7 +14,7 @@
 #  chat_bar_text            :string(255)
 #  selected                 :boolean
 #  areas                    :json
-#  status                   :string(255)      default("pending")
+#  status                   :string(255)      default("enabled")
 #  target                   :string(255)      default("all")
 #  conditions               :json
 #  enabled                  :boolean
@@ -48,13 +48,13 @@ class RichMenu < ApplicationRecord
   # validate :time_is_not_overlapped
 
   # Scope
-  enum status: { pending: 'pending', done: 'done', error: 'error' }
+  enum status: { enabled: 'enabled', disabled: 'disabled' }
   enum target: { all: 'all', condition: 'condition' }, _prefix: true
 
   before_destroy :exec_after_destroy
 
   def image_url
-    media.url
+    media&.url
   end
 
   private

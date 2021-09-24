@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User::RichMenusController < User::ApplicationController
+  load_and_authorize_resource
+
   before_action :find_rich_menu, only: [:show, :update, :destroy]
   include User::RichMenusHelper
 
@@ -63,6 +65,7 @@ class User::RichMenusController < User::ApplicationController
         :template_id,
         :target,
         :selected,
+        :status,
         areas: [
           :key,
           bounds: {},

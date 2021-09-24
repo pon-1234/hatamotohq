@@ -63,7 +63,7 @@
                   </template>
                 <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
                 <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">シナリオ配信</b-dropdown-item>
-                <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item>
+                <!-- <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item> -->
               </b-dropdown>
             </li>
           </ul>
@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <media-modal :types="['image','audio','video']" @input="onSendMedia($event)" @sendMedia="sendMediaFromManager"></media-modal>
+    <modal-select-media :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
     <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
     <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
@@ -309,7 +309,8 @@ export default {
           type: 'audio',
           originalContentUrl: media.url,
           duration: media.duration || 0
-        }
+        },
+        timestamp: new Date().getTime()
       };
     },
 
@@ -377,7 +378,7 @@ export default {
           key: new Date().getTime(),
           is_bot_sender: 0,
           attr: 'chat-reverse',
-          line_content: { ...content, id: template.id },
+          content: { ...content, id: template.id },
           timestamp: new Date().getTime()
         }
       };

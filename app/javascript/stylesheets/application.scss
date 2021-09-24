@@ -1,22 +1,18 @@
+// @import "./app.scss";
+// @import "./icons.scss";
 @import "admin-lte";
 @import "toastr/build/toastr";
 @import "bootstrap-vue/dist/bootstrap-vue.css";
 @import "./emojione/emojione.min.css";
 @import "./emojione/emojionearea.min.css";
 @import "./linebot.css";
-@import "./common.css";
+// @import "./common.css";
 @import "./chatbox.scss";
 @import "./perfect-scrollbar.min.css";
 @import "./register.css";
 @import "./slick/slick.css";
 @import "./slick/slick-theme.css";
 @import "./override.scss";
-* {
-  font-family: Lucida Grande, Hiragino Kaku Gothic ProN,
-    "\30D2\30E9\30AE\30CE\89D2\30B4   ProN W3", Meiryo, "\30E1\30A4\30EA\30AA",
-    "sans-serif", Noto Color Emoji, Apple Color Emoji, Glyphicons Halflings,
-    Segoe UI Emoji, Segoe UI Symbol, Noto Emoji;
-}
 
 // START: card view
 .card {
@@ -109,8 +105,28 @@
 
 @for $i from 1 through 100 {
   $width: 0% + $i;
+
   .w-#{$i}p {
     width: $width;
+  }
+
+  $vw: 0vw + $i;
+  .vw-#{$i} {
+    width: $vw;
+  }
+
+  .mvw-#{$i} {
+    min-width: $vw;
+  }
+
+  $vh: 0vh + $i;
+  .vh-#{$i} {
+    height: $vh;
+  }
+
+  $vh: 0vh + $i;
+  .mvh-#{$i} {
+    min-height: $vh;
   }
 }
 
@@ -126,8 +142,8 @@
     max-height: $height;
   }
 
-  .mh-#{i} {
-    min-height: $height;
+  .mh-#{$i} {
+    min-height: $height !important;
   }
 }
 
@@ -145,7 +161,7 @@
   .mw-#{$i} {
     min-width: $width;
   }
-  .mxw-#{i} {
+  .mxw-#{$i} {
     max-width: $width;
   }
   .w-#{$i} {

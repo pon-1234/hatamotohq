@@ -91,11 +91,11 @@ export const actions = {
     }
   },
 
-  async deleteRichMenu(context, id) {
+  async deleteRichMenu(_, id) {
     try {
       return await RichMenuAPI.delete(id);
     } catch (error) {
       return null;
     }
-  }
+  },
 };

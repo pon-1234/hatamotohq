@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::AnnouncementsController < Admin::ApplicationController
-  include Admin::AnnouncementsHelper
+  include Admin::ActiveStorageHelper
 
   before_action :find_announcement, only: [:show, :edit, :update, :destroy, :delete_confirm]
 
@@ -34,9 +34,10 @@ class Admin::AnnouncementsController < Admin::ApplicationController
 
   # PATCH /admin/announcements/:id
   def update
-    if !@announcement.update(announcement_params)
-      render_bad_request_with_message(@announcement.first_error_message)
-    end
+    binding.pry
+    # if !@announcement.update(announcement_params)
+    #   render_bad_request_with_message(@announcement.first_error_message)
+    # end
   end
 
   # DELETE /admin/announcements/:id
@@ -62,8 +63,6 @@ class Admin::AnnouncementsController < Admin::ApplicationController
       return render json: {
         url: url_for(@blob),
         name: file.original_filename,
-        blob_id: @blob.id,
-        exist_image: find_attachment_by_name_and_model('Announcement', file.original_filename).first.present?
       }
     end
     render_bad_request_with_message('Error params')

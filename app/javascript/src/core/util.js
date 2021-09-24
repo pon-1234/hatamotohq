@@ -35,28 +35,45 @@ class Util {
     return moment(datetime).format('YYYY.MM.DD hh:mm');
   }
 
-  static checkMediaSize(file) {
+  static validateFileSizeByType(type, size) {
     const result = {
       valid: true
     };
 
-    if (ImageType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Image) {
+    if (type === 'image' && size > UploadMaxSize.Image) {
       result.valid = false;
       result.message = '画像ファイルの最大容量は10MBになります。';
-    } else if (VideoType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Video) {
+    } else if (type === 'video' && size > UploadMaxSize.Video) {
       result.valid = false;
       result.message = 'ビデオファイルの最大容量は200MBになります。';
-    } else if (AudioType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Audio) {
+    } else if (type === 'audio' && size > UploadMaxSize.Audio) {
       result.valid = false;
-      result.message = 'オーディオファイルの最大容量は200MBになります。';
-    } else if (PdfType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.Pdf) {
+      result.message = 'オーディオファイルの最  大容量は200MBになります。';
+    } else if (type === 'pdf' && size > UploadMaxSize.Pdf) {
       result.valid = false;
       result.message = 'オーディオファイルの最大容量は10MBになります。';
-    } else if (ImageType.indexOf(file.type) !== -1 && file.size > UploadMaxSize.RichMenu) {
+    } else if (type === 'richmenu' && size > UploadMaxSize.RichMenu) {
       result.valid = false;
       result.message = '画像ファイルの最大容量は1MBになります。';
     }
     return result;
+  }
+
+  static getMaxSizeByType(type) {
+    switch (type) {
+    case 'image':
+      return UploadMaxSize.Image;
+    case 'video':
+      return UploadMaxSize.Video;
+    case 'audio':
+      return UploadMaxSize.Audio;
+    case 'pdf':
+      return UploadMaxSize.Pdf;
+    case 'richmenu':
+      return UploadMaxSize.RichMenu;
+    default:
+      return UploadMaxSize.Image;
+    }
   }
 
   static getDuration(data) {

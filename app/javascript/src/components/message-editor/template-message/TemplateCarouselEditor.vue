@@ -174,7 +174,7 @@
         </div>
       </div>
     </div>
-    <media-modal @input="uploadThumb" :data="{type: 'image'}" :id="'uploadImageModal'+indexParent"/>
+    <modal-select-media @input="uploadThumb" :data="{type: 'image'}" :id="'uploadImageModal'+indexParent"/>
   </div>
 </template>
 <script>

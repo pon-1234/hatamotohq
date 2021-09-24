@@ -279,6 +279,290 @@ small {
   width: 30%;
 }
 
+@media(max-width: 991px) {
+  .nav-login .navbar-brand,
+  .nav-admin .navbar-brand,
+  .nav-user .navbar-brand {
+    font-size: 125%;
+    line-height: 1.2;
+  }
+  .nav-top {
+    border-bottom: none;
+    margin: 0px -15px;
+    background-color: #fff;
+  }
+  .nav-top-left {
+    position: relative;
+    z-index: 10000;
+    width: 100%;
+    background-color: white;
+  }
+  .nav-top-left a.navbar-brand {
+    margin: 0px;
+  }
+  .nav-bottom {
+    display: none;
+  }
+  .btn-gnav-sp {
+    position: fixed;
+    top: 8px;
+    right: 3.2vw;
+    height: calc(80 / 750 * 100vw);
+    width: calc(80 / 750 * 100vw);
+    background: none;
+    border: none;
+    z-index: 10000;
+    outline: none;
+  }
+  .btn-gnav-sp .txt-gnav {
+    position: absolute;
+    width: calc(80 / 750 * 100vw);
+    font-size: 75.5%;
+    top: 4vw;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    color: #aaa;
+  }
+  .btn-gnav-sp .icn-gnav {
+    width: calc(40 / 750 * 100vw);
+    height: 2px;
+    position: absolute;
+    top: -7.5vw;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: #aaa;
+  }
+  .btn-gnav-sp .icn-gnav:before,
+  .btn-gnav-sp .icn-gnav:after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    left: 0;
+    background: #aaa;
+  }
+  .btn-gnav-sp .icn-gnav:before {
+    top: -1.5vw;
+  }
+  .btn-gnav-sp .icn-gnav:after {
+    bottom: -1.5vw;
+  }
+  .open .btn-gnav-sp .icn-gnav {
+    background: none;
+  }
+  .open .btn-gnav-sp .icn-gnav:before,
+  .open .btn_gnav-sp .icn-gnav:after {
+    background: #aaa;
+  }
+  .open .btn-gnav-sp .icn-gnav:before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  .open .btn-gnav-sp .icn-gnav:after {
+    transform: rotate(-45deg);
+    bottom: 0;
+  }
+  .gnav-sp {
+    padding: 16vw 0 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: rgba(255, 255, 255, 1);
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    height: 100%;
+    visibility: hidden;
+    opacity: 0;
+    width: 100%;
+    line-height: 1.45;
+    letter-spacing: .1em;
+  }
+  .gnav-sp .name-user {
+    border-top: 1px solid #efefef;
+    padding: 3vw 3.2vw;
+    font-size: 87.5%;
+    background: #efefef;
+  }
+  .gnav-sp .nav-main {
+    padding-bottom: 12vw;
+  }
+  .gnav-sp .nav-main>ul {
+    position: relative;
+    border-bottom: 1px solid #efefef;
+  }
+  .gnav-sp .nav-main>ul>li {
+    opacity: 0;
+    transform: translateX(50%);
+    width: calc(100% / 3);
+    border-top: 1px solid #efefef;
+  }
+  .gnav-sp .nav-main>ul>li>a {
+    padding: 9.5vw 3vw;
+    display: -webkit-box;
+    /*--- Androidブラウザ用 ---*/
+    display: -ms-flexbox;
+    /*--- IE10 ---*/
+    display: -webkit-flex;
+    /*--- safari（PC）用 ---*/
+    display: flex;
+    -webkit-box-pack: justify;
+    /*--- Androidブラウザ用 ---*/
+    -ms-flex-pack: justify;
+    /*--- IE10 ---*/
+    -webkit-justify-content: space-between;
+    /*--- safari（PC）用 ---*/
+    justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+    /* Safari */
+    flex-wrap: wrap;
+    -ms-align-items: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
+    color: #e5e5e5;
+    border-right: 1px solid #efefef;
+  }
+  .gnav-sp .nav-main>ul>li:nth-child(3n) a {
+    border-right: none;
+  }
+  .gnav-sp .nav-main>ul>li>a.active {
+    background: #ffefef;
+    color: #00B900;
+  }
+  .gnav-sp .nav-main>ul>li>a.open {
+    background: #ffefef;
+  }
+  .gnav-sp .nav-main>ul>li>a:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    margin: auto;
+    background: #00B900;
+    opacity: 0;
+  }
+  .gnav-sp .nav-main>ul>li>a.active:after,
+  .gnav-sp .nav-main>ul>li>a.open:after {
+    opacity: 1;
+  }
+  .gnav-sp .nav-main>ul>li>a i {
+    display: block;
+    font-size: 200%;
+    width: 100%;
+    margin-bottom: 1vw;
+  }
+  .gnav-sp .nav-main>ul>li>a .ja {
+    font-size: 75%;
+    display: block;
+    width: 100%;
+  }
+  .gnav-sp .nav-main>ul>li>a.active .ja {
+    font-weight: bold;
+  }
+  .gnav-sp .nav-sub {
+    padding: 5.5vw 8vw 7.5vw;
+    position: relative;
+    display: none;
+    left: 0;
+    width: 100vw;
+    border-bottom: 1px solid #efefef;
+  }
+  .gnav-sp .nav-main>ul>li:nth-child(3n-1) .nav-sub {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .gnav-sp .nav-main>ul>li:nth-child(3n) .nav-sub {
+    left: -50%;
+    transform: translateX(-50%);
+  }
+  .gnav-sp .nav-sub:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    /*border-bottom: calc(20 / 750 * 100vw) solid #00B900;*/
+    /*border-right: calc(20 / 750 * 100vw) solid transparent;*/
+    /*border-left:  calc(20 / 750 * 100vw) solid transparent;*/
+    top: calc(-22 / 750 * 100vw);
+    right: auto;
+    left: 14%;
+    margin: auto;
+  }
+  .gnav-sp .nav-main>ul>li:nth-child(3n-1) .nav-sub:before {
+    left: 0;
+    right: 0;
+  }
+  .gnav-sp .nav-main>ul>li:nth-child(3n) .nav-sub:before {
+    left: auto;
+    right: 14%;
+  }
+  .gnav-sp .nav-sub li {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  .gnav-sp .nav-sub li:not(:last-child) {
+    margin-bottom: 2.5vw;
+  }
+  .gnav-sp .nav-sub a {
+    padding: 1vw 6vw 1vw;
+    display: block;
+    position: relative;
+  }
+  .gnav-sp .nav-sub a:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .6vw;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    /*border-left: calc(16 / 750 * 100vw) solid #00B900;*/
+    /*border-top: calc(12 / 750 * 100vw) solid transparent;*/
+    /*border-bottom: calc(12 / 750 * 100vw) solid transparent;*/
+    margin: auto;
+  }
+  .open .gnav-sp {
+    visibility: visible;
+    opacity: 1;
+  }
+  .open .gnav-sp .nav-main>ul>li,
+  .open .gnav-sp .nav-sub li {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .open .gnav-sp .sidebar>ul>li,
+  .open .gnav-sp .sidebar li {
+    opacity: 1;
+    transform: translateX(0);
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .gnav-sp .sidebar {
+    margin-top: 10px;
+  }
+  .gnav-sp .sidebar .nav-side>li>a {
+    width: 100%;
+  }
+  .gnav-sp .sidebar li:not(:last-child) {
+    margin-bottom: 2.5vw;
+  }
+  .gnav-sp .sidebar a {
+    padding: 1vw 6vw 1vw;
+    display: block;
+    position: relative;
+  }
+  .gnav-sp .box-account {
+    display: none;
+  }
+}
+
 .w35 {
   width: 35%;
 }

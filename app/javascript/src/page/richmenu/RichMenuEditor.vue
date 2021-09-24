@@ -138,7 +138,7 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
-    <media-modal :data="{type: 'richmenu'}" @input="onMediaChanged($event)"></media-modal>
+    <modal-select-media :types="['richmenu']" @select="onMediaChanged($event)"></modal-select-media>
     <modal-alert :title="'表示期間が別のリッチメニューと重複しています。別の表示期間を設定してください'" />
   </div>
 </template>

@@ -1,15 +1,48 @@
 import MediaApi from '../api/media_api';
 
-export const state = {};
+export const state = {
+  medias: [],
+  totalRows: 0,
+  perPage: 0,
+  curPage: 1,
+  filterTypes: []
+};
 
-export const mutations = {};
+export const mutations = {
+  setMedias(state, medias) {
+    state.medias = medias;
+  },
+
+  setCurPage(state, curPage) {
+    state.curPage = curPage;
+  },
+
+  setMeta(state, meta) {
+    state.totalRows = meta.total_count;
+    state.perPage = meta.limit_value;
+    state.curPage = meta.current_page;
+  },
+
+  setFilter(state, types) {
+    state.filterTypes = types;
+  }
+};
 
 export const getters = {};
 
 export const actions = {
-  async getMedias(_, query) {
+  async getMedias(context) {
+    const params = {
+      page: context.state.curPage,
+      q: {
+        type_in: context.state.filterTypes
+      }
+    };
     try {
-      return await MediaApi.list(query);
+      const response = await MediaApi.list(params);
+      context.commit('setMedias', response.data);
+      context.commit('setMeta', response.meta);
+      return response;
     } catch (error) {
       console.log(error);
       return null;
@@ -42,21 +75,12 @@ export const actions = {
     }
   },
 
-  mediasDelete(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return MediaApi.mediasDelete(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-  download(_, query) {
-    return MediaApi.download(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {});
+  async deleteMedias(_, ids) {
+    try {
+      return await MediaApi.bulkDelete(ids);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 };

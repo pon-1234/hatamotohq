@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ScenarioSchedulerJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(channel_id, scenario_id)

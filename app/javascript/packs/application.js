@@ -1,5 +1,4 @@
 import '../stylesheets/application'; // This file will contain your custom CSS
-import 'bootstrap';
 import Vue from 'vue';
 import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';

@@ -21,7 +21,7 @@ class User::ChannelsController < User::ApplicationController
 
   # GET /user/channels/:channel_id/scenarios
   def scenarios
-    @scenarios = @channel.line_friend.available_scenarios
+    @scenarios = @channel.line_friend.manual_scenarios
   end
 
   private

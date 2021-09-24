@@ -12,14 +12,18 @@ class DispatchRichMenuJob < ApplicationJob
     friend_ids = @line_account.line_friends.pluck(:line_user_id)
     Normalizer::PostbackNormalizer.new(@richmenu.areas).perform
 
-    return unless delete_rich_menu_if_needed
-    return unless create_rich_menu
-    return unless create_rich_menu_content
+    if @richmenu.disabled?
+      delete_rich_menu_if_needed if @richmenu.line_menu_id.present?
+    elsif @richmenu.enabled?
+      delete_rich_menu_if_needed
+      create_rich_menu
+      create_rich_menu_content
 
-    if @richmenu.target_all?
-      set_default_rich_menu
-    else
-      bulk_link_rich_menus
+      if @richmenu.target_all?
+        set_default_rich_menu
+      else
+        bulk_link_rich_menus
+      end
     end
   rescue StandardError => e
     logger.error(e.message)

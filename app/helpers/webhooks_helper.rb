@@ -79,25 +79,26 @@ module WebhooksHelper
       # a message from LINE we need to check and store friend if needs
       def add_friend(friend_id)
         user_profile = LineApi::GetProfile.new(@line_account).perform(friend_id)
-        # Return if could not file user profile
-        return nil if user_profile.nil?
-        line_friend = LineFriend.find_or_initialize_by(line_account: @line_account, line_user_id: friend_id)
-        line_friend.line_picture_url = user_profile['pictureUrl']
-        line_friend.line_name = user_profile['displayName']
-        line_friend.display_name = line_friend.display_name || line_friend.line_name
-        line_friend.save!
+        ApplicationRecord.transaction do
+          # Return if could not file user profile
+          return nil if user_profile.nil?
+          line_friend = LineFriend.find_or_initialize_by(line_account: @line_account, line_user_id: friend_id)
+          line_friend.line_picture_url = user_profile['pictureUrl']
+          line_friend.line_name = user_profile['displayName']
+          line_friend.display_name = line_friend.display_name || line_friend.line_name
+          line_friend.save!
 
-        # Create or reopen channel
-        channel = Channel.find_or_initialize_by(line_account: @line_account, line_friend: line_friend)
-        channel_alias = Digest::MD5.hexdigest("#{@line_account.webhook_url}_#{friend_id}")
-        channel.status = 'active'
-        channel.avatar = line_friend.line_picture_url
-        channel.title = line_friend.line_name
-        channel.alias = channel_alias
-        channel.un_read = 0
-        channel.save!
-
-        line_friend
+          # Create or reopen channel
+          channel = Channel.find_or_initialize_by(line_account: @line_account, line_friend: line_friend)
+          channel_alias = Digest::MD5.hexdigest("#{@line_account.webhook_url}_#{friend_id}")
+          channel.status = 'active'
+          channel.avatar = line_friend.line_picture_url
+          channel.title = line_friend.line_name
+          channel.alias = channel_alias
+          channel.un_read = 0
+          channel.save!
+          line_friend
+        end
       end
 
       # When incoming message is reached, the number of unread messages is increased by 1

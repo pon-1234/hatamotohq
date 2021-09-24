@@ -23,10 +23,13 @@
   </span>
 </template>
 <script>
+import { mapMutations } from 'vuex';
 export default {
   props: ['sticker', 'animation'],
   methods: {
+    ...mapMutations('global', ['addLog']),
     onSelectSticker() {
+      this.addLog(this.sticker);
       this.$emit('input', this.sticker);
     }
   }

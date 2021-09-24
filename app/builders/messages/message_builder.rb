@@ -37,7 +37,7 @@ class Messages::MessageBuilder
         from: from,
         type: @body[:message][:type],
         line_message_id: @body[:message][:id],
-        line_content: @body[:message],
+        content: @body[:message],
         timestamp: @body[:timestamp],
         reply_token: @body[:replyToken],
         text: text

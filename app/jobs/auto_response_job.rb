@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AutoResponseJob < ApplicationJob
+  sidekiq_options retry: false
   queue_as :default
 
   def perform(message_id)
@@ -9,7 +10,7 @@ class AutoResponseJob < ApplicationJob
     return if auto_response_ids.blank?
 
     # Send auto response message if keyword is hit
-    auto_responses = AutoResponse.where(id: auto_response_ids, status: 'enable')
+    auto_responses = AutoResponse.where(id: auto_response_ids).enabled
     reply_messages = []
     auto_responses.each do |auto_response|
       reply_messages += auto_response.auto_response_messages.pluck(:content)

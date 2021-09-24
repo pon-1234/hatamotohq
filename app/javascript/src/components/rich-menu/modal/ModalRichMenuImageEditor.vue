@@ -1,10 +1,9 @@
 <template>
   <div>
-    <div tabindex="-1" role="dialog" aria-hidden="true" class="modal modal-common01"
-         style="display: block;background: rgb(0 0 0 / 28%);"
+    <div tabindex="-1" role="dialog" aria-hidden="true" class="modal d-block"
          id="modalRichmenuImageEditor">
-      <div class="modal-dialog modal-dialog-centered modal-md modal-rg" role="document"
-           style="min-width: 80%; max-height: 100%; overflow-y: auto; top: 0">
+      <div class="modal-dialog modal-dialog-centered modal-xl mh-100 w-100" role="document"
+           >
         <div class="modal-content h-100 p-0" style="width: 100%">
           <div class="modal-header flex-shrink-0"><h5 class="mb-0"><span v-if="editor === 'richmenu'">リッチメニュー</span><span v-else>画像を作成</span></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="confirmModal()"><span

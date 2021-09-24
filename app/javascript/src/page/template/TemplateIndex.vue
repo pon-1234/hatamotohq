@@ -14,18 +14,18 @@
         <div class="flex-grow-1" :key="contentKey">
           <a v-if="folders && folders.length && curFolder"
             :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
-            class="btn btn-primary btn-sm"
+            class="btn btn-primary"
           >
             <i class="fa fa-plus"></i> 新規作成
           </a>
           <div class="mt-2" v-if="curFolder">
-            <table class="table index">
-              <thead>
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
                 <tr>
                   <th>テンプレート名</th>
                   <th>メッセージ数</th>
-                  <th class="fw-120">操作</th>
-                  <th class="fw-150">フォルダ</th>
+                  <th>操作</th>
+                  <th>フォルダ</th>
                 </tr>
               </thead>
               <tbody>
@@ -34,13 +34,10 @@
                   <td>{{template.template_messages_count}}</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" @click="openEdit(template)">編集</button>
-                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false"></button>
-                      <div class="dropdown-menu bg-white" role="menu" style="">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
-                        <div class="dropdown-divider"></div>
+                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                      <div class="dropdown-menu">
+                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集する</a>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyTemplate" @click="curTemplateIndex = index">テンプレートをコビー</a>
-                        <div class="dropdown-divider"></div>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="curTemplateIndex = index">テンプレートを削除</a>
                       </div>
                     </div>
