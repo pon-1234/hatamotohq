@@ -64,8 +64,9 @@ Rails.application.routes.draw do
       resources :templates do
         post :copy, on: :member
       end
-      resources :folders
       resources :rich_menus
+      resources :surveys
+      resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
       get '/action_objects', to: 'action_objects#index'

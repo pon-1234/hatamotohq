@@ -1,5 +1,5 @@
 <template>
-  <div :class="mode === 'manage' ? 'card mvh-90' : 'card'">
+  <div :class="mode === 'manage' ? 'card mvh-60' : 'card'">
     <div class="card-header d-flex flex-wrap align-items-center">
       <div class="mr-auto" v-if="mode === 'manage'">
         <a

@@ -77,6 +77,13 @@
         <% end %>
       </li>
 
+      <li class="side-nav-item <%= controller?("user/surveys") ? 'mm-active' : '' %>">
+        <%= link_to user_surveys_path, class: "side-nav-link #{controller?("user/surveys" ) ? 'active' : '' }" do %>
+          <i class="uil-file-question-alt"></i>
+          <span>回答フォーム</span>
+        <% end %>
+      </li>
+
       <li class="side-nav-title side-nav-item">友だち属性</li>
        <!-- リッチメニュー -->
       <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">

@@ -1,4 +1,22 @@
 export default {
+  list: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  get: (id) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/surveys/' + id,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   createNew(query) {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/create'),
@@ -22,16 +40,6 @@ export default {
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
-  },
-
-  list(query) {
-    query._pid = btoa('/surveys');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-
-  folders(query) {
-    query._pid = btoa('/folders');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
   },
 
   updateStatus(data) {

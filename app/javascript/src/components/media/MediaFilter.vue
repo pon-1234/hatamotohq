@@ -17,10 +17,10 @@ export default {
       options: [
         { type: 'image', text: '画像' },
         { type: 'audio', text: '音声' },
-        { type: 'richmenu', text: 'メニュー画像' },
-        { type: 'video', text: '動画' }
+        { type: 'video', text: '動画' },
+        { type: 'richmenu', text: 'メニュー画像' }
       ],
-      selectedTypes: []
+      selectedTypes: ['image', 'audio', 'video', 'richmenu']
     };
   },
   methods: {

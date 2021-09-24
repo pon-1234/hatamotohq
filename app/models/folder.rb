@@ -27,6 +27,7 @@ class Folder < ApplicationRecord
   has_many :auto_responses, dependent: :destroy
   has_many :templates, dependent: :destroy
   has_many :rich_menus, dependent: :destroy
+  has_many :surveys, dependent: :destroy
 
   # Validation
   validates :name, presence: true, uniqueness: { scope: [:line_account_id, :type] }

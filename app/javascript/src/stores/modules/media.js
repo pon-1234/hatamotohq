@@ -5,7 +5,7 @@ export const state = {
   totalRows: 0,
   perPage: 0,
   curPage: 1,
-  filterTypes: []
+  filterTypes: ['image', 'video', 'audio', 'richmenu']
 };
 
 export const mutations = {

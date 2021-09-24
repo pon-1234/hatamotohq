@@ -32,4 +32,5 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Survey < ApplicationRecord
+  belongs_to :folder
 end
