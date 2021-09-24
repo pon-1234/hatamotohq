@@ -9,14 +9,14 @@
         <h5 class="survey-title">質問 {{ index + 1 }}</h5>
         <div class="ml-auto">
           <div
-            class="btn btn-xs btn-light"
+            class="btn btn-sm btn-light"
             @click="copyObject(index)"
           >
             <i class="mdi mdi-content-copy"></i>
           </div>
           <div
             @click="moveUpObject(index)"
-            class="btn btn-xs btn-light"
+            class="btn btn-sm btn-light"
             v-if="index > 0">
             <i class="fa fa-arrow-up"></i>
           </div>
@@ -121,7 +121,7 @@
       class="text-center"
       v-if="objectLists.length < maxObject"
     >
-      <div @click="addNewObject()" class="btn btn-outline-success">
+      <div @click="addNewObject()" class="btn btn-primary">
         <i class="fa fa-plus"></i> 質問追加
       </div>
     </div>

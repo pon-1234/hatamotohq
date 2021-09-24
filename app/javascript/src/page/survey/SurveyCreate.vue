@@ -1,93 +1,107 @@
 <template>
-  <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-xl-6">
-          <div class="form-group">
-            <label class="fw-300">フォーム名(管理用)<required-mark/></label>
-            <div class="flex-grow-1">
-              <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required'" data-vv-as="フォーム名(管理用)">
-              <error-message :message="errors.first('survey-name')"></error-message>
+  <div>
+    <div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label class="fw-300">フォーム名(管理用)<required-mark/></label>
+                <div class="flex-grow-1">
+                  <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required'" data-vv-as="フォーム名(管理用)">
+                  <error-message :message="errors.first('survey-name')"></error-message>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>タイトル<required-mark/></label>
+                <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control" placeholder="" v-validate="'required'" data-vv-as="タイトル">
+                <error-message :message="errors.first('survey-title')"></error-message>
+              </div>
+
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer">
+                <label class="custom-control-label" for="customCheck1">何度でも回答可能にする</label>
+              </div>
+            </div>
+
+            <div class="col-xl-6">
+              <div class="form-group">
+                <label>説明<required-mark/></label>
+                <textarea rows="6" v-model.trim="surveyData.description" type="text" name="survey-description"
+                    class="form-control"
+                    placeholder="" v-validate="'required'"
+                    data-vv-as="説明">
+                </textarea>
+                <error-message :message="errors.first('survey-description')"></error-message>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label>タイトル<required-mark/></label>
-            <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control" placeholder="" v-validate="'required'" data-vv-as="タイトル">
-            <error-message :message="errors.first('survey-title')"></error-message>
-          </div>
-
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer">
-            <label class="custom-control-label" for="customCheck1">何度でも回答可能にする</label>
-          </div>
-        </div>
-
-        <div class="col-xl-6">
-          <div class="form-group">
-            <label>説明<required-mark/></label>
-            <textarea rows="6" v-model.trim="surveyData.description" type="text" name="survey-description"
-                class="form-control"
-                placeholder="" v-validate="'required'"
-                data-vv-as="説明">
-            </textarea>
-            <error-message :message="errors.first('survey-description')"></error-message>
-          </div>
         </div>
       </div>
+
       <!-- <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
               placeholder="" v-validate="'required'"> -->
-
-        <survey-editor
-          :data="surveyData.questions"
-          name="survey-editor"
-          @input="surveyData.questions = $event">
-        </survey-editor>
-
-        <div class="form-group">
-          <label>回答後の文章
-            <required-mark/></label>
-          <textarea v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
-                    class="form-control"
-                    placeholder="" v-validate="'required'">
-                    </textarea>
-          <span v-if="errors.first('survey-success-message')" class="invalid-box-label">回答後の文章は必須です</span>
-        </div>
-        <div class="form-group">
-          <label>回答後のアクション</label>
-          <message-action-type-default
-            name="survey-action"
-            :value="surveyData.action"
-            :labelRequired="false"
-            :showTitle="false"
-            :showLaunchMesasge="false"
-            @input="surveyData.action = $event"
-          ></message-action-type-default>
-        </div>
-        <div class="flex">
-          <form target="_blank" :action="`${route}/preview`" method="POST">
-            <input type="hidden" name="data" :value="JSON.stringify(surveyData)">
-            <button class="btn btn-submit btn-block" type="submit"><i class="fa fa-eye"></i>&nbsp;&nbsp;プレビュー
-            </button>
-          </form>
-          <div style="width: 20px"></div>
-          <button class="btn btn-submit btn-block" type="button" @click="submit()"><i class="fa fa-save"></i>&nbsp;&nbsp;保存
-          </button>
-          <div style="width: 20px"></div>
-          <button class="btn btn-submit btn-confirm" type="button" @click="publish()"><i
-            class="fa fa-upload"></i>&nbsp;&nbsp;保存＆公開
-          </button>
+      <div class="card">
+        <div class="card-body">
+          <survey-editor
+            :data="surveyData.questions"
+            name="survey-editor"
+            @input="surveyData.questions = $event">
+          </survey-editor>
         </div>
       </div>
 
-      <modal-confirm title="公開後、編集できませんがよろしいでしょうか。" id='modal-publish' type='confirm'
-                    @input="submit(true)"/>
+      <div class="form-group mt-2">
+        <label>回答後の文章<required-mark/></label>
+        <textarea
+          v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
+          class="form-control"
+          placeholder=""
+          v-validate="'required'"
+          data-vv-as="回答後の文章">
+        </textarea>
+        <error-message :message="errors.first('survey-success-message')"></error-message>
+      </div>
+
+      <div class="form-group mt-2">
+        <label>回答後のアクション</label>
+        <message-action-type-default
+          name="survey-action"
+          :value="surveyData.action"
+          :labelRequired="false"
+          :showTitle="false"
+          :showLaunchMesasge="false"
+          @input="surveyData.action = $event"
+        ></message-action-type-default>
+      </div>
+
+      <div class="flex">
+        <form target="_blank" :action="`${route}/preview`" method="POST">
+          <input type="hidden" name="data" :value="JSON.stringify(surveyData)">
+          <button class="btn btn-submit btn-block" type="submit"><i class="fa fa-eye"></i>&nbsp;&nbsp;プレビュー
+          </button>
+        </form>
+        <div style="width: 20px"></div>
+        <button class="btn btn-submit btn-block" type="button" @click="submit()"><i class="fa fa-save"></i>&nbsp;&nbsp;保存
+        </button>
+        <div style="width: 20px"></div>
+        <button class="btn btn-submit btn-confirm" type="button" @click="publish()"><i
+          class="fa fa-upload"></i>&nbsp;&nbsp;保存＆公開
+        </button>
+      </div>
+    </div>
+
+    <modal-confirm title="公開後、編集できませんがよろしいでしょうか。" id='modal-publish' type='confirm'
+                  @input="submit(true)"/>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import Divider from '../../components/common/Divider.vue';
 
 export default {
+  components: { Divider },
   props: ['data', 'route', 'plan', 'liff_id'],
   provide() {
     return { parentValidator: this.$validator };

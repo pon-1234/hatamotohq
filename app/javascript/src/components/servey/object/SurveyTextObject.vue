@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group clearfix d-flex">
-      <span class="fw-200">項目名<required-mark></required-mark></span>
+      <span class="fw-200">項目名<required-mark/></span>
       <div class="flex-grow-1">
         <input
           v-model.trim="value.text"

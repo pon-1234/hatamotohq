@@ -13,14 +13,14 @@
             </div>
         </div>
         <div class="form-group clearfix">
-            <label class="col-sm-3">質問補足</label>
+            <label class="col-sm-3">補足文</label>
             <div class="col-sm-9">
                 <input v-model.trim="value.sub_text"
                        :name="name+'-subtext'"
                        type="text"
                        class="form-control"
                        placeholder="">
-                <span v-if="errors.first(name+'-subtext')" class="invalid-box-label">質問補足は必須です</span>
+                <span v-if="errors.first(name+'-subtext')" class="invalid-box-label">補足文は必須です</span>
             </div>
         </div>
         <div class="form-group clearfix">
