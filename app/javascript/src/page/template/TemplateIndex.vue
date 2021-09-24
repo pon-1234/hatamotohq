@@ -107,9 +107,6 @@ export default {
   },
 
   computed: {
-    ...mapState('system', {
-      success: state => state.success
-    }),
     ...mapState('template', {
       folders: state => state.folders
     }),

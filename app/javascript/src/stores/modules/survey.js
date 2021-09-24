@@ -1,15 +1,38 @@
-import SurveyApi from '../api/survey_api';
+import SurveyAPI from '../api/survey_api';
 
-export const state = {};
+export const state = {
+  folders: []
+};
 
-export const mutations = {};
+export const mutations = {
+  pushFolder(state, folder) {
+    folder.surveys = [];
+    state.folders.push(folder);
+  },
+
+  setFolders(state, folders) {
+    state.folders = folders;
+  },
+
+  updateFolder(state, folder) {
+    folder.surveys = [];
+    folder.surveys_count = 0;
+    const index = state.folders.findIndex(_ => _.id === folder.id);
+    state.folders.splice(index, 1, folder);
+  },
+
+  deleteFolder(state, id) {
+    const index = state.folders.findIndex(_ => _.id === id);
+    state.folders.splice(index, 1);
+  }
+};
 
 export const getters = {};
 
 export const actions = {
   createNew(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return SurveyApi.createNew(query).done((res) => {
+    return SurveyAPI.createNew(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -19,7 +42,7 @@ export const actions = {
   },
   update(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return SurveyApi.update(query).done((res) => {
+    return SurveyAPI.update(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -30,7 +53,7 @@ export const actions = {
 
   list(_, query) {
     _.dispatch('system/setLoading', true, { root: true });
-    return SurveyApi.list(query).done((res) => {
+    return SurveyAPI.list(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -38,44 +61,51 @@ export const actions = {
       _.dispatch('system/setLoading', false, { root: true });
     });
   },
-  getFolders(ctx) {
-    return SurveyApi.folders({ type: 'survey' }).done((res) => {
-      return Promise.resolve(res);
-    }).fail((_) => {
-      return Promise.resolve([]);
-    });
+  /**
+   * Survey is belong to a folder, get all folders of current account
+   * @param {*} context store context
+   * @param {*} query query params
+   * @returns surveys in folders
+   */
+  async getSurveys(context, query) {
+    try {
+      const folders = await SurveyAPI.list(query);
+      context.commit('setFolders', folders);
+    } catch (error) {
+      return null;
+    }
   },
 
   updateStatus(_, data) {
-    return SurveyApi.updateStatus(data).done((res) => {
+    return SurveyAPI.updateStatus(data).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
     });
   },
   getCustomers(_, query) {
-    return SurveyApi.getCustomers(query).done((res) => {
+    return SurveyAPI.getCustomers(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
     });
   },
   answersOfCustomer(_, query) {
-    return SurveyApi.answersOfCustomer(query).done((res) => {
+    return SurveyAPI.answersOfCustomer(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
     });
   },
   copy(_, query) {
-    return SurveyApi.copy(query).done((res) => {
+    return SurveyAPI.copy(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
     });
   },
   destroy(_, query) {
-    return SurveyApi.delete(query).done((res) => {
+    return SurveyAPI.delete(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -85,7 +115,7 @@ export const actions = {
   addSurveyProfile(_, data) {
     _.dispatch('system/setLoading', true, { root: true });
 
-    return SurveyApi.addSurveyProfile(data).done((res) => {
+    return SurveyAPI.addSurveyProfile(data).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -95,7 +125,7 @@ export const actions = {
   },
 
   getSurveyProfiles(_, query = {}) {
-    return SurveyApi.getSurveyProfiles(query).done((res) => {
+    return SurveyAPI.getSurveyProfiles(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -103,7 +133,7 @@ export const actions = {
   },
 
   updateSurveyProfile(_, data) {
-    return SurveyApi.updateSurveyProfile(data).done((res) => {
+    return SurveyAPI.updateSurveyProfile(data).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
@@ -111,7 +141,7 @@ export const actions = {
   },
 
   friendAnswers(_, query) {
-    return SurveyApi.friendAnswers(query).done((res) => {
+    return SurveyAPI.friendAnswers(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
       return Promise.reject(err);
