@@ -45,7 +45,7 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     $(this.$refs.vuemodal).on('show.bs.modal', this.shownModal);
   },
 
