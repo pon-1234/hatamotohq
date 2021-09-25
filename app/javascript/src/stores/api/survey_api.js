@@ -17,14 +17,15 @@ export default {
     });
   },
 
-  createNew(query) {
+  create: (payload) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/create'),
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },
+
   update(query) {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/edit'),

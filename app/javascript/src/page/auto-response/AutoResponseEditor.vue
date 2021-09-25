@@ -1,84 +1,74 @@
 <template>
   <div class="fw-1200">
     <div class="card">
-      <div class="card-header d-flex align-items-center">
-        <a :href="`${MIX_ROOT_PATH}/user/broadcasts`" class="text-info">
-          <i class="fa fa-arrow-left"></i> 自動応答一覧
-        </a>
-        <h5 class="m-auto font-weight-bold">新規自動応答メッセージ</h5>
-      </div>
-
+      <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
       <div class="card-body">
-        <div class="form-group">
-          <label>自動応答名<required-mark/></label>
-          <input type="text" name="name" class="form-control" v-model="autoResponseData.name" placeholder="自動応答名を入力してください" v-validate="'required'" data-vv-as="自動応答名">
-          <error-message :message="errors.first('name')"></error-message>
-        </div>
-        <div class="form-group">
-          <label class="mb10">設定</label>
-          <div class="flex start ai_center">
-            <div class="toggle-switch btn-keyword01">
-              <input id="keyword-onoff-setting01" class="toggle-input" type="checkbox"
-                    v-model="autoResponseData.status" true-value="enabled"
-                    false-value="disabled">
-              <label for="keyword-onoff-setting01" class="toggle-label">
-                <span></span>
-              </label>
-            </div>
-            <p class="keyword-status keyword-status01 no-mgn">オン</p>
+        <div class="form-group d-flex">
+          <label class="fw-200">自動応答名<required-mark/></label>
+          <div class="flex-grow-1">
+            <input type="text" name="name" class="form-control" v-model="autoResponseData.name" placeholder="自動応答名を入力してください" v-validate="'required'" data-vv-as="自動応答名">
+            <error-message :message="errors.first('name')"></error-message>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-header left-border">
-            <h3>反応するキーワードを設定する</h3>
-          </div>
-          <div class="card-body">
-            <div class="form-group d-flex flex-column">
-              <label class="mb10">キーワード<required-mark/></label>
-              <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'invalid-box' : ''"
-                placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
-              </b-form-tags>
-              <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
-              <div>
-                <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
-              </div>
-              <span class="invalid-box-label"  v-if="error"><b>{{ error.keyword}}</b>のキーワードが<b>{{error.name}}</b>で設定されているため設定できません。</span>
-              <error-message class="w-100" :message="errors.first('keywords')"></error-message>
-            </div>
+        <div class="form-group d-flex">
+          <label class="fw-200">設定</label>
+          <div class="flex-grow-1 d-flex">
+            <input type="checkbox" id="scenario-onoff" checked data-switch="success" v-model="autoResponseData.status" true-value="enabled" false-value="disabled" ref="status"/>
+            <label for="scenario-onoff" data-on-label="オン" data-off-label="オフ"></label>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="card">
-          <div class="card-header left-border">
-            <h3>反応時のアクションを設定する</h3>
+    <div class="card">
+      <div class="card-header left-border">
+        <h3>反応するキーワードを設定する</h3>
+      </div>
+      <div class="card-body">
+        <div class="form-group d-flex flex-column">
+          <label class="mb10">キーワード<required-mark/></label>
+          <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'invalid-box' : ''"
+            placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
+          </b-form-tags>
+          <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
+          <div>
+            <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
           </div>
-          <div class="card-body">
-            <div class="form-border">
-              <div class="form-group" :key="msgContentKey">
-                <label>メッセージ本文</label>
-                <div>
-                  <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
-                </div>
-                <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
-                <message-editor
-                  :isDisplayTemplate="true"
-                  v-for="(item, index) in autoResponseData.messages"
-                  :key="index"
-                  v-bind:data="item"
-                  v-bind:index="index"
-                  v-bind:countMessages="autoResponseData.messages.length"
-                  @input="onMessageContentChanged"
-                  @selectTemplate="selectTemplate"
-                  @remove="removeContent"
-                  @moveTopMessage="moveTopMessage"
-                  @moveBottomMessage="moveBottomMessage"
-                />
-                <div>
-                  <div class="btn btn-outline-success" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
-                    <i class="fa fa-plus"></i><span> メッセージ追加</span>
-                  </div>
-                </div>
+          <span class="invalid-box-label"  v-if="error"><b>{{ error.keyword}}</b>のキーワードが<b>{{error.name}}</b>で設定されているため設定できません。</span>
+          <error-message class="w-100" :message="errors.first('keywords')"></error-message>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header left-border">
+        <h3>反応時のアクションを設定する</h3>
+      </div>
+      <div class="card-body">
+        <div class="form-border">
+          <div class="form-group" :key="msgContentKey">
+            <label>メッセージ本文</label>
+            <div>
+              <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
+            </div>
+            <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
+            <message-editor
+              :isDisplayTemplate="true"
+              v-for="(item, index) in autoResponseData.messages"
+              :key="index"
+              v-bind:data="item"
+              v-bind:index="index"
+              v-bind:countMessages="autoResponseData.messages.length"
+              @input="onMessageContentChanged"
+              @selectTemplate="selectTemplate"
+              @remove="removeContent"
+              @moveTopMessage="moveTopMessage"
+              @moveBottomMessage="moveBottomMessage"
+            />
+            <div>
+              <div class="btn btn-outline-success" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
+                <i class="fa fa-plus"></i><span> メッセージ追加</span>
               </div>
             </div>
           </div>

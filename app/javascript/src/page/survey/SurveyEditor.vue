@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import Util from '@/core/util';
 import { mapActions } from 'vuex';
 
 export default {
@@ -109,12 +110,11 @@ export default {
   data() {
     return {
       isCreate: this.data == null,
-      folders: [],
       surveyData: this.data || {
+        folder_id: Util.getParamFromUrl('folder_id'),
         name: null,
         liff_id: this.liff_id,
         title: null,
-        folder_id: null,
         description: null,
         questions: null,
         action: null,
@@ -124,7 +124,6 @@ export default {
     };
   },
   async beforeMount() {
-    this.folders = await this.getFolders();
     await this.getTags({ low: true });
   },
   methods: {
@@ -132,10 +131,9 @@ export default {
       'getTags'
     ]),
     ...mapActions('survey', [
-      'update',
-      'createNew',
-      'delete',
-      'getFolders'
+      'createSurvey',
+      'updateSurvey',
+      'delete'
     ]),
 
     async validateForm() {
@@ -167,34 +165,31 @@ export default {
     async submit(isPushlish = false) {
       const passed = await this.validateForm();
       // find indexFolder
-
-      if (passed) {
-        const folderIndex = this.folders.findIndex((folder) => {
-          return folder.id === this.surveyData.folder_id;
-        });
-
-        this.surveyData.is_publish = isPushlish;
-        if (isPushlish) {
-          this.surveyData.status = 'enable';
-        }
-        if (this.isCreate) {
-          this.createNew(this.surveyData).then(() => {
-            window.toastr.success('成功');
-            location.href = this.route + '?folder_index=' + folderIndex;
-          }).catch(() => {
-            window.toastr.error('失敗');
-            location.href = this.route + '?folder_index=' + folderIndex;
-          });
-        } else {
-          this.update(this.surveyData).then((res) => {
-            window.toastr.success('成功');
-            location.href = this.route + '?folder_index=' + folderIndex;
-          }).catch(() => {
-            window.toastr.error('失敗');
-            location.href = this.route + '?folder_index=' + folderIndex;
-          });
-        }
+      console.log('-------submit-------', this.surveyData);
+      // if (passed) {
+      this.surveyData.is_publish = isPushlish;
+      if (isPushlish) {
+        this.surveyData.status = 'enabled';
       }
+      await this.createSurvey(this.surveyData);
+      if (this.isCreate) {
+        //   this.createNew(this.surveyData).then(() => {
+        //     window.toastr.success('成功');
+        //     location.href = this.route + '?folder_id=' + folderIndex;
+        //   }).catch(() => {
+        //     window.toastr.error('失敗');
+        //     location.href = this.route + '?folder_index=' + folderIndex;
+        //   });
+        // } else {
+        //   this.update(this.surveyData).then((res) => {
+        //     window.toastr.success('成功');
+        //     location.href = this.route + '?folder_index=' + folderIndex;
+        //   }).catch(() => {
+        //     window.toastr.error('失敗');
+        //     location.href = this.route + '?folder_index=' + folderIndex;
+        //   });
+      }
+      // }
     },
 
     previewSurvey() {

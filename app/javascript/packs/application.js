@@ -12,6 +12,7 @@ import vSelect from 'vue-select';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
+
 import {
   BootstrapVue,
   DropdownPlugin,
@@ -22,8 +23,11 @@ import * as constant from '@/core/constant';
 
 import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
+import Rails from '@rails/ujs';
+Rails.start();
 
 const jQuery = require('jquery');
+
 window.$ = jQuery;
 window._ = require('lodash');
 const toastr = require('toastr');
@@ -34,7 +38,6 @@ Object.keys(constant).forEach((key) => {
   Vue.prototype[key] = constant[key];
 });
 
-require('@rails/ujs').start();
 require('turbolinks').start();
 require('@rails/activestorage').start();
 require('admin-lte');

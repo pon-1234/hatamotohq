@@ -181,9 +181,8 @@ export default {
       this.contentKey++;
     },
     syncObj() {
-      this.blink(() => {
-        this.$emit('input', this.objectLists);
-      });
+      this.forceRerender();
+      this.$emit('input', this.objectLists);
     },
     addNewObject() {
       this.objectLists.push({
@@ -195,7 +194,6 @@ export default {
       this.syncObj();
     },
     copyObject(index) {
-      // eslint-disable-next-line no-undef
       const newObject = _.cloneDeep(this.objectLists[index]);
       this.objectLists.push(newObject);
       this.syncObj();
