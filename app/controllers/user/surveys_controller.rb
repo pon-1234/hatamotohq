@@ -2,6 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
+  before_action :find_survey, only: [:show, :update]
   # GET /user/surveys
   def index
     @folders = Folder.accessible_by(current_ability).type_survey
@@ -11,8 +12,17 @@ class User::SurveysController < User::ApplicationController
     end
   end
 
-  # GET /user/surveys/:id/new
+  # GET /user/surveys/:id
+  def show
+  end
+
+  # GET /user/surveys/new
   def new
+  end
+
+  # GET /user/surveys/:id/edit
+  def edit
+    @survey_id = params[:id]
   end
 
   # POST /user/surveys
@@ -40,5 +50,9 @@ class User::SurveysController < User::ApplicationController
         ],
         after_action: {}
       )
+    end
+
+    def find_survey
+      @survey = Survey.find(params[:id])
     end
 end

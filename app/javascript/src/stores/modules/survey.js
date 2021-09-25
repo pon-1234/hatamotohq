@@ -32,8 +32,8 @@ export const getters = {};
 export const actions = {
   /**
    * Survey is belong to a folder, get all folders of current account
-   * @param {*} context store context
-   * @param {*} query query params
+   * @param {Context} context store context
+   * @param {Object} payload payload
    * @returns surveys in folders
    */
   async getSurveys(context, query) {
@@ -45,6 +45,12 @@ export const actions = {
     }
   },
 
+  /**
+   * Get survey detail
+   * @param {Context} context store context
+   * @param {Object} payload payload
+   * @returns survey
+   */
   async getSurvey(_, id) {
     try {
       return await SurveyAPI.get(id);

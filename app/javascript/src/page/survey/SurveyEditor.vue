@@ -125,8 +125,8 @@ export default {
   },
   async beforeMount() {
     await this.getTags({ low: true });
-    // const response = await this.getSurvey(this.survey_id);
-    // this.parseSurvey(response);
+    const response = await this.getSurvey(this.survey_id);
+    this.parseSurvey(response);
   },
   methods: {
     ...mapActions('tag', [
