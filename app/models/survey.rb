@@ -4,22 +4,22 @@
 #
 # Table name: surveys
 #
-#  id               :bigint           not null, primary key
-#  action           :text(4294967295)
-#  code             :string(255)
-#  deleted_at       :datetime
-#  description      :text(65535)
-#  is_publish       :boolean          default(FALSE)
-#  multiple_answers :boolean          default(FALSE)
-#  name             :string(255)
-#  status           :string(255)      default("enabled")
-#  success_message  :text(65535)
-#  title            :string(255)
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  folder_id        :bigint
-#  liff_id          :string(255)
-#  line_account_id  :bigint
+#  id              :bigint           not null, primary key
+#  line_account_id :bigint
+#  folder_id       :bigint
+#  code            :string(255)
+#  name            :string(255)
+#  liff_id         :string(255)
+#  title           :string(255)
+#  description     :text(65535)
+#  action          :text(4294967295)
+#  success_message :text(65535)
+#  status          :string(255)      default("enabled")
+#  is_publish      :boolean          default(FALSE)
+#  re_answer       :boolean          default(FALSE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  deleted_at      :datetime
 #
 # Indexes
 #
@@ -33,4 +33,8 @@
 #
 class Survey < ApplicationRecord
   belongs_to :folder
+
+  validates :name, presence: true, length: { maximum: 255 }
+  validates :title, presence: true, length: { maximum: 255 }
+  validates :description, presence: true
 end

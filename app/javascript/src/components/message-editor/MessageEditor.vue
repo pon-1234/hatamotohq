@@ -2,12 +2,9 @@
   <div>
     <div class="dashed" v-if="index !== 0"></div>
     <div class="card card-outline card-success mt-4">
-      <div class="card-header">
+      <div class="card-header d-flex">
         <span class="card-title">メッセージ{{index + 1}}設定</span>
-        <div class="card-tools">
-          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-          </button>
-        </div>
+        <div class="ml-auto btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></div>
       </div>
       <div class="card-body">
         <div class="d-flex align-items-center mb10">

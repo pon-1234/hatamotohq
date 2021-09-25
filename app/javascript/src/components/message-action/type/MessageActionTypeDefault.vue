@@ -40,15 +40,25 @@
           class="d-inline-block"
           v-if="messages.length > 1"
         >
-          <a class="btn btn-default" @click="moveUpMessage(index)">
-            <i class="fa fa-arrow-up"></i
-          ></a>
-          <a class="btn btn-default" @click="moveDownMessage(index)">
+          <div
+            @click="moveUpMessage(index)"
+            class="btn btn-sm btn-light"
+            v-if="index > 0">
+            <i class="fa fa-arrow-up"></i>
+          </div>
+          <div
+            type="button"
+            @click="moveDownMessage(index)"
+            class="btn btn-sm btn-light"
+            v-if="index < messages.length - 1">
             <i class="fa fa-arrow-down"></i
-          ></a>
-          <a class="btn btn-default" @click="removeMessage(index)">
-            <i class="fa fa-minus"></i
-          ></a>
+          ></div>
+          <div
+            @click="removeMessage(index)"
+            v-if="messages.length > 1"
+            class="btn btn-sm btn-light">
+            <i class="mdi mdi-delete"></i>
+          </div>
         </div>
       </div>
       <action-postback
@@ -61,15 +71,15 @@
       </action-postback>
     </div>
     <div class="text-center mt-4" v-if="messages.length < 3">
-      <button
-        class="btn btn-outline-success"
-        type="button"
+      <div
+        class="btn btn-warning"
+        role="button"
         @click="addMessage()"
       >
         <i class="fa fa-plus"></i> アクションの追加
-      </button>
+      </div>
     </div>
-    <div class="divider mt-4"></div>
+    <divider></divider>
     <div>
       <label class="w-100 mt20">
         タグ設定
@@ -102,7 +112,9 @@
 </template>
 
 <script>
+import Divider from '../../common/Divider.vue';
 export default {
+  components: { Divider },
   props: {
     value: Object,
     labelRequired: Boolean,

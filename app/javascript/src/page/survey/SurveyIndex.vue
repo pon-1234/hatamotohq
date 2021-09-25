@@ -99,9 +99,6 @@ export default {
     await this.getSurveys();
     this.loading = false;
   },
-  created() {
-    this.selectedFolderIndex = location.href.getParameterByName('folder_index') || 0;
-  },
 
   computed: {
     ...mapState('survey', {

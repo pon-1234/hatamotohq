@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_23_021317) do
+ActiveRecord::Schema.define(version: 2021_09_24_091854) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -433,7 +433,7 @@ ActiveRecord::Schema.define(version: 2021_09_23_021317) do
     t.text 'success_message'
     t.string 'status', default: 'enabled'
     t.boolean 'is_publish', default: false
-    t.boolean 'multiple_answers', default: false
+    t.boolean 're_answer', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

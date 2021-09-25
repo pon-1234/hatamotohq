@@ -1,6 +1,4 @@
-// @import "./app.scss";
-// @import "./icons.scss";
-@import "admin-lte";
+// @import "admin-lte";
 @import "toastr/build/toastr";
 @import "bootstrap-vue/dist/bootstrap-vue.css";
 @import "./emojione/emojione.min.css";
@@ -17,7 +15,7 @@
 // START: card view
 .card {
   .left-border {
-    border-left: solid 5px #40bd62;
+    border-left: solid 5px #0acf97;
     border-bottom: dashed 1px #aaa;
     font-weight: bold;
     line-height: 34px;
@@ -52,8 +50,9 @@
 }
 
 .error-explanation {
-  font-size: 13px;
-  color: rgb(235, 4, 4);
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #fa5c7c;
 }
 
 .invalid-box {

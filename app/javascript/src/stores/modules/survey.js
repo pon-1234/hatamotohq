@@ -76,6 +76,20 @@ export const actions = {
     }
   },
 
+  /**
+   * Create a new survey
+   * @param {Context} context store context
+   * @param {Object} payload payload
+   * @returns survey or null
+   */
+  async createSurvey(context, payload) {
+    try {
+      return await SurveyAPI.create(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
   updateStatus(_, data) {
     return SurveyAPI.updateStatus(data).done((res) => {
       return Promise.resolve(res);

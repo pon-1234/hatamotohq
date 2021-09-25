@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User::SurveysController < User::ApplicationController
   # GET /user/surveys
   def index
@@ -11,4 +13,19 @@ class User::SurveysController < User::ApplicationController
   # GET /user/surveys/:id/new
   def new
   end
+
+  # POST /user/surveys
+  def create
+    render_success
+  end
+
+  private
+    def survey_params
+      params.permit(
+        :folder_id,
+        :name,
+        :title,
+        :description
+      )
+    end
 end
