@@ -32,30 +32,30 @@
       />
     </div>
 
-    <div class="message-item" v-for="(message, index) in messages" :key="index">
+    <div class="action-item" v-for="(action, index) in actions" :key="index">
       <div class="d-flex">
         <label style="flex: 1">アクション{{ index + 1 }}</label>
         <div
           tyle="float:right"
           class="d-inline-block"
-          v-if="messages.length > 1"
+          v-if="actions.length > 1"
         >
           <div
-            @click="moveUpMessage(index)"
+            @click="moveActionUp(index)"
             class="btn btn-sm btn-light"
             v-if="index > 0">
             <i class="fa fa-arrow-up"></i>
           </div>
           <div
             type="button"
-            @click="moveDownMessage(index)"
+            @click="moveActionDown(index)"
             class="btn btn-sm btn-light"
-            v-if="index < messages.length - 1">
+            v-if="index < actions.length - 1">
             <i class="fa fa-arrow-down"></i
           ></div>
           <div
-            @click="removeMessage(index)"
-            v-if="messages.length > 1"
+            @click="removeAction(index)"
+            v-if="actions.length > 1"
             class="btn btn-sm btn-light">
             <i class="mdi mdi-delete"></i>
           </div>
@@ -63,18 +63,18 @@
       </div>
       <action-postback
         :showTitle="false"
-        :value="message"
+        :value="action"
         :name="name + '_postback_' + index"
         :labelRequired="false"
         @input="changeAction(index, $event)"
       >
       </action-postback>
     </div>
-    <div class="text-center mt-4" v-if="messages.length < 3">
+    <div class="text-center mt-4" v-if="actions.length < 3">
       <div
         class="btn btn-warning"
         role="button"
-        @click="addMessage()"
+        @click="addAction()"
       >
         <i class="fa fa-plus"></i> アクションの追加
       </div>
@@ -134,7 +134,7 @@ export default {
       displayText: null,
       assignTagsData: { type: 'assign', tags: [] },
       unassignTagsData: { type: 'unassign', tags: [] },
-      messages: [
+      actions: [
         {
           type: 'no-action'
         }
@@ -153,7 +153,7 @@ export default {
       if (!this.value) return;
       const data = this.value.data;
       this.label = this.value.label || null;
-      this.messages = data.messages;
+      this.actions = data.actions;
       this.displayText = this.value.displayText || null;
       const tagActions = data.tag;
       if (tagActions) {
@@ -184,36 +184,36 @@ export default {
       this.updateData();
     },
 
-    changeAction(index, message) {
-      this.$set(this.messages, index, message);
+    changeAction(index, action) {
+      this.$set(this.actions, index, action);
       this.updateData();
     },
 
-    addMessage() {
-      this.messages.push({
+    addAction() {
+      this.actions.push({
         type: 'no-action'
       });
 
       this.updateData();
     },
 
-    removeMessage(index) {
-      this.messages.splice(index, 1);
+    removeAction(index) {
+      this.actions.splice(index, 1);
       this.updateData();
     },
 
-    moveUpMessage(index) {
+    moveActionUp(index) {
       if (index > 0) {
         const to = index - 1;
-        this.messages.splice(to, 0, this.messages.splice(index, 1)[0]);
+        this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
         this.updateData();
       }
     },
 
-    moveDownMessage(index) {
-      if (index < this.messages.length) {
+    moveActionDown(index) {
+      if (index < this.actions.length) {
         const to = index + 1;
-        this.messages.splice(to, 0, this.messages.splice(index, 1)[0]);
+        this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
         this.updateData();
       }
     },
@@ -234,7 +234,7 @@ export default {
         displayText: this.displayText,
         data: {
           displayText: this.displayText,
-          messages: this.messages,
+          actions: this.actions,
           tag: [this.assignTagsData, this.unassignTagsData]
         }
       });
@@ -295,7 +295,7 @@ export default {
   color: #1b1b1b;
 }
 
-.message-item {
+.action-item {
   border: 1px solid #cecece;
   padding: 10px 20px;
   border-radius: 5px;

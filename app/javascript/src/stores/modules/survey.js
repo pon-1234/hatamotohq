@@ -30,37 +30,6 @@ export const mutations = {
 export const getters = {};
 
 export const actions = {
-  createNew(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.createNew(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-  update(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.update(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
-  list(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.list(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
   /**
    * Survey is belong to a folder, get all folders of current account
    * @param {*} context store context
@@ -71,6 +40,14 @@ export const actions = {
     try {
       const folders = await SurveyAPI.list(query);
       context.commit('setFolders', folders);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getSurvey(_, id) {
+    try {
+      return await SurveyAPI.get(id);
     } catch (error) {
       return null;
     }

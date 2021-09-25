@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class User::SurveysController < User::ApplicationController
+  include User::SurveysHelper
   # GET /user/surveys
   def index
     @folders = Folder.accessible_by(current_ability).type_survey
@@ -16,7 +17,10 @@ class User::SurveysController < User::ApplicationController
 
   # POST /user/surveys
   def create
-    render_success
+    @survey = build_survey(survey_params)
+    unless @survey.save!
+      render_bad_request_with_message(@survey.first_error_message)
+    end
   end
 
   private
@@ -25,7 +29,16 @@ class User::SurveysController < User::ApplicationController
         :folder_id,
         :name,
         :title,
-        :description
+        :description,
+        :re_answer,
+        :status,
+        survey_questions_attributes: [
+          :id,
+          :required,
+          :type,
+          content: {}
+        ],
+        after_action: {}
       )
     end
 end

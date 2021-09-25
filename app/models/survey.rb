@@ -12,10 +12,9 @@
 #  liff_id         :string(255)
 #  title           :string(255)
 #  description     :text(65535)
-#  action          :text(4294967295)
+#  after_action    :json
 #  success_message :text(65535)
-#  status          :string(255)      default("enabled")
-#  is_publish      :boolean          default(FALSE)
+#  status          :string(255)      default("unpublished")
 #  re_answer       :boolean          default(FALSE)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -32,9 +31,32 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Survey < ApplicationRecord
+  belongs_to :line_account
   belongs_to :folder
+  has_many :survey_questions, dependent: :destroy
+  accepts_nested_attributes_for :survey_questions, allow_destroy: true
 
+  # Validation
   validates :name, presence: true, length: { maximum: 255 }
   validates :title, presence: true, length: { maximum: 255 }
   validates :description, presence: true
+
+  # Scope
+  enum status: { published: 'published', unpublished: 'unpublished', draft: 'draft' }
+
+  before_create do
+    self.code = generate_code
+  end
+  after_create_commit :exec_after_create_commit
+
+  private
+    def exec_after_create_commit
+    end
+
+    def generate_code
+      loop do
+        code = Devise.friendly_token(10)
+        break code unless Survey.where(code: code).first
+      end
+    end
 end

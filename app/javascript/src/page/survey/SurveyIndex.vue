@@ -20,6 +20,7 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
+                  <th>未公開／公開</th>
                   <th>フォーム名</th>
                   <th>回答状態</th>
                   <th>無効化</th>
@@ -28,27 +29,24 @@
               </thead>
               <tbody v-if="curFolder">
                 <tr v-for="(survey, index) in curFolder.surveys" v-bind:key="index">
-                  <td>{{survey.name}}</td>
                   <td>
-                    <div class="toggle-switch" style="margin: auto;" v-if="survey.is_publish">
-                      <input v-bind:id="survey.id" class="toggle-input" type="checkbox"
-                            v-model="survey.status" true-value="enable"
-                            false-value="disable"
-                            @change="updateStatus(survey)">
-                      <label v-bind:for="survey.id" class="toggle-label"/>
-                      <span></span>
+                    <div v-if="survey.status !== 'draft'">
+                      <input type="checkbox" :id="`switchStatus${index}`" checked data-switch="success"
+                        v-model="survey.status" true-value="published" false-value="unpublished"
+                        @change="updateStatus(survey)"/>
+                      <label :for="`switchStatus${index}`"></label>
                     </div>
-                    <span v-else>下書き</span>
+                    <span v-else class="text-danger">下書き</span>
                   </td>
-
+                  <td>{{survey.name}}</td>
                   <td class="row-btn" style="text-align: left; display: flex">
-                    <div class="btn-edit01" v-if="!survey.is_publish && permission == 1" v-tooltip="'編集'">
-                      <a class="btn-more btn-more-linebot btn-block" :href="`${route}/${survey.id}/edit`">
+                    <div class="btn-edit01" v-if="survey.status !== 'published'" v-tooltip="'編集'">
+                      <a class="btn-more btn-more-linebot btn-block" :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/edit`">
                         <i class="fas fa-edit"></i>
                       </a>
                     </div>
                     <div class="btn-edit01 btn-info-linebot" v-if="survey.is_publish" v-tooltip="'回答一覧'">
-                      <a class="btn-more btn-more-linebot btn-block" :href="`${route}/${survey.id}/info`">
+                      <a class="btn-more btn-more-linebot btn-block" :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/info`">
                         回答一覧
                       </a>
                     </div>
@@ -80,7 +78,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 export default {
-  props: ['data', 'route', 'permission', 'plan'],
+  props: ['permission'],
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,

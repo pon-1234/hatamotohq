@@ -1,0 +1,1 @@
+json.(question, :id, :content, :required)

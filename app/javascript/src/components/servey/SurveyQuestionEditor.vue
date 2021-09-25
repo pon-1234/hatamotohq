@@ -37,19 +37,14 @@
       </div>
       <div class="card-body">
         <div class="form-group d-flex mt-2 align-items-center">
-          <div class="fw-200" @click="object.is_editor = !object.is_editor">
-            <span v-if="object.content && object.content.text">
-              {{ object.content.text }}
-            </span>
-            <span v-else>
-              質問タイプ
-            </span>
+          <div class="fw-200" @click="object.editing = !object.editing">
+            質問タイプ
           </div>
           <select
             v-model="object.type"
             @change="
               object.content = null;
-              object.is_editor = true;
+              object.editing = true;
             "
             class="form-control flex-grow-1"
           >
@@ -63,12 +58,12 @@
             <option value="none">- NONE -</option>
           </select>
           <div class="custom-control custom-checkbox ml-2 text-nowrap">
-            <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="object.is_required">
+            <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="object.required">
             <label class="custom-control-label" for="customCheck1"> 必須</label>
           </div>
         </div>
 
-        <div v-show="object.is_editor" class="mt-2">
+        <div v-show="object.editing" class="mt-2">
           <survey-text-object
             :name="name + '-text-' + index"
             :content="object.content"
@@ -137,8 +132,8 @@ export default {
       maxObject: 50,
       objectLists: this.data || [
         {
-          is_editor: true,
-          is_required: false,
+          editing: true,
+          required: false,
           type: 'text',
           content: null
         }
@@ -169,7 +164,7 @@ export default {
             );
           });
           if (fieldText) {
-            object.is_editor = true;
+            object.editing = true;
           }
         });
       }
@@ -186,8 +181,8 @@ export default {
     },
     addNewObject() {
       this.objectLists.push({
-        is_editor: true,
-        is_required: false,
+        editing: true,
+        required: false,
         type: 'text',
         content: null
       });

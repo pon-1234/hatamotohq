@@ -77,11 +77,11 @@
         <div class="card-body">
           <message-action-type-default
             name="survey-action"
-            :value="surveyData.action"
+            :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
             :showLaunchMesasge="false"
-            @input="surveyData.action = $event"
+            @input="surveyData.after_action = $event"
           ></message-action-type-default>
         </div>
       </div>
@@ -103,21 +103,21 @@ import Util from '@/core/util';
 import { mapActions } from 'vuex';
 
 export default {
-  props: ['data', 'route', 'plan', 'liff_id'],
+  props: ['survey_id', 'plan', 'liff_id'],
   provide() {
     return { parentValidator: this.$validator };
   },
   data() {
     return {
-      isCreate: this.data == null,
-      surveyData: this.data || {
+      surveyData: {
+        id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
         name: null,
         liff_id: this.liff_id,
         title: null,
         description: null,
         questions: null,
-        action: null,
+        after_action: null,
         success_message: null,
         re_answer: true
       }
@@ -125,16 +125,23 @@ export default {
   },
   async beforeMount() {
     await this.getTags({ low: true });
+    // const response = await this.getSurvey(this.survey_id);
+    // this.parseSurvey(response);
   },
   methods: {
     ...mapActions('tag', [
       'getTags'
     ]),
     ...mapActions('survey', [
+      'getSurvey',
       'createSurvey',
       'updateSurvey',
       'delete'
     ]),
+
+    parseSurvey(survey) {
+      this.surveyData = _.cloneDeep(survey);
+    },
 
     async validateForm() {
       const result = await this.$validator.validateAll();
@@ -162,34 +169,17 @@ export default {
       }
     },
 
-    async submit(isPushlish = false) {
-      const passed = await this.validateForm();
-      // find indexFolder
-      console.log('-------submit-------', this.surveyData);
-      // if (passed) {
-      this.surveyData.is_publish = isPushlish;
-      if (isPushlish) {
-        this.surveyData.status = 'enabled';
+    async submit(published = false) {
+      const valid = await this.validateForm();
+      if (!valid) return;
+      const payload = _.pick(this.surveyData, ['id', 'folder_id', 'name', 'title', 'description', 're_answer', 'after_action']);
+      payload.status = published ? 'published' : 'unpublished';
+      payload.survey_questions_attributes = this.surveyData.questions;
+      if (this.survey_id) {
+        await this.createSurvey(payload);
+      } else {
+        await this.createSurvey(payload);
       }
-      await this.createSurvey(this.surveyData);
-      if (this.isCreate) {
-        //   this.createNew(this.surveyData).then(() => {
-        //     window.toastr.success('成功');
-        //     location.href = this.route + '?folder_id=' + folderIndex;
-        //   }).catch(() => {
-        //     window.toastr.error('失敗');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   });
-        // } else {
-        //   this.update(this.surveyData).then((res) => {
-        //     window.toastr.success('成功');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   }).catch(() => {
-        //     window.toastr.error('失敗');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   });
-      }
-      // }
     },
 
     previewSurvey() {

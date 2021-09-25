@@ -10,7 +10,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/surveys/' + id,
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
