@@ -2,6 +2,7 @@
   <div>
     <div>
       <div class="card">
+        <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
           <div class="row">
             <div class="col-xl-6">
@@ -27,12 +28,31 @@
             <div class="col-xl-6">
               <div class="form-group">
                 <label>説明<required-mark/></label>
-                <textarea rows="6" v-model.trim="surveyData.description" type="text" name="survey-description"
-                    class="form-control"
-                    placeholder="" v-validate="'required'"
-                    data-vv-as="説明">
+                <textarea
+                  rows="3"
+                  v-model.trim="surveyData.description"
+                  type="text"
+                  name="survey-description"
+                  class="form-control"
+                  placeholder=""
+                  v-validate="'required'"
+                  data-vv-as="説明">
                 </textarea>
                 <error-message :message="errors.first('survey-description')"></error-message>
+              </div>
+              <div class="form-group mt-2">
+                <label>回答後の文章<required-mark/></label>
+                <textarea
+                  rows="2"
+                  v-model.trim="surveyData.success_message"
+                  type="text"
+                  name="survey-success-message"
+                  class="form-control"
+                  placeholder=""
+                  v-validate="'required'"
+                  data-vv-as="回答後の文章">
+                </textarea>
+                <error-message :message="errors.first('survey-success-message')"></error-message>
               </div>
             </div>
           </div>
@@ -42,52 +62,34 @@
       <!-- <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
               placeholder="" v-validate="'required'"> -->
       <div class="card">
+        <div class="card-header left-border"><h3 class="card-title">質問一覧</h3></div>
         <div class="card-body">
-          <survey-editor
+          <survey-question-editor
             :data="surveyData.questions"
-            name="survey-editor"
+            name="survey-question-editor"
             @input="surveyData.questions = $event">
-          </survey-editor>
+          </survey-question-editor>
         </div>
       </div>
 
-      <div class="form-group mt-2">
-        <label>回答後の文章<required-mark/></label>
-        <textarea
-          v-model.trim="surveyData.success_message" type="text" name="survey-success-message"
-          class="form-control"
-          placeholder=""
-          v-validate="'required'"
-          data-vv-as="回答後の文章">
-        </textarea>
-        <error-message :message="errors.first('survey-success-message')"></error-message>
+      <div class="card">
+        <div class="card-header left-border"><h3 class="card-title">回答後のアクション</h3></div>
+        <div class="card-body">
+          <message-action-type-default
+            name="survey-action"
+            :value="surveyData.action"
+            :labelRequired="false"
+            :showTitle="false"
+            :showLaunchMesasge="false"
+            @input="surveyData.action = $event"
+          ></message-action-type-default>
+        </div>
       </div>
 
-      <div class="form-group mt-2">
-        <label>回答後のアクション</label>
-        <message-action-type-default
-          name="survey-action"
-          :value="surveyData.action"
-          :labelRequired="false"
-          :showTitle="false"
-          :showLaunchMesasge="false"
-          @input="surveyData.action = $event"
-        ></message-action-type-default>
-      </div>
-
-      <div class="flex">
-        <form target="_blank" :action="`${route}/preview`" method="POST">
-          <input type="hidden" name="data" :value="JSON.stringify(surveyData)">
-          <button class="btn btn-submit btn-block" type="submit"><i class="fa fa-eye"></i>&nbsp;&nbsp;プレビュー
-          </button>
-        </form>
-        <div style="width: 20px"></div>
-        <button class="btn btn-submit btn-block" type="button" @click="submit()"><i class="fa fa-save"></i>&nbsp;&nbsp;保存
-        </button>
-        <div style="width: 20px"></div>
-        <button class="btn btn-submit btn-confirm" type="button" @click="publish()"><i
-          class="fa fa-upload"></i>&nbsp;&nbsp;保存＆公開
-        </button>
+      <div class="d-flex">
+        <div class="btn btn-success mr-2" @click="publish()">保存＆公開</div>
+        <div class="btn btn-outline-success mw-120" @click="submit()">保存</div>
+        <div class="btn btn-secondary ml-auto" @click="previewSurvey()">プレビュー</div>
       </div>
     </div>
 
@@ -98,10 +100,8 @@
 
 <script>
 import { mapActions } from 'vuex';
-import Divider from '../../components/common/Divider.vue';
 
 export default {
-  components: { Divider },
   props: ['data', 'route', 'plan', 'liff_id'],
   provide() {
     return { parentValidator: this.$validator };
@@ -195,6 +195,10 @@ export default {
           });
         }
       }
+    },
+
+    previewSurvey() {
+      // TODO
     }
   }
 };
