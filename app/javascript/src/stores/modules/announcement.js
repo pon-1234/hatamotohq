@@ -20,5 +20,12 @@ export const actions = {
     }).fail((err) => {
       return Promise.reject(err);
     });
+  },
+  searchAnnouncement(_, query) {
+    return AnnouncementApi.search(query).done((res) => {
+      return Promise.resolve(res);
+    }).fail((err) => {
+      return Promise.reject(err);
+    });
   }
 };

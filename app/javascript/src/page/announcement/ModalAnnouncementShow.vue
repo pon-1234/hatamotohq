@@ -1,6 +1,6 @@
 <template>
-  <div class="modal fade" id="announcementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" ref="vuemodal">
-    <div class="modal-dialog modal-xl modal-xlg modal-dialog-centered" role="document">
+  <div class="modal fade" ref="vuemodal" id="announcementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
+    <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
       <div class="modal-content p-2">
         <div class="modal-header">
           <h3 class="card-title" :class="status == 'admin' ? 'card-title_admin' : 'card-title_user' ">announcement detail</h3>
@@ -26,7 +26,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment-timezone';
 export default {
   props: ['announcements', 'status'],
   data() {
@@ -37,17 +36,13 @@ export default {
   },
 
   mounted() {
-    $(this.$refs.vuemodal).on('show.bs.modal', this.shownModal);
+    // $(this.$refs.vuemodal).on('show.bs.modal', this.shownModal);
   },
 
   methods: {
-    shownModal() {
-      if ($('#inputValue').val()) {
-        const currAnnouncementId = $('#inputValue').val();
-        this.announcement = this.announcements.find(e => e.id === Number(currAnnouncementId));
-        this.announcement.announced_at = moment(this.announcement.announced_at).format('YYYY年MM月DD日');
-        console.log(this.announcement);
-      }
+    shownModal(id) {
+      this.announcement = this.announcements.find(e => e.id === Number(id));
+      // this.announcement.announced_at = moment(this.announcement.announced_at).format('YYYY年MM月DD日');
     },
     modifyUrl(url) {
       let endpoint = url;

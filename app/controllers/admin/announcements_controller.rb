@@ -9,7 +9,18 @@ class Admin::AnnouncementsController < Admin::ApplicationController
   def index
     @params = params[:q]
     @q = Announcement.ransack(@params)
+    @total_rows = @q.result.length
+    @current_page = params[:page]
     @announcements = @q.result.page(params[:page])
+  end
+
+  # GET /admin/announcements/search
+  def search
+    index
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: { announcements: @announcements, total_rows: @total_rows, current_page: @current_page } }
+    end
   end
 
   # GET /admin/announcements/new
@@ -34,10 +45,9 @@ class Admin::AnnouncementsController < Admin::ApplicationController
 
   # PATCH /admin/announcements/:id
   def update
-    binding.pry
-    # if !@announcement.update(announcement_params)
-    #   render_bad_request_with_message(@announcement.first_error_message)
-    # end
+    if !@announcement.update(announcement_params)
+      render_bad_request_with_message(@announcement.first_error_message)
+    end
   end
 
   # DELETE /admin/announcements/:id
@@ -62,7 +72,7 @@ class Admin::AnnouncementsController < Admin::ApplicationController
 
       return render json: {
         url: url_for(@blob),
-        name: file.original_filename,
+        name: file.original_filename
       }
     end
     render_bad_request_with_message('Error params')

@@ -79,36 +79,16 @@
   </div>
 
   <div class="col-lg-4">
-    <div class="card">
-      <div class="card-header text-md">
-        <b>最新情報</b>
-      </div>
-      <div class="card-body">
-            <% @announcements.each do |announcement| %>
-              <a class="home_announcement_btn" role="button" data-toggle="modal" data-target="#announcementDetail" onclick="confirmScope(<%= announcement.id %>)">
-                <span> <%= announcement.announced_at.strftime('%m月%d日') %></span>
-                <span> <%= announcement.title %> </span>
-              </a>
-            <% end %>
-        <%#=
-          <div>内容</div> 
-        %>
-        <%# Pagination %>
-        <div class="d-flex justify-content-center mt-4">
-          <% if @announcements.size == 0 %>
-            <b>データはありません。</b>
-          <% end %>
-          <%= paginate @announcements %>
-        </div>
-      </div>
+    <announcement-home-index 
+      :announcements="<%=@announcements.to_json%>" 
+    ></announcement-home-index>
+    <!-- <div>内容</div> -->
+    <%# Pagination %>
+    <div class="d-flex justify-content-center mt-4">
+      <% if @announcements.size == 0 %>
+        <b>データはありません。</b>
+      <% end %>
+      <%= paginate @announcements %>
     </div>
   </div>
 </div>
-
-<modal-announcement-show :announcements="<%= @announcements.to_json %>"></modal-announcement-show>
-<input type="hidden" id="inputValue">
-<script>
-  function confirmScope(id) {
-    $('#inputValue').val(id);
-  }
-</script>

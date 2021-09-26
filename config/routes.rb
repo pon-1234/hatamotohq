@@ -95,6 +95,7 @@ Rails.application.routes.draw do
         get :sso, on: :member
       end
       resources :announcements do
+        get :search, on: :collection
         get :delete_confirm, on: :member
         post :upload_image,  on: :collection
       end
