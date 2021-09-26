@@ -2,7 +2,7 @@
 
 class User::TemplatesController < User::ApplicationController
   before_action :find_template, only: [:show, :update, :destroy, :copy]
-
+  include User::TemplatesHelper
   # GET /user/templates
   def index
     @folders = Folder.accessible_by(current_ability).type_template_message
@@ -28,7 +28,7 @@ class User::TemplatesController < User::ApplicationController
 
   # POST /user/templates
   def create
-    @template = Template.new(template_params)
+    @template = buld_template(template_params)
     unless @template.save
       render_bad_request_with_message(@template.first_error_message)
     end

@@ -25,6 +25,7 @@
 #
 class Template < ApplicationRecord
   # Association
+  belongs_to :line_account
   belongs_to :folder
   has_many :template_messages, inverse_of: :template, dependent: :destroy
 

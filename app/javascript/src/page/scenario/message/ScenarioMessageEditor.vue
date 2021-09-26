@@ -1,12 +1,6 @@
 <template>
   <div class="mxw-1200">
     <div class="card" :key="componentKey">
-      <div class="card-header d-flex align-items-center">
-        <a :href="`${userRootUrl}/user/scenarios/${scenario_id}/messages`" class="text-info" v-if="!loading">
-          <i class="fa fa-arrow-left"></i> メッセージ一覧
-        </a>
-        <h5 class="m-auto font-weight-bold">新規登録</h5>
-      </div>
       <div class="card-body">
         <scenario-message-time-define
           v-if="!loading"

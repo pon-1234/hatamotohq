@@ -27,8 +27,7 @@
             </button>
           </div>
           <div class="my-2">
-            <button type="button" class="btn-block btn btn-secondary"
-                    @click="showEditor()">
+            <button type="button" class="btn-block btn btn-secondary" @click="isShowingEditor = true">
               一式の個別画像を編集
             </button>
           </div>
@@ -78,10 +77,10 @@
     </div>
 
     <modal-rich-menu-image-editor
-      v-if="isShowEditor"
+      v-if="isShowingEditor"
       :templateId="templateId"
-      @close="isShowEditor = false"
       @input="exportImage"
+      @close="isShowingEditor = false"
     ></modal-rich-menu-image-editor>
   </div>
 </template>
@@ -108,7 +107,7 @@ export default {
   },
   data() {
     return {
-      isShowEditor: false,
+      isShowingEditor: false,
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       actionObjects: this.areas
     };
@@ -191,10 +190,8 @@ export default {
     changeObjectAction(key, value) {
       this.actionObjects[key] = value;
     },
-    showEditor() {
-      this.isShowEditor = true;
-    },
     exportImage(data) {
+      this.isShowingEditor = false;
       // remove header
       data = data.replace('data:image/jpeg;base64,', '');
       // upload image

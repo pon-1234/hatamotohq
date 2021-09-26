@@ -37,7 +37,7 @@
                       <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                       <div class="dropdown-menu">
                         <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集する</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyTemplate" @click="curTemplateIndex = index">テンプレートをコビー</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyTemplate" @click="curTemplateIndex = index">テンプレートをコピー</a>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="curTemplateIndex = index">テンプレートを削除</a>
                       </div>
                     </div>
@@ -75,7 +75,7 @@
     <!-- END: Delete template modal -->
 
     <!-- START: Copy template modal -->
-    <modal-confirm title="このテンプレートをコビーしてもよろしいですか？" id='modalCopyTemplate' type='confirm' @confirm="submitCopyTemplate">
+    <modal-confirm title="このテンプレートをコピーしてもよろしいですか？" id='modalCopyTemplate' type='confirm' @confirm="submitCopyTemplate">
       <template v-slot:content>
         <div v-if="curTemplate">
           テンプレート名：<b>{{curTemplate.name}}</b>
@@ -173,9 +173,9 @@ export default {
     async submitCopyTemplate() {
       const response = await this.copyTemplate(this.curTemplate.id);
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートのコビーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('テンプレートのコビーは失敗しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', window.location.href);
       }
       this.forceRerender();
     },
@@ -184,8 +184,8 @@ export default {
       this.isPc = false;
     },
 
-    openEdit(autoResponse) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${autoResponse.id}/edit`);
+    openEdit(template) {
+      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
     },
 
     formattedDate(date) {

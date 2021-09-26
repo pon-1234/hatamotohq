@@ -28,7 +28,7 @@
           背景画像をアップロード
         </button>
         <button type="button" class="btn-block btn btn-secondary mt-2"
-                @click="isShowEditor = true">
+                @click="isShowingEditor = true">
           一式の個別画像を編集
         </button>
       </div>
@@ -82,13 +82,13 @@
       :id="index+'_imagemapModalUploadImage'">
     </modal-select-media>
 
-    <rich-menu-image-editor
-      v-if="isShowEditor"
+    <modal-rich-menu-image-editor
+      v-if="isShowingEditor"
       :templateId="templateId"
       editor="imagemap"
-      @close="isShowEditor = false"
+      @close="isShowingEditor = false"
       @input="exportImage"
-    ></rich-menu-image-editor>
+    ></modal-rich-menu-image-editor>
   </div>
 </template>
 
@@ -102,7 +102,7 @@ export default {
   props: ['index', 'data'],
   data() {
     return {
-      isShowEditor: false,
+      isShowingEditor: false,
       templateId: this.data.templateId,
       templateValue: this.data.templateValue,
       altText: this.data.altText,

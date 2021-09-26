@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_091854) do
+ActiveRecord::Schema.define(version: 2021_09_25_121428) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -412,10 +412,10 @@ ActiveRecord::Schema.define(version: 2021_09_24_091854) do
   create_table 'survey_questions', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'survey_id'
     t.string 'name'
-    t.integer 'index', default: 0
-    t.boolean 'is_required', default: false
+    t.integer 'order', default: 0
+    t.boolean 'required', default: false
     t.string 'type'
-    t.text 'content', size: :long
+    t.json 'content'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['survey_id'], name: 'index_survey_questions_on_survey_id'
@@ -429,10 +429,9 @@ ActiveRecord::Schema.define(version: 2021_09_24_091854) do
     t.string 'liff_id'
     t.string 'title'
     t.text 'description'
-    t.text 'action', size: :long
+    t.json 'after_action'
     t.text 'success_message'
     t.string 'status', default: 'enabled'
-    t.boolean 'is_publish', default: false
     t.boolean 're_answer', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false

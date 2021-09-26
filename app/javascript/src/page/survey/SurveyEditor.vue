@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div :key="contentKey">
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
@@ -9,13 +9,13 @@
               <div class="form-group">
                 <label class="fw-300">フォーム名(管理用)<required-mark/></label>
                 <div class="flex-grow-1">
-                  <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required'" data-vv-as="フォーム名(管理用)">
+                  <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required|max:255'" data-vv-as="フォーム名(管理用)">
                   <error-message :message="errors.first('survey-name')"></error-message>
                 </div>
               </div>
               <div class="form-group">
                 <label>タイトル<required-mark/></label>
-                <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control" placeholder="" v-validate="'required'" data-vv-as="タイトル">
+                <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control" placeholder="" v-validate="'required|max:255'" data-vv-as="タイトル">
                 <error-message :message="errors.first('survey-title')"></error-message>
               </div>
 
@@ -41,7 +41,7 @@
                 <error-message :message="errors.first('survey-description')"></error-message>
               </div>
               <div class="form-group mt-2">
-                <label>回答後の文章<required-mark/></label>
+                <label>回答後の文章</label>
                 <textarea
                   rows="2"
                   v-model.trim="surveyData.success_message"
@@ -49,14 +49,13 @@
                   name="survey-success-message"
                   class="form-control"
                   placeholder=""
-                  v-validate="'required'"
                   data-vv-as="回答後の文章">
                 </textarea>
-                <error-message :message="errors.first('survey-success-message')"></error-message>
               </div>
             </div>
           </div>
         </div>
+        <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
 
       <!-- <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
@@ -70,6 +69,7 @@
             @input="surveyData.questions = $event">
           </survey-question-editor>
         </div>
+        <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
 
       <div class="card">
@@ -77,18 +77,19 @@
         <div class="card-body">
           <message-action-type-default
             name="survey-action"
-            :value="surveyData.action"
+            :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
             :showLaunchMesasge="false"
-            @input="surveyData.action = $event"
+            @input="surveyData.after_action = $event"
           ></message-action-type-default>
         </div>
+        <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
 
       <div class="d-flex">
-        <div class="btn btn-success mr-2" @click="publish()">保存＆公開</div>
-        <div class="btn btn-outline-success mw-120" @click="submit()">保存</div>
+        <div class="btn btn-success mr-2" @click="submit()">保存＆公開</div>
+        <div class="btn btn-outline-success mw-120" @click="submit(false)">下書き保存</div>
         <div class="btn btn-secondary ml-auto" @click="previewSurvey()">プレビュー</div>
       </div>
     </div>
@@ -103,21 +104,24 @@ import Util from '@/core/util';
 import { mapActions } from 'vuex';
 
 export default {
-  props: ['data', 'route', 'plan', 'liff_id'],
+  props: ['survey_id', 'plan', 'liff_id'],
   provide() {
     return { parentValidator: this.$validator };
   },
   data() {
     return {
-      isCreate: this.data == null,
-      surveyData: this.data || {
+      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      contentKey: 0,
+      loading: true,
+      surveyData: {
+        id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
         name: null,
         liff_id: this.liff_id,
         title: null,
         description: null,
         questions: null,
-        action: null,
+        after_action: null,
         success_message: null,
         re_answer: true
       }
@@ -125,16 +129,31 @@ export default {
   },
   async beforeMount() {
     await this.getTags({ low: true });
+    if (this.survey_id) {
+      const response = await this.getSurvey(this.survey_id);
+      this.parseSurvey(response);
+      this.forceRerender();
+    }
+    this.loading = false;
   },
   methods: {
     ...mapActions('tag', [
       'getTags'
     ]),
     ...mapActions('survey', [
+      'getSurvey',
       'createSurvey',
       'updateSurvey',
       'delete'
     ]),
+
+    forceRerender() {
+      this.contentKey++;
+    },
+
+    parseSurvey(survey) {
+      this.surveyData = _.cloneDeep(survey);
+    },
 
     async validateForm() {
       const result = await this.$validator.validateAll();
@@ -155,41 +174,25 @@ export default {
       return true;
     },
 
-    async publish() {
-      const passed = await this.validateForm();
-      if (passed) {
-        $('#modal-publish').modal('show');
+    async submit(published = true) {
+      if (published) {
+        const valid = await this.validateForm();
+        if (!valid) return;
       }
-    },
-
-    async submit(isPushlish = false) {
-      const passed = await this.validateForm();
-      // find indexFolder
-      console.log('-------submit-------', this.surveyData);
-      // if (passed) {
-      this.surveyData.is_publish = isPushlish;
-      if (isPushlish) {
-        this.surveyData.status = 'enabled';
+      const payload = _.pick(this.surveyData, ['id', 'folder_id', 'name', 'title', 'description', 'success_message', 're_answer', 'after_action']);
+      payload.status = published ? 'published' : 'draft';
+      payload.survey_questions_attributes = this.surveyData.questions;
+      let response = null;
+      if (this.survey_id) {
+        response = await this.updateSurvey(payload);
+      } else {
+        response = await this.createSurvey(payload);
       }
-      await this.createSurvey(this.surveyData);
-      if (this.isCreate) {
-        //   this.createNew(this.surveyData).then(() => {
-        //     window.toastr.success('成功');
-        //     location.href = this.route + '?folder_id=' + folderIndex;
-        //   }).catch(() => {
-        //     window.toastr.error('失敗');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   });
-        // } else {
-        //   this.update(this.surveyData).then((res) => {
-        //     window.toastr.success('成功');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   }).catch(() => {
-        //     window.toastr.error('失敗');
-        //     location.href = this.route + '?folder_index=' + folderIndex;
-        //   });
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォームの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/surveys`);
+      } else {
+        window.toastr.error('回答フォームの保存は失敗しました。');
       }
-      // }
     },
 
     previewSurvey() {
