@@ -1,14 +1,39 @@
 <template>
-  <div class="conversations">
-    <talk-channel-action/>
-    <div class="list-view" ref="channelListView" @scroll="loadMoreChannel()">
-      <talk-channel-item
+  <div class="card">
+    <div class="card-body">
+      <!-- start search box -->
+      <div class="app-search">
+        <form>
+          <div class="form-group position-relative">
+            <input type="text" class="form-control" placeholder="People, groups & messages..." />
+            <span class="mdi mdi-magnify search-icon"></span>
+          </div>
+        </form>
+      </div>
+      <!-- users -->
+      <div class="row">
+        <div class="col">
+          <div data-simplebar style="max-height: 550px">
+            <channel-list-item
+              v-for="(channel, index) in showChannels" :key="index"
+              :data="channel"
+              :active="activeChannel && channel.id === activeChannel.id"
+              @click.native="switchChannel(channel, index)">
+            </channel-list-item>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end search box -->
+    <!-- <talk-channel-action/> -->
+    <!-- <div class="list-view" ref="channelListView" @scroll="loadMoreChannel()">
+      <channel-list-item
         v-for="(channel, index) in showChannels" :key="index"
         :data="channel"
         :active="activeChannel && channel.id === activeChannel.id"
         @click.native="switchChannel(channel, index)"
         />
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

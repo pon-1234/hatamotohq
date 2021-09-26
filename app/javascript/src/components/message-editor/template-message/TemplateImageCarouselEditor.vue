@@ -61,7 +61,7 @@
             <div class="col-sm-4">
               <div class="group-button-thumb form-group">
                 <label>画像<required-mark></required-mark></label>
-                <div class="btn btn-info btn-block uploadfile-thumb" data-toggle="modal" :data-target="'#imageModalCenter'+ indexParent">
+                <div class="btn btn-info btn-block uploadfile-thumb" data-toggle="modal" :data-target="'#modalSelectMedia'+ indexParent">
                   <i class="glyphicon glyphicon-picture"></i>
                   画像選択
                   <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <modal-select-media @input="uploadThumb" :data="{type: 'image'}" :id="'imageModalCenter'+indexParent"/>
+    <modal-select-media @input="uploadThumb" :data="{type: 'image'}" :id="'modalSelectMedia'+indexParent"/>
   </div>
 </template>
 <script>

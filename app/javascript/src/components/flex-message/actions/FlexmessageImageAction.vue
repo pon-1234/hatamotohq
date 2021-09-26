@@ -9,7 +9,7 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label">画像</label>
           <div class="col-sm-8">
-            <button type="button" class="btn btn-submit btn-block" data-toggle="modal" :data-target="'#imageModalCenter-'+name">画像を選択する</button>
+            <button type="button" class="btn btn-submit btn-block" data-toggle="modal" :data-target="'#modalSelectMedia-'+name">画像を選択する</button>
           </div>
         </div>
         <div class="form-group row">
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <modal-select-media @input="uploadImage" :data="{type: 'image'}" :id="'imageModalCenter-'+name" />
+    <modal-select-media @input="uploadImage" :data="{type: 'image'}" :id="'modalSelectMedia-'+name" />
   </div>
   </div>
 </template>

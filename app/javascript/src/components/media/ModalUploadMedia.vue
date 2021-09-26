@@ -1,14 +1,14 @@
 <template>
   <div
     class="modal fade"
-    id="imageModalCenter"
+    id="modalSelectMedia"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
     ref="mediaModal"
   >
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-full-width" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">
