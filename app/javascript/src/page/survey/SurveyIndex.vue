@@ -20,10 +20,9 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>未公開／公開</th>
+                  <th>公開化</th>
                   <th>フォーム名</th>
                   <th>回答状態</th>
-                  <th>無効化</th>
                   <th></th>
                 </tr>
               </thead>

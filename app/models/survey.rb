@@ -31,6 +31,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Survey < ApplicationRecord
+  default_scope { order(created_at: :desc) }
   belongs_to :line_account
   belongs_to :folder
   has_many :survey_questions, dependent: :destroy

@@ -28,7 +28,15 @@ class User::SurveysController < User::ApplicationController
   # POST /user/surveys
   def create
     @survey = build_survey(survey_params)
-    unless @survey.save!
+    unless @survey.save(validate: !@survey.draft?)
+      render_bad_request_with_message(@survey.first_error_message)
+    end
+  end
+
+  # PATCH /user/surveys/:id
+  def update
+    @survey.assign_attributes(survey_params)
+    unless @survey.save(validate: !@survey.draft?)
       render_bad_request_with_message(@survey.first_error_message)
     end
   end
@@ -36,10 +44,12 @@ class User::SurveysController < User::ApplicationController
   private
     def survey_params
       params.permit(
+        :id,
         :folder_id,
         :name,
         :title,
         :description,
+        :success_message,
         :re_answer,
         :status,
         survey_questions_attributes: [

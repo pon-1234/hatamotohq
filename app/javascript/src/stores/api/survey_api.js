@@ -26,11 +26,11 @@ export default {
     });
   },
 
-  update(query) {
+  update(payload) {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/edit'),
-      method: 'PUT',
-      data: JSON.stringify(query),
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${payload.id}`,
+      method: 'PATCH',
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },

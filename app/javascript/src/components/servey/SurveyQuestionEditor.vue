@@ -58,12 +58,12 @@
             <option value="none">- NONE -</option>
           </select>
           <div class="custom-control custom-checkbox ml-2 text-nowrap">
-            <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="object.required">
-            <label class="custom-control-label" for="customCheck1"> 必須</label>
+            <input type="checkbox" class="custom-control-input" :id="`questionRequiredCheck${index}`" v-model="object.required">
+            <label class="custom-control-label" :for="`questionRequiredCheck${index}`"> 必須</label>
           </div>
         </div>
 
-        <div v-show="object.editing" class="mt-2">
+        <div class="mt-2">
           <survey-text-object
             :name="name + '-text-' + index"
             :content="object.content"
