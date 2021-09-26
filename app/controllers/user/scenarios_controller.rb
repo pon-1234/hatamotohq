@@ -8,9 +8,15 @@ class User::ScenariosController < User::ApplicationController
 
   # GET /user/scenarios
   def index
-    @params = params[:q]
-    @q = Scenario.accessible_by(current_ability).ransack(params[:q])
-    @scenarios = @q.result.page(params[:page])
+    if request.format.json?
+      @params = params[:q]
+      @q = Scenario.accessible_by(current_ability).ransack(params[:q])
+      @scenarios = @q.result.page(params[:page])
+    end
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/scenarios/search
@@ -52,11 +58,8 @@ class User::ScenariosController < User::ApplicationController
 
   # DELETE /user/scenarios/:id
   def destroy
-    if @scenario.destroy
-      redirect_to user_scenarios_path, flash: { success: 'シナリオの削除は成功しました。' }
-    else
-      redirect_to user_scenarios_path, flash: { error: 'シナリオの削除は失敗しました。' }
-    end
+    @scenario.destroy!
+    render_success
   end
 
   def delete_confirm
@@ -70,19 +73,13 @@ class User::ScenariosController < User::ApplicationController
     new_scenario = @scenario.clone
     if new_scenario.present?
       @scenario.scenario_messages&.each { |message| message.clone_to(new_scenario.id) }
-      redirect_to user_scenarios_path, flash: { success: 'シナリオのコピーは完了しました。' }
+      render_success
     else
-      redirect_to user_scenarios_path, flash: { error: 'シナリオのコピーは失敗しました。' }
+      render_bad_request
     end
   rescue => e
     logger.error e.message
-    redirect_to user_scenarios_path, flash: { error: 'シナリオのコピーは失敗しました。' }
-  end
-
-  def copy_confirm
-    respond_to do |format|
-      format.js
-    end
+    render_bad_request
   end
 
   # GET /user/scenarios/manual

@@ -11,67 +11,8 @@
     </div>
   </div>
 </div>
+<scenario-index></scenario-index>
 
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row mb-2">
-          <div class="col-sm-4">
-            <%= link_to new_user_scenario_path do %>
-              <button type="button" class="btn btn-success mr-2"><i class="fa fa-plus"></i> 新規作成</button>
-            <% end %>
-          </div>
-        </div>
-        <table class="table table-centered mb-0">
-          <thead class="thead-light">
-            <tr>
-              <th>配信方式</th>
-              <th>シナリオ名</th>
-              <th>状況</th>
-              <th>メッセージ</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <%# Data %>
-          <tbody>
-            <% @scenarios.each do |scenario| %>
-              <tr>
-                <td><%= scenario.mode_i18n %></td>
-                <td><%= scenario.title %></td>
-                <td><%= render_scenario_status(scenario.status) %></td>
-                <td>
-                  <%= link_to user_scenario_messages_path(scenario), class: "btn btn-light btn-sm mr-1" do %>
-                    メッセージ一覧 <b>（<%= scenario.scenario_messages_count || 0 %>）</b>
-                  <% end %>
-                </td>
-                <td class="table-action">
-                  <%= link_to edit_user_scenario_path(scenario), class:"action-icon" do %>
-                    <i class="mdi mdi-square-edit-outline"></i>
-                  <% end %>
-                  <%= link_to copy_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
-                    <i class="mdi mdi-content-copy"></i>
-                  <% end %>
-                  <%= link_to delete_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
-                    <i class="mdi mdi-delete"></i>
-                  <% end %>
-                  
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <%# Pagination %>
-        <div class="d-flex justify-content-center mt-4">
-          <% if @scenarios.size == 0 %>
-            <b>データはありません。</b>
-          <% end %>
-          <%= paginate @scenarios %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div id='confirmDelContent'></div>
 <div id='confirmCopyContent'></div>

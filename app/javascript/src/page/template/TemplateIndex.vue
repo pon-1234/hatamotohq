@@ -184,8 +184,8 @@ export default {
       this.isPc = false;
     },
 
-    openEdit(autoResponse) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${autoResponse.id}/edit`);
+    openEdit(template) {
+      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
     },
 
     formattedDate(date) {
