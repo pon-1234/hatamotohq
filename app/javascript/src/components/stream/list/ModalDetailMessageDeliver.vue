@@ -60,10 +60,6 @@ export default {
   max-width: 700px!important;
 }
 
-.modal-title {
-  font-weight: bold;
-}
-
 ::v-deep {
   .chat-item-text {
     text-align: left!important;

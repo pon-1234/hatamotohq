@@ -294,7 +294,7 @@ export const ActionMessage = {
   default: {
     type: 'postback',
     data: {
-      messages: [
+      actions: [
         { type: 'no-action' }
       ],
       tags: { type: 'tag', content: { tag_ids: [] } }

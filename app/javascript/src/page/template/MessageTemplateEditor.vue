@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="btn btn-outline-success" v-if="templateData.messages.length < 3" @click="addMessageBlock()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
+        <div class="btn btn-primary" v-if="templateData.messages.length < 3" @click="addMessageBlock()"><i class="fa fa-plus"></i><span > メッセージ追加</span></div>
       </div>
       <div class="card-footer d-flex">
         <button

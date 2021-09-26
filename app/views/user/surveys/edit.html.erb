@@ -5,12 +5,13 @@
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">メッセージ</li>
           <li class="breadcrumb-item active"><%= link_to "回答フォーム一覧", user_surveys_path %></li>
-          <li class="breadcrumb-item active">新規回答フォームの登録</li>
+          <li class="breadcrumb-item active"><%= @survey_id %></li>
+          <li class="breadcrumb-item active">回答フォームの編集</li>
         </ol>
       </div>
-      <h4 class="page-title">新規回答フォームの登録</h4>
+      <h4 class="page-title">回答フォームの編集</h4>
     </div>
   </div>
 </div>
 
-<survey-editor></survey-editor>
+<survey-editor :survey_id="<%= @survey_id %>"></survey-editor>

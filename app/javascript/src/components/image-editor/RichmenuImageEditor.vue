@@ -505,11 +505,11 @@
       <div class="editor-divider"></div>
       <div class="d-flex flex-column editor-container w-100">
         <div class="d-flex mb-2">
-          <button class="btn btn-outline-success btn-xs ml-auto mr-1" @click="imageGeneration()"><i
+          <button class="btn btn-info btn-xs ml-auto mr-1" @click="imageGeneration()"><i
             class="fa fa-download"></i>
             ダウンロード
           </button>
-          <button class="btn btn-xs btn-success" @click="imageGeneration(false)"><i class="fa fa-save"></i> 保存</button>
+          <button class="btn btn-xs btn-info" @click="imageGeneration(false)"><i class="fa fa-save"></i> 保存</button>
         </div>
         <image-editor :data="objectLists[selectIndex]" :preview="'#preview_'+objectLists[selectIndex].name"
                       :width="width" :height="height"

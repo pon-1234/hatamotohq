@@ -51,12 +51,12 @@ export default {
   },
 
   async beforeMount() {
-    const response = await this.getScenarios();
+    const response = await this.getManualScenarios();
     this.scenarios = response;
   },
 
   methods: {
-    ...mapActions('scenario', ['getScenarios']),
+    ...mapActions('scenario', ['getManualScenarios']),
     selectScenario(scenario) {
       this.$emit('selectScenario', scenario);
     }

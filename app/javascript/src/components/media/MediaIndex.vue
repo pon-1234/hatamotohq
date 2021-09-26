@@ -49,7 +49,7 @@
         </a>
       </div>
       <div class="ml-auto">
-        <media-filter @filterChanged="getMedias"></media-filter>
+        <media-filter @filterChanged="getMedias" v-if="filterable"></media-filter>
       </div>
     </div>
     <div class="card-body d-flex flex-column" :key="contentKey">

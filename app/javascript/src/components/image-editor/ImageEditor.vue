@@ -16,7 +16,7 @@
     </div>
 
     <div style="position: relative; text-align: center; height: 40px; display: flex;">
-      <label class="btn-img-upload">
+      <label class="btn-img-upload text-info" role="button">
         <input @change="changeImage($event)" type="file" name="image"
                style="position: absolute; z-index: 1; top: 0; opacity: 0; width: 100%">
         <i class="fa fa-image"></i> アップロード
@@ -381,7 +381,6 @@ export default {
       font-weight: normal;
       position: relative;
       margin: auto;
-      color: #00B900
     }
   }
 </style>

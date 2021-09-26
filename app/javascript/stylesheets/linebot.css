@@ -143,62 +143,6 @@
 .dropdown-common01 li a:after {
     display: none;
 }
-.modal-open>header{
-    padding-right: 15px;
-}
-.modal-open .modal {
-    -ms-filter: none;
-    filter: blur(0px);
-}
-.modal-backdrop {
-    background: #fff;
-}
-.modal-backdrop.in {
-    opacity: .6;
-    z-index: 10;
-}
-.modal-common01.in .modal-dialog {
-    -webkit-transform: translateY(-54%);
-    transform: translateY(-54%);
-}
-.modal-common01 .modal-content {
-    box-shadow: 0px 5px 15px rgba(0,0,0,.3);
-    border: none;
-    padding: 15px;
-}
-.modal-common01 .modal-body {
-    padding: 15px 15px;
-}
-.modal-common01 button.close {
-    color: #aaa;
-    opacity: 1;
-    font-size: 30px;
-     margin-top: -5px;
-}
-.modal-common01 .icn {
-    width: 150px;
-    height: 150px;
-    margin-right: auto;
-    margin-left: auto;
-    border-radius: 50%;
-    background: #f5f5f5;
-}
-.modal-common01 table {
-    max-width: 400px;
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-}
-.modal-common01 th {
-    padding: 0px 0;
-}
-.modal-common01 td {
-    width: calc(100% - 120px);
-    padding: 10px 0;
-}
-.modal-common01 .modal-footer {
-    padding: 15px;
-}
 .list-checkbox-tag.edit {
     padding-top: 15px;
     border-top: 1px solid #e5e5e5;
@@ -365,31 +309,6 @@
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background: #eee!important;
 }
-@media(max-width: 991px) {
-
-    .modal-common01 .modal-footer .btn,
-    .row-form-btn .btn {
-        margin: 5px!important;
-    }
-    .modal-open .box-account {
-        -ms-filter: blur(4px);
-        filter: blur(4px);
-    }
-    .modal-common01 .tbl-linebot01 {
-        font-size: 87.5%;
-    }
-    .modal-common01 th {
-        padding: 5px 0;
-    }
-    .modal-common01 td {
-        width: 65%;
-        padding: 5px 0;
-    }
-    .modal-common01 .modal-footer {
-        padding: 10px;
-    }
-}
-
 
 /* header */
 .nav-linebot .nav-bottom .nav-bottom-left > ul > li > a, .nav-linebot .nav-bottom .nav-bottom-right > ul > li > a {
@@ -1220,16 +1139,7 @@
         width: 100%;
     }
 }
-.modal-dialog {
-    position: relative;
-    width: auto;
-    margin: auto;
-    max-width: 600px;
-}
 @media(max-width: 991px) {
-    .modal-dialog {
-        margin: 15px !important;
-    }
     .group-linebot01 dt {
         width: 100%;
         margin-bottom: 5px;
@@ -1254,16 +1164,6 @@
         width: 100%;
         font-size: 87.5%;
     }
-}
-
-.modal-title{
-    display: inline-block;
-}
-
-.modal-header .close {
-    margin-top: -2px;
-    vertical-align: middle;
-    line-height: normal;
 }
 
 .cursor-pointer{

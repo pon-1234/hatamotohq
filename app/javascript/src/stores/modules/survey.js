@@ -30,47 +30,30 @@ export const mutations = {
 export const getters = {};
 
 export const actions = {
-  createNew(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.createNew(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-  update(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.update(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
-
-  list(_, query) {
-    _.dispatch('system/setLoading', true, { root: true });
-    return SurveyAPI.list(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
   /**
    * Survey is belong to a folder, get all folders of current account
-   * @param {*} context store context
-   * @param {*} query query params
+   * @param {Context} context store context
+   * @param {Object} payload payload
    * @returns surveys in folders
    */
   async getSurveys(context, query) {
     try {
       const folders = await SurveyAPI.list(query);
       context.commit('setFolders', folders);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
+   * Get survey detail
+   * @param {Context} context store context
+   * @param {Object} payload payload
+   * @returns survey
+   */
+  async getSurvey(_, id) {
+    try {
+      return await SurveyAPI.get(id);
     } catch (error) {
       return null;
     }
@@ -85,6 +68,20 @@ export const actions = {
   async createSurvey(context, payload) {
     try {
       return await SurveyAPI.create(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
+   * Update the survey
+   * @param {Context} context store context
+   * @param {Object} payload payload
+   * @returns survey or null
+   */
+  async updateSurvey(context, payload) {
+    try {
+      return await SurveyAPI.update(payload);
     } catch (error) {
       return null;
     }

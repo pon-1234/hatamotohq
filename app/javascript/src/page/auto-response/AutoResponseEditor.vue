@@ -67,7 +67,7 @@
               @moveBottomMessage="moveBottomMessage"
             />
             <div>
-              <div class="btn btn-outline-success" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
+              <div class="btn btn-primary" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
                 <i class="fa fa-plus"></i><span> メッセージ追加</span>
               </div>
             </div>

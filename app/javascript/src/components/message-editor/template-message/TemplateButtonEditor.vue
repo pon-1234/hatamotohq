@@ -42,9 +42,9 @@
           </ul>
         </div>
         <div class="col-sm-9">
-          <div class="card card-outline card-success">
+          <div class="card">
             <div class="card-header">
-              <h3 class="card-title">選択肢{{ selected + 1 }}</h3>
+              <b>選択肢{{ selected + 1 }}</b>
             </div>
             <div class="card-body">
               <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">

@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <label class="mt-4">本文<required-mark/></label>
+  <div>
+    <label>本文<required-mark/></label>
     <textarea
       :name="name+'_postback_text'"
       placeholder="本文を入力してください"
@@ -13,7 +13,7 @@
       data-vv-as="本文"
     />
     <error-message :message="errors.first(name+'_postback_text')"></error-message>
-  </section>
+  </div>
 </template>
 <script>
 export default {

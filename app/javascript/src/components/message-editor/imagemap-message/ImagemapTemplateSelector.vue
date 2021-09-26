@@ -95,7 +95,7 @@
           </div>
           <div class="d-flex-sm flex-shrink-0 modal-footer flex-row-reverse "
               style="text-align: center;     justify-content: center;">
-            <button type="button" class="btn btn-submit" @click="acceptAction" data-dismiss="modal">選択
+            <button type="button" class="btn btn-info" @click="acceptAction" data-dismiss="modal">選択
             </button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
           </div>
@@ -163,7 +163,7 @@ export default {
   }
 
   .active {
-    border: 2px solid #14b81a;
+    border: 2px solid #727cf5;
     filter: contrast(0.8);
     border-radius: 7px;
   }

@@ -190,12 +190,4 @@ export default {
     transform: translate(-50%, -50%);
     width: 100%;
   }
-
-  .border-right {
-    border-right: 1px solid #00B900;
-  }
-
-  .border-primary {
-    border-color: #00B900 !important;
-  }
 </style>

@@ -19,16 +19,14 @@
       </div>
     </div> -->
 
-    <label class="mt20">
-      アクション
-    </label>
+    <label>アクション</label>
 
     <div>
       <select type="text" maxlength="12" v-model="currentPostBackType" class="w-100 form-control" @change="changeSelected">
         <option v-for="(val,key) of types" :key="key" :value="key">{{val}}</option>
       </select>
     </div>
-    <div>
+    <div class="mt-2">
       <action-postback-text
         v-if="currentPostBackType==='text'"
         :value="content"

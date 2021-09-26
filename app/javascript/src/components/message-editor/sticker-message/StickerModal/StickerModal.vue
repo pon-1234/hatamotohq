@@ -81,10 +81,6 @@ export default {
 
 <style  lang="scss"  scoped>
 ::v-deep {
-  .modal-content {
-    padding: 0px !important;
-  }
-
   .sticker-picker {
     margin: -15px !important;
   }
