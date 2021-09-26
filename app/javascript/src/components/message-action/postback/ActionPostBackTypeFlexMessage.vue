@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label class="w-100 mt20">
+    <label class="w-100">
       コンテンツ
       <required-mark/>
     </label>

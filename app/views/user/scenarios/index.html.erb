@@ -3,7 +3,7 @@
     <div class="page-title-box">
       <div class="page-title-right">
         <ol class="breadcrumb m-0">
-          <li class="breadcrumb-item"><a href="javascript: void(0);">メッセージ</a></li>
+          <li class="breadcrumb-item">メッセージ</li>
           <li class="breadcrumb-item active">シナリオ一覧</li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
                 <td><%= render_scenario_status(scenario.status) %></td>
                 <td>
                   <%= link_to user_scenario_messages_path(scenario), class: "btn btn-light btn-sm mr-1" do %>
-                    メッセージ一覧 <b>（<%= scenario.scenario_messages_count %>）</b>
+                    メッセージ一覧 <b>（<%= scenario.scenario_messages_count || 0 %>）</b>
                   <% end %>
                 </td>
                 <td class="table-action">

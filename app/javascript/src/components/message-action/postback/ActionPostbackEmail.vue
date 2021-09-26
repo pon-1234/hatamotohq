@@ -1,25 +1,25 @@
 <template>
   <div>
     <div>
-    <label class="mt-4">
-      宛先
-    </label>
-      <input type="text" :value="form.emails" :name="name+'_postback_email'" v-validate="'required'" class="d-none" data-vv-as="宛先">
-      <b-form-tags
-        :aria-invalid="errors.first(name+'_postback_email')? true: false"
-        class="form-control d-flex"
-        input-id="tags-basic"
-        v-model="form.emails"
-        :tag-validator="tagValidator"
-        :add-button-text="'追加'"
-        :invalid-tag-text="null"
-        :duplicate-tag-text="'宛先が重複しています。'"
-        :limit-tags-text="'宛先の最大数に達しました'"
-        placeholder="メールアドレスを入力してください。"
-        separator=" ,;"
-      >
-      </b-form-tags>
-      <error-message :message="errors.first(name+'_postback_email')"></error-message>
+      <label>
+        宛先
+      </label>
+        <input type="text" :value="form.emails" :name="name+'_postback_email'" v-validate="'required'" class="d-none" data-vv-as="宛先">
+        <b-form-tags
+          :aria-invalid="errors.first(name+'_postback_email')? true: false"
+          class="form-control d-flex"
+          input-id="tags-basic"
+          v-model="form.emails"
+          :tag-validator="tagValidator"
+          :add-button-text="'追加'"
+          :invalid-tag-text="null"
+          :duplicate-tag-text="'宛先が重複しています。'"
+          :limit-tags-text="'宛先の最大数に達しました'"
+          placeholder="メールアドレスを入力してください。"
+          separator=" ,;"
+        >
+        </b-form-tags>
+        <error-message :message="errors.first(name+'_postback_email')"></error-message>
     </div>
 
     <div class="mt-4">

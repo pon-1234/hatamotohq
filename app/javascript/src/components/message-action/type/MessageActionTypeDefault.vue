@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showTitle">
-      <label class="w-100 mt10">
+      <label class="w-100 mt-2">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>
@@ -32,45 +32,48 @@
       />
     </div>
 
-    <div class="action-item" v-for="(action, index) in actions" :key="index">
-      <div class="d-flex">
-        <label style="flex: 1">アクション{{ index + 1 }}</label>
-        <div
-          tyle="float:right"
-          class="d-inline-block"
-          v-if="actions.length > 1"
-        >
+    <div class="card border-warning border" v-for="(action, index) in actions" :key="index">
+      <div class="card-header">
+        <div class="d-flex align-items-center">
+          <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
           <div
-            @click="moveActionUp(index)"
-            class="btn btn-sm btn-light"
-            v-if="index > 0">
-            <i class="fa fa-arrow-up"></i>
-          </div>
-          <div
-            type="button"
-            @click="moveActionDown(index)"
-            class="btn btn-sm btn-light"
-            v-if="index < actions.length - 1">
-            <i class="fa fa-arrow-down"></i
-          ></div>
-          <div
-            @click="removeAction(index)"
+            class="ml-auto"
             v-if="actions.length > 1"
-            class="btn btn-sm btn-light">
-            <i class="mdi mdi-delete"></i>
+          >
+            <div
+              @click="moveActionUp(index)"
+              class="btn btn-sm btn-light"
+              v-if="index > 0">
+              <i class="fa fa-arrow-up"></i>
+            </div>
+            <div
+              type="button"
+              @click="moveActionDown(index)"
+              class="btn btn-sm btn-light"
+              v-if="index < actions.length - 1">
+              <i class="fa fa-arrow-down"></i
+            ></div>
+            <div
+              @click="removeAction(index)"
+              v-if="actions.length > 1"
+              class="btn btn-sm btn-light">
+              <i class="mdi mdi-delete"></i>
+            </div>
           </div>
         </div>
       </div>
-      <action-postback
-        :showTitle="false"
-        :value="action"
-        :name="name + '_postback_' + index"
-        :labelRequired="false"
-        @input="changeAction(index, $event)"
-      >
-      </action-postback>
+      <div class="card-body">
+        <action-postback
+          :showTitle="false"
+          :value="action"
+          :name="name + '_postback_' + index"
+          :labelRequired="false"
+          @input="changeAction(index, $event)"
+        >
+        </action-postback>
+      </div>
     </div>
-    <div class="text-center mt-4" v-if="actions.length < 3">
+    <div class="text-center mt-2" v-if="actions.length < 3">
       <div
         class="btn btn-warning"
         role="button"
@@ -81,7 +84,7 @@
     </div>
     <divider></divider>
     <div>
-      <label class="w-100 mt20">
+      <label class="w-100 mt-2">
         タグ設定
       </label>
       <div class="row m-0">
@@ -112,9 +115,7 @@
 </template>
 
 <script>
-import Divider from '../../common/Divider.vue';
 export default {
-  components: { Divider },
   props: {
     value: Object,
     labelRequired: Boolean,
@@ -293,12 +294,5 @@ export default {
 .btn-add:hover {
   background: white;
   color: #1b1b1b;
-}
-
-.action-item {
-  border: 1px solid #cecece;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin-top: 10px;
 }
 </style>

@@ -56,7 +56,7 @@
                       <div class="dropdown-menu">
                         <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalToggleRichMenu" @click="curRichMenuIndex = index">{{ richmenu.status === 'enabled' ? '無効' : '有効' }}にする</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyRichMenu" @click="curTemplateIndex = index">リッチメニューをコビー</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyRichMenu" @click="curTemplateIndex = index">リッチメニューをコピー</a>
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteRichMenu" @click="curTemplateIndex = index">リッチメニューを削除</a>
                       </div>
                     </div>

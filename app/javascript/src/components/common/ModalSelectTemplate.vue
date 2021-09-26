@@ -17,7 +17,7 @@
             <div class="flex-grow-1">
               <div class="list-content">
                 <div class="list-scroll" v-if="folders && folders[this.selectedFolder]">
-                  <table class="table table-hover index">
+                  <table class="table table-hover">
                     <thead>
                       <tr>
                         <td>

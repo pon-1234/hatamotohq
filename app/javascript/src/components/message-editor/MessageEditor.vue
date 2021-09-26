@@ -1,9 +1,8 @@
 <template>
   <div>
-    <div class="dashed" v-if="index !== 0"></div>
-    <div class="card card-outline card-success mt-4">
-      <div class="card-header d-flex">
-        <span class="card-title">メッセージ{{index + 1}}設定</span>
+    <div class="card border-success border mt-4">
+      <div class="card-header d-flex align-items-center">
+        <span>メッセージ{{index + 1}}設定</span>
         <div class="ml-auto btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></div>
       </div>
       <div class="card-body">
@@ -25,6 +24,7 @@
           </div>
         </div>
         <message-content-editor
+          class="mt-2"
           v-if="rerender"
           :index="index"
           :data="defaults.content"

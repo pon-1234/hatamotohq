@@ -83,7 +83,7 @@
 
         <div class="card" :key="msgContentKey">
           <div class="card-header left-border">
-            <div class="card-title">配信メッセージ設定</div>
+            <h3 class="card-title">配信先</h3>
           </div>
           <div class="card-body">
             <div class="form-group">
@@ -93,7 +93,7 @@
             </div>
             <div v-if="refresh_content">
               <div class="mb-2">
-                <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
+                <div class="btn btn-secondary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
                 <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
               </div>
               <div v-for="(item, index) in broadcastData.messages"  :key="index">
@@ -109,7 +109,7 @@
                 />
               </div>
               <div
-                class="btn btn-outline-success"
+                class="btn btn-success"
                 @click="addMoreMessageContentDistribution"
                 v-if="broadcastData.messages.length < 5"
               >

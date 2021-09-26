@@ -38,25 +38,19 @@
                     <span v-else class="text-danger">下書き</span>
                   </td>
                   <td>{{survey.name}}</td>
-                  <td class="row-btn" style="text-align: left; display: flex">
-                    <div class="btn-edit01" v-if="survey.status !== 'published'" v-tooltip="'編集'">
-                      <a class="btn-more btn-more-linebot btn-block" :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/edit`">
-                        <i class="fas fa-edit"></i>
-                      </a>
+                  <td>未回答</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                      <div class="dropdown-menu">
+                        <a role="button" class="dropdown-item" :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/edit`" v-if="survey.status !== 'published'">回答フォームを編集</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopySurvey" @click="curSurveyIndex = index">回答フォームをコピー</a>
+                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteSurvey" @click="curSurveyIndex = index">回答フォームを削除</a>
+                      </div>
                     </div>
                     <div class="btn-edit01 btn-info-linebot" v-if="survey.is_publish" v-tooltip="'回答一覧'">
                       <a class="btn-more btn-more-linebot btn-block" :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/info`">
                         回答一覧
-                      </a>
-                    </div>
-                    <div class="btn-edit01" @click="modalCopy(survey)" v-tooltip="'複製'" v-if="permission == 1">
-                      <a class="btn-more btn-more-linebot btn-block">
-                        <i class="fas fa-copy"></i>
-                      </a>
-                    </div>
-                    <div class="btn-edit01" @click="modalDelete(survey)" v-tooltip="'削除'" v-if="permission == 1">
-                      <a class="btn-more btn-more-linebot btn-block">
-                        <i class="fas fa-trash"></i>
                       </a>
                     </div>
                   </td>
@@ -68,16 +62,22 @@
         </div>
       </div>
     </div>
-    <modal-confirm v-bind:title="'コピーしますか？'" type='confirm' @input="copySurvey"></modal-confirm>
-    <modal-confirm title="こちらのアンケートを削除しますか？" id="modal-delete-confirm" type='confirm' @input="deleteSurvey"></modal-confirm>
-    <modal-confirm title="こちらのフォルダを削除してもよろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
+    <modal-confirm title="この回答フォームをコピーしてもよろしいですか？" id="modalCopySurvey" type='confirm' @confirm="submitCopySurvey">
+      <template v-slot:content v-if="curSurvey">
+        <span>回答フォーム名：{{ curSurvey.name }}</span>
+      </template>
+    </modal-confirm>
+    <modal-confirm title="この回答フォームを削除してもよろしいですか？" id="modalDeleteSurvey" type='delete' @confirm="submitDeleteSurvey">
+      <template v-slot:content v-if="curSurvey">
+        <span>回答フォーム名：{{ curSurvey.name }}</span>
+      </template>
+    </modal-confirm>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 export default {
-  props: ['permission'],
   data() {
     return {
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
@@ -85,7 +85,7 @@ export default {
       contentKey: 0,
       surveysData: [],
       selectedFolderIndex: 0,
-      scenarioIndex: 0,
+      curSurveyIndex: 0,
       surveyContents: 0,
       isPc: true,
       survey: null,
@@ -107,7 +107,7 @@ export default {
     },
 
     curSurvey() {
-      return this.curFolder ? this.curFolder.surveys[this.selectedFolderIndex] : null;
+      return this.curFolder ? this.curFolder.surveys[this.curSurveyIndex] : null;
     }
   },
 
@@ -158,7 +158,7 @@ export default {
         $('#modal-confirm').off();
       });
     },
-    copySurvey() {
+    submitCopySurvey() {
       if (this.survey) {
         this.$store.dispatch('survey/copy', {
           id: this.survey.id
@@ -177,7 +177,7 @@ export default {
         $('#modal-delete-confirm').off();
       });
     },
-    deleteSurvey() {
+    submitDeleteSurvey() {
       if (this.survey) {
         this.$store.dispatch('survey/destroy', {
           id: this.survey.id
@@ -203,119 +203,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  .table-responsive > .table > thead > tr > th {
-    white-space: nowrap !important;
-    height: 42px;
-  }
-
-  .btn-action {
-    white-space: nowrap;
-    width: auto !important;
-  }
-
-  .tag-header {
-    height: 40px;
-    color: white;
-    .col-r {
-      display: inline-flex;
-      float: right;
-    }
-    button {
-      color: black !important;
-    }
-  }
-
-  .tag-content {
-    height: 85vh;
-    background-color: #f0f0f0;
-    margin-top: 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    .tag-scroll {
-      height: 100%;
-      overflow: hidden;
-      margin: 0 0;
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  .table-tags-header {
-    margin-bottom: 0px !important;
-  }
-
-  .item-sm {
-    display: none;
-  }
-
-  @media (max-width: 991px) {
-    .item-pc {
-      display: none !important;
-    }
-
-    .item-sm {
-      display: inline-block !important;
-    }
-
-    .fa-arrow-left {
-      margin-right: 10px;
-      cursor: pointer;
-    }
-
-  }
-
-  .table-scenario {
-    min-width: 580px;
-  }
-
-  .table-responsive {
-    overflow: auto;
-    height: 100%;
-    margin-bottom: 0px !important;
-    thead {
-      border-bottom: none !important;
-      th {
-        padding: 8px !important;
-        border-bottom: none !important;
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: #e0e0e0;
-        border-radius: 0px !important;
-      }
-    }
-  }
-
-  .btn-copy {
-    border: 1px solid #00B900 !important;
-    color: #00B900 !important;
-    background: transparent !important;
-  }
-
-  .btn-more,
-  .btn-edit01 {
-    margin-right: 5px;
-    margin-bottom: 5px;
-    width: 40px !important;
-  }
-
-  .btn-edit01.btn-info-linebot,
-  .btn-info-linebot .btn-more {
-    max-width: 100px !important;
-    width: 100px !important;
-  }
-
-  ::v-deep {
-    .modal-dialog {
-      margin: auto !important;
-    }
-    @media(max-width: 991px) {
-      .btn-copy {
-        min-width: 80px;
-        margin-bottom: 10px;
-      }
-    }
-  }
-</style>

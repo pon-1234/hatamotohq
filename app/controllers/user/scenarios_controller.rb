@@ -70,13 +70,13 @@ class User::ScenariosController < User::ApplicationController
     new_scenario = @scenario.clone
     if new_scenario.present?
       @scenario.scenario_messages&.each { |message| message.clone_to(new_scenario.id) }
-      redirect_to user_scenarios_path, flash: { success: 'シナリオのコビーは完了しました。' }
+      redirect_to user_scenarios_path, flash: { success: 'シナリオのコピーは完了しました。' }
     else
-      redirect_to user_scenarios_path, flash: { error: 'シナリオのコビーは失敗しました。' }
+      redirect_to user_scenarios_path, flash: { error: 'シナリオのコピーは失敗しました。' }
     end
   rescue => e
     logger.error e.message
-    redirect_to user_scenarios_path, flash: { error: 'シナリオのコビーは失敗しました。' }
+    redirect_to user_scenarios_path, flash: { error: 'シナリオのコピーは失敗しました。' }
   end
 
   def copy_confirm

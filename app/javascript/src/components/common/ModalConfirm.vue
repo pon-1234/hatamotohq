@@ -1,21 +1,22 @@
 <template>
-  <div :id="id ? id : 'confirmModal'" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+  <div :id="id ? id : 'confirmModal'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header align-items-center">
-          <label class="m-0">{{ title || '本当に削除してよろしいですか？'  }}</label>
-          <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="modal-header modal-colored-header bg-info">
+          <h4 class="modal-title" id="info-header-modalLabel">{{ title || '本当に削除してよろしいですか？'  }}</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body">
           <slot name="content"></slot>
         </div>
         <div class="modal-footer">
-          <div class="btn btn-info" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">確認</div>
-          <div class="btn btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</div>
+          <button type="button" class="btn btn-light" data-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-info" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">確認</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</button>
         </div>
-      </div>
-    </div>
-  </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 </template>
 <script>
 export default {

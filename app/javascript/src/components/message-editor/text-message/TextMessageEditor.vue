@@ -1,6 +1,6 @@
 <template>
-  <div class="pos">
-    <span class="title-editor">絵文字</span>
+  <div class="mt-2">
+    <span class="title-editor ml-3">絵文字</span>
     <input
       :name="'message-editor' + index"
       type="text"
@@ -79,8 +79,8 @@ export default {
 }
 
 .title-editor {
-  margin-left: 30px;
+  display: flex;
   font-size: 12px;
-
+  padding-bottom: 3px !important;
 }
 </style>

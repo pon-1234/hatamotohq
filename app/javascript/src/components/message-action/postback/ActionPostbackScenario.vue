@@ -1,9 +1,6 @@
 <template>
   <section>
-    <label class="w-100 mt20">
-      シナリオ配信
-    </label>
-
+    <label>シナリオ配信</label>
     <div class="btn-template mb20 fz14">
       <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary btn-block">{{currentTemplate.title}}</div>
       <input type="hidden" v-model="currentTemplate.scenario_id" :name="name+'_scenario_id'"  v-validate="'required'" data-vv-as="シナリオ配信" />
