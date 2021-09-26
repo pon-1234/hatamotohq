@@ -1,115 +1,107 @@
 <template>
   <div class="card mxw-1200">
-    <div class="card-header d-flex align-items-center">
-      <a :href="`${MIX_ROOT_PATH}/user/rich_menus`" class="text-info">
-        <i class="fa fa-arrow-left"></i> リッチメニュー一覧
-      </a>
-      <h5 class="m-auto font-weight-bold">新規登録</h5>
-    </div>
-    <div class="card-body">
-      <div class="card">
-        <div class="card-header left-border">
-          <h3 class="card-title">基本設定</h3>
+    <div class="card">
+      <div class="card-header left-border">
+        <h3 class="card-title">基本設定</h3>
+      </div>
+      <div class="card-body">
+        <div class="form-group d-flex align-items-start">
+          <div class="d-flex fw-300 align-items-center">
+            <span class="font-weight-bold">リッチメニュー名<required-mark/></span>
+            <div v-b-tooltip.hover title="タイトルは管理画面のみで使用され、ユーザーには表示されません。" class="ml-2">
+              <i class="text-md far fa-question-circle"></i>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー（ホーム）" v-validate="'required'" data-vv-as="リッチメニュー名">
+            <error-message :message="errors.first('name')"></error-message>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="form-group d-flex align-items-start">
-            <div class="d-flex fw-300 align-items-center">
-              <span class="font-weight-bold">リッチメニュー名<required-mark/></span>
-              <div v-b-tooltip.hover title="タイトルは管理画面のみで使用され、ユーザーには表示されません。" class="ml-2">
-                <i class="text-md far fa-question-circle"></i>
-              </div>
-            </div>
-            <div class="flex-grow-1">
-              <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー（ホーム）" v-validate="'required'" data-vv-as="リッチメニュー名">
-              <error-message :message="errors.first('name')"></error-message>
+
+        <div class="form-group d-flex align-items-start mt-2">
+          <div class="d-flex fw-300 align-items-center">
+            <span class="font-weight-bold">トークルームメニュー<required-mark/></span>
+            <div v-b-tooltip.hover title="チャットルームの下部にあるメニューバーに表示するテキストです。" class="ml-2">
+              <i class="text-md far fa-question-circle"></i>
             </div>
           </div>
+          <div class="flex-grow-1">
+            <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="トップメニュー" v-validate="'required|max:14'" data-vv-as="トークルームメニュー">
+            <error-message :message="errors.first('richmenu-title')"></error-message>
+          </div>
+        </div>
 
-          <div class="form-group d-flex align-items-start mt-2">
-            <div class="d-flex fw-300 align-items-center">
-              <span class="font-weight-bold">トークルームメニュー<required-mark/></span>
-              <div v-b-tooltip.hover title="チャットルームの下部にあるメニューバーに表示するテキストです。" class="ml-2">
-                <i class="text-md far fa-question-circle"></i>
-              </div>
-            </div>
-            <div class="flex-grow-1">
-              <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="トップメニュー" v-validate="'required|max:14'" data-vv-as="トークルームメニュー">
-              <error-message :message="errors.first('richmenu-title')"></error-message>
+        <div class="form-group d-flex align-items-start mt-2">
+          <div class="d-flex fw-300 align-items-center">
+            <span class="font-weight-bold">メニューの初期状態<required-mark/></span>
+            <div v-b-tooltip.hover title="チャットルームを開いたときに、リッチメニューを表示するかしないかを選択します。" class="ml-2">
+              <i class="text-md far fa-question-circle"></i>
             </div>
           </div>
-
-          <div class="form-group d-flex align-items-start mt-2">
-            <div class="d-flex fw-300 align-items-center">
-              <span class="font-weight-bold">メニューの初期状態<required-mark/></span>
-              <div v-b-tooltip.hover title="チャットルームを開いたときに、リッチメニューを表示するかしないかを選択します。" class="ml-2">
-                <i class="text-md far fa-question-circle"></i>
-              </div>
+          <div class="radio-group flex-grow-1 flex-column">
+            <div class="radio">
+              <label class="">
+                <input
+                  v-model="richMenuData.selected"
+                  name="selected"
+                  type="radio"
+                  v-bind:value="true"
+                />
+                表示する
+              </label>
             </div>
-            <div class="radio-group flex-grow-1 flex-column">
-              <div class="radio">
-                <label class="">
-                  <input
-                    v-model="richMenuData.selected"
-                    name="selected"
-                    type="radio"
-                    v-bind:value="true"
-                  />
-                  表示する
-                </label>
-              </div>
-              <div class="radio">
-                <label class="">
-                  <input
-                    v-model="richMenuData.selected"
-                    name="selected"
-                    type="radio"
-                    v-bind:value="false"
-                  />
-                  表示しない
-                </label>
-              </div>
+            <div class="radio">
+              <label class="">
+                <input
+                  v-model="richMenuData.selected"
+                  name="selected"
+                  type="radio"
+                  v-bind:value="false"
+                />
+                表示しない
+              </label>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!--Editor-->
-      <rich-menu-content-editor
-        @input="richMenu"
-        :background="backgroundUrl"
-        :templateId="richMenuData.template_id"
-        :templateValue="templateValue"
-        :templateType="templateType"
-        @onMediaChanged="onMediaChanged($event)">
-      </rich-menu-content-editor>
+    <!--Editor-->
+    <rich-menu-content-editor
+      @input="richMenu"
+      :background="backgroundUrl"
+      :templateId="richMenuData.template_id"
+      :templateValue="templateValue"
+      :templateType="templateType"
+      @onMediaChanged="onMediaChanged($event)">
+    </rich-menu-content-editor>
 
-      <div class="card">
-        <div class="card-header left-border">
-          <h3 class="card-title">配信先設定</h3>
+    <div class="card">
+      <div class="card-header left-border">
+        <h3 class="card-title">配信先設定</h3>
+      </div>
+      <div class="card-body">
+        <div class="radio-group">
+          <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="all">全員</label>
+          <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="condition" >タグで絞り込む</label>
         </div>
-        <div class="card-body">
-          <div class="radio-group">
-            <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="all">全員</label>
-            <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="condition" >タグで絞り込む</label>
-          </div>
-          <div v-if="richMenuData.target === 'condition'">
-            <label>タグ</label>
-            <div class="list-checkbox-tag">
-              <input-tag :tags="tags" @input="onTagsChanged"/>
-            </div>
+        <div v-if="richMenuData.target === 'condition'">
+          <label>タグ</label>
+          <div class="list-checkbox-tag">
+            <input-tag :tags="tags" @input="onTagsChanged"/>
           </div>
         </div>
       </div>
-
     </div>
-    <div class="card-footer">
+
+    <div>
       <button @click="submitRichMenu" class="btn btn-success fw-120">保存</button>
     </div>
 
     <loading-indicator :loading="loading"></loading-indicator>
 
     <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
-    <modal-select-media :types="['richmenu']" @select="onMediaChanged($event)"></modal-select-media>
+    <modal-select-media :types="['richmenu']" filterable="false" @select="onMediaChanged($event)"></modal-select-media>
   </div>
 </template>
 

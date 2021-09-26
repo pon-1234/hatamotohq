@@ -109,7 +109,7 @@
                 />
               </div>
               <div
-                class="btn btn-success"
+                class="btn btn-primary"
                 @click="addMoreMessageContentDistribution"
                 v-if="broadcastData.messages.length < 5"
               >

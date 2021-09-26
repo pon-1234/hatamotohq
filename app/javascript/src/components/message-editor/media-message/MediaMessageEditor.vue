@@ -42,7 +42,7 @@
         <div class="figure figure-grid-sm my-4">
           <a
             href="#"
-            class="select-image"
+            class="text-primary"
             data-toggle="modal"
             data-target="#imageModalCenter"
           >
@@ -104,12 +104,6 @@ export default {
 
 <style  lang="scss"  scoped>
 ::v-deep {
-  .select-image {
-    color: #00b900 !important;
-    text-decoration: none !important;
-    background-color: transparent !important;
-  }
-
   .audio_icon_item {
     width: 80px;
     height: 80px;

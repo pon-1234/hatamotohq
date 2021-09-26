@@ -30,7 +30,7 @@
           ></textarea>
           <error-message :message="errors.first('location-description')"></error-message>
         </div>
-        <div class="btn btn-outline-success ml-2" style="" @click="getMarker">
+        <div class="btn btn-primary ml-2" style="" @click="getMarker">
           ピンの住所を検出
         </div>
       </div>

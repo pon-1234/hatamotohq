@@ -1,21 +1,23 @@
 <template>
-  <div>
-    <div tabindex="-1" role="dialog" aria-hidden="true" class="modal d-block"
-         id="modalRichmenuImageEditor">
-      <div class="modal-dialog modal-dialog-centered modal-xl mh-100 w-100" role="document"
-           >
-        <div class="modal-content h-100 p-0" style="width: 100%">
-          <div class="modal-header flex-shrink-0"><h5 class="mb-0"><span v-if="editor === 'richmenu'">リッチメニュー</span><span v-else>画像を作成</span></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modalConfirmCloseEditor"><span
-              aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body mh-100 overflow-y-auto">
-            <rich-menu-image-editor :templateId="templateId" :editor="editor" @save="saveImage"></rich-menu-image-editor>
-          </div>
+  <div tabindex="-1" role="dialog" aria-hidden="true" class="modal d-block"
+        id="modalRichmenuImageEditor" style="background: rgba(0, 0, 0, 0.4);">
+    <div class="modal-dialog modal-xl" role="document"
+          >
+      <div class="modal-content">
+        <div class="modal-header flex-shrink-0"><h5 class="mb-0"><span v-if="editor === 'richmenu'">リッチメニュー</span><span v-else>画像を作成</span></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#modalConfirmCloseEditor"><span
+            aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body mh-100 overflow-y-auto">
+          <rich-menu-image-editor :templateId="templateId" :editor="editor" @save="saveImage"></rich-menu-image-editor>
         </div>
       </div>
     </div>
-    <modal-confirm id="modalConfirmCloseEditor" type="confirm" title="画像は保存されません。よろしいでしょうか。" @confirm="closeEditor()"></modal-confirm>
+    <modal-confirm id="modalConfirmCloseEditor" type="confirm" title="確認" @confirm="closeEditor()">
+      <template v-slot:content>
+        画像は保存されません。よろしいでしょうか。
+      </template>
+    </modal-confirm>
   </div>
 </template>
 
