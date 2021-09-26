@@ -21,7 +21,7 @@
               <media-upload :types="types" @upload="selectMedia($event)"></media-upload>
             </b-tab>
             <b-tab title="メディア一覧">
-              <media-index mode="read" @select="selectMedia($event)"></media-index>
+              <media-index mode="read" @select="selectMedia($event)" :filterable="filterable"></media-index>
             </b-tab>
           </b-tabs>
         </div>
@@ -37,6 +37,10 @@ export default {
     types: {
       type: Array,
       default: () => ['image', 'audio', 'video']
+    },
+    filterable: {
+      type: Boolean,
+      default: true
     },
     id: {
       type: String

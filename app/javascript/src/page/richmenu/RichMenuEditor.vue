@@ -101,7 +101,7 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
-    <modal-select-media :types="['richmenu']" filterable="false" @select="onMediaChanged($event)"></modal-select-media>
+    <modal-select-media :types="['richmenu']" :filterable="false" @select="onMediaChanged($event)"></modal-select-media>
   </div>
 </template>
 
