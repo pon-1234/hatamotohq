@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <button type="button" class="btn btn-success mr-2"><i class="fa fa-plus"></i> 新規作成</button>
+          <div class="btn btn-success mr-2" @click="openNew()"><i class="fa fa-plus"></i> 新規作成</div>
         </div>
         <div class="card-body">
           <table class="table table-centered mb-0">
@@ -33,15 +33,6 @@
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteScenario" @click="curScenarioIndex = index">シナリオを削除</a>
                       </div>
                     </div>
-                    <!-- <%= link_to edit_user_scenario_path(scenario), class:"action-icon" do %>
-                      <i class="mdi mdi-square-edit-outline"></i>
-                    <% end %>
-                    <%= link_to copy_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
-                      <i class="mdi mdi-content-copy"></i>
-                    <% end %>
-                    <%= link_to delete_confirm_user_scenario_path(scenario), class:"action-icon", remote: true do %>
-                      <i class="mdi mdi-delete"></i>
-                    <% end %> -->
                   </td>
                 </tr>
             </tbody>
@@ -133,6 +124,10 @@ export default {
         this.forceRerender();
         this.loading = false;
       });
+    },
+
+    openNew() {
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
     },
 
     openEdit(scenario) {

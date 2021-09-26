@@ -18,7 +18,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body vh-70 overflow-hidden position-relative">
+        <div class="modal-body overflow-hidden position-relative">
           <media-upload :types="types" @upload="onUploadFinished(event)"></media-upload>
         </div>
       </div>
