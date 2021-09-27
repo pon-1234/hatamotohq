@@ -54,8 +54,6 @@ module WebhooksHelper
       channel = line_friend.channel
       # Create a message
       message = create_message(channel, line_friend, @event)
-      # Increase unread message count by 1
-      update_channel_last_message(channel)
     rescue => e
       logger.error(e)
     end
@@ -86,6 +84,7 @@ module WebhooksHelper
           line_friend.line_picture_url = user_profile['pictureUrl']
           line_friend.line_name = user_profile['displayName']
           line_friend.display_name = line_friend.display_name || line_friend.line_name
+          line_friend.status = 'active'
           line_friend.save!
 
           # Create or reopen channel

@@ -201,6 +201,7 @@ export default {
     };
   },
   async beforeMount() {
+    this.resetFilter();
     await this.getMedias();
     this.loading = false;
   },
@@ -214,7 +215,10 @@ export default {
   },
 
   methods: {
-    ...mapMutations('media', ['setCurPage']),
+    ...mapMutations('media', [
+      'setCurPage',
+      'resetFilter'
+    ]),
     ...mapActions('media', [
       'getMedias',
       'deleteMedias'

@@ -1,5 +1,5 @@
 <template>
-  <div class="card mxw-1200">
+  <div class="mxw-1200">
     <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">基本設定</h3>
@@ -64,6 +64,8 @@
           </div>
         </div>
       </div>
+
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <!--Editor-->
@@ -92,13 +94,13 @@
           </div>
         </div>
       </div>
+
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <div>
       <button @click="submitRichMenu" class="btn btn-success fw-120">保存</button>
     </div>
-
-    <loading-indicator :loading="loading"></loading-indicator>
 
     <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
     <modal-select-media :types="['richmenu']" :filterable="false" @select="onMediaChanged($event)"></modal-select-media>

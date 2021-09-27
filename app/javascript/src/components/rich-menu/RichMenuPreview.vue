@@ -230,8 +230,4 @@ export default {
       margin-left: -5px;
     }
   }
-
-  .border-primary {
-    border-color: #00B900 !important;
-  }
 </style>

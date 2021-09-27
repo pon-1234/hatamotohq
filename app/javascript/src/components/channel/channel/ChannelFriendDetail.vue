@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card chat-pane">
     <div class="card-body" v-if="activeChannel">
       <div class="dropdown float-right">
         <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown"

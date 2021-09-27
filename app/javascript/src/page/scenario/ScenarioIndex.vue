@@ -22,7 +22,7 @@
                   <td>{{ scenario.title }}</td>
                   <td><scenario-item-status :status="scenario.status"></scenario-item-status></td>
                   <td>
-                    <div class="btn btn-light">メッセージ一覧（{{scenario.scenario_messages_count || 0}}）</div>
+                    <div class="btn btn-light" @click="openMessageIndex(scenario)">メッセージ一覧（{{scenario.scenario_messages_count || 0}}）</div>
                   </td>
                   <td>
                     <div class="btn-group">
@@ -37,7 +37,7 @@
                 </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-center mt-4">
+          <div class="d-flex justify-content-center mt-4" v-if="scenarios.length === 0">
             <b-pagination
               v-model="currentPage"
               :total-rows="totalRows"
@@ -47,6 +47,8 @@
             ></b-pagination>
           </div>
         </div>
+
+        <loading-indicator :loading="loading"></loading-indicator>
       </div>
     </div>
 
@@ -132,6 +134,10 @@ export default {
 
     openEdit(scenario) {
       window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/edit`);
+    },
+
+    openMessageIndex(scenario) {
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`;
     },
 
     async submitDeleteScenario() {

@@ -1,7 +1,7 @@
 <template>
-  <div class="card" v-if="activeChannel">
-    <div class="card-body">
-      <ul class="conversation-list overflow-auto" data-simplebar style="max-height: 537px;" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+  <div class="card chat-pane" v-if="activeChannel">
+    <div class="card-body d-flex flex-column">
+      <ul class="flex-grow-1 conversation-list overflow-auto" data-simplebar ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
         <li>
           <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
         </li>
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row mt-auto">
         <div class="col">
           <div class="mt-2 bg-light p-3 rounded">
             <div class="row">
