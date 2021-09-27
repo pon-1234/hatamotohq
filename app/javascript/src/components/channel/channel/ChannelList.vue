@@ -11,17 +11,13 @@
         </form>
       </div>
       <!-- users -->
-      <div class="row">
-        <div class="col">
-          <div data-simplebar style="max-height: 550px">
-            <channel-list-item
-              v-for="(channel, index) in showChannels" :key="index"
-              :data="channel"
-              :active="activeChannel && channel.id === activeChannel.id"
-              @click.native="switchChannel(channel, index)">
-            </channel-list-item>
-          </div>
-        </div>
+      <div data-simplebar style="max-height: 550px">
+        <channel-list-item
+          v-for="(channel, index) in showChannels" :key="index"
+          :data="channel"
+          :active="activeChannel && channel.id === activeChannel.id"
+          @click.native="switchChannel(channel, index)">
+        </channel-list-item>
       </div>
     </div>
     <!-- end search box -->
@@ -77,6 +73,7 @@ export default {
   methods: {
     ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
     async switchChannel(channel, index) {
+      console.log('-----switch channel to -----', channel);
       const notChanged = this.activeChannel.id === channel.id;
       this.$emit('switchChannel', !notChanged);
       // Do nothing if channel is not changed

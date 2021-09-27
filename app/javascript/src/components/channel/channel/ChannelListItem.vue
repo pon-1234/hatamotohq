@@ -1,5 +1,5 @@
 <template>
-  <a href="javascript:void(0);" class="text-body">
+  <div role="button" class="text-body">
     <div :class="active ? 'bg-light media mt-1 p-2' : 'media mt-1 p-2'">
       <img :src="data.avatar ? data.avatar : '/img/no-image-profile.png'" class="mr-2 rounded-circle" height="48"
         alt="User avatar" />
@@ -15,7 +15,7 @@
         </p>
       </div>
     </div>
-  </a>
+  </div>
 <!--
   <div :class="getChannelClass()">
     <div class="avatar">
