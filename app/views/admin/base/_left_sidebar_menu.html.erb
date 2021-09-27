@@ -9,16 +9,16 @@
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
 
-      <li class="side-nav-item <%= controller?("user/users") ? 'mm-active' : '' %>">
-        <%= link_to admin_users_path, class: "side-nav-link #{controller?("user/users") ? 'active' : '' }" do %>
+      <li class="side-nav-item <%= controller?("admin/users") ? 'mm-active' : '' %>">
+        <%= link_to admin_users_path, class: "side-nav-link #{controller?("admin/users") ? 'active' : '' }" do %>
           <i class="uil-users-alt"></i>
           <span> クライアント一覧 </span>
         <% end %>
       </li>
 
       <!-- トーク -->
-      <li class="side-nav-item <%= controller?("user/announcements") ? 'mm-active' : '' %>">
-        <%= link_to admin_announcements_path, class: "side-nav-link #{controller?("user/announcements") ? 'active' : '' }" do %>
+      <li class="side-nav-item <%= controller?("admin/announcements") ? 'mm-active' : '' %>">
+        <%= link_to admin_announcements_path, class: "side-nav-link #{controller?("admin/announcements") ? 'active' : '' }" do %>
           <i class="uil-comments-alt"></i>
           <span> お知らせ一覧 </span>
         <% end %>

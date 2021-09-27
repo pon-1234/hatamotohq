@@ -13,32 +13,28 @@
               <table class="table table-bordered mb-0">
                   <thead class="thead-light">
                     <tr>
-                      <th width="5%" class="fw-50 text-center">ID</th>
-                      <th width="20%" class="fw-150">日時</th>
-                      <th width="40%" class="fw-200">タイトル</th>
-                      <th width="20%" class="fw-150">変更日時</th>
-                      <th width="15%" class="fw-100">操作</th>
+                      <th>日時</th>
+                      <th>タイトル</th>
+                      <th>変更日時</th>
+                      <th class="fw-300">操作</th>
                     </tr>
                   </thead>
                   <tbody v-for="announcement in announcements" :key="announcement.id">
                       <tr>
-                        <td class="text-center">{{ announcement.id }}</td>
-                        <td>{{ moment(announcement.announced_at) }}</td>
+                        <td>{{ formattedDatetime(announcement.announced_at) }}</td>
                         <td>{{ announcement.title }}</td>
-                        <td>{{ moment(announcement.updated_at) }}</td>
+                        <td>{{ formattedDatetime(announcement.updated_at) }}</td>
                         <td>
-                          <div class="btn-group">
+                          <div class="btn-group mr-1">
                             <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
                             <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
-                              <a class="dropdown-item" data-toggle="modal" data-target="#announcementDetail" @click="onShowModal(announcement.id)" >
-                                プレビュー
-                              </a>
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/delete_confirm`" class="dropdown-item" data-remote="true" data-type="json">
                                 削除
                               </a>
                             </div>
                           </div>
+                          <div class="btn btn-info btn-sm" data-toggle="modal" data-target="#announcementDetail" @click="onShowModal(announcement.id)">プレビュー</div>
                         </td>
                       </tr>
                   </tbody>
@@ -70,7 +66,8 @@
 </template>
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
-import moment from 'moment-timezone';
+import Util from '@/core/util';
+
 export default {
   data() {
     return {
@@ -88,7 +85,7 @@ export default {
       announcements: (state) => state.announcements,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    }),
+    })
   },
   methods: {
     ...mapMutations('announcement', [
@@ -97,12 +94,7 @@ export default {
     ...mapActions('announcement', [
       'getAnnouncements'
     ]),
-    moment(date) {
-      return moment(date).tz('Asia/Tokyo').format('YYYY.MM.DD. HH:mm');
-    },
-    onShowModal(id) {
-      this.$refs.modalAnnouncementDetail.shownModal(id);
-    },
+
     async changePage(page) {
       this.$nextTick(async() => {
         this.loading = true;
@@ -110,6 +102,10 @@ export default {
         await this.getAnnouncements();
         this.loading = false;
       });
+    },
+
+    formattedDatetime(time) {
+      return Util.formattedDatetime(time);
     }
   }
 };
