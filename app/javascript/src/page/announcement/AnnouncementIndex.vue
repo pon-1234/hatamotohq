@@ -28,8 +28,8 @@
                         <td>{{ moment(announcement.updated_at) }}</td>
                         <td>
                           <div class="btn-group">
-                            <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">操作 <span class="caret"></span></button>
-                            <div class="dropdown-menu" role="menu">
+                            <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
+                            <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
                               <a class="dropdown-item" data-toggle="modal" data-target="#announcementDetail" @click="onShowModal(announcement.id)" >
                                 プレビュー
