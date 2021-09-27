@@ -265,7 +265,7 @@ export default {
 
     openAddFileModal(index) {
       this.field_index = index;
-      $('#imageModalCenter').modal('show');
+      $('#modalSelectMedia').modal('show');
     },
 
     changeFile(file) {

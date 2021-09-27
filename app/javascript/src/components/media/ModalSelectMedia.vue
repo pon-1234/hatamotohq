@@ -1,16 +1,16 @@
 <template>
   <div
     class="modal fade"
-    :id="id ? id: 'imageModalCenter'"
+    :id="id ? id: 'modalSelectMedia'"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-full-width">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">アップロードする</h4>
+          <h4 class="modal-title">メディア</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" ref="close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -177,10 +177,6 @@ export default {
     a {
       margin-right: 0px!important;
     }
-  }
-
-  .modal-dialog {
-    max-width: 900px!important;
   }
 
   .thumb-item {

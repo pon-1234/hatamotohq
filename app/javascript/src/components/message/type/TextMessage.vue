@@ -5,24 +5,16 @@ export default {
     return h(
       'div',
       {
-        class: 'balloon'
+        class: 'selectable chat-item-text'
       },
       [
-        h(
-          'div',
-          {
-            class: 'selectable chat-item-text'
-          },
-          [
-            h('div', {
-              class: 'view preview-text-content',
-              domProps: {
-                // eslint-disable-next-line no-undef
-                innerHTML: emojione.toImage(this.data)
-              }
-            })
-          ]
-        )
+        h('div', {
+          class: 'view preview-text-content',
+          domProps: {
+            // eslint-disable-next-line no-undef
+            innerHTML: emojione.toImage(this.data)
+          }
+        })
       ]
     );
   }

@@ -22,7 +22,7 @@
           </div>
           <div class="my-2">
             <button type="button" class="btn-block btn btn-secondary"
-                    data-toggle="modal" data-target="#imageModalCenter">
+                    data-toggle="modal" data-target="#modalSelectMedia">
               背景画像をアップロード
             </button>
           </div>

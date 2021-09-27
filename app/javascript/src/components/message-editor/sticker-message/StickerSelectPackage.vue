@@ -1,11 +1,12 @@
 <template>
   <div class='bg-light d-flex overflow-x-auto'>
-    <package-sticker
+    <sticker-package
+      class="mr-1"
       v-for='(option, index) in options'
       v-bind:data='option'
       :key='index'
       @input='changePackageId'
-    />
+    ></sticker-package>
   </div>
 </template>
 <script>
@@ -52,6 +53,7 @@ export default {
 <style  lang='scss'  scoped>
 ::v-deep {
   .sticker-nav {
+    overflow: hidden;
     flex: 0 0 40px;
     height: 33px;
     display: flex;

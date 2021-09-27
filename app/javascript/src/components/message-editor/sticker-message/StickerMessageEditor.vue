@@ -33,7 +33,7 @@
       <error-message :message="errors.first('sticker-id' + index)"></error-message>
     </div>
     <!-- Modal -->
-    <sticker-modal name="stickerModalCenter" @input="selectSticker" />
+    <modal-select-sticker name="stickerModalCenter" @input="selectSticker" />
     <input type="hidden" v-model="stickerId" :name="'sticker-id' + index" v-validate="'required'" data-vv-as="スタンプ" />
   </div>
 </template>

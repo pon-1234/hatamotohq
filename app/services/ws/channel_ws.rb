@@ -14,7 +14,7 @@ class Ws::ChannelWs
     def build_payload(message)
       {
         action: 'new_message',
-        channel: message.channel.as_json(except: [:deleted_at]),
+        channel: message.channel.push_event_data,
         content: message.push_event_data
       }
     end

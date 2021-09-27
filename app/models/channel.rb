@@ -44,4 +44,15 @@ class Channel < ApplicationRecord
     # Make owner of official account to be a participant
     ChannelParticipant.create(channel: self, participant: line_account.owner)
   end
+
+  def push_event_data
+    {
+      id: id,
+      status: status,
+      last_message: last_message,
+      last_activity_at: last_activity_at,
+      un_read: un_read,
+      line_friend: line_friend.push_event_data
+    }
+  end
 end
