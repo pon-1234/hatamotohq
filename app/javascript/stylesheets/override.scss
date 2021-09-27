@@ -1,4 +1,4 @@
-.btn-group-xs > .btn,
+.btn-group-xs>.btn,
 .btn-xs {
   padding: 1px 5px;
   font-size: 12px !important;
@@ -29,7 +29,7 @@ td {
   vertical-align: middle;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
+.table-striped>tbody>tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -40,7 +40,7 @@ td {
   }
 }
 
-.table > tbody > tr > td {
+.table>tbody>tr>td {
   line-height: 1.4;
   border-top: 1px solid #ddd;
 }
@@ -61,12 +61,12 @@ td {
   border-color: #17a2b8;
   color: #17a2b8;
 }
-// END: Pagination
 
+// END: Pagination
 // START: Datetime picker theme
 .theme-success .vdatetime-popup__header,
-.theme-success .vdatetime-calendar__month__day--selected > span > span,
-.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
+.theme-success .vdatetime-calendar__month__day--selected>span>span,
+.theme-success .vdatetime-calendar__month__day--selected:hover>span>span {
   background: #28a745;
 }
 
@@ -75,4 +75,31 @@ td {
 .theme-success .vdatetime-popup__actions__button {
   color: #28a745;
 }
+
 // END: Datetime picker theme
+// START: Css home page
+.home_announcement_btn {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  color: #000000;
+  border-bottom: 1px solid #dddddd;
+  .output {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.home_announcement_btn:hover {
+  color: #000000;
+  background-color: #e6e6e6;
+  border: 1px solid #dddddd;
+}
+
+// END: Css home page

@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item">お知らせ</li>
+          <li class="breadcrumb-item"><%= link_to "お知らせ一覧", admin_announcements_path %></li>
+          <li class="breadcrumb-item active">新規お知らせ編集</li>
+        </ol>
+      </div>
+      <h4 class="page-title">新規お知らせ編集</h4>
+    </div>
+  </div>
+</div>
+<announcement-editor :announcement="<%=@announcement.to_json%>"></announcement-editor>

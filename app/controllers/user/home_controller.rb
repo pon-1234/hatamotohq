@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
 class User::HomeController < User::ApplicationController
+  # GET /user/home
   def index
-    @notices = []
     @friend_count = Current.user.line_account.line_friends.count
     @messages = Current.user.line_account.latest_messages
+  end
+
+  # GET /user/home/announcements
+  def announcements
+    @announcements = Announcement.for_user.page(params[:page])
   end
 end

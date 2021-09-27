@@ -35,6 +35,9 @@ Rails.application.routes.draw do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
+      resources :home, only: [:index] do
+        get :announcements, on: :collection
+      end
       resources :channels do
         get :scenarios, on: :member
         resources :messages do
@@ -94,7 +97,10 @@ Rails.application.routes.draw do
         get :delete_confirm, on: :member
         get :sso, on: :member
       end
-      resources :announcements
+      resources :announcements do
+        get :search, on: :collection
+        post :upload_image,  on: :collection
+      end
     end
 
     require 'sidekiq/web'

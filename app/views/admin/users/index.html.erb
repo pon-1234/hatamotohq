@@ -45,8 +45,8 @@
                     </td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
-                        <div class="dropdown-menu">
+                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
                           <%= link_to 'ユーザーを編集', edit_admin_user_path(user), class: "dropdown-item", role: "button" %>
                           <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalConfirmToggle" onclick="confirmToggleStatus(<%= user.id %>)">
                             <% if user.status.eql?('active')%>
@@ -84,7 +84,7 @@
 </div>
 
 <div id='confirmDelContent'></div>
-<modal-change-user-status :users="<%= @users.to_json %>"></modal-change-user-status>
+<modal-change-user-status :users="<%= @users.to_json %>" :status="`user`"></modal-change-user-status>
 <input type="hidden" id="inputValue">
 <script>
   function confirmToggleStatus(id) {
