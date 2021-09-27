@@ -1,12 +1,7 @@
 <template>
   <div class="mxw-1200" >
     <div class="card">
-      <div class="card-header d-flex align-items-center">
-        <a :href="`${rootUrl}/admin/announcements`" class="text-info">
-          <i class="fa fa-arrow-left"></i> ユーザー一覧
-        </a>
-        <h5 class="m-auto font-weight-bold">announcement new</h5>
-      </div>
+      <!-- <div class="card-header d-flex align-items-center"></div> -->
       <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
         <div class="card-body">
           <div class="form-group row">
@@ -48,7 +43,8 @@
           </div>
         </div>
         <div class="card-footer row-form-btn d-flex">
-          <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit)">登録</button>
+          <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit('published'))">登録</button>
+          <button type="submit" class="btn btn-outline-info fw-120" :disabled="invalid" @click="validate().then(onSubmit('draft'))">下書き保存</button>
         </div>
       </ValidationObserver>
     </div>
@@ -60,6 +56,7 @@ import { Datetime } from 'vue-datetime';
 import { mapActions } from 'vuex';
 
 export default {
+  props: ['announcement'],
   components: {
     Datetime
   },
@@ -67,27 +64,45 @@ export default {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
       announcementData: {
+        id: null,
         announced_at: moment().tz('Asia/Tokyo').format(),
         title: null,
-        body: null
+        body: null,
+        status: null
       },
       currentDate: moment().tz('Asia/Tokyo').format()
     };
   },
+  created() {
+    Object.assign(this.announcementData, this.announcement);
+  },
   methods: {
-    ...mapActions('announcement', ['createAnnouncement']),
+    ...mapActions('announcement', ['createAnnouncement', 'updateAnnouncement']),
 
-    onSubmit(e) {
-      this.submitted = true;
-      this.createAnnouncement(this.announcementData).then((response) => {
-        this.onReceiveCreateUserResponse(response.id, null);
-      }).catch((error) => {
-        this.onReceiveCreateUserResponse(null, error.responseJSON.message);
-      });
+    onSubmit(status) {
+      this.announcementData.status = status;
+      if (this.announcementData.id) {
+        this.updateAnnouncement(this.announcementData).then((response) => {
+          this.onReceiveCreateUserResponse(response.id, null);
+        }).catch((error) => {
+          this.onReceiveCreateUserResponse(null, error.responseJSON.message);
+        });
+      } else {
+        const formData = _.omit(this.announcementData, ['id']);
+        this.createAnnouncement(formData).then((response) => {
+          this.onReceiveCreateUserResponse(response.id, null);
+        }).catch((error) => {
+          this.onReceiveCreateUserResponse(null, error.responseJSON.message);
+        });
+      }
     },
     onReceiveCreateUserResponse(id, errorMessage) {
       if (id) {
-        window.toastr.success('success create');
+        if (this.announcementData.id) {
+          window.toastr.success('success update');
+        } else {
+          window.toastr.success('success create');
+        }
         setTimeout(() => {
           window.location.href = `${this.rootUrl}/admin/announcements`;
         }, 750);

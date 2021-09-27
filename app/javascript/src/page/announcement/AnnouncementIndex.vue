@@ -17,6 +17,7 @@
                       <th width="20%" class="fw-150">日時</th>
                       <th width="40%" class="fw-200">タイトル</th>
                       <th width="20%" class="fw-150">変更日時</th>
+                      <th width="20%" class="fw-150">状況</th>
                       <th width="15%" class="fw-100">操作</th>
                     </tr>
                   </thead>
@@ -27,10 +28,18 @@
                         <td>{{ announcement.title }}</td>
                         <td>{{ moment(announcement.updated_at) }}</td>
                         <td>
+                          <span v-if="announcement.status == 'draft'"><i class="mdi mdi-circle text-secondary"></i> 下書き </span>
+                          <span v-if="announcement.status == 'published'"><i class="mdi mdi-circle text-success"></i> 作成 </span>
+                          <span v-if="announcement.status == 'unpublished'"><i class="mdi mdi-circle text-primary"></i> unpublished </span>
+                        </td>
+                        <td>
                           <div class="btn-group">
                             <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
                             <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
+                              <a v-if="announcement.status && announcement.status !== 'draft'" class="dropdown-item" data-toggle="modal" data-target="#announcementConfirmSwitch" @click="onShowModalConfirmSwitch(announcement.id)">
+                                switch btn
+                              </a>
                               <a class="dropdown-item" data-toggle="modal" data-target="#announcementDetail" @click="onShowModal(announcement.id)" >
                                 プレビュー
                               </a>
@@ -66,11 +75,13 @@
     <div id='confirmDelContent'></div>
 
     <modal-announcement-show ref="modalAnnouncementDetail" :announcements=announcements :status="`admin`"></modal-announcement-show>
+    <modal-change-announcement-status ref="modalConfirmSwitch" :announcements=announcements></modal-change-announcement-status>
   </div>
 </template>
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import moment from 'moment-timezone';
+
 export default {
   data() {
     return {
@@ -88,7 +99,7 @@ export default {
       announcements: (state) => state.announcements,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    }),
+    })
   },
   methods: {
     ...mapMutations('announcement', [
@@ -102,6 +113,9 @@ export default {
     },
     onShowModal(id) {
       this.$refs.modalAnnouncementDetail.shownModal(id);
+    },
+    onShowModalConfirmSwitch(id) {
+      this.$refs.modalConfirmSwitch.shownModal(id);
     },
     async changePage(page) {
       this.$nextTick(async() => {
