@@ -1,8 +1,27 @@
 import AnnouncementApi from '../api/announcement_api';
 
-export const state = {};
+export const state = {
+  announcements: [],
+  totalRows: 0,
+  perPage: 0,
+  curPage: 1
+};
 
-export const mutations = {};
+export const mutations = {
+  setAnnouncements(state, announcements) {
+    state.announcements = announcements;
+  },
+
+  setCurPage(state, curPage) {
+    state.curPage = curPage;
+  },
+
+  setMeta(state, meta) {
+    state.totalRows = meta.total_count;
+    state.perPage = meta.limit_value;
+    state.curPage = meta.current_page;
+  }
+};
 
 export const getters = {};
 
@@ -21,11 +40,18 @@ export const actions = {
       return Promise.reject(err);
     });
   },
-  searchAnnouncement(_, query) {
-    return AnnouncementApi.search(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async getAnnouncements(context) {
+    const params = {
+      page: context.state.curPage
+    };
+    try {
+      const response = await AnnouncementApi.list(params);
+      context.commit('setAnnouncements', response.data);
+      context.commit('setMeta', response.meta);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 };

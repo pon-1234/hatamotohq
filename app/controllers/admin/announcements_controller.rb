@@ -9,18 +9,17 @@ class Admin::AnnouncementsController < Admin::ApplicationController
   def index
     @params = params[:q]
     @q = Announcement.ransack(@params)
-    @total_rows = @q.result.length
-    @current_page = params[:page]
     @announcements = @q.result.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /admin/announcements/search
   def search
     index
-    respond_to do |format|
-      format.html { render :index }
-      format.json { render json: { announcements: @announcements, total_rows: @total_rows, current_page: @current_page } }
-    end
+    render :index
   end
 
   # GET /admin/announcements/new

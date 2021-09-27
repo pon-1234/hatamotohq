@@ -20,7 +20,7 @@
                       <th width="15%" class="fw-100">操作</th>
                     </tr>
                   </thead>
-                  <tbody v-for="announcement in announcementList" :key="announcement.id">
+                  <tbody v-for="announcement in announcements" :key="announcement.id">
                       <tr>
                         <td class="text-center">{{ announcement.id }}</td>
                         <td>{{ moment(announcement.announced_at) }}</td>
@@ -55,7 +55,7 @@
                 @change="changePage"
               ></b-pagination>
             </div>
-            <div v-if="announcementList.length == 0">
+            <div v-if="announcements.length == 0">
               <b>データはありません。</b>
             </div>
           </div>
@@ -65,29 +65,38 @@
 
     <div id='confirmDelContent'></div>
 
-    <modal-announcement-show ref="modalAnnouncementDetail" :announcements=announcementList :status="`admin`"></modal-announcement-show>
+    <modal-announcement-show ref="modalAnnouncementDetail" :announcements=announcements :status="`admin`"></modal-announcement-show>
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import moment from 'moment-timezone';
 export default {
-  props: ['announcements', 'current_page', 'total_rows_default'],
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      announcementList: [],
       currentPage: 1,
-      totalRows: 0
+      loading: true
     };
   },
-  created() {
-    this.announcementList = _.cloneDeep(this.announcements);
-    this.currentPage = this.current_page || 1;
-    this.totalRows = this.total_rows_default;
+  async beforeMount() {
+    await this.getAnnouncements();
+    this.loading = false;
+  },
+  computed: {
+    ...mapState('announcement', {
+      announcements: (state) => state.announcements,
+      totalRows: (state) => state.totalRows,
+      perPage: (state) => state.perPage
+    }),
   },
   methods: {
-    ...mapActions('announcement', ['searchAnnouncement']),
+    ...mapMutations('announcement', [
+      'setCurPage'
+    ]),
+    ...mapActions('announcement', [
+      'getAnnouncements'
+    ]),
     moment(date) {
       return moment(date).tz('Asia/Tokyo').format('YYYY.MM.DD. HH:mm');
     },
@@ -95,12 +104,12 @@ export default {
       this.$refs.modalAnnouncementDetail.shownModal(id);
     },
     async changePage(page) {
-      const res = await this.searchAnnouncement({ page: page });
-      if (res && res.announcements) {
-        this.announcementList = [...res.announcements];
-        this.currentPage = res.current_page;
-        this.totalRows = res.total_rows;
-      }
+      this.$nextTick(async() => {
+        this.loading = true;
+        this.setCurPage(this.currentPage);
+        await this.getAnnouncements();
+        this.loading = false;
+      });
     }
   }
 };

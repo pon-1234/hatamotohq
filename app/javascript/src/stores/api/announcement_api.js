@@ -17,10 +17,11 @@ export default {
       dataType: 'json'
     });
   },
-  search: (query) => {
+  list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/search/?page=${query.page}`,
+      url: `${process.env.MIX_ROOT_PATH}/admin/announcements`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
