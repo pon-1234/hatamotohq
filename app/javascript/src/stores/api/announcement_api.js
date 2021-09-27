@@ -32,5 +32,5 @@ export default {
       method: 'DELETE',
       contentType: 'application/json'
     });
-  },
+  }
 };

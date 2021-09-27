@@ -35,7 +35,7 @@
                             <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
                             <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
-                              <a v-if="announcement.status && announcement.status !== 'draft'" class="dropdown-item" data-toggle="modal" data-target="#announcementConfirmSwitch" @click="onShowModalConfirmSwitch(announcement.id)">
+                              <a v-if="announcement.status && announcement.status !== 'draft'" role="button" class="dropdown-item" data-toggle="modal" data-target="#announcementConfirmSwitch" @click="curAnnouncementIndex = index">
                                 switch btn
                               </a>
                               <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAnnouncement" @click="curAnnouncementIndex = index">
@@ -78,14 +78,21 @@
     </modal-confirm>
     <!-- END: Delete announcement modal -->
 
+    <!-- START: Change status announcement modal -->
+    <modal-confirm title="change status announcement ?" id='announcementConfirmSwitch' type='confirm' @confirm="submitChangeStatusAnnouncement">
+      <template v-slot:content>
+        <div v-if="curAnnouncement">
+          シナリオ名：<b>{{curAnnouncement.title}}</b>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: Change status announcement modal -->
 
     <modal-announcement-show ref="modalAnnouncementDetail" :announcements=announcements :status="`admin`"></modal-announcement-show>
-    <modal-change-announcement-status ref="modalConfirmSwitch" :announcements=announcements></modal-change-announcement-status>
   </div>
 </template>
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
-import moment from 'moment-timezone';
 import Util from '@/core/util';
 
 export default {
@@ -120,13 +127,11 @@ export default {
     ]),
     ...mapActions('announcement', [
       'getAnnouncements',
-      'deleteAnnouncement'
+      'deleteAnnouncement',
+      'updateAnnouncement'
     ]),
     onShowModal(id) {
       this.$refs.modalAnnouncementDetail.shownModal(id);
-    },
-    onShowModalConfirmSwitch(id) {
-      this.$refs.modalConfirmSwitch.shownModal(id);
     },
     forceRerender() {
       this.contentKey++;
@@ -152,6 +157,27 @@ export default {
       }
       this.forceRerender();
     },
+    submitChangeStatusAnnouncement() {
+      const data = {
+        id: this.curAnnouncement.id,
+        status: (this.curAnnouncement.status === 'unpublished') ? 'published' : 'unpublished'
+      };
+      this.updateAnnouncement(data).then((response) => {
+        this.onReceiveChangeStatusUserResponse(response.id, null);
+      }).catch((error) => {
+        this.onReceiveChangeStatusUserResponse(null, error.responseJSON.message);
+      });
+    },
+    onReceiveChangeStatusUserResponse(id, errorMessage) {
+      if (id) {
+        window.toastr.success('success');
+        setTimeout(() => {
+          window.location.href = `${this.rootUrl}/admin/announcements`;
+        }, 750);
+      } else {
+        window.toastr.error(errorMessage);
+      }
+    }
   }
 };
 </script>

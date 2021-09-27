@@ -1,9 +1,9 @@
 <template>
   <div class="modal fade" ref="vuemodal" id="announcementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
-    <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
       <div class="modal-content p-2">
         <div class="modal-header">
-          <h3 class="card-title" :class="status == 'admin' ? 'card-title_admin' : 'card-title_user' ">announcement detail</h3>
+          <h3 class="card-title">announcement detail</h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -18,8 +18,8 @@
             </div>
           </section>
         </div>
-        <div class="modal-footer d-flex justify-content-center" v-if="status == 'admin'">
-          <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="btn btn-info m-auto fw-120">編集</a>
+        <div class="modal-footer" v-if="status == 'admin'">
+          <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="btn btn-info fw-120">編集</a>
         </div>
       </div>
     </div>
@@ -71,12 +71,6 @@ export default {
       font-size: 1.2rem;
       line-height: 35px;
       font-weight: 600;
-    }
-    .card-title_admin {
-      border-left: 4px solid #17a2b8;
-    }
-    .card-title_user {
-      border-left: 4px solid #28a745;
     }
   }
 

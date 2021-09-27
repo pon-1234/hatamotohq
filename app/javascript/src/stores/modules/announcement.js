@@ -60,5 +60,5 @@ export const actions = {
     } catch (error) {
       return null;
     }
-  },
+  }
 };
