@@ -25,5 +25,12 @@ export default {
       dataType: 'json',
       contentType: 'application/json'
     });
-  }
+  },
+  delete: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/${id}`,
+      method: 'DELETE',
+      contentType: 'application/json'
+    });
+  },
 };

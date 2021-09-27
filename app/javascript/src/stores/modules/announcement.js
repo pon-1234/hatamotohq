@@ -53,5 +53,12 @@ export const actions = {
       console.log(error);
       return null;
     }
-  }
+  },
+  async deleteAnnouncement(context, id) {
+    try {
+      return await AnnouncementApi.delete(id);
+    } catch (error) {
+      return null;
+    }
+  },
 };
