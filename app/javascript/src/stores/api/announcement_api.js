@@ -19,21 +19,21 @@ export default {
     });
   },
 
-  create(query) {
+  create(payload) {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/admin/announcements/`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json',
       dataType: 'json'
     });
   },
 
-  update: (query) => {
+  update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/${query.id}`,
+      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/${payload.id}`,
       method: 'PATCH',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json',
       dataType: 'json'
     });

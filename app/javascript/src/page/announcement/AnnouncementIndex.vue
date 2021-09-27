@@ -13,11 +13,11 @@
               <table class="table table-bordered mb-0">
                   <thead class="thead-light">
                     <tr>
-                      <th width="20%" class="fw-150">日時</th>
-                      <th width="40%" class="fw-200">タイトル</th>
-                      <th width="20%" class="fw-150">変更日時</th>
-                      <th width="20%" class="fw-150">状況</th>
-                      <th width="15%" class="fw-300">操作</th>
+                      <th>日時</th>
+                      <th>タイトル</th>
+                      <th>変更日時</th>
+                      <th>状況</th>
+                      <th class="fw-300">操作</th>
                     </tr>
                   </thead>
                   <tbody v-for="(announcement, index) in announcements" :key="announcement.id">
@@ -27,23 +27,22 @@
                         <td>{{ formattedDatetime(announcement.updated_at) }}</td>
                         <td>
                           <span v-if="announcement.status == 'draft'"><i class="mdi mdi-circle text-secondary"></i> 下書き </span>
-                          <span v-if="announcement.status == 'published'"><i class="mdi mdi-circle text-success"></i> 作成 </span>
-                          <span v-if="announcement.status == 'unpublished'"><i class="mdi mdi-circle text-primary"></i> unpublished </span>
+                          <span v-else-if="announcement.status == 'published'"><i class="mdi mdi-circle text-success"></i> 公開 </span>
+                          <span v-else-if="announcement.status == 'unpublished'"><i class="mdi mdi-circle text-primary"></i> 未公開 </span>
                         </td>
                         <td>
                           <div class="btn-group">
-                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
-                            <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
-                              <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
-                              <a v-if="announcement.status && announcement.status !== 'draft'" role="button" class="dropdown-item" data-toggle="modal" data-target="#announcementConfirmSwitch" @click="curAnnouncementIndex = index">
-                                switch btn
+                            <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                            <div class="dropdown-menu">
+                              <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" role="button" class="dropdown-item">お知らせを編集</a>
+                              <a v-if="announcement.status && announcement.status !== 'draft'" role="button" class="dropdown-item" data-toggle="modal" data-target="#modalToggleStatusAnnouncement" @click="curAnnouncementIndex = index">
+                                <span v-if="announcement.status === 'unpublished'">公開にする</span>
+                                <span v-else>未公開にする</span>
                               </a>
-                              <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAnnouncement" @click="curAnnouncementIndex = index">
-                                削除
-                              </a>
+                              <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAnnouncement" @click="curAnnouncementIndex = index">お知らせを削除</a>
                             </div>
                           </div>
-                          <div class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#announcementDetail" @click="curAnnouncementIndex = index">プレビュー</div>
+                          <div class="btn btn-light btn-sm" data-toggle="modal" data-target="#modalAnnouncementDetail" @click="curAnnouncementIndex = index">プレビュー</div>
                         </td>
                       </tr>
                   </tbody>
@@ -57,7 +56,7 @@
                 aria-controls="my-table"
                 first-number
                 last-number
-                @change="changePage"
+                @change="loadPage"
               ></b-pagination>
             </div>
             <div v-if="announcements.length == 0">
@@ -69,7 +68,7 @@
     </div>
 
     <!-- START: Delete announcement modal -->
-    <modal-confirm title="delete announcement ?" id='modalDeleteAnnouncement' type='delete' @confirm="submitDeleteAnnouncement">
+    <modal-confirm title="このお知らせを削除もよろしいですか？" id='modalDeleteAnnouncement' type='delete' @confirm="submitDeleteAnnouncement">
       <template v-slot:content>
         <div v-if="curAnnouncement">
           お知らせタイトル：<b>{{curAnnouncement.title}}</b>
@@ -78,15 +77,15 @@
     </modal-confirm>
     <!-- END: Delete announcement modal -->
 
-    <!-- START: Change status announcement modal -->
-    <modal-confirm title="change status announcement ?" id='announcementConfirmSwitch' type='confirm' @confirm="submitChangeStatusAnnouncement">
+    <!-- START: Toggle status (published/unpublished) -->
+    <modal-confirm title="このお知らせの状況を変更してもよろしいですか？" id='modalToggleStatusAnnouncement' type='confirm' @confirm="submitToggleStatus">
       <template v-slot:content>
         <div v-if="curAnnouncement">
-          シナリオ名：<b>{{curAnnouncement.title}}</b>
+          <b>{{ curAnnouncement.status === 'published' ? '公開' : '未公開' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAnnouncement.status === 'published' ? '未公開' : '公開' }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Change status announcement modal -->
+    <!-- END: Toggle status (published/unpublished) -->
 
     <modal-announcement-detail :announcement="curAnnouncement"></modal-announcement-detail>
   </div>
@@ -130,13 +129,12 @@ export default {
       'deleteAnnouncement',
       'updateAnnouncement'
     ]),
-    onShowModal(id) {
-      this.$refs.modalAnnouncementDetail.shownModal(id);
-    },
+
     forceRerender() {
       this.contentKey++;
     },
-    async changePage(page) {
+
+    async loadPage(page) {
       this.$nextTick(async() => {
         this.loading = true;
         this.setCurPage(this.currentPage);
@@ -159,7 +157,7 @@ export default {
       }
       this.forceRerender();
     },
-    submitChangeStatusAnnouncement() {
+    submitToggleStatus() {
       const data = {
         id: this.curAnnouncement.id,
         status: (this.curAnnouncement.status === 'unpublished') ? 'published' : 'unpublished'
@@ -183,6 +181,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-
-</style>

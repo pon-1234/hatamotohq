@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" id="modalAnnouncementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="info-header-modalLabel">お知らせ詳細</h5>
@@ -9,15 +9,15 @@
           </button>
         </div>
         <div class="modal-body" v-if="announcement">
-          <div class="announcement_page--title">{{ announcement.title }}</div>
-          <section class="page-output">
-            <div class="page-output__inner c-grid">
-              <div id="output" class="" v-html="modifyUrl(announcement.body)"></div>
+          <h3 class="text-center">{{ announcement.title }}</h3>
+          <section class="page-content">
+            <div class="page-content__inner c-grid">
+              <div id="output" class="" v-html="normalize(announcement.body)"></div>
             </div>
           </section>
         </div>
         <div class="modal-footer" >
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+          <button type="button" class="btn btn-light" data-dismiss="modal">閉じる</button>
         </div>
       </div>
     </div>
@@ -26,39 +26,22 @@
 <script>
 export default {
   props: ['announcement'],
-  data() {
-    return {
-      rootUrl: process.env.MIX_ROOT_PATH
-    };
-  },
 
   methods: {
-    modifyUrl(url) {
-      let endpoint = url;
-      if (endpoint && endpoint.includes('<oembed')) {
-        endpoint = endpoint.replaceAll('oembed', 'iframe');
-        endpoint = endpoint.replaceAll('url', 'src');
-        endpoint = endpoint.replaceAll('watch?v=', 'embed/');
+    normalize(body) {
+      if (body && body.includes('<oembed')) {
+        body = body.replaceAll('oembed', 'iframe');
+        body = body.replaceAll('url', 'src');
+        body = body.replaceAll('watch?v=', 'embed/');
       }
-      return endpoint;
+      return body;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  @media screen and (min-width: 576px) and (max-width: 1100px) {
-    .modal-dialog {
-      max-width: 95vw;
-    }
-  }
-
-  .announcement_page--title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-align: center;
-  }
-  .page-output__inner {
+  .page-content__inner {
     padding-bottom: 100px
   }
   .c-grid {
@@ -70,7 +53,7 @@ export default {
     box-sizing: border-box
   }
   @media screen and (max-width:768px) {
-    .page-output__inner {
+    .page-content__inner {
       padding-bottom: 50px
     }
     .c-grid {
@@ -164,9 +147,9 @@ export default {
     background: #ffffff;
     font-feature-settings: 'palt' 1;
   }
-    @media screen and (max-width: 768px) {
-      #output {
-        margin: 30px auto 0;
-      }
+  @media screen and (max-width: 768px) {
+    #output {
+      margin: 30px auto 0;
     }
+  }
 </style>

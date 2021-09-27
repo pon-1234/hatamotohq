@@ -9,6 +9,6 @@ class User::HomeController < User::ApplicationController
 
   # GET /user/home/announcements
   def announcements
-    @announcements = Announcement.published.before(Time.zone.now).page(params[:page])
+    @announcements = Announcement.for_user.page(params[:page])
   end
 end

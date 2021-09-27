@@ -2,7 +2,7 @@
   <div class="mxw-1200" >
     <div class="card">
       <!-- <div class="card-header d-flex align-items-center"></div> -->
-      <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
+      <ValidationObserver ref="observer" v-slot="{ validate }">
         <div class="card-body">
           <div class="form-group row">
             <label class="col-12">日時<required-mark/></label>
@@ -18,7 +18,7 @@
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                 ></datetime>
-                <span class="error-explanation">{{ errors[0] }}</span>
+                <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
           </div>
@@ -27,24 +27,24 @@
             <div class="col-12">
               <ValidationProvider name="タイトル" rules="required|max:512" v-slot="{ errors }">
                 <input type="text" class="form-control" name="announcement[title]" placeholder="入力してください" v-model="announcementData.title">
-                <span class="error-explanation">{{ errors[0] }}</span>
+                <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">body<required-mark/></label>
+            <label class="col-12">本文<required-mark/></label>
             <div class="col-12">
               <rich-text-input :value.sync="announcementData.body"></rich-text-input>
-              <ValidationProvider name="body" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="本文" rules="required" v-slot="{ errors }">
                 <input type="hidden" v-model="announcementData.body" name="announcement[body]"/>
-                <span class="error-explanation">{{ errors[0] }}</span>
+                <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
           </div>
         </div>
         <div class="card-footer row-form-btn d-flex">
-          <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit('published'))">登録</button>
-          <button type="submit" class="btn btn-outline-info fw-120" :disabled="invalid" @click="validate().then(onSubmit('draft'))">下書き保存</button>
+          <div role="button" class="btn btn-info fw-120 mr-2" @click="onSubmit('published')">登録</div>
+          <div role="button" class="btn btn-outline-info fw-120" @click="onSubmit('draft')">下書き保存</div>
         </div>
       </ValidationObserver>
     </div>
@@ -54,6 +54,7 @@
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
 import { mapActions } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   props: ['announcement'],
@@ -77,37 +78,31 @@ export default {
     Object.assign(this.announcementData, this.announcement);
   },
   methods: {
-    ...mapActions('announcement', ['createAnnouncement', 'updateAnnouncement']),
+    ...mapActions('announcement', [
+      'createAnnouncement', 'updateAnnouncement'
+    ]),
 
-    onSubmit(status) {
+    async onSubmit(status) {
+      // Validate if status is published
+      if (status === 'published') {
+        const isValid = await this.$refs.observer.validate();
+        if (!isValid) {
+          return;
+        }
+      }
+
       this.announcementData.status = status;
+      let response = null;
       if (this.announcementData.id) {
-        this.updateAnnouncement(this.announcementData).then((response) => {
-          this.onReceiveCreateUserResponse(response.id, null);
-        }).catch((error) => {
-          this.onReceiveCreateUserResponse(null, error.responseJSON.message);
-        });
+        response = await this.updateAnnouncement(this.announcementData);
+        if (response) return Util.showSuccessThenRedirect('お知らせの変更は完了しました。', `${this.rootUrl}/admin/announcements`);
       } else {
         const formData = _.omit(this.announcementData, ['id']);
-        this.createAnnouncement(formData).then((response) => {
-          this.onReceiveCreateUserResponse(response.id, null);
-        }).catch((error) => {
-          this.onReceiveCreateUserResponse(null, error.responseJSON.message);
-        });
+        response = await this.createAnnouncement(formData);
+        if (response) return Util.showSuccessThenRedirect('お知らせの作成は完了しました。', `${this.rootUrl}/admin/announcements`);
       }
-    },
-    onReceiveCreateUserResponse(id, errorMessage) {
-      if (id) {
-        if (this.announcementData.id) {
-          window.toastr.success('success update');
-        } else {
-          window.toastr.success('success create');
-        }
-        setTimeout(() => {
-          window.location.href = `${this.rootUrl}/admin/announcements`;
-        }, 750);
-      } else {
-        window.toastr.error(errorMessage);
+      if (!response) {
+        window.toastr.error('お知らせの保存は失敗しました。');
       }
     }
   }

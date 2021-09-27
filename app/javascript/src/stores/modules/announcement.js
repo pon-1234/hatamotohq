@@ -26,20 +26,20 @@ export const mutations = {
 export const getters = {};
 
 export const actions = {
-  createAnnouncement(_, query) {
-    return AnnouncementApi.create(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async createAnnouncement(_, query) {
+    try {
+      return await AnnouncementApi.create(query);
+    } catch (error) {
+      return null;
+    }
   },
 
-  updateAnnouncement(_, query) {
-    return AnnouncementApi.update(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async updateAnnouncement(_, payload) {
+    try {
+      return await AnnouncementApi.update(payload);
+    } catch (error) {
+      return null;
+    }
   },
 
   async getAnnouncements(context) {

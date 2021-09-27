@@ -48,7 +48,7 @@ class LineAccount < ApplicationRecord
   end
 
   def latest_messages
-    Message.joins(:channel).references(:channel).where(channels: { line_account_id: self.id }).from_friend.limit(10)
+    Message.joins(:channel).references(:channel).where(channels: { line_account_id: self.id }).from_friend.limit(8)
   end
 
   private

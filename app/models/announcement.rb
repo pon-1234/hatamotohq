@@ -23,5 +23,6 @@ class Announcement < ApplicationRecord
 
   # Scope
   enum status: { published: 'published', unpublished: 'unpublished', draft: 'draft' }
-  scope :before, -> (time) { where('announced_at <= ?', Time.zone.now) }
+
+  scope :for_user, -> { published.where('announced_at <= ?', Time.zone.now) }
 end

@@ -29,7 +29,7 @@ class Admin::AnnouncementsController < Admin::ApplicationController
   # POST /admin/announcements
   def create
     @announcement = Announcement.new(announcement_params)
-    if !@announcement.save
+    unless @announcement.save(validate: !@announcement.draft?)
       render_bad_request_with_message(@announcement.first_error_message)
     end
   end
