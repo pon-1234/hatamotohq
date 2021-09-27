@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card chat-pane">
     <div class="card-body">
       <!-- start search box -->
       <div class="app-search">
