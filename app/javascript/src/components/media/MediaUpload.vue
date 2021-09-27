@@ -27,11 +27,11 @@
           </div>
           <label class="custom-file-label text-left">ファイルを選択</label>
         </div>
-        <span v-if="errorMessage" class="error">{{errorMessage}}</span>
+        <span v-if="errorMessage" class="w-100 error">{{errorMessage}}</span>
+        <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       </div>
     </div>
     <div class="d-flex align-items-center">
-      <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       <button v-if="isPreview" class="btn btn-info ml-auto mr-4 fw-120" @click="handleUpload">確認する</button>
     </div>
   </div>

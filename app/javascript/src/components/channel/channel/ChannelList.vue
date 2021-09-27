@@ -1,14 +1,35 @@
 <template>
-  <div class="conversations">
-    <talk-channel-action/>
-    <div class="list-view" ref="channelListView" @scroll="loadMoreChannel()">
-      <talk-channel-item
+  <div class="card">
+    <div class="card-body">
+      <!-- start search box -->
+      <div class="app-search">
+        <form>
+          <div class="form-group position-relative">
+            <input type="text" class="form-control" placeholder="People, groups & messages..." />
+            <span class="mdi mdi-magnify search-icon"></span>
+          </div>
+        </form>
+      </div>
+      <!-- users -->
+      <div style="max-height: 550px">
+        <channel-list-item
+          v-for="(channel, index) in showChannels" :key="index"
+          :channel="channel"
+          :active="activeChannel && channel.id === activeChannel.id"
+          @click.native="switchChannel(channel, index)">
+        </channel-list-item>
+      </div>
+    </div>
+    <!-- end search box -->
+    <!-- <talk-channel-action/> -->
+    <!-- <div class="list-view" ref="channelListView" @scroll="loadMoreChannel()">
+      <channel-list-item
         v-for="(channel, index) in showChannels" :key="index"
         :data="channel"
         :active="activeChannel && channel.id === activeChannel.id"
         @click.native="switchChannel(channel, index)"
         />
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -52,6 +73,7 @@ export default {
   methods: {
     ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
     async switchChannel(channel, index) {
+      console.log('-----switch channel to -----', channel);
       const notChanged = this.activeChannel.id === channel.id;
       this.$emit('switchChannel', !notChanged);
       // Do nothing if channel is not changed

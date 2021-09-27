@@ -18,7 +18,7 @@
         <div class="modal-body mh-100 overflow-hidden">
           <div class="bg-light sticker-picker m-n3">
             <div class="w-100">
-              <select-package-sticker @input="changePackageId" />
+              <sticker-select-package @input="changePackageId"></sticker-select-package>
             </div>
             <div class="bg-white" style="height: 400px;">
               <div

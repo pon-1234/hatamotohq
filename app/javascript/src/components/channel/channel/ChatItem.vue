@@ -1,5 +1,29 @@
 <template>
-  <div :class="'direct-chat-msg ' + message.from">
+  <li :class="message.from === 'friend' ? 'clearfix' : 'clearfix odd'">
+    <div class="chat-avatar">
+      <img :src="message.sender && message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
+      <i>{{getTimeMessage(message)}}</i>
+    </div>
+    <div class="conversation-text">
+      <div class="ctext-wrap">
+        <i>{{ message.sender ? message.sender.name : 'システム' }}</i>
+        <p>
+          <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
+        </p>
+      </div>
+    </div>
+    <div class="conversation-actions dropdown" hidden>
+      <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
+          class='uil uil-ellipsis-v'></i></button>
+
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="#">Copy Message</a>
+        <a class="dropdown-item" href="#">Edit</a>
+        <a class="dropdown-item" href="#">Delete</a>
+      </div>
+    </div>
+  </li>
+  <!-- <div :class="'direct-chat-msg ' + message.from">
     <template v-if="message.from === 'friend'">
       <div class="direct-chat-infos clearfix">
         <span class="direct-chat-name float-left">{{ message.sender.name }}</span>
@@ -27,7 +51,7 @@
           </div>
         </div>
       </div>
-    </template>
+    </template> -->
 
     <!-- <div class="d-flex align-items-center" hidden>
       <div class="avatar" v-if="message.from === 'friend'">
@@ -52,7 +76,6 @@
         </b-dropdown>
       </div>
     </div> -->
-  </div>
 </template>
 <script>
 import moment from 'moment';

@@ -1,21 +1,23 @@
 <template>
-  <div class="container" v-if="activeChannel">
-    <div class="nav-element" hidden>
-      <!-- left -->
-      <div class="left">
-          <div class="avatar">
-              <img :src="activeChannel.avatar ? activeChannel.avatar : '/img/no-image-profile.png'">
-          </div>
-          <div class="name">
-              {{activeChannel.title}}
-          </div>
-          <div  id="btn-detail" class="btn-detail fz14 btn-deatil-friend" @click="showFriendDetail(activeChannel.line_friend_id)"><a >友だち詳細</a></div>
-      </div>
-      <div class="right">
-      </div>
-    </div>
-    <div class="messages">
-      <div class="content direct-chat-messages" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+  <div class="card" v-if="activeChannel">
+    <div class="card-body">
+      <ul class="conversation-list overflow-auto" data-simplebar style="max-height: 537px;" ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+        <li>
+          <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
+        </li>
+        <span
+          v-for="(message, index) in messages"
+          :key="index"
+          :id="'message_content_' + message.id"
+        >
+          <chat-item
+            :message="message"
+            @unread="setUnreadMessage">
+          </chat-item>
+        </span>
+      </ul>
+
+      <div hidden class="content direct-chat-messages"  @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
         <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
         <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
           <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
@@ -30,13 +32,44 @@
               </div>
             </div>
           </div>
-          <chat-item  :message="message" @unread="setUnreadMessage"></chat-item>
+          <chat-item :message="message" @unread="setUnreadMessage"></chat-item>
         </div>
       </div>
-      <div class="box-input" style="position: relative">
+
+      <div class="row">
+        <div class="col">
+          <div class="mt-2 bg-light p-3 rounded">
+            <div class="row">
+              <div class="col mb-2 mb-sm-0">
+                <input type="text" class="form-control border-0"
+                  :placeholder="!isMobile? 'Enterで改行、Shift+Enterで送信': ''"
+                  v-model="textMessage"
+                  @compositionstart="composing=true"
+                  @compositionend="composing=false"
+                  @keydown.enter.shift.exact.prevent
+                  @keydown.enter.shift.exact="sendTextMessage"
+                  required="">
+                <div class="invalid-feedback">
+                  メッセージを入力してください
+                </div>
+              </div>
+              <div class="col-sm-auto">
+                <div class="btn-group">
+                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSendMedia"><i class="uil uil-paperclip"></i></div>
+                  <div class="btn btn-light" role="button" data-toggle="modal" data-target="#modalSelectSticker"> <i class='uil uil-smile'></i></div>
+                  <button type="submit" class="btn btn-success chat-send btn-block" @click="sendTextMessage"><i
+                      class='uil uil-message'></i></button>
+                </div>
+              </div> <!-- end col -->
+            </div> <!-- end row-->
+          </div>
+        </div> <!-- end col-->
+      </div>
+
+      <div hidden class="box-input" style="position: relative">
         <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
-            <select-package-sticker @input="changePackageId" />
+            <sticker-select-package @input="changePackageId" />
           </div>
           <div class="content">
             <sticker
@@ -50,10 +83,10 @@
         </div>
         <div class="tool d-flex align-items-center" v-if="activeChannel.status !== 'blocked'">
           <ul class="left list-action">
-            <li class="text-sticker" @click="openSticker">
+            <li class="text-sticker" >
               <i class="fas fa-smile "></i>
             </li>
-            <li data-toggle="modal" data-target="#imageModalCenter">
+            <li data-toggle="modal" data-target="#modalSendMedia">
               <i class="fas fa-paperclip "></i>
             </li>
             <li data-toggle="modal">
@@ -90,9 +123,10 @@
         </div>
       </div>
     </div>
-    <modal-select-media :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
+    <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
     <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
     <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
+    <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
   <div v-else class="container" >
@@ -252,8 +286,8 @@ export default {
         channel_id: this.activeChannel.id,
         message: {
           type: 'sticker',
-          packageId: sticker.package_id,
-          stickerId: sticker.line_emoji_id,
+          packageId: sticker.packageId,
+          stickerId: sticker.stickerId,
           stickerResourceType: 'STATIC'
         },
         timestamp: new Date().getTime()

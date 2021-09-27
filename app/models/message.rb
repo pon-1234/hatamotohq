@@ -68,12 +68,12 @@ class Message < ApplicationRecord
     end
 
     def execute_after_create_commit
-      set_conversation_activity
+      update_last_activity if self.from_friend?
       dispatch_create_events
       send_reply
     end
 
-    def set_conversation_activity
+    def update_last_activity
       channel.update_columns(last_activity_at: created_at, last_message: self.text)
     end
 

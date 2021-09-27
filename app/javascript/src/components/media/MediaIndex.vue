@@ -6,7 +6,7 @@
           href="#"
           class="btn btn-success mb-2"
           data-toggle="modal"
-          data-target="#imageModalCenter"
+          data-target="#modalSelectMedia"
           @click="curUploadType = 'image'"
         >
           画像アップロード
@@ -15,7 +15,7 @@
           href="#"
           class="btn btn-success mb-2"
           data-toggle="modal"
-          data-target="#imageModalCenter"
+          data-target="#modalSelectMedia"
           @click="curUploadType = 'audio'"
         >
           音声アップロード
@@ -24,7 +24,7 @@
           href="#"
           class="btn btn-success mb-2"
           data-toggle="modal"
-          data-target="#imageModalCenter"
+          data-target="#modalSelectMedia"
           @click="curUploadType = 'video'"
         >
           動画アップロード
@@ -33,7 +33,7 @@
           href="#"
           class="btn btn-success mb-2"
           data-toggle="modal"
-          data-target="#imageModalCenter"
+          data-target="#modalSelectMedia"
           @click="curUploadType = 'richmenu'"
         >
           メニュー画像アップロード
@@ -42,7 +42,7 @@
           href="#"
           class="btn btn-success mb-2"
           data-toggle="modal"
-          data-target="#imageModalCenter"
+          data-target="#modalSelectMedia"
           @click="curUploadType = 'pdf'"
         >
           PDFアップロード
@@ -59,11 +59,11 @@
             v-for="(media, index) in medias"
             :key="index"
             @click="selectMedia(media)"
-            :class="mode === 'manage' ? 'col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex' : 'col-xs-12 col-md-6 col-lg-4 col-xl-3 mb-4 d-flex'"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex"
           >
             <div class="card w-100">
-              <div class="card-body d-flex align-items-center justify-content-center">
-                <div class="text-center">
+              <div class="card-body p-0 d-flex align-items-center justify-content-center">
+                <div class="text-center overflow-hidden">
                   <div :class="mode === 'read' ? 'media-preview' : 'media-preview'">
                     <template v-if="media.type === 'image' || media.type === 'richmenu'">
                       <expandable-image
@@ -99,10 +99,9 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer">
+              <div class="card-footer" v-if="mode === 'manage'">
                 <div class="d-flex align-items-center mt-1">
                   <input
-                    v-if="mode === 'manage'"
                     class="select-media-cb mr-1"
                     type="checkbox"
                     :value="media"
@@ -110,7 +109,6 @@
                   />
                   <b>{{ media.type }}</b>
                   <a
-                    v-if="mode === 'manage'"
                     :href="media.url"
                     class="ml-auto text-sm text-info"
                     download

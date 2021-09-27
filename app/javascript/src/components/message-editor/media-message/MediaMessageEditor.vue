@@ -44,7 +44,7 @@
             href="#"
             class="text-primary"
             data-toggle="modal"
-            data-target="#imageModalCenter"
+            data-target="#modalSelectMedia"
           >
             <span v-if="data.type === 'image'">写真をアップロード</span>
             <span v-if="data.type === 'video'">動画をアップロード</span>

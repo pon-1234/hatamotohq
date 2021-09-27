@@ -1,19 +1,30 @@
 <template>
-  <div class="card">
-    <div class="card-body talk">
-      <div id="chatbox" class="chatbox active">
-        <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
-        <chat-box
-          @onSendMessage="sendMessage"
-          @onSendScenario="sendScenario"
-          @onSendTemplate="sendTemplate"
-          @sendMediaMessage="sendMediaMessage"
-          :class="getRightItem()"
-          @showFriendDetail="showFriendDetail"
-        />
-        <channel-friend-detail></channel-friend-detail>
-      </div>
+  <div class="row">
+    <!-- start chat users-->
+    <div class="col-xl-3 col-lg-6 order-lg-1 order-xl-1">
+      <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
     </div>
+    <!-- end chat users-->
+
+    <!-- chat area -->
+    <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
+      <chat-box
+        @onSendMessage="sendMessage"
+        @onSendScenario="sendScenario"
+        @onSendTemplate="sendTemplate"
+        @sendMediaMessage="sendMediaMessage"
+        :class="getRightItem()"
+        @showFriendDetail="showFriendDetail"
+      ></chat-box>
+    </div>
+    <!-- end chat area-->
+
+    <!-- start user detail -->
+    <div class="col-xl-3 col-lg-6 order-lg-1 order-xl-2">
+      <channel-friend-detail></channel-friend-detail>
+    </div>
+    <!-- end user detail -->
+
     <talk-modal-search
       :id="'TalkModalSearch'"
       @input="fetchItem"

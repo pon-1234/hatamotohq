@@ -1,7 +1,7 @@
 <template>
   <div
     class="modal fade modal-template modal-common01"
-    :id="id ? id: 'imageModalCenter'"
+    :id="id ? id: 'modalSelectMedia'"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
