@@ -1,12 +1,6 @@
 <template>
   <div class="mxw-1200" ref="myComponent">
     <div class="card">
-      <div class="card-header d-flex align-items-center">
-        <a :href="`${MIX_ROOT_PATH}/user/templates`" class="text-info">
-          <i class="fa fa-arrow-left"></i> テンプレート一覧
-        </a>
-        <h5 class="m-auto font-weight-bold">新規テンプレート登録</h5>
-      </div>
       <div class="card-body">
         <div class="form-border">
           <div class="form-group">
@@ -37,7 +31,7 @@
       <div class="card-footer d-flex">
         <button
           type="submit"
-          class="btn btn-submit btn-success fw-120"
+          class="btn btn-success fw-120"
           @click="submitSaveTemplate"
         >保存</button>
       </div>

@@ -25,6 +25,10 @@ export const mutations = {
 
   setFilter(state, types) {
     state.filterTypes = types;
+  },
+
+  resetFilter(state) {
+    state.filterTypes = ['image', 'video', 'audio', 'richmenu'];
   }
 };
 

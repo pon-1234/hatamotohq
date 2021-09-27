@@ -37,7 +37,7 @@
                 </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-center mt-4">
+          <div class="d-flex justify-content-center mt-4" v-if="scenarios.length === 0">
             <b-pagination
               v-model="currentPage"
               :total-rows="totalRows"
@@ -47,6 +47,8 @@
             ></b-pagination>
           </div>
         </div>
+
+        <loading-indicator :loading="loading"></loading-indicator>
       </div>
     </div>
 
