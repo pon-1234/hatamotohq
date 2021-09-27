@@ -7,9 +7,11 @@ class Admin::AnnouncementsController < Admin::ApplicationController
 
   # GET /admin/announcements
   def index
-    @params = params[:q]
-    @q = Announcement.ransack(@params)
-    @announcements = @q.result.page(params[:page])
+    if request.format.json?
+      @params = params[:q]
+      @q = Announcement.ransack(@params)
+      @announcements = @q.result.page(params[:page])
+    end
     respond_to do |format|
       format.html
       format.json
@@ -51,30 +53,21 @@ class Admin::AnnouncementsController < Admin::ApplicationController
 
   # DELETE /admin/announcements/:id
   def destroy
-    if @announcement.destroy
-      redirect_to admin_announcements_path, flash: { success: 'お知らせの削除は完了しました。' }
-    else
-      redirect_to admin_announcements_path, flash: { error: @announcement.first_error_message }
-    end
-  end
-
-  def delete_confirm
-    respond_to do |format|
-      format.js
-    end
+    @announcement.destroy!
+    render_success
   end
 
   def upload_image
     if params.has_key?(:file)
       file = params[:file]
-      @blob = create_blob(file, file.original_filename, file.content_type)
+      @blob = create_blob_from_file(file)
 
       return render json: {
         url: url_for(@blob),
         name: file.original_filename
       }
     end
-    render_bad_request_with_message('Error params')
+    render_bad_request
   end
 
   private

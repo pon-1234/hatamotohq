@@ -26,9 +26,7 @@
                         <td>{{ announcement.title }}</td>
                         <td>{{ formattedDatetime(announcement.updated_at) }}</td>
                         <td>
-                          <span v-if="announcement.status == 'draft'"><i class="mdi mdi-circle text-secondary"></i> 下書き </span>
-                          <span v-else-if="announcement.status == 'published'"><i class="mdi mdi-circle text-success"></i> 公開 </span>
-                          <span v-else-if="announcement.status == 'unpublished'"><i class="mdi mdi-circle text-primary"></i> 未公開 </span>
+                          <announcement-status :announcement="announcement"></announcement-status>
                         </td>
                         <td>
                           <div class="btn-group">
@@ -151,32 +149,20 @@ export default {
     async submitDeleteAnnouncement() {
       const response = await this.deleteAnnouncement(this.curAnnouncement.id);
       if (response) {
-        window.toastr.success('success');
+        Util.showSuccessThenRedirect('お知らせの削除は完了しました。', `${this.rootUrl}/admin/announcements`);
       } else {
-        window.toastr.error('error');
+        window.toastr.error('お知らせの削除は失敗しました。');
       }
-      this.forceRerender();
     },
-    submitToggleStatus() {
+
+    async submitToggleStatus() {
       const data = {
         id: this.curAnnouncement.id,
         status: (this.curAnnouncement.status === 'unpublished') ? 'published' : 'unpublished'
       };
-      this.updateAnnouncement(data).then((response) => {
-        this.onReceiveChangeStatusUserResponse(response.id, null);
-      }).catch((error) => {
-        this.onReceiveChangeStatusUserResponse(null, error.responseJSON.message);
-      });
-    },
-    onReceiveChangeStatusUserResponse(id, errorMessage) {
-      if (id) {
-        window.toastr.success('success');
-        setTimeout(() => {
-          window.location.href = `${this.rootUrl}/admin/announcements`;
-        }, 750);
-      } else {
-        window.toastr.error(errorMessage);
-      }
+      const response = await this.updateAnnouncement(data);
+      if (response) Util.showSuccessThenRedirect('お知らせ状況の変更は完了しました。', `${this.rootUrl}/admin/announcements`);
+      else window.toastr.error('お知らせ状況の変更は失敗しました。');
     }
   }
 };

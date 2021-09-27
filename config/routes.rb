@@ -99,7 +99,6 @@ Rails.application.routes.draw do
       end
       resources :announcements do
         get :search, on: :collection
-        get :delete_confirm, on: :member
         post :upload_image,  on: :collection
       end
     end
