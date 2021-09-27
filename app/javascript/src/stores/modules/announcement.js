@@ -33,6 +33,7 @@ export const actions = {
       return Promise.reject(err);
     });
   },
+
   updateAnnouncement(_, query) {
     return AnnouncementApi.update(query).done((res) => {
       return Promise.resolve(res);
@@ -40,6 +41,7 @@ export const actions = {
       return Promise.reject(err);
     });
   },
+
   async getAnnouncements(context) {
     const params = {
       page: context.state.curPage
@@ -54,6 +56,22 @@ export const actions = {
       return null;
     }
   },
+
+  async getPublishedAnnouncements(context) {
+    const params = {
+      page: context.state.curPage
+    };
+    try {
+      const response = await AnnouncementApi.published(params);
+      context.commit('setAnnouncements', response.data);
+      context.commit('setMeta', response.meta);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+
   async deleteAnnouncement(context, id) {
     try {
       return await AnnouncementApi.delete(id);

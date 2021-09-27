@@ -32,7 +32,7 @@
                         </td>
                         <td>
                           <div class="btn-group">
-                            <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
+                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuAnnouncement" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作 <span class="caret"></span></button>
                             <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuAnnouncement">
                               <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="dropdown-item">編集</a>
                               <a v-if="announcement.status && announcement.status !== 'draft'" role="button" class="dropdown-item" data-toggle="modal" data-target="#announcementConfirmSwitch" @click="curAnnouncementIndex = index">
@@ -43,7 +43,7 @@
                               </a>
                             </div>
                           </div>
-                          <div class="btn btn-info btn-sm" data-toggle="modal" data-target="#announcementDetail" @click="onShowModal(announcement.id)">プレビュー</div>
+                          <div class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#announcementDetail" @click="curAnnouncementIndex = index">プレビュー</div>
                         </td>
                       </tr>
                   </tbody>
@@ -72,7 +72,7 @@
     <modal-confirm title="delete announcement ?" id='modalDeleteAnnouncement' type='delete' @confirm="submitDeleteAnnouncement">
       <template v-slot:content>
         <div v-if="curAnnouncement">
-          シナリオ名：<b>{{curAnnouncement.title}}</b>
+          お知らせタイトル：<b>{{curAnnouncement.title}}</b>
         </div>
       </template>
     </modal-confirm>
@@ -88,7 +88,7 @@
     </modal-confirm>
     <!-- END: Change status announcement modal -->
 
-    <modal-announcement-show ref="modalAnnouncementDetail" :announcements=announcements :status="`admin`"></modal-announcement-show>
+    <modal-announcement-detail :announcement="curAnnouncement"></modal-announcement-detail>
   </div>
 </template>
 <script>
@@ -145,9 +145,11 @@ export default {
         this.loading = false;
       });
     },
+
     formattedDatetime(time) {
       return Util.formattedDatetime(time);
     },
+
     async submitDeleteAnnouncement() {
       const response = await this.deleteAnnouncement(this.curAnnouncement.id);
       if (response) {

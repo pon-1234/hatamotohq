@@ -1,25 +1,23 @@
 <template>
-  <div class="modal fade" ref="vuemodal" id="announcementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-      <div class="modal-content p-2">
+  <div class="modal fade" id="modalAnnouncementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+      <div class="modal-content">
         <div class="modal-header">
-          <h3 class="card-title">announcement detail</h3>
+          <h5 class="modal-title" id="info-header-modalLabel">お知らせ詳細</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body modal-scroll-x">
-          <!--title-->
+        <div class="modal-body" v-if="announcement">
           <div class="announcement_page--title">{{ announcement.title }}</div>
-          <!--EDITOR-OUTPUT-->
           <section class="page-output">
             <div class="page-output__inner c-grid">
               <div id="output" class="" v-html="modifyUrl(announcement.body)"></div>
             </div>
           </section>
         </div>
-        <div class="modal-footer" v-if="status == 'admin'">
-          <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" class="btn btn-info fw-120">編集</a>
+        <div class="modal-footer" >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
         </div>
       </div>
     </div>
@@ -27,23 +25,14 @@
 </template>
 <script>
 export default {
-  props: ['announcements', 'status'],
+  props: ['announcement'],
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
-      announcement: {}
+      rootUrl: process.env.MIX_ROOT_PATH
     };
   },
 
-  mounted() {
-    // $(this.$refs.vuemodal).on('show.bs.modal', this.shownModal);
-  },
-
   methods: {
-    shownModal(id) {
-      this.announcement = this.announcements.find(e => e.id === Number(id));
-      // this.announcement.announced_at = moment(this.announcement.announced_at).format('YYYY年MM月DD日');
-    },
     modifyUrl(url) {
       let endpoint = url;
       if (endpoint && endpoint.includes('<oembed')) {
@@ -64,45 +53,32 @@ export default {
     }
   }
 
-  .modal-header {
-    border-bottom: 1px solid #fff;
-    .card-title{
-      padding-left: 15px;
-      font-size: 1.2rem;
-      line-height: 35px;
-      font-weight: 600;
+  .announcement_page--title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .page-output__inner {
+    padding-bottom: 100px
+  }
+  .c-grid {
+    width: 100%;
+    max-width: 1180px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin: 0 auto;
+    box-sizing: border-box
+  }
+  @media screen and (max-width:768px) {
+    .page-output__inner {
+      padding-bottom: 50px
+    }
+    .c-grid {
+      padding-left: 20px;
+      padding-right: 20px
     }
   }
 
-  .modal-scroll-x {
-    height: 75vh;
-    overflow-x: auto;
-    .announcement_page--title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      text-align: center;
-    }
-    .page-output__inner {
-      padding-bottom: 100px
-    }
-    .c-grid {
-      width: 100%;
-      max-width: 1180px;
-      padding-left: 40px;
-      padding-right: 40px;
-      margin: 0 auto;
-      box-sizing: border-box
-    }
-    @media screen and (max-width:768px) {
-      .page-output__inner {
-        padding-bottom: 50px
-      }
-      .c-grid {
-        padding-left: 20px;
-        padding-right: 20px
-      }
-    }
-  }
   ::v-deep {
     .image-style-side,
     .image-style-align-left,
