@@ -11,10 +11,10 @@
         </form>
       </div>
       <!-- users -->
-      <div data-simplebar style="max-height: 550px">
+      <div style="max-height: 550px">
         <channel-list-item
           v-for="(channel, index) in showChannels" :key="index"
-          :data="channel"
+          :channel="channel"
           :active="activeChannel && channel.id === activeChannel.id"
           @click.native="switchChannel(channel, index)">
         </channel-list-item>

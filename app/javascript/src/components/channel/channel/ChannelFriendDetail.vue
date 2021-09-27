@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-body">
+    <div class="card-body" v-if="activeChannel">
       <div class="dropdown float-right">
         <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown"
           aria-expanded="false">
@@ -17,42 +17,35 @@
       </div>
 
       <div class="mt-3 text-center">
-        <img src="assets/images/users/avatar-5.jpg" alt="shreyu"
+        <img :src="activeChannel.line_friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>Shreyu N</h4>
-        <button class="btn btn-primary btn-sm mt-1"><i class='uil uil-envelope-add mr-1'></i>Send
-          Email</button>
-        <p class="text-muted mt-2 font-14">Last Interacted: <strong>Few hours back</strong></p>
+        <h4>{{ activeChannel.line_friend.name }}</h4>
       </div>
 
       <div class="mt-3">
         <hr class="" />
 
-        <p class="mt-4 mb-1"><strong><i class='uil uil-at'></i> Email:</strong></p>
-        <p>support@coderthemes.com</p>
+        <p class="mt-4 mb-1"><strong><i class='uil uil-at'></i> メール:</strong></p>
+        <p>未設定</p>
 
-        <p class="mt-3 mb-1"><strong><i class='uil uil-phone'></i> Phone Number:</strong></p>
-        <p>+1 456 9595 9594</p>
+        <p class="mt-3 mb-1"><strong><i class='uil uil-phone'></i> 電話番号:</strong></p>
+        <p>未設定</p>
 
-        <p class="mt-3 mb-1"><strong><i class='uil uil-location'></i> Location:</strong></p>
-        <p>California, USA</p>
-
-        <p class="mt-3 mb-1"><strong><i class='uil uil-globe'></i> Languages:</strong></p>
-        <p>English, German, Spanish</p>
-
-        <p class="mt-3 mb-2"><strong><i class='uil uil-users-alt'></i> Groups:</strong></p>
-        <p>
-          <span class="badge badge-success-lighten p-1 font-14">Work</span>
-          <span class="badge badge-primary-lighten p-1 font-14">Friends</span>
-        </p>
+        <p class="mt-3 mb-1"><strong><i class='uil uil-location'></i> 住所:</strong></p>
+        <p>未設定</p>
       </div>
     </div> <!-- end card-body -->
-    </div> <!-- end card-->
+  </div> <!-- end card-->
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-
+  computed: {
+    ...mapState('channel', {
+      activeChannel: state => state.activeChannel
+    })
+  }
 };
 </script>
 

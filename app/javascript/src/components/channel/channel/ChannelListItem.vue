@@ -1,17 +1,17 @@
 <template>
-  <div role="button" class="text-body">
-    <div :class="active ? 'bg-light media mt-1 p-2' : 'media mt-1 p-2'">
-      <img :src="data.avatar ? data.avatar : '/img/no-image-profile.png'" class="mr-2 rounded-circle" height="48"
+  <div class="text-body">
+    <div :class="active ? 'bg-light media mt-1 p-2' : 'media mt-1 p-2'" role="button">
+      <img :src="channel.line_friend.avatar_url || '/img/no-image-profile.png'" class="mr-2 rounded-circle" height="48"
         alt="User avatar" />
       <div class="media-body">
         <h5 class="mt-0 mb-0 font-14">
-          <span class="float-right text-muted font-12">{{getLastTime(data.last_timetamp)}}</span>
-          {{data.title}}
+          <span class="float-right text-muted font-12">{{getLastTime(channel.last_timetamp)}}</span>
+          {{channel.line_friend.name}}
         </h5>
         <p class="mt-1 mb-0 text-muted font-14">
           <span class="w-25 float-right text-right"><span
               class="badge badge-danger-lighten">3</span></span>
-          <span class="w-75"><last-message-text :message="data.last_message"/></span>
+          <span class="w-75"><last-message-text :message="channel.last_message"/></span>
         </p>
       </div>
     </div>
@@ -42,7 +42,7 @@
 import moment from 'moment';
 
 export default {
-  props: ['data', 'active'],
+  props: ['channel', 'active'],
   methods: {
     getLastTime(time) {
       const timeMessage = moment(moment(time).format('YYYY-MM-DD'));
@@ -61,7 +61,7 @@ export default {
         className += 'active';
       }
 
-      if (this.data.status === 'blocked') {
+      if (this.channel.status === 'blocked') {
         className += ' blocked';
       }
 
@@ -69,10 +69,10 @@ export default {
     },
 
     getTotalUnreadMessage() {
-      if (this.data.total_unread_messages > 98) {
+      if (this.channel.total_unread_messages > 98) {
         return '99+';
       }
-      return this.data.total_unread_messages;
+      return this.channel.total_unread_messages;
     }
   }
 };
