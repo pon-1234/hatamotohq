@@ -37,14 +37,16 @@
                 </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-center mt-4" v-if="scenarios.length === 0">
+          <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
+              v-if="totalRows > perPage"
               v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="loadPage"
               aria-controls="my-table"
             ></b-pagination>
+            <b v-if="!loading && totalRows === 0">シナリオはありません。</b>
           </div>
         </div>
 
