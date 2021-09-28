@@ -47,7 +47,7 @@
                       <div class="btn-group">
                         <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <%= link_to 'ユーザーを編集', edit_admin_user_path(user), class: "dropdown-item", role: "button" %>
+                          <%= link_to 'クライアントを編集', edit_admin_user_path(user), class: "dropdown-item", role: "button" %>
                           <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalConfirmToggle" onclick="confirmToggleStatus(<%= user.id %>)">
                             <% if user.status.eql?('active')%>
                               ブロックする
@@ -57,7 +57,7 @@
                           </a>
 
                           <%= link_to delete_confirm_admin_user_path(user), remote: true, class: "dropdown-item", role: "button" do%>
-                            ユーザーを削除
+                            クライアントを削除
                           <% end %>
                         </div>
                       </div>

@@ -1,13 +1,20 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><%= link_to 'クライアント一覧',  admin_users_path %></>
+          <li class="breadcrumb-item"><%= @user.name %></li>
+        </ol>
+      </div>
+      <h4 class="page-title">クライアント詳細</h4>
+    </div>
+  </div>
+</div>
+
 <div class="row" >
   <div class="col-12">
     <div class="card">
-      <div class="card-header d-flex align-items-center">
-        <%= link_to admin_users_path, class: "text-info" do %>
-          <i class="fa fa-arrow-left"></i>
-          ユーザー一覧
-        <% end %>
-        <h5 class="m-auto font-weight-bold">ユーザー詳細</h5>
-      </div>
       <div class="card-body row">
         <div class="offset-xl-2 col-xl-8 text-center">
           <div class="table-responsive">
@@ -40,7 +47,7 @@
                 <tr>
                   <th>状況</th>
                   <td>
-                    <span class="badge <%= @user.status.eql?('active') ? 'badge-success' : (@user.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @user.status_i18n %></span>
+                    <span class="badge badge-pill <%= @user.status.eql?('active') ? 'badge-success' : (@user.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @user.status_i18n %></span>
                   </td>
                 </tr>
               </tbody>
@@ -49,7 +56,7 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <%= link_to "編集", edit_admin_user_path(@user), class: "btn btn-info m-auto fw-120" %>
+        <%= link_to "編集", edit_admin_user_path(@user), class: "btn btn-info fw-120" %>
       </div>
     </div>
   </div>
