@@ -40,7 +40,6 @@ Object.keys(constant).forEach((key) => {
 
 require('turbolinks').start();
 require('@rails/activestorage').start();
-require('admin-lte');
 require('chart.js');
 
 // Plugin configurations
@@ -92,7 +91,7 @@ document.addEventListener('turbolinks:load', () => {
 });
 
 toastr.options = {
-  closeButton: false,
+  closeButton: true,
   debug: false,
   newestOnTop: true,
   progressBar: false,

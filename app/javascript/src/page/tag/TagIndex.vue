@@ -166,11 +166,21 @@ export default {
     },
 
     async submitCreateFolder(value) {
-      await this.createFolder(value);
+      const response = await this.createFolder(value);
+      if (response) {
+        window.toastr.success('フォルダの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダの作成は失敗しました。');
+      }
     },
 
     async submitUpdateFolder(value) {
-      await this.updateFolder(value);
+      const response = await this.updateFolder(value);
+      if (response) {
+        window.toastr.success('フォルダの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダの変更は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {
@@ -186,12 +196,6 @@ export default {
       this.tagData.name = '';
     },
 
-    async submitUpdateTag(tag) {
-      this.showFolderInput = false;
-      this.showTagInput = false;
-      await this.updateTag(tag);
-    },
-
     async submitDeleteTag() {
       const response = await this.deleteTag(this.curTag.id);
       if (response) {
@@ -205,9 +209,26 @@ export default {
           folder_id: this.curFolder.id,
           name: this.tagData.name
         };
-        await this.createTag(payload);
+        const response = await this.createTag(payload);
+        if (response) {
+          window.toastr.success('タグの作成は完了しました。');
+        } else {
+          window.toastr.error('フォルダの作成は失敗しました。');
+        }
         this.resetTagInput();
       }
+    },
+
+    async submitUpdateTag(tag) {
+      this.showFolderInput = false;
+      this.showTagInput = false;
+      const response = await this.updateTag(tag);
+      if (response) {
+        window.toastr.success('タグの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダの変更は失敗しました。');
+      }
+      this.forceRerender();
     },
 
     resetTagInput() {

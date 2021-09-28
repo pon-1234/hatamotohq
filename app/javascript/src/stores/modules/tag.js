@@ -44,6 +44,12 @@ export const mutations = {
     tag.friends_count = 0;
     const folder = state.folders.find(_ => _.id === tag.folder_id);
     folder.tags.push(tag);
+  },
+
+  updateTag(state, tag) {
+    const folder = state.folders.find(_ => _.id === tag.folder_id);
+    const oldIndex = folder.tags.findIndex(_ => _.id === tag.id);
+    folder.tags.splice(oldIndex, 1, tag);
   }
 };
 
@@ -103,8 +109,9 @@ export const actions = {
 
   async createTag(context, payload) {
     try {
-      const response = await TagAPI.createTag(payload);
+      const response = await TagAPI.create(payload);
       context.commit('pushTag', response);
+      return response;
     } catch (error) {
       return null;
     }
@@ -112,8 +119,9 @@ export const actions = {
 
   async updateTag(context, payload) {
     try {
-      const response = await TagAPI.updateTag(payload);
+      const response = await TagAPI.update(payload);
       context.commit('updateTag', response);
+      return response;
     } catch (error) {
       return null;
     }
@@ -121,7 +129,7 @@ export const actions = {
 
   async deleteTag(context, id) {
     try {
-      return await TagAPI.deleteTag(id);
+      return await TagAPI.delete(id);
     } catch (error) {
       return null;
     }
