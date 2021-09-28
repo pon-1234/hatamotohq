@@ -14,24 +14,13 @@ export const state = {
   channel_CurrentPage: null,
   isLoadMoreMessage: false,
   isLoadMoreChannel: false,
-  unreadChannelId: null
+  unreadChannelId: null,
+  allMessagesLoaded: false
 };
 
-// TODO need refactoring
 export const mutations = {
   setChannels(state, channels) {
-    state.channel_LastPage = parseInt(channels.meta.last_page);
-    state.channel_CurrentPage = parseInt(channels.meta.current_page);
-    if (state.channel_CurrentPage === 1) {
-      state.channels = channels.data;
-    } else {
-      for (const channel of channels.data) {
-        const index = state.channels.findIndex(item => item.alias === channel.alias);
-        if (index === -1) {
-          state.channels.push(channel);
-        }
-      }
-    }
+    state.channels = channels;
   },
 
   setUnreadChannelId(state, unreadChannelId) {
@@ -57,16 +46,15 @@ export const mutations = {
   },
 
   setMessages(state, messages) {
-    state.messages = messages.data.reverse().concat(state.messages);
-  },
-
-  SET_MESSAGE_PARAMS(state, messageParams) {
-    state.messageParams = messageParams;
-    state.currentPage = messageParams.page;
+    state.messages = messages.concat(state.messages);
   },
 
   setLoadMoreMessage(state, status) {
     state.isLoadMoreMessage = status;
+  },
+
+  setAllMessageLoaded(state, status) {
+    state.allMessagesLoaded = status;
   },
 
   setLoadMoreChannel(state, status) {
@@ -116,11 +104,10 @@ export const getters = {
 export const actions = {
   async getChannels(context, query = {}) {
     context.commit('setLoadMoreChannel', true);
-
     try {
       const res = await ChannelAPI.list();
       if (res) {
-        context.commit('setChannels', res);
+        context.commit('setChannels', res.data);
       }
     } catch (error) {
       console.log(error);
@@ -131,9 +118,13 @@ export const actions = {
   async getMessages(context, query) {
     context.commit('setLoadMoreMessage', true);
     try {
-      const res = await ChannelAPI.channelMessages(query);
-      if (res && res.data && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
-        context.commit('setMessages', res);
+      const response = await ChannelAPI.channelMessages(query);
+      const messages = response.data;
+      if (messages && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
+        context.commit('setMessages', messages);
+        if (messages.length < 20) {
+          context.commit('setAllMessageLoaded', true);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -143,13 +134,6 @@ export const actions = {
 
   setActiveChannel(context, payload) {
     context.commit('setActiveChannel', payload);
-  },
-
-  setMessageParams(context, params) {
-    if (!params.page) {
-      params.page = 1;
-    }
-    context.commit('SET_MESSAGE_PARAMS', Object.assign({}, context.state.messageParams, params));
   },
 
   onReceiveWebsocketEvent(context, event) {
@@ -172,10 +156,12 @@ export const actions = {
     default:
     }
   },
+
   // Get available scenario of the channel
   async getAvailableScenarios(context, channelId) {
     return await ChannelAPI.availableScenarios(channelId);
   },
+
   // Send a text message to the active channel
   async sendMessage(context, payload) {
     try {
@@ -184,6 +170,7 @@ export const actions = {
       console.log(error);
     }
   },
+
   // Send a scenario to the active channel
   async sendScenario(_, payload) {
     try {
@@ -228,8 +215,7 @@ export const actions = {
   async sendMedia(context, query) {
     try {
       const response = await ChannelAPI.sendMedia(query);
-      console.log('--------------');
-      console.log(response);
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -239,17 +225,6 @@ export const actions = {
     try {
       const response = await ChannelAPI.sendMediaFromManager(query);
       console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  async unreadMessage(context, query) {
-    try {
-      const res = await ChannelAPI.unreadMessage(query);
-      if (res && res.total) {
-        context.commit('setActiveChannel', Object.assign({}, context.state.activeChannel, { total_unread_messages: res.total }));
-      }
     } catch (error) {
       console.log(error);
     }

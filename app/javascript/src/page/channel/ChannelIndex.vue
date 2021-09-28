@@ -115,7 +115,6 @@ export default {
       'pushMessage',
       'updateChannels',
       'setActiveChannel',
-      'setMessageParams',
       'getMessages',
       'setUnreadChannelId',
       'resetMessages'
@@ -141,8 +140,6 @@ export default {
 
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
-      // await this.setMessageParams({ channelId: this.activeChannel.id });
-      // await this.getMessages(this.messageParams);
     },
 
     sendMediaMessage(message) {

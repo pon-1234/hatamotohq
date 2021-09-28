@@ -71,7 +71,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'setMessageParams', 'resetMessages']),
+    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'resetMessages']),
     async switchChannel(channel, index) {
       const notChanged = this.activeChannel.id === channel.id;
       this.$emit('switchChannel', !notChanged);
@@ -81,9 +81,6 @@ export default {
       // Activate new channel
       this.setActiveChannel(channel);
       this.resetMessages();
-      // const totalUnreadMessage = channel.total_unread_messages ? channel.total_unread_messages : channel.total_unread_messages;
-      // await this.setMessageParams({ channelId: channel.id, unread: totalUnreadMessage });
-      // await this.getMessages(this.messageParams);
     },
 
     getChannelsFromCache(channels, perPage = 0) {

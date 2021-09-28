@@ -1,10 +1,10 @@
 <template>
-  <div ref="chatPanel" class="card chat-panel">
-    <div class="card-body d-flex flex-column" v-if="activeChannel">
-      <ul class="flex-grow-1 conversation-list overflow-auto" data-simplebar ref='messageDisplay' @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <li>
-          <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
-        </li>
+  <div class="card chat-panel">
+    <div class="card-body d-flex flex-column">
+      <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+        <div class="d-flex justify-content-center" v-show="shouldShowSpinner">
+          <div class="spinner-border" role="status"></div>
+        </div>
         <span
           v-for="(message, index) in messages"
           :key="index"
@@ -17,25 +17,6 @@
         </span>
       </ul>
 
-      <div hidden class="content direct-chat-messages"  @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
-        <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
-          <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
-            <div class="chatsys-content">
-              {{getDateTimeMessage(message)}}
-            </div>
-          </div>
-          <div class="unread-message-divider w-100" v-show="totalUnreadMessage && messages.length - totalUnreadMessage == index" id="unreadMessageIndex">
-            <div class="unread-message-content w-100">
-              <div class="unread-message-text">
-                未読
-              </div>
-            </div>
-          </div>
-          <chat-item :message="message" @unread="setUnreadMessage"></chat-item>
-        </div>
-      </div>
-
       <div class="row mt-auto">
         <div class="col">
           <div class="mt-2 bg-light p-3 rounded">
@@ -44,8 +25,6 @@
                 <input type="text" class="form-control border-0"
                   :placeholder="!isMobile? 'Enterで改行、Shift+Enterで送信': ''"
                   v-model="textMessage"
-                  @compositionstart="composing=true"
-                  @compositionend="composing=false"
                   @keydown.enter.shift.exact.prevent
                   @keydown.enter.shift.exact="sendTextMessage"
                   required="">
@@ -66,7 +45,7 @@
         </div> <!-- end col-->
       </div>
 
-      <div hidden class="box-input" style="position: relative">
+      <!-- <div hidden class="box-input" style="position: relative">
         <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
             <sticker-select-package @input="changePackageId" />
@@ -96,7 +75,6 @@
                   </template>
                 <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
                 <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">シナリオ配信</b-dropdown-item>
-                <!-- <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item> -->
               </b-dropdown>
             </li>
           </ul>
@@ -121,11 +99,13 @@
             <div style="font-size: 12px; text-align: center; user-select: none; height: 100%; overflow: hidden"> このユーザーはLINEアカウントを削除したか、あなたのアカウントをブロックしたか、あなたをチャットルームから退出させたため、このユーザーにメッセージを送信できません。
             </div>
         </div>
-      </div>
-      <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
-      <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
-      <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-      <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
+      </div> -->
+      <template v-if="activeChannel">
+        <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
+        <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
+        <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
+        <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
+      </template>
     </div>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
@@ -145,14 +125,15 @@ export default {
       totalUnreadMessage: null,
       currentScrollTop: 0,
       isLoadingPrevious: true,
-      chatPanel: null,
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null
     };
   },
 
   mounted() {
-    this.addScrollListener();
+    this.$nextTick(() => {
+      this.addScrollListener();
+    });
   },
 
   unmounted() {
@@ -160,8 +141,16 @@ export default {
   },
 
   watch: {
-    activeChannel(newActiveChannel, oldActiveChannel) {
-      if (oldActiveChannel && newActiveChannel.id === oldActiveChannel.id) {
+    messages: {
+      handler(val) {
+        this.$nextTick(function() {
+          this.scrollToBottom();
+        });
+      },
+      deep: true
+    },
+    activeChannel(newChannel, oldChannel) {
+      if (oldChannel && newChannel.id === oldChannel.id) {
         return;
       }
       this.loadMoreMessages();
@@ -172,6 +161,7 @@ export default {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
+      allMessagesLoaded: state => state.allMessagesLoaded,
       isLoadMoreMessage: state => state.isLoadMoreMessage
     }),
     ...mapState('global', {
@@ -180,13 +170,20 @@ export default {
 
     isMobile() {
       return Util.isMobile();
+    },
+
+    shouldLoadMoreChats() {
+      return !this.allMessagesLoaded && !this.isLoadingPrevious;
+    },
+
+    shouldShowSpinner() {
+      return !this.allMessagesLoaded && this.isLoadingPrevious;
     }
   },
 
   methods: {
     ...mapActions('channel', [
       'getMessages',
-      'setMessageParams',
       'setActiveChannel',
       'sendMedia',
       'unreadMessage',
@@ -197,64 +194,42 @@ export default {
     ]),
 
     addScrollListener() {
-      this.channelPanel = this.$refs.chatPanel;
       this.setScrollParams();
-      this.channelPanel.addEventListener('scroll', this.handleScroll);
       this.scrollToBottom();
       this.isLoadingPrevious = false;
     },
 
-    removeScrollListener() {
-      this.channelPanel.removeEventListener('scroll', this.handleScroll);
-    },
-
     setScrollParams() {
-      this.heightBeforeLoad = this.channelPanel.scrollHeight;
-      this.scrollTopBeforeLoad = this.channelPanel.scrollTop;
+      this.heightBeforeLoad = this.$refs.chatPanel.scrollHeight;
+      this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
     },
 
     scrollToBottom() {
-      this.channelPanel.scrollTop = this.channelPanel.scrollHeight;
+      this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
     },
 
     async handleScroll(e) {
       this.setScrollParams();
 
-      const dataFetchCheck = this.shouldLoadMoreChats;
       if (
         e.target.scrollTop < 100 &&
         !this.isLoadingPrevious &&
-        dataFetchCheck
+        !this.allMessagesLoaded
       ) {
         this.isLoadingPrevious = true;
         await this.loadMoreMessages();
-        // this.$store
-        //   .dispatch('fetchPreviousMessages', {
-        //     conversationId: this.currentChat.id,
-        //     before: this.getMessages.messages[0].id
-        //   })
-        //   .then(() => {
         const heightDifference =
-              this.channelPanel.scrollHeight - this.heightBeforeLoad;
-        this.channelPanel.scrollTop =
+              this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
+        this.$refs.chatPanel.scrollTop =
               this.scrollTopBeforeLoad + heightDifference;
         this.isLoadingPrevious = false;
         this.setScrollParams();
-        // });
       }
-    },
-
-    shouldLoadMoreChats() {
-      return !this.isLoadMoreMessage && !this.isLoadingPrevious;
     },
 
     async loadMoreMessages() {
       const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
-      this.setScrollParams();
       await this.getMessages({ channelId: this.activeChannel.id, before: before });
-      if (!before) {
-        this.scrollToBottom();
-      }
     },
 
     openSticker() {
