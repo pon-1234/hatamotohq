@@ -8,14 +8,14 @@ class DispatchBroadcastJob < ApplicationJob
     broadcast = Broadcast.find(broadcast_id)
     # Change broadcast status to sending
     broadcast.deliver_at = Time.zone.now
-    broadcast.update_status('sending')
+    broadcast.update_columns(status: 'sending')
 
     dispatch_to_all(broadcast) if broadcast.broadcast_type_all?
     dispatch_with_condition(broadcast) if broadcast.broadcast_type_condition?
-    broadcast.update_status('done')
+    broadcast.update_columns(status: 'done')
   rescue => e
     p e.message
-    broadcast&.update_status('error')
+    broadcast.update_columns(status: 'error')
   end
 
   # send message to every friends of line official account
@@ -33,7 +33,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     # Deliver messages via line api
     if !send_broadcast(line_account, nomalized_messages_data)
-      broadcast.update_status('error')
+      broadcast.update_columns(status: 'error')
       return
     end
     nomalized_messages_data.each do |content|
@@ -55,7 +55,7 @@ class DispatchBroadcastJob < ApplicationJob
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
     if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
-      broadcast.update_status('error')
+      broadcast.update_columns(status: 'error')
     end
     nomalized_messages_data.each do |content|
       insert_delivered_message(channels, content)
@@ -73,6 +73,7 @@ class DispatchBroadcastJob < ApplicationJob
       end
     end
 
+    # TODO need refactoring
     def filter_friend_by_conditions(broadcast)
       conditions = broadcast.conditions
       add_friend_date_cond = conditions['add_friend_date']
@@ -95,39 +96,5 @@ class DispatchBroadcastJob < ApplicationJob
       channels.each do |channel|
         Messages::MessageBuilder.new(nil, channel, message_params).perform
       end
-      # slug = content['type'] == 'text' ? content['text'] : nil
-      # $savedData = [
-      #       'line_account_id' => $lineAccount->id,
-      #       'line_customer_id' => $lineAccount->line_customer_id,
-      #       'is_bot_sender' => TRUE,
-      #       'attr' => 'chat-reverse',
-      #       'line_message_id' => $now,
-      #       'content' => json_encode($lineContent),
-      #       'timestamp' => $now.'000',
-      #       'line_reply_token' => '',
-      #       'raw_content' => json_encode($body),
-      #       'slug' => $slug,
-      #     ];
-
-      #     $this->_saveMessage($savedData, $channel);
-
-      #     //create message log
-      #     $savedLog = [
-      #       'type' => 'log',
-      #       'bot_sender' => config('const.LOG.VALUE.DISTRIBUTION'),
-      #       'text' => config('const.LOG.TEXT.DISTRIBUTION').$body['title']
-      #   ];
-      #     $savedDate = [
-      #       'line_account_id' => $lineAccount->id,
-      #       'line_customer_id' => $lineAccount->line_customer_id,
-      #       'is_bot_sender' => TRUE,
-      #       'attr' => 'chat-log',
-      #       'line_message_id' => $now,
-      #       'content' => json_encode($savedLog),
-      #       'timestamp' => $now.'000',
-      #       'line_reply_token' => '',
-      #       'raw_content' => json_encode($body),
-      #     ];
-      #     $this->_saveMessage($savedDate, $channel, false);
     end
 end

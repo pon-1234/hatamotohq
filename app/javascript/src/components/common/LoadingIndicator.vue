@@ -1,7 +1,6 @@
 <template>
   <div class="overlay" v-if="loading">
-    <!-- <div class="spinner-grow text-primary" role="status"></div> -->
-    <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+    <div class="spinner-border text-primary" role="status"></div>
   </div>
 </template>
 <script>

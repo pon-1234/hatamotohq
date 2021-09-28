@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       end
       resources :broadcasts do
         get :search, on: :collection
-        get :delete_confirm, on: :member
+        post :copy, on: :member
       end
       resources :scenarios do
         get :search, on: :collection
@@ -59,8 +59,6 @@ Rails.application.routes.draw do
           get :delete_confirm, on: :member
           post :import, on: :collection
         end
-        get :delete_confirm, on: :member
-        get :copy_confirm, on: :member
         post :copy, on: :member
       end
       resources :auto_responses

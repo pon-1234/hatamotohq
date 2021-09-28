@@ -3,57 +3,49 @@ import BroadcastAPI from '../api/broadcast_api';
 
 export const state = {
   broadcasts: [],
-  total: 0,
-  per_page: 0,
-  params: {
-    page: 1,
-    status: 'all'
-  },
-  broadcast: null,
-  broadcast_id: null,
-  action_objects: []
+  totalRows: 0,
+  perPage: 0,
+  curPage: 1
 };
 
 export const mutations = {
-  SET_BROADCASTS_DATA(state, { broadcasts, total, perPage }) {
+  setBroadcasts(state, broadcasts) {
     state.broadcasts = broadcasts;
-    state.total = total;
-    state.per_page = perPage;
   },
 
-  SET_BROADCAST(state, broadcast) {
-    // eslint-disable-next-line no-undef
-    state.broadcast = _.cloneDeep(broadcast);
+  setCurPage(state, curPage) {
+    state.curPage = curPage;
   },
 
-  SET_BROADCAST_ID(state, broadcastId) {
-    state.broadcast_id = broadcastId;
-  },
-
-  SET_PARAMS(state, params) {
-    state.params = params;
-  },
-
-  REMOVE_BROADCAST_FROM_LIST_BROADCAST(state, index) {
-    state.broadcasts = state.broadcasts.filter(item => item.id !== index);
-  },
-
-  SET_ACTION_OBJECTS(state, actionObjects) {
-    state.action_objects = actionObjects;
+  setMeta(state, meta) {
+    state.totalRows = meta.total_count;
+    state.perPage = meta.limit_value;
+    state.curPage = meta.current_page;
   }
-
-};
-export const getters = {
 };
 
 export const actions = {
   setPreviewContent(context, broadcast) {
-    context.commit('SET_BROADCAST', broadcast);
     context.dispatch('preview/setMessages', broadcast.messages, { root: true });
   },
 
   async getBroadcast(context, id) {
     return await BroadcastAPI.get(id);
+  },
+
+  async getBroadcasts(context) {
+    const params = {
+      page: context.state.curPage
+    };
+    try {
+      const response = await BroadcastAPI.list(params);
+      context.commit('setBroadcasts', response.data);
+      context.commit('setMeta', response.meta);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   },
 
   async createBroadcast(context, query) {
@@ -82,10 +74,19 @@ export const actions = {
     return broadcastId;
   },
 
-  setParams(context, params) {
-    if (!params.page) {
-      params.page = 1;
+  async copyBroadcast(context, id) {
+    try {
+      return await BroadcastAPI.copy(id);
+    } catch (error) {
+      return null;
     }
-    context.commit('SET_PARAMS', Object.assign({}, context.state.params, params));
+  },
+
+  async deleteBroadcast(context, id) {
+    try {
+      return await BroadcastAPI.delete(id);
+    } catch (error) {
+      return null;
+    }
   }
 };

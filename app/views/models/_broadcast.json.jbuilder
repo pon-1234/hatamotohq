@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.(broadcast, :id, :title, :type, :deliver_now, :schedule_at, :conditions)
+json.(broadcast, :id, :title, :type, :status, :deliver_now, :schedule_at, :conditions)
 json.tags do
   json.array! broadcast.tags do |tag|
     json.partial! 'models/tag', tag: tag

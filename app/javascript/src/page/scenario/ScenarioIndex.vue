@@ -20,7 +20,7 @@
                 <tr v-for="(scenario, index) in scenarios" :key="index">
                   <td>{{ scenario.mode === 'elapsed_time' ? '経過時間' : '時刻' }}</td>
                   <td>{{ scenario.title }}</td>
-                  <td><scenario-item-status :status="scenario.status"></scenario-item-status></td>
+                  <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">メッセージ一覧（{{scenario.scenario_messages_count || 0}}）</div>
                   </td>
@@ -155,9 +155,8 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect('シナリオのコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('シナリオのコピーは失敗しました。', window.location.href);
+        window.toastr.error('シナリオのコピーは失敗しました。');
       }
-      this.forceRerender();
     }
   }
 };

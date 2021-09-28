@@ -1,4 +1,13 @@
 export default {
+  list: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts/`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   get: (id) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + id,
@@ -22,6 +31,22 @@ export default {
       url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + data.id,
       method: 'PATCH',
       data: JSON.stringify(data),
+      contentType: 'application/json'
+    });
+  },
+
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts/${id}/copy`,
+      method: 'POST',
+      contentType: 'application/json'
+    });
+  },
+
+  delete: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts/${id}`,
+      method: 'DELETE',
       contentType: 'application/json'
     });
   }
