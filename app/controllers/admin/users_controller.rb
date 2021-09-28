@@ -8,6 +8,10 @@ class Admin::UsersController < Admin::ApplicationController
     @params = params[:q]
     @q = User.ransack(@params)
     @users = @q.result.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /admin/users/search
@@ -33,17 +37,8 @@ class Admin::UsersController < Admin::ApplicationController
 
   # DELETE /admin/users/:id
   def destroy
-    if @user.destroy
-      redirect_to admin_users_path, flash: { success: 'ユーザー削除は完了しました。' }
-    else
-      redirect_to admin_users_path, flash: { error: @user.first_error_message }
-    end
-  end
-
-  def delete_confirm
-    respond_to do |format|
-      format.js
-    end
+    @user.destroy!
+    render_success
   end
 
   # GET /admin/users/:id/sso

@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header d-flex align-items-center">
             <a :href="`${rootUrl}/admin/announcements/new`" class="btn btn-info fw-120 mr-2">
-              <i class="fa fa-plus"></i> 新規登録
+              <i class="mdi mdi-plus-circle mr-2"></i> 新規登録
             </a>
           </div>
           <div class="card-body">
@@ -46,7 +46,7 @@
                   </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-center" v-if="totalRows && totalRows/10 > 1">
+            <div class="d-flex justify-content-end" v-if="totalRows && totalRows/10 > 1">
               <b-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
