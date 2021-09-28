@@ -77,7 +77,7 @@
 
     <div class="card" :key="msgContentKey">
       <div class="card-header left-border">
-        <h3 class="card-title">配信先</h3>
+        <h3 class="card-title">本文</h3>
       </div>
       <div class="card-body">
         <div class="form-group">

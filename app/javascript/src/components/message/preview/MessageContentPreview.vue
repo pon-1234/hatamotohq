@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="message-preview">
     <div v-for="(item, index) in messages" :key="index">
       <div class="chat chat-text-light chat-secondary" v-if="isDisplay(item)">
         <div class="avatar mb-1 rounded-circle avatar-sm">
