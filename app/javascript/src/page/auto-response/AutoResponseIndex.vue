@@ -39,7 +39,7 @@
                     <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"><span v-if="index > 0">or</span>「{{tag}}」</span>
                   </td>
                   <td>
-                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2">
+                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2 text-left">
                       <message-content :data="item.content" ></message-content>
                     </div>
                   </td>
@@ -223,6 +223,10 @@ export default {
 
     td .chat-item {
       padding: 0px;
+    }
+
+    .chat-item-text {
+      text-align: left;
     }
   }
 </style>
