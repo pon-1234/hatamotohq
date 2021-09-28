@@ -24,6 +24,12 @@ class User::ChannelsController < User::ApplicationController
     @scenarios = @channel.line_friend.manual_scenarios
   end
 
+  # POST /user/channels/:id/update_last_seen
+  def update_last_seen
+    @channel.last_seen_at = Time.zone.now
+    @channel.save!
+  end
+
   private
     def find_channel
       @channel = Channel.find(params[:id])

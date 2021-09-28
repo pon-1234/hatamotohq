@@ -39,6 +39,9 @@ class Message < ApplicationRecord
   validates :type, presence: true
   validates_presence_of :from
 
+  # Scope
+  scope :unread_since, ->(datetime) { where('EXTRACT(EPOCH FROM created_at) > (?)', datetime.to_i.succ) }
+
   before_create :exec_before_create
   after_create_commit :execute_after_create_commit
 

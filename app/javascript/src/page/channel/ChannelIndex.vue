@@ -141,8 +141,8 @@ export default {
 
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
-      await this.setMessageParams({ channelId: this.activeChannel.id });
-      await this.getMessages(this.messageParams);
+      // await this.setMessageParams({ channelId: this.activeChannel.id });
+      // await this.getMessages(this.messageParams);
     },
 
     sendMediaMessage(message) {

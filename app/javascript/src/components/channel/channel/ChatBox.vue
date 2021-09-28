@@ -1,7 +1,7 @@
 <template>
-  <div class="card chat-pane" v-if="activeChannel">
-    <div class="card-body d-flex flex-column">
-      <ul class="flex-grow-1 conversation-list overflow-auto" data-simplebar ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+  <div ref="chatPanel" class="card chat-panel">
+    <div class="card-body d-flex flex-column" v-if="activeChannel">
+      <ul class="flex-grow-1 conversation-list overflow-auto" data-simplebar ref='messageDisplay' @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
         <li>
           <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
         </li>
@@ -81,7 +81,7 @@
             />
           </div>
         </div>
-        <div class="tool d-flex align-items-center" v-if="activeChannel.status !== 'blocked'">
+        <div class="tool d-flex align-items-center" v-if="!activeChannel.locked">
           <ul class="left list-action">
             <li class="text-sticker" >
               <i class="fas fa-smile "></i>
@@ -102,7 +102,7 @@
           </ul>
           <div class="btn-send" @click="sendTextMessage"><i class="fas fa-paper-plane"></i></div>
         </div>
-        <div class="text"  v-if="activeChannel.status !== 'blocked'">
+        <div class="text"  v-if="!activeChannel.locked">
             <b-form-textarea
               v-model="textMessage"
               id='txtMessage'
@@ -116,21 +116,18 @@
         </b-form-textarea>
         </div>
         <div class="blocked"
-          v-if="activeChannel.status === 'blocked'"
+          v-if="activeChannel.locked"
           style="padding: 30px;background-color: #ededed;display: flex;">
             <div style="font-size: 12px; text-align: center; user-select: none; height: 100%; overflow: hidden"> このユーザーはLINEアカウントを削除したか、あなたのアカウントをブロックしたか、あなたをチャットルームから退出させたため、このユーザーにメッセージを送信できません。
             </div>
         </div>
       </div>
+      <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
+      <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
+      <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
+      <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
     </div>
-    <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
-    <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
-    <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-    <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
-  </div>
-  <div v-else class="container" >
-    <div class="empty" ></div>
   </div>
 </template>
 <script>
@@ -146,60 +143,36 @@ export default {
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
-      currentScrollTop: 0
+      currentScrollTop: 0,
+      isLoadingPrevious: true,
+      chatPanel: null,
+      scrollTopBeforeLoad: null,
+      heightBeforeLoad: null
     };
   },
 
-  watch: {
-    messages: {
-      handler(val) {
-        if (this.currentPage === 1 && val.length > 0) {
-          this.$nextTick(function() {
-            if (this.totalUnreadMessage && this.totalUnreadMessage > 0 && val.length >= this.totalUnreadMessage) {
-              // đi đến unread
-              const message = val[val.length - this.totalUnreadMessage];
-              const obj = $('#message_content_' + message.id);
-              const childPos = obj.offset();
-              const parentPos = obj.parent().offset();
-              this.$refs.messageDisplay.scrollTop = childPos.top - parentPos.top - 20;// ($('#message_content_' + message.id).offset().top - 30);
-              // flash message
-              obj.find('.chat').addClass('flash-message');
-            } else {
-              this.scrollToBottom();
-            }
-            this.totalUnreadMessage = 0;
-          });
-        }
-      },
-      deep: true
-    },
+  mounted() {
+    this.addScrollListener();
+  },
 
-    activeChannel: {
-      handler(val) {
-        if (!val) return;
-        this.$nextTick(() => {
-          if (this.doneFetchingChannelAcitveId !== val.id) {
-            this.totalUnreadMessage = val.total_unread_messages;
-            this.doneFetchingChannelAcitveId = val.id;
-          } else {
-            if (this.unreadChannelId) {
-              this.totalUnreadMessage = val.total_unread_messages;
-            }
-          }
-        });
-      },
-      deep: true
+  unmounted() {
+    this.removeScrollListener();
+  },
+
+  watch: {
+    activeChannel(newActiveChannel, oldActiveChannel) {
+      if (oldActiveChannel && newActiveChannel.id === oldActiveChannel.id) {
+        return;
+      }
+      this.loadMoreMessages();
     }
   },
+
   computed: {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
-      isLoadMoreMessage: state => state.isLoadMoreMessage,
-      messageParams: state => state.messageParams,
-      totalPages: state => state.totalPages,
-      currentPage: state => state.currentPage,
-      unreadChannelId: state => state.unreadChannelId
+      isLoadMoreMessage: state => state.isLoadMoreMessage
     }),
     ...mapState('global', {
       stickers: state => state.stickers
@@ -223,25 +196,64 @@ export default {
       'getStickers'
     ]),
 
+    addScrollListener() {
+      this.channelPanel = this.$refs.chatPanel;
+      this.setScrollParams();
+      this.channelPanel.addEventListener('scroll', this.handleScroll);
+      this.scrollToBottom();
+      this.isLoadingPrevious = false;
+    },
+
+    removeScrollListener() {
+      this.channelPanel.removeEventListener('scroll', this.handleScroll);
+    },
+
+    setScrollParams() {
+      this.heightBeforeLoad = this.channelPanel.scrollHeight;
+      this.scrollTopBeforeLoad = this.channelPanel.scrollTop;
+    },
+
     scrollToBottom() {
-      setTimeout(() => {
-        const messageDisplay = this.$refs.messageDisplay;
-        messageDisplay.scrollTop = messageDisplay.scrollHeight;
-      }, 1);
+      this.channelPanel.scrollTop = this.channelPanel.scrollHeight;
+    },
+
+    async handleScroll(e) {
+      this.setScrollParams();
+
+      const dataFetchCheck = this.shouldLoadMoreChats;
+      if (
+        e.target.scrollTop < 100 &&
+        !this.isLoadingPrevious &&
+        dataFetchCheck
+      ) {
+        this.isLoadingPrevious = true;
+        await this.loadMoreMessages();
+        // this.$store
+        //   .dispatch('fetchPreviousMessages', {
+        //     conversationId: this.currentChat.id,
+        //     before: this.getMessages.messages[0].id
+        //   })
+        //   .then(() => {
+        const heightDifference =
+              this.channelPanel.scrollHeight - this.heightBeforeLoad;
+        this.channelPanel.scrollTop =
+              this.scrollTopBeforeLoad + heightDifference;
+        this.isLoadingPrevious = false;
+        this.setScrollParams();
+        // });
+      }
+    },
+
+    shouldLoadMoreChats() {
+      return !this.isLoadMoreMessage && !this.isLoadingPrevious;
     },
 
     async loadMoreMessages() {
-      const messageDisplay = this.$refs.messageDisplay;
-      if (messageDisplay.scrollTop < 10 && !this.isLoadMoreMessage) {
-        const lastElement = messageDisplay.firstElementChild.id;
-        const page = this.messageParams.page + 1;
-        this.currentScrollTop = messageDisplay.scrollHeight;
-        if (page > this.totalPages) return;
-        this.setMessageParams({ page: page });
-        await this.getMessages({ page: page });
-        this.$nextTick(() => {
-          document.getElementById(lastElement).scrollIntoView();
-        });
+      const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
+      this.setScrollParams();
+      await this.getMessages({ channelId: this.activeChannel.id, before: before });
+      if (!before) {
+        this.scrollToBottom();
       }
     },
 

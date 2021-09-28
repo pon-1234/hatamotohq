@@ -90,7 +90,7 @@ module WebhooksHelper
           # Create or reopen channel
           channel = Channel.find_or_initialize_by(line_account: @line_account, line_friend: line_friend)
           channel_alias = Digest::MD5.hexdigest("#{@line_account.webhook_url}_#{friend_id}")
-          channel.status = 'active'
+          channel.locked = false
           channel.avatar = line_friend.line_picture_url
           channel.title = line_friend.line_name
           channel.alias = channel_alias

@@ -36,23 +36,33 @@ class Channel < ApplicationRecord
   belongs_to :line_friend
   has_many :messages, dependent: :destroy, autosave: true
 
-  enum status: { active: 'active', block: 'block' }, _prefix: true
-
   after_create do
     # Make friend to be a participant
-    ChannelParticipant.create(channel: self, participant: line_friend)
+    ChannelMember.create(channel: self, participant: line_friend)
     # Make owner of official account to be a participant
-    ChannelParticipant.create(channel: self, participant: line_account.owner)
+    ChannelMember.create(channel: self, participant: line_account.owner)
   end
 
   def push_event_data
     {
       id: id,
-      status: status,
+      locked: locked,
       last_message: last_message,
       last_activity_at: last_activity_at,
       un_read: un_read,
       line_friend: line_friend.push_event_data
     }
+  end
+
+  def lock!
+    update!(locked: true)
+  end
+
+  def unlock!
+    update!(locked: false)
+  end
+
+  def unread_messages
+    messages.unread_since(last_seen_at)
   end
 end

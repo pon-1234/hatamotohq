@@ -54,19 +54,10 @@ export const mutations = {
 
   resetMessages(state) {
     state.messages = [];
-    state.totalPages = 0;
-    state.currentPage = 0;
   },
 
   setMessages(state, messages) {
-    state.totalPages = parseInt(messages.meta.total_pages);
-    state.currentPage = parseInt(messages.meta.current_page);
-
-    if (messages.meta.current_page > 1) {
-      state.messages = messages.data.reverse().concat(state.messages);
-    } else {
-      state.messages = messages.data.reverse();
-    }
+    state.messages = messages.data.reverse().concat(state.messages);
   },
 
   SET_MESSAGE_PARAMS(state, messageParams) {
@@ -207,6 +198,14 @@ export const actions = {
       return await ChannelAPI.sendTemplate(payload);
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  async updateLastSeen(context, payload) {
+    try {
+      return await ChannelAPI.updateLastSeen(payload);
+    } catch (error) {
+      return null;
     }
   },
 

@@ -61,7 +61,7 @@ export default {
         className += 'active';
       }
 
-      if (this.channel.status === 'blocked') {
+      if (this.channel.locked) {
         className += ' blocked';
       }
 
