@@ -37,7 +37,6 @@ class User < ApplicationRecord
   after_create :execute_after_create
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :trackable
