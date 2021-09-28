@@ -8,9 +8,15 @@ class User::BroadcastsController < User::ApplicationController
 
   # GET /user/broadcasts
   def index
-    @params = params[:q]
-    @q = Broadcast.accessible_by(current_ability).includes([:tags, taggings: [:tag]]).order(id: :desc).ransack(params[:q])
-    @broadcasts = @q.result.page(params[:page])
+    if request.format.json?
+      @params = params[:q]
+      @q = Broadcast.accessible_by(current_ability).includes([:tags, taggings: [:tag]]).order(id: :desc).ransack(params[:q])
+      @broadcasts = @q.result.page(params[:page])
+    end
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/broadcasts/search
@@ -61,18 +67,26 @@ class User::BroadcastsController < User::ApplicationController
     render_bad_request
   end
 
-  # DELETE /user/scenarios/:id
-  def destroy
-    if @broadcast.destroyable? && @broadcast.destroy
-      redirect_to user_broadcasts_path, flash: { success: '一斉配信の削除は成功しました。' }
+  # POST /user/broadcasts/:id/copy
+  def copy
+    new_broadcast = @broadcast.clone
+    if new_broadcast.present?
+      @broadcast.broadcast_messages&.each { |message| message.clone_to(new_broadcast.id) }
+      render_success
     else
-      redirect_to user_broadcasts_path, flash: { error: '一斉配信の削除は失敗しました。' }
+      render_bad_request
     end
+  rescue => e
+    logger.error e.message
+    render_bad_request
   end
 
-  def delete_confirm
-    respond_to do |format|
-      format.js
+  # DELETE /user/broadcasts/:id
+  def destroy
+    if @broadcast.destroyable? && @broadcast.destroy
+      render_success
+    else
+      render_bad_request
     end
   end
 

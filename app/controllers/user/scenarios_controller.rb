@@ -62,12 +62,6 @@ class User::ScenariosController < User::ApplicationController
     render_success
   end
 
-  def delete_confirm
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # POST /user/scenarios/:id/copy
   def copy
     new_scenario = @scenario.clone
