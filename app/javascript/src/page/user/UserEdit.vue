@@ -41,8 +41,8 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-12">会社名</label>
-          <div class="col-12">
+          <label class="col-xl-3">会社名</label>
+          <div class="col-xl-9">
             <ValidationProvider name="会社名" rules="max:255" v-slot="{ errors }">
               <input type="text" class="form-control" name="user[company_name]" placeholder="入力してください" v-model="userFormData.company_name">
               <span class="error-explanation">{{ errors[0] }}</span>
