@@ -35,6 +35,13 @@ export default {
     });
   },
 
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}/copy`,
+      method: 'POST'
+    });
+  },
+
   delete: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}`,

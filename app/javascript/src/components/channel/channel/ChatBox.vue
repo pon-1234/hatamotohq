@@ -56,7 +56,7 @@
               <div class="col-sm-auto">
                 <div class="btn-group">
                   <div class="btn btn-light" data-toggle="modal" data-target="#modalSendMedia"><i class="uil uil-paperclip"></i></div>
-                  <div class="btn btn-light" role="button" data-toggle="modal" data-target="#modalSelectSticker"> <i class='uil uil-smile'></i></div>
+                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker"> <i class='uil uil-smile'></i></div>
                   <button type="submit" class="btn btn-success chat-send btn-block" @click="sendTextMessage"><i
                       class='uil uil-message'></i></button>
                 </div>

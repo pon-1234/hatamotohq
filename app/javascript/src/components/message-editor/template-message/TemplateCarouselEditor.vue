@@ -17,7 +17,7 @@
           </li>
           <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
             <span>
-              <i class="fa fa-plus"></i>追加
+              <i class="uil-plus"></i>追加
             </span>
           </li>
         </ul>
@@ -119,7 +119,7 @@
                 </li>
                 <li v-if="column.actions.length < 3">
                   <div class="nav-button btn justify-content-center" @click="addMoreAction">
-                    <i class="fa fa-plus"></i> 追加
+                    <i class="uil-plus"></i> 追加
                   </div>
                 </li>
               </ul>

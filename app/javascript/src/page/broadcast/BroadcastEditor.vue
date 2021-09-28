@@ -107,7 +107,7 @@
             @click="addMoreMessageContentDistribution"
             v-if="broadcastData.messages.length < 5"
           >
-            <i class="fa fa-plus"></i> <span>メッセージ追加</span>
+            <i class="uil-plus"></i> <span>メッセージ追加</span>
           </div>
         </div>
       </div>

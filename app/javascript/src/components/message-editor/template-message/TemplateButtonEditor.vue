@@ -35,8 +35,8 @@
               </div>
             </li>
             <li v-if="templateData.actions.length < 4">
-              <div class="nav-button btn btn-outline-success justify-content-center" @click="addMoreAction">
-                <i class="fa fa-plus"></i> 追加
+              <div class="nav-button btn btn-primary justify-content-center" @click="addMoreAction">
+                <i class="uil-plus"></i> 追加
               </div>
             </li>
           </ul>
@@ -161,8 +161,8 @@ export default {
 
   li.active {
     .nav-button {
-      border-left: 3px solid #28a745;
-      color: #28a745;
+      border-left: 3px solid #727cf5;
+      color: #727cf5;
       font-weight: bold;
     }
     .action-tab-selector-remover {

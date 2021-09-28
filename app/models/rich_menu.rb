@@ -38,6 +38,8 @@
 #  fk_rails_...  (media_id => media.id)
 #
 class RichMenu < ApplicationRecord
+  default_scope { order(created_at: :desc) }
+
   belongs_to :line_account
   belongs_to :folder
   belongs_to :media
@@ -54,6 +56,13 @@ class RichMenu < ApplicationRecord
 
   def image_url
     media&.url
+  end
+
+  def clone
+    new_richmenu = self.dup
+    new_richmenu.status = :disabled
+    new_richmenu.name = self.name + '（コピー）'
+    new_richmenu.save!
   end
 
   private

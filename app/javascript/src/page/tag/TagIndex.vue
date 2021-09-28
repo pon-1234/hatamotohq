@@ -13,7 +13,7 @@
           />
         <div class="flex-grow-1">
           <div class="btn btn-primary" @click="addTag">
-            <i class="fa fa-plus"></i> 新規登録
+            <i class="uil-plus"></i> 新規登録
           </div>
           <div class="mt-2">
             <table class="table table-centered mb-0">

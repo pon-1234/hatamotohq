@@ -53,6 +53,19 @@ class User::RichMenusController < User::ApplicationController
     render_success
   end
 
+  # POST /user/rich_menus/:id/copy
+  def copy
+    rich_menu = @rich_menu.clone
+    if rich_menu.present?
+      render_success
+    else
+      render_bad_request
+    end
+  rescue => e
+    logger.error e.message
+    render_bad_request
+  end
+
   private
     def rich_menu_params
       params.permit(

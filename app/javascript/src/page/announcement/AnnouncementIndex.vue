@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header d-flex align-items-center">
             <a :href="`${rootUrl}/admin/announcements/new`" class="btn btn-info fw-120 mr-2">
-              <i class="fa fa-plus"></i> 新規登録
+              <i class="uil-plus"></i> 新規登録
             </a>
           </div>
           <div class="card-body">

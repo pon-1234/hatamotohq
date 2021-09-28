@@ -65,7 +65,9 @@ Rails.application.routes.draw do
       resources :templates do
         post :copy, on: :member
       end
-      resources :rich_menus
+      resources :rich_menus do
+        post :copy, on: :member
+      end
       resources :surveys
       resources :folders
       resources :tags

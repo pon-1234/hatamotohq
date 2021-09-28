@@ -16,7 +16,7 @@
             :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
             class="btn btn-primary"
           >
-            <i class="fa fa-plus"></i> 新規作成
+            <i class="uil-plus"></i> 新規作成
           </a>
           <div class="mt-2" v-if="curFolder">
             <table class="table table-centered mb-0">

@@ -18,14 +18,14 @@
             @click="moveUpObject(index)"
             class="btn btn-sm btn-light"
             v-if="index > 0">
-            <i class="fa fa-arrow-up"></i>
+            <i class="mdi mdi-arrow-up-bold"></i>
           </div>
           <div
             type="button"
             @click="moveDownObject(index)"
             class="btn btn-sm btn-light"
             v-if="index < objectLists.length - 1">
-            <i class="fa fa-arrow-down"></i
+            <i class="mdi mdi-arrow-down-bold"></i
           ></div>
           <div
             @click="removeObject(index)"
@@ -117,7 +117,7 @@
       v-if="objectLists.length < maxObject"
     >
       <div @click="addNewObject()" class="btn btn-primary">
-        <i class="fa fa-plus"></i> 質問追加
+        <i class="uil-plus"></i> 質問追加
       </div>
     </div>
   </div>

@@ -16,7 +16,7 @@
             <a v-if="folders && folders.length && folders[selectedFolderIndex]"
               :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id='+folders[selectedFolderIndex].id" class="btn btn-primary"
             >
-              <i class="fa fa-plus"></i> 新規作成
+              <i class="uil-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2">

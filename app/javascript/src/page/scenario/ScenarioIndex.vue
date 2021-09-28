@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <div class="btn btn-success mr-2" @click="openNew()"><i class="fa fa-plus"></i> 新規作成</div>
+          <div class="btn btn-success mr-2" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
         </div>
         <div class="card-body">
           <table class="table table-centered mb-0">
