@@ -57,7 +57,7 @@
                 @change="loadPage"
               ></b-pagination>
             </div>
-            <div v-if="announcements.length == 0">
+            <div class="text-center mt-4" v-if="announcements.length == 0">
               <b>データはありません。</b>
             </div>
           </div>

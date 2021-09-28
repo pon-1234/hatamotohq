@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link href="/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
@@ -15,12 +13,12 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body data-scrollbar-auto-hide="n" class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed text-sm" style="height: auto;">
+  <body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed text-sm" style="height: auto;">
     <div class="wrapper" id="application">
       <%= render "admin/base/left_sidebar_menu"%>
       <div class="content-page">
-        <%= render "admin/base/header" %>
         <div class="content">
+          <%= render "admin/base/header" %>
           <div class="container-fluid p-2">
             <%= custom_flash_message %>
             <%= yield %>
