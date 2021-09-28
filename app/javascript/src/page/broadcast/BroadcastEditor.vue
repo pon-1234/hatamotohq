@@ -77,7 +77,7 @@
 
     <div class="card" :key="msgContentKey">
       <div class="card-header left-border">
-        <h3 class="card-title">配信先</h3>
+        <h3 class="card-title">本文</h3>
       </div>
       <div class="card-body">
         <div class="form-group">
@@ -107,7 +107,7 @@
             @click="addMoreMessageContentDistribution"
             v-if="broadcastData.messages.length < 5"
           >
-            <i class="fa fa-plus"></i> <span>メッセージ追加</span>
+            <i class="uil-plus"></i> <span>メッセージ追加</span>
           </div>
         </div>
       </div>

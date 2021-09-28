@@ -9,10 +9,12 @@
         <button
           type="button"
           class="position-absolute close"
-          style="top: 10px; right: 10px;"
+          style="top: 10px; right: 0px;"
           @click="removeSticker"
         >
-          <i class="fas fa-times"></i>
+
+          <i class="mdi mdi-close-outline"></i>
+          <!-- <i class="fas fa-times"></i> -->
         </button>
       </div>
     </div>

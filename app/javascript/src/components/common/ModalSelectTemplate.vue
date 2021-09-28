@@ -18,7 +18,7 @@
               <div class="list-content">
                 <div class="list-scroll" v-if="folders && folders[this.selectedFolder]">
                   <table class="table table-hover">
-                    <thead>
+                    <thead class="thead-light">
                       <tr>
                         <td>
                           <span v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}</span>

@@ -91,6 +91,14 @@ export const actions = {
     }
   },
 
+  async copyRichMenu(_, id) {
+    try {
+      return await RichMenuAPI.copy(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async deleteRichMenu(_, id) {
     try {
       return await RichMenuAPI.delete(id);

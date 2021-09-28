@@ -15,7 +15,7 @@
         <div class="flex-grow-1">
           <div v-if="curFolder">
             <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
-              <i class="fa fa-plus"></i> 新規作成
+              <i class="uil-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2" v-if="curFolder">
@@ -113,12 +113,12 @@
 
     <!-- START: modal enable/disable richmenu -->
     <modal-confirm
-      :title="`こちらのリッチメニューを${curRichMenu && curRichMenu.status === 'enabled' ? '無効' : '有効'}にしてもよろしいですか？`"
+      :title="`このリッチメニューの状況を変更してもよろしいですか？`"
       id="modalToggleRichMenu"
       type="confirm"
       @confirm="submitToggleRichMenu">
       <template v-slot:content v-if="curRichMenu">
-        リッチメニュー名：{{ curRichMenu.name }}
+        状況変更：<b>{{ curRichMenu.status === 'enabled' ? '有効' : '無効' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curRichMenu.status === 'enabled' ? '無効' : '有効' }}</b>
       </template>
     </modal-confirm>
     <!-- END: modal delete richmenu -->
@@ -168,6 +168,7 @@ export default {
       'updateFolder',
       'deleteFolder',
       'updateRichMenu',
+      'copyRichMenu',
       'deleteRichMenu'
     ]),
 
@@ -189,6 +190,15 @@ export default {
     async submitDeleteFolder() {
       await this.deleteFolder(this.curFolder.id);
       this.onFolderChanged(0);
+    },
+
+    async submitCopyRichMenu() {
+      const response = await this.copyRichMenu(this.curRichMenu.id);
+      if (response) {
+        Util.showSuccessThenRedirect('リッチメニュのコピーは完了しました。', window.location.href);
+      } else {
+        window.$toastr.error('リッチメニュのコピーは失敗しました。');
+      }
     },
 
     async submitDeleteRichMenu() {

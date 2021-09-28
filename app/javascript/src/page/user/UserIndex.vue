@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header d-flex align-items-center">
             <a :href="`${rootUrl}/admin/users/new`" class="btn btn-info fw-120 mr-2">
-              <i class="mdi mdi-plus-circle mr-2"></i> 新規登録
+              <i class="uil-plus"></i> 新規登録
             </a>
             <!-- START: Search form -->
               <div class="mr-2">

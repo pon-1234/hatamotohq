@@ -13,7 +13,7 @@
           </li>
           <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
             <span>
-              <i class="fa fa-plus"></i>追加
+              <i class="uil-plus"></i>追加
             </span>
           </li>
         </ul>

@@ -85,13 +85,13 @@
                 @click="moveUpObject(index)"
                 class="btn btn-sm btn-light"
                 v-if="index > 0"
-                ><i class="fa fa-arrow-up"></i
+                ><i class="mdi mdi-arrow-up-bold"></i
               ></div>
               <div
                 @click="moveDownObject(index)"
                 class="btn btn-sm btn-light"
                 v-if="index < value.data.length - 1"
-                ><i class="fa fa-arrow-down"></i
+                ><i class="mdi mdi-arrow-down-bold"></i
               ></div>
 
               <div
@@ -156,7 +156,7 @@
             v-if="value.data.length < max"
             class="btn btn-info"
           >
-            <i class="fa fa-plus"></i> 選択肢追加
+            <i class="uil-plus"></i> 選択肢追加
           </div>
         </div>
       </div>

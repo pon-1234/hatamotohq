@@ -5,7 +5,7 @@ class Ability
 
   def initialize(user)
     # Broadcast
-    can [:read, :update, :destroy, :delete_confirm, :search], Broadcast, line_account: user.line_account
+    can [:manage], Broadcast, line_account: user.line_account
     can [:create], Broadcast
 
     # Scenario

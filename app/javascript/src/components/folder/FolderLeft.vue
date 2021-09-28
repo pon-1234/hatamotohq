@@ -2,7 +2,7 @@
   <div class="fw-300">
     <div v-if="!isPerview">
       <div class="btn btn-success" @click="addMoreFolder">
-        <i class="fa fa-plus"></i>
+        <i class="uil-plus"></i>
           新しいフォルダ
       </div>
     </div>

@@ -1,5 +1,3 @@
-// @import "admin-lte";
-@import "toastr/build/toastr";
 @import "bootstrap-vue/dist/bootstrap-vue.css";
 @import "./emojione/emojione.min.css";
 @import "./emojione/emojionearea.min.css";
@@ -11,7 +9,7 @@
 @import "./slick/slick.css";
 @import "./slick/slick-theme.css";
 @import "./override.scss";
-
+@import "toastr/build/toastr";
 // START: card view
 .card {
   .left-border {

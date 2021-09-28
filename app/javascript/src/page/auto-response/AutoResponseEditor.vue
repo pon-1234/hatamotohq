@@ -68,7 +68,7 @@
             />
             <div>
               <div class="btn btn-primary" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
-                <i class="fa fa-plus"></i><span> メッセージ追加</span>
+                <i class="uil-plus"></i><span> メッセージ追加</span>
               </div>
             </div>
           </div>

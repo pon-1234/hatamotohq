@@ -44,14 +44,14 @@
               @click="moveActionUp(index)"
               class="btn btn-sm btn-light"
               v-if="index > 0">
-              <i class="fa fa-arrow-up"></i>
+              <i class="mdi mdi-arrow-up-bold"></i>
             </div>
             <div
               type="button"
               @click="moveActionDown(index)"
               class="btn btn-sm btn-light"
               v-if="index < actions.length - 1">
-              <i class="fa fa-arrow-down"></i
+              <i class="mdi mdi-arrow-down-bold"></i
             ></div>
             <div
               @click="removeAction(index)"
@@ -79,7 +79,7 @@
         role="button"
         @click="addAction()"
       >
-        <i class="fa fa-plus"></i> アクションの追加
+        <i class="uil-plus"></i> アクションの追加
       </div>
     </div>
     <divider></divider>

@@ -5,10 +5,14 @@ class AcquireFriendJob < ApplicationJob
   queue_as :default
 
   def perform(friend_id)
-    friend = LineFriend.find(friend_id)
-    scenarios = friend.auto_scenarios
+    @friend = LineFriend.find(friend_id)
+    apply_scenario
+  end
+
+  def apply_scenario
+    scenarios = @friend.auto_scenarios
     scenarios.each do |scenario|
-      ScenarioSchedulerJob.perform_later(friend.channel.id, scenario.id)
+      ScenarioSchedulerJob.perform_later(@friend.channel.id, scenario.id)
     end
   end
 end

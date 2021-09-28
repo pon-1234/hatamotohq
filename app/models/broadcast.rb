@@ -62,8 +62,12 @@ class Broadcast < ApplicationRecord
     !self.sending?
   end
 
-  def update_status(status)
-    self.status = status
-    self.save
+  def clone
+    new_broadcast = self.dup
+    new_broadcast.title = self.title + '（コピー）'
+    new_broadcast.status = :draft
+    new_broadcast.tag_ids = self.tag_ids
+    new_broadcast.save!
+    new_broadcast
   end
 end

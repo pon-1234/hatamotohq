@@ -14,7 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             :href="`${MIX_ROOT_PATH}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`" class="btn btn-primary">
-            <i class="fa fa-plus"></i> 新規作成
+            <i class="uil-plus"></i> 新規作成
           </a>
           <div class="mt-2">
             <table class="table table-centered mb-0">

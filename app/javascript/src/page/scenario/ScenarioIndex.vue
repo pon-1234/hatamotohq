@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <div class="btn btn-success mr-2" @click="openNew()"><i class="fa fa-plus"></i> 新規作成</div>
+          <div class="btn btn-success mr-2" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
         </div>
         <div class="card-body">
           <table class="table table-centered mb-0">
@@ -20,7 +20,7 @@
                 <tr v-for="(scenario, index) in scenarios" :key="index">
                   <td>{{ scenario.mode === 'elapsed_time' ? '経過時間' : '時刻' }}</td>
                   <td>{{ scenario.title }}</td>
-                  <td><scenario-item-status :status="scenario.status"></scenario-item-status></td>
+                  <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">メッセージ一覧（{{scenario.scenario_messages_count || 0}}）</div>
                   </td>
@@ -37,14 +37,16 @@
                 </tr>
             </tbody>
           </table>
-          <div class="d-flex justify-content-center mt-4" v-if="scenarios.length === 0">
+          <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
+              v-if="totalRows > perPage"
               v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="loadPage"
               aria-controls="my-table"
             ></b-pagination>
+            <b v-if="!loading && totalRows === 0">シナリオはありません。</b>
           </div>
         </div>
 
@@ -155,9 +157,8 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect('シナリオのコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('シナリオのコピーは失敗しました。', window.location.href);
+        window.toastr.error('シナリオのコピーは失敗しました。');
       }
-      this.forceRerender();
     }
   }
 };
