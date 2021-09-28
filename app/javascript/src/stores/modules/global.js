@@ -26,7 +26,7 @@ export const mutations = {
     const MAX_LOGS = 30;
     if (state.logs.length > MAX_LOGS) state.logs.splice(MAX_LOGS - 1, 1);
     const oldLogIndex = state.logs.findIndex(_ => _.line_emoji_id === sticker.line_emoji_id);
-    state.logs.splice(oldLogIndex, 1);
+    if (oldLogIndex !== -1) state.logs.splice(oldLogIndex, 1);
     state.logs.unshift(sticker);
   },
 
