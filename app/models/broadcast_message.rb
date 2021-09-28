@@ -25,4 +25,11 @@ class BroadcastMessage < ApplicationRecord
 
   # Validation
   validates :content, presence: true
+
+  def clone_to(broadcast_id)
+    new_message = self.dup
+    new_message.broadcast_id = broadcast_id
+    new_message.save!
+    new_message
+  end
 end
