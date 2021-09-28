@@ -49,6 +49,7 @@
                       <div class="btn-group">
                         <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
+                          <a :href="`${rootUrl}/admin/users/${user.id}`" role="button" class="dropdown-item">user detail</a>
                           <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item">ユーザーを編集</a>
                           <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalToggleStatusUser" @click="curUserIndex = index">
                             <span v-if="user.status === 'active'">ブロックする</span>
