@@ -32,6 +32,7 @@ export const mutations = {
 
   setActiveChannel(state, activeChannel) {
     state.activeChannel = activeChannel;
+    state.allMessagesLoaded = false;
     if (state.unreadChannelId !== state.activeChannel.id) {
       state.activeChannel.un_read = false;
     }

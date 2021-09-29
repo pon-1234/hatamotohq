@@ -2,9 +2,11 @@
   <div class="card chat-panel">
     <div class="card-body d-flex flex-column">
       <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <div class="d-flex justify-content-center" v-show="shouldShowSpinner">
-          <div class="spinner-border" role="status"></div>
-        </div>
+        <transition name="slide-up">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status" v-show="shouldShowSpinner"></div>
+          </div>
+        </transition>
         <span
           v-for="(message, index) in messages"
           :key="index"
@@ -172,10 +174,6 @@ export default {
       return Util.isMobile();
     },
 
-    shouldLoadMoreChats() {
-      return !this.allMessagesLoaded && !this.isLoadingPrevious;
-    },
-
     shouldShowSpinner() {
       return !this.allMessagesLoaded && this.isLoadingPrevious;
     }
@@ -225,6 +223,10 @@ export default {
         this.isLoadingPrevious = false;
         this.setScrollParams();
       }
+    },
+
+    shouldLoadMoreChats() {
+      return !this.allMessagesLoaded && !this.isLoadingPrevious;
     },
 
     async loadMoreMessages() {

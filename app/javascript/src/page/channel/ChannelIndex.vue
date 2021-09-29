@@ -119,7 +119,6 @@ export default {
       'setUnreadChannelId',
       'resetMessages'
     ]),
-    ...mapActions('friend', ['getFriend']),
     ...mapActions('tag', ['getTags']),
 
     connectToWebsocket() {
@@ -175,11 +174,6 @@ export default {
       }
 
       return className;
-    },
-
-    async showFriendDetail(query) {
-      await this.getFriend(query);
-      $('#modal-detail-friend').modal('show');
     },
 
     changeTilteActiveChannel(title) {
