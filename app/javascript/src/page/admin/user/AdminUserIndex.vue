@@ -10,17 +10,17 @@
             <!-- START: Search form -->
 
               <div class="ml-auto d-flex">
-                <select class="form-control fw-150 mr-1" v-model="searchData.status">
+                <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq">
                   <option value="">すべて</option>
                   <option value="active">有効</option>
                   <option value="blocked">無効</option>
                 </select>
 
                 <div class="input-group app-search">
-                  <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="searchData.name">
+                  <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="queryParams.name_or_company_name_or_email_cont">
                   <span class="mdi mdi-magnify search-icon"></span>
                   <div class="input-group-append">
-                    <div class="btn btn-info" @click="loadPage('searchData')">検索</div>
+                    <div class="btn btn-info" @click="loadUsers">検索</div>
                   </div>
                 </div>
               </div>
@@ -69,13 +69,13 @@
             </div>
             <div class="d-flex justify-content-end" v-if="totalRows && totalRows/10 > 1">
               <b-pagination
-                v-model="currentPage"
+                v-model="queryParams.page"
                 :total-rows="totalRows"
                 :per-page="10"
                 aria-controls="my-table"
                 first-number
                 last-number
-                @change="loadPage('getData')"
+                @change="loadUsers"
               ></b-pagination>
             </div>
             <div class="text-center mt-4" v-if="users.length == 0">
@@ -107,7 +107,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -119,24 +119,25 @@ export default {
       loading: true,
       curUserIndex: 0,
       isSearch: false,
-      searchData: {
-        name: '',
-        status: ''
-      }
+      queryParams: null
     };
+  },
+  created() {
+    this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
     await this.getUsers();
     this.loading = false;
   },
+
   computed: {
+    ...mapGetters('user',
+      ['getQueryParams']
+    ),
     ...mapState('user', {
       users: (state) => state.users,
       totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage,
-      curPage: (state) => state.curPage,
-      searchDataName: (state) => state.searchDataName,
-      searchDataStatus: (state) => state.searchDataStatus
+      perPage: (state) => state.perPage
     }),
 
     curUser() {
@@ -146,7 +147,7 @@ export default {
   methods: {
     ...mapMutations('user', [
       'setCurPage',
-      'setSearchData'
+      'setQueryParams'
     ]),
     ...mapActions('user', [
       'getUsers',
@@ -159,23 +160,11 @@ export default {
       this.contentKey++;
     },
 
-    async loadPage(status) {
+    async loadUsers() {
       this.$nextTick(async() => {
-        if (status === 'searchData') this.isSearch = true;
+        this.setQueryParams(this.queryParams);
         this.loading = true;
-        if (this.isSearch && status === 'searchData') {
-          this.currentPage = 1;
-          this.setSearchData(this.searchData);
-        }
-        this.setCurPage(this.currentPage);
-
-        const data = {
-          'q[name_or_company_name_or_email_cont]': this.searchDataName,
-          'q[status_eq]': this.searchDataStatus,
-          page: this.curPage
-        };
-
-        await this.searchUsers(data);
+        this.getUsers();
         this.forceRerender();
         this.loading = false;
       });
@@ -209,6 +198,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-
-</style>

@@ -58,7 +58,7 @@
 
 <script>
 import Util from '@/core/util.js';
-import InputPassword from '../../components/input/InputPassword.vue';
+import InputPassword from '../../../components/input/InputPassword.vue';
 
 export default {
   components: { InputPassword },

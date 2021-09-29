@@ -4,18 +4,16 @@ export const state = {
   users: [],
   totalRows: 0,
   perPage: 0,
-  curPage: 1,
-  searchDataName: '',
-  searchDataStatus: ''
+  queryParams: {
+    page: null,
+    status_eq: '',
+    name_or_company_name_or_email_cont: null
+  }
 };
 
 export const mutations = {
   setUsers(state, users) {
     state.users = users;
-  },
-
-  setCurPage(state, curPage) {
-    state.curPage = curPage;
   },
 
   setMeta(state, meta) {
@@ -24,13 +22,20 @@ export const mutations = {
     state.curPage = meta.current_page;
   },
 
-  setSearchData(state, data) {
-    state.searchDataName = data.name;
-    state.searchDataStatus = data.status;
+  setQueryParams(state, params) {
+    Object.assign(state.queryParams, params);
+  },
+
+  setQueryParam(state, param) {
+    Object.assign(state.queryParams, { param });
   }
 };
 
-export const getters = {};
+export const getters = {
+  getQueryParams(state) {
+    return state.queryParams;
+  }
+};
 
 export const actions = {
   createUser(_, query) {
@@ -50,23 +55,8 @@ export const actions = {
   },
 
   async getUsers(context) {
-    const params = {
-      page: context.state.curPage
-    };
     try {
-      const response = await UserApi.list(params);
-      context.commit('setUsers', response.data);
-      context.commit('setMeta', response.meta);
-      return response;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  },
-
-  async searchUsers(context, query) {
-    try {
-      const response = await UserApi.search(query);
+      const response = await UserApi.list(state.queryParams);
       context.commit('setUsers', response.data);
       context.commit('setMeta', response.meta);
       return response;
