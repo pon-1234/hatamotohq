@@ -1,9 +1,9 @@
 <template>
   <div>
-    <span v-if="status === 'active'" class="badge badge-success">
+    <span v-if="status === 'active'" class="badge badge-pill badge-success pt-1">
       正常
     </span>
-    <span v-else-if="status === 'block'" class="badge badge-warning">
+    <span v-else-if="status === 'blocked'" class="badge badge-pill badge-warning pt-1">
       友達からブロック
     </span>
   </div>
@@ -14,7 +14,3 @@ export default {
   props: ['status']
 };
 </script>
-
-<style>
-
-</style>

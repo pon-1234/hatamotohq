@@ -9,7 +9,7 @@
           <div class="d-flex fw-300 align-items-center">
             <span class="font-weight-bold">リッチメニュー名<required-mark/></span>
             <div v-b-tooltip.hover title="タイトルは管理画面のみで使用され、ユーザーには表示されません。" class="ml-2">
-              <i class="text-md far fa-question-circle"></i>
+              <i class="mdi mdi-information mdi-2x"></i>
             </div>
           </div>
           <div class="flex-grow-1">
@@ -22,7 +22,7 @@
           <div class="d-flex fw-300 align-items-center">
             <span class="font-weight-bold">トークルームメニュー<required-mark/></span>
             <div v-b-tooltip.hover title="チャットルームの下部にあるメニューバーに表示するテキストです。" class="ml-2">
-              <i class="text-md far fa-question-circle"></i>
+              <i class="mdi mdi-information mdi-2x"></i>
             </div>
           </div>
           <div class="flex-grow-1">
@@ -35,7 +35,7 @@
           <div class="d-flex fw-300 align-items-center">
             <span class="font-weight-bold">メニューの初期状態<required-mark/></span>
             <div v-b-tooltip.hover title="チャットルームを開いたときに、リッチメニューを表示するかしないかを選択します。" class="ml-2">
-              <i class="text-md far fa-question-circle"></i>
+              <i class="mdi mdi-information mdi-2x"></i>
             </div>
           </div>
           <div class="radio-group flex-grow-1 flex-column">

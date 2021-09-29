@@ -2,8 +2,28 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
-          <div class="btn btn-success mr-2" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
+        <div class="card-header d-flex align-items-center">
+          <div class="btn btn-success fw-120" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
+          <!-- START: Search form -->
+          <div class="ml-auto d-flex">
+            <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq">
+              <option value="">すべて</option>
+              <option value="done">配信済</option>
+              <option value="sending">配信中</option>
+              <option value="pending">配信予約</option>
+              <option value="error">エラー</option>
+              <option value="draft">下書き</option>
+            </select>
+            <div class="input-group app-search">
+              <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." id="top-search" v-model="queryParams.title_cont">
+              <span class="mdi mdi-magnify search-icon"></span>
+              <div class="input-group-append">
+                <div class="btn btn-primary" @click="loadPage()">検索</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- End: Search form -->
         </div>
         <div class="card-body">
           <table class="table table-centered mb-0">
@@ -48,10 +68,10 @@
           <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
               v-if="totalRows > perPage"
-              v-model="currentPage"
+              v-model="queryParams.page"
               :total-rows="totalRows"
               :per-page="perPage"
-              @change="loadPage"
+              @change="loadPage()"
               aria-controls="my-table"
             ></b-pagination>
             <b v-if="!loading && totalRows === 0">一斉配信はありません。</b>
@@ -85,7 +105,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -93,15 +113,21 @@ export default {
     return {
       loading: true,
       contentKey: 0,
-      currentPage: 1,
-      curBroadcastIndex: 0
+      curBroadcastIndex: 0,
+      queryParams: null
     };
+  },
+  created() {
+    this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
     await this.getBroadcasts();
     this.loading = false;
   },
   computed: {
+    ...mapGetters('user',
+      ['getQueryParams']
+    ),
     ...mapState('broadcast', {
       broadcasts: (state) => state.broadcasts,
       totalRows: (state) => state.totalRows,
@@ -114,7 +140,8 @@ export default {
   },
   methods: {
     ...mapMutations('broadcast', [
-      'setCurPage'
+      'setCurPage',
+      'setQueryParams'
     ]),
     ...mapActions('broadcast', [
       'getBroadcasts',
@@ -130,9 +157,9 @@ export default {
       // bootstrap pagination return old value of current page,
       // using nextTick to solve the issue
       this.$nextTick(async() => {
+        this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.setCurPage(this.currentPage);
-        await this.getBroadcasts();
+        this.getBroadcasts();
         this.forceRerender();
         this.loading = false;
       });

@@ -1,1 +1,16 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="javascript: void(0);">1対1トーク</a></li>
+          <li class="breadcrumb-item"><%= link_to '友達一覧', user_friends_path %></li>
+          <li class="breadcrumb-item active">友達詳細</li>
+        </ol>
+      </div>
+      <h4 class="page-title">友達詳細</h4>
+    </div>
+  </div>
+</div>
+
 <friend-detail :friend_id="<%= @friend.id %>" channel_id="<%= @friend.channel.id %>"></friend-detail>

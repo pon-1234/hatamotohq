@@ -15,16 +15,20 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header d-flex">
         <!-- Start: search condition -->
-        <%= search_form_for @q, url: search_user_friends_path do |f| %>
-        <div class="d-flex">
-          <%= f.search_field :line_name_or_display_name_cont, placeholder: "ユーザー名", class: "form-control fw-300" %>
+        <%= search_form_for @q, url: search_user_friends_path, class:"ml-auto d-flex" do |f| %>
           <%= f.select :status_eq,
             options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
-            class: "form-control select2bs4 fw-200 ml-2" %>
-          <button class="btn btn-success btn-normal ml-2 search-button" type="submit">検索</button>
-        </div>
+            class: "form-control fw-150 mr-1" %>
+
+          <div class="input-group app-search mr-0">
+            <%= f.search_field :line_name_or_display_name_cont, placeholder: "検索...", class: "form-control dropdown-toggle fw-250" %>
+            <span class="mdi mdi-magnify search-icon"></span>
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">検索</button>
+            </div>
+          </div>
         <% end %>
         <!-- End: search condition -->
       </div>
@@ -52,10 +56,8 @@
                 <td>
                   <%= render_friend_status(line_friend.status) %>
                 </td>
-                <td class="table-action">
-                  <%= link_to user_friend_path(line_friend), class: "action-icon" do %>
-                    <i class="mdi mdi-pencil"></i>
-                  <% end %>
+                <td>
+                  <%= link_to '詳細', user_friend_path(line_friend), class: "btn btn-sm btn-light" %>
                 </td>
               </tr>
             <% end %>
