@@ -1,7 +1,7 @@
 <template>
   <div class="card chat-panel">
     <div class="card-body d-flex flex-column">
-      <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
+      <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @drop="onDropMessage" @dragover="allowDrop">
         <transition name="slide-up">
           <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status" v-show="shouldShowSpinner"></div>
@@ -121,7 +121,6 @@ export default {
   data() {
     return {
       textMessage: '',
-      openedStickerPane: false,
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
@@ -166,9 +165,6 @@ export default {
       allMessagesLoaded: state => state.allMessagesLoaded,
       isLoadMoreMessage: state => state.isLoadMoreMessage
     }),
-    ...mapState('global', {
-      stickers: state => state.stickers
-    }),
 
     isMobile() {
       return Util.isMobile();
@@ -185,10 +181,8 @@ export default {
       'setActiveChannel',
       'sendMedia',
       'unreadMessage',
-      'setUnreadChannelId'
-    ]),
-    ...mapActions('global', [
-      'getStickers'
+      'setUnreadChannelId',
+      'markMessagesRead'
     ]),
 
     addScrollListener() {
@@ -232,21 +226,6 @@ export default {
     async loadMoreMessages() {
       const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
       await this.getMessages({ channelId: this.activeChannel.id, before: before });
-    },
-
-    openSticker() {
-      this.openedStickerPane = !this.openedStickerPane;
-      this.getStickers({ packageId: null });
-    },
-
-    clickMessagesContent() {
-      this.openedStickerPane = false;
-      this.getStickers({ packageId: null });
-    },
-
-    changePackageId(option) {
-      this.animation = option.animation;
-      this.getStickers({ packageId: option.packageId });
     },
 
     // Send a text message from input
