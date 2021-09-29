@@ -198,6 +198,7 @@ export default {
 
     scrollToBottom() {
       this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
+      this.markMessagesRead();
     },
 
     async handleScroll(e) {

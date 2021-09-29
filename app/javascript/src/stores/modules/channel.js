@@ -69,9 +69,9 @@ export const mutations = {
     state.messages.push(message);
 
     if (state.unreadChannelId) {
-      state.activeChannel.total_unread_messages += 1;
+      state.activeChannel.unread_count += 1;
     } else {
-      state.activeChannel.total_unread_messages = 0;
+      state.activeChannel.unread_count = 0;
     }
   },
 
@@ -192,6 +192,19 @@ export const actions = {
   async updateLastSeen(context, payload) {
     try {
       return await ChannelAPI.updateLastSeen(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
+   * Mark all messages in the channel as read
+   * @param {Context} context state context
+   * @returns response
+   */
+  async markMessagesRead(context) {
+    try {
+      return await ChannelAPI.updateLastSeen(state.activeChannel.id);
     } catch (error) {
       return null;
     }

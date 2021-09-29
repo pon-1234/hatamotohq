@@ -17,7 +17,7 @@ export default {
         {
           packageId: null,
           animation: false,
-          icon: 'far fa-clock',
+          icon: 'mdi mdi-history icon',
           active: true
         },
         {
@@ -52,6 +52,10 @@ export default {
 
 <style  lang='scss'  scoped>
 ::v-deep {
+  .icon {
+    font-size: 1.5rem;
+  }
+
   .sticker-nav {
     overflow: hidden;
     flex: 0 0 40px;
