@@ -187,10 +187,7 @@ export default {
       };
       const response = await this.updateUser(data);
       if (response) {
-        window.toastr.success('ユーザー状況の変更は完了しました。');
-        setTimeout(() => {
-          this.loadPage(this.currentPage);
-        }, 500);
+        Util.showSuccessThenRedirect('ユーザー状況の変更は完了しました。', `${this.rootUrl}/admin/users`);
       } else {
         window.toastr.error('ユーザー状況の変更は失敗しました。');
       }
