@@ -5,9 +5,11 @@ class Admin::UsersController < Admin::ApplicationController
 
   # GET /admin/users
   def index
-    @params = params[:q]
-    @q = User.ransack(@params)
-    @users = @q.result.page(params[:page])
+    if request.format.json?
+      @params = params[:q]
+      @q = User.ransack(@params)
+      @users = @q.result.page(params[:page])
+    end
     respond_to do |format|
       format.html
       format.json
