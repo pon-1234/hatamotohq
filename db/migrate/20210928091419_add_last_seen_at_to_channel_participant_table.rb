@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLastSeenAtToChannelParticipantTable < ActiveRecord::Migration[6.0]
   def up
     rename_table :channel_participants, :channel_members

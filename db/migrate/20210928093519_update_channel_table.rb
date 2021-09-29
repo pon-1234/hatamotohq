@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateChannelTable < ActiveRecord::Migration[6.0]
   def up
     remove_column :channels, :status

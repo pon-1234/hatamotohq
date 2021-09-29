@@ -113,7 +113,6 @@ export default {
       'sendScenario',
       'sendTemplate',
       'pushMessage',
-      'updateChannels',
       'setActiveChannel',
       'getMessages',
       'setUnreadChannelId',

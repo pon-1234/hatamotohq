@@ -10,8 +10,9 @@
 #  title            :string(255)
 #  avatar           :string(255)
 #  last_message     :string(255)
-#  status           :string(255)      default(NULL)
 #  last_activity_at :datetime
+#  last_seen_at     :datetime
+#  locked           :boolean
 #  alias            :string(255)
 #  slug             :string(255)
 #  un_read          :boolean          default(TRUE)
@@ -32,6 +33,7 @@
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
 class Channel < ApplicationRecord
+  default_scope { order(last_activity_at: :desc) }
   belongs_to :line_account
   belongs_to :line_friend
   has_many :messages, dependent: :destroy, autosave: true
@@ -49,7 +51,7 @@ class Channel < ApplicationRecord
       locked: locked,
       last_message: last_message,
       last_activity_at: last_activity_at,
-      un_read: un_read,
+      unread_count: unread_messages.count,
       line_friend: line_friend.push_event_data
     }
   end

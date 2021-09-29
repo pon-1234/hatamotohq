@@ -68,30 +68,34 @@ export const mutations = {
     }
     state.messages.push(message);
 
-    if (state.unreadChannelId) {
-      state.activeChannel.unread_count += 1;
-    } else {
-      state.activeChannel.unread_count = 0;
-    }
+    // if (state.unreadChannelId) {
+    state.activeChannel.unread_count += 1;
+    // } else {
+    //   state.activeChannel.unread_count = 0;
+    // }
   },
 
-  updateChannels(state, { status, channel }) {
-    const index = state.channels.findIndex(item => item.id === channel.id);
-    if (index >= 0) {
+  setUnreadCount(state, { channel, count }) {
+    channel.unread_count = count;
+  },
+
+  updateChannels(state, { event, channel }) {
+    const channelIndex = state.channels.findIndex(item => item.id === channel.id);
+    if (channelIndex >= 0) {
       if (state.activeChannel && state.activeChannel.id === channel.id) {
-        channel.un_read = false;
-        if (!state.unreadChannelId) {
-          channel.total_unread_messages = 0;
-        }
+        channel.unread_count = 0;
+        // Update active channel with latest data
         state.activeChannel = channel;
       }
-
-      if (status === 'new_message') {
-        // move channel to top
-        state.channels.splice(index, 1);
-        state.channels.unshift(channel);
-      } else if (status === 'read_message' || status === 'line_follow') {
-        state.channels.splice(index, 1, channel);
+      if (event.action === 'new_message') {
+        const message = event.content;
+        if (message.from === 'friend') {
+          // move the channel to top
+          state.channels.splice(channelIndex, 1);
+          state.channels.unshift(channel);
+        }
+      } else if (event.action === 'read_message' || event.action === 'line_follow') {
+        state.channels.splice(channelIndex, 1, channel);
       }
     } else {
       state.channels.unshift(channel);
@@ -144,15 +148,11 @@ export const actions = {
       if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id) {
         context.commit('pushMessage', event.content);
       }
-      context.commit('updateChannels', { status: 'new_message', channel: event.channel });
-      break;
-
-    case 'message_read':
-      context.commit('updateChannels', { status: 'read_message', channel: event });
+      context.commit('updateChannels', { event: event, channel: event.channel });
       break;
 
     case 'line_follow':
-      context.commit('updateChannels', { status: 'line_follow', channel: event.channel });
+      context.commit('updateChannels', { event: event, channel: event.channel });
       break;
     default:
     }
@@ -204,7 +204,9 @@ export const actions = {
    */
   async markMessagesRead(context) {
     try {
-      return await ChannelAPI.updateLastSeen(state.activeChannel.id);
+      const response = await ChannelAPI.updateLastSeen(state.activeChannel.id);
+      context.commit('setUnreadCount', { channel: state.activeChannel, count: 0 });
+      return response;
     } catch (error) {
       return null;
     }
@@ -212,10 +214,6 @@ export const actions = {
 
   pushMessage(context, message) {
     context.commit('pushMessage', message);
-  },
-
-  updateChannels(context, { status, channel }) {
-    context.commit('updateChannels', { status, channel });
   },
 
   resetMessages(context) {
