@@ -1,11 +1,10 @@
-import '../stylesheets/application'; // This file will contain your custom CSS
+import '../stylesheets/application';
 import Vue from 'vue';
 import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';
 import Chartkick from 'vue-chartkick';
 import { Datetime } from 'vue-datetime';
 import { Settings } from 'luxon';
-import 'vue-datetime/dist/vue-datetime.css';
 import DateRangePicker from 'vue2-daterange-picker';
 import 'vue2-daterange-picker/dist/vue2-daterange-picker';
 import vSelect from 'vue-select';
@@ -20,8 +19,6 @@ import {
 } from 'bootstrap-vue';
 // Import constant
 import * as constant from '@/core/constant';
-
-import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
 import Rails from '@rails/ujs';
 Rails.start();
