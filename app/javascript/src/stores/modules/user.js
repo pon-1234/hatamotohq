@@ -4,7 +4,9 @@ export const state = {
   users: [],
   totalRows: 0,
   perPage: 0,
-  curPage: 1
+  curPage: 1,
+  searchDataName: '',
+  searchDataStatus: ''
 };
 
 export const mutations = {
@@ -20,6 +22,11 @@ export const mutations = {
     state.totalRows = meta.total_count;
     state.perPage = meta.limit_value;
     state.curPage = meta.current_page;
+  },
+
+  setSearchData(state, data) {
+    state.searchDataName = data.name;
+    state.searchDataStatus = data.status;
   }
 };
 

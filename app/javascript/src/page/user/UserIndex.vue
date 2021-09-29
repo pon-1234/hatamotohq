@@ -120,7 +120,7 @@ export default {
       curUserIndex: 0,
       isSearch: false,
       searchData: {
-        name: null,
+        name: '',
         status: ''
       }
     };
@@ -134,7 +134,9 @@ export default {
       users: (state) => state.users,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage,
-      curPage: (state) => state.curPage
+      curPage: (state) => state.curPage,
+      searchDataName: (state) => state.searchDataName,
+      searchDataStatus: (state) => state.searchDataStatus
     }),
 
     curUser() {
@@ -143,7 +145,8 @@ export default {
   },
   methods: {
     ...mapMutations('user', [
-      'setCurPage'
+      'setCurPage',
+      'setSearchData'
     ]),
     ...mapActions('user', [
       'getUsers',
@@ -160,18 +163,19 @@ export default {
       this.$nextTick(async() => {
         if (status === 'searchData') this.isSearch = true;
         this.loading = true;
-        if (this.isSearch && status === 'searchData') this.currentPage = 1;
-        this.setCurPage(this.currentPage);
-        if (this.isSearch) {
-          const data = {
-            'q[name_or_company_name_or_email_cont]': this.searchData.name,
-            'q[status_eq]': this.searchData.status,
-            page: this.curPage
-          };
-          await this.searchUsers(data);
-        } else {
-          await this.getUsers();
+        if (this.isSearch && status === 'searchData') {
+          this.currentPage = 1;
+          this.setSearchData(this.searchData);
         }
+        this.setCurPage(this.currentPage);
+
+        const data = {
+          'q[name_or_company_name_or_email_cont]': this.searchDataName,
+          'q[status_eq]': this.searchDataStatus,
+          page: this.curPage
+        };
+
+        await this.searchUsers(data);
         this.forceRerender();
         this.loading = false;
       });
