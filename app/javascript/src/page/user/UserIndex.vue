@@ -8,18 +8,22 @@
               <i class="uil-plus"></i> 新規登録
             </a>
             <!-- START: Search form -->
-              <div class="mr-2">
-                <input type="text" class="form-control mw-300" placeholder="氏名、会社名、メールで検索" v-model="searchData.name">
-              </div>
-              <div class="mr-2">
-                <select class="form-control filter-box" v-model="searchData.status">
+
+              <div class="ml-auto d-flex">
+                <select class="form-control fw-150 mr-1" v-model="searchData.status">
                   <option value="">すべて</option>
                   <option value="active">有効</option>
                   <option value="blocked">無効</option>
                 </select>
+
+                <div class="input-group app-search">
+                  <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="searchData.name">
+                  <span class="mdi mdi-magnify search-icon"></span>
+                  <div class="input-group-append">
+                    <div class="btn btn-info" @click="onSearchUsers()">検索</div>
+                  </div>
+                </div>
               </div>
-              <button class="btn btn-info fw-110" @click="onSearchUsers()">検索</button>
-              <!-- :name_or_company_name_or_email_cont -->
             <!-- End: Search form -->
           </div>
 
@@ -49,7 +53,6 @@
                       <div class="btn-group">
                         <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/users/${user.id}`" role="button" class="dropdown-item">user detail</a>
                           <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item">ユーザーを編集</a>
                           <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalToggleStatusUser" @click="curUserIndex = index">
                             <span v-if="user.status === 'active'">ブロックする</span>
@@ -79,11 +82,12 @@
               <b>データはありません。</b>
             </div>
           </div>
+          <loading-indicator :loading="loading"></loading-indicator>
         </div>
       </div>
     </div>
     <!-- START: Toggle status (active/blocked) -->
-    <modal-confirm title="change status user ?" id='modalToggleStatusUser' type='confirm' @confirm="submitToggleStatus">
+    <modal-confirm title="このユーザーの状況を変更してもよろしいですか？" id='modalToggleStatusUser' type='confirm' @confirm="submitToggleStatus">
       <template v-slot:content>
         <div v-if="curUser">
           <b>{{ curUser.status === 'active' ? '有効' : 'ブロック中' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curUser.status === 'active' ? 'ブロック中' : '有効' }}</b>
@@ -213,6 +217,7 @@ export default {
     },
 
     async onSearchUsers() {
+      this.loading = true;
       this.$nextTick(async() => {
         this.currentPage = 1;
         this.setCurPage(this.currentPage);
@@ -223,6 +228,7 @@ export default {
         };
         await this.searchUsers(data);
         this.isSearch = true;
+        this.loading = false;
         this.forceRerender();
       });
     }
