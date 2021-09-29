@@ -18,7 +18,7 @@
                   <option value="blocked">無効</option>
                 </select>
               </div>
-              <button class="btn btn-info fw-110" @click="onSearchUsers()">検索</button>
+              <button class="btn btn-info fw-110" @click="loadPage('searchData')">検索</button>
               <!-- :name_or_company_name_or_email_cont -->
             <!-- End: Search form -->
           </div>
@@ -72,7 +72,7 @@
                 aria-controls="my-table"
                 first-number
                 last-number
-                @change="loadPage"
+                @change="loadPage('getData')"
               ></b-pagination>
             </div>
             <div class="text-center mt-4" v-if="users.length == 0">
@@ -152,19 +152,21 @@ export default {
       this.contentKey++;
     },
 
-    async loadPage(page) {
+    async loadPage(status) {
       this.$nextTick(async() => {
+        if (status === 'searchData') this.isSearch = true;
         this.loading = true;
+        if (this.isSearch && status === 'searchData') this.currentPage = 1;
         this.setCurPage(this.currentPage);
-        if (!this.isSearch) {
-          await this.getUsers();
-        } else {
+        if (this.isSearch) {
           const data = {
             'q[name_or_company_name_or_email_cont]': this.searchData.name,
             'q[status_eq]': this.searchData.status,
             page: this.curPage
           };
           await this.searchUsers(data);
+        } else {
+          await this.getUsers();
         }
         this.forceRerender();
         this.loading = false;
@@ -177,20 +179,8 @@ export default {
 
     async submitDeleteUser() {
       const response = await this.deleteUser(this.curUser.id);
-      // if (response) {
-      //   Util.showSuccessThenRedirect('ユーザー削除は完了しました。', `${this.rootUrl}/admin/users`);
-      // } else {
-      //   window.toastr.error('ユーザーの削除は失敗しました。');
-      // }
-
-      if (response) {
-        window.toastr.success('ユーザー削除は完了しました。');
-        setTimeout(() => {
-          this.loadPage(this.currentPage);
-        }, 500);
-      } else {
-        window.toastr.error('ユーザーの削除は失敗しました。');
-      }
+      if (response) Util.showSuccessThenRedirect('ユーザー削除は完了しました。', `${this.rootUrl}/admin/users`);
+      else window.toastr.error('ユーザーの削除は失敗しました。');
     },
 
     async submitToggleStatus() {
@@ -199,9 +189,6 @@ export default {
         status: (this.curUser.status === 'blocked') ? 'active' : 'blocked'
       };
       const response = await this.updateUser(data);
-      // if (response) Util.showSuccessThenRedirect('ユーザー状況の変更は完了しました。', `${this.rootUrl}/admin/users`);
-      // else window.toastr.error('ユーザー状況の変更は失敗しました。');
-
       if (response) {
         window.toastr.success('ユーザー状況の変更は完了しました。');
         setTimeout(() => {
@@ -210,21 +197,6 @@ export default {
       } else {
         window.toastr.error('ユーザー状況の変更は失敗しました。');
       }
-    },
-
-    async onSearchUsers() {
-      this.$nextTick(async() => {
-        this.currentPage = 1;
-        this.setCurPage(this.currentPage);
-        const data = {
-          'q[name_or_company_name_or_email_cont]': this.searchData.name,
-          'q[status_eq]': this.searchData.status,
-          page: this.curPage
-        };
-        await this.searchUsers(data);
-        this.isSearch = true;
-        this.forceRerender();
-      });
     }
   }
 };
