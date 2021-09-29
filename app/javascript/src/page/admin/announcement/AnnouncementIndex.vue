@@ -46,7 +46,7 @@
                   </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-center" v-if="totalRows && totalRows/10 > 1">
+            <div class="d-flex justify-content-end" v-if="totalRows && totalRows/10 > 1">
               <b-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
