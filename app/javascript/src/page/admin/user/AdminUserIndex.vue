@@ -38,7 +38,7 @@
                     <th>会社名</th>
                     <th>登録日時</th>
                     <th>状況</th>
-                    <th>操作</th>
+                    <th class="fw-200">操作</th>
                   </tr>
                 </thead>
                 <tbody v-for="(user, index) in users" :key="user.id">
@@ -67,7 +67,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center mt-4">
               <b-pagination
                 v-if="totalRows > perPage"
                 v-model="queryParams.page"
@@ -77,9 +77,6 @@
                 aria-controls="my-table"
               ></b-pagination>
               <b v-if="!loading && totalRows === 0">データはありません。</b>
-            </div>
-            <div class="text-center mt-4" v-if="users.length == 0">
-              <b></b>
             </div>
           </div>
           <loading-indicator :loading="loading"></loading-indicator>

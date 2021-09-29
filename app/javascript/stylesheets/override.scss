@@ -103,3 +103,31 @@ td {
 }
 
 // END: Css home page
+
+// START: Fix toast background bug
+#toast-container > .toast-info {
+  background-image: none;
+}
+#toast-container > .toast-error {
+  background-image: none;
+}
+#toast-container > .toast-success {
+  background-image: none;
+}
+#toast-container > .toast-warning {
+  background-image: none;
+}
+
+.toast-success {
+  background-color: #51a351;
+}
+.toast-error {
+  background-color: #bd362f;
+}
+.toast-info {
+  background-color: #2f96b4;
+}
+.toast-warning {
+  background-color: #f89406;
+}
+// END: Fix toast background bug
