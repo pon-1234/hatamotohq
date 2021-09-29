@@ -39,10 +39,15 @@ Rails.application.routes.draw do
         get :announcements, on: :collection
       end
       resources :channels do
-        get :scenarios, on: :member
+        member do
+          get :scenarios
+          post :update_last_seen
+        end
         resources :messages do
-          post :send_scenario, on: :collection
-          post :send_template, on: :collection
+          collection do
+            post :send_scenario
+            post :send_template
+          end
         end
       end
       resources :friends do
@@ -53,8 +58,10 @@ Rails.application.routes.draw do
         post :copy, on: :member
       end
       resources :scenarios do
-        get :search, on: :collection
-        get :manual, on: :collection
+        collection do
+          get :search
+          get :manual
+        end
         resources :messages, controller: 'scenario_messages' do
           get :delete_confirm, on: :member
           post :import, on: :collection

@@ -1,10 +1,12 @@
 <template>
-  <div class="card chat-pane" v-if="activeChannel">
+  <div class="card chat-panel">
     <div class="card-body d-flex flex-column">
-      <ul class="flex-grow-1 conversation-list overflow-auto" data-simplebar ref='messageDisplay' @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <li>
-          <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
-        </li>
+      <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @drop="onDropMessage" @dragover="allowDrop">
+        <transition name="slide-up">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status" v-show="shouldShowSpinner"></div>
+          </div>
+        </transition>
         <span
           v-for="(message, index) in messages"
           :key="index"
@@ -17,25 +19,6 @@
         </span>
       </ul>
 
-      <div hidden class="content direct-chat-messages"  @scroll="loadMoreMessages" @click="clickMessagesContent" @drop="onDropMessage" @dragover="allowDrop">
-        <img id="message_loading" src="/img/giphy.gif" style="width: 100px;height: 70px; margin: auto; display: flex; object-fit:cover;"  v-if="isLoadMoreMessage">
-        <div v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
-          <div v-if="isDateTimeMessage(message, messages[index-1]) || index == 0 " class="chatsys">
-            <div class="chatsys-content">
-              {{getDateTimeMessage(message)}}
-            </div>
-          </div>
-          <div class="unread-message-divider w-100" v-show="totalUnreadMessage && messages.length - totalUnreadMessage == index" id="unreadMessageIndex">
-            <div class="unread-message-content w-100">
-              <div class="unread-message-text">
-                未読
-              </div>
-            </div>
-          </div>
-          <chat-item :message="message" @unread="setUnreadMessage"></chat-item>
-        </div>
-      </div>
-
       <div class="row mt-auto">
         <div class="col">
           <div class="mt-2 bg-light p-3 rounded">
@@ -44,8 +27,6 @@
                 <input type="text" class="form-control border-0"
                   :placeholder="!isMobile? 'Enterで改行、Shift+Enterで送信': ''"
                   v-model="textMessage"
-                  @compositionstart="composing=true"
-                  @compositionend="composing=false"
                   @keydown.enter.shift.exact.prevent
                   @keydown.enter.shift.exact="sendTextMessage"
                   required="">
@@ -66,7 +47,7 @@
         </div> <!-- end col-->
       </div>
 
-      <div hidden class="box-input" style="position: relative">
+      <!-- <div hidden class="box-input" style="position: relative">
         <div  class="emoji" v-if="openedStickerPane">
           <div class="tool">
             <sticker-select-package @input="changePackageId" />
@@ -81,7 +62,7 @@
             />
           </div>
         </div>
-        <div class="tool d-flex align-items-center" v-if="activeChannel.status !== 'blocked'">
+        <div class="tool d-flex align-items-center" v-if="!activeChannel.locked">
           <ul class="left list-action">
             <li class="text-sticker" >
               <i class="fas fa-smile "></i>
@@ -96,13 +77,12 @@
                   </template>
                 <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
                 <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">シナリオ配信</b-dropdown-item>
-                <!-- <b-dropdown-item data-toggle="modal" data-target="#modal-flex-message-template">Flexメッセージ配信</b-dropdown-item> -->
               </b-dropdown>
             </li>
           </ul>
           <div class="btn-send" @click="sendTextMessage"><i class="fas fa-paper-plane"></i></div>
         </div>
-        <div class="text"  v-if="activeChannel.status !== 'blocked'">
+        <div class="text"  v-if="!activeChannel.locked">
             <b-form-textarea
               v-model="textMessage"
               id='txtMessage'
@@ -116,21 +96,20 @@
         </b-form-textarea>
         </div>
         <div class="blocked"
-          v-if="activeChannel.status === 'blocked'"
+          v-if="activeChannel.locked"
           style="padding: 30px;background-color: #ededed;display: flex;">
             <div style="font-size: 12px; text-align: center; user-select: none; height: 100%; overflow: hidden"> このユーザーはLINEアカウントを削除したか、あなたのアカウントをブロックしたか、あなたをチャットルームから退出させたため、このユーザーにメッセージを送信できません。
             </div>
         </div>
-      </div>
+      </div> -->
+      <template v-if="activeChannel">
+        <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
+        <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
+        <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
+        <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
+      </template>
     </div>
-    <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
-    <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
-    <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-    <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
-  </div>
-  <div v-else class="container" >
-    <div class="empty" ></div>
   </div>
 </template>
 <script>
@@ -142,122 +121,112 @@ export default {
   data() {
     return {
       textMessage: '',
-      openedStickerPane: false,
       animation: false,
       doneFetchingChannelAcitveId: null,
       totalUnreadMessage: null,
-      currentScrollTop: 0
+      currentScrollTop: 0,
+      isLoadingPrevious: true,
+      scrollTopBeforeLoad: null,
+      heightBeforeLoad: null
     };
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      this.addScrollListener();
+    });
+  },
+
+  unmounted() {
+    this.removeScrollListener();
   },
 
   watch: {
     messages: {
       handler(val) {
-        if (this.currentPage === 1 && val.length > 0) {
-          this.$nextTick(function() {
-            if (this.totalUnreadMessage && this.totalUnreadMessage > 0 && val.length >= this.totalUnreadMessage) {
-              // đi đến unread
-              const message = val[val.length - this.totalUnreadMessage];
-              const obj = $('#message_content_' + message.id);
-              const childPos = obj.offset();
-              const parentPos = obj.parent().offset();
-              this.$refs.messageDisplay.scrollTop = childPos.top - parentPos.top - 20;// ($('#message_content_' + message.id).offset().top - 30);
-              // flash message
-              obj.find('.chat').addClass('flash-message');
-            } else {
-              this.scrollToBottom();
-            }
-            this.totalUnreadMessage = 0;
-          });
-        }
-      },
-      deep: true
-    },
-
-    activeChannel: {
-      handler(val) {
-        if (!val) return;
-        this.$nextTick(() => {
-          if (this.doneFetchingChannelAcitveId !== val.id) {
-            this.totalUnreadMessage = val.total_unread_messages;
-            this.doneFetchingChannelAcitveId = val.id;
-          } else {
-            if (this.unreadChannelId) {
-              this.totalUnreadMessage = val.total_unread_messages;
-            }
-          }
+        this.$nextTick(function() {
+          this.scrollToBottom();
         });
       },
       deep: true
+    },
+    activeChannel(newChannel, oldChannel) {
+      if (oldChannel && newChannel.id === oldChannel.id) {
+        return;
+      }
+      this.loadMoreMessages();
     }
   },
+
   computed: {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
-      isLoadMoreMessage: state => state.isLoadMoreMessage,
-      messageParams: state => state.messageParams,
-      totalPages: state => state.totalPages,
-      currentPage: state => state.currentPage,
-      unreadChannelId: state => state.unreadChannelId
-    }),
-    ...mapState('global', {
-      stickers: state => state.stickers
+      allMessagesLoaded: state => state.allMessagesLoaded,
+      isLoadMoreMessage: state => state.isLoadMoreMessage
     }),
 
     isMobile() {
       return Util.isMobile();
+    },
+
+    shouldShowSpinner() {
+      return !this.allMessagesLoaded && this.isLoadingPrevious;
     }
   },
 
   methods: {
     ...mapActions('channel', [
       'getMessages',
-      'setMessageParams',
       'setActiveChannel',
       'sendMedia',
       'unreadMessage',
-      'setUnreadChannelId'
-    ]),
-    ...mapActions('global', [
-      'getStickers'
+      'setUnreadChannelId',
+      'markMessagesRead'
     ]),
 
-    scrollToBottom() {
-      setTimeout(() => {
-        const messageDisplay = this.$refs.messageDisplay;
-        messageDisplay.scrollTop = messageDisplay.scrollHeight;
-      }, 1);
+    addScrollListener() {
+      this.setScrollParams();
+      this.scrollToBottom();
+      this.isLoadingPrevious = false;
     },
 
-    async loadMoreMessages() {
-      const messageDisplay = this.$refs.messageDisplay;
-      if (messageDisplay.scrollTop < 10 && !this.isLoadMoreMessage) {
-        const lastElement = messageDisplay.firstElementChild.id;
-        const page = this.messageParams.page + 1;
-        this.currentScrollTop = messageDisplay.scrollHeight;
-        if (page > this.totalPages) return;
-        this.setMessageParams({ page: page });
-        await this.getMessages({ page: page });
-        this.$nextTick(() => {
-          document.getElementById(lastElement).scrollIntoView();
-        });
+    setScrollParams() {
+      this.heightBeforeLoad = this.$refs.chatPanel.scrollHeight;
+      this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
+    },
+
+    scrollToBottom() {
+      this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
+      this.markMessagesRead();
+    },
+
+    async handleScroll(e) {
+      this.setScrollParams();
+
+      if (
+        e.target.scrollTop < 100 &&
+        !this.isLoadingPrevious &&
+        !this.allMessagesLoaded
+      ) {
+        this.isLoadingPrevious = true;
+        await this.loadMoreMessages();
+        const heightDifference =
+              this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
+        this.$refs.chatPanel.scrollTop =
+              this.scrollTopBeforeLoad + heightDifference;
+        this.isLoadingPrevious = false;
+        this.setScrollParams();
       }
     },
 
-    openSticker() {
-      this.openedStickerPane = !this.openedStickerPane;
-      this.getStickers({ packageId: null });
+    shouldLoadMoreChats() {
+      return !this.allMessagesLoaded && !this.isLoadingPrevious;
     },
 
-    clickMessagesContent() {
-      this.openedStickerPane = false;
-      this.getStickers({ packageId: null });
-    },
-
-    changePackageId(option) {
-      this.animation = option.animation;
-      this.getStickers({ packageId: option.packageId });
+    async loadMoreMessages() {
+      const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
+      await this.getMessages({ channelId: this.activeChannel.id, before: before });
     },
 
     // Send a text message from input

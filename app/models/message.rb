@@ -39,6 +39,9 @@ class Message < ApplicationRecord
   validates :type, presence: true
   validates_presence_of :from
 
+  # Scope
+  scope :unread_since, ->(datetime) { where('created_at > ?', datetime) }
+
   before_create :exec_before_create
   after_create_commit :execute_after_create_commit
 

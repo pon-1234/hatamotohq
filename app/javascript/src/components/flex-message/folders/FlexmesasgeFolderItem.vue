@@ -1,6 +1,6 @@
 <template>
   <div @click="changeSelected" :class="getClassName()">
-    <div  class="d-flex align-items-center" v-if="!isEdit || !active">
+    <div class="d-flex align-items-center" v-if="!isEdit || !active">
       <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
       <span class="title">
         {{data.name}}

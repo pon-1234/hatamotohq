@@ -10,8 +10,9 @@
 #  title            :string(255)
 #  avatar           :string(255)
 #  last_message     :string(255)
-#  status           :string(255)      default(NULL)
 #  last_activity_at :datetime
+#  last_seen_at     :datetime
+#  locked           :boolean
 #  alias            :string(255)
 #  slug             :string(255)
 #  un_read          :boolean          default(TRUE)
@@ -32,27 +33,38 @@
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
 class Channel < ApplicationRecord
+  default_scope { order(last_activity_at: :desc) }
   belongs_to :line_account
   belongs_to :line_friend
   has_many :messages, dependent: :destroy, autosave: true
 
-  enum status: { active: 'active', block: 'block' }, _prefix: true
-
   after_create do
     # Make friend to be a participant
-    ChannelParticipant.create(channel: self, participant: line_friend)
+    ChannelMember.create(channel: self, participant: line_friend)
     # Make owner of official account to be a participant
-    ChannelParticipant.create(channel: self, participant: line_account.owner)
+    ChannelMember.create(channel: self, participant: line_account.owner)
   end
 
   def push_event_data
     {
       id: id,
-      status: status,
+      locked: locked,
       last_message: last_message,
       last_activity_at: last_activity_at,
-      un_read: un_read,
+      unread_count: unread_messages.count,
       line_friend: line_friend.push_event_data
     }
+  end
+
+  def lock!
+    update!(locked: true)
+  end
+
+  def unlock!
+    update!(locked: false)
+  end
+
+  def unread_messages
+    messages.unread_since(last_seen_at)
   end
 end

@@ -14,7 +14,7 @@
 #  description     :text(65535)
 #  after_action    :json
 #  success_message :text(65535)
-#  status          :string(255)      default("unpublished")
+#  status          :string(255)      default(NULL)
 #  re_answer       :boolean          default(FALSE)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

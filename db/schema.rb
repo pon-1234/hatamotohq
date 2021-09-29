@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_25_121428) do
+ActiveRecord::Schema.define(version: 2021_09_28_093519) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -122,15 +122,14 @@ ActiveRecord::Schema.define(version: 2021_09_25_121428) do
     t.index ['line_account_id'], name: 'index_broadcasts_on_line_account_id'
   end
 
-  create_table 'channel_participants', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+  create_table 'channel_members', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'channel_id'
     t.string 'participant_type'
     t.bigint 'participant_id'
-    t.integer 'unread_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
-    t.index ['channel_id'], name: 'index_channel_participants_on_channel_id'
+    t.index ['channel_id'], name: 'index_channel_members_on_channel_id'
     t.index ['participant_type', 'participant_id'], name: 'index_participant_id_and_type_on_channel_participants'
   end
 
@@ -140,8 +139,9 @@ ActiveRecord::Schema.define(version: 2021_09_25_121428) do
     t.string 'title'
     t.string 'avatar'
     t.string 'last_message'
-    t.string 'status', default: '1'
     t.datetime 'last_activity_at'
+    t.datetime 'last_seen_at'
+    t.boolean 'locked'
     t.string 'alias'
     t.string 'slug'
     t.boolean 'un_read', default: true
@@ -484,19 +484,6 @@ ActiveRecord::Schema.define(version: 2021_09_25_121428) do
     t.index ['line_account_id'], name: 'index_templates_on_line_account_id'
   end
 
-  create_table 'unread_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'channel_id'
-    t.bigint 'last_message_id'
-    t.integer 'total'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.datetime 'deleted_at'
-    t.index ['channel_id'], name: 'index_unread_messages_on_channel_id'
-    t.index ['last_message_id'], name: 'index_unread_messages_on_last_message_id'
-    t.index ['line_account_id'], name: 'index_unread_messages_on_line_account_id'
-  end
-
   create_table 'users', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'email', default: '', null: false
     t.string 'encrypted_password', default: '', null: false
@@ -530,7 +517,7 @@ ActiveRecord::Schema.define(version: 2021_09_25_121428) do
   add_foreign_key 'auto_responses', 'line_accounts'
   add_foreign_key 'broadcast_messages', 'broadcasts'
   add_foreign_key 'broadcasts', 'line_accounts'
-  add_foreign_key 'channel_participants', 'channels'
+  add_foreign_key 'channel_members', 'channels'
   add_foreign_key 'channels', 'line_accounts'
   add_foreign_key 'channels', 'line_friends'
   add_foreign_key 'flex_message_sent_logs', 'flex_messages'
@@ -570,7 +557,4 @@ ActiveRecord::Schema.define(version: 2021_09_25_121428) do
   add_foreign_key 'template_messages', 'templates'
   add_foreign_key 'templates', 'folders'
   add_foreign_key 'templates', 'line_accounts'
-  add_foreign_key 'unread_messages', 'channels'
-  add_foreign_key 'unread_messages', 'line_accounts'
-  add_foreign_key 'unread_messages', 'messages', column: 'last_message_id'
 end
