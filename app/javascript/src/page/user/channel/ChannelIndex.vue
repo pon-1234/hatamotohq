@@ -113,14 +113,11 @@ export default {
       'sendScenario',
       'sendTemplate',
       'pushMessage',
-      'updateChannels',
       'setActiveChannel',
-      'setMessageParams',
       'getMessages',
       'setUnreadChannelId',
       'resetMessages'
     ]),
-    ...mapActions('friend', ['getFriend']),
     ...mapActions('tag', ['getTags']),
 
     connectToWebsocket() {
@@ -141,8 +138,6 @@ export default {
 
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
-      await this.setMessageParams({ channelId: this.activeChannel.id });
-      await this.getMessages(this.messageParams);
     },
 
     sendMediaMessage(message) {
@@ -178,11 +173,6 @@ export default {
       }
 
       return className;
-    },
-
-    async showFriendDetail(query) {
-      await this.getFriend(query);
-      $('#modal-detail-friend').modal('show');
     },
 
     changeTilteActiveChannel(title) {

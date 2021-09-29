@@ -10,8 +10,9 @@ export default {
 
   channelMessages: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages?page=${query.page}`,
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
@@ -85,6 +86,13 @@ export default {
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
+    });
+  },
+
+  updateLastSeen: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${id}/update_last_seen`,
+      method: 'POST'
     });
   }
 };

@@ -2,7 +2,7 @@
   <div class="input-group">
     <input type="text" class="form-control" :value="text" disabled>
     <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" @click="copy()"><i class="fa fa-copy"></i></button>
+      <button class="btn btn-outline-secondary" type="button" @click="copy()"><i class="mdi mdi-content-copy"></i></button>
     </div>
   </div>
 </template>

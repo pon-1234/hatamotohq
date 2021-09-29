@@ -14,24 +14,13 @@ export const state = {
   channel_CurrentPage: null,
   isLoadMoreMessage: false,
   isLoadMoreChannel: false,
-  unreadChannelId: null
+  unreadChannelId: null,
+  allMessagesLoaded: false
 };
 
-// TODO need refactoring
 export const mutations = {
   setChannels(state, channels) {
-    state.channel_LastPage = parseInt(channels.meta.last_page);
-    state.channel_CurrentPage = parseInt(channels.meta.current_page);
-    if (state.channel_CurrentPage === 1) {
-      state.channels = channels.data;
-    } else {
-      for (const channel of channels.data) {
-        const index = state.channels.findIndex(item => item.alias === channel.alias);
-        if (index === -1) {
-          state.channels.push(channel);
-        }
-      }
-    }
+    state.channels = channels;
   },
 
   setUnreadChannelId(state, unreadChannelId) {
@@ -43,6 +32,7 @@ export const mutations = {
 
   setActiveChannel(state, activeChannel) {
     state.activeChannel = activeChannel;
+    state.allMessagesLoaded = false;
     if (state.unreadChannelId !== state.activeChannel.id) {
       state.activeChannel.un_read = false;
     }
@@ -54,28 +44,18 @@ export const mutations = {
 
   resetMessages(state) {
     state.messages = [];
-    state.totalPages = 0;
-    state.currentPage = 0;
   },
 
   setMessages(state, messages) {
-    state.totalPages = parseInt(messages.meta.total_pages);
-    state.currentPage = parseInt(messages.meta.current_page);
-
-    if (messages.meta.current_page > 1) {
-      state.messages = messages.data.reverse().concat(state.messages);
-    } else {
-      state.messages = messages.data.reverse();
-    }
-  },
-
-  SET_MESSAGE_PARAMS(state, messageParams) {
-    state.messageParams = messageParams;
-    state.currentPage = messageParams.page;
+    state.messages = messages.concat(state.messages);
   },
 
   setLoadMoreMessage(state, status) {
     state.isLoadMoreMessage = status;
+  },
+
+  setAllMessageLoaded(state, status) {
+    state.allMessagesLoaded = status;
   },
 
   setLoadMoreChannel(state, status) {
@@ -88,30 +68,34 @@ export const mutations = {
     }
     state.messages.push(message);
 
-    if (state.unreadChannelId) {
-      state.activeChannel.total_unread_messages += 1;
-    } else {
-      state.activeChannel.total_unread_messages = 0;
-    }
+    // if (state.unreadChannelId) {
+    state.activeChannel.unread_count += 1;
+    // } else {
+    //   state.activeChannel.unread_count = 0;
+    // }
   },
 
-  updateChannels(state, { status, channel }) {
-    const index = state.channels.findIndex(item => item.id === channel.id);
-    if (index >= 0) {
+  setUnreadCount(state, { channel, count }) {
+    channel.unread_count = count;
+  },
+
+  updateChannels(state, { event, channel }) {
+    const channelIndex = state.channels.findIndex(item => item.id === channel.id);
+    if (channelIndex >= 0) {
       if (state.activeChannel && state.activeChannel.id === channel.id) {
-        channel.un_read = false;
-        if (!state.unreadChannelId) {
-          channel.total_unread_messages = 0;
-        }
+        channel.unread_count = 0;
+        // Update active channel with latest data
         state.activeChannel = channel;
       }
-
-      if (status === 'new_message') {
-        // move channel to top
-        state.channels.splice(index, 1);
-        state.channels.unshift(channel);
-      } else if (status === 'read_message' || status === 'line_follow') {
-        state.channels.splice(index, 1, channel);
+      if (event.action === 'new_message') {
+        const message = event.content;
+        if (message.from === 'friend') {
+          // move the channel to top
+          state.channels.splice(channelIndex, 1);
+          state.channels.unshift(channel);
+        }
+      } else if (event.action === 'read_message' || event.action === 'line_follow') {
+        state.channels.splice(channelIndex, 1, channel);
       }
     } else {
       state.channels.unshift(channel);
@@ -125,11 +109,10 @@ export const getters = {
 export const actions = {
   async getChannels(context, query = {}) {
     context.commit('setLoadMoreChannel', true);
-
     try {
       const res = await ChannelAPI.list();
       if (res) {
-        context.commit('setChannels', res);
+        context.commit('setChannels', res.data);
       }
     } catch (error) {
       console.log(error);
@@ -140,9 +123,13 @@ export const actions = {
   async getMessages(context, query) {
     context.commit('setLoadMoreMessage', true);
     try {
-      const res = await ChannelAPI.channelMessages(query);
-      if (res && res.data && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
-        context.commit('setMessages', res);
+      const response = await ChannelAPI.channelMessages(query);
+      const messages = response.data;
+      if (messages && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
+        context.commit('setMessages', messages);
+        if (messages.length < 20) {
+          context.commit('setAllMessageLoaded', true);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -154,13 +141,6 @@ export const actions = {
     context.commit('setActiveChannel', payload);
   },
 
-  setMessageParams(context, params) {
-    if (!params.page) {
-      params.page = 1;
-    }
-    context.commit('SET_MESSAGE_PARAMS', Object.assign({}, context.state.messageParams, params));
-  },
-
   onReceiveWebsocketEvent(context, event) {
     const eventType = event.action;
     switch (eventType) {
@@ -168,23 +148,21 @@ export const actions = {
       if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id) {
         context.commit('pushMessage', event.content);
       }
-      context.commit('updateChannels', { status: 'new_message', channel: event.channel });
-      break;
-
-    case 'message_read':
-      context.commit('updateChannels', { status: 'read_message', channel: event });
+      context.commit('updateChannels', { event: event, channel: event.channel });
       break;
 
     case 'line_follow':
-      context.commit('updateChannels', { status: 'line_follow', channel: event.channel });
+      context.commit('updateChannels', { event: event, channel: event.channel });
       break;
     default:
     }
   },
+
   // Get available scenario of the channel
   async getAvailableScenarios(context, channelId) {
     return await ChannelAPI.availableScenarios(channelId);
   },
+
   // Send a text message to the active channel
   async sendMessage(context, payload) {
     try {
@@ -193,6 +171,7 @@ export const actions = {
       console.log(error);
     }
   },
+
   // Send a scenario to the active channel
   async sendScenario(_, payload) {
     try {
@@ -210,12 +189,31 @@ export const actions = {
     }
   },
 
-  pushMessage(context, message) {
-    context.commit('pushMessage', message);
+  async updateLastSeen(context, payload) {
+    try {
+      return await ChannelAPI.updateLastSeen(payload);
+    } catch (error) {
+      return null;
+    }
   },
 
-  updateChannels(context, { status, channel }) {
-    context.commit('updateChannels', { status, channel });
+  /**
+   * Mark all messages in the channel as read
+   * @param {Context} context state context
+   * @returns response
+   */
+  async markMessagesRead(context) {
+    try {
+      const response = await ChannelAPI.updateLastSeen(state.activeChannel.id);
+      context.commit('setUnreadCount', { channel: state.activeChannel, count: 0 });
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  pushMessage(context, message) {
+    context.commit('pushMessage', message);
   },
 
   resetMessages(context) {
@@ -229,8 +227,7 @@ export const actions = {
   async sendMedia(context, query) {
     try {
       const response = await ChannelAPI.sendMedia(query);
-      console.log('--------------');
-      console.log(response);
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -240,17 +237,6 @@ export const actions = {
     try {
       const response = await ChannelAPI.sendMediaFromManager(query);
       console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  async unreadMessage(context, query) {
-    try {
-      const res = await ChannelAPI.unreadMessage(query);
-      if (res && res.total) {
-        context.commit('setActiveChannel', Object.assign({}, context.state.activeChannel, { total_unread_messages: res.total }));
-      }
     } catch (error) {
       console.log(error);
     }

@@ -6,7 +6,7 @@ class User::ChannelsController < User::ApplicationController
 
   # GET /user/channels
   def index
-    @channels = Channel.accessible_by(current_ability).page(params[:page]).per(50)
+    @channels = Channel.accessible_by(current_ability).includes([:line_friend]).page(params[:page]).per(50)
     respond_to do |format|
       format.html
       format.json
@@ -22,6 +22,12 @@ class User::ChannelsController < User::ApplicationController
   # GET /user/channels/:channel_id/scenarios
   def scenarios
     @scenarios = @channel.line_friend.manual_scenarios
+  end
+
+  # POST /user/channels/:id/update_last_seen
+  def update_last_seen
+    @channel.last_seen_at = Time.zone.now
+    @channel.save!
   end
 
   private

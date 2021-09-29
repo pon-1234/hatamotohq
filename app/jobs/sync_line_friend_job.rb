@@ -20,7 +20,7 @@ class SyncLineFriendJob < ApplicationJob
     channel.save!
 
     # Create or update channel participant
-    participant = ChannelParticipant.find_or_initialize_by(line_friend: line_friend, channel: channel)
+    participant = ChannelMember.find_or_initialize_by(line_friend: line_friend, channel: channel)
     participant.save!
   end
 end

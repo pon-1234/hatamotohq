@@ -5,7 +5,7 @@ class User::MessagesController < User::ApplicationController
 
   # GET /user/channels/:channel_id/messages
   def index
-    @messages = @channel.messages.includes([:sender]).page(params[:page]).per(20)
+    @messages = message_finder.perform
   end
 
   # POST /user/channels/:channel_id/messages
@@ -35,6 +35,10 @@ class User::MessagesController < User::ApplicationController
   private
     def find_channel
       @channel = Channel.find(message_params[:channel_id])
+    end
+
+    def message_finder
+      @message_finder ||= MessageFinder.new(@channel, params)
     end
 
     def message_params

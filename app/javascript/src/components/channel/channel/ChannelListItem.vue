@@ -10,7 +10,7 @@
         </h5>
         <p class="mt-1 mb-0 text-muted font-14">
           <span class="w-25 float-right text-right"><span
-              class="badge badge-danger-lighten">3</span></span>
+              class="badge badge-danger-lighten" v-show="channel.unread_count > 0">{{ channel.unread_count }}</span></span>
           <span class="w-75"><last-message-text :message="channel.last_message"/></span>
         </p>
       </div>
@@ -61,7 +61,7 @@ export default {
         className += 'active';
       }
 
-      if (this.channel.status === 'blocked') {
+      if (this.channel.locked) {
         className += ' blocked';
       }
 
