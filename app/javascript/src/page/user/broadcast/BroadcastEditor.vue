@@ -182,13 +182,7 @@ export default {
     if (this.broadcast_id) {
       this.broadcastData.id = this.broadcast_id;
     } else {
-      this.broadcastData.messages.push({
-        message_type_id: this.MessageTypeIds.Text,
-        content: {
-          type: this.MessageType.Text,
-          text: ''
-        }
-      });
+      this.setDefaultMessageIfNeed();
     }
   },
 
@@ -232,12 +226,25 @@ export default {
         const broadcast = await this.getBroadcast(this.broadcast_id);
         Object.assign(this.broadcastData, broadcast);
         if (this.broadcastData.status === 'done') {
-          window.location.href = process.env.MIX_ROOT_PATH + '/streams';
+          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
         }
-
+        this.setDefaultMessageIfNeed();
         if (this.broadcastData.deliver_now) {
           this.changeStartDateForNow();
         }
+      }
+    },
+
+    // set default message if the list message is empty
+    setDefaultMessageIfNeed() {
+      if (this.broadcastData.messages.length === 0) {
+        this.broadcastData.messages.push({
+          message_type_id: this.MessageTypeIds.Text,
+          content: {
+            type: this.MessageType.Text,
+            text: ''
+          }
+        });
       }
     },
 
