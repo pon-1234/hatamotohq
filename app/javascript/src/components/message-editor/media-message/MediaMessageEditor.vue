@@ -51,9 +51,9 @@
             <span v-if="data.type === 'audio'">ボイスメッセージをアップロード</span>
           </a>
           <div class="text-muted opacity-30">
-            <i v-if="data.type === 'image'" class="fas fa-image fa-2x"></i>
-            <i v-if="data.type === 'video'" class="fas fa-video fa-2x"></i>
-            <i v-if="data.type === 'audio'" class="fas fa-volume-up fa-2x"></i>
+            <i v-if="data.type === 'image'" class="mdi mdi-image mdi-2x"></i>
+            <i v-if="data.type === 'video'" class="mdi mdi-video mdi-2x"></i>
+            <i v-if="data.type === 'audio'" class="mdi mdi-voice mdi-2x"></i>
           </div>
         </div>
       </div>

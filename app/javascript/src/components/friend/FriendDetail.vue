@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header d-flex align-items-center">
       <a :href="friendIndexPath" class="text-info">
-        <i class="fa fa-arrow-left"></i> 友達一覧
+        <i class="mdi mdi-arrow-left"></i> 友達一覧
       </a>
     </div>
     <div class="card-body">

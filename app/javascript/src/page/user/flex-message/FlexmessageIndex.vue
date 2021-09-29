@@ -60,7 +60,7 @@
               <thead class="thead-light">
               <tr>
                 <th class="">
-                  <i class="fa fa-arrow-left hidden-pc" @click="backToFolder"></i>
+                  <i class="mdi mdi-arrow-left hidden-pc" @click="backToFolder"></i>
                 </th>
                 <th class="header-title folder-title">
                   {{ currentFolder.name || '' }}

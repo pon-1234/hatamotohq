@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <a :href="`${userRootUrl}/user/setting`" class="text-info">
-          <i class="fa fa-arrow-left"></i>アカウント詳細
+          <i class="mdi mdi-arrow-left"></i>アカウント詳細
         </a>
         <h5 class="m-auto font-weight-bold">設定変更</h5>
       </div>

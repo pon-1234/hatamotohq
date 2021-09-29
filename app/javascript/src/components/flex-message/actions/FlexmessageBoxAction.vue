@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-right" @click="expand()"> <span class="float-left">ボックス</span> <i class="fa fa-arrow-expand" aria-hidden="true"></i></p>
+    <p class="text-right" @click="expand()"> <span class="float-left">ボックス</span> <i class="mdi mdi-arrow-expand" aria-hidden="true"></i></p>
     <div style="margin-top: 10px; display: none" :class="name+'-expand'" class="card-container">
       <div class="card" >
         <h5 class="card-header">アクション設定</h5>

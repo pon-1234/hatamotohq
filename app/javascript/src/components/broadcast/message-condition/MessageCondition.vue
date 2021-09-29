@@ -2,7 +2,7 @@
   <div>
     <div>
       <label>
-        <i class="fa fa-calendar-check-o icon-color" aria-hidden="true"></i>友だち登録日
+        <i class="mdi mdi-calendar icon-color" aria-hidden="true"></i>友だち登録日
       </label>
       <div class="mt-2">
         <daterange-picker

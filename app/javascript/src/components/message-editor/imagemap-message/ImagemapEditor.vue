@@ -41,9 +41,9 @@
                 <h5 class="m-0">
                   <button type="button"
                           class="btn-block btn-link text-left btn btn-outline-block">
-                    <i class="fas mr-2 fa-angle-right" style="width: 20px"
+                    <i class="fas mr-2 mdi mdi-chevron-right" style="width: 20px"
                         v-if="!item.expand"></i>
-                    <i class="fas mr-2 fa-angle-down" style="width: 20px" v-else></i>{{item.key}}
+                    <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{item.key}}
                   </button>
                 </h5>
               </div>

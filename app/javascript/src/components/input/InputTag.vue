@@ -2,7 +2,7 @@
   <div @click="focusForm" v-click-outside="blurInputTag">
     <b-form-tags v-model="value" :disabled="disabled" no-outer-focus class="mb-2 position-relative" :add-button-text="'追加'" remove-on-delete>
       <template v-slot="{ tags, disabled, addTag }" >
-        <i :class="isFocus?'fas fa-angle-up float-r':'fas fa-angle-down float-r'" class="down icon-action" @click.stop="showDropDown"></i>
+        <i :class="isFocus?'fas fa-angle-up float-r':'fas mdi mdi-chevron-down float-r'" class="down icon-action" @click.stop="showDropDown"></i>
         <ul class="list-inline d-inline-block mb-2">
           <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag

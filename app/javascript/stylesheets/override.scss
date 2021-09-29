@@ -1,4 +1,4 @@
-.btn-group-xs>.btn,
+.btn-group-xs > .btn,
 .btn-xs {
   padding: 1px 5px;
   font-size: 12px !important;
@@ -29,7 +29,7 @@ td {
   vertical-align: middle;
 }
 
-.table-striped>tbody>tr:nth-of-type(odd) {
+.table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -40,7 +40,7 @@ td {
   }
 }
 
-.table>tbody>tr>td {
+.table > tbody > tr > td {
   line-height: 1.4;
   border-top: 1px solid #ddd;
 }
@@ -65,8 +65,8 @@ td {
 // END: Pagination
 // START: Datetime picker theme
 .theme-success .vdatetime-popup__header,
-.theme-success .vdatetime-calendar__month__day--selected>span>span,
-.theme-success .vdatetime-calendar__month__day--selected:hover>span>span {
+.theme-success .vdatetime-calendar__month__day--selected > span > span,
+.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
   background: #28a745;
 }
 
