@@ -20,11 +20,10 @@
                   <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="searchData.name">
                   <span class="mdi mdi-magnify search-icon"></span>
                   <div class="input-group-append">
-                    <div class="btn btn-info" @click="onSearchUsers()">検索</div>
+                    <div class="btn btn-info" @click="loadPage('searchData')">検索</div>
                   </div>
                 </div>
               </div>
-              <button class="btn btn-info fw-110" @click="loadPage('searchData')">検索</button>
             <!-- End: Search form -->
           </div>
 
