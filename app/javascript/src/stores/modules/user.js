@@ -5,7 +5,7 @@ export const state = {
   totalRows: 0,
   perPage: 0,
   queryParams: {
-    page: null,
+    page: 1,
     status_eq: '',
     name_or_company_name_or_email_cont: null
   }
@@ -56,7 +56,11 @@ export const actions = {
 
   async getUsers(context) {
     try {
-      const response = await UserApi.list(state.queryParams);
+      const params = {
+        page: state.queryParams.page,
+        q: _.omit(state.queryParams, 'page')
+      };
+      const response = await UserApi.list(params);
       context.commit('setUsers', response.data);
       context.commit('setMeta', response.meta);
       return response;

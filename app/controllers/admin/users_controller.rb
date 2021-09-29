@@ -16,12 +16,6 @@ class Admin::UsersController < Admin::ApplicationController
     end
   end
 
-  # GET /admin/users/search
-  def search
-    index
-    render :index
-  end
-
   # POST /admin/users
   def create
     @user = User.new(user_params)

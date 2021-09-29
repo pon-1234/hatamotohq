@@ -67,19 +67,19 @@
                 </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-end" v-if="totalRows && totalRows/10 > 1">
+            <div class="d-flex justify-content-center">
               <b-pagination
+                v-if="totalRows > perPage"
                 v-model="queryParams.page"
                 :total-rows="totalRows"
-                :per-page="10"
-                aria-controls="my-table"
-                first-number
-                last-number
+                :per-page="perPage"
                 @change="loadUsers"
+                aria-controls="my-table"
               ></b-pagination>
+              <b v-if="!loading && totalRows === 0">データはありません。</b>
             </div>
             <div class="text-center mt-4" v-if="users.length == 0">
-              <b>データはありません。</b>
+              <b></b>
             </div>
           </div>
           <loading-indicator :loading="loading"></loading-indicator>

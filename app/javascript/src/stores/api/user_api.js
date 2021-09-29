@@ -3,7 +3,7 @@ export default {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/admin/users`,
       method: 'GET',
-      data: { q: query },
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
