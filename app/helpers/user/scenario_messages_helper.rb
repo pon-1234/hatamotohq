@@ -23,30 +23,24 @@ module User::ScenarioMessagesHelper
     status_i18n = I18n.t('enums.scenario_message.status.' + status)
     case status
     when 'enabled'
-      "<span class='badge badge-primary p-2'>#{status_i18n}</span>".html_safe
-    when 'disabled'
-      "<span class='badge badge-warning p-2'>#{status_i18n}</span>".html_safe
-    end
-  end
 
-  def schedule_date_for(scenario, message)
-    if scenario.elapsed_time_mode?
-      message.is_initial? || message.date == 0 ? '開始直後' : ''
-    elsif scenario.time_mode?
-      message.is_initial? || message.date == 0 ? '開始当日' : "#{message.date}日後"
+      "<i class='mdi mdi-circle text-success'></i> #{status_i18n}".html_safe
+    when 'disabled'
+      "<i class='mdi mdi-circle'></i> #{status_i18n}".html_safe
     end
   end
 
   def schedule_time_for(scenario, message)
+    return '' if message.disabled?
     if scenario.elapsed_time_mode?
       if message.is_initial?
-        "#{message.order}通目"
+        "開始直後"
       else
         sb = message.date > 0 ? "#{message.date}日と" : ''
-        sb + "#{message.time&.to_time.strftime('%-H時間%-M分')}後 #{message.order}通目"
+        sb + "#{message.time&.to_time.strftime('%-H時間%-M分')}後"
       end
     elsif scenario.time_mode?
-      "#{message.time} #{message.order}通目"
+      message.is_initial? ? "開始当日 #{message.time}" : "#{message.date}日後 #{message.time}"
     end
   end
 end

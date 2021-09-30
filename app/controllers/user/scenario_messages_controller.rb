@@ -24,7 +24,9 @@ class User::ScenarioMessagesController < User::ApplicationController
   def create
     @message = ScenarioMessage.new(message_params)
     @message.scenario = @scenario
-    if !@message.save
+    if @message.save
+      @scenario.reorder_messages
+    else
       render_bad_request_with_message(@message.first_error_message)
     end
   end
@@ -37,7 +39,9 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # PATCH /user/scenarios/:scenario_id/messages/:id
   def update
-    if !@message.update!(message_params)
+    if @message.update!(message_params)
+      @scenario.reorder_messages
+    else
       render_bad_request_with_message(@message.first_error_message)
     end
   end
@@ -47,12 +51,14 @@ class User::ScenarioMessagesController < User::ApplicationController
   def import
     template = Template.find(params[:template_id])
     import_messages_from_template(@scenario, template)
+    @scenario.reorder_messages
     render_success
   end
 
   # DELETE /user/scenarios/:scenario_id/messages/:id
   def destroy
     if @message.destroy
+      @scenario.reorder_messages
       redirect_to user_scenario_messages_path, flash: { success: 'シナリオメッセージの削除は成功しました。' }
     else
       redirect_to user_scenario_messages_path, flash: { error: 'シナリオメッセージの削除は失敗しました。' }

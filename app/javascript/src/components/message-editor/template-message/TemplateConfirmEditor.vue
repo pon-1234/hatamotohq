@@ -1,36 +1,42 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <div class="form-group">
-        <label for="question_title">質問文</label>
-        <required-mark/>
-        <input class="form-control"
-          :name="'confirm-label'+ indexParent"
-          placeholder="質問文を入力してください"
-          maxlength="160"
-          autocomplete="off"
-          type="text"
-          v-model="defaults.text"
-          v-validate="'required'"
-          data-vv-as="質問文"
-        >
-        <error-message :message="errors.first('confirm-label'+indexParent)"></error-message>
-      </div>
+  <div>
+    <div>
+      <label for="question_title">質問文</label>
+      <required-mark/>
+      <input class="form-control"
+        :name="'confirm-label'+ indexParent"
+        placeholder="質問文を入力してください"
+        maxlength="160"
+        autocomplete="off"
+        type="text"
+        v-model="defaults.text"
+        v-validate="'required'"
+        data-vv-as="質問文"
+      >
+      <error-message :message="errors.first('confirm-label'+indexParent)"></error-message>
     </div>
-    <div class="col-xl-6" v-for="(item, index) in defaults.actions" :key="index">
-      <div class="card card-outline card-success">
-        <div class="card-header"><h3 class="card-title">選択肢{{index+1}}</h3></div>
-        <div class="card-body">
-          <div class="">
-            <div class="col-md-12 p-0">
-              <message-action-type
-                :name="'confirm_'+index"
-                :value="item"
-                :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
-                @input="changeAction(index, ...arguments)"
-              />
-            </div>
-          </div>
+
+    <ul class="w-100 nav nav-tabs nav-bordered mt-2">
+      <li class="nav-item" v-for="(item, index) in defaults.actions" :key="index">
+        <a :href="`#messageAction${index}`" data-toggle="tab"
+          @click="editingActionIndex = index"
+          :aria-expanded="editingActionIndex === index"
+          :class="editingActionIndex === index ? 'nav-link active' : 'nav-link'">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">選択肢{{ index + 1 }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="w-100 tab-content">
+      <div :class="editingActionIndex === index ? 'tab-pane show active' : 'tab-pane'" v-for="(item, index) in defaults.actions" :key="index" :id="`#messageAction${index}`">
+        <div>
+          <message-action-type
+            :name="'confirm_'+index"
+            :value="item"
+            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+            @input="changeAction(index, ...arguments)"
+          />
         </div>
       </div>
     </div>
@@ -43,6 +49,7 @@ export default {
   inject: ['parentValidator'],
   data() {
     return {
+      editingActionIndex: 0,
       defaults: {
         type: this.TemplateMessageType.Confirm,
         text: '',

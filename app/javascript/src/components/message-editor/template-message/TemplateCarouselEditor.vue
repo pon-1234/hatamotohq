@@ -28,8 +28,8 @@
                 <div class="carousel-header">
                   <span class="carousel-header-title">{{index+1}}枚目</span>
                   <div class="carousel-header-action">
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"><i  class="glyphicon glyphicon-arrow-left"></i></span>
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"><i  class="glyphicon glyphicon-arrow-right"></i></span>
+                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"><i class="glyphicon glyphicon-arrow-left"></i></span>
+                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"><i class="glyphicon glyphicon-arrow-right"></i></span>
                     <span class="action-item" @click="copyColumn(index, item)"><i  class="fas fa-copy glyphicon"></i></span>
                     <span class="action-item" @click="addMoreColumn(index)"><i  class="glyphicon glyphicon-plus"></i></span>
                     <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"><i  class="glyphicon glyphicon-remove"></i></span>

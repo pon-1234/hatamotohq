@@ -95,7 +95,7 @@
               :isDisplayTemplate="true"
               v-bind:data="item"
               v-bind:index="index"
-              v-bind:countMessages="broadcastData.messages.length"
+              v-bind:messagesCount="broadcastData.messages.length"
               @input="changeContent"
               @remove="removeContent"
               @moveTopMessage="moveTopMessage"

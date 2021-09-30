@@ -11,7 +11,7 @@ class User::ScenariosController < User::ApplicationController
     if request.format.json?
       @params = params[:q]
       @q = Scenario.accessible_by(current_ability).ransack(params[:q])
-      @scenarios = @q.result.page(params[:page])
+      @scenarios = @q.result.page(params[:page]).per(8)
     end
     respond_to do |format|
       format.html

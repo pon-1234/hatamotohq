@@ -1,62 +1,67 @@
 <template>
   <div class="mxw-1200">
-    <div class="card" :key="componentKey">
-      <div class="card-body">
-        <scenario-message-time-define
-          v-if="!loading"
-          :mode="scenario.mode"
-          :is_initial.sync="scenarioMessageData.is_initial"
-          :date.sync="scenarioMessageData.date"
-          :time.sync="scenarioMessageData.time"
-          :order.sync="scenarioMessageData.order"
-          >
-        </scenario-message-time-define>
-        <div class="form-common01">
-          <div class="form-border">
-            <div class="form-group">
-              <label>メッセージ名<required-mark/></label>
+    <div :key="componentKey">
+      <div class="card">
+        <div class="card-header left-border">
+          <h3 class="card-title">基本設定</h3>
+        </div>
+        <div class="card-body">
+          <div class="form-group d-flex">
+            <label class="fw-250">メッセージ名（管理用）<required-mark/></label>
+            <div class="flex-grow-1">
               <input type="text" name="message-name" class="form-control" placeholder="メッセージ名を入力してください" v-model="scenarioMessageData.name" v-validate="'required'" data-vv-as="メッセージ名">
               <error-message :message="errors.first('message-name')"></error-message>
             </div>
           </div>
-          <div class="form-border">
-            <div class="form-group">
-              <label>メッセージ本文</label>
-                <message-editor
-                :isDisplayTemplate="true"
-                  v-for="(item, index) in scenarioMessageData.messages"
-                  :key="index"
-                  v-bind:data="item"
-                  v-bind:index="index"
-                  @selectTemplate="selectTemplate"
-                  @input="onMessageContentChanged"
-                />
-            </div>
-          </div>
-          <div class="form-border">
-            <div class="form-group">
-              <label class="mb10">配信</label>
-              <div class="flex start ai_center">
-                <div class="toggle-switch btn-scenario01">
-                  <input id="scenario-onoff" class="toggle-input" type="checkbox"
-                    v-model="scenarioMessageData.status" true-value="enabled"
-                    false-value="disabled">
-                  <label for="scenario-onoff" class="toggle-label">
-                    <span></span>
-                  </label>
-                </div>
-                <p class="scenario-status no-mgn">配信する</p>
-              </div>
+          <div class="fmt-2 d-flex">
+            <label class="fw-250">配信する</label>
+            <div class="flex-grow-1">
+              <input type="checkbox" id="messageOnoff" checked data-switch="success" v-model="scenarioMessageData.status" true-value="enabled" false-value="disabled" ref="status"/>
+              <label for="messageOnoff" data-on-label="オン" data-off-label="オフ"></label>
             </div>
           </div>
         </div>
       </div>
-      <div class="card-footer">
+
+      <div class="card">
+        <div class="card-header left-border">
+          <h3 class="card-title">配信タイミング設定</h3>
+        </div>
+        <div class="card-body">
+          <scenario-message-time-define
+            v-if="!loading"
+            :mode="scenario.mode"
+            :is_initial.sync="scenarioMessageData.is_initial"
+            :date.sync="scenarioMessageData.date"
+            :time.sync="scenarioMessageData.time"
+            :order.sync="scenarioMessageData.order"
+            >
+          </scenario-message-time-define>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header left-border">
+          <h3 class="card-title">メッセージ本文</h3>
+        </div>
+        <div class="card-body py-0">
+          <message-editor
+            :isDisplayTemplate="true"
+            v-for="(item, index) in scenarioMessageData.messages"
+            :key="index"
+            v-bind:data="item"
+            v-bind:index="index"
+            @selectTemplate="selectTemplate"
+            @input="onMessageContentChanged"
+          ></message-editor>
+        </div>
+        <loading-indicator :loading="loading"></loading-indicator>
+      </div>
+      <div>
         <button type="submit" class="btn btn-success fw-120" @click="submit()" >保存</button>
       </div>
-      <loading-indicator :loading="loading"></loading-indicator>
     </div>
-    <message-preview />
+    <message-preview></message-preview>
   </div>
 </template>
 <script>

@@ -28,7 +28,7 @@
             data-target="#stickerModalCenter"
           >スタンプを選択</a>
           <div class="text-muted opacity-30">
-            <i class="mdi mdi-sticker-emoji mdi-2x"></i>
+            <i class="mdi mdi-sticker-emoji mdi-3x"></i>
           </div>
         </div>
       </div>

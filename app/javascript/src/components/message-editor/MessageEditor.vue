@@ -2,7 +2,7 @@
   <div>
     <div class="card border-primary border mt-4">
       <div class="card-header d-flex align-items-center">
-        <span>メッセージ{{index + 1}}設定</span>
+        <span>メッセージ{{index ? index + 1 : '' }}設定</span>
         <div class="ml-auto btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></div>
       </div>
       <div class="card-body">
@@ -11,14 +11,14 @@
             v-model="defaults.message_type_id"
             @input="changeSelectedMessage"
           />
-          <div class="group-action d-flex" v-if="countMessages && countMessages > 0">
-            <button type="button" class="d-flex btn btn-light action-item" @click="moveTopMessage" v-if="index >= 1">
+          <div class="group-action d-flex" v-if="messagesCount && messagesCount > 0">
+            <button type="button" class="d-flex btn btn-light action-item" @click="moveMessageToTop" v-if="index >= 1">
               <i class="fas fa-chevron-up"></i>
             </button>
-            <button type="button" class="d-flex btn btn-light action-item" @click="moveBottomMessage" v-if="index < countMessages - 1">
+            <button type="button" class="d-flex btn btn-light action-item" @click="moveMessageToBottom" v-if="index < messagesCount - 1">
               <i class="fas fa-chevron-down"></i>
             </button>
-            <button type="button" class="d-flex btn btn-light action-item" @click="removeContent" v-if="countMessages !=1">
+            <button type="button" class="d-flex btn btn-light action-item" @click="removeMessage" v-if="messagesCount !=1">
               <i class="fas fa-times"></i>
             </button>
           </div>
@@ -37,7 +37,7 @@
 </template>
 <script>
 export default {
-  props: ['data', 'index', 'countMessages', 'isDisplayTemplate'],
+  props: ['data', 'index', 'messagesCount', 'isDisplayTemplate'],
   data() {
     return {
       defaults: {
@@ -168,16 +168,16 @@ export default {
       this.$emit('input', { index: this.index, content: this.defaults });
     },
 
-    removeContent() {
+    removeMessage() {
       this.$emit('remove', { index: this.index });
     },
 
-    moveTopMessage() {
-      this.$emit('moveTopMessage', this.index);
+    moveMessageToTop() {
+      this.$emit('moveMessageToTop', this.index);
     },
 
-    moveBottomMessage() {
-      this.$emit('moveBottomMessage', this.index);
+    moveMessageToBottom() {
+      this.$emit('moveMessageToBottom', this.index);
     }
   }
 };

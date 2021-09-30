@@ -51,4 +51,12 @@ class Scenario < ApplicationRecord
     new_scenario.save!
     new_scenario
   end
+
+  def reorder_messages
+    orderd_messages = scenario_messages.ordered
+    orderd_messages.each_with_index do |message, index|
+      message.step = index + 1
+      message.save
+    end
+  end
 end

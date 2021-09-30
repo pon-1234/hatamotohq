@@ -59,7 +59,7 @@
               :key="index"
               v-bind:data="item"
               v-bind:index="index"
-              v-bind:countMessages="autoResponseData.messages.length"
+              v-bind:messagesCount="autoResponseData.messages.length"
               @input="onMessageContentChanged"
               @selectTemplate="selectTemplate"
               @remove="removeContent"

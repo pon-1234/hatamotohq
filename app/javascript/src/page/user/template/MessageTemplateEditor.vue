@@ -17,7 +17,7 @@
               :key="item.id"
               v-bind:data="item"
               v-bind:index="index"
-              v-bind:countMessages="templateData.messages.length"
+              v-bind:messagesCount="templateData.messages.length"
               @input="changeContent"
               @remove="removeContent"
               @moveTopMessage="moveTopMessage"
