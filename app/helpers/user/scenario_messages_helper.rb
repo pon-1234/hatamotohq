@@ -23,7 +23,6 @@ module User::ScenarioMessagesHelper
     status_i18n = I18n.t('enums.scenario_message.status.' + status)
     case status
     when 'enabled'
-
       "<i class='mdi mdi-circle text-success'></i> #{status_i18n}".html_safe
     when 'disabled'
       "<i class='mdi mdi-circle'></i> #{status_i18n}".html_safe

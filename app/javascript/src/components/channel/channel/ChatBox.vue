@@ -14,6 +14,7 @@
         >
           <chat-item
             :message="message"
+            :prevMessage="index > 0 ? messages[index -1] : null"
             @unread="setUnreadMessage">
           </chat-item>
         </span>
