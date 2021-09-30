@@ -70,6 +70,6 @@ class Channel < ApplicationRecord
 
   # Delete all applied scenarios
   def cancel_scenarios
-    ScenarioEvent.queued.where(channel_id: channel_id).destroy_all
+    ScenarioEvent.queued.where(channel_id: id).destroy_all
   end
 end

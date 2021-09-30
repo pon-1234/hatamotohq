@@ -7,8 +7,7 @@ class DispatchBroadcastJob < ApplicationJob
   def perform(broadcast_id)
     @broadcast = Broadcast.find(broadcast_id)
     # Change broadcast status to sending
-    @broadcast.deliver_at = Time.zone.now
-    @broadcast.update_columns(status: 'sending')
+    @broadcast.update_columns(status: 'sending', deliver_at: Time.zone.now)
 
     dispatch_to_all if @broadcast.broadcast_type_all?
     dispatch_with_condition if @broadcast.broadcast_type_condition?
