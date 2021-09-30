@@ -39,8 +39,12 @@ class Admin::UsersController < Admin::ApplicationController
 
   # GET /admin/users/:id/sso
   def sso
-    sign_in @user
-    redirect_to user_root_path
+    if @user.active?
+      sign_in @user
+      redirect_to user_root_path
+    else
+      redirect_to admin_users_path, flash: { warning: 'ユーザーはブロック中ですので、ログインできませんでした。' }
+    end
   end
 
   private

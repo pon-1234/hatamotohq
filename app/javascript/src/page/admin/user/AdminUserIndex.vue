@@ -53,15 +53,15 @@
                       <div class="btn-group">
                         <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item">ユーザーを編集</a>
+                          <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item">クライアントを編集</a>
                           <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalToggleStatusUser" @click="curUserIndex = index">
                             <span v-if="user.status === 'active'">ブロックする</span>
                             <span v-else>ブロック解除する</span>
                           </a>
-                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteUser" @click="curUserIndex = index">ユーザーを削除</a>
+                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteUser" @click="curUserIndex = index">クライアントを削除</a>
                         </div>
                       </div>
-                      <a :href="`${rootUrl}/admin/users/${user.id}/sso`" class="btn btn-sm btn-info" target="_blank">ログイン</a>
+                      <a :href="`${rootUrl}/admin/users/${user.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
                     </td>
                   </tr>
                 </tbody>
