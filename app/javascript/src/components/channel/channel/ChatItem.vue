@@ -1,8 +1,10 @@
 <template>
   <li>
-    <template v-if="isSystemMessage"></template>
+    <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
+    <template v-if="isSystemMessage">
+      <system-message :message="message"></system-message>
+    </template>
     <template v-else>
-      <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
       <div :class="alignBubble">
         <div class="chat-avatar">
           <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
