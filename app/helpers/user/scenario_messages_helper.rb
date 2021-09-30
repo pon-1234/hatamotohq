@@ -33,7 +33,7 @@ module User::ScenarioMessagesHelper
     return '' if message.disabled?
     if scenario.elapsed_time_mode?
       if message.is_initial?
-        "開始直後"
+        '開始直後'
       else
         sb = message.date > 0 ? "#{message.date}日と" : ''
         sb + "#{message.time&.to_time.strftime('%-H時間%-M分')}後"
