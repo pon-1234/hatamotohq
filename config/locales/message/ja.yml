@@ -10,3 +10,9 @@ ja:
       imagemap: メッセージを送信しました
       template: メッセージを送信しました
       flex: メッセージを送信しました
+    logs:
+      follow: 【フォローされました】
+      unfollow: 【アンフォローされました】
+      broadcast: "メッセージが配信されました：【%{title}】"
+      scenario_start: "シナリオが開始されました：【%{title}】"
+      scenario_end: "シナリオが終了しました：【%{title}】"

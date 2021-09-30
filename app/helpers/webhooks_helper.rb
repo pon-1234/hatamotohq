@@ -116,10 +116,11 @@ module WebhooksHelper
 
       def handle_after_unfollow(channel)
         Messages::SystemLogBuilder.new(channel).perform_unfollow
+        channel.cancel_scenarios
       end
 
       def create_message(channel, sender, body)
         mb = Messages::MessageBuilder.new(sender, channel, body)
-        message = mb.perform
+        mb.perform
       end
 end

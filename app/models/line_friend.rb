@@ -75,10 +75,6 @@ class LineFriend < ApplicationRecord
     without_tag + with_tag
   end
 
-  # Cancel all applied scenarios
-  def cancel_scenarios
-  end
-
   private
     def exec_after_create_commit
       AcquireFriendJob.perform_later(self.id)

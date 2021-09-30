@@ -9,19 +9,31 @@ class Messages::SystemLogBuilder
   end
 
   def perform_follow
-    @message.text = '【フォローされました】'
+    @message.text = I18n.t('messages.logs.follow')
     @message.save!
     @message
   end
 
   def perform_unfollow
-    @message.text = '【アンフォローされました】'
+    @message.text = I18n.t('messages.logs.unfollow')
     @message.save!
     @message
   end
 
   def perform_broadcast(broadcast)
-    @message.text = "メッセージが配信されました：#{broadcast.title}"
+    @message.text = I18n.t('messages.logs.broadcast', { title: broadcast.title })
+    @message.save!
+    @message
+  end
+
+  def perform_scenario_start(scenario)
+    @message.text = I18n.t('messages.logs.scenario_start', { title: scenario.title })
+    @message.save!
+    @message
+  end
+
+  def perform_scenario_end(scenario)
+    @message.text = I18n.t('messages.logs.scenario_end', { title: scenario.title })
     @message.save!
     @message
   end
