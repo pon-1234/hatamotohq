@@ -30,7 +30,7 @@
               <tr>
                 <th>通目</th>
                 <th>時刻</th>
-                <th>タイトル</th>
+                <th>メッセージ名</th>
                 <th>タイプ</th>
                 <th>メッセージプレビュー</th>
                 <th class="fw-120">状況</th>
@@ -49,7 +49,7 @@
                     <% end %>
                   </td>
                   <td><%= schedule_time_for(@scenario, message) %></td>
-                  <td><%= message.name %></td>
+                  <td><%= message.name&.present? ? message.name : '未設定' %></td>
                   <td><message-type-label :data="<%= message.content.to_json %>"/></td>
                   <td><message-content :data="<%= message.content.to_json %>"></message-content></td>
                   <td><%= render_scenario_message_status(message.status) %></td>

@@ -7,9 +7,9 @@
         </div>
         <div class="card-body">
           <div class="form-group d-flex">
-            <label class="fw-250">メッセージ名（管理用）<required-mark/></label>
+            <label class="fw-250">メッセージ名（管理用)</label>
             <div class="flex-grow-1">
-              <input type="text" name="message-name" class="form-control" placeholder="メッセージ名を入力してください" v-model="scenarioMessageData.name" v-validate="'required'" data-vv-as="メッセージ名">
+              <input type="text" name="message-name" class="form-control" placeholder="メッセージ名を入力してください" v-model="scenarioMessageData.name" v-validate="'max:255'" data-vv-as="メッセージ名">
               <error-message :message="errors.first('message-name')"></error-message>
             </div>
           </div>

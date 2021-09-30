@@ -5,7 +5,7 @@ module User::ScenarioMessagesHelper
     template.template_messages.each do |message|
       scenario_message = ScenarioMessage.new
       scenario_message.scenario = scenario
-      scenario_message.name = '未設定'
+      scenario_message.name = nil
       scenario_message.is_initial = true
       scenario_message.date = 0
       scenario_message.time = '0:00'
