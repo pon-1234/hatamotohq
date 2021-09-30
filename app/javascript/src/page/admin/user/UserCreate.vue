@@ -6,7 +6,7 @@
           <div class="form-group row">
             <label class="col-xl-3">メールアドレス<required-mark/></label>
             <div class="col-xl-9">
-              <ValidationProvider name="メールアドレス" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
                 <input type="text" class="form-control" name="user[email]" placeholder="入力してください" v-model="userFormData.email">
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
