@@ -1,30 +1,33 @@
 <template>
-  <li >
-    <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
-    <div :class="alignBubble">
-      <div class="chat-avatar">
-        <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
-        <i>{{ readableTime }}</i>
-      </div>
-      <div class="conversation-text">
-        <div class="ctext-wrap">
-          <i>{{ sender.name || 'システム' }}</i>
-          <p>
-            <message-content :data="message.content" :time="readableTime"></message-content>
-          </p>
+  <li>
+    <template v-if="isSystemMessage"></template>
+    <template v-else>
+      <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
+      <div :class="alignBubble">
+        <div class="chat-avatar">
+          <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
+          <i>{{ readableTime }}</i>
         </div>
-      </div>
-      <div class="conversation-actions dropdown" hidden>
-        <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
-            class='uil uil-ellipsis-v'></i></button>
+        <div class="conversation-text">
+          <div class="ctext-wrap">
+            <i>{{ sender.name || 'システム' }}</i>
+            <p>
+              <message-content :data="message.content" :time="readableTime"></message-content>
+            </p>
+          </div>
+        </div>
+        <div class="conversation-actions dropdown" hidden>
+          <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
+              class='uil uil-ellipsis-v'></i></button>
 
-        <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="#">Copy Message</a>
-          <a class="dropdown-item" href="#">Edit</a>
-          <a class="dropdown-item" href="#">Delete</a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#">Copy Message</a>
+            <a class="dropdown-item" href="#">Edit</a>
+            <a class="dropdown-item" href="#">Delete</a>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </li>
   <!-- <div :class="'direct-chat-msg ' + message.from">
     <template v-if="message.from === 'friend'">
@@ -96,6 +99,9 @@ export default {
     }
   },
   computed: {
+    isSystemMessage() {
+      return this.message.from === 'system';
+    },
     sender() {
       return this.message.sender || {};
     },

@@ -4,7 +4,8 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/channels`,
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
@@ -14,7 +15,8 @@ export default {
       method: 'GET',
       data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
@@ -42,7 +44,7 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_scenario`,
       method: 'POST',
       data: JSON.stringify(payload),
-      dataType: 'json',
+      dataType: 'jsonp',
       contentType: 'application/json'
     });
   },
@@ -65,16 +67,6 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages/sendMedia`,
       method: 'POST',
       data: formData,
-      processData: false,
-      contentType: false
-    });
-  },
-
-  sendMediaFromManager: (query) => {
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages/sendMediaFromManager`,
-      method: 'POST',
-      data: JSON.stringify(query),
       processData: false,
       contentType: false
     });

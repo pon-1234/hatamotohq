@@ -182,7 +182,6 @@ export default {
       'setActiveChannel',
       'sendMedia',
       'unreadMessage',
-      'setUnreadChannelId',
       'markMessagesRead'
     ]),
 
@@ -329,11 +328,6 @@ export default {
 
     showFriendDetail(id) {
       this.$emit('showFriendDetail', { id: id });
-    },
-
-    setUnreadMessage(messageId) {
-      this.setUnreadChannelId(this.activeChannel.id);
-      this.unreadMessage({ message_id: messageId, channel_id: this.activeChannel.id });
     },
 
     isDateTimeMessage(currentMessage, lastMessage) {
