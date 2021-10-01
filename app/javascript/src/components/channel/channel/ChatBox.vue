@@ -116,7 +116,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import Util from '@/core/util';
-import moment from 'moment';
 
 export default {
   data() {
@@ -133,9 +132,7 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      this.addScrollListener();
-    });
+    this.addScrollListener();
   },
 
   unmounted() {
@@ -180,7 +177,10 @@ export default {
     ...mapActions('channel', [
       'getMessages',
       'setActiveChannel',
+      'sendMessage',
       'sendMedia',
+      'sendTemplate',
+      'sendScenario',
       'unreadMessage',
       'markMessagesRead'
     ]),
@@ -203,7 +203,6 @@ export default {
 
     async handleScroll(e) {
       this.setScrollParams();
-
       if (
         e.target.scrollTop < 100 &&
         !this.isLoadingPrevious &&
@@ -240,8 +239,7 @@ export default {
           },
           timestamp: new Date().getTime()
         };
-
-        this.$emit('onSendMessage', message);
+        this.sendMessage(message);
       }
 
       this.textMessage = '';
@@ -261,8 +259,7 @@ export default {
         },
         timestamp: new Date().getTime()
       };
-
-      this.$emit('onSendMessage', message);
+      this.sendMessage(message);
     },
 
     onSendMedia(media) {
@@ -278,7 +275,7 @@ export default {
         message = this.buildAudioMessage(media);
         break;
       }
-      this.$emit('onSendMessage', message);
+      this.sendMessage(message);
     },
 
     buildImageMessage(media) {
@@ -326,33 +323,12 @@ export default {
       event.preventDefault();
     },
 
-    showFriendDetail(id) {
-      this.$emit('showFriendDetail', { id: id });
-    },
-
-    isDateTimeMessage(currentMessage, lastMessage) {
-      if (currentMessage && currentMessage.created_at && lastMessage && lastMessage.created_at) {
-        const currentTime = moment(moment(parseInt(currentMessage.timestamp)).format('YYYY-MM-DD'));
-        const lastTime = moment(moment(parseInt(lastMessage.timestamp)).format('YYYY-MM-DD'));
-        const dif = currentTime.diff(lastTime, 'days');
-        if (dif >= 1) {
-          return true;
-        }
-      }
-      return false;
-    },
-
-    getDateTimeMessage(value) {
-      return moment(parseInt(value.timestamp)).format('YYYY年MM月DD日');
-    },
-
     onSelectTemplate(template) {
       const payload = {
         channel_id: this.activeChannel.id,
         template_id: template.id
       };
-
-      this.$emit('onSendTemplate', payload);
+      this.sendTemplate(payload);
     },
 
     onSelectScenario(scenario) {
@@ -360,8 +336,7 @@ export default {
         channel_id: this.activeChannel.id,
         scenario_id: scenario.id
       };
-
-      this.$emit('onSendScenario', payload);
+      this.sendScenario(payload);
     },
 
     selectFlexMessageTemplate(template) {

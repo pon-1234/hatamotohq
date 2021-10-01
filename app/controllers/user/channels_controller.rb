@@ -6,7 +6,7 @@ class User::ChannelsController < User::ApplicationController
 
   # GET /user/channels
   def index
-    @channels = Channel.accessible_by(current_ability).includes([:line_friend]).page(params[:page]).per(50)
+    @channels = channel_finder.perform
     respond_to do |format|
       format.html
       format.json
@@ -33,5 +33,9 @@ class User::ChannelsController < User::ApplicationController
   private
     def find_channel
       @channel = Channel.find(params[:id])
+    end
+
+    def channel_finder
+      @channel_finder ||= ChannelFinder.new(current_ability, params)
     end
 end

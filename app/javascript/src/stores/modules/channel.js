@@ -4,35 +4,48 @@ export const state = {
   channels: [],
   activeChannel: null,
   messages: [],
-  messageParams: {
-    page: 1,
-    channelId: null
+  channelParams: {
+    before: null,
+    keyword: ''
   },
-  totalPages: 1,
-  currentPage: null,
-  channel_LastPage: 1,
-  channel_CurrentPage: null,
+  perPageChannel: 30,
   isLoadMoreMessage: false,
   isLoadMoreChannel: false,
   unreadChannelId: null,
+  allChannelLoaded: false,
   allMessagesLoaded: false
 };
 
 export const mutations = {
-  setChannels(state, channels) {
-    state.channels = channels;
+  setChannelParams(state, params) {
+    Object.assign(state.channelParams, params);
+  },
+
+  setChannelParam(state, param) {
+    Object.assign(state.channelParams, param);
+  },
+
+  pushChannels(state, channels) {
+    if (channels.length < state.perPageChannel) {
+      state.allChannelLoaded = true;
+    }
+    state.channels = state.channels.concat(channels);
+    state.channels = _.uniqBy(state.channels, (channel) => {
+      return channel.id;
+    });
   },
 
   setActiveChannel(state, activeChannel) {
     state.activeChannel = activeChannel;
     state.allMessagesLoaded = false;
-    if (state.unreadChannelId !== state.activeChannel.id) {
-      state.activeChannel.un_read = false;
-    }
     const index = state.channels.findIndex(item => parseInt(item.id) === parseInt(activeChannel.id));
     if (index >= 0) {
       state.channels.splice(index, 1, activeChannel);
     }
+  },
+
+  resetChannels(state) {
+    state.channels = [];
   },
 
   resetMessages(state) {
@@ -47,12 +60,12 @@ export const mutations = {
     state.isLoadMoreMessage = status;
   },
 
-  setAllMessageLoaded(state, status) {
-    state.allMessagesLoaded = status;
+  setAllChannelLoaded(state, status) {
+    state.allChannelLoaded = status;
   },
 
-  setLoadMoreChannel(state, status) {
-    state.isLoadMoreChannel = status;
+  setAllMessageLoaded(state, status) {
+    state.allMessagesLoaded = status;
   },
 
   pushMessage(state, message) {
@@ -81,9 +94,10 @@ export const mutations = {
       if (event.action === 'new_message') {
         const message = event.content;
         if (message.from === 'friend') {
-          // move the channel to top
-          state.channels.splice(channelIndex, 1);
-          state.channels.unshift(channel);
+          if (state.channelParams.keyword) {
+            state.channels.splice(channelIndex, 1);
+            state.channels.unshift(channel);
+          }
         }
       } else if (event.action === 'read_message' || event.action === 'line_follow') {
         state.channels.splice(channelIndex, 1, channel);
@@ -98,17 +112,19 @@ export const getters = {
 };
 
 export const actions = {
-  async getChannels(context, query = {}) {
-    context.commit('setLoadMoreChannel', true);
+  async getChannels(context) {
     try {
-      const res = await ChannelAPI.list();
+      const params = {
+        before: state.channelParams.before,
+        q: { line_friend_display_name_cont: state.channelParams.keyword }
+      };
+      const res = await ChannelAPI.list(params);
       if (res) {
-        context.commit('setChannels', res.data);
+        context.commit('pushChannels', res.data);
       }
     } catch (error) {
       console.log(error);
     }
-    context.commit('setLoadMoreChannel', false);
   },
 
   async getMessages(context, query) {

@@ -9,10 +9,6 @@
     <!-- chat area -->
     <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
       <chat-box
-        @onSendMessage="sendMessage"
-        @onSendScenario="sendScenario"
-        @onSendTemplate="sendTemplate"
-        @sendMediaMessage="sendMediaMessage"
         :class="getRightItem()"
         @showFriendDetail="showFriendDetail"
       ></chat-box>
@@ -79,7 +75,6 @@ export default {
       activeChannel: (state) => state.activeChannel,
       channels: (state) => state.channels,
       messages: (state) => state.messages,
-      messageParams: (state) => state.messageParams,
       unreadChannelId: (state) => state.unreadChannelId
     }),
     ...mapState('friend', {
@@ -103,12 +98,8 @@ export default {
     ...mapActions('channel', [
       'getChannels',
       'onReceiveWebsocketEvent',
-      'sendMessage',
-      'sendScenario',
-      'sendTemplate',
       'pushMessage',
-      'setActiveChannel',
-      'getMessages'
+      'setActiveChannel'
     ]),
     ...mapActions('tag', ['getTags']),
 

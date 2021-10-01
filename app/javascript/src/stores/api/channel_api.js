@@ -1,8 +1,9 @@
 export default {
-  list: () => {
+  list: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json',
       cache: false
@@ -56,19 +57,6 @@ export default {
       data: JSON.stringify(payload),
       dataType: 'json',
       contentType: 'application/json'
-    });
-  },
-
-  sendMedia: (query) => {
-    const formData = new FormData();
-    formData.append('key', query.key);
-    formData.append('fileData', query.file);
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages/sendMedia`,
-      method: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false
     });
   },
 

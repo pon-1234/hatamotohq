@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_30_110523) do
+ActiveRecord::Schema.define(version: 2021_09_30_154904) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -143,9 +143,6 @@ ActiveRecord::Schema.define(version: 2021_09_30_110523) do
     t.boolean 'locked'
     t.string 'alias'
     t.string 'slug'
-    t.boolean 'un_read', default: true
-    t.boolean 'is_mute', default: false
-    t.boolean 'is_pair_chat', default: true
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
