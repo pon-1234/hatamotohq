@@ -25,15 +25,14 @@
     <image-carousel-message v-if="data.type === MessageType.Template  && data.template && data.template.type ===  TemplateMessageType.ImageCarousel"  :data="data.template.columns" />
     <imagemap-message v-if="data.type === MessageType.Imagemap"  :data="data.baseUrl"/>
     <location-message v-if="data.type === MessageType.Location"  :data="data"/>
-    <flex-message v-if="data.type === MessageType.Flex"  :data="data" :source="source"/>
+    <!-- <flex-message v-if="data.type === MessageType.Flex"  :data="data" :source="source"/> -->
   </div>
 </template>
 <script>
 export default {
   props: {
     data: Object,
-    time: String,
-    source: String
+    time: String
   }
 };
 </script>

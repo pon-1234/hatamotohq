@@ -29,12 +29,6 @@
       :id="'TalkModalSearch'"
       @input="fetchItem"
     ></talk-modal-search>
-    <modal-friend-detail
-      :data="friend"
-      :talk="true"
-      @changeTilteChannel="changeTilteActiveChannel"
-      v-if="rerender"
-    />
   </div>
 </template>
 <script>
@@ -114,9 +108,7 @@ export default {
       'sendTemplate',
       'pushMessage',
       'setActiveChannel',
-      'getMessages',
-      'setUnreadChannelId',
-      'resetMessages'
+      'getMessages'
     ]),
     ...mapActions('tag', ['getTags']),
 
@@ -138,10 +130,6 @@ export default {
 
     async activateFirstChannel() {
       this.setActiveChannel(this.channels[0]);
-    },
-
-    sendMediaMessage(message) {
-      this.pushMessage(message.content);
     },
 
     switchChannel(isRefresh) {

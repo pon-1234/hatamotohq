@@ -39,6 +39,11 @@ export default {
     };
   },
   methods: {
+    defaultActive() {
+      this.options.forEach(element => {
+        element.active = !element.packageId;
+      });
+    },
     changePackageId(packageId) {
       this.options.forEach(element => {
         element.active = element.packageId === packageId;

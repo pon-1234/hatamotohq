@@ -67,4 +67,9 @@ class Channel < ApplicationRecord
   def unread_messages
     messages.unread_since(last_seen_at)
   end
+
+  # Delete all applied scenarios
+  def cancel_scenarios
+    ScenarioEvent.queued.where(channel_id: id).destroy_all
+  end
 end

@@ -35,7 +35,7 @@ class Message < ApplicationRecord
 
   belongs_to :channel
   belongs_to :sender, polymorphic: true, required: false
-  validates :content, presence: true
+  validates :content, presence: true, unless: :from_system?
   validates :type, presence: true
   validates_presence_of :from
 
@@ -52,6 +52,7 @@ class Message < ApplicationRecord
       from: from,
       type: type_before_type_cast,
       created_at: created_at.to_i,
+      text: text,
       content: content,
       timestamp: timestamp
     }
@@ -65,7 +66,7 @@ class Message < ApplicationRecord
 
   private
     def exec_before_create
-      unless type_text?
+      unless type_text? || type_log?
         self.text = I18n.t("messages.sent.#{self.type}")
       end
     end

@@ -25,7 +25,9 @@ module WebhooksHelper
   private
     def handle_follow
       line_friend = add_friend(@friend_id)
-      line_friend.present?
+      if line_friend.present?
+        handle_after_follow(line_friend.channel)
+      end
     end
 
     def handle_unfollow
@@ -37,8 +39,8 @@ module WebhooksHelper
       # Change channel status to block
       channel = Channel.where(line_account: @line_account, line_friend: line_friend).first
       return false if channel.nil?
-      channel.update_columns(status: 'blocked')
-      true
+      channel.update_columns(locked: true)
+      handle_after_unfollow(channel)
     end
 
     def handle_message
@@ -62,7 +64,7 @@ module WebhooksHelper
       # Get mapper key
       key = @event[:postback][:data]
       action = PostbackMapper.where(key: key)&.first&.value
-      return false if action.blank?
+      return if action.blank?
 
       if action[:displayText].present?
         # TODO: send text message
@@ -108,8 +110,17 @@ module WebhooksHelper
         channel.save!
       end
 
+      def handle_after_follow(channel)
+        Messages::SystemLogBuilder.new(channel).perform_follow
+      end
+
+      def handle_after_unfollow(channel)
+        Messages::SystemLogBuilder.new(channel).perform_unfollow
+        channel.cancel_scenarios
+      end
+
       def create_message(channel, sender, body)
         mb = Messages::MessageBuilder.new(sender, channel, body)
-        message = mb.perform
+        mb.perform
       end
 end

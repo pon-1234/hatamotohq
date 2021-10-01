@@ -33,7 +33,7 @@
                 <th>タイトル</th>
                 <th>状況</th>
                 <th class="fw-300">配信先</th>
-                <th>配信数</th>
+                <th hidden>配信数</th>
                 <th class="fw-150">操作</th>
               </tr>
             </thead>
@@ -51,7 +51,7 @@
                   <td>{{ broadcast.title }}</td>
                   <td><broadcast-status :status="broadcast.status"></broadcast-status></td>
                   <td><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
-                  <td></td>
+                  <td hidden></td>
                   <td>
                     <div class="btn-group">
                       <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>

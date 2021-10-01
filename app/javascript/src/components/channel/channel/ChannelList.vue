@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
   data() {
@@ -71,7 +71,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel', 'resetMessages']),
+    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel']),
+    ...mapMutations('channel', [
+      'resetMessages'
+    ]),
     async switchChannel(channel, index) {
       const notChanged = this.activeChannel.id === channel.id;
       this.$emit('switchChannel', !notChanged);

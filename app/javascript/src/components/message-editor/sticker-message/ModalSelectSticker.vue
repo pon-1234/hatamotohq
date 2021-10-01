@@ -18,7 +18,7 @@
         <div class="modal-body mh-100 overflow-hidden">
           <div class="bg-light sticker-picker m-n3">
             <div class="w-100">
-              <sticker-select-package @input="changePackageId"></sticker-select-package>
+              <sticker-select-package ref="stickerSelected" @input="changePackageId"></sticker-select-package>
             </div>
             <div class="bg-white" style="height: 400px;">
               <div
@@ -67,6 +67,7 @@ export default {
       this.animation = option.animation;
       this.getStickers({ packageId: option.packageId });
     },
+
     selectSticker(sticker) {
       // emit sticker
       const data = {
@@ -74,6 +75,11 @@ export default {
         stickerId: sticker.line_emoji_id
       };
       this.$emit('input', data);
+    },
+
+    reset() {
+      this.$refs.stickerSelected.defaultActive();
+      this.getStickers({ packageId: null });
     }
   }
 };

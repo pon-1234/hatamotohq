@@ -5,25 +5,24 @@ class DispatchBroadcastJob < ApplicationJob
   queue_as :default
 
   def perform(broadcast_id)
-    broadcast = Broadcast.find(broadcast_id)
+    @broadcast = Broadcast.find(broadcast_id)
     # Change broadcast status to sending
-    broadcast.deliver_at = Time.zone.now
-    broadcast.update_columns(status: 'sending')
+    @broadcast.update_columns(status: 'sending', deliver_at: Time.zone.now)
 
-    dispatch_to_all(broadcast) if broadcast.broadcast_type_all?
-    dispatch_with_condition(broadcast) if broadcast.broadcast_type_condition?
-    broadcast.update_columns(status: 'done')
+    dispatch_to_all if @broadcast.broadcast_type_all?
+    dispatch_with_condition if @broadcast.broadcast_type_condition?
+    @broadcast.update_columns(status: 'done')
   rescue => e
     p e.message
-    broadcast.update_columns(status: 'error')
+    @broadcast.update_columns(status: 'error')
   end
 
   # send message to every friends of line official account
   # using broadcast api to reduce message count
-  def dispatch_to_all(broadcast)
-    line_account = broadcast.line_account
+  def dispatch_to_all
+    line_account = @broadcast.line_account
     friends = line_account.line_friends
-    messages = broadcast.broadcast_messages
+    messages = @broadcast.broadcast_messages
     channels = Channel.where(line_friend_id: friends.map(&:id))
 
     nomalized_messages_data = []
@@ -33,7 +32,7 @@ class DispatchBroadcastJob < ApplicationJob
 
     # Deliver messages via line api
     if !send_broadcast(line_account, nomalized_messages_data)
-      broadcast.update_columns(status: 'error')
+      @broadcast.update_columns(status: 'error')
       return
     end
     nomalized_messages_data.each do |content|
@@ -43,19 +42,19 @@ class DispatchBroadcastJob < ApplicationJob
 
   # send message to specific friend
   # using multicast api to send message to friends
-  def dispatch_with_condition(broadcast)
-    line_account = broadcast.line_account
+  def dispatch_with_condition
+    line_account = @broadcast.line_account
 
-    friends = filter_friend_by_conditions(broadcast)
+    friends = filter_friend_by_conditions
     channels = Channel.where(line_friend_id: friends.map(&:id))
-    messages = broadcast.broadcast_messages
+    messages = @broadcast.broadcast_messages
 
     nomalized_messages_data = []
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
     if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
-      broadcast.update_columns(status: 'error')
+      @broadcast.update_columns(status: 'error')
     end
     nomalized_messages_data.each do |content|
       insert_delivered_message(channels, content)
@@ -74,16 +73,16 @@ class DispatchBroadcastJob < ApplicationJob
     end
 
     # TODO need refactoring
-    def filter_friend_by_conditions(broadcast)
-      conditions = broadcast.conditions
+    def filter_friend_by_conditions
+      conditions = @broadcast.conditions
       add_friend_date_cond = conditions['add_friend_date']
-      friends = broadcast.line_account.line_friends
+      friends = @broadcast.line_account.line_friends
       if conditions['type']&.eql?('specific')
         friends = friends.created_at_gteq(add_friend_date_cond['start_date']).created_at_lteq(add_friend_date_cond['end_date'])
       end
       # filter by tags
-      unless broadcast.tags.empty?
-        friends = friends.joins(:tags).references(:tags).where(tags: { id: broadcast.tag_ids })
+      unless @broadcast.tags.empty?
+        friends = friends.joins(:tags).references(:tags).where(tags: { id: @broadcast.tag_ids })
       end
       friends
     end
@@ -95,6 +94,7 @@ class DispatchBroadcastJob < ApplicationJob
       }
       channels.each do |channel|
         Messages::MessageBuilder.new(nil, channel, message_params).perform
+        Messages::SystemLogBuilder.new(channel).perform_broadcast(@broadcast)
       end
     end
 end

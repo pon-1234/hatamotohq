@@ -5,18 +5,17 @@
 # Table name: broadcasts
 #
 #  id              :bigint           not null, primary key
+#  line_account_id :bigint
 #  conditions      :json
-#  date_start      :string(255)
-#  deleted_at      :datetime
-#  deliver_at      :datetime
-#  deliver_now     :boolean          default(TRUE)
-#  schedule_at     :datetime
-#  status          :string(255)
 #  title           :string(255)
+#  deliver_now     :boolean          default(TRUE)
+#  status          :string(255)
 #  type            :string(255)
+#  schedule_at     :datetime
+#  deliver_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  line_account_id :bigint
+#  deleted_at      :datetime
 #
 # Indexes
 #

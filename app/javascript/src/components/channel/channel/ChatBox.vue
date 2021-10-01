@@ -14,6 +14,7 @@
         >
           <chat-item
             :message="message"
+            :prevMessage="index > 0 ? messages[index -1] : null"
             @unread="setUnreadMessage">
           </chat-item>
         </span>
@@ -37,7 +38,7 @@
               <div class="col-sm-auto">
                 <div class="btn-group">
                   <div class="btn btn-light" data-toggle="modal" data-target="#modalSendMedia"><i class="uil uil-paperclip"></i></div>
-                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker"> <i class='uil uil-smile'></i></div>
+                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker" @click="showStickerModal()"> <i class='uil uil-smile'></i></div>
                   <button type="submit" class="btn btn-success chat-send btn-block" @click="sendTextMessage"><i
                       class='uil uil-message'></i></button>
                 </div>
@@ -106,7 +107,7 @@
         <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
         <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
         <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-        <modal-select-sticker id="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
+        <modal-select-sticker ref="modalSticker" name="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
       </template>
     </div>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
@@ -181,7 +182,6 @@ export default {
       'setActiveChannel',
       'sendMedia',
       'unreadMessage',
-      'setUnreadChannelId',
       'markMessagesRead'
     ]),
 
@@ -330,11 +330,6 @@ export default {
       this.$emit('showFriendDetail', { id: id });
     },
 
-    setUnreadMessage(messageId) {
-      this.setUnreadChannelId(this.activeChannel.id);
-      this.unreadMessage({ message_id: messageId, channel_id: this.activeChannel.id });
-    },
-
     isDateTimeMessage(currentMessage, lastMessage) {
       if (currentMessage && currentMessage.created_at && lastMessage && lastMessage.created_at) {
         const currentTime = moment(moment(parseInt(currentMessage.timestamp)).format('YYYY-MM-DD'));
@@ -387,6 +382,10 @@ export default {
       };
 
       this.$emit('onSendMessage', message);
+    },
+
+    showStickerModal() {
+      this.$refs.modalSticker.reset();
     }
   }
 };

@@ -23,7 +23,6 @@ module User::ScenarioMessagesHelper
     status_i18n = I18n.t('enums.scenario_message.status.' + status)
     case status
     when 'enabled'
-
       "<i class='mdi mdi-circle text-success'></i> #{status_i18n}".html_safe
     when 'disabled'
       "<i class='mdi mdi-circle'></i> #{status_i18n}".html_safe
@@ -34,7 +33,7 @@ module User::ScenarioMessagesHelper
     return '' if message.disabled?
     if scenario.elapsed_time_mode?
       if message.is_initial?
-        "開始直後"
+        '開始直後'
       else
         sb = message.date > 0 ? "#{message.date}日と" : ''
         sb + "#{message.time&.to_time.strftime('%-H時間%-M分')}後"

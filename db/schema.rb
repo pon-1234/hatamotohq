@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_28_093519) do
+ActiveRecord::Schema.define(version: 2021_09_30_110523) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 2021_09_28_093519) do
     t.bigint 'line_account_id'
     t.json 'conditions'
     t.string 'title'
-    t.string 'date_start'
     t.boolean 'deliver_now', default: true
     t.string 'status'
     t.string 'type'

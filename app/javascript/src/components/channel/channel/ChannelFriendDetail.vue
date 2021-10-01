@@ -8,11 +8,9 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           <!-- item-->
-          <a href="javascript:void(0);" class="dropdown-item">View full</a>
+          <a :href="detailPath" class="dropdown-item">友達詳細</a>
           <!-- item-->
-          <a href="javascript:void(0);" class="dropdown-item">Edit Contact Info</a>
-          <!-- item-->
-          <a href="javascript:void(0);" class="dropdown-item">Remove</a>
+          <a href="javascript:void(0);" class="dropdown-item">ミュート</a>
         </div>
       </div>
 
@@ -41,14 +39,21 @@
 <script>
 import { mapState } from 'vuex';
 export default {
+  data() {
+    return {
+      rootPath: process.env.MIX_ROOT_PATH
+    };
+  },
   computed: {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel
-    })
+    }),
+    friend() {
+      return this.activeChannel.line_friend;
+    },
+    detailPath() {
+      return `${this.rootPath}/user/friends/${this.friend.id}`;
+    }
   }
 };
 </script>
-
-<style>
-
-</style>

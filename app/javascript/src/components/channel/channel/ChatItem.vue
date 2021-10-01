@@ -1,27 +1,35 @@
 <template>
-  <li :class="message.from === 'friend' ? 'clearfix' : 'clearfix odd'">
-    <div class="chat-avatar">
-      <img :src="message.sender && message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
-      <i>{{getTimeMessage(message)}}</i>
-    </div>
-    <div class="conversation-text">
-      <div class="ctext-wrap">
-        <i>{{ message.sender ? message.sender.name : 'システム' }}</i>
-        <p>
-          <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
-        </p>
-      </div>
-    </div>
-    <div class="conversation-actions dropdown" hidden>
-      <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
-          class='uil uil-ellipsis-v'></i></button>
+  <li>
+    <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
+    <template v-if="isSystemMessage">
+      <system-message :message="message"></system-message>
+    </template>
+    <template v-else>
+      <div :class="alignBubble">
+        <div class="chat-avatar">
+          <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
+          <i>{{ readableTime }}</i>
+        </div>
+        <div class="conversation-text">
+          <div class="ctext-wrap">
+            <i>{{ sender.name || 'システム' }}</i>
+            <p>
+              <message-content :data="message.content" :time="readableTime"></message-content>
+            </p>
+          </div>
+        </div>
+        <div class="conversation-actions dropdown" hidden>
+          <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
+              class='uil uil-ellipsis-v'></i></button>
 
-      <div class="dropdown-menu dropdown-menu-right">
-        <a class="dropdown-item" href="#">Copy Message</a>
-        <a class="dropdown-item" href="#">Edit</a>
-        <a class="dropdown-item" href="#">Delete</a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#">Copy Message</a>
+            <a class="dropdown-item" href="#">Edit</a>
+            <a class="dropdown-item" href="#">Delete</a>
+          </div>
+        </div>
       </div>
-    </div>
+    </template>
   </li>
   <!-- <div :class="'direct-chat-msg ' + message.from">
     <template v-if="message.from === 'friend'">
@@ -81,14 +89,39 @@
 import moment from 'moment';
 
 export default {
-  props: ['message'],
-  methods: {
-    setUnreadMessage() {
-      this.$emit('unread', this.message.id);
+  props: {
+    message: {
+      type: Object,
+      required: true
     },
-
-    getTimeMessage(value) {
-      return moment(parseInt(value.timestamp)).format('HH:mm');
+    prevMessage: {
+      type: Object,
+      required: false,
+      default: () => {}
+    }
+  },
+  computed: {
+    isSystemMessage() {
+      return this.message.from === 'system';
+    },
+    sender() {
+      return this.message.sender || {};
+    },
+    readableTime() {
+      return moment(parseInt(this.message.timestamp)).format('HH:mm');
+    },
+    readableDate() {
+      return moment(parseInt(this.message.timestamp)).format('YYYY/MM/DD');
+    },
+    shouldShowDate() {
+      const ts1 = this.message.timestamp;
+      const ts2 = this.prevMessage ? this.prevMessage.timestamp : null;
+      const date1 = moment(parseInt(ts1)).format('YYYY/MM/DD');
+      const date2 = ts2 ? moment(parseInt(ts2)).format('YYYY/MM/DD') : null;
+      return date1 !== date2;
+    },
+    alignBubble() {
+      return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
     }
   }
 };

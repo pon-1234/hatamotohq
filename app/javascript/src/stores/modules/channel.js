@@ -23,13 +23,6 @@ export const mutations = {
     state.channels = channels;
   },
 
-  setUnreadChannelId(state, unreadChannelId) {
-    state.unreadChannelId = unreadChannelId;
-    if (unreadChannelId) {
-      state.activeChannel.un_read = true;
-    }
-  },
-
   setActiveChannel(state, activeChannel) {
     state.activeChannel = activeChannel;
     state.allMessagesLoaded = false;
@@ -68,11 +61,9 @@ export const mutations = {
     }
     state.messages.push(message);
 
-    // if (state.unreadChannelId) {
-    state.activeChannel.unread_count += 1;
-    // } else {
-    //   state.activeChannel.unread_count = 0;
-    // }
+    if (message.from === 'friend') {
+      state.activeChannel.unread_count += 1;
+    }
   },
 
   setUnreadCount(state, { channel, count }) {
@@ -212,18 +203,6 @@ export const actions = {
     }
   },
 
-  pushMessage(context, message) {
-    context.commit('pushMessage', message);
-  },
-
-  resetMessages(context) {
-    context.commit('resetMessages');
-  },
-
-  setUnreadChannelId(context, payload) {
-    context.commit('setUnreadChannelId', payload);
-  },
-
   async sendMedia(context, query) {
     try {
       const response = await ChannelAPI.sendMedia(query);
@@ -232,13 +211,4 @@ export const actions = {
       console.log(error);
     }
   },
-
-  async sendMediaFromManager(context, query) {
-    try {
-      const response = await ChannelAPI.sendMediaFromManager(query);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 };
