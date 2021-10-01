@@ -38,7 +38,7 @@
               <div class="col-sm-auto">
                 <div class="btn-group">
                   <div class="btn btn-light" data-toggle="modal" data-target="#modalSendMedia"><i class="uil uil-paperclip"></i></div>
-                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker" @click="onShowModal()"> <i class='uil uil-smile'></i></div>
+                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker" @click="showStickerModal()"> <i class='uil uil-smile'></i></div>
                   <button type="submit" class="btn btn-success chat-send btn-block" @click="sendTextMessage"><i
                       class='uil uil-message'></i></button>
                 </div>
@@ -383,8 +383,9 @@ export default {
 
       this.$emit('onSendMessage', message);
     },
-    onShowModal() {
-      this.$refs.modalSticker.shownModal();
+
+    showStickerModal() {
+      this.$refs.modalSticker.reset();
     }
   }
 };

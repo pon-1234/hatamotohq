@@ -67,6 +67,7 @@ export default {
       this.animation = option.animation;
       this.getStickers({ packageId: option.packageId });
     },
+
     selectSticker(sticker) {
       // emit sticker
       const data = {
@@ -75,7 +76,8 @@ export default {
       };
       this.$emit('input', data);
     },
-    shownModal() {
+
+    reset() {
       this.$refs.stickerSelected.defaultActive();
       this.getStickers({ packageId: null });
     }
