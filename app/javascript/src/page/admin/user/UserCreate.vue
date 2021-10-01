@@ -34,7 +34,7 @@
             <label class="col-xl-3">電話番号<required-mark/></label>
             <div class="col-xl-9">
               <ValidationProvider name="電話番号" rules="required|min:10|max:11" v-slot="{ errors }">
-                <input type="number" class="form-control" name="user[phone_number]" placeholder="入力してください" v-model="userFormData.phone_number">
+                <input type="text" class="form-control" name="user[phone_number]" placeholder="入力してください" v-model="userFormData.phone_number">
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
