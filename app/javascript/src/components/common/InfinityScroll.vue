@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-center" id="observer">
+  <div class="d-flex justify-content-center fh-60" id="observer">
     <div class="spinner-border" role="status"></div>
   </div>
 </template>

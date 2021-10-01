@@ -75,7 +75,6 @@ export default {
       activeChannel: (state) => state.activeChannel,
       channels: (state) => state.channels,
       messages: (state) => state.messages,
-      messageParams: (state) => state.messageParams,
       unreadChannelId: (state) => state.unreadChannelId
     }),
     ...mapState('friend', {
