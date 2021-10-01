@@ -15,9 +15,6 @@
 #  locked           :boolean
 #  alias            :string(255)
 #  slug             :string(255)
-#  un_read          :boolean          default(TRUE)
-#  is_mute          :boolean          default(FALSE)
-#  is_pair_chat     :boolean          default(TRUE)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime

@@ -15,6 +15,7 @@ export const state = {
   isLoadMoreMessage: false,
   isLoadMoreChannel: false,
   unreadChannelId: null,
+  allChannelLoaded: false,
   allMessagesLoaded: false
 };
 
@@ -26,9 +27,6 @@ export const mutations = {
   setActiveChannel(state, activeChannel) {
     state.activeChannel = activeChannel;
     state.allMessagesLoaded = false;
-    if (state.unreadChannelId !== state.activeChannel.id) {
-      state.activeChannel.un_read = false;
-    }
     const index = state.channels.findIndex(item => parseInt(item.id) === parseInt(activeChannel.id));
     if (index >= 0) {
       state.channels.splice(index, 1, activeChannel);
@@ -45,6 +43,10 @@ export const mutations = {
 
   setLoadMoreMessage(state, status) {
     state.isLoadMoreMessage = status;
+  },
+
+  setAllChannelLoaded(state, status) {
+    state.allChannelLoaded = status;
   },
 
   setAllMessageLoaded(state, status) {
@@ -99,7 +101,6 @@ export const getters = {
 
 export const actions = {
   async getChannels(context, query = {}) {
-    context.commit('setLoadMoreChannel', true);
     try {
       const res = await ChannelAPI.list();
       if (res) {
@@ -108,7 +109,6 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-    context.commit('setLoadMoreChannel', false);
   },
 
   async getMessages(context, query) {

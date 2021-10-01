@@ -96,7 +96,6 @@ module WebhooksHelper
           channel.avatar = line_friend.line_picture_url
           channel.title = line_friend.line_name
           channel.alias = channel_alias
-          channel.un_read = 0
           channel.save!
           line_friend
         end
@@ -105,7 +104,6 @@ module WebhooksHelper
       # When incoming message is reached, the number of unread messages is increased by 1
       # Last message data is also updated
       def update_channel_last_message(channel)
-        channel.un_read = 1
         channel.last_message = @event[:message].to_json
         channel.save!
       end
