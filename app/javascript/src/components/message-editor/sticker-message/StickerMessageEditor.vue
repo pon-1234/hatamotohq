@@ -26,7 +26,9 @@
             href="#"
             data-toggle="modal"
             data-target="#stickerModalCenter"
-          >スタンプを選択</a>
+            @click="onShowModal()"
+          >スタンプを選択
+          </a>
           <div class="text-muted opacity-30">
             <i class="mdi mdi-sticker-emoji mdi-3x"></i>
           </div>
@@ -35,7 +37,7 @@
       <error-message :message="errors.first('sticker-id' + index)"></error-message>
     </div>
     <!-- Modal -->
-    <modal-select-sticker name="stickerModalCenter" @input="selectSticker" />
+    <modal-select-sticker ref="modalSticker" name="stickerModalCenter" @input="selectSticker" />
     <input type="hidden" v-model="stickerId" :name="'sticker-id' + index" v-validate="'required'" data-vv-as="スタンプ" />
   </div>
 </template>
@@ -53,6 +55,9 @@ export default {
     },
     selectSticker(sticker) {
       this.$emit('input', sticker);
+    },
+    onShowModal() {
+      this.$refs.modalSticker.shownModal();
     }
   }
 };
