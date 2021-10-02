@@ -43,6 +43,6 @@ class Messages::SystemLogBuilder
       @message = Message.new(channel: @channel)
       @message.type = :log
       @message.from = :system
-      @message.timestamp = (Time.now.to_f * 1000).to_i
+      @message.timestamp = Time.zone.now
     end
 end

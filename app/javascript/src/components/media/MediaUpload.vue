@@ -31,7 +31,7 @@
         <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       </div>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center mt-2">
       <button v-if="isPreview" class="btn btn-info ml-auto mr-4 fw-120" @click="handleUpload">確認する</button>
     </div>
   </div>

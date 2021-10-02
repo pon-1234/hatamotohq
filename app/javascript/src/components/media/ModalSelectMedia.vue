@@ -67,7 +67,7 @@ export default {
     };
   },
 
-  beforeMount() {
+  created() {
     this.setFilter(this.types);
   },
 

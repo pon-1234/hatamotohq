@@ -10,6 +10,16 @@ export default {
     });
   },
 
+  get: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
+  },
+
   channelMessages: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,

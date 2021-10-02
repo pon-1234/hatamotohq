@@ -35,7 +35,6 @@ export default {
     ...mapState('channel', {
       channels: state => state.channels,
       allChannelLoaded: state => state.allChannelLoaded,
-      isLoadMoreChannel: state => state.isLoadMoreChannel,
       activeChannel: state => state.activeChannel
     }),
 
@@ -69,7 +68,6 @@ export default {
 
     async switchChannel(channel, index) {
       const notChanged = this.activeChannel.id === channel.id;
-      this.$emit('switchChannel', !notChanged);
       // Do nothing if channel is not changed
       if (notChanged) return;
 

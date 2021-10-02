@@ -8,9 +8,9 @@ export const state = {
     before: null,
     keyword: ''
   },
-  perPageChannel: 30,
+  limitChannel: 30,
+  limitMessage: 20,
   isLoadMoreMessage: false,
-  isLoadMoreChannel: false,
   unreadChannelId: null,
   allChannelLoaded: false,
   allMessagesLoaded: false
@@ -26,7 +26,7 @@ export const mutations = {
   },
 
   pushChannels(state, channels) {
-    if (channels.length < state.perPageChannel) {
+    if (channels.length < state.limitChannel) {
       state.allChannelLoaded = true;
     }
     state.channels = state.channels.concat(channels);
@@ -94,7 +94,7 @@ export const mutations = {
       if (event.action === 'new_message') {
         const message = event.content;
         if (message.from === 'friend') {
-          if (state.channelParams.keyword) {
+          if (_.isEmpty(state.channelParams.keyword)) {
             state.channels.splice(channelIndex, 1);
             state.channels.unshift(channel);
           }
@@ -134,7 +134,7 @@ export const actions = {
       const messages = response.data;
       if (messages && (context.state.activeChannel && query.channelId === context.state.activeChannel.id)) {
         context.commit('setMessages', messages);
-        if (messages.length < 20) {
+        if (messages.length < state.limitMessage) {
           context.commit('setAllMessageLoaded', true);
         }
       }
@@ -145,6 +145,7 @@ export const actions = {
   },
 
   setActiveChannel(context, payload) {
+    
     context.commit('setActiveChannel', payload);
   },
 

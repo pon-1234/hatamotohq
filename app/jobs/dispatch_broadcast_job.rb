@@ -90,7 +90,7 @@ class DispatchBroadcastJob < ApplicationJob
     def insert_delivered_message(channels, message_content)
       message_params = {
         message: message_content.with_indifferent_access,
-        timestamp: Time.now.to_i
+        timestamp: Time.zone.now
       }
       channels.each do |channel|
         Messages::MessageBuilder.new(nil, channel, message_params).perform

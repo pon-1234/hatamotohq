@@ -11,9 +11,6 @@ import Util from '@/core/util';
 
 export default {
   props: ['data'],
-  created() {
-    console.log(this.data);
-  },
   methods: {
     getClassName() {
       let className = 'chat-item rounded';
@@ -29,19 +26,6 @@ export default {
         return Util.getDuration(this.data);
       }
     }
-
-    // getUrlFromLineId(id) {
-    //   return Util.getMediaFromLine(id);
-    // },
-
-    // getUrlMedia() {
-    //   if (this.data.contentProvider.type === 'line') {
-    //     return this.getUrlFromLineId(this.data.id);
-    //   }
-
-    //   return this.data.originalContentUrl || this.data.contentProvider.originalContentUrl;
-    // }
-
   }
 };
 </script>

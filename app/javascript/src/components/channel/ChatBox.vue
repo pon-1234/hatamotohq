@@ -15,7 +15,8 @@
           <chat-item
             :message="message"
             :prevMessage="index > 0 ? messages[index -1] : null"
-            @unread="setUnreadMessage">
+            :lastSeenAt="activeChannel.last_seen_at"
+          >
           </chat-item>
         </span>
       </ul>
@@ -23,71 +24,10 @@
       <reply-box
         @sendTextMessage="sendTextMessage"
         @sendStickerMessage="sendStickerMessage"
+        @sendMediaMessage="sendMediaMessage"
         @sendTemplate="sendTemplate"
         @sendScenario="sendScenario"
       ></reply-box>
-
-      <!-- <div hidden class="box-input" style="position: relative">
-        <div  class="emoji" v-if="openedStickerPane">
-          <div class="tool">
-            <sticker-select-package @input="changePackageId" />
-          </div>
-          <div class="content">
-            <sticker
-              v-for="(sticker, index) in stickers"
-              v-bind:sticker="sticker"
-              v-bind:animation="animation"
-              :key="index"
-              @input="sendStickerMessage"
-            />
-          </div>
-        </div>
-        <div class="tool d-flex align-items-center" v-if="!activeChannel.locked">
-          <ul class="left list-action">
-            <li class="text-sticker" >
-              <i class="fas fa-smile "></i>
-            </li>
-            <li data-toggle="modal" data-target="#modalSendMedia">
-              <i class="fas fa-paperclip "></i>
-            </li>
-            <li data-toggle="modal">
-              <b-dropdown id="dropdown-dropup" dropup class="m-2 action-template">
-                 <template v-slot:button-content>
-                    <i class="fas fa-plus"></i>
-                  </template>
-                <b-dropdown-item  data-toggle="modal" data-target="#modal-template">テンプレート配信</b-dropdown-item>
-                <b-dropdown-item data-toggle="modal" data-target="#modalSelectScenario">シナリオ配信</b-dropdown-item>
-              </b-dropdown>
-            </li>
-          </ul>
-          <div class="btn-send" @click="sendTextMessage"><i class="fas fa-paper-plane"></i></div>
-        </div>
-        <div class="text"  v-if="!activeChannel.locked">
-            <b-form-textarea
-              v-model="textMessage"
-              id='txtMessage'
-              :placeholder="!isMobile? 'Enterで改行、Shift+Enterで送信': ''"
-              rows="4"
-              @compositionstart="composing=true"
-              @compositionend="composing=false"
-              @keydown.enter.shift.exact.prevent
-              @keydown.enter.shift.exact="sendTextMessage"
-              >
-        </b-form-textarea>
-        </div>
-        <div class="blocked"
-          v-if="activeChannel.locked"
-          style="padding: 30px;background-color: #ededed;display: flex;">
-            <div style="font-size: 12px; text-align: center; user-select: none; height: 100%; overflow: hidden"> このユーザーはLINEアカウントを削除したか、あなたのアカウントをブロックしたか、あなたをチャットルームから退出させたため、このユーザーにメッセージを送信できません。
-            </div>
-        </div>
-      </div> -->
-      <!-- <template v-if="activeChannel">
-        <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
-        <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
-        <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-        <modal-select-sticker ref="modalSticker" name="modalSelectSticker" @input="sendStickerMessage"></modal-select-sticker>
-      </template> -->
     </div>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
@@ -212,8 +152,7 @@ export default {
           message: {
             type: 'text',
             text: message
-          },
-          timestamp: new Date().getTime()
+          }
         };
         this.sendMessage(payload);
       }
@@ -231,13 +170,12 @@ export default {
           packageId: sticker.packageId,
           stickerId: sticker.stickerId,
           stickerResourceType: 'STATIC'
-        },
-        timestamp: new Date().getTime()
+        }
       };
       this.sendMessage(payload);
     },
 
-    onSendMedia(media) {
+    sendMediaMessage(media) {
       let message = null;
       switch (media.type) {
       case 'image':
@@ -260,8 +198,7 @@ export default {
           type: 'image',
           originalContentUrl: media.url,
           previewImageUrl: media.preview_url
-        },
-        timestamp: new Date().getTime()
+        }
       };
     },
 
@@ -272,8 +209,7 @@ export default {
           type: 'video',
           originalContentUrl: media.url,
           previewImageUrl: media.preview_url
-        },
-        timestamp: new Date().getTime()
+        }
       };
     },
 
@@ -284,8 +220,7 @@ export default {
           type: 'audio',
           originalContentUrl: media.url,
           duration: media.duration || 0
-        },
-        timestamp: new Date().getTime()
+        }
       };
     },
 
@@ -310,8 +245,7 @@ export default {
           key: new Date().getTime(),
           is_bot_sender: 0,
           attr: 'chat-reverse',
-          content: { ...content, id: template.id },
-          timestamp: new Date().getTime()
+          content: { ...content, id: template.id }
         }
       };
 

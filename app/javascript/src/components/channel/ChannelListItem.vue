@@ -4,7 +4,7 @@
       <img :src="friend.avatar_url || '/img/no-image-profile.png'" class="mr-2 rounded-circle" height="48"
         alt="User avatar" />
       <div class="media-body">
-        <h5 class="mt-0 mb-0 font-14">
+        <h5 class="my-0 font-14">
           <span class="float-right text-muted font-12">{{ readableTime }}</span>
           {{ friend.name }}
         </h5>
@@ -59,19 +59,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.total-unread-message {
-  width: 25px;
-  height: 25px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #00B900;
-  color: white;
-  font-weight: bold;
-  border-radius: 50%;
-  font-size: 10px;
-  padding-left: 2px;
-}
-</style>

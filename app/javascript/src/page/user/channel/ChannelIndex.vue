@@ -2,7 +2,7 @@
   <div class="row">
     <!-- start chat users-->
     <div class="col-xl-3 col-lg-6 order-lg-1 order-xl-1">
-      <channel-list @switchChannel="switchChannel" :class="getLeftItem()" />
+      <channel-list :class="getLeftItem()" />
     </div>
     <!-- end chat users-->
 
@@ -10,7 +10,6 @@
     <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
       <chat-box
         :class="getRightItem()"
-        @showFriendDetail="showFriendDetail"
       ></chat-box>
     </div>
     <!-- end chat area-->
@@ -20,11 +19,6 @@
       <channel-friend-detail></channel-friend-detail>
     </div>
     <!-- end user detail -->
-
-    <talk-modal-search
-      :id="'TalkModalSearch'"
-      @input="fetchItem"
-    ></talk-modal-search>
   </div>
 </template>
 <script>
@@ -35,13 +29,14 @@ ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    activeChannel: Number
+    channel_id: Number
   },
+
   async beforeMount() {
     this.connectToWebsocket();
     await this.getChannels();
     await this.getTags();
-    this.activateFirstChannel();
+    this.activateChannel();
   },
 
   data() {
@@ -51,23 +46,6 @@ export default {
       isShowTalkChannel: false,
       rerender: true
     };
-  },
-
-  created() {
-    $(window).on('scroll', function() {
-      const scrollHeight = $(document).height();
-      const scrollPosition = $(window).height() + $(window).scrollTop();
-      if (scrollHeight - scrollPosition <= 77) {
-        $('div.talk').css(
-          'top',
-          scrollHeight - $('div.talk').height() - 185 - 77 - 30
-        );
-        $('div.talk').addClass('bottom');
-      } else {
-        $('div.talk').css('top', '185px');
-        $('div.talk').removeClass('bottom');
-      }
-    });
   },
 
   computed: {
@@ -80,18 +58,6 @@ export default {
     ...mapState('friend', {
       friend: (state) => state.friend
     })
-  },
-
-  watch: {
-    activeChannel: {
-      handler(val) {
-        this.rerender = false;
-        this.$nextTick(() => {
-          this.rerender = true;
-        });
-      },
-      deep: true
-    }
   },
 
   methods: {
@@ -119,13 +85,10 @@ export default {
       );
     },
 
-    async activateFirstChannel() {
-      this.setActiveChannel(this.channels[0]);
-    },
-
-    switchChannel(isRefresh) {
-      this.isPc = !this.isPc;
-      // if (isRefresh) { this.activeChannel(0); }
+    // Activate the first channel if no channel was specified. Otherwise, activate the specified one
+    async activateChannel() {
+      const channel = this.channels.find(_ => _.id === this.channel_id);
+      this.setActiveChannel(channel || this.channels[0]);
     },
 
     showChannels() {
@@ -152,13 +115,6 @@ export default {
       }
 
       return className;
-    },
-
-    changeTilteActiveChannel(title) {
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.title = title;
-      this.setActiveChannel(channel);
     }
   }
 };

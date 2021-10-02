@@ -48,6 +48,7 @@ class Channel < ApplicationRecord
       locked: locked,
       last_message: last_message,
       last_activity_at: last_activity_at,
+      last_seen_at: last_seen_at,
       unread_count: unread_messages.count,
       line_friend: line_friend.push_event_data
     }

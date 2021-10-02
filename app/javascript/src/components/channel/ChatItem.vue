@@ -1,5 +1,6 @@
 <template>
   <li>
+    <chat-item-unread-mark v-if="shouldShowUnreadDiv"></chat-item-unread-mark>
     <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
     <template v-if="isSystemMessage">
       <system-message :message="message"></system-message>
@@ -31,59 +32,6 @@
       </div>
     </template>
   </li>
-  <!-- <div :class="'direct-chat-msg ' + message.from">
-    <template v-if="message.from === 'friend'">
-      <div class="direct-chat-infos clearfix">
-        <span class="direct-chat-name float-left">{{ message.sender.name }}</span>
-      </div>
-      <div class="d-flex">
-        <img class="direct-chat-img" alt="friend avatar" :src="message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'">
-        <div class="ml-2">
-          <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
-        </div>
-        <span class="direct-chat-timestamp float-right mt-auto ml-2">{{getTimeMessage(message)}}</span>
-      </div>
-    </template>
-
-    <template v-if="['bot', 'user'].includes(message.from)">
-      <div>
-        <div class="direct-chat-msg right">
-          <div class="direct-chat-infos clearfix" v-if="message.sender">
-            <span class="direct-chat-name float-right">{{ message.sender.name }}</span>
-          </div>
-          <div class="d-flex float-right">
-            <span class="direct-chat-timestamp float-left mt-auto mr-2">{{getTimeMessage(message)}}</span>
-            <div class="chat-item mr-0">
-              <message-content :data="message.content" :time="getTimeMessage(message)" :source="message.source || 'sended'"></message-content>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template> -->
-
-    <!-- <div class="d-flex align-items-center" hidden>
-      <div class="avatar" v-if="message.from === 'friend'">
-        <img :src="message.sender.line_picture_url ? message.sender.line_picture_url :  '/img/no-image-profile.png'">
-      </div>
-      <div class="chat-content">
-        <div class="chat-body">
-          <div class="chat-main" :class="message.from === 'bot' ? ' is_bot' : ''">
-            <message-content :data="message.content" :time="getTimeMessage(data)" :source="message.source || 'sended'"></message-content>
-          </div>
-        </div>
-      </div>
-      <div class="created-message" v-if="message.attr !== 'chat-log'">
-        {{getTimeMessage(data)}}
-      </div>
-      <div :class="'more-option option-'+ message.attr" v-if="message.attr !== 'chat-log'">
-        <b-dropdown>
-          <template v-slot:button-content>
-            <i class="fas fa-ellipsis-h"></i>
-          </template>
-          <b-dropdown-item @click="setUnreadMessage">未読</b-dropdown-item>
-        </b-dropdown>
-      </div>
-    </div> -->
 </template>
 <script>
 import moment from 'moment';
@@ -98,6 +46,11 @@ export default {
       type: Object,
       required: false,
       default: () => {}
+    },
+    lastSeenAt: {
+      type: String,
+      required: false,
+      default: moment()
     }
   },
   computed: {
@@ -108,20 +61,30 @@ export default {
       return this.message.sender || {};
     },
     readableTime() {
-      return moment(parseInt(this.message.timestamp)).format('HH:mm');
+      return moment(this.message.timestamp).format('HH:mm');
     },
     readableDate() {
-      return moment(parseInt(this.message.timestamp)).format('YYYY/MM/DD');
+      return moment(this.message.timestamp).format('YYYY/MM/DD');
     },
     shouldShowDate() {
       const ts1 = this.message.timestamp;
       const ts2 = this.prevMessage ? this.prevMessage.timestamp : null;
-      const date1 = moment(parseInt(ts1)).format('YYYY/MM/DD');
-      const date2 = ts2 ? moment(parseInt(ts2)).format('YYYY/MM/DD') : null;
+      const date1 = moment(ts1).format('YYYY/MM/DD');
+      const date2 = ts2 ? moment(ts2).format('YYYY/MM/DD') : null;
       return date1 !== date2;
+    },
+    shouldShowUnreadDiv() {
+      if (!this.prevMessage) return this.isUnread(this.message);
+      return this.isUnread(this.prevMessage) ? false : this.isUnread(this.message);
     },
     alignBubble() {
       return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
+    }
+  },
+
+  methods: {
+    isUnread(message) {
+      return moment(message.timestamp).isAfter(moment(this.lastSeenAt));
     }
   }
 };

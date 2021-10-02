@@ -45,7 +45,7 @@ class PushMessageToLineJob < ApplicationJob
       message_params = {
         replyToken: @reply_token,
         message: message.try(:with_indifferent_access),
-        timestamp: Time.zone.now.to_i * 1000
+        timestamp: Time.zone.now
       }
       Messages::MessageBuilder.new(nil, @channel, message_params).perform
     end

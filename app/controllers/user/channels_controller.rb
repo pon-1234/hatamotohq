@@ -16,7 +16,11 @@ class User::ChannelsController < User::ApplicationController
   # GET /user/channels/:id
   def show
     @channel_id = params[:id]
-    index
+    @channels = channel_finder.perform
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/channels/:channel_id/scenarios

@@ -10,6 +10,11 @@ module ApplicationHelper
     action.include?(params[:action])
   end
 
+  def unread_count
+    count = Current.user.line_account.channels.sum { |channel| channel.unread_messages.count }
+    count > 99 ? '99+' : count
+  end
+
   def custom_flash_message
     flash_messages = []
     flash.each do |type, message|

@@ -19,7 +19,7 @@ export default {
 
   computed: {
     readableTime() {
-      return moment(parseInt(this.message.timestamp)).format('HH:mm');
+      return moment(this.message.timestamp).format('HH:mm');
     }
   }
 };

@@ -1,7 +1,8 @@
 <template>
   <div class="border rounded">
     <div class="comment-area-box">
-      <textarea rows="4" class="form-control border-0 resize-none"
+      <textarea rows="4"
+        class="form-control border-0 resize-none"
         v-model="message"
         @keydown.enter.shift.exact.prevent
         @keydown.enter.shift.exact="sendTextMessage"
@@ -49,7 +50,7 @@
       </div>
     </div>
     <template v-if="activeChannel">
-      <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
+      <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="sendMediaMessage($event)"></modal-select-media>
       <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
       <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
       <modal-select-sticker ref="modalSticker" name="modalSelectSticker" @input="sendStickerMessage"></modal-select-sticker>
@@ -84,6 +85,15 @@ export default {
 
     sendStickerMessage(sticker) {
       this.$emit('sendStickerMessage', sticker);
+    },
+
+    sendMediaMessage(media) {
+      const payload = _.cloneDeep(media);
+      // convert media type if need
+      if (payload.type === 'richmenu') {
+        payload.type = 'image';
+      }
+      this.$emit('sendMediaMessage', payload);
     },
 
     sendTemplate(template) {
