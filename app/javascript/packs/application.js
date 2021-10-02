@@ -20,14 +20,13 @@ import {
 } from 'bootstrap-vue';
 // Import constant
 import * as constant from '@/core/constant';
-
 import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
 import Rails from '@rails/ujs';
+
 Rails.start();
 
 const jQuery = require('jquery');
-
 window.$ = jQuery;
 window._ = require('lodash');
 const toastr = require('toastr');
@@ -42,14 +41,10 @@ require('turbolinks').start();
 require('@rails/activestorage').start();
 require('chart.js');
 
-// Plugin configurations
 Vue.config.devtools = true;
 Vue.use(Chartkick);
-
-// Datetime picker
 Vue.use(Datetime);
 Settings.defaultLocale = 'ja';
-
 Vue.use(DateRangePicker);
 Vue.component('v-select', vSelect);
 Vue.use(VueGoogleMaps, {
@@ -64,7 +59,6 @@ Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
 Vue.use(CKEditor);
-
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
@@ -107,3 +101,10 @@ toastr.options = {
   showMethod: 'fadeIn',
   hideMethod: 'fadeOut'
 };
+
+// Unauthenticated detection
+$(document).ajaxError((e, xhr, settings) => {
+  if (xhr.status === 401) {
+    location.reload();
+  }
+});
