@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" :id="id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modalSendScenario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content mh-400">
         <div class="modal-header">
@@ -9,8 +9,8 @@
           </button>
         </div>
         <div class="modal-body text-sm">
-          <table class="table table-hover index">
-            <thead>
+          <table class="table table-hover">
+            <thead class="thead-light">
               <tr>
                 <th>#</th>
                 <th>配信方式</th>
@@ -41,8 +41,6 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  props: ['id'],
-
   data() {
     return {
       scenarios: [],

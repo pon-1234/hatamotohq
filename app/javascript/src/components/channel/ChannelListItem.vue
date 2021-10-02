@@ -11,7 +11,7 @@
         <p class="mt-1 mb-0 text-muted font-14">
           <span class="w-25 float-right text-right"><span
               class="badge badge-danger-lighten" v-show="channel.unread_count > 0">{{ unreadCountLabel }}</span></span>
-          <span class="w-75"><last-message-text :message="channel.last_message"/></span>
+          <span class="w-75"><last-message :message="channel.last_message"/></span>
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
-  <div class="modal fade" :id="id? id:'modal-template'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+  <div class="modal fade" id="modalSendTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">テンプレートを選択してください</h5>
@@ -16,23 +16,23 @@
               :data="folders"
               :isPc="isPc"
               :selectedFolder="selectedFolder"
-              @changeSelectedFolder="changeSelectedFolderTemplate"
+              @changeSelectedFolder="changeTemplateFolder"
               />
             <div class="flex-grow-1">
               <div class="table-responsive">
-                <table class="table table-hover index">
-                  <thead>
+                <table class="table table-hover">
+                  <thead class="thead-light">
                     <tr>
-                      <td>
+                      <th>
                         <span v-if="folders[selectedFolder]">{{folders[selectedFolder].name}}</span>
-                      </td>
+                      </th>
                     </tr>
                   </thead>
                   <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
                     <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
                       <td class="d-flex w-100">
                         <div>{{item.name}}</div>
-                        <div class="btn btn-info btn-sm ml-auto " @click="selectTemplate(item)" >送信</div>
+                        <div class="btn btn-info btn-sm ml-auto" data-dismiss="modal" @click="selectTemplate(item)" >送信</div>
                       </td>
                     </tr>
                   </tbody>
@@ -56,8 +56,6 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 export default {
-  props: ['id'],
-
   data() {
     return {
       selectedFolder: 0,
@@ -87,10 +85,10 @@ export default {
     selectTemplate(template) {
       // eslint-disable-next-line no-undef
       const data = _.cloneDeep(template);
-      this.$emit('selectTemplate', data);
+      this.$emit('sendTemplate', data);
     },
 
-    changeSelectedFolderTemplate(index) {
+    changeTemplateFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
     }

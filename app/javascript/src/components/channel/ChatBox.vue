@@ -20,33 +20,12 @@
         </span>
       </ul>
 
-      <div class="row mt-auto">
-        <div class="col">
-          <div class="mt-2 bg-light p-3 rounded">
-            <div class="row">
-              <div class="col mb-2 mb-sm-0">
-                <input type="text" class="form-control border-0"
-                  :placeholder="!isMobile? 'Enterで改行、Shift+Enterで送信': ''"
-                  v-model="textMessage"
-                  @keydown.enter.shift.exact.prevent
-                  @keydown.enter.shift.exact="sendTextMessage"
-                  required="">
-                <div class="invalid-feedback">
-                  メッセージを入力してください
-                </div>
-              </div>
-              <div class="col-sm-auto">
-                <div class="btn-group">
-                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSendMedia"><i class="uil uil-paperclip"></i></div>
-                  <div class="btn btn-light" data-toggle="modal" data-target="#modalSelectSticker" @click="showStickerModal()"> <i class='uil uil-smile'></i></div>
-                  <button type="submit" class="btn btn-success chat-send btn-block" @click="sendTextMessage"><i
-                      class='uil uil-message'></i></button>
-                </div>
-              </div> <!-- end col -->
-            </div> <!-- end row-->
-          </div>
-        </div> <!-- end col-->
-      </div>
+      <reply-box
+        @sendTextMessage="sendTextMessage"
+        @sendStickerMessage="sendStickerMessage"
+        @sendTemplate="sendTemplate"
+        @sendScenario="sendScenario"
+      ></reply-box>
 
       <!-- <div hidden class="box-input" style="position: relative">
         <div  class="emoji" v-if="openedStickerPane">
@@ -59,7 +38,7 @@
               v-bind:sticker="sticker"
               v-bind:animation="animation"
               :key="index"
-              @input="onSendStickerMessage"
+              @input="sendStickerMessage"
             />
           </div>
         </div>
@@ -103,12 +82,12 @@
             </div>
         </div>
       </div> -->
-      <template v-if="activeChannel">
+      <!-- <template v-if="activeChannel">
         <modal-select-media id="modalSendMedia" :types="['image','audio','video']" @select="onSendMedia($event)"></modal-select-media>
         <modal-send-template @selectTemplate="onSelectTemplate"></modal-send-template>
         <modal-send-scenario @selectScenario="onSelectScenario" type="normal" id="modalSelectScenario"></modal-send-scenario>
-        <modal-select-sticker ref="modalSticker" name="modalSelectSticker" @input="onSendStickerMessage"></modal-select-sticker>
-      </template>
+        <modal-select-sticker ref="modalSticker" name="modalSelectSticker" @input="sendStickerMessage"></modal-select-sticker>
+      </template> -->
     </div>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
@@ -120,10 +99,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      textMessage: '',
       animation: false,
-      doneFetchingChannelAcitveId: null,
-      totalUnreadMessage: null,
       currentScrollTop: 0,
       isLoadingPrevious: true,
       scrollTopBeforeLoad: null,
@@ -229,27 +205,26 @@ export default {
     },
 
     // Send a text message from input
-    sendTextMessage() {
-      if (this.textMessage.trim()) {
-        const message = {
+    sendTextMessage(message) {
+      if (message.trim()) {
+        const payload = {
           channel_id: this.activeChannel.id,
           message: {
             type: 'text',
-            text: this.textMessage
+            text: message
           },
           timestamp: new Date().getTime()
         };
-        this.sendMessage(message);
+        this.sendMessage(payload);
       }
-
-      this.textMessage = '';
     },
+
     // Send a sticker message
-    onSendStickerMessage(sticker) {
+    sendStickerMessage(sticker) {
       // close stickers pane
       this.openedStickerPane = false;
 
-      const message = {
+      const payload = {
         channel_id: this.activeChannel.id,
         message: {
           type: 'sticker',
@@ -259,7 +234,7 @@ export default {
         },
         timestamp: new Date().getTime()
       };
-      this.sendMessage(message);
+      this.sendMessage(payload);
     },
 
     onSendMedia(media) {
@@ -323,22 +298,6 @@ export default {
       event.preventDefault();
     },
 
-    onSelectTemplate(template) {
-      const payload = {
-        channel_id: this.activeChannel.id,
-        template_id: template.id
-      };
-      this.sendTemplate(payload);
-    },
-
-    onSelectScenario(scenario) {
-      const payload = {
-        channel_id: this.activeChannel.id,
-        scenario_id: scenario.id
-      };
-      this.sendScenario(payload);
-    },
-
     selectFlexMessageTemplate(template) {
       const content = JSON.parse(template.json_message);
       // eslint-disable-next-line no-undef
@@ -357,10 +316,6 @@ export default {
       };
 
       this.$emit('onSendMessage', message);
-    },
-
-    showStickerModal() {
-      this.$refs.modalSticker.reset();
     }
   }
 };
