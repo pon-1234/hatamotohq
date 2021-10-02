@@ -19,16 +19,6 @@
             </p>
           </div>
         </div>
-        <div class="conversation-actions dropdown" hidden>
-          <button class="btn btn-sm btn-link" data-toggle="dropdown" aria-expanded="false"><i
-              class='uil uil-ellipsis-v'></i></button>
-
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="#">Copy Message</a>
-            <a class="dropdown-item" href="#">Edit</a>
-            <a class="dropdown-item" href="#">Delete</a>
-          </div>
-        </div>
       </div>
     </template>
   </li>
@@ -84,7 +74,7 @@ export default {
 
   methods: {
     isUnread(message) {
-      return moment(message.timestamp).isAfter(moment(this.lastSeenAt));
+      return message.from === 'friend' && moment(message.timestamp).isAfter(moment(this.lastSeenAt));
     }
   }
 };

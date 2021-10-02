@@ -35,21 +35,22 @@
           <h4>詳細情報</h4>
         </div>
         <div class="card-body">
-          <strong><i class="fas fa-book mr-1"></i> 表示名</strong>
+          <p class="mt-3 mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
             <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName" :disabled="!editing">
           </p>
           <hr>
 
-          <strong><i class="far fa-file-alt mr-1"></i> メモ欄</strong>
+          <p class="mt-3 mb-1"><strong>メモ欄</strong></p>
           <p class="text-muted mt-2">
-            <textarea rows="2" class="form-control" placeholder="メモ欄" v-model="friendData.note" :disabled="!editing"></textarea>
+            <textarea rows="2" class="form-control" v-model="friendData.note" :disabled="!editing"></textarea>
           </p>
           <hr>
 
-          <strong><i class="fas fa-tag mr-1"></i> タグ</strong>
+          <p class="mt-3 mb-1"><strong>タグ</strong></p>
           <p class="text-muted mt-2">
-            <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" :disabled="!editing"/>
+            <friend-tag :tags="friendData.tags" v-if="!editing"></friend-tag>
+            <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" v-if="editing"/>
           </p>
           <hr>
           <div v-if="!editing" @click="editing = true" class="btn btn-success fw-120">編集</div>

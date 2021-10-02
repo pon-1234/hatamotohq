@@ -15,22 +15,28 @@
       </div>
 
       <div class="mt-3 text-center">
-        <img :src="activeChannel.line_friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
+        <img :src="friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>{{ activeChannel.line_friend.name }}</h4>
+        <h4>{{ friend.name }}</h4>
       </div>
 
       <div class="mt-3">
         <hr class="" />
 
-        <p class="mt-4 mb-1"><strong><i class='uil uil-at'></i> メール:</strong></p>
+        <p class="mt-4 mb-1 font-12"><strong><i class='uil uil-at'></i> メール:</strong></p>
         <p>未設定</p>
 
-        <p class="mt-3 mb-1"><strong><i class='uil uil-phone'></i> 電話番号:</strong></p>
+        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-phone'></i> 電話番号:</strong></p>
         <p>未設定</p>
 
-        <p class="mt-3 mb-1"><strong><i class='uil uil-location'></i> 住所:</strong></p>
+        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-location'></i> 住所:</strong></p>
         <p>未設定</p>
+
+        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-notes'></i> メモ欄:</strong></p>
+        <p>{{ friend.note || 'なし' }}</p>
+
+        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-tag'></i> タグ:</strong></p>
+        <p><friend-tag :tags="friend.tags"></friend-tag></p>
       </div>
     </div> <!-- end card-body -->
   </div> <!-- end card-->
