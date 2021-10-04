@@ -32,7 +32,7 @@ class Util {
   }
 
   static formattedDatetime(datetime) {
-    return moment(datetime).format('YYYY年MM月DD hh:mm');
+    return moment(datetime).format('YYYY年MM月DD日 hh:mm');
   }
 
   static validateFileSizeByType(type, size) {
