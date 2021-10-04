@@ -1,8 +1,8 @@
 <template>
   <div>
     <div :class="getClassName()">
-        <media-preview :type="data.type" :src="data.previewImageUrl" :duration="getDuration()"  v-if="data" :showMedia="true" />
-        <media-preview :src="data.originalContentUrl"  :type="data.type" :duration="getDuration()" :showMedia="true" v-else/>
+      <media-preview :type="data.type" :src="data.previewImageUrl" :duration="getDuration()" v-if="data.previewImageUrl" :showMedia="true"></media-preview>
+      <media-preview :type="data.type" :src="data.originalContentUrl" :duration="getDuration()" :showMedia="true" v-else></media-preview>
     </div>
   </div>
 </template>

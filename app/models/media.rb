@@ -5,11 +5,10 @@
 # Table name: media
 #
 #  id              :bigint           not null, primary key
-#  alias           :string(255)
+#  line_account_id :bigint
 #  type            :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  line_account_id :bigint
 #
 # Indexes
 #
@@ -51,5 +50,9 @@ class Media < ApplicationRecord
     end
   rescue StandardError => e
     logger.error('Could not generate preview url')
+  end
+
+  def set_blob_duration(duration)
+    file.blob.update_columns(duration: duration)
   end
 end

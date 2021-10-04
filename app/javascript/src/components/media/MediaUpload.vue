@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       mediaData: {
-        type: 'image',
+        type: null,
         originalContentUrl: '',
         previewImageUrl: ''
       },
@@ -96,7 +96,8 @@ export default {
       const mediaType = Util.convertMineTypeToMediaType(input.type);
       if (mediaType === 'image') {
         if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
-        if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
+        else if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
+        else this.mediaData.type = 'image';
       } else {
         this.mediaData.type = mediaType;
       }

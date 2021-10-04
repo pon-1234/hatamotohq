@@ -5,11 +5,10 @@
 # Table name: media
 #
 #  id              :bigint           not null, primary key
-#  alias           :string(255)
+#  line_account_id :bigint
 #  type            :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  line_account_id :bigint
 #
 # Indexes
 #

@@ -16,9 +16,7 @@
       v-bind:data="data.stickerId"
     />
 
-    <media-message v-if="data.type === 'image' " v-bind:data="data" />
-    <media-message v-if="data.type === 'video' " v-bind:data="data" />
-    <media-message v-if="data.type === 'audio' " v-bind:data="data" />
+    <media-message v-if="['image', 'video', 'audio'].includes(data.type)" v-bind:data="data" />
     <buttons-message v-if="data.type === MessageType.Template  && data.template && data.template.type ===  TemplateMessageType.Buttons" v-bind:data="data.template" />
     <confirm-message  v-if="data.type === MessageType.Template  && data.template && data.template.type ===  TemplateMessageType.Confirm" v-bind:data="data.template" />
     <carousel-message v-if="data.type === MessageType.Template  && data.template && data.template.type ===  TemplateMessageType.Carousel" :data="data.template.columns" />

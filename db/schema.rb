@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_03_100704) do
+ActiveRecord::Schema.define(version: 2021_10_04_092330) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_100704) do
     t.string 'content_type'
     t.text 'metadata'
     t.bigint 'byte_size', null: false
+    t.float 'duration'
     t.string 'checksum', null: false
     t.datetime 'created_at', null: false
     t.index ['key'], name: 'index_active_storage_blobs_on_key', unique: true
@@ -250,7 +251,6 @@ ActiveRecord::Schema.define(version: 2021_10_03_100704) do
 
   create_table 'media', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
-    t.string 'alias'
     t.string 'type'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false

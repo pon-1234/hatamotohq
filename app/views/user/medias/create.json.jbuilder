@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.(@media, :id, :type, :url, :preview_url)
+json.partial! 'models/media', media: @media

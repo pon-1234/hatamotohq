@@ -77,31 +77,10 @@ class Util {
   }
 
   static getDuration(data) {
-    const time = data.duration / 1000;
-
-    var mins = Math.floor(time / 60);
-    if (mins < 10) {
-      mins = '0' + String(mins);
-    }
-    var secs = Math.floor(time % 60);
-    if (secs < 10) {
-      secs = '0' + String(secs);
-    }
-
-    return mins + ':' + secs;
-  }
-
-  static getMediaFromLine(id) {
-    return process.env.MIX_ROOT_PATH + '?_pid=' + btoa('/channels/contentFromLine/' + id);
-  }
-
-  static makeUrlfromKey(key) {
-    const obj = {
-      originalContentUrl: process.env.MIX_MEDIA_FLEXA_URL + '/' + key,
-      previewImageUrl: process.env.MIX_MEDIA_FLEXA_URL + '/' + key + '/preview'
-    };
-
-    return obj;
+    const durationInMilis = data.duration;
+    const duration = moment.duration(durationInMilis / 1000, 'seconds');
+    console.log('---duration---', duration);
+    return `${duration.minutes()}:${duration.seconds()}`;
   }
 
   static setDefaultFormatDate(date) {

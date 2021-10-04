@@ -18,23 +18,23 @@
         <div class="modal-body overflow-hidden" :key="contentKey">
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
-              <a href="#uploadMedia" data-toggle="tab" aria-expanded="false" class="nav-link">
+              <a href="#uploadMedia" data-toggle="tab" aria-expanded="true" class="nav-link active">
                 <i class="mdi mdi-home-variant d-md-none d-block"></i>
                 <span class="d-none d-md-block">新規アップロード</span>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#selectMedia" data-toggle="tab" aria-expanded="true" class="nav-link active">
+              <a href="#selectMedia" data-toggle="tab" aria-expanded="false" class="nav-link">
                 <i class="mdi mdi-account-circle d-md-none d-block"></i>
                 <span class="d-none d-md-block">メディア一覧</span>
               </a>
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane" id="uploadMedia">
+            <div class="tab-pane show active" id="uploadMedia">
               <media-upload :types="types" @upload="selectMedia($event)"></media-upload>
             </div>
-            <div class="tab-pane show active" id="selectMedia">
+            <div class="tab-pane" id="selectMedia">
               <media-index mode="read" @select="selectMedia($event)" :filterable="filterable"></media-index>
             </div>
           </div>

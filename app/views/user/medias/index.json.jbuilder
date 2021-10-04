@@ -8,9 +8,6 @@ json.meta do
 end
 json.data do
   json.array! @medias do |media|
-    json.id media.id
-    json.type media.type
-    json.url media.url
-    json.preview_url media.preview_url
+    json.partial! 'models/media', media: media
   end
 end

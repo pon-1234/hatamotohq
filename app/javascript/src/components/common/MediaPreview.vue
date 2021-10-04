@@ -45,7 +45,6 @@ export default {
         backgroundSize: 'contain',
         height: this.type === 'video' ? '90px' : '0px'
       }
-
     };
   },
 
