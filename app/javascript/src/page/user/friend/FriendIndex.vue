@@ -7,13 +7,8 @@
         </a>
         <!-- START: Search form -->
           <div class="ml-auto d-flex">
-            <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq">
-              <option value="">すべて</option>
-              <option value="active">正常</option>
-              <option value="blocked">ブロック中</option>
-            </select>
             <div class="input-group app-search">
-              <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="queryParams.line_name_or_display_name_cont">
+              <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword">
               <span class="mdi mdi-magnify search-icon"></span>
               <div class="input-group-append">
                 <div class="btn btn-primary" @click="loadFriend">検索</div>
@@ -71,37 +66,52 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      loading: true,
-      queryParams: null
+      loading: true
     };
-  },
-  created() {
-    this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
     await this.getFriends();
     this.loading = false;
   },
   computed: {
-    ...mapGetters('friend', [
-      'getQueryParams'
-    ]),
     ...mapState('friend', {
+      queryParams: (state) => state.queryParams,
       friends: (state) => state.friends,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    })
+    }),
+
+    keyword: {
+      get() {
+        return this.queryParams.line_name_or_display_name_cont;
+      },
+
+      set(value) {
+        this.setQueryParam({ line_name_or_display_name_cont: value });
+      }
+    },
+
+    status_eq: {
+      get() {
+        return this.queryParams.status_eq;
+      },
+
+      set(value) {
+        this.setQueryParam({ status_eq: value });
+      }
+    }
   },
   methods: {
     ...mapMutations('friend', [
-      'setQueryParams'
+      'setQueryParams',
+      'setQueryParam'
     ]),
     ...mapActions('friend', [
       'getFriends'

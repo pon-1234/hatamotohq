@@ -8,7 +8,8 @@ export const state = {
   queryParams: {
     page: 1,
     status_eq: '',
-    line_name_or_display_name_cont: null
+    line_name_or_display_name_cont: null,
+    tags_id_in: null
   }
 };
 
@@ -32,7 +33,7 @@ export const mutations = {
   },
 
   setQueryParam(state, param) {
-    Object.assign(state.queryParams, { param });
+    Object.assign(state.queryParams, param);
   }
 };
 
