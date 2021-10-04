@@ -8,6 +8,7 @@ json.data do
       json.id channel.line_friend.id
       json.name channel.line_friend.name
       json.avatar_url channel.line_friend.avatar_url
+      json.created_at channel.line_friend.created_at
       json.tags do
         json.array! channel.line_friend.tags do |tag|
           json.id tag.id

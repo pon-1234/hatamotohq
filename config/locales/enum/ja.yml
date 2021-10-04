@@ -21,9 +21,8 @@ ja:
         deleting: 削除中
     line_friend:
       status:
-        active: 有効
+        active: 正常
         blocked: ブロック中
-        muted: ミュート中
     scenario:
       mode:
         elapsed_time: 経過時間

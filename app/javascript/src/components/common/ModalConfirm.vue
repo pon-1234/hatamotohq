@@ -10,9 +10,9 @@
           <slot name="content"></slot>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-dismiss="modal">キャンセル</button>
-          <button type="button" class="btn btn-info" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">確認</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</button>
+          <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-info" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">確認</button>
+          <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

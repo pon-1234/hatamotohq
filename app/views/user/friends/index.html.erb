@@ -18,6 +18,11 @@
       <div class="card-header d-flex">
         <!-- Start: search condition -->
         <%= search_form_for @q, url: search_user_friends_path, class:"ml-auto d-flex" do |f| %>
+          <div class="custom-control custom-checkbox d-flex align-items-center">
+            <%= f.check_box :visible_not_eq, {class: 'custom-control-input', id: "visibleCheck"}, nil, false %>
+            <label class="custom-control-label text-nowrap mr-1" for="visibleCheck">非表示した友達を表示</label>
+          </div>
+
           <%= f.select :status_eq,
             options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
             class: "form-control fw-150 mr-1" %>
@@ -36,7 +41,7 @@
         <table class="table table-centered mb-0">
           <thead class="thead-light">
             <tr>
-              <th><%= sort_link(@q, :name, '名前', default_order: :asc) %></th>
+              <th>名前</th>
               <th><%= sort_link(@q, :created_at, '登録日時', default_order: :asc) %></th>
               <th>タグ</th>
               <th>状況</th>
@@ -52,7 +57,7 @@
                   <%= line_friend.line_name %>
                 </td>
                 <td><%= formatted_time(line_friend.created_at) %></td>
-                <td>なし</td>
+                <td><friend-tag :tags="<%= line_friend.tags.select(:name).to_json %>"></friend-tag></td>
                 <td>
                   <%= render_friend_status(line_friend.status) %>
                 </td>

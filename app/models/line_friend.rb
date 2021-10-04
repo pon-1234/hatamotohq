@@ -5,16 +5,18 @@
 # Table name: line_friends
 #
 #  id               :bigint           not null, primary key
-#  deleted_at       :datetime
-#  display_name     :string(255)
-#  line_name        :string(255)
+#  line_account_id  :bigint
 #  line_picture_url :string(255)
-#  note             :text(65535)
+#  line_user_id     :string(255)
+#  line_name        :string(255)
+#  display_name     :string(255)
 #  status           :string(255)      default("active")
+#  locked           :boolean          default(FALSE)
+#  visible          :boolean          default(TRUE)
+#  note             :text(65535)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  line_account_id  :bigint
-#  line_user_id     :string(255)
+#  deleted_at       :datetime
 #
 # Indexes
 #
@@ -32,7 +34,7 @@ class LineFriend < ApplicationRecord
   has_many :messages, as: :sender
 
   # Scope
-  enum status: { active: 'active', blocked: 'blocked', muted: 'muted' }
+  enum status: { active: 'active', blocked: 'blocked' }
   scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
   scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
 
@@ -57,6 +59,16 @@ class LineFriend < ApplicationRecord
 
   def avatar_url
     line_picture_url
+  end
+
+  def toggle_locked
+    self.locked = !self.locked
+    self.save!
+  end
+
+  def toggle_visible
+    self.visible = !self.visible
+    self.save!
   end
 
   # Available scenarios that can be sent by configs (on chat, postback action...)

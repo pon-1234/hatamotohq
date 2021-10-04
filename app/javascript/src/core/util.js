@@ -28,11 +28,11 @@ class Util {
   }
 
   static formattedDate(date) {
-    return moment(date).format('YYYY.MM.DD');
+    return moment(date).format('YYYY年MM月DD日');
   }
 
   static formattedDatetime(datetime) {
-    return moment(datetime).format('YYYY.MM.DD hh:mm');
+    return moment(datetime).format('YYYY年MM月DD hh:mm');
   }
 
   static validateFileSizeByType(type, size) {

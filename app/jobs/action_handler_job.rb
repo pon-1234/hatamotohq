@@ -60,6 +60,7 @@ class ActionHandlerJob < ApplicationJob
       SendTemplateJob.perform_later(@friend.channel.id, template_id)
     end
 
+    # TODO: to avoid exception, check existing before save
     def assign_tag(action)
       assign_ids = action['tags'].pluck('id')
       @friend.tag_ids = @friend.tag_ids | assign_ids

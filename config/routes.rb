@@ -51,7 +51,13 @@ Rails.application.routes.draw do
         end
       end
       resources :friends do
-        get :search, on: :collection
+        collection do
+          get :search
+        end
+        member do
+          post :toggle_locked
+          post :toggle_visible
+        end
       end
       resources :broadcasts do
         get :search, on: :collection

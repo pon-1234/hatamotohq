@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_30_154904) do
+ActiveRecord::Schema.define(version: 2021_10_03_100704) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -216,6 +216,8 @@ ActiveRecord::Schema.define(version: 2021_09_30_154904) do
     t.string 'line_name'
     t.string 'display_name'
     t.string 'status', default: 'active'
+    t.boolean 'locked', default: false
+    t.boolean 'visible', default: true
     t.text 'note'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false

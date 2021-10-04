@@ -1,7 +1,11 @@
 <template>
   <li>
     <chat-item-unread-mark v-if="shouldShowUnreadDiv"></chat-item-unread-mark>
-    <div class="text-center text-sm font-weight-bold mb-2" v-if="shouldShowDate">{{ readableDate }}</div>
+    <div class="d-flex align-items-center mb-2" v-if="shouldShowDate">
+      <div class="fh-2 bg-light flex-grow-1"></div>
+      <span class="font-12 font-weight-bold border border-light py-1 px-2 date-title">{{ readableDate }}</span>
+      <div class="fh-2 bg-light flex-grow-1"></div>
+    </div>
     <template v-if="isSystemMessage">
       <system-message :message="message"></system-message>
     </template>
@@ -80,6 +84,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .date-title {
+    border-radius: 15px;
+  }
+
+  .border-light {
+    border-color: #ccc;
+  }
+
+  .bg-light {
+    background: #ccc;
+  }
+
   ::v-deep {
     .more-option {
       display: none;
