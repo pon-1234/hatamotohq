@@ -2,7 +2,7 @@ import FriendAPI from '../api/friend_api';
 
 export const state = {
   friend: null,
-  lineFriends: [],
+  friends: [],
   totalRows: 0,
   perPage: 0,
   queryParams: {
@@ -17,8 +17,8 @@ export const mutations = {
     state.friend = friend;
   },
 
-  setlineFriends(state, lineFriends) {
-    state.lineFriends = lineFriends;
+  setfriends(state, friends) {
+    state.friends = friends;
   },
 
   setMeta(state, meta) {
@@ -43,14 +43,14 @@ export const getters = {
 };
 
 export const actions = {
-  async getlineFriends(context) {
+  async getfriends(context) {
     const params = {
       page: state.queryParams.page,
       q: _.omit(state.queryParams, 'page')
     };
     try {
       const response = await FriendAPI.list(params);
-      context.commit('setlineFriends', response.data);
+      context.commit('setfriends', response.data);
       context.commit('setMeta', response.meta);
       return response;
     } catch (error) {

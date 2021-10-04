@@ -35,21 +35,21 @@
                   <th class="fw-150">操作</th>
                 </tr>
               </thead>
-              <tbody v-for="(lineFriend, index) in lineFriends" :key="index">
+              <tbody v-for="(friend, index) in friends" :key="index">
                 <tr>
                   <td class="table-user">
-                    <img :src="lineFriend.line_picture_url || '/img/no-image-profile.png'" alt="table-user" class="mr-2 rounded-circle" />
-                    {{ lineFriend.line_name }}
+                    <img :src="friend.line_picture_url || '/img/no-image-profile.png'" alt="table-user" class="mr-2 rounded-circle" />
+                    {{ friend.line_name }}
                   </td>
-                  <td> {{ formattedDatetime(lineFriend.created_at) }}</td>
+                  <td> {{ formattedDatetime(friend.created_at) }}</td>
                   <td>
-                    <friend-tag :tags="lineFriend.tags"></friend-tag>
-                  </td>
-                  <td>
-                    <friend-status :lineFriend="lineFriend"></friend-status>
+                    <friend-tag :tags="friend.tags"></friend-tag>
                   </td>
                   <td>
-                    <a :href="`${rootUrl}/user/friends/${lineFriend.id}`" class="btn btn-sm btn-light">詳細</a>
+                    <friend-status :status="friend.status"></friend-status>
+                  </td>
+                  <td>
+                    <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
                   </td>
                 </tr>
               </tbody>
@@ -80,7 +80,6 @@ export default {
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      currentPage: 1,
       loading: true,
       queryParams: null
     };
@@ -89,7 +88,7 @@ export default {
     this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
-    await this.getlineFriends();
+    await this.getfriends();
     this.loading = false;
   },
   computed: {
@@ -97,7 +96,7 @@ export default {
       ['getQueryParams']
     ),
     ...mapState('friend', {
-      lineFriends: (state) => state.lineFriends,
+      friends: (state) => state.friends,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
     })
@@ -107,7 +106,7 @@ export default {
       'setQueryParams'
     ]),
     ...mapActions('friend', [
-      'getlineFriends'
+      'getfriends'
     ]),
 
     formattedDatetime(time) {
@@ -118,7 +117,7 @@ export default {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getlineFriends();
+        this.getfriends();
         this.loading = false;
       });
     }
