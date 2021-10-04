@@ -31,6 +31,7 @@
               </tr>
             </tbody>
           </table>
+          <div class="text-center mt-4" v-if="scenarios.length === 0">送信できるシナリオはありません。</div>
         </div>
       </div>
     </div>

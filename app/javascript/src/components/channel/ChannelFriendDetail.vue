@@ -15,7 +15,7 @@
         <hr class="" />
 
         <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-notes'></i> メモ欄:</strong></p>
-        <p>{{ friend.note || 'なし' }}</p>
+        <p class="text-prewrap max-3-lines">{{ friend.note || 'なし' }}</p>
 
         <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-tag'></i> タグ:</strong></p>
         <p><friend-tag :tags="friend.tags"></friend-tag></p>
@@ -37,6 +37,11 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH
     };
   },
+
+  provide() {
+    return { parentValidator: this.$validator };
+  },
+
   computed: {
     ...mapState('channel', {
       activeChannel: state => state.activeChannel

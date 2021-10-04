@@ -18,11 +18,6 @@
       <div class="card-header d-flex">
         <!-- Start: search condition -->
         <%= search_form_for @q, url: search_user_friends_path, class:"ml-auto d-flex" do |f| %>
-          <div class="custom-control custom-checkbox d-flex align-items-center">
-            <%= f.check_box :visible_not_eq, {class: 'custom-control-input', id: "visibleCheck"}, nil, false %>
-            <label class="custom-control-label text-nowrap mr-1" for="visibleCheck">非表示した友達を表示</label>
-          </div>
-
           <%= f.select :status_eq,
             options_for_select(LineFriend.statuses.keys.map{ |t| [I18n.t("enums.line_friend.status.#{t}"), t] }, @params.present? && @params[:status_eq]), {include_blank: 'すべて状況'}, 
             class: "form-control fw-150 mr-1" %>

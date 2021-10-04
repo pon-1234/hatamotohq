@@ -8,7 +8,7 @@ class User::FriendsController < User::ApplicationController
   # GET /user/friends
   def index
     @params = params[:q]
-    @q = LineFriend.accessible_by(current_ability).ransack(params[:q])
+    @q = LineFriend.accessible_by(current_ability).ransack(@params)
     @line_friends = @q.result.page(params[:page])
   end
 

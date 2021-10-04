@@ -10,6 +10,7 @@ class User::MessagesController < User::ApplicationController
 
   # POST /user/channels/:channel_id/messages
   def create
+    authorize! :create_message, @channel
     user = Current.user
     mb = Messages::MessageBuilder.new(user, @channel, message_params)
     @message = mb.perform
@@ -20,6 +21,7 @@ class User::MessagesController < User::ApplicationController
 
   # POST /user/channels/:channel_id/messages/send_scenario
   def send_scenario
+    authorize! :create_message, @channel
     scenario = Scenario.find(scenario_params[:scenario_id])
     ScenarioSchedulerJob.perform_later(@channel.id, scenario.id)
     render_success
@@ -27,6 +29,7 @@ class User::MessagesController < User::ApplicationController
 
   # POST /user/channels/:channel_id/messages/send_template
   def send_template
+    authorize! :create_message, @channel
     template = Template.find(template_params[:template_id])
     SendTemplateJob.perform_later(@channel.id, template.id)
     render_success

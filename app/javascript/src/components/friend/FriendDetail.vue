@@ -20,7 +20,7 @@
 
             <!-- go to chat -->
             <li class="list-group-item">
-              <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`"><i class="uil-comment-alt-dots"></i> メッセージ</a>
+              <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"><i class="uil-comment-alt-dots"></i> メッセージ</a>
             </li>
 
             <!-- friend addition time -->
@@ -42,13 +42,15 @@
         <div class="card-body">
           <p class="mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
-            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName" :disabled="!editing">
+            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'required|max:255'" data-vv-as="表示名">
+            <error-message :message="errors.first('display_name')"></error-message>
           </p>
           <hr>
 
           <p class="mt-3 mb-1"><strong>メモ欄</strong></p>
           <p class="text-muted mt-2">
-            <textarea rows="2" class="form-control" v-model="friendData.note" :disabled="!editing"></textarea>
+            <textarea rows="2" class="form-control" v-model="friendData.note" name="note" :disabled="!editing" v-validate="'max:2000'" data-vv-as="メモ欄"></textarea>
+            <error-message :message="errors.first('note')"></error-message>
           </p>
           <hr>
 
@@ -205,6 +207,8 @@ export default {
     },
 
     async onSave() {
+      const valid = await this.$validator.validateAll();
+      if (!valid) return;
       this.loading = true;
       const formData = {
         id: this.friendData.id,
@@ -218,6 +222,8 @@ export default {
       } else {
         window.toastr.error('友だち情報の更新が失敗しました。');
       }
+      this.editing = false;
+      this.loading = false;
     },
 
     trimMidString(originStr, maxChars, trailingCharCount) {

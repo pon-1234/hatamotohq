@@ -34,7 +34,9 @@ export default {
 
     async toggle() {
       await this.toggleLocked(this.id);
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 300);
     }
   }
 };
