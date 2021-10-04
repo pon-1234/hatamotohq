@@ -12,7 +12,7 @@
     <template v-else>
       <div :class="alignBubble">
         <div class="chat-avatar">
-          <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="Shreyu N" />
+          <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="友達" />
           <i>{{ readableTime }}</i>
         </div>
         <div class="conversation-text">
