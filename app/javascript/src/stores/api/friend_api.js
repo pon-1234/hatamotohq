@@ -1,4 +1,14 @@
 export default {
+  list: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends`,
+      method: 'GET',
+      data: query,
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
   get: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}`,
@@ -29,6 +39,6 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/toggle_visible`,
       method: 'POST'
     });
-  },
+  }
 
 };

@@ -10,6 +10,10 @@ class User::FriendsController < User::ApplicationController
     @params = params[:q]
     @q = LineFriend.accessible_by(current_ability).ransack(@params)
     @line_friends = @q.result.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def search

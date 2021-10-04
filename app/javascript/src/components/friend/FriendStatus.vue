@@ -1,16 +1,10 @@
 <template>
-  <div>
-    <span v-if="!locked" class="badge badge-pill badge-success pt-1">
-      正常
-    </span>
-    <span v-else-if="locked" class="badge badge-pill badge-warning pt-1">
-      ブロック中
-    </span>
-  </div>
+  <span v-if="lineFriend.status == 'active'"><i class="mdi mdi-circle text-success"></i> 有効 </span>
+  <span v-else-if="lineFriend.status == 'blocked'"><i class="mdi mdi-circle text-warning"></i> ブロック中 </span>
 </template>
 
 <script>
 export default {
-  props: ['status']
+  props: ['lineFriend']
 };
 </script>
