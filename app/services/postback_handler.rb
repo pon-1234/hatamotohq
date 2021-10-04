@@ -11,6 +11,7 @@ class PostbackHandler
   end
 
   def perform
-    ActionHandlerJob.perform_now(@friend, @action, @reply_token)
+    # Ignore handler if the friend is locked
+    ActionHandlerJob.perform_now(@friend, @action, @reply_token) unless @friend.locked
   end
 end

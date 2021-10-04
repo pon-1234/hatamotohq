@@ -116,7 +116,7 @@ export const actions = {
     try {
       const params = {
         before: state.channelParams.before,
-        q: { line_friend_display_name_cont: state.channelParams.keyword }
+        q: { line_friend_display_name_or_line_friend_line_name_or_line_friend_tags_name_cont: state.channelParams.keyword }
       };
       const res = await ChannelAPI.list(params);
       if (res) {
@@ -145,7 +145,6 @@ export const actions = {
   },
 
   setActiveChannel(context, payload) {
-    
     context.commit('setActiveChannel', payload);
   },
 

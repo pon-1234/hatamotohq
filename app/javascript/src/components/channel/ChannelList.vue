@@ -5,6 +5,7 @@
       <div class="form-group position-relative">
         <input type="text" class="form-control" placeholder="検索" v-model="keyword" @keyup="debouncedSearch"/>
         <span class="mdi mdi-magnify search-icon"></span>
+        <div class="mdi mdi-close clear-icon" role="button" @click="resetSearch()" v-show="keyword"></div>
       </div>
     </div>
     <!-- users -->
@@ -52,6 +53,11 @@ export default {
       'resetMessages'
     ]),
 
+    resetSearch() {
+      this.keyword = null;
+      this.fetchData();
+    },
+
     loadMore() {
       const before = !_.isEmpty(this.channels) ? (_.last(this.channels)).last_activity_at : null;
       this.setChannelParam({ before: before });
@@ -59,12 +65,16 @@ export default {
     },
 
     debouncedSearch: _.debounce(async function() {
+      this.fetchData();
+    }, 300),
+
+    async fetchData() {
       this.loading = true;
       this.resetChannels();
       this.setChannelParams({ before: null, keyword: this.keyword });
       await this.getChannels();
       this.loading = false;
-    }, 300),
+    },
 
     async switchChannel(channel, index) {
       const notChanged = this.activeChannel.id === channel.id;
@@ -78,3 +88,11 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .clear-icon {
+    position: absolute;
+    right: 5px;
+    top: calc(50% - 10px);
+  }
+</style>

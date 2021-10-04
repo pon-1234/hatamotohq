@@ -10,14 +10,19 @@
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
           <ul class="list-group list-group-unbordered mb-3">
-            <!-- status (active/block) -->
+            <!-- locked -->
             <li class="list-group-item">
-              <b>ステータス</b> <span class="float-right"><friend-status :status='friendData.status'></friend-status></span>
+              <b>ステータス</b> <span class="float-right d-flex flex-row">
+                <friend-toggle-visible :id="friendData.id" :visible="friendData.visible" class="ml-auto mr-1"></friend-toggle-visible>
+                <friend-toggle-locked :id="friendData.id" :locked="friendData.locked" class="mr-auto"></friend-toggle-locked>
+              </span>
             </li>
-            <!-- go to chat button -->
+
+            <!-- go to chat -->
             <li class="list-group-item">
-              <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`"><i class="fas fa-comment-dots"></i> メッセージ</a>
+              <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"><i class="uil-comment-alt-dots"></i> メッセージ</a>
             </li>
+
             <!-- friend addition time -->
             <li class="list-group-item">
               <b>登録日</b><span class="float-right">{{ formatDateTime(friendData.created_at) }}</span>
@@ -35,15 +40,17 @@
           <h4>詳細情報</h4>
         </div>
         <div class="card-body">
-          <p class="mt-3 mb-1"><strong>表示名</strong></p>
+          <p class="mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
-            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" ref="displayName" :disabled="!editing">
+            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'required|max:255'" data-vv-as="表示名">
+            <error-message :message="errors.first('display_name')"></error-message>
           </p>
           <hr>
 
           <p class="mt-3 mb-1"><strong>メモ欄</strong></p>
           <p class="text-muted mt-2">
-            <textarea rows="2" class="form-control" v-model="friendData.note" :disabled="!editing"></textarea>
+            <textarea rows="2" class="form-control" v-model="friendData.note" name="note" :disabled="!editing" v-validate="'max:2000'" data-vv-as="メモ欄"></textarea>
+            <error-message :message="errors.first('note')"></error-message>
           </p>
           <hr>
 
@@ -168,7 +175,7 @@ export default {
     ]),
     ...mapActions('friend', [
       'getFriend',
-      'editLineInfo'
+      'updateFriend'
     ]),
 
     selectTags(tags) {
@@ -199,7 +206,9 @@ export default {
       this.isEnter = true;
     },
 
-    onSave() {
+    async onSave() {
+      const valid = await this.$validator.validateAll();
+      if (!valid) return;
       this.loading = true;
       const formData = {
         id: this.friendData.id,
@@ -207,14 +216,14 @@ export default {
         note: this.friendData.note,
         tag_ids: this.friendData.tags ? this.friendData.tags.map(_ => _.id) : []
       };
-      this.editLineInfo(formData).then((res) => {
+      const response = await this.updateFriend(formData);
+      if (response) {
         window.toastr.success('友だち情報の更新が成功しました。');
-      }).catch(() => {
+      } else {
         window.toastr.error('友だち情報の更新が失敗しました。');
-      }).finally(() => {
-        this.editing = false;
-        this.loading = false;
-      });
+      }
+      this.editing = false;
+      this.loading = false;
     },
 
     trimMidString(originStr, maxChars, trailingCharCount) {

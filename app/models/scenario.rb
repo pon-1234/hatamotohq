@@ -42,6 +42,9 @@ class Scenario < ApplicationRecord
   enum status: { enabled: 'enabled', disabled: 'disabled', draft: 'draft' }
   enum type: { auto: 'auto', manual: 'manual' }
 
+  # Scope
+  scope :not_empty, -> { where('scenario_messages_count > 0') }
+
   def clone
     new_scenario = self.dup
     new_scenario.title = self.title + '（コピー）'

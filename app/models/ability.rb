@@ -17,7 +17,8 @@ class Ability
     can [:create], AutoResponse
 
     # Channel
-    can [:manage], Channel, line_account: user.line_account
+    can [:read, :create, :update], Channel, line_account: user.line_account
+    can :create_message, Channel, { line_account: user.line_account, locked: false }
 
     # RichMenu
     can [:manage], RichMenu, line_account: user.line_account

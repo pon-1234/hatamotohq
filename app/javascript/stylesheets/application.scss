@@ -161,6 +161,17 @@
   }
 }
 
+@for $i from 1 through 10 {
+  $line_num: $i;
+  .max-#{$line_num}-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line_num; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+}
+
 .mxw-1200 {
   max-width: 1200px !important;
 }

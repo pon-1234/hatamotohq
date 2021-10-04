@@ -6,7 +6,7 @@ module WebhooksHelper
   def handle_event(event, key)
     @event = event
     @line_account = LineAccount.find_by(webhook_url: key)
-    return false if @line_account.nil?
+    return if @line_account.nil?
 
     @friend_id = @event[:source][:userId]
     type = @event[:type]
@@ -33,12 +33,12 @@ module WebhooksHelper
     def handle_unfollow
       # Check if friend alredy in db
       line_friend = LineFriend.where(line_account: @line_account, line_user_id: @friend_id).first
-      return false if line_friend.nil?
+      return if line_friend.nil?
       # Change friend status to block if existing in db
       line_friend.update_columns(status: 'blocked')
       # Change channel status to block
       channel = Channel.where(line_account: @line_account, line_friend: line_friend).first
-      return false if channel.nil?
+      return if channel.nil?
       channel.update_columns(locked: true)
       handle_after_unfollow(channel)
     end
@@ -49,11 +49,13 @@ module WebhooksHelper
       # Store friend data if does not exists
       unless line_friend
         line_friend = add_friend(@friend_id)
-        return false if line_friend.nil?
+        return if line_friend.nil?
       end
       # Bot could not send to itself
-      return false if line_friend.line_user_id == @line_account.line_user_id
+      return if line_friend.line_user_id == @line_account.line_user_id
       channel = line_friend.channel
+      # Ignore webhook if the channel is locked
+      return if channel.locked
       # Create a message
       message = create_message(channel, line_friend, @event)
     rescue => e
