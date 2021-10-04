@@ -1,12 +1,6 @@
 <template>
-  <div>
-    <span v-if="!locked" class="badge badge-pill badge-success pt-1">
-      正常
-    </span>
-    <span v-else-if="locked" class="badge badge-pill badge-warning pt-1">
-      ブロック中
-    </span>
-  </div>
+  <span v-if="status === 'active'"><i class="mdi mdi-circle text-success"></i> 有効 </span>
+  <span v-else-if="status === 'blocked'"><i class="mdi mdi-circle"></i> ブロック中 </span>
 </template>
 
 <script>
