@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="text-left">
     <span class="text-sm" v-if="type === 'pdf'">
       ファイル形式：PDF<br>
       ファイルサイズ：10MB以下

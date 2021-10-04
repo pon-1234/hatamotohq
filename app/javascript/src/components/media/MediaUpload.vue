@@ -1,7 +1,7 @@
 <template>
-  <div class="upload-container my-auto d-flex flex-column">
-    <div class="border flex-grow-1 d-flex justify-content-center align-items-center position-relative" @drop.prevent="addFile" @dragover.prevent>
-      <div class="text-center" v-if="isPreview">
+  <div class="card upload-container my-auto d-flex flex-column">
+    <div class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative" @drop.prevent="addFile" @dragover.prevent>
+      <div class="text-center my-auto" v-if="isPreview">
         <button class="btn-delete-media" @click="deleteMedia()"><span class="close">×</span></button>
         <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL">
         <img v-if="mediaData.type === 'image' || mediaData.type === 'richmenu'" :src="fileURL">
@@ -12,9 +12,9 @@
           <source :src="fileURL" type="video/mp4">
         </video>
       </div>
-      <div class="text-center text-md" v-else>
+      <div class="text-center text-md my-auto" v-else>
         <p><label>ここにファイルをドラッグ＆ドロップ<br>または</label></p>
-        <div class="custom-file w-fix-200">
+        <div class="custom-file fw-200">
           <div class="custom-file-input h-100 w-100">
             <input
               class="fh-50"
@@ -30,10 +30,12 @@
         <span v-if="errorMessage" class="w-100 error">{{errorMessage}}</span>
         <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       </div>
+
+      <div class="text-right w-100 mt-auto">
+        <button v-if="isPreview" class="btn btn-info fw-120" @click="handleUpload">確認する</button>
+      </div>
     </div>
-    <div class="d-flex align-items-center mt-2">
-      <button v-if="isPreview" class="btn btn-info ml-auto mr-4 fw-120" @click="handleUpload">確認する</button>
-    </div>
+    <loading-indicator :loading="loading"></loading-indicator>
   </div>
 </template>
 <script>
@@ -49,6 +51,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       mediaData: {
         type: null,
         originalContentUrl: '',
@@ -171,6 +174,7 @@ export default {
     },
 
     async handleUpload() {
+      this.loading = true;
       const query = {
         file: this.inputFile
       };
@@ -193,6 +197,8 @@ export default {
         this.$emit('upload', this.mediaData);
       }
       this.errorMessage = null;
+      this.deleteMedia();
+      this.loading = false;
     },
 
     getDuration(media) {
