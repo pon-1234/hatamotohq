@@ -17,7 +17,7 @@ export const mutations = {
     state.friend = friend;
   },
 
-  setfriends(state, friends) {
+  setFriends(state, friends) {
     state.friends = friends;
   },
 
@@ -43,14 +43,14 @@ export const getters = {
 };
 
 export const actions = {
-  async getfriends(context) {
+  async getFriends(context) {
     const params = {
       page: state.queryParams.page,
       q: _.omit(state.queryParams, 'page')
     };
     try {
       const response = await FriendAPI.list(params);
-      context.commit('setfriends', response.data);
+      context.commit('setFriends', response.data);
       context.commit('setMeta', response.meta);
       return response;
     } catch (error) {

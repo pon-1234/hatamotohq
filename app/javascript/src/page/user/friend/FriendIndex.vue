@@ -88,13 +88,13 @@ export default {
     this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
-    await this.getfriends();
+    await this.getFriends();
     this.loading = false;
   },
   computed: {
-    ...mapGetters('friend',
-      ['getQueryParams']
-    ),
+    ...mapGetters('friend', [
+      'getQueryParams'
+    ]),
     ...mapState('friend', {
       friends: (state) => state.friends,
       totalRows: (state) => state.totalRows,
@@ -106,7 +106,7 @@ export default {
       'setQueryParams'
     ]),
     ...mapActions('friend', [
-      'getfriends'
+      'getFriends'
     ]),
 
     formattedDatetime(time) {
@@ -117,7 +117,7 @@ export default {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getfriends();
+        this.getFriends();
         this.loading = false;
       });
     }
