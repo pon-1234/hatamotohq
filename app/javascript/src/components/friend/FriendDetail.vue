@@ -165,14 +165,10 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
-    await this.getTags();
     this.loading = false;
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
     ...mapActions('friend', [
       'getFriend',
       'updateFriend'

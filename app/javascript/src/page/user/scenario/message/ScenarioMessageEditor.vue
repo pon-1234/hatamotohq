@@ -120,7 +120,6 @@ export default {
 
   async beforeMount() {
     await this.fetchItem();
-    await this.getTags();
     this.loading = false;
     this.forceRerender();
   },
@@ -132,9 +131,6 @@ export default {
       'createMessage',
       'updateMessage',
       'setPreviewContent'
-    ]),
-    ...mapActions('tag', [
-      'getTags'
     ]),
     ...mapActions('system', [
       'setIsSubmitChange'

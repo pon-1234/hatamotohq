@@ -187,7 +187,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     await this.fetchItem();
     this.loading = false;
   },
@@ -209,9 +208,6 @@ export default {
     ]),
     ...mapActions('template', [
       'getTemplate'
-    ]),
-    ...mapActions('tag', [
-      'getTags'
     ]),
     ...mapActions('system', [
       'setIsSubmitChange'
