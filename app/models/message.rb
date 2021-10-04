@@ -60,7 +60,7 @@ class Message < ApplicationRecord
   end
 
   def merge_sender_attributes(data)
-    data[:sender] = sender.push_event_data if sender && sender.is_a?(LineFriend)
+    data[:sender] = sender.push_event_data if sender && (sender.is_a?(LineFriend) or sender.is_a?(User))
     data
   end
 

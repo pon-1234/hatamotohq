@@ -60,7 +60,8 @@ class User < ApplicationRecord
     {
       id: id,
       name: name,
-      avatar_url: avatar_url
+      avatar_url: avatar_url,
+      type: 'user'
     }
   end
 
