@@ -64,6 +64,7 @@ Vue.use(CKEditor);
 // Lazy loading image
 Vue.use(VueLazyload, {
   preLoad: 1.3,
+  error: '/images/no-image.png',
   loading: '/images/loading.gif',
   attempt: 1
 });
