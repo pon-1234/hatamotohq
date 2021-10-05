@@ -25,7 +25,7 @@
 
           <!-- End: Search form -->
         </div>
-        <div class="card-body">
+        <div class="card-body mvh-50">
           <table class="table table-centered mb-0">
             <thead class="thead-light">
               <tr>

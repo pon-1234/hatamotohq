@@ -1,6 +1,6 @@
 <template>
-  <div class="card chat-panel">
-    <div class="card-body" v-if="activeChannel">
+  <div class="card chat-panel" v-if="activeChannel">
+    <div class="card-body">
       <div class="mt-3 text-center">
         <img :src="friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle" />

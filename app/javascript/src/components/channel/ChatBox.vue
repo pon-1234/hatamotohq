@@ -68,7 +68,9 @@ export default {
       if (oldChannel && newChannel.id === oldChannel.id) {
         return;
       }
-      this.loadMoreMessages();
+      if (newChannel) {
+        this.loadMoreMessages();
+      }
     }
   },
 
