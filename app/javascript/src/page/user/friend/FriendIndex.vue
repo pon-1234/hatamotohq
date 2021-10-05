@@ -2,13 +2,10 @@
   <div>
     <div class="card mvh-50">
       <div class="card-header d-flex align-items-center">
-        <a :href="`${rootUrl}/user/friends/new`" class="btn btn-success fw-120 mr-2">
-          <i class="uil-plus"></i> 新規登録
-        </a>
         <!-- START: Search form -->
         <div class="ml-auto d-flex text-nowrap">
           <div class="input-group app-search">
-            <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword">
+            <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword" maxlength="64">
             <span class="mdi mdi-magnify search-icon"></span>
             <div class="input-group-append">
               <div class="btn btn-primary" @click="loadFriend">検索</div>

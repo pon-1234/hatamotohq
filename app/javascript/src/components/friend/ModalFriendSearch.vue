@@ -11,7 +11,7 @@
           <div class="row form-group">
             <div class="col-lg-4">名前</div>
             <div class="col-lg-8">
-              <input type="text" id="name" v-model="keyword" class="form-control" placeholder="LINE登録名、表示名から検索">
+              <input type="text" id="name" v-model="keyword" class="form-control" placeholder="LINE登録名、表示名から検索" maxlength="64">
             </div>
           </div>
           <!-- タグ検索 -->
@@ -38,7 +38,7 @@
             <div class="col-lg-8">
               <select class="form-control" v-model="status_eq">
                 <option value="">すべて</option>
-                <option value="active">正常</option>
+                <option value="active">有効</option>
                 <option value="blocked">ブロック中</option>
               </select>
             </div>

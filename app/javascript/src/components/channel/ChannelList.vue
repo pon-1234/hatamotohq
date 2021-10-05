@@ -3,7 +3,7 @@
     <!-- start search box -->
     <div class="app-search sticky-top fh-55 w-100">
       <div class="form-group position-relative">
-        <input type="text" class="form-control" placeholder="検索" v-model="keyword" @keyup="debouncedSearch"/>
+        <input type="text" class="form-control" placeholder="LINE登録名、表示名から検索、タグ名" v-model="keyword" maxlength="64" @keyup="debouncedSearch"/>
         <span class="mdi mdi-magnify search-icon"></span>
         <div class="mdi mdi-close clear-icon" role="button" @click="resetSearch()" v-show="keyword"></div>
       </div>

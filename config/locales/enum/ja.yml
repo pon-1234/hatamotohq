@@ -21,7 +21,7 @@ ja:
         deleting: 削除中
     line_friend:
       status:
-        active: 正常
+        active: 有効
         blocked: ブロック中
     scenario:
       mode:
