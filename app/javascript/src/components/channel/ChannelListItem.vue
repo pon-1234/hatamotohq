@@ -10,8 +10,8 @@
         </h5>
         <p class="mt-1 mb-0 text-muted font-14">
           <span class="w-25 float-right text-right"><span
-              class="badge badge-danger-lighten" v-show="channel.unread_count > 0">{{ unreadCountLabel }}</span></span>
-          <span class="w-75"><last-message :message="channel.last_message"/></span>
+              class="badge badge-danger-lighten" v-show="isUnread">{{ unreadCountLabel }}</span></span>
+          <span :class="isUnread ? 'w-75 font-weight-bold': 'w-75'"><last-message :message="channel.last_message"/></span>
         </p>
       </div>
     </div>
@@ -41,6 +41,9 @@ export default {
     },
     unreadCountLabel() {
       return this.channel.unread_count > 99 ? '99+' : this.channel.unread_count;
+    },
+    isUnread() {
+      return this.channel.unread_count > 0;
     }
   },
   methods: {

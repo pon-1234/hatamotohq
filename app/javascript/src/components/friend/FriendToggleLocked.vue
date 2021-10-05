@@ -1,10 +1,10 @@
 <template>
   <div>
     <template v-if="locked">
-      <div class="btn btn-xs btn-info" data-toggle="modal" data-target="#modalConfirmToggleLocked">アンブロック</div>
+      <div class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalConfirmToggleLocked">アンブロック</div>
     </template>
     <template v-else>
-      <div class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modalConfirmToggleLocked">ブロック</div>
+      <div class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalConfirmToggleLocked">ブロック</div>
     </template>
 
     <modal-confirm id="modalConfirmToggleLocked" title="友達状況の変更してもよろしいですか？" type="confirm" @confirm="toggle()">

@@ -1,5 +1,5 @@
 <template>
-  <span>{{ message }}</span>
+  <span>{{ message || 'メッセージなし' }}</span>
 </template>
 
 <script>
