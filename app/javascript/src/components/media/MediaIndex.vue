@@ -72,14 +72,14 @@
                         class="image"
                         :src="media.url"
                       />
-                      <img v-else v-lazy="media.preview_url" border="0" align="center" role="button"/>
+                      <div v-else v-lazy:background-image="media.preview_url" class="fw-240 fh-200" align="center" role="button"></div>
                     </template>
                     <div
                       role="button"
                       class="video"
                       v-if="media.type === 'video'"
                     >
-                      <img v-lazy="media.preview_url" border="0" align="center"/>
+                      <div v-lazy:background-image="media.preview_url" border="0" align="center"></div>
                     </div>
 
                     <div

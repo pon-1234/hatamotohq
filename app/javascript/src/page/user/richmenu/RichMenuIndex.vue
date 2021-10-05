@@ -47,7 +47,7 @@
                   </td>
                   <td>表示しない</td>
                   <td>
-                    <img v-lazy="richmenu.image_url" class="fw-120 fh-81">
+                    <div v-lazy:background-image="richmenu.image_url" class="fw-120 fh-81"></div>
                   </td>
                   <td>0</td>
                   <td>
