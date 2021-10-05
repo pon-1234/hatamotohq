@@ -184,7 +184,7 @@ export default {
     async submitdeleteBroadcast() {
       const response = await this.deleteBroadcast(this.curBroadcast.id);
       if (response) {
-        window.toastr.showSuccessThenRedirect('一斉配信の削除は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('一斉配信の削除は完了しました。', window.location.href);
       } else {
         window.toastr.error('一斉配信の削除は失敗しました。');
       }

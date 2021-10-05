@@ -44,6 +44,7 @@
           data-toggle="modal"
           data-target="#modalSelectMedia"
           @click="curUploadType = 'pdf'"
+          hidden
         >
           PDFアップロード
         </a>
@@ -64,21 +65,21 @@
             <div class="card w-100">
               <div class="card-body p-0 d-flex align-items-center justify-content-center">
                 <div class="text-center overflow-hidden">
-                  <div :class="mode === 'read' ? 'media-preview' : 'media-preview'">
+                  <div class="media-preview">
                     <template v-if="media.type === 'image' || media.type === 'richmenu'">
                       <expandable-image
                         v-if="mode === 'manage'"
                         class="image"
                         :src="media.url"
                       />
-                      <img v-if="mode === 'read'" :src="media.preview_url" border="0" align="center" role="button"/>
+                      <img v-else v-lazy="media.preview_url" border="0" align="center" role="button"/>
                     </template>
                     <div
                       role="button"
                       class="video"
                       v-if="media.type === 'video'"
                     >
-                      <img :src="media.preview_url" border="0" align="center"/>
+                      <img v-lazy="media.preview_url" border="0" align="center"/>
                     </div>
 
                     <div

@@ -1,31 +1,18 @@
 <template>
   <div class="media-content d-flex align-items-center">
-    <div class="thumbnail-item" v-if="type === 'image' || type === 'video' || type=== 'richmenu' || type=== 'imagemap'"
-         :style="style">
-      <div class="play-button" v-if=" type==='video' && !showMedia">
-      </div>
-      <div v-else-if="type==='video' && showMedia">
-        <video :width="style.width" :height="style.height" controls>
-          <source :src="src">
-        </video>
-      </div>
+    <div v-if="isImage">
+      <img v-lazy="src" width="200" height="200">
     </div>
-
-    <div v-if="type === 'audio'">
+    <div v-else-if="isVideo">
+      <video :width="300" :height="200" controls>
+        <source :src="src">
+      </video>
+    </div>
+    <div v-else-if="isAudio">
       <div class="chat-item-voice">
-        <div v-if="!showMedia">
-          <div class="chat-item-voice-control">
-            <span class="play-audio"></span>
-          </div>
-          <div class="chat-item-voice-text">
-            <span>{{duration}}</span>
-          </div>
-        </div>
-        <div v-else>
-          <audio controls style="width: 160px; height: -webkit-fill-available; background-color: #f1f3f4;">
-            <source :src="src">
-          </audio>
-        </div>
+        <audio controls class="audio-player">
+          <source :src="src">
+        </audio>
       </div>
     </div>
   </div>
@@ -66,6 +53,16 @@ export default {
       img.src = this.src;
     }
   },
+
+  computed: {
+    isImage() {
+      return this.type === 'image' || this.type === 'richmenu' || this.type === 'imagemap';
+    },
+    isVideo() {
+      return this.type === 'video';
+    }
+  },
+
   methods: {
     boundSize(orgW, orgH, w, h) {
       if (h > orgH || w > orgW) {
@@ -127,6 +124,12 @@ export default {
     position: absolute;
     background: url("/img/play.png") no-repeat;
     background-size: cover;
+  }
+
+  .audio-player {
+    width: 160px;
+    height: -webkit-fill-available;
+    background-color: #f1f3f4;
   }
 
   .chat-item-voice {

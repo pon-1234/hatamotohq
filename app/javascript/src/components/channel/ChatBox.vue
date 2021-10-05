@@ -29,6 +29,7 @@
         @sendScenario="sendScenario"
       ></reply-box>
     </div>
+    <loading-indicator ></loading-indicator>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
 </template>
@@ -58,9 +59,9 @@ export default {
   watch: {
     messages: {
       handler(val) {
-        this.$nextTick(function() {
+        setTimeout(() => {
           this.scrollToBottom();
-        });
+        }, 500);
       },
       deep: true
     },
@@ -119,6 +120,11 @@ export default {
       this.markMessagesRead();
     },
 
+    scrollToMessage(id) {
+      location.href = '#';
+      location.href = `#chatItem${id}`;
+    },
+
     async handleScroll(e) {
       this.setScrollParams();
       if (
@@ -133,7 +139,6 @@ export default {
         this.$refs.chatPanel.scrollTop =
               this.scrollTopBeforeLoad + heightDifference;
         this.isLoadingPrevious = false;
-        this.setScrollParams();
       }
     },
 
@@ -144,6 +149,7 @@ export default {
     async loadMoreMessages() {
       const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
       await this.getMessages({ channelId: this.activeChannel.id, before: before });
+      this.scrollToBottom();
     },
 
     // Send a text message from input
@@ -257,92 +263,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
-::v-deep{
-  .action-template {
-    .dropdown-menu {
-      bottom: auto!important;
-      min-width: 180px!important;
-    }
-
-    button{
-      background: transparent!important;
-      border: none!important;
-      i {
-        color: #666f86!important;
-      }
-    }
-
-    .btn:focus, .btn:active, .btn:hover{
-        box-shadow: none!important;
-        outline: 0;
-    }
-  }
-}
-
-.flash-message {
-  background: transparent;
-  animation: kf-flash-message 2s normal;
-}
-
 @keyframes kf-flash-message {
   from {background-color: #ffe2d5;}
   to {background-color: transparent;}
-}
-
-#txtMessage:focus{
-  box-shadow: none!important;
-}
-
-.btn-send {
-    margin-left: auto;
-    margin-right: 10px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.btn-deatil-friend {
-  white-space: nowrap;
-  margin-left: 10px;
-  cursor: pointer;
-}
-.chatsys {
-  width: 100%;
-  text-align: center;
-  .chatsys-content {
-    background: rgba(0,0,0,0.2);
-    color: #fff;
-    font-size: 80%;
-    border-radius: 0.75rem;
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    line-height: 1.5;
-    padding-top: 3px;
-  }
-}
-
-.unread-message-divider  {
-  position: relative;
-  height: 1px;
-  background-color: rgb(196, 39, 96);
-  margin: 9px 0px;
-  .unread-message-content{
-    position: absolute;
-    top: -9px;
-    width: 100%;
-    text-align: center;
-    .unread-message-text{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: calc(19px);
-      line-height: calc(19px);
-      background-color: white;
-      font-size: 11px;
-      font-weight: 700;
-      color: rgb(196, 39, 96);
-      padding: 0px 8px;
-    }
-  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li :id="`chatItem${message.id}`">
     <chat-item-unread-mark v-if="shouldShowUnreadDiv"></chat-item-unread-mark>
     <div class="d-flex align-items-center mb-2" v-if="shouldShowDate">
       <div class="fh-2 bg-light flex-grow-1"></div>

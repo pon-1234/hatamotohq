@@ -13,6 +13,8 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
+import VueLazyload from 'vue-lazyload';
+
 import {
   BootstrapVue,
   DropdownPlugin,
@@ -59,6 +61,12 @@ Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
 Vue.use(CKEditor);
+// Lazy loading image
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  loading: '/images/loading.gif',
+  attempt: 1
+});
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
