@@ -48,8 +48,8 @@ export const mutations = {
       tags_id_in: null,
       created_at_gteq: null,
       created_at_lteq: null,
-      visible_eq: null,
-      locked_eq: null
+      visible_eq: true,
+      locked_eq: false
     };
   }
 };

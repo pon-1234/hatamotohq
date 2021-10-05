@@ -19,7 +19,7 @@
         <!-- End: Search form -->
       </div>
       <div class="card-body">
-        <friend-search-condition-text></friend-search-condition-text>
+        <friend-search-status></friend-search-status>
         <table class="table table-centered mt-2">
           <thead class="thead-light">
             <tr>
