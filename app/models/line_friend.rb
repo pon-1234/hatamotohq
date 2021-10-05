@@ -78,8 +78,6 @@ class LineFriend < ApplicationRecord
   def toggle_visible
     self.visible = !self.visible
     self.save!
-    self.channel.visible = self.visible
-    self.channel.save!
   end
 
   # Available scenarios that can be sent by configs (on chat, postback action...)
