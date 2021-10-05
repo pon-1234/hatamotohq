@@ -49,7 +49,7 @@ class Media < ApplicationRecord
       rails_public_blob_url(file.representation(resize: '240x240').processed)
     end
   rescue StandardError => e
-    logger.error('Could not generate preview url')
+    logger.error("Could not generate preview url #{e.message}")
   end
 
   def set_blob_duration(duration)

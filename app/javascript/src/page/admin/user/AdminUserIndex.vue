@@ -87,7 +87,7 @@
     <modal-confirm title="このユーザーの状況を変更してもよろしいですか？" id='modalToggleStatusUser' type='confirm' @confirm="submitToggleStatus">
       <template v-slot:content>
         <div v-if="curUser">
-          <b>{{ curUser.status === 'active' ? '有効' : 'ブロック中' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curUser.status === 'active' ? 'ブロック中' : '有効' }}</b>
+          <b>{{ curUser.status === 'active' ? '有効' : 'ブロックした' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curUser.status === 'active' ? 'ブロックした' : '有効' }}</b>
         </div>
       </template>
     </modal-confirm>

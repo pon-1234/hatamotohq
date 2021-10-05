@@ -39,7 +39,7 @@
               <select class="form-control" v-model="status_eq">
                 <option value="">すべて</option>
                 <option value="active">有効</option>
-                <option value="blocked">ブロック中</option>
+                <option value="blocked">ブロックされた</option>
               </select>
             </div>
           </div>

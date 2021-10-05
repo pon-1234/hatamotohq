@@ -22,7 +22,7 @@ ja:
     line_friend:
       status:
         active: 有効
-        blocked: ブロック中
+        blocked: ブロックされた
     scenario:
       mode:
         elapsed_time: 経過時間
