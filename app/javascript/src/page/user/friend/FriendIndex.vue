@@ -1,25 +1,26 @@
 <template>
   <div>
-    <div class="card">
+    <div class="card mvh-50">
       <div class="card-header d-flex align-items-center">
         <a :href="`${rootUrl}/user/friends/new`" class="btn btn-success fw-120 mr-2">
           <i class="uil-plus"></i> 新規登録
         </a>
         <!-- START: Search form -->
-          <div class="ml-auto d-flex">
-            <div class="input-group app-search">
-              <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword">
-              <span class="mdi mdi-magnify search-icon"></span>
-              <div class="input-group-append">
-                <div class="btn btn-primary" @click="loadFriend">検索</div>
-              </div>
+        <div class="ml-auto d-flex text-nowrap">
+          <div class="input-group app-search">
+            <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword">
+            <span class="mdi mdi-magnify search-icon"></span>
+            <div class="input-group-append">
+              <div class="btn btn-primary" @click="loadFriend">検索</div>
             </div>
-            <div class="btn btn-primary text-nowrap ml-1" data-toggle="modal" data-target="#modalFriendSearch">詳細検索</div>
           </div>
+          <div class="btn btn-primary text-nowrap ml-1" data-backdrop="static" data-toggle="modal" data-target="#modalFriendSearch">詳細検索</div>
+        </div>
         <!-- End: Search form -->
       </div>
       <div class="card-body">
-        <table class="table table-centered mb-0">
+        <friend-search-condition-text></friend-search-condition-text>
+        <table class="table table-centered mt-2">
           <thead class="thead-light">
             <tr>
               <th>名前</th>
@@ -40,7 +41,7 @@
                 <friend-tag :tags="friend.tags"></friend-tag>
               </td>
               <td>
-                <friend-status :status="friend.status"></friend-status>
+                <friend-status :status="friend.status" :locked="friend.locked" :visible="friend.visible"></friend-status>
               </td>
               <td>
                 <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
@@ -48,17 +49,17 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="d-flex justify-content-center mt-4">
-        <b-pagination
-          v-if="totalRows > perPage"
-          v-model="queryParams.page"
-          :total-rows="totalRows"
-          :per-page="perPage"
-          @change="loadFriend"
-          aria-controls="my-table"
-        ></b-pagination>
-        <b v-if="!loading && totalRows === 0">データはありません。</b>
+        <div class="d-flex justify-content-center mt-4">
+          <b-pagination
+            v-if="totalRows > perPage"
+            v-model="curPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            @change="loadFriend"
+            aria-controls="my-table"
+          ></b-pagination>
+          <b v-if="!loading && totalRows === 0">データはありません。</b>
+        </div>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
@@ -87,6 +88,11 @@ export default {
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
     }),
+
+    curPage: {
+      get() { return this.queryParams.page; },
+      set(value) { this.setQueryParam({ page: value }); }
+    },
 
     keyword: {
       get() {
@@ -121,6 +127,11 @@ export default {
       return Util.formattedDatetime(time);
     },
 
+    resetSearch() {
+      this.keyword = '';
+      this.getFriends();
+    },
+
     loadFriend() {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
@@ -132,5 +143,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-</style>

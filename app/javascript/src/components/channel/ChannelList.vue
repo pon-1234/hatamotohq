@@ -90,9 +90,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .clear-icon {
-    position: absolute;
-    right: 5px;
-    top: calc(50% - 10px);
-  }
+
 </style>
