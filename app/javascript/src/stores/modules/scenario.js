@@ -4,7 +4,8 @@ export const state = {
   scenarios: [],
   totalRows: 0,
   perPage: 0,
-  curPage: 1
+  curPage: 1,
+  messages: []
 };
 
 export const mutations = {
@@ -20,6 +21,10 @@ export const mutations = {
     state.totalRows = meta.total_count;
     state.perPage = meta.limit_value;
     state.curPage = meta.current_page;
+  },
+
+  setMessages(state, messages) {
+    state.messages = messages;
   }
 };
 
@@ -120,6 +125,30 @@ export const actions = {
   async createMessagesFromTemplate(_, payload) {
     try {
       return await ScenarioApi.createMessagesFromTemplate(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getMessages(context, query) {
+    const params = {
+      page: context.state.curPage,
+      scenario_id: query
+    };
+    try {
+      const response = await ScenarioApi.listMessages(params);
+      context.commit('setMessages', response.data);
+      context.commit('setMeta', response.meta);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
+
+  async deleteMessages(_, query) {
+    try {
+      return await ScenarioApi.deleteMessages(query);
     } catch (error) {
       return null;
     }
