@@ -83,6 +83,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
+import moment from 'moment';
 
 export default {
   props: ['scenario'],
@@ -134,9 +135,8 @@ export default {
           return '開始直後';
         } else {
           const sb = message.date > 0 ? `${message.date}日と` : '';
-          const messageTime = message.time.split(':');
-          const formatTime = `${messageTime[0]}時間${messageTime[1]}分`;
-          return `${sb}${formatTime}後`;
+          const time = moment(message.time, 'HH:mm:ss').format('HH時間mm分');
+          return `${sb}${time}後`;
         }
       } else if (this.scenario.mode === 'time') {
         return message.is_initial ? `開始当日 ${message.time}` : `${message.date}日後 ${message.time}`;
