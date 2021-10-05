@@ -53,7 +53,6 @@
                   :key="index"
                   @deleteTag="curTagIndex = index"
                   @editTag="submitUpdateTag"
-                  @detailFriends="detailFriends"
                 />
               </tbody>
             </table>
@@ -76,9 +75,8 @@
           <div class="mt-2">タグ名：<b>{{ curTag.name }}</b></div>
         </template>
       </modal-confirm>
-      <modal-list-friends-tag :friends="friends"/>
+      <modal-list-friends-tag/>
     </div>
-
     <loading-indicator :loading="loading"></loading-indicator>
   </div>
 </template>
@@ -242,10 +240,6 @@ export default {
 
     getCreatedAt(item) {
       return moment().format('YYYY.MM.DD');
-    },
-
-    detailFriends(value) {
-      this.friends = value;
     },
 
     showNewTagInput(e) {

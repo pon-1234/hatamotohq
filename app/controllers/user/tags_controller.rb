@@ -34,7 +34,11 @@ class User::TagsController < User::ApplicationController
   # GET /user/tags/:id/friends
   # Get all friends by tag
   def friends
-    @friends = @tag.friends
+    @friends = @tag.friends.page(params[:page])
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   private

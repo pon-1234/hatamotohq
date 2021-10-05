@@ -83,7 +83,9 @@ Rails.application.routes.draw do
       end
       resources :surveys
       resources :folders
-      resources :tags
+      resources :tags do
+        get :friends, on: :member
+      end
       get '/emojis/:pack_id', to: 'emojis#show'
       get '/action_objects', to: 'action_objects#index'
       resources :medias do

@@ -35,6 +35,6 @@ class Ability
     can [:read, :update, :destroy], Folder, line_account: user.line_account
     can [:create], Folder
     can [:read, :update, :destroy], Tag, folder: { line_account: user.line_account }
-    can [:create], Tag
+    can [:create, :friends], Tag
   end
 end
