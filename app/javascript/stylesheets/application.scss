@@ -233,6 +233,14 @@
   border-top: 1px dashed rgb(158, 151, 151);
 }
 
+.app-search {
+  .clear-icon {
+    position: absolute;
+    right: 5px;
+    top: calc(50% - 10px);
+  }
+}
+
 // Btn toggle
 .btn-toggle {
   .switch {

@@ -7,8 +7,13 @@ export const state = {
   perPage: 0,
   queryParams: {
     page: 1,
-    status_eq: '',
-    line_name_or_display_name_cont: null
+    status_eq: 'active',
+    line_name_or_display_name_cont: null,
+    tags_id_in: null,
+    created_at_gteq: null,
+    created_at_lteq: null,
+    visible_eq: true,
+    locked_eq: false
   }
 };
 
@@ -32,7 +37,20 @@ export const mutations = {
   },
 
   setQueryParam(state, param) {
-    Object.assign(state.queryParams, { param });
+    Object.assign(state.queryParams, param);
+  },
+
+  resetQueryParams(state) {
+    state.queryParams = {
+      page: 1,
+      status_eq: 'active',
+      line_name_or_display_name_cont: null,
+      tags_id_in: null,
+      created_at_gteq: null,
+      created_at_lteq: null,
+      visible_eq: true,
+      locked_eq: false
+    };
   }
 };
 

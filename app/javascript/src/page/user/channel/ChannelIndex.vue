@@ -35,7 +35,6 @@ export default {
   async beforeMount() {
     this.connectToWebsocket();
     await this.getChannels();
-    await this.getTags();
     this.activateChannel();
   },
 
@@ -67,7 +66,6 @@ export default {
       'pushMessage',
       'setActiveChannel'
     ]),
-    ...mapActions('tag', ['getTags']),
 
     connectToWebsocket() {
       const _this = this;

@@ -28,7 +28,7 @@
       </li>
 
       <!-- 友達一覧 -->
-      <li class="side-nav-item">
+      <li class="side-nav-item <%= controller?("user/friends") ? 'mm-active' : '' %>">
         <%= link_to user_friends_path, class: "side-nav-link #{controller?("user/friends") ? 'active' : '' }" do %>
           <i class="uil-users-alt"></i>
           <span> 友達一覧 </span>

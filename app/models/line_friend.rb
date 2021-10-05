@@ -45,12 +45,6 @@ class LineFriend < ApplicationRecord
 
   after_create_commit :exec_after_create_commit
 
-  def self.show_hidden(show)
-    unless show
-      where(locked: false, visible: true).active
-    end
-  end
-
   def self.find_all_by_tags(line_account_id, tag_ids)
     LineAccount.find(line_account_id).line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids })
   end

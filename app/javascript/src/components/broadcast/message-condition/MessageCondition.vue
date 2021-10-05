@@ -8,8 +8,8 @@
         <daterange-picker
           class="d-block"
           :start_date.sync="condition.add_friend_date.start_date"
-          :end_date.sync="condition.add_friend_date.end_date"
-        />
+          :end_date.sync="condition.add_friend_date.end_date">
+        </daterange-picker>
       </div>
     </div>
   </div>

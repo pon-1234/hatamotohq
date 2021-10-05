@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="d-flex">
     <input :name="input_start_name" v-model="dateRange.startDate" type="hidden">
     <input :name="input_end_name" v-model="dateRange.endDate" type="hidden">
     <date-range-picker
-      class="w-100"
+      class="flex-grow-1"
       v-model="dateRange"
       :opens="opens || 'right'"
       :ranges="false"
@@ -13,6 +13,7 @@
       @update="onChangedDateRange()"
     >
     </date-range-picker>
+    <div class="btn btn-light ml-1" @click="clearInput()">クリア</div>
   </div>
 </template>
 
@@ -48,6 +49,14 @@ export default {
       if (this.dateRange.startDate && this.dateRange.endDate) {
         this.$emit('submited');
       }
+    },
+
+    clearInput() {
+      this.dateRange = {
+        startDate: null,
+        endDate: null
+      };
+      this.onChangedDateRange();
     }
   }
 };
