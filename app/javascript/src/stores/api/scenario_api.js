@@ -106,7 +106,7 @@ export default {
       contentType: 'application/json'
     });
   },
-  deleteMessages: (query) => {
+  deleteMessage: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages/${query.id}`,
       method: 'DELETE',

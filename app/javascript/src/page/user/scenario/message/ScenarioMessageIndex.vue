@@ -28,7 +28,7 @@
                       <span v-else>未設定</span>
                     </td>
                     <td>
-                      {{ schedule_time_for(message) }}
+                      {{ scheduleTimeFor(message) }}
                     </td>
                     <td>
                       <span>{{ message.name ? message.name : '未設定' }}</span>
@@ -64,7 +64,7 @@
                 <b v-if="!loading && totalRows === 0">シナリオはありません。</b>
               </div>
             </div>
-            <!-- <loading-indicator :loading="loading"></loading-indicator> -->
+            <loading-indicator :loading="loading"></loading-indicator>
           </div>
         </div>
       </div>
@@ -90,7 +90,6 @@ export default {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
-
       curMessageIndex: 0
     };
   },
@@ -125,10 +124,10 @@ export default {
     ]),
     ...mapActions('scenario', [
       'getMessages',
-      'deleteMessages'
+      'deleteMessage'
     ]),
 
-    schedule_time_for(message) {
+    scheduleTimeFor(message) {
       if (message.status === 'disabled') return '';
       if (this.scenario.mode === 'elapsed_time') {
         if (message.is_initial) {
@@ -154,7 +153,7 @@ export default {
       this.$nextTick(async() => {
         this.loading = true;
         this.setCurPage(this.currentPage);
-        await this.getMessages();
+        await this.getMessages(this.scenario.id);
         this.forceRerender();
         this.loading = false;
       });
@@ -165,7 +164,7 @@ export default {
         scenario_id: this.scenario.id,
         id: this.curMessage.id
       };
-      const response = await this.deleteMessages(params);
+      const response = await this.deleteMessage(params);
       if (response) Util.showSuccessThenRedirect('シナリオメッセージの削除は成功しました。', `${this.rootUrl}/user/scenarios/${this.scenario.id}/messages`);
       else window.toastr.error('シナリオメッセージの削除は失敗しました。');
       this.forceRerender();

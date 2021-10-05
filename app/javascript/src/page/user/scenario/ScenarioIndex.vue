@@ -90,6 +90,12 @@ export default {
     };
   },
   async beforeMount() {
+    const meta = {
+      total_count: 0,
+      limit_value: 0,
+      current_page: 1
+    };
+    await this.setMeta(meta);
     await this.getScenarios();
     this.loading = false;
   },
@@ -106,6 +112,7 @@ export default {
   },
   methods: {
     ...mapMutations('scenario', [
+      'setMeta',
       'setCurPage'
     ]),
     ...mapActions('scenario', [

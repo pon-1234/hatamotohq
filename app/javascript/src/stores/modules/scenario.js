@@ -146,9 +146,9 @@ export const actions = {
     }
   },
 
-  async deleteMessages(_, query) {
+  async deleteMessage(_, query) {
     try {
-      return await ScenarioApi.deleteMessages(query);
+      return await ScenarioApi.deleteMessage(query);
     } catch (error) {
       return null;
     }
