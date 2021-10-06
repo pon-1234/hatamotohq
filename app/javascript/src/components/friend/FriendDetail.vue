@@ -46,7 +46,7 @@
         <div class="card-body">
           <p class="mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
-            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'required|max:255'" data-vv-as="表示名">
+            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'max:255'" data-vv-as="表示名">
             <error-message :message="errors.first('display_name')"></error-message>
           </p>
           <hr>
