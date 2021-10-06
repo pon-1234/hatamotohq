@@ -11,8 +11,8 @@
         @keydown.enter.shift.exact="sendTextMessage"
         placeholder="Enterで改行、Shift+Enterで送信"
         data-vv-as="メッセージ"
-        maxlength="10001"
-        v-validate="'max:10000'">
+        maxlength="5001"
+        v-validate="'max:5000'">
       </textarea>
       <error-message :message="errors.first('message')" class="ml-2" v-if="errors.first('message')"></error-message>
       <div class="p-2 bg-light d-flex justify-content-between align-items-center">
