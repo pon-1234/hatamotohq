@@ -17,7 +17,7 @@ ja:
       status:
         inactive: 非アクティブ
         active: 有効
-        blocked: 無効
+        blocked: ブロックした
         deleting: 削除中
     line_friend:
       status:
