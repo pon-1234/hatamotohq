@@ -28,8 +28,8 @@ export default {
         { text: 'ボタンメッセージ', value: 8 },
         { text: '確認メッセージ', value: 9 },
         { text: 'カルーセルメッセージ', value: 10 },
-        { text: '画像カルーセルメッセージ', value: 11 },
-        { text: 'Flexメッセージ', value: 12 }
+        { text: '画像カルーセルメッセージ', value: 11 }
+        // { text: 'Flexメッセージ', value: 12 }
       ]
     };
   },

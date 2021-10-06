@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_04_092330) do
+ActiveRecord::Schema.define(version: 2021_10_06_050654) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 2021_10_04_092330) do
     t.json 'content'
     t.string 'timestamp'
     t.string 'reply_token'
+    t.string 'status', default: 'sent'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['channel_id'], name: 'index_messages_on_channel_id'

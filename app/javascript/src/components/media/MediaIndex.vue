@@ -64,42 +64,39 @@
           >
             <div class="card-body p-0 d-flex align-items-center justify-content-center">
               <div class="text-center overflow-hidden">
-                <div class="media-preview">
+                <div class="media-preview" role="button">
                   <template v-if="isImage(media)">
                     <expandable-image
                       v-if="mode === 'manage'"
-                      class="image"
+                      class="image fw-200 fh-150 bg-position-center"
                       :src="media.url"
                     />
-                    <div v-else v-lazy:background-image="media.preview_url" class="fw-200 fh-150" align="center" role="button"></div>
+                    <div v-else v-lazy:background-image="media.preview_url" class="fw-200 fh-150 bg-position-center"></div>
                   </template>
-                  <div
-                    role="button"
-                    class="video fw-200 fh-150"
-                    v-if="isVideo(media)"
-                  >
-                    <div v-lazy:background-image="media.preview_url" border="0" align="center"></div>
-                  </div>
 
-                  <div
-                    role="button"
-                    class="file fw-200 fh-150"
-                    v-else-if="media.type === 'pdf'"
-                  >
-                    <img src="/img/pdf_temp.png" border="0" align="center"/>
-                  </div>
+                  <template v-if="isVideo(media)">
+                    <video :width="200" :height="150" controls>
+                      <source :src="media.url">
+                    </video>
+                  </template>
 
-                  <div
-                    role="button"
-                    class="file fh-200 fw-150"
-                    v-else-if="isAudio(media)"
-                  >
-                    <i class="fas fa-file-audio preview-icon"></i>
-                  </div>
+                  <template v-else-if="isPdf(media)">
+                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                      <img src="/images/messages/pdf.png" width="100"/>
+                    </div>
+                  </template>
+
+                  <template v-else-if="isAudio(media)">
+                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                      <audio controls class="audio-player mx-2">
+                        <source :src="media.url">
+                      </audio>
+                    </div>
+                  </template>
                 </div>
               </div>
             </div>
-            <div class="card-footer" v-if="mode === 'manage'">
+            <div class="card-footer" v-if="canManage">
               <div class="d-flex align-items-center mt-1">
                 <input
                   class="select-media-cb mr-1"
@@ -122,7 +119,7 @@
         </div>
       </div>
 
-      <div class="d-flex align-items-center mt-auto" v-if="medias && medias.length > 0">
+      <div class="d-flex align-items-center mt-2" v-if="medias && medias.length > 0">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -131,7 +128,7 @@
           aria-controls="my-table"
         ></b-pagination>
 
-        <div class="d-flex align-items-center ml-auto" v-if="mode === 'manage'">
+        <div class="d-flex align-items-center ml-auto" v-if="canManage">
           <label for="selectAllMemberCb" class="d-flex align-items-center m-0 mr-2">
             <input
               id="selectAllMemberCb"
@@ -163,7 +160,7 @@
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
 
-    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="mode === 'manage'">
+    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="canManage">
       <template v-slot:content>
         選択したメディア数：{{ selectedMedias.length }}
       </template>
@@ -210,7 +207,11 @@ export default {
       medias: (state) => state.medias,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    })
+    }),
+
+    canManage() {
+      return this.mode === 'manage';
+    }
   },
 
   methods: {
@@ -279,6 +280,10 @@ export default {
 
     isAudio(media) {
       return media.type === 'audio';
+    },
+
+    isPdf(media) {
+      return media.type === 'pdf';
     }
   }
 };
@@ -289,12 +294,16 @@ export default {
     min-height: 90vh !important;
   }
 
+  .media-preview {
+    background-position-y: center;
+  }
+
   .media-preview:hover {
     opacity: 0.5;
   }
 
   .preview-icon {
-    color: #408254;
+    color: #aab4ad;
     font-size: 8rem;
   }
 
@@ -317,5 +326,9 @@ export default {
 
   .select-media-cb {
     zoom: 1.4;
+  }
+
+  .bg-position-center {
+    background-position: center;
   }
 </style>

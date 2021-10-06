@@ -15,7 +15,10 @@
           <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="友達" />
           <i>{{ readableTime }}</i>
         </div>
-        <div class="conversation-text">
+        <div class="conversation-text d-flex flex-end">
+          <div v-if="!isFriendMessage" class="d-flex ml-auto">
+            <span class="mt-auto mr-1"><chat-item-send-status :status="message.status"></chat-item-send-status></span>
+          </div>
           <div class="ctext-wrap">
             <i>{{ sender.name || 'システム' }}</i>
             <p>
@@ -50,6 +53,9 @@ export default {
   computed: {
     isSystemMessage() {
       return this.message.from === 'system';
+    },
+    isFriendMessage() {
+      return this.message.from === 'friend';
     },
     sender() {
       return this.message.sender || {};

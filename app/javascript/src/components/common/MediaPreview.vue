@@ -1,8 +1,8 @@
 <template>
   <div class="media-content d-flex align-items-center justify-content-center">
-    <div v-if="isImage" class="fw-200 fh-200 image" v-lazy:background-image="src"></div>
+    <div v-if="isImage" class="fw-200 fh-150 image" v-lazy:background-image="src"></div>
     <div v-else-if="isVideo">
-      <video :width="300" :height="200" controls>
+      <video :width="200" :height="150" controls>
         <source :src="src">
       </video>
     </div>

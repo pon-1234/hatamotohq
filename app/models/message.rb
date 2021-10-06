@@ -15,6 +15,7 @@
 #  content         :json
 #  timestamp       :string(255)
 #  reply_token     :string(255)
+#  status          :string(255)      default("sent")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -30,6 +31,7 @@
 class Message < ApplicationRecord
   default_scope { order(created_at: :desc) }
   include MessageType
+  include MessageStatus
 
   enum from: { user: 'user', friend: 'friend', bot: 'bot', system: 'system' }, _prefix: true
 
@@ -54,7 +56,8 @@ class Message < ApplicationRecord
       created_at: created_at.to_i,
       text: text,
       content: content,
-      timestamp: timestamp
+      timestamp: timestamp,
+      status: status
     }
     merge_sender_attributes(data)
   end
