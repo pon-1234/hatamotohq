@@ -6,10 +6,15 @@
         rows="4"
         class="form-control border-0 resize-none"
         v-model="message"
+        name="message"
         @keydown.enter.shift.exact.prevent
         @keydown.enter.shift.exact="sendTextMessage"
-        placeholder="Enterで改行、Shift+Enterで送信">
+        placeholder="Enterで改行、Shift+Enterで送信"
+        data-vv-as="メッセージ"
+        maxlength="10001"
+        v-validate="'max:10000'">
       </textarea>
+      <error-message :message="errors.first('message')" class="ml-2" v-if="errors.first('message')"></error-message>
       <div class="p-2 bg-light d-flex justify-content-between align-items-center">
         <div>
           <a data-toggle="modal" data-target="#modalSelectSticker" @click="showStickerModal()" class="btn btn-sm px-2 font-16 btn-light"><i class="uil uil-smile"></i></a>
@@ -23,7 +28,7 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-sm btn-success" @click="sendTextMessage" :disabled="!isEnabled"><i class="uil uil-message mr-1"></i>送信</button>
+        <button class="btn btn-sm btn-success" @click="sendTextMessage" :disabled="!isEnabled || !message.trim()"><i class="uil uil-message mr-1"></i>送信</button>
       </div>
     </div>
     <template v-if="activeChannel">
@@ -37,7 +42,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import ErrorMessage from '../common/ErrorMessage.vue';
 export default {
+  components: { ErrorMessage },
   data() {
     return {
       message: ''
