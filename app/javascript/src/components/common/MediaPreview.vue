@@ -1,6 +1,6 @@
 <template>
-  <div class="media-content d-flex align-items-center">
-    <div v-if="isImage" class="fw-200 fh-200" v-lazy:background-image="src"></div>
+  <div class="media-content d-flex align-items-center justify-content-center">
+    <div v-if="isImage" class="fw-200 fh-200 image" v-lazy:background-image="src"></div>
     <div v-else-if="isVideo">
       <video :width="300" :height="200" controls>
         <source :src="src">
@@ -58,6 +58,9 @@ export default {
     },
     isVideo() {
       return this.type === 'video';
+    },
+    isAudio() {
+      return this.type === 'audio';
     }
   },
 
@@ -102,6 +105,10 @@ export default {
 
   .media-content {
     display: inline-flex;
+
+    .image {
+      background-size: cover;
+    }
   }
 
   .thumbnail-item {
@@ -124,18 +131,18 @@ export default {
     background-size: cover;
   }
 
-  .audio-player {
-    width: 160px;
-    height: -webkit-fill-available;
-    background-color: #f1f3f4;
-  }
-
   .chat-item-voice {
     width: 160px;
     height: 54px;
     display: flex;
     border: 1px solid #dee2e6 !important;
     border-radius: 4px;
+
+    .audio-player {
+      width: 160px;
+      height: -webkit-fill-available;
+      background-color: #f1f3f4;
+    }
   }
 
   .chat-item-voice-control {

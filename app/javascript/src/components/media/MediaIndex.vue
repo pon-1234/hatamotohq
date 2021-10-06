@@ -55,70 +55,68 @@
     </div>
     <div class="card-body d-flex flex-column" :key="contentKey">
       <div :class="mode === 'read' ? 'flex-grow-1' : ''">
-        <div class="row">
+        <div class="d-flex flex-wrap justify-content-center">
           <div
             v-for="(media, index) in medias"
             :key="index"
             @click="selectMedia(media)"
-            class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex"
+            class="card fw-200 m-2"
           >
-            <div class="card w-100">
-              <div class="card-body p-0 d-flex align-items-center justify-content-center">
-                <div class="text-center overflow-hidden">
-                  <div class="media-preview">
-                    <template v-if="media.type === 'image' || media.type === 'richmenu'">
-                      <expandable-image
-                        v-if="mode === 'manage'"
-                        class="image"
-                        :src="media.url"
-                      />
-                      <div v-else v-lazy:background-image="media.preview_url" class="fw-240 fh-200" align="center" role="button"></div>
-                    </template>
-                    <div
-                      role="button"
-                      class="video"
-                      v-if="media.type === 'video'"
-                    >
-                      <div v-lazy:background-image="media.preview_url" border="0" align="center"></div>
-                    </div>
+            <div class="card-body p-0 d-flex align-items-center justify-content-center">
+              <div class="text-center overflow-hidden">
+                <div class="media-preview">
+                  <template v-if="isImage(media)">
+                    <expandable-image
+                      v-if="mode === 'manage'"
+                      class="image"
+                      :src="media.url"
+                    />
+                    <div v-else v-lazy:background-image="media.preview_url" class="fw-200 fh-150" align="center" role="button"></div>
+                  </template>
+                  <div
+                    role="button"
+                    class="video fw-200 fh-150"
+                    v-if="isVideo(media)"
+                  >
+                    <div v-lazy:background-image="media.preview_url" border="0" align="center"></div>
+                  </div>
 
-                    <div
-                      role="button"
-                      class="file"
-                      v-else-if="media.type === 'pdf'"
-                    >
-                      <img src="/img/pdf_temp.png" border="0" align="center"/>
-                    </div>
+                  <div
+                    role="button"
+                    class="file fw-200 fh-150"
+                    v-else-if="media.type === 'pdf'"
+                  >
+                    <img src="/img/pdf_temp.png" border="0" align="center"/>
+                  </div>
 
-                    <div
-                      role="button"
-                      class="file"
-                      v-else-if="media.type === 'audio'"
-                    >
-                      <i class="fas fa-file-audio preview-icon"></i>
-                    </div>
+                  <div
+                    role="button"
+                    class="file fh-200 fw-150"
+                    v-else-if="isAudio(media)"
+                  >
+                    <i class="fas fa-file-audio preview-icon"></i>
                   </div>
                 </div>
               </div>
-              <div class="card-footer" v-if="mode === 'manage'">
-                <div class="d-flex align-items-center mt-1">
-                  <input
-                    class="select-media-cb mr-1"
-                    type="checkbox"
-                    :value="media"
-                    v-model="selectedMedias"
-                  />
-                  <b>{{ media.type }}</b>
-                  <a
-                    :href="media.url"
-                    class="ml-auto text-sm text-info"
-                    download
-                    ><i class="fas fa-download"></i></a>
-                </div>
-                <small class="w-100">
-                  登録：<b>{{ formattedDate(media.created_at) }}</b>
-                </small>
+            </div>
+            <div class="card-footer" v-if="mode === 'manage'">
+              <div class="d-flex align-items-center mt-1">
+                <input
+                  class="select-media-cb mr-1"
+                  type="checkbox"
+                  :value="media"
+                  v-model="selectedMedias"
+                />
+                <b>{{ media.type }}</b>
+                <a
+                  :href="media.url"
+                  class="ml-auto text-sm text-info"
+                  download
+                  ><i class="fas fa-download"></i></a>
               </div>
+              <small class="w-100">
+                登録：<b>{{ formattedDate(media.created_at) }}</b>
+              </small>
             </div>
           </div>
         </div>
@@ -269,6 +267,18 @@ export default {
 
     formattedDate(time) {
       return moment(time).format('YYYY年MM月DD日');
+    },
+
+    isImage(media) {
+      return media.type === 'image' || media.type === 'richmenu';
+    },
+
+    isVideo(media) {
+      return media.type === 'video';
+    },
+
+    isAudio(media) {
+      return media.type === 'audio';
     }
   }
 };
