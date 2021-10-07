@@ -2,7 +2,7 @@
   <div class="area-type mb20">
 
     <!-- text message -->
-    <text-message-editor v-if="data.type === 'text'" :value="data.text" @input="onTextChanged" :index="index" />
+    <message-editor-text v-if="data.type === 'text'" :value="data.text" @input="onTextChanged" :index="index" />
 
     <!-- sticker -->
     <sticker-message-editor
