@@ -28,12 +28,12 @@
     </template>
 
     <!-- location -->
-    <location-editor
+    <message-editor-location
       v-if="data.type === MessageType.Location"
       :data="data"
       @input="onLocationChanged"
       :indexParent="index"
-    />
+    ></message-editor-location>
 
     <!-- <div class="form-group" v-if="[MessageType.Template, MessageType.Imagemap, MessageType.Flex].includes(data.type)" hidden>
       <label>代替テキスト</label>

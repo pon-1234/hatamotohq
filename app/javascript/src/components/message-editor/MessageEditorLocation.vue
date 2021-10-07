@@ -7,28 +7,30 @@
         placeholder="タイトルを入力してください"
         name="location-title"
         class="form-control"
-        max="100"
+        maxlength="101"
         v-model="defaults.title"
-        v-validate="'required'"
+        v-validate="'required|max:100'"
         data-vv-as="タイトル"
       />
       <error-message :message="errors.first('location-title')"></error-message>
     </div>
     <div class="form-group">
       <label>住所<required-mark /></label>
-      <div class="d-flex" style="align-items: flex-start;">
+      <div class="d-flex" style="align-items: flex-start">
         <div class="flex column flex-grow-1">
           <textarea
             class="form-control"
             rows="2"
-            maxlength="90"
+            maxlength="101"
             placeholder="住所を入力してください"
             v-model="defaults.address"
-            v-validate="'required'"
+            v-validate="'required|max:100'"
             data-vv-as="住所"
             name="location-description"
           ></textarea>
-          <error-message :message="errors.first('location-description')"></error-message>
+          <error-message
+            :message="errors.first('location-description')"
+          ></error-message>
         </div>
         <div class="btn btn-primary ml-2" style="" @click="getMarker">
           ピンの住所を検出
@@ -42,13 +44,19 @@
       :center="center"
       :zoom="17"
       :options="options"
-      style="width:100%;  height: 400px;"
+      style="width: 100%; height: 400px"
       @center_changed="changeCenter"
     >
       <div slot="visible">
         <div
           class="box-search"
-          style="top: 10px; left:12px; width: 300px; position: absolute; z-index: 0"
+          style="
+            top: 10px;
+            left: 12px;
+            width: 300px;
+            position: absolute;
+            z-index: 0;
+          "
         >
           <gmap-autocomplete
             @place_changed="setPlace"
@@ -69,7 +77,7 @@
 </template>
 
 <script>
-import ErrorMessage from '../../common/ErrorMessage.vue';
+import ErrorMessage from '../common/ErrorMessage.vue';
 export default {
   components: { ErrorMessage },
   inject: ['parentValidator'],
@@ -262,18 +270,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep {
-  .btn-add {
-    display: block;
-    color: white;
-    background: linear-gradient(90deg, #04dc04 0%, #00b900 50%, #00af00 100%);
-    border-radius: 5px;
-    padding: 9px 10px;
-    line-height: 1;
-    white-space: nowrap;
-    margin-left: 10px;
-    cursor: pointer;
-    height: 30px;
+  ::v-deep {
+    .btn-add {
+      display: block;
+      color: white;
+      background: linear-gradient(90deg, #04dc04 0%, #00b900 50%, #00af00 100%);
+      border-radius: 5px;
+      padding: 9px 10px;
+      line-height: 1;
+      white-space: nowrap;
+      margin-left: 10px;
+      cursor: pointer;
+      height: 30px;
+    }
   }
-}
 </style>
