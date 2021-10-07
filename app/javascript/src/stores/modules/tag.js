@@ -2,8 +2,7 @@ import TagAPI from '../api/tag_api';
 import FolderAPI from '../api/folder_api';
 
 export const state = {
-  folders: [],
-  friends: []
+  folders: []
 };
 
 // TODO need refactor
@@ -12,10 +11,6 @@ export const mutations = {
     const old = state.folders.find(_ => _.id === folder.id);
     old.tags_count = folder.tags_count;
     old.tags = folder.tags;
-  },
-
-  setFriends(state, friends) {
-    state.friends = friends;
   },
 
   setFolders(state, folders) {
@@ -53,8 +48,7 @@ export const mutations = {
   }
 };
 
-export const getters = {
-};
+export const getters = {};
 
 export const actions = {
   async getTags(context) {
@@ -62,16 +56,6 @@ export const actions = {
       const folders = await TagAPI.getTags();
       context.commit('setFolders', folders);
       return folders;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  async getFriendsByTag(context, query) {
-    let data = null;
-    try {
-      data = await TagAPI.friendsByTag(query);
-      context.commit('setFriends', data);
     } catch (error) {
       console.log(error);
     }

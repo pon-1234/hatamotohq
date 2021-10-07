@@ -5,7 +5,9 @@ class User::TagsController < User::ApplicationController
   before_action :find_tag, only: [:update, :destroy, :friends]
 
   def index
-    @folders = Folder.includes([:tags]).accessible_by(current_ability).type_tag
+    if request.format.json?
+      @folders = Folder.includes([:tags]).accessible_by(current_ability).type_tag
+    end
     respond_to do |format|
       format.html
       format.json
@@ -29,12 +31,6 @@ class User::TagsController < User::ApplicationController
   def destroy
     @tag.destroy
     render_success
-  end
-
-  # GET /user/tags/:id/friends
-  # Get all friends by tag
-  def friends
-    @friends = @tag.friends
   end
 
   private
