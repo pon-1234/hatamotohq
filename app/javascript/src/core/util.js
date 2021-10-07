@@ -380,7 +380,7 @@ class Util {
     }
 
     if (types.includes(MessageType.Audio)) {
-      mineTypes.push('audio/*');
+      mineTypes.push('audio/m4a,audio/x-m4a');
     }
 
     if (types.includes('pdf')) {

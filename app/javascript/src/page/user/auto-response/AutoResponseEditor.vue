@@ -60,6 +60,7 @@
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
             separator=" ,;"
+            add-on-change
             :add-button-text="'追加'"
           >
           </b-form-tags>

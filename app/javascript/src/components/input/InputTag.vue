@@ -1,8 +1,23 @@
 <template>
   <div @click="focusForm" v-click-outside="blurInputTag">
-    <b-form-tags v-model="value" :disabled="disabled" no-outer-focus class="mb-2 position-relative" :add-button-text="'追加'" remove-on-delete>
-      <template v-slot="{ tags, disabled, addTag }" >
-        <i :class="isFocus?'fas fa-angle-up float-r':'fas mdi mdi-chevron-down float-r'" class="down icon-action" @click.stop="showDropDown"></i>
+    <b-form-tags
+      v-model="value"
+      :disabled="disabled"
+      no-outer-focus
+      class="mb-2 position-relative"
+      :add-button-text="'追加'"
+      remove-on-delete
+    >
+      <template v-slot="{ tags, disabled, addTag }">
+        <i
+          :class="
+            isFocus
+              ? 'fas fa-angle-up float-r'
+              : 'fas mdi mdi-chevron-down float-r'
+          "
+          class="down icon-action"
+          @click.stop="showDropDown"
+        ></i>
         <ul class="list-inline d-inline-block mb-2">
           <li v-for="tag in tags" :key="tag" class="list-inline-item">
             <b-form-tag
@@ -10,19 +25,24 @@
               :title="tag"
               :disabled="disabled"
               variant="info"
-            >{{ tag }}</b-form-tag>
+              >{{ tag }}</b-form-tag
+            >
           </li>
         </ul>
         <b-form-input
           :disabled="disabled"
           v-model="search"
           ref="inputTag"
-          class="input-text-tag "
+          class="input-text-tag"
           type="search"
           autocomplete="off"
           placeholder="タグ名を入力"
-          ></b-form-input>
-        <div class="w-100 dropdown-tag row" v-if="!disabled && isFocus" :class="{top: isShowTop()}">
+        ></b-form-input>
+        <div
+          class="w-100 dropdown-tag row"
+          v-if="!disabled && isFocus"
+          :class="{ top: isShowTop() }"
+        >
           <div :class="getClassLeftTag()">
             <div class="tag-content">
               <table class="table table-tags-header">
@@ -33,9 +53,26 @@
                 </thead>
               </table>
               <div class="tag-scroll folder-list">
-                <div v-for="(item, index) in folders" :key="index" :class="selectedFolderIndex== index? 'folder-item active':'folder-item'" @click="changeSelected(index)">
-                  <i :class="selectedFolderIndex== index? 'fas fa-folder-open': 'fas fa-folder'"></i>
-                  <span class="tag-label">{{item.name}}</span> ({{item.tags.length}})
+                <div
+                  v-for="(item, index) in folders"
+                  :key="index"
+                  :class="
+                    selectedFolderIndex === index
+                      ? 'folder-item active'
+                      : 'folder-item'
+                  "
+                  @click="changeSelected(index)"
+                >
+                  <i
+                    :class="
+                      selectedFolderIndex === index
+                        ? 'fas fa-folder-open'
+                        : 'fas fa-folder'
+                    "
+                  ></i>
+                  <span class="tag-label">{{ item.name }}</span> ({{
+                    item.tags.length
+                  }})
                 </div>
               </div>
             </div>
@@ -43,25 +80,48 @@
           <div :class="getClassRightTag()">
             <div class="tag-content">
               <!--<table class="table table-tags-header">-->
-                <!--<thead>-->
-                <!--<tr>-->
-                  <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-                  <!--<th v-if="folders[selectedFolderIndex]">{{folders[selectedFolderIndex].name}}</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
+              <!--<thead>-->
+              <!--<tr>-->
+              <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
+              <!--<th v-if="folders[selectedFolderIndex]">{{folders[selectedFolderIndex].name}}</th>-->
+              <!--</tr>-->
+              <!--</thead>-->
               <!--</table>-->
               <div class="x-tag-header">
                 <div class="x-btn-back">
-                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-                <div class="x-title"
-                      v-if="curFolder">{{curFolder.name}}</div>
+                  <i
+                    style="margin: auto"
+                    class="fas fa-arrow-left item-sm"
+                    @click="backToFolder"
+                  ></i>
+                </div>
+                <div class="x-title" v-if="curFolder">{{ curFolder.name }}</div>
               </div>
 
-              <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
-                <div v-for="(item, index) in availableOptions"
-                  :key="index" :class="selectedTags.find(el=>el.id === item.id)? 'folder-item active':'folder-item'"
-                  @click="onTagSelected({item, addTag})">
-                  <span class="tag-label">{{item.name}}</span> <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span> <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span> <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
+              <div
+                class="tag-scroll tag-list"
+                v-if="availableOptions && availableOptions.length"
+              >
+                <div
+                  v-for="(item, index) in availableOptions"
+                  :key="index"
+                  :class="
+                    selectedTags.find((el) => el.id === item.id)
+                      ? 'folder-item active'
+                      : 'folder-item'
+                  "
+                  @click="onTagSelected({ item, addTag })"
+                >
+                  <span class="tag-label">{{ item.name }}</span>
+                  <span class="tag-choose item-hidden"
+                    ><i class="fas fa-check"></i>選択</span
+                  >
+                  <span class="tag-checked item-hidden"
+                    ><i class="fas fa-check"></i>選択中</span
+                  >
+                  <span class="tag-remove item-hidden"
+                    ><i class="fas fa-times"></i>解除</span
+                  >
                 </div>
               </div>
               <div v-else class="tag-scroll tag-empty-content text-center">
@@ -228,93 +288,92 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
-.tag-label {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.b-form-tag {
-  font-weight: bold;
-}
-
-.float-r {
-  float: right;
-}
-
-.dropdown-tag {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 300px;
-  max-height: 300px;
-  max-width: 450px;
-  z-index: 9999;
-  margin-top: 15px;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, .15);
-  border-radius: .25rem;
-  min-width: 500px;
-}
-.dropdown-tag.top{
-  top: -320px;
-}
-
-.down {
-  top: 18px;
-  position: absolute;
-  right: 10px;
-}
-
-.input-text-tag {
-  display: inline-block;
-  max-width: 200px;
-  padding-right: 0px!important;
-  padding-left: 0px!important;
-  border: none !important;;
-  margin-bottom: 0px;
-}
-
-.tag-content-left, .tag-content-right {
-  padding: 0px!important;
-}
-
-.table-tags-header {
-  margin-bottom: 0px!important;
-  max-width: none!important;
-}
-
-.item-sm {
-  display: none;
-}
-
-.tag-empty-content {
-  padding: 40px;
-}
-
-@media (max-width: 768px) {
-  .dropdown-tag{
-    min-width: initial;
+  .tag-label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
-}
+  .b-form-tag {
+    font-weight: bold;
+  }
 
-@media (max-width: 991px) {
-  .item-pc {
-    display: none!important;
+  .float-r {
+    float: right;
+  }
+
+  .dropdown-tag {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 300px;
+    max-height: 300px;
+    max-width: 450px;
+    z-index: 9999;
+    margin-top: 15px;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    min-width: 500px;
+  }
+  .dropdown-tag.top {
+    top: -320px;
+  }
+
+  .down {
+    top: 18px;
+    position: absolute;
+    right: 10px;
+  }
+
+  .input-text-tag {
+    display: inline-block;
+    max-width: 200px;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    border: none !important;
+    margin-bottom: 0px;
+  }
+
+  .tag-content-left,
+  .tag-content-right {
+    padding: 0px !important;
+  }
+
+  .table-tags-header {
+    margin-bottom: 0px !important;
+    max-width: none !important;
   }
 
   .item-sm {
-    display: inline-block!important;
+    display: none;
   }
 
-  .fa-arrow-left {
-    margin-right: 10px;
-    cursor: pointer;
+  .tag-empty-content {
+    padding: 40px;
   }
-}
+
+  @media (max-width: 768px) {
+    .dropdown-tag {
+      min-width: initial;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .item-pc {
+      display: none !important;
+    }
+
+    .item-sm {
+      display: inline-block !important;
+    }
+
+    .fa-arrow-left {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
 
   .badge {
     background-color: #f0ad4e !important;
@@ -411,7 +470,7 @@ export default {
     }
   }
 
-  .icon-action{
+  .icon-action {
     cursor: pointer;
   }
 </style>
