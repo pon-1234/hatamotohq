@@ -46,13 +46,13 @@
           <!-- ブロック、非表示した友達 -->
           <div class="mt-2 d-flex">
             <div class="flex-1 custom-control custom-checkbox mr-2">
-              <input type="checkbox" class="custom-control-input" id="hiddenFriendCheck" v-model="visible_eq" :true-value="null" :false-value="true">
-              <label class="custom-control-label" for="hiddenFriendCheck">非表示した人を表示</label>
-            </div>
-
-            <div class="flex-1 custom-control custom-checkbox ">
               <input type="checkbox" class="custom-control-input" id="lockedFriendCheck" v-model="locked_eq" :true-value="null" :false-value="false">
               <label class="custom-control-label" for="lockedFriendCheck">ブロックした人を表示</label>
+            </div>
+
+            <div class="flex-1 custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="hiddenFriendCheck" v-model="visible_eq" :true-value="null" :false-value="true">
+              <label class="custom-control-label" for="hiddenFriendCheck">非表示した人を表示</label>
             </div>
           </div>
         </div>
