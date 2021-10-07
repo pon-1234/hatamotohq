@@ -15,8 +15,7 @@ class User::MessagesController < User::ApplicationController
     mb = Messages::MessageBuilder.new(user, @channel, message_params)
     @message = mb.perform
     success = push_message_to_line
-    @message.update_columns(status: :sent) if success
-    @message.update_columns(status: :error) unless success
+    @message.update_columns(status: success ? :sent : :error)
   rescue StandardError => e
     render_could_not_create_error(e.message)
   end

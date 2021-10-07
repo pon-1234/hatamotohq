@@ -54,14 +54,14 @@
       </div>
     </div>
     <div class="card-body d-flex flex-column" :key="contentKey">
-      <div :class="mode === 'read' ? 'flex-grow-1' : ''">
-        <div class="d-flex flex-wrap justify-content-center">
-          <div
-            v-for="(media, index) in medias"
-            :key="index"
-            @click="selectMedia(media)"
-            class="card fw-200 m-2"
-          >
+      <div :class="mode === 'read' ? 'row flex-grow-1' : 'row'">
+        <div
+          v-for="(media, index) in medias"
+          :key="index"
+          @click="selectMedia(media)"
+          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6' : 'col-xl-4 col-md-6'"
+        >
+          <div class="card fw-200 mx-auto">
             <div class="card-body p-0 d-flex align-items-center justify-content-center">
               <div class="text-center overflow-hidden">
                 <div class="media-preview" role="button">
@@ -96,7 +96,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer" v-if="canManage">
+            <div class="card-footer" v-if="isManageMode">
               <div class="d-flex align-items-center mt-1">
                 <input
                   class="select-media-cb mr-1"
@@ -128,7 +128,7 @@
           aria-controls="my-table"
         ></b-pagination>
 
-        <div class="d-flex align-items-center ml-auto" v-if="canManage">
+        <div class="d-flex align-items-center ml-auto" v-if="isManageMode">
           <label for="selectAllMemberCb" class="d-flex align-items-center m-0 mr-2">
             <input
               id="selectAllMemberCb"
@@ -160,7 +160,7 @@
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
 
-    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="canManage">
+    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="isManageMode">
       <template v-slot:content>
         選択したメディア数：{{ selectedMedias.length }}
       </template>
@@ -209,7 +209,7 @@ export default {
       perPage: (state) => state.perPage
     }),
 
-    canManage() {
+    isManageMode() {
       return this.mode === 'manage';
     }
   },
@@ -330,5 +330,6 @@ export default {
 
   .bg-position-center {
     background-position: center;
+    background-size: cover;
   }
 </style>
