@@ -7,18 +7,18 @@
         class="form-control"
         :name="'confirm-label' + indexParent"
         placeholder="質問文を入力してください"
-        maxlength="160"
+        maxlength="241"
         autocomplete="off"
         type="text"
-        v-model="defaults.text"
-        v-validate="'required'"
+        v-model="messageData.text"
+        v-validate="'required|max:240'"
         data-vv-as="質問文"
       />
       <error-message :message="errors.first('confirm-label' + indexParent)"></error-message>
     </div>
 
     <ul class="w-100 nav nav-tabs nav-bordered mt-2">
-      <li class="nav-item" v-for="(item, index) in defaults.actions" :key="index">
+      <li class="nav-item" v-for="(item, index) in messageData.actions" :key="index">
         <a
           :href="`#messageAction${index}`"
           data-toggle="tab"
@@ -35,7 +35,7 @@
     <div class="w-100 tab-content">
       <div
         :class="editingActionIndex === index ? 'tab-pane show active' : 'tab-pane'"
-        v-for="(item, index) in defaults.actions"
+        v-for="(item, index) in messageData.actions"
         :key="index"
         :id="`#messageAction${index}`"
       >
@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       editingActionIndex: 0,
-      defaults: {
+      messageData: {
         type: this.TemplateMessageType.Confirm,
         text: '',
         actions: [this.ActionMessage.default, this.ActionMessage.default]
@@ -67,7 +67,7 @@ export default {
     };
   },
   watch: {
-    defaults: {
+    messageData: {
       handler(val) {
         this.$emit('input', val);
       },
@@ -77,16 +77,16 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     if (this.data) {
-      Object.assign(this.defaults, this.data);
+      Object.assign(this.messageData, this.data);
     }
   },
   methods: {
     changeSelectedAction(index, value) {
-      this.defaults.actions.splice(index, 1, value);
+      this.messageData.actions.splice(index, 1, value);
     },
 
     changeAction(index, data) {
-      this.defaults.actions.splice(index, 1, data);
+      this.messageData.actions.splice(index, 1, data);
     }
   }
 };
