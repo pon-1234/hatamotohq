@@ -284,7 +284,7 @@ export const PostbackTypes = {
   text: 'テキスト送信',
   template: 'テンプレート送信',
   scenario: 'ステップ送信',
-  flexMessage: 'Flexメッセージ送信',
+  // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
   'no-action': '何もしない'
   // tag: 'タグを操作'

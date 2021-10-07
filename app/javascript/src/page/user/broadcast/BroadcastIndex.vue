@@ -15,7 +15,13 @@
               <option value="draft">下書き</option>
             </select>
             <div class="input-group app-search">
-              <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." id="top-search" v-model="queryParams.title_cont">
+              <input
+                type="text"
+                class="form-control dropdown-toggle fw-250"
+                placeholder="検索..."
+                id="top-search"
+                v-model="queryParams.title_cont"
+              />
               <span class="mdi mdi-magnify search-icon"></span>
               <div class="input-group-append">
                 <div class="btn btn-primary" @click="loadPage()">検索</div>
@@ -38,31 +44,54 @@
               </tr>
             </thead>
             <tbody>
-                <tr v-for="(broadcast, index) in broadcasts" :key="index">
-                  <td>
-                    <template v-if="broadcast.deliver_at">
-                      {{ formattedDatetime(broadcast.deliver_at) }}
-                    </template>
-                    <template v-else>
-                      <div>未配信</div>
-                      <div><span class="text-sm">予約 {{ formattedDatetime(broadcast.schedule_at) }} </span></div>
-                    </template>
-                  </td>
-                  <td>{{ broadcast.title }}</td>
-                  <td><broadcast-status :status="broadcast.status"></broadcast-status></td>
-                  <td><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
-                  <td hidden></td>
-                  <td>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
-                      <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(broadcast)">一斉配信を編集する</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalcopyBroadcast" @click="curBroadcastIndex = index">一斉配信をコピー</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modaldeleteBroadcast" @click="curBroadcastIndex = index">一斉配信を削除</a>
-                      </div>
+              <tr v-for="(broadcast, index) in broadcasts" :key="index">
+                <td>
+                  <template v-if="broadcast.deliver_at">
+                    {{ formattedDatetime(broadcast.deliver_at) }}
+                  </template>
+                  <template v-else>
+                    <div>未配信</div>
+                    <div>
+                      <span class="text-sm">予約 {{ formattedDatetime(broadcast.schedule_at) }} </span>
                     </div>
-                  </td>
-                </tr>
+                  </template>
+                </td>
+                <td>{{ broadcast.title }}</td>
+                <td><broadcast-status :status="broadcast.status"></broadcast-status></td>
+                <td><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
+                <td hidden></td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      type="button"
+                      class="btn btn-light btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      操作 <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a role="button" class="dropdown-item" @click="openEdit(broadcast)">一斉配信を編集する</a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modalcopyBroadcast"
+                        @click="curBroadcastIndex = index"
+                        >一斉配信をコピー</a
+                      >
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modaldeleteBroadcast"
+                        @click="curBroadcastIndex = index"
+                        >一斉配信を削除</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-center mt-4 text-center">
@@ -83,20 +112,30 @@
     </div>
 
     <!-- START: Delete broadcast modal -->
-    <modal-confirm title="この一斉配信を削除してもよろしいですか？" id='modaldeleteBroadcast' type='delete' @confirm="submitdeleteBroadcast">
+    <modal-confirm
+      title="この一斉配信を削除してもよろしいですか？"
+      id="modaldeleteBroadcast"
+      type="delete"
+      @confirm="submitdeleteBroadcast"
+    >
       <template v-slot:content>
         <div v-if="curBroadcast">
-          一斉配信名：<b>{{curBroadcast.title}}</b>
+          一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Delete broadcast modal -->
 
     <!-- START: Copy broadcast modal -->
-    <modal-confirm title="この一斉配信をコピーしてもよろしいですか？" id='modalcopyBroadcast' type='confirm' @confirm="submitcopyBroadcast">
+    <modal-confirm
+      title="この一斉配信をコピーしてもよろしいですか？"
+      id="modalcopyBroadcast"
+      type="confirm"
+      @confirm="submitcopyBroadcast"
+    >
       <template v-slot:content>
         <div v-if="curBroadcast">
-          一斉配信名：<b>{{curBroadcast.title}}</b>
+          一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>
     </modal-confirm>

@@ -59,7 +59,7 @@
           v-for="(media, index) in medias"
           :key="index"
           @click="selectMedia(media)"
-          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6' : 'col-xl-4 col-md-6'"
+          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden' : 'col-xl-4 col-md-6 overflow-hidden'"
         >
           <div class="card fw-200 mx-auto">
             <div class="card-body p-0 d-flex align-items-center justify-content-center">
@@ -71,25 +71,29 @@
                       class="image fw-200 fh-150 bg-position-center"
                       :src="media.url"
                     />
-                    <div v-else v-lazy:background-image="media.preview_url" class="fw-200 fh-150 bg-position-center"></div>
+                    <div
+                      v-else
+                      v-lazy:background-image="media.preview_url"
+                      class="fw-200 fh-150 bg-position-center"
+                    ></div>
                   </template>
 
                   <template v-if="isVideo(media)">
                     <video :width="200" :height="150" controls>
-                      <source :src="media.url">
+                      <source :src="media.url" />
                     </video>
                   </template>
 
                   <template v-else-if="isPdf(media)">
                     <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
-                      <img src="/images/messages/pdf.png" width="100"/>
+                      <img src="/images/messages/pdf.png" width="100" />
                     </div>
                   </template>
 
                   <template v-else-if="isAudio(media)">
                     <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
                       <audio controls class="audio-player mx-2">
-                        <source :src="media.url">
+                        <source :src="media.url" />
                       </audio>
                     </div>
                   </template>
@@ -98,18 +102,9 @@
             </div>
             <div class="card-footer" v-if="isManageMode">
               <div class="d-flex align-items-center mt-1">
-                <input
-                  class="select-media-cb mr-1"
-                  type="checkbox"
-                  :value="media"
-                  v-model="selectedMedias"
-                />
+                <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
                 <b>{{ media.type }}</b>
-                <a
-                  :href="media.url"
-                  class="ml-auto text-sm text-info"
-                  download
-                  ><i class="fas fa-download"></i></a>
+                <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
               </div>
               <small class="w-100">
                 登録：<b>{{ formattedDate(media.created_at) }}</b>
@@ -151,19 +146,20 @@
         </div>
       </div>
 
-      <div
-        class="text-center mt-5"
-        v-if="(!medias || medias.length === 0) && !loading"
-      >
+      <div class="text-center mt-5" v-if="(!medias || medias.length === 0) && !loading">
         <b>登録したメディアはありません。</b>
       </div>
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
 
-    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="isManageMode">
-      <template v-slot:content>
-        選択したメディア数：{{ selectedMedias.length }}
-      </template>
+    <modal-confirm
+      title="選択したものを削除してもよろしいですか？"
+      id="modalDeleteConfirm"
+      type="delete"
+      @confirm="deleteSelectedMedia"
+      v-if="isManageMode"
+    >
+      <template v-slot:content> 選択したメディア数：{{ selectedMedias.length }} </template>
     </modal-confirm>
 
     <modal-upload-media :types="[curUploadType]" @upload="onUploadFinished"></modal-upload-media>
@@ -177,6 +173,10 @@ import * as moment from 'moment';
 
 export default {
   props: {
+    types: {
+      type: Array,
+      default: () => ['image', 'audio', 'video']
+    },
     mode: {
       type: String,
       default: 'read'
@@ -197,7 +197,7 @@ export default {
     };
   },
   async beforeMount() {
-    this.resetFilter();
+    this.setFilter(this.types);
     await this.getMedias();
     this.loading = false;
   },
@@ -215,14 +215,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations('media', [
-      'setCurPage',
-      'resetFilter'
-    ]),
-    ...mapActions('media', [
-      'getMedias',
-      'deleteMedias'
-    ]),
+    ...mapMutations('media', ['setCurPage', 'setFilter', 'resetFilter']),
+    ...mapActions('media', ['getMedias', 'deleteMedias']),
 
     forceRerender() {
       this.contentKey++;
@@ -256,10 +250,13 @@ export default {
 
     async deleteSelectedMedia() {
       this.loading = true;
-      const mediaIds = this.selectedMedias.map(_ => _.id);
+      const mediaIds = this.selectedMedias.map((_) => _.id);
       const response = await this.deleteMedias(mediaIds);
       if (response) {
-        Util.showSuccessThenRedirect('選択したメディアの削除は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect(
+          '選択したメディアの削除は完了しました。',
+          window.location.href
+        );
       } else {
         window.toastr.error('選択したメディアの削除は失敗しました。');
       }
@@ -271,7 +268,7 @@ export default {
     },
 
     isImage(media) {
-      return media.type === 'image' || media.type === 'richmenu';
+      return media.type === 'image' || media.type === 'richmenu' || media.type === 'imagemap';
     },
 
     isVideo(media) {

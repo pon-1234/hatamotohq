@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showTitle">
-      <label class="w-100 mt-2">
+      <label class="w-100">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>
@@ -36,27 +36,19 @@
       <div class="card-header">
         <div class="d-flex align-items-center">
           <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
-          <div
-            class="ml-auto"
-            v-if="actions.length > 1"
-          >
-            <div
-              @click="moveActionUp(index)"
-              class="btn btn-sm btn-light"
-              v-if="index > 0">
-              <i class="mdi mdi-arrow-up-bold"></i>
+          <div class="ml-auto" v-if="actions.length > 1">
+            <div @click="moveActionUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
+              <i class="dripicons-chevron-up"></i>
             </div>
             <div
               type="button"
               @click="moveActionDown(index)"
               class="btn btn-sm btn-light"
-              v-if="index < actions.length - 1">
-              <i class="mdi mdi-arrow-down-bold"></i
-            ></div>
-            <div
-              @click="removeAction(index)"
-              v-if="actions.length > 1"
-              class="btn btn-sm btn-light">
+              v-if="index < actions.length - 1"
+            >
+              <i class="dripicons-chevron-down"></i>
+            </div>
+            <div @click="removeAction(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
               <i class="mdi mdi-delete"></i>
             </div>
           </div>
@@ -74,19 +66,11 @@
       </div>
     </div>
     <div class="text-center mt-2" v-if="actions.length < 3">
-      <div
-        class="btn btn-warning"
-        role="button"
-        @click="addAction()"
-      >
-        <i class="uil-plus"></i> アクションの追加
-      </div>
+      <div class="btn btn-warning" role="button" @click="addAction()"><i class="uil-plus"></i> アクションの追加</div>
     </div>
     <divider></divider>
     <div>
-      <label class="w-100 mt-2">
-        タグ設定
-      </label>
+      <label class="w-100 mt-2"> タグ設定 </label>
       <div class="row m-0">
         <div class="col-md-6 d-flex-auto p-0">
           <span>タグを追加</span>
@@ -245,54 +229,54 @@ export default {
 </script>
 
 <style type="text/scss" scoped>
-.d-flex-auto {
-  flex-direction: column;
-}
-
-.tag-content {
-  border: 1px solid #cecece;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.tag {
-  vertical-align: middle;
-  flex: 1;
-  width: calc(100% - 117px);
-  display: inline-block;
-}
-
-@media (max-width: 1290px) {
   .d-flex-auto {
-    flex-direction: row;
+    flex-direction: column;
+  }
+
+  .tag-content {
+    border: 1px solid #cecece;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .tag {
+    vertical-align: middle;
+    flex: 1;
+    width: calc(100% - 117px);
+    display: inline-block;
+  }
+
+  @media (max-width: 1290px) {
+    .d-flex-auto {
+      flex-direction: row;
+      margin-top: 10px;
+    }
+
+    .d-flex-auto > label {
+      width: 100% !important;
+    }
+    .tag {
+      width: 100%;
+    }
+  }
+
+  .mt-4 {
     margin-top: 10px;
   }
 
-  .d-flex-auto > label {
-    width: 100% !important;
+  .btn-default {
+    font-size: 10px;
   }
-  .tag {
-    width: 100%;
+
+  .btn-add {
+    width: 200px;
+    border: 1px solid #ededed;
+    background: white;
+    color: #1b1b1b;
   }
-}
 
-.mt-4 {
-  margin-top: 10px;
-}
-
-.btn-default {
-  font-size: 10px;
-}
-
-.btn-add {
-  width: 200px;
-  border: 1px solid #ededed;
-  background: white;
-  color: #1b1b1b;
-}
-
-.btn-add:hover {
-  background: white;
-  color: #1b1b1b;
-}
+  .btn-add:hover {
+    background: white;
+    color: #1b1b1b;
+  }
 </style>

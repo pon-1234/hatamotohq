@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="showTitle" style="display: contents">
-      <label class="w-100 mt20">
+    <div v-if="showTitle">
+      <label class="w-100">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>
@@ -27,14 +27,14 @@
     <div>
       <input
         :name="name + '_value'"
-        type="number"
+        type="text"
         maxlength="15"
         v-model="uri"
         placeholder="09044445555"
         class="form-control"
         @blur="onValueChanged"
         data-vv-as="電話番号"
-        v-validate="'required|min:10|max:11'"
+        v-validate="'required|numeric|min:10|max:11'"
       />
       <error-message :message="errors.first(name + '_value')"></error-message>
     </div>
@@ -89,5 +89,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

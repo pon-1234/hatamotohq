@@ -4,31 +4,37 @@
       <h3 class="hdg3">Flexメッセージ新規</h3>
     </div>
 
-    <div v-if="flexMessage !=null">
+    <div v-if="flexMessage != null">
       <div class="container">
         <div class="form-group row d-flex">
           <label class="col-sm-3 text-right m-auto">Flexメッセージ名</label>
           <div class="col-sm-9">
-            <input class="form-control" name="flex-title" placeholder="Flex ッセージ名を入力してください" type="text" v-model.trim="flexMessage.name"  v-validate="'required'">
+            <input
+              class="form-control"
+              name="flex-title"
+              placeholder="Flex ッセージ名を入力してください"
+              type="text"
+              v-model.trim="flexMessage.name"
+              v-validate="'required'"
+            />
             <span v-if="errors.first('flex-title')" class="invalid-box-label">Flexメッセージ名は必須です</span>
           </div>
         </div>
       </div>
 
-      <flexmessage-editor style="margin-top: 30px"
+      <flexmessage-editor
+        style="margin-top: 30px"
         :data="flexMessage"
         @input="flexMessageEditable = $event"
         :altTextData="altText"
         @altText="altText = $event"
-        />
+      />
 
       <div class="row-form-btn d-flex justify-content-center">
         <button type="submit" class="btn btn-submit btn-block" @click="save">保存</button>
       </div>
     </div>
-    <div v-else>
-      LOADING..
-    </div>
+    <div v-else>LOADING..</div>
   </div>
 </template>
 

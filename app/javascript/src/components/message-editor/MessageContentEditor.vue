@@ -1,8 +1,7 @@
 <template>
   <div class="area-type mb20">
-
     <!-- text message -->
-    <text-message-editor v-if="data.type === 'text'" :value="data.text" @input="onTextChanged" :index="index" />
+    <message-editor-text v-if="data.type === 'text'" :value="data.text" @input="onTextChanged" :index="index" />
 
     <!-- sticker -->
     <sticker-message-editor
@@ -10,16 +9,22 @@
       :packageId="data.packageId"
       :stickerId="data.stickerId"
       @input="onStickerChanged"
-      :index="index">
+      :index="index"
+    >
     </sticker-message-editor>
 
     <!-- image/video/audio -->
     <template v-if="['image', 'video', 'audio'].includes(data.type)">
-      <media-message-editor :data="data" @input="onMediaChanged" :index="index"></media-message-editor>
+      <message-editor-media :data="data" @input="onMediaChanged" :index="index"></message-editor-media>
     </template>
 
     <!-- location -->
-    <location-editor v-if="data.type === MessageType.Location" :data="data"  @input="onLocationChanged" :indexParent="index"/>
+    <message-editor-location
+      v-if="data.type === MessageType.Location"
+      :data="data"
+      @input="onLocationChanged"
+      :indexParent="index"
+    ></message-editor-location>
 
     <!-- <div class="form-group" v-if="[MessageType.Template, MessageType.Imagemap, MessageType.Flex].includes(data.type)" hidden>
       <label>代替テキスト</label>
@@ -29,37 +34,54 @@
 
     <!-- template button -->
     <template-button-editor
-      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Buttons" :data="data.template"
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Buttons"
+      :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-      />
+    />
 
     <!-- template confirm -->
-    <template-confirm-editor
-    v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Confirm" :data="data.template"
-    @input="onTemplateContentChanged"
-    :indexParent="index"
-    />
+    <message-editor-confirm
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Confirm"
+      :data="data.template"
+      @input="onTemplateContentChanged"
+      :indexParent="index"
+    ></message-editor-confirm>
 
     <!-- template carousel -->
     <template-carousel-editor
-      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Carousel" :data="data.template"
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Carousel"
+      :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-      />
+    />
 
     <!-- template image caroutsel -->
     <template-image-carousel-editor
-      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.ImageCarousel" :data="data.template"
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.ImageCarousel"
+      :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-      />
+    />
 
     <!-- imagemap -->
-    <imagemap-editor v-if="data.type === MessageType.Imagemap" :data="data" :index="index" @input="onImagemapChanged" :indexParent="index"/>
+    <message-editor-imagemap
+      v-if="data.type === MessageType.Imagemap"
+      :data="data"
+      :index="index"
+      @input="onImagemapChanged"
+      :indexParent="index"
+    >
+    </message-editor-imagemap>
 
     <!-- flex message -->
-    <flex-message-editor v-if="data.type === MessageType.Flex" :data="data" :index="index"  @input="onFlexChanged" :indexParent="index"/>
+    <flex-message-editor
+      v-if="data.type === MessageType.Flex"
+      :data="data"
+      :index="index"
+      @input="onFlexChanged"
+      :indexParent="index"
+    />
   </div>
 </template>
 <script>

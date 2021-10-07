@@ -1,7 +1,12 @@
 <template>
   <div>
     <div :class="getClassName()">
-      <media-preview :type="data.type" :src="data.originalContentUrl" :duration="getDuration()" :showMedia="true"></media-preview>
+      <media-preview
+        :type="data.type"
+        :src="data.originalContentUrl"
+        :duration="getDuration()"
+        :showMedia="true"
+      ></media-preview>
     </div>
   </div>
 </template>
@@ -29,8 +34,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.chat-item {
-  display: inline-flex;
-  overflow: hidden;
-}
+  .chat-item {
+    display: inline-flex;
+    overflow: hidden;
+  }
 </style>

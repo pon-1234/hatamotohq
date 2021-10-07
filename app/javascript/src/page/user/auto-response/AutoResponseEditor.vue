@@ -1,12 +1,22 @@
 <template>
   <div class="fw-1200">
     <div class="card">
-      <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
+      <div class="card-header left-border">
+        <h3 class="card-title">基本設定</h3>
+      </div>
       <div class="card-body">
         <div class="form-group d-flex">
-          <label class="fw-200">自動応答名<required-mark/></label>
+          <label class="fw-200">自動応答名<required-mark /></label>
           <div class="flex-grow-1">
-            <input type="text" name="name" class="form-control" v-model="autoResponseData.name" placeholder="自動応答名を入力してください" v-validate="'required'" data-vv-as="自動応答名">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              v-model="autoResponseData.name"
+              placeholder="自動応答名を入力してください"
+              v-validate="'required'"
+              data-vv-as="自動応答名"
+            />
             <error-message :message="errors.first('name')"></error-message>
           </div>
         </div>
@@ -14,8 +24,21 @@
         <div class="form-group d-flex">
           <label class="fw-200">設定</label>
           <div class="flex-grow-1 d-flex">
-            <input type="checkbox" id="scenario-onoff" checked data-switch="success" v-model="autoResponseData.status" true-value="enabled" false-value="disabled" ref="status"/>
-            <label for="scenario-onoff" data-on-label="オン" data-off-label="オフ"></label>
+            <input
+              type="checkbox"
+              id="scenario-onoff"
+              checked
+              data-switch="success"
+              v-model="autoResponseData.status"
+              true-value="enabled"
+              false-value="disabled"
+              ref="status"
+            />
+            <label
+              for="scenario-onoff"
+              data-on-label="オン"
+              data-off-label="オフ"
+            ></label>
           </div>
         </div>
       </div>
@@ -27,16 +50,41 @@
       </div>
       <div class="card-body">
         <div class="form-group d-flex flex-column">
-          <label class="mb10">キーワード<required-mark/></label>
-          <b-form-tags size="md" :limit="10" class="bot-tag" input-id="tags-limit" v-model="autoResponseData.keywords" :class="errors.first('bot-tag') ? 'invalid-box' : ''"
-            placeholder="キーワードを入力してください" separator=" ,;" :add-button-text="'追加'" >
+          <label class="mb10">キーワード<required-mark /></label>
+          <b-form-tags
+            size="md"
+            :limit="10"
+            class="bot-tag"
+            input-id="tags-limit"
+            v-model="autoResponseData.keywords"
+            :class="errors.first('bot-tag') ? 'invalid-box' : ''"
+            placeholder="キーワードを入力してください"
+            separator=" ,;"
+            add-on-change
+            :add-button-text="'追加'"
+          >
           </b-form-tags>
-          <input type='hidden' name="keywords" data-vv-as="キーワード" v-model="autoResponseData.keywords" v-validate="'required'"/>
+          <input
+            type="hidden"
+            name="keywords"
+            data-vv-as="キーワード"
+            v-model="autoResponseData.keywords"
+            v-validate="'required'"
+          />
           <div>
-            <small>キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small>
+            <small
+              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small
+            >
           </div>
-          <span class="invalid-box-label"  v-if="error"><b>{{ error.keyword}}</b>のキーワードが<b>{{error.name}}</b>で設定されているため設定できません。</span>
-          <error-message class="w-100" :message="errors.first('keywords')"></error-message>
+          <span class="invalid-box-label" v-if="error"
+            ><b>{{ error.keyword }}</b
+            >のキーワードが<b>{{ error.name }}</b
+            >で設定されているため設定できません。</span
+          >
+          <error-message
+            class="w-100"
+            :message="errors.first('keywords')"
+          ></error-message>
         </div>
       </div>
     </div>
@@ -50,9 +98,18 @@
           <div class="form-group" :key="msgContentKey">
             <label>メッセージ本文</label>
             <div>
-              <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
+              <div
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#modal-template"
+              >
+                テンプレートから作成
+              </div>
             </div>
-            <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template"/>
+            <modal-select-template
+              @selectTemplate="onSelectTemplate"
+              id="modal-template"
+            />
             <message-editor
               :isDisplayTemplate="true"
               v-for="(item, index) in autoResponseData.messages"
@@ -63,11 +120,17 @@
               @input="onMessageContentChanged"
               @selectTemplate="selectTemplate"
               @remove="removeContent"
-              @moveTopMessage="moveTopMessage"
-              @moveBottomMessage="moveBottomMessage"
+              @moveMessageUp="moveMessageUp"
+              @moveMessageDown="moveMessageDown"
             />
             <div>
-              <div class="btn btn-primary" @click="addMoreMessageContentDistribution" v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE">
+              <div
+                class="btn btn-primary"
+                @click="addMoreMessageContentDistribution"
+                v-if="
+                  autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE
+                "
+              >
                 <i class="uil-plus"></i><span> メッセージ追加</span>
               </div>
             </div>
@@ -75,7 +138,13 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
+        <button
+          type="submit"
+          class="btn btn-success fw-120"
+          @click="submitCreate()"
+        >
+          保存
+        </button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -207,12 +276,12 @@ export default {
       this.forceRerender();
     },
 
-    moveTopMessage(index) {
+    moveMessageUp(index) {
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index - 1, 1, option)[0];
       this.forceRerender();
     },
-    moveBottomMessage(index) {
+    moveMessageDown(index) {
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index + 1, 1, option)[0];
       this.forceRerender();
@@ -224,7 +293,7 @@ export default {
   ::v-deep {
     #tags-limit {
       border: none;
-      background-color: rgba(255, 255, 255, 0)!important;
+      background-color: rgba(255, 255, 255, 0) !important;
     }
     .bot-tag.disabled {
       background-color: #ccc !important;

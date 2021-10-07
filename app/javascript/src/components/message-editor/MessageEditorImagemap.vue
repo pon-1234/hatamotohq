@@ -2,48 +2,71 @@
   <div>
     <div class="form-group">
       <label>代替テキスト</label>
-      <input type="text" :name="`altText${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
+      <input
+        type="text"
+        :name="`altText${index}`"
+        class="form-control"
+        placeholder="代替テキストを入力してください"
+        v-model="altText"
+        maxlength="401"
+        v-validate="'max:400'"
+        data-vv-as="代替テキスト"
+      />
       <error-message :message="errors.first(`altText${index}`)"></error-message>
     </div>
 
     <!--Editor-->
     <div class="d-flex">
       <div class="fw-260">
-        <input type="text" v-model="backgroundUrl" :name="'image-url'+index" v-validate="'required'" data-vv-as="背景画像" class="d-none"/>
+        <input
+          type="text"
+          v-model="backgroundUrl"
+          :name="'image-url' + index"
+          v-validate="'required'"
+          data-vv-as="背景画像"
+          class="d-none"
+        />
         <imagemap-view
           :background="backgroundUrl"
           :template-id="templateId"
-          :class="errors.first('image-url'+index) ? 'fh-260 invalid-box' : 'fh-260'"
-          @click="expandAction" />
-        <error-message :message="errors.first('image-url'+index)"></error-message>
+          :class="errors.first('image-url' + index) ? 'fh-260 invalid-box' : 'fh-260'"
+          @click="expandAction"
+        />
+        <error-message :message="errors.first('image-url' + index)"></error-message>
 
-        <button type="button"
+        <button
+          type="button"
           class="btn-block btn btn-secondary mt-2"
           data-toggle="modal"
-          :data-target="`#imagemapTemplateSelectorModal${index}`">
+          :data-target="`#imagemapTemplateSelectorModal${index}`"
+        >
           テンプレートを選択
         </button>
-        <button type="button" class="btn-block btn btn-secondary mt-2"
-                data-toggle="modal" :data-target="'#'+index+'_imagemapModalUploadImage'">
+        <button
+          type="button"
+          class="btn-block btn btn-secondary mt-2"
+          data-toggle="modal"
+          :data-target="`#imagemapModalUploadImage${index}`"
+        >
           背景画像をアップロード
         </button>
-        <button type="button" class="btn-block btn btn-secondary mt-2"
-                @click="isShowingEditor = true">
+        <button type="button" class="btn-block btn btn-secondary mt-2" @click="isShowingEditor = true">
           一式の個別画像を編集
         </button>
       </div>
       <div class="flex-grow-1 ml-4">
         <h5>アクション設定</h5>
         <div id="accordion">
-          <div v-for="(item, index) in actionObjects" v-bind:key="index" >
-            <div class="card mb-2"  :class="errors.items.find(item=>item.field.includes('imagemap_action_'+index)) ? 'invalid-box': '' ">
+          <div v-for="(item, index) in actionObjects" v-bind:key="index">
+            <div
+              class="card mb-2"
+              :class="errors.items.find((item) => item.field.includes('imagemap_action_' + index)) ? 'invalid-box' : ''"
+            >
               <div class="p-2" @click="expandAction(item.key, false, index)">
                 <h5 class="m-0">
-                  <button type="button"
-                          class="btn-block btn-link text-left btn btn-outline-block">
-                    <i class="fas mr-2 mdi mdi-chevron-right" style="width: 20px"
-                        v-if="!item.expand"></i>
-                    <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{item.key}}
+                  <button type="button" class="btn-block btn-link text-left btn btn-outline-block">
+                    <i class="fas mr-2 mdi mdi-chevron-right" style="width: 20px" v-if="!item.expand"></i>
+                    <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{ item.key }}
                   </button>
                 </h5>
               </div>
@@ -51,13 +74,13 @@
                 <div>
                   <div class="card-body pt-0 accordion-0 center">
                     <div>
-                      <message-action-type
+                      <message-action-editor
                         :index="index"
                         :value="item.action"
                         :supports="['message', 'uri', 'survey']"
                         :labelRequired="false"
                         :showTitle="false"
-                        :name="'imagemap_action_'+index"
+                        :name="'imagemap_action_' + index"
                         @input="item.action = $event"
                       />
                     </div>
@@ -73,13 +96,16 @@
     <imagemap-template-selector
       :id="'imagemapTemplateSelectorModal' + index"
       :selectionId="templateId"
-      @accept="templateChange">
+      @accept="templateChange"
+    >
     </imagemap-template-selector>
 
     <modal-select-media
       @select="onSelectMedia"
-      :data="{type: 'imagemap'}"
-      :id="index+'_imagemapModalUploadImage'">
+      :types="['imagemap']"
+      :filterable="false"
+      :id="`imagemapModalUploadImage${index}`"
+    >
     </modal-select-media>
 
     <modal-rich-menu-image-editor
@@ -94,8 +120,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import Util from '../../../core/util';
-import ErrorMessage from '../../common/ErrorMessage.vue';
+import Util from '../../core/util';
+import ErrorMessage from '../common/ErrorMessage.vue';
 
 export default {
   components: { ErrorMessage },
@@ -220,8 +246,8 @@ export default {
       this.templateValue = data.value;
     },
 
-    onSelectMedia(input) {
-      this.line_media_alias = input.id;
+    onSelectMedia(media) {
+      this.backgroundUrl = media.url;
     },
 
     publish(actionObject) {
@@ -304,7 +330,8 @@ export default {
     padding: 0.375rem 0.75rem;
     line-height: 1.5;
     border-radius: 2px;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
   }
 
   .card {
@@ -318,7 +345,7 @@ export default {
     word-wrap: break-word;
     background-color: #fff;
     background-clip: border-box;
-    border: 1px solid rgba(0,0,0,0.125);
+    border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 4px;
     padding: 5px;
   }
@@ -352,10 +379,6 @@ export default {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-  }
-
-  .kv-select {
-    padding: 0px;
   }
 
   td {

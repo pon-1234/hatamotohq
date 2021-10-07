@@ -4,9 +4,20 @@
       <div class="card-body">
         <div class="form-border">
           <div class="form-group">
-            <label>テンプレート名<required-mark/></label>
-            <input type="text" class="form-control"  name="template-title" placeholder="テンプレート名を入力してください" v-model="templateData.name" v-validate="'required'" data-vv-as="テンプレート名"/>
-            <error-message :message="errors.first('template-title')"></error-message>
+            <label>テンプレート名<required-mark /></label>
+            <input
+              type="text"
+              class="form-control"
+              name="template-title"
+              placeholder="テンプレート名を入力してください"
+              v-model="templateData.name"
+              maxlength="256"
+              v-validate="'required|max:255'"
+              data-vv-as="テンプレート名"
+            />
+            <error-message
+              :message="errors.first('template-title')"
+            ></error-message>
           </div>
         </div>
         <div class="form-border">
@@ -20,26 +31,38 @@
               v-bind:messagesCount="templateData.messages.length"
               @input="changeContent"
               @remove="removeContent"
-              @moveTopMessage="moveTopMessage"
-              @moveBottomMessage="moveBottomMessage"
+              @moveMessageUp="moveMessageUp"
+              @moveMessageDown="moveMessageDown"
             />
           </div>
         </div>
 
-        <div class="btn btn-primary" v-if="templateData.messages.length < 3" @click="addMessageBlock()"><i class="uil-plus"></i><span > メッセージ追加</span></div>
+        <div
+          class="btn btn-primary"
+          v-if="templateData.messages.length < 3"
+          @click="addMessageBlock()"
+        >
+          <i class="uil-plus"></i><span> メッセージ追加</span>
+        </div>
       </div>
       <div class="card-footer d-flex">
         <button
           type="submit"
           class="btn btn-success fw-120"
           @click="submitSaveTemplate"
-        >保存</button>
+        >
+          保存
+        </button>
       </div>
 
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
     <message-preview></message-preview>
-    <modal-confirm v-bind:title="'このメッセージを削除してもよろしいですか？'" type='delete' @input="deleteTemplateTemplate"/>
+    <modal-confirm
+      v-bind:title="'このメッセージを削除してもよろしいですか？'"
+      type="delete"
+      @input="deleteTemplateTemplate"
+    />
   </div>
 </template>
 <script>
@@ -120,14 +143,14 @@ export default {
       this.templateData.messages.splice(index, 1);
     },
 
-    moveTopMessage(index) {
+    moveMessageUp(index) {
       const temp1 = this.templateData.messages[index - 1];
       const temp2 = this.templateData.messages[index];
       this.$set(this.templateData.messages, index - 1, temp2);
       this.$set(this.templateData.messages, index, temp1);
       this.forceRerender();
     },
-    moveBottomMessage(index) {
+    moveMessageDown(index) {
       const temp1 = this.templateData.messages[index + 1];
       const temp2 = this.templateData.messages[index];
       this.$set(this.templateData.messages, index + 1, temp2);

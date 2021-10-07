@@ -7,53 +7,91 @@
         </div>
 
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'active' : ''" @click="changeSelected(index)">
+          <li
+            role="presentation"
+            v-for="(item, index) in defaults.columns"
+            :key="index"
+            :class="selected === index ? 'active' : ''"
+            @click="changeSelected(index)"
+          >
             <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
-                パネル{{ index + 1}}
+              パネル{{ index + 1 }}
               <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
                 <i class="fa fa-times"></i>
               </span>
             </a>
           </li>
           <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
-            <span>
-              <i class="uil-plus"></i>追加
-            </span>
+            <span> <i class="uil-plus"></i>追加 </span>
           </li>
         </ul>
         <div class="carousel-body" hidden>
           <div class="list-carousel d-flex align-items-center">
             <div class="carousel-group d-flex align-items-center">
-              <div v-for="(item, index) in defaults.columns" :key="index" :class="selected === index ? 'carousel-preview active': 'carousel-preview'">
+              <div
+                v-for="(item, index) in defaults.columns"
+                :key="index"
+                :class="selected === index ? 'carousel-preview active' : 'carousel-preview'"
+              >
                 <div class="carousel-header">
-                  <span class="carousel-header-title">{{index+1}}枚目</span>
+                  <span class="carousel-header-title">{{ index + 1 }}枚目</span>
                   <div class="carousel-header-action">
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"><i class="glyphicon glyphicon-arrow-left"></i></span>
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"><i class="glyphicon glyphicon-arrow-right"></i></span>
-                    <span class="action-item" @click="copyColumn(index, item)"><i  class="fas fa-copy glyphicon"></i></span>
-                    <span class="action-item" @click="addMoreColumn(index)"><i  class="glyphicon glyphicon-plus"></i></span>
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"><i  class="glyphicon glyphicon-remove"></i></span>
+                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"
+                      ><i class="glyphicon glyphicon-arrow-left"></i
+                    ></span>
+                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"
+                      ><i class="glyphicon glyphicon-arrow-right"></i
+                    ></span>
+                    <span class="action-item" @click="copyColumn(index, item)"
+                      ><i class="fas fa-copy glyphicon"></i
+                    ></span>
+                    <span class="action-item" @click="addMoreColumn(index)"
+                      ><i class="glyphicon glyphicon-plus"></i
+                    ></span>
+                    <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"
+                      ><i class="glyphicon glyphicon-remove"></i
+                    ></span>
                   </div>
                 </div>
-                <div class="carousel-content" @click="changeSelected(index)"  :class="errors.items.find(item=>item.field.includes('template_carousel_'+index))? 'invalid-box': ''">
-                  <div class="carousel-thumb" :style="{ backgroundImage: 'url(' + item.thumbnailImageUrl + ')'}" v-if="item.thumbnailImageUrl" >
-                  </div>
-                  <div v-if="isThumbnail && 'thumbnailImageUrl' in item && !item.thumbnailImageUrl" class="carousel-thumb" :class="errors.first('image-url-'+ index)?'invalid-box':'' ">
+                <div
+                  class="carousel-content"
+                  @click="changeSelected(index)"
+                  :class="
+                    errors.items.find((item) => item.field.includes('template_carousel_' + index)) ? 'invalid-box' : ''
+                  "
+                >
+                  <div
+                    class="carousel-thumb"
+                    :style="{
+                      backgroundImage: 'url(' + item.thumbnailImageUrl + ')',
+                    }"
+                    v-if="item.thumbnailImageUrl"
+                  ></div>
+                  <div
+                    v-if="isThumbnail && 'thumbnailImageUrl' in item && !item.thumbnailImageUrl"
+                    class="carousel-thumb"
+                    :class="errors.first('image-url-' + index) ? 'invalid-box' : ''"
+                  >
                     (画像未登録)
-                  <input type="hidden" v-model="item.thumbnailImageUrl" :name="'image-url-'+index" v-validate="'required'" />
+                    <input
+                      type="hidden"
+                      v-model="item.thumbnailImageUrl"
+                      :name="'image-url-' + index"
+                      v-validate="'required'"
+                    />
                   </div>
                   <div class="carousel-heading">
-                    <b v-if="item.title">{{item.title}}</b>
+                    <b v-if="item.title">{{ item.title }}</b>
                     <b v-else>タイトル</b>
-                    <p v-if="item.text">{{item.text}}</p>
+                    <p v-if="item.text">{{ item.text }}</p>
                     <b v-else class="carousel-text"></b>
                   </div>
                   <div class="carousel-action" v-for="(action, indexAction) in item.actions" :key="indexAction">
                     <div class="carousel-action-label" v-if="action.label">
-                      {{action.label}}
+                      {{ action.label }}
                     </div>
-                    <div  class="carousel-action-label carousel-action-label-default" v-else >
-                      選択肢: {{indexAction+1}}
+                    <div class="carousel-action-label carousel-action-label-default" v-else>
+                      選択肢: {{ indexAction + 1 }}
                     </div>
                   </div>
                 </div>
@@ -61,22 +99,40 @@
             </div>
             <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="defaults.columns.length < 10">
               <i class="glyphicon glyphicon-plus-sign"></i>
-              <span class="count-carousel">({{defaults.columns.length}} / 10)</span>
+              <span class="count-carousel">({{ defaults.columns.length }} / 10)</span>
             </div>
           </div>
         </div>
-        <div v-for="(column, indexColumn) in defaults.columns" :key="indexColumn"  v-show="indexColumn === selected" >
+        <div v-for="(column, indexColumn) in defaults.columns" :key="indexColumn" v-show="indexColumn === selected">
           <div class="carousel-group-action row">
             <div class="col-sm-5 p-0">
               <div class="form-group">
-                <label>パネル{{ selected + 1}}タイトル <required-mark></required-mark></label>
-                <input type="text" :name="'carousel-title'+indexColumn" placeholder="タイトル" class="form-control" v-model="column.title" maxlength='40' v-validate="{required: requiredTitle}" data-vv-as="タイトル">
-                <error-message :message="errors.first('carousel-title'+indexColumn)"></error-message>
+                <label>パネル{{ selected + 1 }}タイトル <required-mark></required-mark></label>
+                <input
+                  type="text"
+                  :name="'carousel-title' + indexColumn"
+                  placeholder="タイトル"
+                  class="form-control"
+                  v-model="column.title"
+                  maxlength="40"
+                  v-validate="{ required: requiredTitle }"
+                  data-vv-as="タイトル"
+                />
+                <error-message :message="errors.first('carousel-title' + indexColumn)"></error-message>
               </div>
               <div class="form-group">
-                <label>パネル{{ selected + 1}}本文</label><required-mark></required-mark>
-                <textarea  :name="'carousel-text'+indexColumn" placeholder="本文を入力してください" class="form-control" v-model="column.text" maxlength='60' v-validate="'required'" data-vv-as="本文"> </textarea>
-                <error-message :message="errors.first('carousel-text'+indexColumn)"></error-message>
+                <label>パネル{{ selected + 1 }}本文</label><required-mark></required-mark>
+                <textarea
+                  :name="'carousel-text' + indexColumn"
+                  placeholder="本文を入力してください"
+                  class="form-control"
+                  v-model="column.text"
+                  maxlength="60"
+                  v-validate="'required'"
+                  data-vv-as="本文"
+                >
+                </textarea>
+                <error-message :message="errors.first('carousel-text' + indexColumn)"></error-message>
               </div>
             </div>
             <div class="col-sm-7">
@@ -85,7 +141,11 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="group-button-thumb">
-                      <div class="btn btn-info btn-block btn-sm uploadfile-thumb"  data-toggle="modal" :data-target="'#uploadImageModal'+ indexParent">
+                      <div
+                        class="btn btn-info btn-block btn-sm uploadfile-thumb"
+                        data-toggle="modal"
+                        :data-target="'#uploadImageModal' + indexParent"
+                      >
                         <i class="glyphicon glyphicon-picture"></i>
                         画像選択
                         <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
@@ -101,39 +161,65 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-6" >
-                    <img v-if="column.thumbnailImageUrl" :src="column.thumbnailImageUrl" class="image-carousel-thumb" >
-                    <span v-if="errorMessageUploadFile" class="label error-message-upload">{{errorMessageUploadFile}}</span>
+                  <div class="col-sm-6">
+                    <img v-if="column.thumbnailImageUrl" :src="column.thumbnailImageUrl" class="image-carousel-thumb" />
+                    <span v-if="errorMessageUploadFile" class="label error-message-upload">{{
+                      errorMessageUploadFile
+                    }}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-sm-12 p-0 row">
               <div class="col-sm-3">
-              <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
-                <li v-for="(item, index) in column.actions" :key="index" :class="selectedAction == index? 'active': ''" @click="changeActiveAction(index)">
-                  <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'invalid-box': ''">
-                    ボタン{{index + 1}}
-                    <span v-if="column.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeCurrentAction(index)"><i class="fas fa-times"></i></span>
-                  </div>
-                </li>
-                <li v-if="column.actions.length < 3">
-                  <div class="nav-button btn justify-content-center" @click="addMoreAction">
-                    <i class="uil-plus"></i> 追加
-                  </div>
-                </li>
-              </ul>
+                <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
+                  <li
+                    v-for="(item, index) in column.actions"
+                    :key="index"
+                    :class="selectedAction == index ? 'active' : ''"
+                    @click="changeActiveAction(index)"
+                  >
+                    <div
+                      class="nav-button"
+                      :class="
+                        errors.items.find((item) => item.field.includes(indexParent + 'template_button_' + index))
+                          ? 'invalid-box'
+                          : ''
+                      "
+                    >
+                      ボタン{{ index + 1 }}
+                      <span
+                        v-if="column.actions.length > 1"
+                        class="action-tab-selector-remover"
+                        @click.stop="removeCurrentAction(index)"
+                        ><i class="fas fa-times"></i
+                      ></span>
+                    </div>
+                  </li>
+                  <li v-if="column.actions.length < 3">
+                    <div class="nav-button btn justify-content-center" @click="addMoreAction">
+                      <i class="uil-plus"></i> 追加
+                    </div>
+                  </li>
+                </ul>
               </div>
               <div class="col-sm-9">
-                <div v-for="(item, index) in column.actions" :key="index" v-show="selectedAction === index" class="card card-light">
+                <div
+                  v-for="(item, index) in column.actions"
+                  :key="index"
+                  v-show="selectedAction === index"
+                  class="card card-light"
+                >
                   <div class="card-header d-flex flex-start align-items-center">
-                    <h3 class="card-title">選択肢{{index+1}}</h3>
-                    <div class="btn btn-secondary btn-sm ml-auto" @click.stop="copyCurrentAction(index)"><i class="fas fa-copy"></i></div>
+                    <h3 class="card-title">選択肢{{ index + 1 }}</h3>
+                    <div class="btn btn-secondary btn-sm ml-auto" @click.stop="copyCurrentAction(index)">
+                      <i class="fas fa-copy"></i>
+                    </div>
                   </div>
                   <div class="card-body">
                     <div class="col-sm-12">
-                      <message-action-type
-                        :name="index+ '_template_carousel_'+ indexColumn"
+                      <message-action-editor
+                        :name="index + '_template_carousel_' + indexColumn"
                         :value="item"
                         @input="changeActionColumn(indexColumn, index, ...arguments)"
                       />
@@ -152,7 +238,7 @@
                       <label class="mt20">
                         選択後の挙動 : {{index+1}}
                       </label>
-                      <message-action-type
+                      <message-action-editor
                         :name="index+ '_template_carousel_'+ indexColumn"
                         :value="item"
                         @input="changeActionColumn(indexColumn, index, ...arguments)"
@@ -174,7 +260,7 @@
         </div>
       </div>
     </div>
-    <modal-select-media @input="uploadThumb" :data="{type: 'image'}" :id="'uploadImageModal'+indexParent"/>
+    <modal-select-media @input="uploadThumb" :data="{ type: 'image' }" :id="'uploadImageModal' + indexParent" />
   </div>
 </template>
 <script>
@@ -374,7 +460,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .nav-stacked>li {
+  .nav-stacked > li {
     float: none;
     position: relative;
     display: block;
@@ -418,9 +504,9 @@ export default {
     white-space: pre-line;
   }
 
-  .template-carousel{
+  .template-carousel {
     padding: 15px 0;
-    margin: 0px!important;
+    margin: 0px !important;
   }
 
   .panel-heading {
@@ -436,7 +522,7 @@ export default {
     }
   }
 
-  .carousel-body{
+  .carousel-body {
     background: #f1f1f1;
     overflow-y: hidden;
     margin: 0 0px;
@@ -445,11 +531,11 @@ export default {
     margin-bottom: 15px;
   }
 
-  .carousel-group-action{
+  .carousel-group-action {
     padding: 15px;
   }
 
-  .list-carousel{
+  .list-carousel {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -465,16 +551,16 @@ export default {
     width: 100px;
     text-align: center;
     color: #999;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    .count-carousel{
+    .count-carousel {
       font-size: 20px;
     }
 
-    .glyphicon-plus-sign{
+    .glyphicon-plus-sign {
       font-size: 35px;
     }
   }
@@ -502,8 +588,8 @@ export default {
           line-height: 1.2;
           width: 2em;
           border-left: 1px solid #ccc;
-          .glyphicon{
-          font-size: 14px;
+          .glyphicon {
+            font-size: 14px;
           }
         }
 
@@ -513,13 +599,13 @@ export default {
       }
     }
 
-    .carousel-content{
+    .carousel-content {
       border: 1px solid #aaa;
       border-radius: 4px;
       background-color: white;
       cursor: pointer;
 
-      .carousel-heading{
+      .carousel-heading {
         b {
           display: block;
           padding: 0 0.5em;
@@ -542,7 +628,7 @@ export default {
           min-height: 2em;
         }
 
-        .carousel-text{
+        .carousel-text {
           // font-weight: bold;
           // color: red;
         }
@@ -578,7 +664,6 @@ export default {
       width: 100%;
       margin-bottom: 20px;
     }
-
   }
   .btn-info {
     color: white;
@@ -594,7 +679,7 @@ export default {
     position: relative;
     overflow: hidden;
     color: white;
-    input[type=file] {
+    input[type="file"] {
       position: absolute;
       top: 0;
       right: 0;
@@ -610,19 +695,19 @@ export default {
   }
 
   .active {
-    .carousel-content{
-      box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
+    .carousel-content {
+      box-shadow: 0 0 2px 2px rgba(91, 192, 222, 0.6);
       border-color: #5bc0de;
     }
   }
   // Action panel
   .action-panel.active {
-      box-shadow: 0 0 2px 2px rgba(91,192,222,0.6);
-      border-color: #5bc0de;
+    box-shadow: 0 0 2px 2px rgba(91, 192, 222, 0.6);
+    border-color: #5bc0de;
   }
 
-  .btn-group{
-    .btn{
+  .btn-group {
+    .btn {
       padding-left: 0px;
       padding-right: 0px;
     }

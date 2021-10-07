@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="showTitle" style="display: contents">
-      <label class="w-100 mt20">
+    <div v-if="showTitle">
+      <label class="w-100">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>
@@ -17,12 +17,12 @@
           v-validate="{ required: labelRequired && showTitle }"
           data-vv-as="ラベル"
         />
-        <error-message :message="errors.first('datetime-label')"></error-message>
+        <error-message
+          :message="errors.first('datetime-label')"
+        ></error-message>
       </div>
     </div>
-    <label class="w-100 mt20">
-      モード
-    </label>
+    <label class="w-100 mt20"> モード </label>
     <div class="w-100">
       <select
         v-model="data.mode"

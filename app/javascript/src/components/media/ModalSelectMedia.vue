@@ -1,7 +1,7 @@
 <template>
   <div
     class="modal fade"
-    :id="id ? id: 'modalSelectMedia'"
+    :id="id ? id : 'modalSelectMedia'"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -35,7 +35,12 @@
               <media-upload :types="types" @upload="selectMedia($event)"></media-upload>
             </div>
             <div class="tab-pane" id="selectMedia">
-              <media-index mode="read" @select="selectMedia($event)" :filterable="filterable"></media-index>
+              <media-index
+                mode="read"
+                @select="selectMedia($event)"
+                :filterable="filterable"
+                :types="types"
+              ></media-index>
             </div>
           </div>
         </div>
@@ -44,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   props: {
@@ -67,12 +72,7 @@ export default {
     };
   },
 
-  created() {
-    this.setFilter(this.types);
-  },
-
   methods: {
-    ...mapMutations('media', ['setFilter']),
     ...mapActions('media', [
       'uploadMedia',
       'uploadRichMenu',
@@ -92,138 +92,137 @@ export default {
 </script>
 
 <style  lang="scss"  scoped>
+  ::v-deep {
+    .hidden {
+      display: none !important;
+    }
 
-::v-deep {
-  .hidden {
-    display: none!important;
-  }
+    .modal-body {
+      min-height: 70vh;
+    }
 
-  .modal-body {
-    min-height: 70vh;
-  }
+    .custom-file {
+      position: relative;
+      display: inline-block;
+      height: 40px;
+      margin-bottom: 0;
+    }
 
-  .custom-file {
-    position: relative;
-    display: inline-block;
-    height: 40px;
-    margin-bottom: 0;
-  }
+    input {
+      overflow: visible;
+    }
 
-  input {
-    overflow: visible;
-  }
+    .custom-file-input {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      opacity: 0;
+    }
 
-  .custom-file-input {
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    opacity: 0;
-  }
+    .custom-file-label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1;
+      height: 40px;
+      color: #495057;
+      background-color: #fff;
+      border: 1px solid #cfd4da;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-weight: 200;
+      font-size: 15px;
+    }
 
-  .custom-file-label {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 1;
-    height: 40px;
-    color: #495057;
-    background-color: #fff;
-    border: 1px solid #cfd4da;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    font-weight: 200;
-    font-size: 15px;
-  }
+    .custom-file-label::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      height: 38px;
+      color: #495057;
+      content: "+";
+      background-color: #f8f9fa;
+      border-left: 1px solid #cfd4da;
+      border-radius: 0 2px 2px 0;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
 
-  .custom-file-label::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    height: 38px;
-    color: #495057;
-    content: "+";
-    background-color: #f8f9fa;
-    border-left: 1px solid #cfd4da;
-    border-radius: 0 2px 2px 0;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
+    .text-muted {
+      color: #adb5bd !important;
+      display: block;
+      font-size: 10px;
+    }
 
-  .text-muted {
-    color: #adb5bd !important;
-    display: block;
-    font-size: 10px;
-  }
+    .text-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-  .text-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+    .error {
+      color: red !important;
+      font-size: 16px !important;
+    }
 
-  .error {
-    color: red !important;
-    font-size: 16px!important;
-  }
+    .h-fix-360 {
+      border-top: none !important;
+    }
 
-  .h-fix-360 {
-    border-top: none!important;
-  }
+    .nav-tabs .nav-link.active {
+      color: #495057;
+      background-color: #fff;
+      border-color: #dee2e6 #dee2e6 #fff;
+    }
 
-  .nav-tabs .nav-link.active {
-    color: #495057;
-    background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff
-  }
+    .nav-tabs > li {
+      margin-bottom: -2px !important;
+      width: 50%;
+      text-align: center;
+      a {
+        margin-right: 0px !important;
+      }
+    }
 
-  .nav-tabs > li {
-    margin-bottom: -2px!important;
-    width: 50%;
-    text-align: center;
-    a {
-      margin-right: 0px!important;
+    .thumb-item {
+      margin: 0 auto 5px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .thumb-item:hover {
+      .thumbnail-item {
+        border: 2px solid #00b900;
+        box-shadow: 0 0 2px 2px #e6ab92;
+      }
+      .chat-item-voice {
+        border: 2px solid #00b900;
+        box-shadow: 0 0 2px 2px #e6ab92;
+      }
+    }
+
+    .modal-body {
+      min-height: 550px !important;
+    }
+
+    .medias-content {
+      padding: 10px 10px;
+      min-height: 380px !important;
+      height: 380px !important;
+      overflow-y: auto;
+      overflow-x: hidden;
+      margin: 0px !important;
+    }
+
+    .tab-media {
+      border-top: none !important;
     }
   }
-
-  .thumb-item {
-    margin: 0 auto 5px;
-    cursor: pointer;
-    display: inline-block;
-  }
-  .thumb-item:hover {
-    .thumbnail-item {
-      border: 2px solid #00B900;
-      box-shadow: 0 0 2px 2px #e6ab92;
-    }
-    .chat-item-voice {
-      border: 2px solid #00B900;
-      box-shadow: 0 0 2px 2px #e6ab92;
-    }
-  }
-
-  .modal-body {
-    min-height: 550px!important;
-  }
-
-  .medias-content {
-    padding: 10px 10px;
-    min-height: 380px!important;
-    height: 380px!important;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin: 0px!important;
-  }
-
-  .tab-media {
-    border-top: none!important;
-  }
-}
 </style>

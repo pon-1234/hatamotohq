@@ -6,13 +6,16 @@
       :supports="supports"
       @input="changeAction"
       :isNone="isNone"
-      class="kv-select form-group"/>
+      class="form-group"
+    />
 
-    <action-object-value :data="action"
-      :name="'imagemap_action_'+name"
+    <action-object-value
+      :data="action"
+      :name="'imagemap_action_' + name"
       :labelRequired="labelRequired"
       :showTitle="showTitle"
-      @input="changeAction"/>
+      @input="changeAction"
+    />
   </div>
 </template>
 

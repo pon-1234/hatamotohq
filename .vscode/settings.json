@@ -1,3 +1,14 @@
 {
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "vetur.completion.scaffoldSnippetSources": {
+    "workspace": "💼",
+    "user": "🗒️",
+    "vetur": "✌"
+  },
+  "vetur.format.defaultFormatterOptions": {
+    "prettier": {
+      "tabWidth": 2, // works
+      "printWidth": 120 // does not work
+    }
+  }
 }
