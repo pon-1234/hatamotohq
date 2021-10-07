@@ -54,10 +54,11 @@
             v-for="(friendInformation, index) in friendInformations"
             :value="friendInformation"
             :key="index"
-            >{{ friendInformation.name }}
+          >
+            {{ friendInformation.name }}
           </option>
         </select>
-        <div v-if="value.profile" style="margin-top: 10px;">
+        <div v-if="value.profile" style="margin-top: 10px">
           <survey-profile-action
             v-if="value.profile.id === 3"
             type="text"
@@ -77,7 +78,11 @@
       <span class="fw-200">選択肢</span>
       <div class="flex-grow-1">
         <!-- START: checkbox options -->
-        <div v-for="(item, index) of value.data" :key="index" class="card border-info border">
+        <div
+          v-for="(item, index) of value.data"
+          :key="index"
+          class="card border-info border"
+        >
           <div class="card-header d-flex">
             <div>選択肢 {{ index + 1 }}</div>
             <div class="ml-auto">
@@ -85,27 +90,38 @@
                 @click="moveUpObject(index)"
                 class="btn btn-sm btn-light"
                 v-if="index > 0"
-                ><i class="mdi mdi-arrow-up-bold"></i
-              ></div>
+              >
+                <i class="dripicons-chevron-up"></i>
+              </div>
               <div
                 @click="moveDownObject(index)"
                 class="btn btn-sm btn-light"
                 v-if="index < value.data.length - 1"
-                ><i class="mdi mdi-arrow-down-bold"></i
-              ></div>
+              >
+                <i class="dripicons-chevron-down"></i>
+              </div>
 
               <div
                 @click="removeObject(index)"
                 v-if="value.data.length > 1"
-                class="btn btn-sm btn-light">
+                class="btn btn-sm btn-light"
+              >
                 <i class="mdi mdi-delete"></i>
               </div>
             </div>
           </div>
           <div class="card-body">
             <div class="form-group d-flex">
-              <span class="fw-200">ラベル<required-mark/></span>
-              <input class="form-control flex-grow-1" type="text" aria-label="Option Label" aria-describedby="basic-addon1" v-validate="'required'" :name="name + '-value-' + index" v-model="item.value">
+              <span class="fw-200">ラベル<required-mark /></span>
+              <input
+                class="form-control flex-grow-1"
+                type="text"
+                aria-label="Option Label"
+                aria-describedby="basic-addon1"
+                v-validate="'required'"
+                :name="name + '-value-' + index"
+                v-model="item.value"
+              />
             </div>
             <div v-show="item.is_editor" class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
@@ -268,28 +284,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep {
-  .survey {
-    border: 1px solid #dedede;
-    border-radius: 4px;
-    padding: 10px;
+  ::v-deep {
+    .survey {
+      border: 1px solid #dedede;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    a:hover {
+      cursor: pointer;
+    }
+    .form-group {
+      padding: 5px 0;
+    }
+    .mt10 {
+      margin-top: 10px !important;
+    }
+    .mr10 {
+      margin-right: 10px !important;
+    }
+    .action-postback {
+      background: gray;
+      padding: 0 10px 10px 10px;
+      border-radius: 4px;
+    }
   }
-  a:hover {
-    cursor: pointer;
-  }
-  .form-group {
-    padding: 5px 0;
-  }
-  .mt10 {
-    margin-top: 10px !important;
-  }
-  .mr10 {
-    margin-right: 10px !important;
-  }
-  .action-postback {
-    background: gray;
-    padding: 0 10px 10px 10px;
-    border-radius: 4px;
-  }
-}
 </style>
