@@ -1,26 +1,19 @@
 <template>
   <div class="mt-2">
     <span class="title-editor ml-3">絵文字</span>
-    <!-- <input
-      :name="'message-editor' + index"
-      type="text"
-      v-model="input_value"
-      v-validate="'required'"
-      data-vv-as="本文"
-      class="d-none"
-    /> -->
     <textarea
       :name="'message-editor' + index"
       ref="textarea"
+      v-validate="'required|max:5000'"
+      data-vv-as="本文"
       class="form-control"
       rows="5"
       placeholder="本文を入力してください"
       v-model="input_value"
-      v-validate="'required|max:5000'"
-      maxlength="5001"
-      data-vv-as="本文"
     ></textarea>
-    <error-message :message="errors.first('message-editor' + index)"></error-message>
+    <error-message
+      :message="errors.first('message-editor' + index)"
+    ></error-message>
   </div>
 </template>
 <script>
@@ -66,25 +59,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-  .emojionearea-button {
-    left: -4px !important;
-    top: -26px !important;
+  ::v-deep {
+    .emojionearea-button {
+      left: -4px !important;
+      top: -26px !important;
+    }
+
+    .emojionearea-picker-position-bottom {
+      left: -20px !important;
+      top: 10px !important;
+    }
+
+    .emojionearea-wrapper::after {
+      left: 20px !important;
+    }
   }
 
-  .emojionearea-picker-position-bottom {
-    left: -20px !important;
-    top: 10px !important;
+  .title-editor {
+    display: flex;
+    font-size: 12px;
+    padding-bottom: 3px !important;
   }
-
-  .emojionearea-wrapper::after {
-    left: 20px !important;
-  }
-}
-
-.title-editor {
-  display: flex;
-  font-size: 12px;
-  padding-bottom: 3px !important;
-}
 </style>

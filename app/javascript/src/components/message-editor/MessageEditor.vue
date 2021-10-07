@@ -2,37 +2,56 @@
   <div>
     <div class="card border-primary border mt-4">
       <div class="card-header d-flex align-items-center">
-        <span>メッセージ{{index ? index + 1 : '' }}設定</span>
-        <div class="ml-auto btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></div>
+        <span>メッセージ{{ index ? index + 1 : "" }}設定</span>
+        <div class="ml-auto btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </div>
       </div>
       <div class="card-body">
         <div class="d-flex align-items-center">
           <message-type-selection
-            v-model="defaults.message_type_id"
+            v-model="messageData.message_type_id"
             @input="changeSelectedMessage"
           />
-          <div class="group-action d-flex" v-if="messagesCount && messagesCount > 0">
-            <button type="button" class="d-flex btn btn-light action-item" @click="moveMessageToTop" v-if="index >= 1">
-              <i class="fas fa-chevron-up"></i>
-            </button>
-            <button type="button" class="d-flex btn btn-light action-item" @click="moveMessageToBottom" v-if="index < messagesCount - 1">
-              <i class="fas fa-chevron-down"></i>
-            </button>
-            <button type="button" class="d-flex btn btn-light action-item" @click="removeMessage" v-if="messagesCount !=1">
-              <i class="fas fa-times"></i>
-            </button>
+          <div
+            class="group-action d-flex"
+            v-if="messagesCount && messagesCount > 0"
+          >
+            <div
+              role="button"
+              class="d-flex btn btn-light btn-sm mr-1"
+              @click="moveMessageUp"
+              v-if="index >= 1"
+            >
+              <i class="dripicons-chevron-up"></i>
+            </div>
+            <div
+              role="button"
+              class="d-flex btn btn-light btn-sm mr-1"
+              @click="moveMessageDown"
+              v-if="index < messagesCount - 1"
+            >
+              <i class="dripicons-chevron-down"></i>
+            </div>
+            <div
+              role="button"
+              class="d-flex btn btn-light btn-sm"
+              @click="removeMessage"
+              v-if="messagesCount != 1"
+            >
+              <i class="dripicons-minus"></i>
+            </div>
           </div>
         </div>
         <message-content-editor
           class="mt-2"
           v-if="rerender"
           :index="index"
-          :data="defaults.content"
+          :data="messageData.content"
           @changeContent="changeContentMessage"
         />
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -40,7 +59,7 @@ export default {
   props: ['data', 'index', 'messagesCount', 'isDisplayTemplate'],
   data() {
     return {
-      defaults: {
+      messageData: {
         message_type_id: this.MessageTypeIds.Text,
         content: {
           type: this.MessageType.Text,
@@ -53,49 +72,49 @@ export default {
 
   created() {
     if (this.data) {
-      Object.assign(this.defaults, this.data);
+      Object.assign(this.messageData, this.data);
     }
   },
 
   methods: {
     changeSelectedMessage() {
-      switch (this.defaults.message_type_id) {
+      switch (this.messageData.message_type_id) {
       case this.MessageTypeIds.Text:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Text,
           text: ''
         };
         break;
       case this.MessageTypeIds.Sticker:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Sticker,
           packageId: '',
           stickerId: ''
         };
         break;
       case this.MessageTypeIds.Image:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Image,
           originalContentUrl: '',
           previewImageUrl: ''
         };
         break;
       case this.MessageTypeIds.Video:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Video,
           originalContentUrl: '',
           previewImageUrl: ''
         };
         break;
       case this.MessageTypeIds.Audio:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Audio,
           originalContentUrl: '',
           duration: ''
         };
         break;
       case this.MessageTypeIds.TemplateButtons:
-        this.defaults.content = {
+        this.messageData.content = {
           type: 'template',
           template: {
             type: this.TemplateMessageType.Buttons
@@ -103,7 +122,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.TemplateConfirm:
-        this.defaults.content = {
+        this.messageData.content = {
           type: 'template',
           template: {
             type: this.TemplateMessageType.Confirm
@@ -111,7 +130,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.TemplateCarousel:
-        this.defaults.content = {
+        this.messageData.content = {
           type: 'template',
           template: {
             type: this.TemplateMessageType.Carousel
@@ -119,7 +138,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.TemplateImageCarousel:
-        this.defaults.content = {
+        this.messageData.content = {
           type: 'template',
           template: {
             type: this.TemplateMessageType.ImageCarousel
@@ -127,7 +146,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.Imagemap:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Imagemap,
           templateId: 201,
           templateValue: 6,
@@ -140,7 +159,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.Location:
-        this.defaults.content = {
+        this.messageData.content = {
           type: 'location',
           title: '',
           address: '',
@@ -149,7 +168,7 @@ export default {
         };
         break;
       case this.MessageTypeIds.Flex:
-        this.defaults.content = {
+        this.messageData.content = {
           type: this.MessageType.Flex,
           contents: null
         };
@@ -161,49 +180,38 @@ export default {
         this.rerender = true;
       }, 100);
 
-      this.$emit('input', { index: this.index, content: this.defaults });
+      this.$emit('input', { index: this.index, content: this.messageData });
     },
     changeContentMessage(content) {
-      this.defaults.content = content;
-      this.$emit('input', { index: this.index, content: this.defaults });
+      this.messageData.content = content;
+      this.$emit('input', { index: this.index, content: this.messageData });
     },
 
     removeMessage() {
       this.$emit('remove', { index: this.index });
     },
 
-    moveMessageToTop() {
-      this.$emit('moveMessageToTop', this.index);
+    moveMessageUp() {
+      this.$emit('moveMessageUp', this.index);
     },
 
-    moveMessageToBottom() {
-      this.$emit('moveMessageToBottom', this.index);
+    moveMessageDown() {
+      this.$emit('moveMessageDown', this.index);
     }
   }
 };
 </script>
 
 <style  lang="scss" scoped>
-::v-deep {
-  .group-action {
-    margin-left: auto;
-  }
+  ::v-deep {
+    .group-action {
+      margin-left: auto;
+    }
 
-  .action-item {
-    margin-left: 10px;
-    background: transparent;
+    .dashed {
+      height: 1px;
+      margin: 10px 0;
+      border: thin dashed #ededed;
+    }
   }
-
-  .action-item:hover {
-    color: #212529;
-    background-color: #e2e6ea;
-    border-color: #dae0e5;
-  }
-  .dashed{
-    height: 1px;
-    margin: 10px 0;
-    border: thin dashed #ededed;
-  }
-}
-
 </style>

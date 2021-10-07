@@ -149,8 +149,8 @@
               v-bind:messagesCount="broadcastData.messages.length"
               @input="changeContent"
               @remove="removeContent"
-              @moveTopMessage="moveTopMessage"
-              @moveBottomMessage="moveBottomMessage"
+              @moveMessageUp="moveMessageUp"
+              @moveMessageDown="moveMessageDown"
             />
           </div>
           <div
@@ -313,7 +313,7 @@ export default {
       });
     },
 
-    moveTopMessage(index) {
+    moveMessageUp(index) {
       this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index - 1, 1, option)[0];
@@ -321,7 +321,7 @@ export default {
         this.refresh_content = true;
       });
     },
-    moveBottomMessage(index) {
+    moveMessageDown(index) {
       this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index + 1, 1, option)[0];
