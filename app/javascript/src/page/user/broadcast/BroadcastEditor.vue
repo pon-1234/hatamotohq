@@ -56,10 +56,7 @@
               </label>
             </div>
             <div v-if="broadcastData.conditions.type == 'specific'">
-              <message-condition
-                @input="changeCondition"
-                v-bind:data="broadcastData.conditions"
-              />
+              <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions" />
             </div>
           </div>
         </div>
@@ -82,12 +79,7 @@
             />今すぐ配信
           </label>
           <label>
-            <input
-              type="radio"
-              name="datetime"
-              :value="false"
-              v-model="broadcastData.deliver_now"
-            />配信日時を指定
+            <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now" />配信日時を指定
           </label>
         </div>
         <datetime
@@ -123,23 +115,14 @@
             maxlength="256"
             data-vv-as="タイトル"
           />
-          <error-message
-            :message="errors.first('broadcast_title')"
-          ></error-message>
+          <error-message :message="errors.first('broadcast_title')"></error-message>
         </div>
         <div v-if="refresh_content">
           <div class="mb-2">
-            <div
-              class="btn btn-secondary"
-              data-toggle="modal"
-              data-target="#modalSelectTemplate"
-            >
+            <div class="btn btn-secondary" data-toggle="modal" data-target="#modalSelectTemplate">
               テンプレートから作成
             </div>
-            <modal-select-template
-              @selectTemplate="onSelectTemplate"
-              id="modalSelectTemplate"
-            ></modal-select-template>
+            <modal-select-template @selectTemplate="onSelectTemplate" id="modalSelectTemplate"></modal-select-template>
           </div>
           <div v-for="(item, index) in broadcastData.messages" :key="index">
             <message-editor
@@ -167,20 +150,10 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button
-          class="btn btn-success fw-120 mr-1"
-          @click="createMessage('pending')"
-          :disabled="invalid"
-        >
+        <button class="btn btn-success fw-120 mr-1" @click="createMessage('pending')" :disabled="invalid">
           配信登録
         </button>
-        <button
-          type="submit"
-          class="btn btn-outline-success fw-120"
-          @click="createMessage('draft')"
-        >
-          下書き保存
-        </button>
+        <button type="submit" class="btn btn-outline-success fw-120" @click="createMessage('draft')">下書き保存</button>
       </div>
     </div>
     <message-preview></message-preview>

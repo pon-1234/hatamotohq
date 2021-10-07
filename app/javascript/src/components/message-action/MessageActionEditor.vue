@@ -2,17 +2,34 @@
   <div>
     <div class="mt-2" v-if="isSupportPostback">
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" :id="`actionCategoryCustom${index}`" :name="name+'_message_action_type'" value="default" :checked="type==='default'" @change="changeType('default')" class="custom-control-input">
+        <input
+          type="radio"
+          :id="`actionCategoryCustom${index}`"
+          :name="name + '_message_action_type'"
+          value="default"
+          :checked="type === 'default'"
+          @change="changeType('default')"
+          class="custom-control-input"
+        />
         <label class="custom-control-label" :for="`actionCategoryCustom${index}`">カスタムアクション</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
-        <input type="radio" :id="`actionCategoryBasic${index}`" :name="name+'_message_action_type'" value="basic" :checked="type==='basic'" @change="changeType('basic')" class="custom-control-input">
+        <input
+          type="radio"
+          :id="`actionCategoryBasic${index}`"
+          :name="name + '_message_action_type'"
+          value="basic"
+          :checked="type === 'basic'"
+          @change="changeType('basic')"
+          class="custom-control-input"
+        />
         <label class="custom-control-label" :for="`actionCategoryBasic${index}`">基本アクション</label>
       </div>
     </div>
 
     <div class="mt-2">
-      <message-action-type-default v-if="type==='default' && isSupportPostback"
+      <message-action-editor-custom
+        v-if="type === 'default' && isSupportPostback"
         :name="name"
         :value="data"
         :labelRequired="labelRequired"
@@ -20,7 +37,8 @@
         @input="updateAction"
       />
 
-      <message-action-type-basic v-if="type==='basic' "
+      <message-action-editor-basic
+        v-if="type === 'basic'"
         :value="data"
         :name="name"
         :supports="supports"

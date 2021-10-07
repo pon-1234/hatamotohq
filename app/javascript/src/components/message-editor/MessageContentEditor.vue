@@ -1,12 +1,7 @@
 <template>
   <div class="area-type mb20">
     <!-- text message -->
-    <message-editor-text
-      v-if="data.type === 'text'"
-      :value="data.text"
-      @input="onTextChanged"
-      :index="index"
-    />
+    <message-editor-text v-if="data.type === 'text'" :value="data.text" @input="onTextChanged" :index="index" />
 
     <!-- sticker -->
     <sticker-message-editor
@@ -20,11 +15,7 @@
 
     <!-- image/video/audio -->
     <template v-if="['image', 'video', 'audio'].includes(data.type)">
-      <message-editor-media
-        :data="data"
-        @input="onMediaChanged"
-        :index="index"
-      ></message-editor-media>
+      <message-editor-media :data="data" @input="onMediaChanged" :index="index"></message-editor-media>
     </template>
 
     <!-- location -->
@@ -43,10 +34,7 @@
 
     <!-- template button -->
     <template-button-editor
-      v-if="
-        data.type === MessageType.Template &&
-        data.template.type === TemplateMessageType.Buttons
-      "
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Buttons"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
@@ -54,10 +42,7 @@
 
     <!-- template confirm -->
     <template-confirm-editor
-      v-if="
-        data.type === MessageType.Template &&
-        data.template.type === TemplateMessageType.Confirm
-      "
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Confirm"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
@@ -65,10 +50,7 @@
 
     <!-- template carousel -->
     <template-carousel-editor
-      v-if="
-        data.type === MessageType.Template &&
-        data.template.type === TemplateMessageType.Carousel
-      "
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Carousel"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
@@ -76,23 +58,21 @@
 
     <!-- template image caroutsel -->
     <template-image-carousel-editor
-      v-if="
-        data.type === MessageType.Template &&
-        data.template.type === TemplateMessageType.ImageCarousel
-      "
+      v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.ImageCarousel"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
     />
 
     <!-- imagemap -->
-    <imagemap-editor
+    <message-editor-imagemap
       v-if="data.type === MessageType.Imagemap"
       :data="data"
       :index="index"
       @input="onImagemapChanged"
       :indexParent="index"
-    />
+    >
+    </message-editor-imagemap>
 
     <!-- flex message -->
     <flex-message-editor

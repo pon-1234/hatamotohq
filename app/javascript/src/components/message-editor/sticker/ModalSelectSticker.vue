@@ -11,37 +11,22 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">スタンプを選択</h4>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body mh-100 overflow-hidden">
           <div class="bg-light sticker-picker m-n3">
             <div class="w-100">
-              <sticker-select-package
-                ref="stickerSelected"
-                @input="changePackageId"
-              ></sticker-select-package>
+              <sticker-select-package ref="stickerSelected" @input="changePackageId"></sticker-select-package>
             </div>
             <div class="bg-white" style="height: 400px">
               <div
-                class="
-                  h-100
-                  overflow-y-scroll overflow-auto-shadow overflow-scroll-touch
-                  start
-                "
+                class="h-100 overflow-y-scroll overflow-auto-shadow overflow-scroll-touch start"
                 style="height: 100%"
               >
                 <div class="sticker-list">
-                  <div
-                    class="d-flex"
-                    style="margin: 0px auto; flex-wrap: wrap; width: 540px"
-                  >
+                  <div class="d-flex" style="margin: 0px auto; flex-wrap: wrap; width: 540px">
                     <!-- Todo -->
                     <sticker
                       v-for="(sticker, index) in stickers"

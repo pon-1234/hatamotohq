@@ -32,20 +32,12 @@
       />
     </div>
 
-    <div
-      class="card border-warning border"
-      v-for="(action, index) in actions"
-      :key="index"
-    >
+    <div class="card border-warning border" v-for="(action, index) in actions" :key="index">
       <div class="card-header">
         <div class="d-flex align-items-center">
           <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
           <div class="ml-auto" v-if="actions.length > 1">
-            <div
-              @click="moveActionUp(index)"
-              class="btn btn-sm btn-light"
-              v-if="index > 0"
-            >
+            <div @click="moveActionUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
               <i class="dripicons-chevron-up"></i>
             </div>
             <div
@@ -56,11 +48,7 @@
             >
               <i class="dripicons-chevron-down"></i>
             </div>
-            <div
-              @click="removeAction(index)"
-              v-if="actions.length > 1"
-              class="btn btn-sm btn-light"
-            >
+            <div @click="removeAction(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
               <i class="mdi mdi-delete"></i>
             </div>
           </div>
@@ -78,9 +66,7 @@
       </div>
     </div>
     <div class="text-center mt-2" v-if="actions.length < 3">
-      <div class="btn btn-warning" role="button" @click="addAction()">
-        <i class="uil-plus"></i> アクションの追加
-      </div>
+      <div class="btn btn-warning" role="button" @click="addAction()"><i class="uil-plus"></i> アクションの追加</div>
     </div>
     <divider></divider>
     <div>

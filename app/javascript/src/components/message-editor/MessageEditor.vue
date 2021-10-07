@@ -9,20 +9,9 @@
       </div>
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <message-type-selection
-            v-model="messageData.message_type_id"
-            @input="changeSelectedMessage"
-          />
-          <div
-            class="group-action d-flex"
-            v-if="messagesCount && messagesCount > 0"
-          >
-            <div
-              role="button"
-              class="d-flex btn btn-light btn-sm mr-1"
-              @click="moveMessageUp"
-              v-if="index >= 1"
-            >
+          <message-type-selection v-model="messageData.message_type_id" @input="changeSelectedMessage" />
+          <div class="group-action d-flex" v-if="messagesCount && messagesCount > 0">
+            <div role="button" class="d-flex btn btn-light btn-sm mr-1" @click="moveMessageUp" v-if="index >= 1">
               <i class="dripicons-chevron-up"></i>
             </div>
             <div
@@ -33,12 +22,7 @@
             >
               <i class="dripicons-chevron-down"></i>
             </div>
-            <div
-              role="button"
-              class="d-flex btn btn-light btn-sm"
-              @click="removeMessage"
-              v-if="messagesCount != 1"
-            >
+            <div role="button" class="d-flex btn btn-light btn-sm" @click="removeMessage" v-if="messagesCount != 1">
               <i class="dripicons-minus"></i>
             </div>
           </div>

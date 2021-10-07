@@ -1,9 +1,7 @@
 <template>
   <select v-model="selected" class="form-control w-50">
     <option v-for="(item, index) in options" :key="index" :value="item.value">
-      {{
-      item.text
-      }}
+      {{ item.text }}
     </option>
   </select>
 </template>

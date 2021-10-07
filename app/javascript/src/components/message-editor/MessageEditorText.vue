@@ -11,9 +11,7 @@
       placeholder="本文を入力してください"
       v-model="input_value"
     ></textarea>
-    <error-message
-      :message="errors.first('message-editor' + index)"
-    ></error-message>
+    <error-message :message="errors.first('message-editor' + index)"></error-message>
   </div>
 </template>
 <script>

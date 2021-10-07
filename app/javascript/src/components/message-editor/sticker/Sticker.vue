@@ -1,13 +1,13 @@
 <template>
   <span v-if="animation" class="sticker-item animation" data-dismiss="modal">
     <img
-      :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker_animation.png'"
+      :src="`https://stickershop.line-scdn.net/stickershop/v1/sticker/${sticker.line_emoji_id}/PC/sticker_animation.png`"
       class="sticker-animation position-absolute"
-      style="top: 0px;"
+      style="top: 0px"
     />
     <img
       v-if="animation"
-      :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker.png'"
+      :src="`https://stickershop.line-scdn.net/stickershop/v1/sticker/${sticker.line_emoji_id}/PC/sticker.png`"
       class="sticker-static"
       @click="onSelectSticker"
       style
@@ -15,7 +15,7 @@
   </span>
   <span v-else class="sticker-item" data-dismiss="modal">
     <img
-      :src="'https://stickershop.line-scdn.net/stickershop/v1/sticker/'+sticker.line_emoji_id+'/PC/sticker.png'"
+      :src="`https://stickershop.line-scdn.net/stickershop/v1/sticker/${sticker.line_emoji_id}/PC/sticker.png`"
       class="sticker-static"
       @click="onSelectSticker"
       style

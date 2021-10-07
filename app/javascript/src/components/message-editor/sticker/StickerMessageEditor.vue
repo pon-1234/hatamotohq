@@ -1,29 +1,19 @@
 <template>
   <div>
     <div class="border" v-if="packageId && stickerId">
-      <div
-        class="figure figure-grid figure-grid-sm mr-3 mb-3 position-relative"
-      >
+      <div class="figure figure-grid figure-grid-sm mr-3 mb-3 position-relative">
         <img
           :src="`https://stickershop.line-scdn.net/stickershop/v1/sticker/${stickerId}/PC/sticker.png`"
           alt="tabImage"
         />
-        <button
-          type="button"
-          class="position-absolute close"
-          style="top: 10px; right: 0px"
-          @click="removeSticker"
-        >
+        <button type="button" class="position-absolute close" style="top: 10px; right: 0px" @click="removeSticker">
           <i class="mdi mdi-close-outline"></i>
           <!-- <i class="fas fa-times"></i> -->
         </button>
       </div>
     </div>
     <div v-else>
-      <div
-        class="border text-center"
-        :class="errors.first('sticker-id' + index) ? 'invalid-box' : ''"
-      >
+      <div class="border text-center" :class="errors.first('sticker-id' + index) ? 'invalid-box' : ''">
         <div class="figure figure-grid-sm my-4">
           <a
             class="text-primary"
@@ -38,16 +28,10 @@
           </div>
         </div>
       </div>
-      <error-message
-        :message="errors.first('sticker-id' + index)"
-      ></error-message>
+      <error-message :message="errors.first('sticker-id' + index)"></error-message>
     </div>
     <!-- Modal -->
-    <modal-select-sticker
-      :ref="`modalSticker${index}`"
-      :id="`stickerModalCenter${index}`"
-      @input="selectSticker"
-    />
+    <modal-select-sticker :ref="`modalSticker${index}`" :id="`stickerModalCenter${index}`" @input="selectSticker" />
     <input
       type="hidden"
       v-model="stickerId"

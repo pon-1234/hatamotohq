@@ -28,13 +28,9 @@
             data-vv-as="住所"
             name="location-description"
           ></textarea>
-          <error-message
-            :message="errors.first('location-description')"
-          ></error-message>
+          <error-message :message="errors.first('location-description')"></error-message>
         </div>
-        <div class="btn btn-primary ml-2" style="" @click="getMarker">
-          ピンの住所を検出
-        </div>
+        <div class="btn btn-primary ml-2" style="" @click="getMarker">ピンの住所を検出</div>
       </div>
     </div>
     <br />
@@ -48,21 +44,8 @@
       @center_changed="changeCenter"
     >
       <div slot="visible">
-        <div
-          class="box-search"
-          style="
-            top: 10px;
-            left: 12px;
-            width: 300px;
-            position: absolute;
-            z-index: 0;
-          "
-        >
-          <gmap-autocomplete
-            @place_changed="setPlace"
-            :options="{ fields: ['geometry'] }"
-            class="form-control"
-          >
+        <div class="box-search" style="top: 10px; left: 12px; width: 300px; position: absolute; z-index: 0">
+          <gmap-autocomplete @place_changed="setPlace" :options="{ fields: ['geometry'] }" class="form-control">
           </gmap-autocomplete>
         </div>
       </div>

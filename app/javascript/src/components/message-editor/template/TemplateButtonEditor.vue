@@ -2,36 +2,59 @@
   <div>
     <div class="border template-buttons row">
       <div class="d-flex group-title col-md-6">
-        <label class="mt-2">
-          タイトル<required-mark/>
-        </label>
-        <input class="form-control" placeholder="タイトルを入力してください" type="text" maxlength="40" v-model="templateData.title" v-validate="'required'" data-vv-as="タイトル" :name="'button-title'+ indexParent"/>
+        <label class="mt-2"> タイトル<required-mark /> </label>
+        <input
+          class="form-control"
+          placeholder="タイトルを入力してください"
+          type="text"
+          maxlength="40"
+          v-model="templateData.title"
+          v-validate="'required'"
+          data-vv-as="タイトル"
+          :name="'button-title' + indexParent"
+        />
         <error-message :message="errors.first('button-title' + indexParent)"></error-message>
       </div>
 
       <div class="d-flex group-title col-md-6">
-        <label class="mt-2">
-          テキスト<required-mark/>
-        </label>
+        <label class="mt-2"> テキスト<required-mark /> </label>
         <input
           class="form-control"
           placeholder="テキストを入力してください"
-          :name="'button-text'+indexParent"
+          :name="'button-text' + indexParent"
           type="text"
           maxlength="60"
           v-model="templateData.text"
           v-validate="'required'"
-          data-vv-as="テキスト"/>
-        <error-message :message="errors.first('button-text'+indexParent)"></error-message>
+          data-vv-as="テキスト"
+        />
+        <error-message :message="errors.first('button-text' + indexParent)"></error-message>
       </div>
 
-      <div class="row col-12" style="margin-top: 15px !important;">
+      <div class="row col-12" style="margin-top: 15px !important">
         <div class="col-sm-3">
           <ul class="nav nav-tabs nav-stacked nav-buttons d-block">
-            <li v-for="(item, index) in templateData.actions" :key="index" :class="selected == index? 'active': ''" @click="changeSelected(index)">
-              <div class="nav-button" :class="errors.items.find(item=>item.field.includes(indexParent + 'template_button_' + index)) ? 'invalid-box': ''">
-                ボタン{{index + 1}}
-                <span v-if="templateData.actions.length > 1" class="action-tab-selector-remover" @click.stop="removeAction(index)"><i class="fas fa-times"></i></span>
+            <li
+              v-for="(item, index) in templateData.actions"
+              :key="index"
+              :class="selected == index ? 'active' : ''"
+              @click="changeSelected(index)"
+            >
+              <div
+                class="nav-button"
+                :class="
+                  errors.items.find((item) => item.field.includes(indexParent + 'template_button_' + index))
+                    ? 'invalid-box'
+                    : ''
+                "
+              >
+                ボタン{{ index + 1 }}
+                <span
+                  v-if="templateData.actions.length > 1"
+                  class="action-tab-selector-remover"
+                  @click.stop="removeAction(index)"
+                  ><i class="fas fa-times"></i
+                ></span>
               </div>
             </li>
             <li v-if="templateData.actions.length < 4">
@@ -48,7 +71,7 @@
             </div>
             <div class="card-body">
               <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">
-                <message-action-type
+                <message-action-editor
                   :name="'parent_' + indexParent + 'template_button_' + index"
                   :value="item"
                   @input="changeAction(index, $event)"
@@ -120,59 +143,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep{
-  .row {
-    margin: 0!important;
-  }
-
-  .group-title {
-    flex-direction: column;
-  }
-
-  .nav-stacked>li {
-    float: none;
-    position: relative;
-    display: block;
-  }
-
-  li {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .nav-button {
-      width: 100% !important;
-      display: flex !important;
-      height: 40px;
-      align-items: center !important;
-      border: 1px solid #e4e4e4;
-      padding-left: 10px;
+  ::v-deep {
+    .row {
+      margin: 0 !important;
     }
 
-    .action-tab-selector-remover {
-      padding: 5px;
+    .group-title {
+      flex-direction: column;
+    }
+
+    .nav-stacked > li {
+      float: none;
+      position: relative;
+      display: block;
+    }
+
+    li {
       cursor: pointer;
-      line-height: 1;
+      display: flex;
       align-items: center;
-      margin-left: auto;
-      display: inline-flex;
-    }
-  }
+      justify-content: center;
+      .nav-button {
+        width: 100% !important;
+        display: flex !important;
+        height: 40px;
+        align-items: center !important;
+        border: 1px solid #e4e4e4;
+        padding-left: 10px;
+      }
 
-  li.active {
-    .nav-button {
-      border-left: 3px solid #727cf5;
-      color: #727cf5;
-      font-weight: bold;
+      .action-tab-selector-remover {
+        padding: 5px;
+        cursor: pointer;
+        line-height: 1;
+        align-items: center;
+        margin-left: auto;
+        display: inline-flex;
+      }
     }
-    .action-tab-selector-remover {
-      color: white;
-    }
-  }
 
-  .glyphicon-remove{
-    font-size: 13px;
-    margin-bottom: 2px;
+    li.active {
+      .nav-button {
+        border-left: 3px solid #727cf5;
+        color: #727cf5;
+        font-weight: bold;
+      }
+      .action-tab-selector-remover {
+        color: white;
+      }
+    }
+
+    .glyphicon-remove {
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
   }
-}
 </style>
