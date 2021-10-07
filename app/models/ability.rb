@@ -32,9 +32,11 @@ class Ability
     can [:manage], LineFriend, line_account: user.line_account
 
     # Folder
-    can [:read, :update, :destroy], Folder, line_account: user.line_account
+    can [:manage], Folder, line_account: user.line_account
     can [:create], Folder
-    can [:read, :update, :destroy], Tag, folder: { line_account: user.line_account }
-    can [:create, :friends], Tag
+
+    # Tag
+    can [:manage], Tag, folder: { line_account: user.line_account }
+    can [:create], Tag
   end
 end

@@ -8,16 +8,6 @@ export default {
     });
   },
 
-  getFriendsByTag: (query) => {
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/tags/${query.id}/friends`,
-      method: 'GET',
-      data: query,
-      dataType: 'json',
-      contentType: 'application/json'
-    });
-  },
-
   create: (query) => {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '/user/tags',

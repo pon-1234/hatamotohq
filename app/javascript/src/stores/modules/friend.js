@@ -51,6 +51,10 @@ export const mutations = {
       visible_eq: true,
       locked_eq: false
     };
+  },
+
+  resetFriends(state) {
+    state.friends = [];
   }
 };
 

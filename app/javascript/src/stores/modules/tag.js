@@ -2,12 +2,7 @@ import TagAPI from '../api/tag_api';
 import FolderAPI from '../api/folder_api';
 
 export const state = {
-  folders: [],
-  friends: [],
-  tag: null,
-  totalRows: 0,
-  perPage: 0,
-  curPage: 1
+  folders: []
 };
 
 // TODO need refactor
@@ -16,24 +11,6 @@ export const mutations = {
     const old = state.folders.find(_ => _.id === folder.id);
     old.tags_count = folder.tags_count;
     old.tags = folder.tags;
-  },
-
-  setFriends(state, friends) {
-    state.friends = friends;
-  },
-
-  setTag(state, tag) {
-    state.tag = tag;
-  },
-
-  setCurPage(state, curPage) {
-    state.curPage = curPage;
-  },
-
-  setMeta(state, meta) {
-    state.totalRows = meta.total_count;
-    state.perPage = meta.limit_value;
-    state.curPage = meta.current_page;
   },
 
   setFolders(state, folders) {
@@ -79,20 +56,6 @@ export const actions = {
       const folders = await TagAPI.getTags();
       context.commit('setFolders', folders);
       return folders;
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  async getFriendsByTag(context) {
-    try {
-      const params = {
-        id: context.state.tag.id,
-        page: context.state.curPage
-      };
-      const response = await TagAPI.getFriendsByTag(params);
-      context.commit('setFriends', response.data);
-      context.commit('setMeta', response.meta);
     } catch (error) {
       console.log(error);
     }
