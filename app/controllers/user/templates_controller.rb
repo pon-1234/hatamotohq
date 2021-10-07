@@ -28,7 +28,7 @@ class User::TemplatesController < User::ApplicationController
 
   # POST /user/templates
   def create
-    @template = buld_template(template_params)
+    @template = build_template(template_params)
     unless @template.save
       render_bad_request_with_message(@template.first_error_message)
     end
