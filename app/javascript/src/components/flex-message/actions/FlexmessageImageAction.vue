@@ -4,11 +4,7 @@
       <span class="float-left">画像</span>
       <i class="mdi mdi-arrow-expand" aria-hidden="true"></i>
     </p>
-    <div
-      style="margin-top: 10px; display: none"
-      :class="name + '-expand'"
-      class="card-container"
-    >
+    <div style="margin-top: 10px; display: none" :class="name + '-expand'" class="card-container">
       <div class="card">
         <h5 class="card-header">Image</h5>
         <div class="card-body">
@@ -29,17 +25,8 @@
           <div class="form-group row">
             <label class="col-sm-4 col-form-label">サイズ変更</label>
             <div class="col-sm-8">
-              <select
-                type="text"
-                v-model="aspectModeParams"
-                class="w-100 form-control"
-                @change="changeAspectMode"
-              >
-                <option
-                  v-for="(val, index) of aspectModesOption"
-                  :key="index"
-                  :value="val"
-                >
+              <select type="text" v-model="aspectModeParams" class="w-100 form-control" @change="changeAspectMode">
+                <option v-for="(val, index) of aspectModesOption" :key="index" :value="val">
                   {{ val }}
                 </option>
               </select>
@@ -52,14 +39,7 @@
         <div class="card-body">
           <div class="form-group">
             <message-action-editor
-              :supports="[
-                '',
-                'postback',
-                'uri',
-                'message',
-                'datetimepicker',
-                'survey',
-              ]"
+              :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
               :name="name"
               :value="action"
               :showTitle="false"
@@ -69,11 +49,7 @@
           </div>
         </div>
       </div>
-      <modal-select-media
-        @input="uploadImage"
-        :data="{ type: 'image' }"
-        :id="'modalSelectMedia-' + name"
-      />
+      <modal-select-media @input="uploadImage" :data="{ type: 'image' }" :id="'modalSelectMedia-' + name" />
     </div>
   </div>
 </template>
@@ -223,12 +199,7 @@ export default {
         rgba(227, 100, 48, 1) 50%,
         rgba(240, 71, 0, 1) 100%
       );
-      background: linear-gradient(
-        90deg,
-        rgba(208, 120, 83, 1) 0%,
-        rgba(227, 100, 48, 1) 50%,
-        rgba(240, 71, 0, 1) 100%
-      );
+      background: linear-gradient(90deg, rgba(208, 120, 83, 1) 0%, rgba(227, 100, 48, 1) 50%, rgba(240, 71, 0, 1) 100%);
     }
   }
 </style>

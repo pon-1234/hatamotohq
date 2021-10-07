@@ -37,15 +37,16 @@
         :class="editingActionIndex === index ? 'tab-pane show active' : 'tab-pane'"
         v-for="(item, index) in messageData.actions"
         :key="index"
-        :id="`#messageAction${index}`"
+        :id="`messageAction${index}`"
       >
         <div>
           <message-action-editor
-            :name="'confirm_' + index"
+            :index="index"
+            :name="`message${indexParent}Confirm${index}`"
             :value="item"
             :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
             @input="changeAction(index, ...arguments)"
-          />
+          ></message-action-editor>
         </div>
       </div>
     </div>

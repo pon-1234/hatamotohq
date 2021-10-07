@@ -41,12 +41,12 @@
     />
 
     <!-- template confirm -->
-    <template-confirm-editor
+    <message-editor-confirm
       v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Confirm"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-    />
+    ></message-editor-confirm>
 
     <!-- template carousel -->
     <template-carousel-editor

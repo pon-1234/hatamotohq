@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showTitle">
-      <label class="w-100 mt-2">
+      <label class="w-100">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>

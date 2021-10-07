@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showTitle">
-      <label class="w-100">
+      <label class="w-100 d-flex align-items-center">
         ラベル
         <required-mark v-if="labelRequired" />
       </label>
@@ -21,8 +21,8 @@
       </div>
     </div>
 
-    <div>
-      <label>URL<required-mark /></label>
+    <div class="mt-2">
+      <label class="d-flex align-items-center">URL<required-mark /></label>
       <input
         :name="name + '_value'"
         type="text"
