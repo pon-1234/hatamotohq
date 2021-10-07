@@ -17,13 +17,13 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i>タグ名</th>
+                  <th>タグ名</th>
                   <th>メンバー数</th>
                   <th>作成日</th>
                 </tr>
               </thead>
               <tbody v-if="curFolder">
-                <tr v-if="showTagInput" class="tag-item">
+                <tr v-if="showTagInput">
                   <td class="mw-200 vetical-align-middle">
                     <div class="folder-item">
                       <div class="input-group newgroup-inputs">
@@ -268,107 +268,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  .tag-header {
-    color: white;
-  }
-
-  .tag-content {
-    height: 85vh;
-    margin-top: 10px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    .tag-scroll {
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      margin: 0 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .tag-list {
-      overflow-y: hidden;
-    }
-  }
-
-  .tag-content-left {
-    padding-right: 0px !important;
-  }
-
-  .table-tags-header {
-    margin-bottom: 0px !important;
-  }
-  .item-sm {
-    display: none;
-  }
-  @media (max-width: 991px) {
-    .item-pc {
-      display: none !important;
-    }
-
-    .item-sm {
-      display: inline-block !important;
-    }
-
-    .fa-arrow-left {
-      cursor: pointer;
-      float: left;
-      margin-right: 10px;
-    }
-
-    .tag-content-right {
-      .tag-scroll {
-        overflow-x: scroll;
-      }
-    }
-
-    .tag-scroll {
-      overflow-x: scroll;
-    }
-  }
-
-  .new-folder {
-    background: #fff3a0 !important;
-    padding: 10px;
-  }
-
-  .tag-item {
-    background: white;
-  }
-
-  .table-responsive {
-    overflow: auto;
-    height: 100%;
-    margin-bottom: 0px !important;
-    thead {
-      border-bottom: none !important;
-      th {
-        color: #333;
-        z-index: 5;
-        padding: 8px !important;
-        height: 52px;
-        border-bottom: none !important;
-        box-shadow: inset 0 -2px 0 #ddd;
-        position: sticky;
-        top: 0;
-        background: #f0f0f0;
-        border-radius: 0px !important;
-      }
-      th:first-child {
-        text-align: left !important;
-      }
-    }
-  }
-
-  .thead-light {
-    th {
-      height: 52px;
-    }
-  }
-
-  .folder-list {
-    border-right: thin solid #ccc;
-  }
-</style>

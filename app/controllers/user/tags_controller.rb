@@ -33,15 +33,6 @@ class User::TagsController < User::ApplicationController
     render_success
   end
 
-  # GET /user/tags/:id/friends
-  # Get all friends by tag
-  def friends
-    @friends = @tag.friends.page(params[:page])
-    respond_to do |format|
-      format.json
-    end
-  end
-
   private
     def tag_params
       params.permit(:name, :folder_id)
