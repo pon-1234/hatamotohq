@@ -79,7 +79,6 @@ class Util {
   static getDuration(data) {
     const durationInMilis = data.duration;
     const duration = moment.duration(durationInMilis / 1000, 'seconds');
-    console.log('---duration---', duration);
     return `${duration.minutes()}:${duration.seconds()}`;
   }
 

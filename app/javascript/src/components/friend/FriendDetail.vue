@@ -1,6 +1,6 @@
 <template>
   <div class="profile-detail row" v-if="friendData">
-    <div class="col-lg-4 d-flex">
+    <div class="col-xl-4 d-flex">
       <div class="card card-success card-outline w-100">
         <div class="card-body box-profile">
           <!-- profile image -->
@@ -9,13 +9,17 @@
           </div>
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
-          <ul class="list-group list-group-unbordered mb-3">
+
+          <span class="d-flex flex-row w-100">
+            <friend-toggle-visible :id="friendData.id" :visible="friendData.visible" class="ml-auto mr-1"></friend-toggle-visible>
+            <friend-toggle-locked :id="friendData.id" :locked="friendData.locked" class="mr-auto"></friend-toggle-locked>
+          </span>
+
+          <ul class="list-group list-group-unbordered my-3">
             <!-- locked -->
             <li class="list-group-item">
-              <b>ステータス</b> <span class="float-right d-flex flex-row">
-                <friend-toggle-visible :id="friendData.id" :visible="friendData.visible" class="ml-auto mr-1"></friend-toggle-visible>
-                <friend-toggle-locked :id="friendData.id" :locked="friendData.locked" class="mr-auto"></friend-toggle-locked>
-              </span>
+              <b>ステータス</b>
+              <span class="float-right"><friend-status :status="friendData.status" :locked="friendData.locked" :visible="friendData.visible"></friend-status></span>
             </li>
 
             <!-- go to chat -->
@@ -34,7 +38,7 @@
       </div>
       <!-- /.card -->
     </div>
-    <div class="col-lg-8">
+    <div class="col-xl-8">
       <div class="card card-success card-outline">
         <div class="card-header d-flex align-items-center">
           <h4>詳細情報</h4>
@@ -42,7 +46,7 @@
         <div class="card-body">
           <p class="mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
-            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'required|max:255'" data-vv-as="表示名">
+            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'max:255'" data-vv-as="表示名">
             <error-message :message="errors.first('display_name')"></error-message>
           </p>
           <hr>
@@ -143,7 +147,9 @@ export default {
   data() {
     return {
       friendData: {
-        status: 'enabled',
+        status: 'active',
+        locked: null,
+        visible: null,
         line_name: '',
         line_picture_url: '',
         display_name: '',
@@ -165,14 +171,10 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
-    await this.getTags();
     this.loading = false;
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
     ...mapActions('friend', [
       'getFriend',
       'updateFriend'
@@ -236,31 +238,6 @@ export default {
         shrinkedStr = front + mid + end;
       }
       return shrinkedStr;
-    },
-    autoText(data) {
-      if (Array.isArray(data)) {
-        let str = '';
-        data.forEach((text, index) => {
-          if (index > 0) {
-            str += ', ';
-          }
-          str += text;
-        });
-
-        return str;
-      }
-      return data;
-    },
-
-    async updateStatusFromBot() {
-      await this.$store.dispatch('friend/updateStatusFromBot', {
-        id: this.friendData.id,
-        status_from_bot: this.destinationStatusFromBot
-      }).done(res => {
-        this.friendData.status_from_bot = this.destinationStatusFromBot;
-      })
-        .fail(e => {
-        });
     },
 
     openAddFileModal(index) {

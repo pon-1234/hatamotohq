@@ -143,7 +143,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     if (this.rich_menu_id) {
       await this.fetchRichMenu();
     }
@@ -151,9 +150,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
     ...mapActions('richmenu', [
       'getRichMenu',
       'createRichMenu',

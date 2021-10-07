@@ -27,7 +27,9 @@ class Media < ApplicationRecord
   belongs_to :line_account
   has_one_attached :file
   has_one :rich_menu, dependent: :nullify
-  validates :file, attached: false, content_type: ['image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf', 'audio/mpeg', 'video/mp4']
+  validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], if: :type_image?
+  validates :file, content_type: ['audio/m4a'], if: :type_audio?
+  validates :file, content_type: ['video/mp4'], if: :type_video?
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040, height: 1040 }, if: :type_imagemap?
   validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
   validates_with MediaValidator
@@ -46,10 +48,10 @@ class Media < ApplicationRecord
 
   def preview_url
     if file.attached? && file.representable?
-      rails_public_blob_url(file.representation(resize: '240x240').processed)
+      url_for(file.representation(resize: '240x240').processed)
     end
   rescue StandardError => e
-    logger.error('Could not generate preview url')
+    logger.error("Could not generate preview url #{e.message}")
   end
 
   def set_blob_duration(duration)

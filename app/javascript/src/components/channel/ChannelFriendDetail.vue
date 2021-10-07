@@ -1,6 +1,6 @@
 <template>
-  <div class="card chat-panel">
-    <div class="card-body" v-if="activeChannel">
+  <div class="card chat-panel" v-if="activeChannel">
+    <div class="card-body">
       <div class="mt-3 text-center">
         <img :src="friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle" />
@@ -9,7 +9,7 @@
 
       <div class="mt-3">
         <div class="d-flex align-items-center justify-content-center">
-          <a :href="detailPath" class="btn btn-primary btn-xs mr-1 ml-auto">詳細</a>
+          <a :href="detailPath" class="btn btn-primary btn-sm mr-1 ml-auto fw-80">詳細</a>
           <friend-toggle-locked :id="friend.id" :locked="friend.locked" class="mr-auto"></friend-toggle-locked>
         </div>
         <hr class="" />

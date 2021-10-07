@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class User::MediasController < User::ApplicationController
+  load_and_authorize_resource
+
   # GET /user/medias
   def index
-    @q = Media.with_attached_file.ransack(params[:q])
+    @q = Media.accessible_by(current_ability).with_attached_file.ransack(params[:q])
     @medias = @q.result.page(params[:page]).per(12)
     respond_to do |format|
       format.html

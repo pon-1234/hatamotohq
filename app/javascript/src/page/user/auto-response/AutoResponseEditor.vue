@@ -116,7 +116,6 @@ export default {
     } else {
       this.setDefaultMessage();
     }
-    await this.getTags();
     this.loading = false;
   },
 
@@ -130,10 +129,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
-
     ...mapActions('autoResponse', [
       'getAutoResponse',
       'createAutoResponse',

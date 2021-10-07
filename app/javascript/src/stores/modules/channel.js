@@ -99,8 +99,6 @@ export const mutations = {
             state.channels.unshift(channel);
           }
         }
-      } else if (event.action === 'read_message' || event.action === 'line_follow') {
-        state.channels.splice(channelIndex, 1, channel);
       }
     } else {
       state.channels.unshift(channel);
@@ -226,5 +224,5 @@ export const actions = {
     } catch (error) {
       console.log(error);
     }
-  },
+  }
 };

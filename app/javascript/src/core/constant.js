@@ -50,11 +50,11 @@ export const ActionObjectsType = {
   Location: 'location'
 };
 
-export const ImageType = ['image/jpeg', 'image/png', 'image/gif', 'image/pjpeg'];
+export const ImageType = ['image/jpeg', 'image/png', 'image/jpg'];
 
-export const VideoType = ['video/quicktime', 'video/mp4', 'video/m4v', 'video/x-m4v', 'video/wmv'];
+export const VideoType = ['video/mp4'];
 
-export const AudioType = ['audio/mpeg', 'audio/ogg', 'audio/mp3', 'audio/x-m4a'];
+export const AudioType = ['audio/m4a', 'audio/x-m4a'];
 
 export const PdfType = ['application/pdf', 'application/x-pdf'];
 

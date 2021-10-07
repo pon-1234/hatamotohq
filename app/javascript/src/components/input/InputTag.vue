@@ -76,11 +76,24 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import ClickOutside from 'vue-click-outside';
 
 export default {
-  props: ['tags', 'allTags', 'disabled'],
+  props: {
+    tags: {
+      type: Array,
+      default: () => []
+    },
+    allTags: {
+      type: Boolean,
+      default: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       value: [],
@@ -90,6 +103,10 @@ export default {
       selectedTags: [],
       isPc: true
     };
+  },
+
+  async beforeMount() {
+    await this.getTags();
   },
 
   created() {
@@ -137,6 +154,9 @@ export default {
   },
 
   methods: {
+    ...mapActions('tag', [
+      'getTags'
+    ]),
     isShowTop() {
       const rect = this.$refs.inputTag.$el.getBoundingClientRect();
       return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || (rect.top + window.scrollY) < 100;

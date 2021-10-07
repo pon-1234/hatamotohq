@@ -119,7 +119,7 @@
         <button
           class="btn btn-success fw-120 mr-1"
           @click="createMessage('pending')"
-          :disabled="invalid">送信</button>
+          :disabled="invalid">配信登録</button>
         <button
           type="submit"
           class="btn btn-outline-success fw-120"
@@ -187,7 +187,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     await this.fetchItem();
     this.loading = false;
   },
@@ -209,9 +208,6 @@ export default {
     ]),
     ...mapActions('template', [
       'getTemplate'
-    ]),
-    ...mapActions('tag', [
-      'getTags'
     ]),
     ...mapActions('system', [
       'setIsSubmitChange'

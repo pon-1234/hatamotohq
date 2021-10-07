@@ -44,6 +44,7 @@
           data-toggle="modal"
           data-target="#modalSelectMedia"
           @click="curUploadType = 'pdf'"
+          hidden
         >
           PDFアップロード
         </a>
@@ -53,77 +54,72 @@
       </div>
     </div>
     <div class="card-body d-flex flex-column" :key="contentKey">
-      <div :class="mode === 'read' ? 'flex-grow-1' : ''">
-        <div class="row">
-          <div
-            v-for="(media, index) in medias"
-            :key="index"
-            @click="selectMedia(media)"
-            class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4 d-flex"
-          >
-            <div class="card w-100">
-              <div class="card-body p-0 d-flex align-items-center justify-content-center">
-                <div class="text-center overflow-hidden">
-                  <div :class="mode === 'read' ? 'media-preview' : 'media-preview'">
-                    <template v-if="media.type === 'image' || media.type === 'richmenu'">
-                      <expandable-image
-                        v-if="mode === 'manage'"
-                        class="image"
-                        :src="media.url"
-                      />
-                      <img v-if="mode === 'read'" :src="media.preview_url" border="0" align="center" role="button"/>
-                    </template>
-                    <div
-                      role="button"
-                      class="video"
-                      v-if="media.type === 'video'"
-                    >
-                      <img :src="media.preview_url" border="0" align="center"/>
-                    </div>
+      <div :class="mode === 'read' ? 'row flex-grow-1' : 'row'">
+        <div
+          v-for="(media, index) in medias"
+          :key="index"
+          @click="selectMedia(media)"
+          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6' : 'col-xl-4 col-md-6'"
+        >
+          <div class="card fw-200 mx-auto">
+            <div class="card-body p-0 d-flex align-items-center justify-content-center">
+              <div class="text-center overflow-hidden">
+                <div class="media-preview" role="button">
+                  <template v-if="isImage(media)">
+                    <expandable-image
+                      v-if="mode === 'manage'"
+                      class="image fw-200 fh-150 bg-position-center"
+                      :src="media.url"
+                    />
+                    <div v-else v-lazy:background-image="media.preview_url" class="fw-200 fh-150 bg-position-center"></div>
+                  </template>
 
-                    <div
-                      role="button"
-                      class="file"
-                      v-else-if="media.type === 'pdf'"
-                    >
-                      <img src="/img/pdf_temp.png" border="0" align="center"/>
-                    </div>
+                  <template v-if="isVideo(media)">
+                    <video :width="200" :height="150" controls>
+                      <source :src="media.url">
+                    </video>
+                  </template>
 
-                    <div
-                      role="button"
-                      class="file"
-                      v-else-if="media.type === 'audio'"
-                    >
-                      <i class="fas fa-file-audio preview-icon"></i>
+                  <template v-else-if="isPdf(media)">
+                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                      <img src="/images/messages/pdf.png" width="100"/>
                     </div>
-                  </div>
+                  </template>
+
+                  <template v-else-if="isAudio(media)">
+                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                      <audio controls class="audio-player mx-2">
+                        <source :src="media.url">
+                      </audio>
+                    </div>
+                  </template>
                 </div>
               </div>
-              <div class="card-footer" v-if="mode === 'manage'">
-                <div class="d-flex align-items-center mt-1">
-                  <input
-                    class="select-media-cb mr-1"
-                    type="checkbox"
-                    :value="media"
-                    v-model="selectedMedias"
-                  />
-                  <b>{{ media.type }}</b>
-                  <a
-                    :href="media.url"
-                    class="ml-auto text-sm text-info"
-                    download
-                    ><i class="fas fa-download"></i></a>
-                </div>
-                <small class="w-100">
-                  登録：<b>{{ formattedDate(media.created_at) }}</b>
-                </small>
+            </div>
+            <div class="card-footer" v-if="isManageMode">
+              <div class="d-flex align-items-center mt-1">
+                <input
+                  class="select-media-cb mr-1"
+                  type="checkbox"
+                  :value="media"
+                  v-model="selectedMedias"
+                />
+                <b>{{ media.type }}</b>
+                <a
+                  :href="media.url"
+                  class="ml-auto text-sm text-info"
+                  download
+                  ><i class="fas fa-download"></i></a>
               </div>
+              <small class="w-100">
+                登録：<b>{{ formattedDate(media.created_at) }}</b>
+              </small>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="d-flex align-items-center mt-auto" v-if="medias && medias.length > 0">
+      <div class="d-flex align-items-center mt-2" v-if="medias && medias.length > 0">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -132,7 +128,7 @@
           aria-controls="my-table"
         ></b-pagination>
 
-        <div class="d-flex align-items-center ml-auto" v-if="mode === 'manage'">
+        <div class="d-flex align-items-center ml-auto" v-if="isManageMode">
           <label for="selectAllMemberCb" class="d-flex align-items-center m-0 mr-2">
             <input
               id="selectAllMemberCb"
@@ -164,7 +160,7 @@
     </div>
     <loading-indicator :loading="loading"></loading-indicator>
 
-    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="mode === 'manage'">
+    <modal-confirm title="選択したものを削除してもよろしいですか？" id='modalDeleteConfirm' type='delete' @confirm="deleteSelectedMedia" v-if="isManageMode">
       <template v-slot:content>
         選択したメディア数：{{ selectedMedias.length }}
       </template>
@@ -211,7 +207,11 @@ export default {
       medias: (state) => state.medias,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    })
+    }),
+
+    isManageMode() {
+      return this.mode === 'manage';
+    }
   },
 
   methods: {
@@ -268,6 +268,22 @@ export default {
 
     formattedDate(time) {
       return moment(time).format('YYYY年MM月DD日');
+    },
+
+    isImage(media) {
+      return media.type === 'image' || media.type === 'richmenu';
+    },
+
+    isVideo(media) {
+      return media.type === 'video';
+    },
+
+    isAudio(media) {
+      return media.type === 'audio';
+    },
+
+    isPdf(media) {
+      return media.type === 'pdf';
     }
   }
 };
@@ -278,12 +294,16 @@ export default {
     min-height: 90vh !important;
   }
 
+  .media-preview {
+    background-position-y: center;
+  }
+
   .media-preview:hover {
     opacity: 0.5;
   }
 
   .preview-icon {
-    color: #408254;
+    color: #aab4ad;
     font-size: 8rem;
   }
 
@@ -306,5 +326,10 @@ export default {
 
   .select-media-cb {
     zoom: 1.4;
+  }
+
+  .bg-position-center {
+    background-position: center;
+    background-size: cover;
   }
 </style>

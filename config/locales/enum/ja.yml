@@ -17,12 +17,12 @@ ja:
       status:
         inactive: 非アクティブ
         active: 有効
-        blocked: 無効
+        blocked: ブロックした
         deleting: 削除中
     line_friend:
       status:
-        active: 正常
-        blocked: ブロック中
+        active: 有効
+        blocked: ブロックされた
     scenario:
       mode:
         elapsed_time: 経過時間

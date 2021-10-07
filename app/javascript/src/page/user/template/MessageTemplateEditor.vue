@@ -77,7 +77,6 @@ export default {
 
   async beforeMount() {
     await this.fetchItem();
-    await this.getTags();
     this.loading = false;
   },
 
@@ -97,10 +96,6 @@ export default {
       'updateTemplate',
       'deleteTemplate',
       'setMessagePreview'
-    ]),
-
-    ...mapActions('tag', [
-      'getTags'
     ]),
 
     ...mapActions('system', [

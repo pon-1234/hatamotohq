@@ -7,6 +7,7 @@
     aria-labelledby="myModalLabel"
     aria-hidden="true"
     ref="mediaModal"
+    :key="contentKey"
   >
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
@@ -33,6 +34,11 @@ export default {
       type: Array,
       default: () => ['image']
     }
+  },
+  data() {
+    return {
+
+    };
   },
   methods: {
     onUploadFinished(event) {

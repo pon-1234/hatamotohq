@@ -27,7 +27,7 @@ export const mutations = {
   },
 
   setQueryParam(state, param) {
-    Object.assign(state.queryParams, { param });
+    Object.assign(state.queryParams, param);
   }
 };
 
