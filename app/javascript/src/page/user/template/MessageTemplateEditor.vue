@@ -11,7 +11,8 @@
               name="template-title"
               placeholder="テンプレート名を入力してください"
               v-model="templateData.name"
-              v-validate="'required'"
+              maxlength="256"
+              v-validate="'required|max:255'"
               data-vv-as="テンプレート名"
             />
             <error-message
