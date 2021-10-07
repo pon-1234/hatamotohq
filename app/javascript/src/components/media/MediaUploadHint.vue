@@ -13,7 +13,7 @@
     </span>
     <span v-else-if="type === 'audio'"
       class="text-sm">
-      ファイル形式：MP3<br>
+      ファイル形式：M4A<br>
       ファイルサイズ：10MB以下
     </span>
     <span class="text-sm" v-else-if="type === 'richmenu'"
@@ -27,7 +27,7 @@
       ファイルサイズ：10MB以下
     </span>
     <span v-else>
-      ファイル形式：JPG、JPEG、PNG、MP3、MP4<br>
+      ファイル形式：JPG、JPEG、PNG、M4A、MP4<br>
     </span>
   </div>
 </template>
