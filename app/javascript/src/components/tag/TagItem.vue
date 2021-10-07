@@ -2,9 +2,9 @@
   <tr class="tag-item">
     <td style="min-width: 200px; vertical-align: middle;"><tag-item-editor :data="data" @deleteTag="deleteTag"  @editTag="editTag" @createTag="createTag"/></td>
     <td class="fw-150">{{data.friends_count}}人&nbsp;
-      <a class="btn-light btn-sm" data-toggle="modal" data-target="#modal-friends-tag" @click="showListFriends" v-if="data.friends_count > 0">
+      <div role="button" class="btn-light btn-sm d-inline-block" data-toggle="modal" data-target="#modal-friends-tag" @click="showListFriends" v-if="data.friends_count > 0">
         表示
-      </a>
+      </div>
     </td>
     <td class="fw-200">{{getCreatedAt(data.created_at)}}</td>
   </tr>
@@ -15,11 +15,14 @@ import { mapActions, mapMutations } from 'vuex';
 export default {
   props: ['data'],
   methods: {
+    ...mapMutations('friend', [
+      'setQueryParam'
+    ]),
     ...mapMutations('tag', [
       'setTag'
     ]),
-    ...mapActions('tag', [
-      'getFriendsByTag'
+    ...mapActions('friend', [
+      'getFriends'
     ]),
 
     getCreatedAt(item) {
@@ -40,7 +43,8 @@ export default {
 
     async showListFriends() {
       this.setTag(this.data);
-      await this.getFriendsByTag();
+      this.setQueryParam({ tags_id_in: this.data.id });
+      await this.getFriends();
     }
   }
 };

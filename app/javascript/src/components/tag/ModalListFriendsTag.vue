@@ -37,7 +37,7 @@
           <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
               v-if="totalRows > perPage"
-              v-model="currentPage"
+              v-model="curPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="loadPage"
@@ -57,31 +57,39 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      currentPage: 1,
+      rootUrl: process.env.MIX_ROOT_PATH,
       loading: false
     };
   },
   computed: {
-    ...mapState('tag', {
-      tag: state => state.tag,
+    ...mapState('friend', {
+      queryParams: (state) => state.queryParams,
       friends: state => state.friends,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
-    })
+    }),
+
+    ...mapState('tag', {
+      tag: (state) => state.tag
+    }),
+
+    curPage: {
+      get() { return this.queryParams.page; },
+      set(value) { this.setQueryParam({ page: value }); }
+    }
   },
   methods: {
-    ...mapMutations('tag', [
-      'setCurPage'
+    ...mapMutations('friend', [
+      'setQueryParam'
     ]),
-    ...mapActions('tag', [
-      'getFriendsByTag'
+    ...mapActions('friend', [
+      'getFriends'
     ]),
 
-    async  loadPage() {
+    async loadPage() {
       this.$nextTick(async() => {
         this.loading = true;
-        this.setCurPage(this.currentPage);
-        await this.getFriendsByTag();
+        await this.getFriends();
         this.loading = false;
       });
     },

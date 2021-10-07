@@ -36,7 +36,6 @@ class User::TagsController < User::ApplicationController
   def friends
     @friends = @tag.friends.page(params[:page])
     respond_to do |format|
-      format.html
       format.json
     end
   end
