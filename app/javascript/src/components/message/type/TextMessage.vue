@@ -15,7 +15,7 @@ export default {
           },
           [
             h('div', {
-              class: 'view preview-text-content',
+              class: 'view preview-text-content text-prewrap',
               domProps: {
                 // eslint-disable-next-line no-undef
                 innerHTML: emojione.toImage(this.data)
