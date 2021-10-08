@@ -76,10 +76,19 @@
         <% end %>
       </li>
 
+      <!-- 回答フォーム -->
       <li class="side-nav-item <%= controller?("user/surveys") ? 'mm-active' : '' %>">
         <%= link_to user_surveys_path, class: "side-nav-link #{controller?("user/surveys" ) ? 'active' : '' }" do %>
           <i class="uil-file-question-alt"></i>
           <span>回答フォーム</span>
+        <% end %>
+      </li>
+
+    <!--  -->
+      <li class="side-nav-item <%= controller?("user/reminders") ? 'mm-active' : '' %>">
+        <%= link_to user_reminders_path, class: "side-nav-link #{controller?("user/reminders" ) ? 'active' : '' }" do %>
+          <i class="uil-stopwatch"></i>
+          <span>リマインダ配信</span>
         <% end %>
       </li>
 
