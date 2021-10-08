@@ -1,31 +1,31 @@
 <template>
   <div>
     <div class="border template-buttons row">
-      <div class="d-flex group-title col-md-6">
-        <label class="mt-2"> タイトル<required-mark /> </label>
+      <div class="d-flex group-title col-12">
+        <label class="mt-2"> タイトル</label>
         <input
           class="form-control"
           placeholder="タイトルを入力してください"
           type="text"
-          maxlength="40"
+          maxlength="41"
           v-model="templateData.title"
-          v-validate="'required'"
+          v-validate="'max:40'"
           data-vv-as="タイトル"
           :name="'button-title' + indexParent"
         />
         <error-message :message="errors.first('button-title' + indexParent)"></error-message>
       </div>
 
-      <div class="d-flex group-title col-md-6">
-        <label class="mt-2"> テキスト<required-mark /> </label>
+      <div class="d-flex group-title col-12">
+        <label class="mt-2 d-flex align-items-center"> テキスト<required-mark /> </label>
         <input
           class="form-control"
           placeholder="テキストを入力してください"
           :name="'button-text' + indexParent"
           type="text"
-          maxlength="60"
+          maxlength="61"
           v-model="templateData.text"
-          v-validate="'required'"
+          v-validate="'required|max:60'"
           data-vv-as="テキスト"
         />
         <error-message :message="errors.first('button-text' + indexParent)"></error-message>

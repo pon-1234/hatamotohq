@@ -33,12 +33,12 @@
     </div> -->
 
     <!-- template button -->
-    <template-button-editor
+    <message-editor-buttons
       v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Buttons"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-    />
+    ></message-editor-buttons>
 
     <!-- template confirm -->
     <message-editor-confirm
