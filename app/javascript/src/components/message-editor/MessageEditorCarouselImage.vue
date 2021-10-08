@@ -2,17 +2,23 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default pb20 mb-0">
-        <ul class="nav nav-tabs" role="tablist">
+        <!-- パネルメニュー -->
+        <ul class="nav nav-tabs nav-bordered" role="tablist">
           <li
             role="presentation"
-            v-for="(item, index) in defaults.columns"
+            v-for="(item, index) in messageData.columns"
             :key="index"
-            :class="selected === index ? 'active' : ''"
             @click="changeSelected(index)"
           >
-            <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
+            <a
+              aria-controls="text"
+              role="tab"
+              data-toggle="tab"
+              aria-expanded="true"
+              :class="selected === index ? 'active' : ''"
+            >
               パネル{{ index + 1 }}
-              <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
+              <span @click="removeColumn(index)" v-if="messageData.columns.length > 1">
                 <i class="fa fa-times"></i>
               </span>
             </a>
@@ -27,17 +33,17 @@
             <div class="list-carousel d-flex align-items-center">
               <div class="carousel-group d-flex align-items-center">
                 <div
-                  v-for="(item, index) in defaults.columns"
+                  v-for="(item, index) in messageData.columns"
                   :key="index"
                   :class="selected === index ? 'carousel-preview active' : 'carousel-preview'"
                 >
                   <div class="carousel-header">
                     <span class="carousel-header-title">{{ index + 1 }}枚目</span>
                     <div class="carousel-header-action">
-                      <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"
+                      <span class="action-item" v-if="messageData.columns.length > 1" @click="moveLeftColumn(index)"
                         ><i class="glyphicon glyphicon-arrow-left"></i
                       ></span>
-                      <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"
+                      <span class="action-item" v-if="messageData.columns.length > 1" @click="moveRightColumn(index)"
                         ><i class="glyphicon glyphicon-arrow-right"></i
                       ></span>
                       <span class="action-item" @click="copyColumn(index, item)"
@@ -46,7 +52,7 @@
                       <span class="action-item" @click="addMoreColumn(index)"
                         ><i class="glyphicon glyphicon-plus"></i
                       ></span>
-                      <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"
+                      <span class="action-item" v-if="messageData.columns.length > 1" @click="removeColumn(index)"
                         ><i class="glyphicon glyphicon-remove"></i
                       ></span>
                     </div>
@@ -75,15 +81,15 @@
                   </div>
                 </div>
               </div>
-              <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="defaults.columns.length < 10">
+              <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="messageData.columns.length < 10">
                 <i class="glyphicon glyphicon-plus-sign"></i>
-                <span class="count-carousel">({{ defaults.columns.length }} / 10)</span>
+                <span class="count-carousel">({{ messageData.columns.length }} / 10)</span>
               </div>
             </div>
           </div>
           <div
             class="carousel-group-action row"
-            v-for="(column, indexColum) in defaults.columns"
+            v-for="(column, indexColum) in messageData.columns"
             v-show="selected === indexColum"
             :key="indexColum"
           >
@@ -100,23 +106,30 @@
             </div>
             <div class="col-sm-4">
               <div class="group-button-thumb form-group">
-                <label>画像<required-mark></required-mark></label>
+                <label
+                  >画像<required-mark></required-mark
+                  ><tool-tip
+                    title="画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨)。"
+                  ></tool-tip
+                ></label>
                 <div
-                  class="btn btn-info btn-block uploadfile-thumb"
+                  class="btn btn-secondary btn-block uploadfile-thumb"
                   data-toggle="modal"
                   :data-target="'#modalSelectMedia' + indexParent"
                 >
-                  <i class="glyphicon glyphicon-picture"></i>
                   画像選択
-                  <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
                 </div>
-                <div class="btn btn-default btn-sm" @click="removeCurrentThumb(indexColum)" v-if="column.imageUrl">
+                <div
+                  class="btn btn-outline-danger btn-sm"
+                  @click="removeCurrentThumb(indexColum)"
+                  v-if="column.imageUrl"
+                >
                   このパネルの画像を削除
                 </div>
-                <div class="btn btn-info btn-sm" @click="coppyAllThumb(indexColum)" v-if="column.imageUrl">
+                <div class="btn btn-secondary btn-sm" @click="coppyAllThumb(indexColum)" v-if="column.imageUrl">
                   全パネルにこの画像をコピー
                 </div>
-                <div class="btn btn-default btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
+                <div class="btn btn-outline-danger btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
                   全パネルの画像を削除
                 </div>
                 <!-- error message if no image is selected -->
@@ -132,7 +145,7 @@
                 </template>
                 <!-- image preview -->
                 <div class="form-group text-center">
-                  <img v-if="column.imageUrl" :src="column.imageUrl" class="mw-250" />
+                  <img v-if="column.imageUrl" :src="column.imageUrl" class="fw-250" />
                   <span v-if="errorMessageUploadFile" class="label error-message-upload">{{
                     errorMessageUploadFile
                   }}</span>
@@ -143,12 +156,17 @@
         </div>
       </div>
     </div>
-    <modal-select-media @input="uploadThumb" :data="{ type: 'image' }" :id="'modalSelectMedia' + indexParent" />
+    <modal-select-media
+      @select="uploadThumb"
+      :types="['image']"
+      :id="'modalSelectMedia' + indexParent"
+      :filterable="false"
+    ></modal-select-media>
   </div>
 </template>
 <script>
 
-import { ActionMessage } from '../../../core/constant';
+import { ActionMessage } from '../../core/constant';
 
 export default {
   props: ['data', 'indexParent'],
@@ -157,7 +175,7 @@ export default {
     return {
       selected: 0,
       errorMessageUploadFile: '',
-      defaults: {
+      messageData: {
         type: this.TemplateMessageType.ImageCarousel,
         columns: [
           {
@@ -172,13 +190,13 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     if (this.data) {
-      Object.assign(this.defaults, this.data);
-      this.$emit('input', this.defaults);
+      Object.assign(this.messageData, this.data);
+      this.$emit('input', this.messageData);
     }
   },
 
   watch: {
-    defaults: {
+    messageData: {
       handler(val) {
         // eslint-disable-next-line no-undef
         const value = _.cloneDeep(val);
@@ -189,34 +207,34 @@ export default {
   },
   methods: {
     addMoreColumn(index) {
-      if (this.defaults.columns.length > 9) return;
+      if (this.messageData.columns.length > 9) return;
       const option = {
         imageUrl: '',
         action: ActionMessage.default
       };
 
-      this.defaults.columns.push(option);
-      this.selected = this.defaults.columns.length - 1;
+      this.messageData.columns.push(option);
+      this.selected = this.messageData.columns.length - 1;
     },
 
     removeColumn(index) {
-      this.defaults.columns.splice(index, 1);
+      this.messageData.columns.splice(index, 1);
 
-      if (this.selected === this.defaults.columns.length) {
+      if (this.selected === this.messageData.columns.length) {
         this.selected -= 1;
       }
     },
 
     copyColumn(index, column) {
-      if (this.defaults.columns.length > 9) return;
+      if (this.messageData.columns.length > 9) return;
       // eslint-disable-next-line no-undef
-      this.defaults.columns.splice(index + 1, 0, _.cloneDeep(column));
+      this.messageData.columns.splice(index + 1, 0, _.cloneDeep(column));
     },
 
     moveRightColumn(index) {
-      const option = this.defaults.columns[index];
-      if (this.defaults.columns[index + 1]) {
-        this.defaults.columns[index] = this.defaults.columns.splice(index + 1, 1, option)[0];
+      const option = this.messageData.columns[index];
+      if (this.messageData.columns[index + 1]) {
+        this.messageData.columns[index] = this.messageData.columns.splice(index + 1, 1, option)[0];
         if (this.selected === index) {
           this.selected += 1;
         }
@@ -224,9 +242,9 @@ export default {
     },
 
     moveLeftColumn(index) {
-      const option = this.defaults.columns[index];
-      if (this.defaults.columns[index - 1]) {
-        this.defaults.columns[index] = this.defaults.columns.splice(index - 1, 1, option)[0];
+      const option = this.messageData.columns[index];
+      if (this.messageData.columns[index - 1]) {
+        this.messageData.columns[index] = this.messageData.columns.splice(index - 1, 1, option)[0];
 
         if (this.selected === index) {
           this.selected -= 1;
@@ -239,30 +257,30 @@ export default {
     },
 
     async uploadThumb(value) {
-      this.defaults.columns[this.selected].imageUrl = value.originalContentUrl;
-      this.$emit('input', this.defaults);
+      this.messageData.columns[this.selected].imageUrl = value.url;
+      this.$emit('input', this.messageData);
     },
 
     removeCurrentThumb(index) {
-      this.defaults.columns[index].imageUrl = '';
-      this.$emit('input', this.defaults);
+      this.messageData.columns[index].imageUrl = '';
+      this.$emit('input', this.messageData);
     },
 
     coppyAllThumb(index) {
-      this.defaults.columns.forEach(item => { item.imageUrl = this.defaults.columns[index].imageUrl; });
+      this.messageData.columns.forEach(item => { item.imageUrl = this.messageData.columns[index].imageUrl; });
     },
 
     removeAllThumb() {
-      this.defaults.columns.forEach(item => { item.imageUrl = ''; });
+      this.messageData.columns.forEach(item => { item.imageUrl = ''; });
     },
 
     changeSelectedAction(value) {
-      this.defaults.columns[this.selected].action = value;
+      this.messageData.columns[this.selected].action = value;
     },
 
     changeActionColumn(index, data) {
       console.log('changeActionColumn', index);
-      this.defaults.columns[index].action = data;
+      this.messageData.columns[index].action = data;
     }
 
   }

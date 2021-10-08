@@ -57,12 +57,12 @@
     ></message-editor-carousel>
 
     <!-- template image caroutsel -->
-    <template-image-carousel-editor
+    <message-editor-carousel-image
       v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.ImageCarousel"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-    />
+    ></message-editor-carousel-image>
 
     <!-- imagemap -->
     <message-editor-imagemap
