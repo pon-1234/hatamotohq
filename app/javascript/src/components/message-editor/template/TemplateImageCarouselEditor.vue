@@ -41,7 +41,7 @@
                         ><i class="glyphicon glyphicon-arrow-right"></i
                       ></span>
                       <span class="action-item" @click="copyColumn(index, item)"
-                        ><i class="fas fa-copy glyphicon"></i
+                        ><i class="mdi mdi-content-copy glyphicon"></i
                       ></span>
                       <span class="action-item" @click="addMoreColumn(index)"
                         ><i class="glyphicon glyphicon-plus"></i

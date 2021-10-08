@@ -41,7 +41,7 @@
               @click="changeSelected(index)"
             >
               <div
-                class="nav-button"
+                class="nav-button d-flex"
                 :class="
                   errors.items.find((item) => item.field.includes(indexParent + 'template_button_' + index))
                     ? 'invalid-box'
@@ -49,11 +49,8 @@
                 "
               >
                 ボタン{{ index + 1 }}
-                <span
-                  v-if="templateData.actions.length > 1"
-                  class="action-tab-selector-remover"
-                  @click.stop="removeAction(index)"
-                  ><i class="fas fa-times"></i
+                <span v-if="templateData.actions.length > 1" @click.stop="removeAction(index)" class="ml-auto mr-1"
+                  ><i class="dripicons-trash"></i
                 ></span>
               </div>
             </li>

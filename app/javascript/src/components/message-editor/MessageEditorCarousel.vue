@@ -5,18 +5,23 @@
         <div class="alert alert-warning">
           パネルタイトルの有無・画像の有無・ボタンの数は全てのパネルで同じ必要があります。
         </div>
-
-        <ul class="nav nav-tabs" role="tablist">
+        <!-- パネルメニュー -->
+        <ul class="nav nav-tabs nav-bordered" role="tablist">
           <li
             role="presentation"
-            v-for="(item, index) in defaults.columns"
+            v-for="(item, index) in messageData.columns"
             :key="index"
-            :class="selected === index ? 'active' : ''"
             @click="changeSelected(index)"
           >
-            <a aria-controls="text" role="tab" data-toggle="tab" aria-expanded="true">
+            <a
+              aria-controls="text"
+              role="tab"
+              data-toggle="tab"
+              aria-expanded="true"
+              :class="selected === index ? 'active' : ''"
+            >
               パネル{{ index + 1 }}
-              <span @click="removeColumn(index)" v-if="defaults.columns.length > 1">
+              <span @click="removeColumn(index)" v-if="messageData.columns.length > 1">
                 <i class="fa fa-times"></i>
               </span>
             </a>
@@ -25,89 +30,17 @@
             <span> <i class="uil-plus"></i>追加 </span>
           </li>
         </ul>
-        <div class="carousel-body" hidden>
-          <div class="list-carousel d-flex align-items-center">
-            <div class="carousel-group d-flex align-items-center">
-              <div
-                v-for="(item, index) in defaults.columns"
-                :key="index"
-                :class="selected === index ? 'carousel-preview active' : 'carousel-preview'"
-              >
-                <div class="carousel-header">
-                  <span class="carousel-header-title">{{ index + 1 }}枚目</span>
-                  <div class="carousel-header-action">
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveLeftColumn(index)"
-                      ><i class="glyphicon glyphicon-arrow-left"></i
-                    ></span>
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="moveRightColumn(index)"
-                      ><i class="glyphicon glyphicon-arrow-right"></i
-                    ></span>
-                    <span class="action-item" @click="copyColumn(index, item)"
-                      ><i class="fas fa-copy glyphicon"></i
-                    ></span>
-                    <span class="action-item" @click="addMoreColumn(index)"
-                      ><i class="glyphicon glyphicon-plus"></i
-                    ></span>
-                    <span class="action-item" v-if="defaults.columns.length > 1" @click="removeColumn(index)"
-                      ><i class="glyphicon glyphicon-remove"></i
-                    ></span>
-                  </div>
-                </div>
-                <div
-                  class="carousel-content"
-                  @click="changeSelected(index)"
-                  :class="
-                    errors.items.find((item) => item.field.includes('template_carousel_' + index)) ? 'invalid-box' : ''
-                  "
-                >
-                  <div
-                    class="carousel-thumb"
-                    :style="{
-                      backgroundImage: 'url(' + item.thumbnailImageUrl + ')',
-                    }"
-                    v-if="item.thumbnailImageUrl"
-                  ></div>
-                  <div
-                    v-if="isThumbnail && 'thumbnailImageUrl' in item && !item.thumbnailImageUrl"
-                    class="carousel-thumb"
-                    :class="errors.first('image-url-' + index) ? 'invalid-box' : ''"
-                  >
-                    (画像未登録)
-                    <input
-                      type="hidden"
-                      v-model="item.thumbnailImageUrl"
-                      :name="'image-url-' + index"
-                      v-validate="'required'"
-                    />
-                  </div>
-                  <div class="carousel-heading">
-                    <b v-if="item.title">{{ item.title }}</b>
-                    <b v-else>タイトル</b>
-                    <p v-if="item.text">{{ item.text }}</p>
-                    <b v-else class="carousel-text"></b>
-                  </div>
-                  <div class="carousel-action" v-for="(action, indexAction) in item.actions" :key="indexAction">
-                    <div class="carousel-action-label" v-if="action.label">
-                      {{ action.label }}
-                    </div>
-                    <div class="carousel-action-label carousel-action-label-default" v-else>
-                      選択肢: {{ indexAction + 1 }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-add-btn" @click="addMoreColumn(null)" v-if="defaults.columns.length < 10">
-              <i class="glyphicon glyphicon-plus-sign"></i>
-              <span class="count-carousel">({{ defaults.columns.length }} / 10)</span>
-            </div>
-          </div>
-        </div>
-        <div v-for="(column, indexColumn) in defaults.columns" :key="indexColumn" v-show="indexColumn === selected">
+
+        <div v-for="(column, indexColumn) in messageData.columns" :key="indexColumn" v-show="indexColumn === selected">
           <div class="carousel-group-action row">
             <div class="col-sm-5 p-0">
               <div class="form-group">
-                <label>パネル{{ selected + 1 }}タイトル <required-mark></required-mark></label>
+                <label
+                  >パネル{{ selected + 1 }}のタイトル <required-mark></required-mark>
+                  <tool-tip
+                    title="各カラムのアクションの数は同じにします。画像またはタイトルの有無も、各カラムで統一してください。"
+                  ></tool-tip>
+                </label>
                 <input
                   type="text"
                   :name="'carousel-title' + indexColumn"
@@ -121,7 +54,7 @@
                 <error-message :message="errors.first('carousel-title' + indexColumn)"></error-message>
               </div>
               <div class="form-group">
-                <label>パネル{{ selected + 1 }}本文</label><required-mark></required-mark>
+                <label>パネル{{ selected + 1 }}の本文<required-mark></required-mark></label>
                 <textarea
                   :name="'carousel-text' + indexColumn"
                   placeholder="本文を入力してください"
@@ -137,26 +70,39 @@
             </div>
             <div class="col-sm-7">
               <div class="form-group">
-                <label>画像</label>
+                <label
+                  >画像
+                  <tool-tip
+                    title="画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨。"
+                  ></tool-tip
+                ></label>
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="group-button-thumb">
                       <div
-                        class="btn btn-info btn-block btn-sm uploadfile-thumb"
+                        class="btn btn-secondary btn-block btn-sm uploadfile-thumb"
                         data-toggle="modal"
                         :data-target="'#uploadImageModal' + indexParent"
                       >
                         <i class="glyphicon glyphicon-picture"></i>
                         画像選択
-                        <!-- <input type="file"  ref="thumb" accept="image/*" @change="uploadThumb"/> -->
                       </div>
-                      <div class="btn btn-default btn-sm" @click="removeCurrentThumb" v-if="column.thumbnailImageUrl">
+
+                      <div
+                        class="btn btn-outline-danger btn-sm"
+                        @click="removeCurrentThumb"
+                        v-if="column.thumbnailImageUrl"
+                      >
                         このパネルの画像を削除
                       </div>
-                      <div class="btn btn-info btn-sm" @click="coppyAllThumb" v-if="column.thumbnailImageUrl">
+                      <div class="btn btn-secondary btn-sm" @click="coppyAllThumb" v-if="column.thumbnailImageUrl">
                         全パネルにこの画像をコピー
                       </div>
-                      <div class="btn btn-default btn-sm" @click="removeAllThumb" v-if="column.thumbnailImageUrl">
+                      <div
+                        class="btn btn-outline-danger btn-sm"
+                        @click="removeAllThumb"
+                        v-if="column.thumbnailImageUrl"
+                      >
                         全パネルの画像を削除
                       </div>
                     </div>
@@ -180,7 +126,7 @@
                     @click="changeActiveAction(index)"
                   >
                     <div
-                      class="nav-button"
+                      class="nav-button d-flex"
                       :class="
                         errors.items.find((item) => item.field.includes(indexParent + 'template_button_' + index))
                           ? 'invalid-box'
@@ -190,14 +136,14 @@
                       ボタン{{ index + 1 }}
                       <span
                         v-if="column.actions.length > 1"
-                        class="action-tab-selector-remover"
                         @click.stop="removeCurrentAction(index)"
-                        ><i class="fas fa-times"></i
+                        class="ml-auto mr-1"
+                        ><i class="dripicons-trash"></i
                       ></span>
                     </div>
                   </li>
                   <li v-if="column.actions.length < 3">
-                    <div class="nav-button btn justify-content-center" @click="addMoreAction">
+                    <div class="nav-button btn btn-primary justify-content-center" @click="addMoreAction">
                       <i class="uil-plus"></i> 追加
                     </div>
                   </li>
@@ -211,9 +157,9 @@
                   class="card card-light"
                 >
                   <div class="card-header d-flex flex-start align-items-center">
-                    <h3 class="card-title">選択肢{{ index + 1 }}</h3>
-                    <div class="btn btn-secondary btn-sm ml-auto" @click.stop="copyCurrentAction(index)">
-                      <i class="fas fa-copy"></i>
+                    <label>選択肢{{ index + 1 }}</label>
+                    <div class="btn btn-light btn-sm ml-auto" @click.stop="copyCurrentAction(index)">
+                      <i class="mdi mdi-content-copy"></i>
                     </div>
                   </div>
                   <div class="card-body">
@@ -227,58 +173,36 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="form-group" >
-                <h5><label>ボタン{{selected + 1}}</label></h5>
-                <div v-for="(item, index) in column.actions"
-                  :key="index" @click="changeActiveAction(index)"
-                  :class="selectedAction === index ? 'panel action-panel panel-default pb20 active': 'panel action-panel panel-default pb20'" >
-                  <div class="panel-body">
-                    <div class="col-sm-9">
-                      <label class="mt20">
-                        選択後の挙動 : {{index+1}}
-                      </label>
-                      <message-action-editor
-                        :name="index+ '_template_carousel_'+ indexColumn"
-                        :value="item"
-                        @input="changeActionColumn(indexColumn, index, ...arguments)"
-                      />
-                    </div>
-                    <div class="col-sm-3 panel-tool" style="">
-                      <div class="btn-group btn-group-justified mt20">
-                        <div class="btn-group" @click.stop="moveTopAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-up"></i></button></div>
-                        <div class="btn-group" @click.stop="moveBottomAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-arrow-down"></i></button></div>
-                        <div class="btn-group" @click.stop="copyCurrentAction(index)"><button type="button" class="btn btn-default"><i class="fas fa-copy"></i></button></div>
-                        <div class="btn-group" v-if="column.actions.length > 1" @click.stop="removeCurrentAction(index)"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <modal-select-media @input="uploadThumb" :data="{ type: 'image' }" :id="'uploadImageModal' + indexParent" />
+    <modal-select-media
+      @select="uploadThumb"
+      :types="['image']"
+      :id="'uploadImageModal' + indexParent"
+      :filterable="false"
+    ></modal-select-media>
   </div>
 </template>
 <script>
-import ErrorMessage from '../../common/ErrorMessage.vue';
-import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../common/ErrorMessage.vue';
+import RequiredMark from '../common/RequiredMark.vue';
+import ToolTip from '../common/ToolTip.vue';
 
 export default {
-  components: { RequiredMark, ErrorMessage },
+  components: { RequiredMark, ErrorMessage, ToolTip },
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
   data() {
     return {
-      requiredTitle: false,
+      requiredTitle: true,
       selected: 0,
       selectedAction: 0,
       errorMessageUploadFile: '',
       isThumbnail: false,
-      defaults: {
+      messageData: {
         type: this.TemplateMessageType.Carousel,
         columns: [
           {
@@ -297,14 +221,13 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     if (this.data) {
-      Object.assign(this.defaults, this.data);
-      this.$emit('input', this.defaults);
+      Object.assign(this.messageData, this.data);
+      this.$emit('input', this.messageData);
     }
   },
   watch: {
-    defaults: {
+    messageData: {
       handler(val) {
-        // eslint-disable-next-line no-undef
         const value = _.cloneDeep(val);
         this.isThumbnail = value.columns.find(item => item.thumbnailImageUrl !== '');
         if (!this.isThumbnail) {
@@ -312,9 +235,8 @@ export default {
             delete item.thumbnailImageUrl;
           });
         }
-
-        // this.requiredTitle = !!val.columns.find(item => item.title); // TODO: need to clear
-
+        // Have to set title for all column if one column have set title
+        this.requiredTitle = !!val.columns.find(item => item.title);
         this.$emit('input', value);
       },
       deep: true
@@ -322,7 +244,7 @@ export default {
   },
   methods: {
     addMoreColumn(index) {
-      if (this.defaults.columns.length > 9) return;
+      if (this.messageData.columns.length > 9) return;
       const option = {
         thumbnailImageUrl: '',
         title: '',
@@ -330,33 +252,33 @@ export default {
         actions: []
       };
 
-      this.defaults.columns[0].actions.forEach(item => {
+      this.messageData.columns[0].actions.forEach(item => {
         option.actions.push({ ...this.ActionMessage.default, label: '' });
       });
 
-      this.defaults.columns.push(option);
-      this.selected = this.defaults.columns.length - 1;
+      this.messageData.columns.push(option);
+      this.selected = this.messageData.columns.length - 1;
       console.log('selected tab = ', this.selected);
     },
 
     removeColumn(index) {
-      this.defaults.columns.splice(index, 1);
+      this.messageData.columns.splice(index, 1);
 
-      if (this.selected === this.defaults.columns.length) {
+      if (this.selected === this.messageData.columns.length) {
         this.selected -= 1;
       }
     },
 
     copyColumn(index, column) {
-      if (this.defaults.columns.length > 9) return;
+      if (this.messageData.columns.length > 9) return;
       // eslint-disable-next-line no-undef
-      this.defaults.columns.splice(index + 1, 0, _.cloneDeep(column));
+      this.messageData.columns.splice(index + 1, 0, _.cloneDeep(column));
     },
 
     moveRightColumn(index) {
-      const option = this.defaults.columns[index];
-      if (this.defaults.columns[index + 1]) {
-        this.defaults.columns[index] = this.defaults.columns.splice(index + 1, 1, option)[0];
+      const option = this.messageData.columns[index];
+      if (this.messageData.columns[index + 1]) {
+        this.messageData.columns[index] = this.messageData.columns.splice(index + 1, 1, option)[0];
         if (this.selected === index) {
           this.selected += 1;
         }
@@ -364,9 +286,9 @@ export default {
     },
 
     moveLeftColumn(index) {
-      const option = this.defaults.columns[index];
-      if (this.defaults.columns[index - 1]) {
-        this.defaults.columns[index] = this.defaults.columns.splice(index - 1, 1, option)[0];
+      const option = this.messageData.columns[index];
+      if (this.messageData.columns[index - 1]) {
+        this.messageData.columns[index] = this.messageData.columns.splice(index - 1, 1, option)[0];
 
         if (this.selected === index) {
           this.selected -= 1;
@@ -379,38 +301,38 @@ export default {
     },
 
     uploadThumb(value) {
-      this.defaults.columns[this.selected].thumbnailImageUrl = value.originalContentUrl;
-      this.$emit('input', this.defaults);
+      this.messageData.columns[this.selected].thumbnailImageUrl = value.url;
+      this.$emit('input', this.messageData);
 
       this.isThumbnail = true;
     },
 
     removeCurrentThumb() {
-      this.defaults.columns[this.selected].thumbnailImageUrl = '';
+      this.messageData.columns[this.selected].thumbnailImageUrl = '';
       console.log('this.selected', this.selected);
-      this.$emit('input', this.defaults);
+      this.$emit('input', this.messageData);
     },
 
     coppyAllThumb() {
-      this.defaults.columns.forEach(item => { item.thumbnailImageUrl = this.defaults.columns[this.selected].thumbnailImageUrl; });
+      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl; });
     },
 
     removeAllThumb() {
-      this.defaults.columns.forEach(item => { item.thumbnailImageUrl = ''; });
+      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = ''; });
     },
 
     changeSelectedAction(index, value) {
-      this.defaults.columns[this.selected].actions.splice(index, 1, value);
+      this.messageData.columns[this.selected].actions.splice(index, 1, value);
     },
 
     changeActionColumn(indexColumn, index, data) {
-      this.defaults.columns[indexColumn].actions.splice(index, 1, data);
+      this.messageData.columns[indexColumn].actions.splice(index, 1, data);
     },
 
     moveTopAction(index) {
-      const option = this.defaults.columns[this.selected].actions[index];
-      if (this.defaults.columns[this.selected].actions[index - 1]) {
-        this.defaults.columns[this.selected].actions[index] = this.defaults.columns[this.selected].actions.splice(index - 1, 1, option)[0];
+      const option = this.messageData.columns[this.selected].actions[index];
+      if (this.messageData.columns[this.selected].actions[index - 1]) {
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index - 1, 1, option)[0];
 
         if (this.selectedAction === index) {
           this.selectedAction -= 1;
@@ -419,9 +341,9 @@ export default {
     },
 
     moveBottomAction(index) {
-      const option = this.defaults.columns[this.selected].actions[index];
-      if (this.defaults.columns[this.selected].actions[index + 1]) {
-        this.defaults.columns[this.selected].actions[index] = this.defaults.columns[this.selected].actions.splice(index + 1, 1, option)[0];
+      const option = this.messageData.columns[this.selected].actions[index];
+      if (this.messageData.columns[this.selected].actions[index + 1]) {
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index + 1, 1, option)[0];
         if (this.selectedAction === index) {
           this.selectedAction += 1;
         }
@@ -429,8 +351,8 @@ export default {
     },
 
     copyCurrentAction(index) {
-      if (this.defaults.columns[this.selected].actions.length < 3) {
-        this.defaults.columns.forEach((item) => {
+      if (this.messageData.columns[this.selected].actions.length < 3) {
+        this.messageData.columns.forEach((item) => {
           // eslint-disable-next-line no-undef
           item.actions.splice(index + 1, 0, _.cloneDeep(item.actions[index]));
         });
@@ -438,17 +360,17 @@ export default {
     },
 
     removeCurrentAction(index) {
-      this.defaults.columns.forEach((item) => {
+      this.messageData.columns.forEach((item) => {
         item.actions.splice(index, 1);
       });
 
-      if (this.selectedAction === this.defaults.columns[this.selected].actions.length) {
+      if (this.selectedAction === this.messageData.columns[this.selected].actions.length) {
         this.selectedAction -= 1;
       }
     },
 
     addMoreAction() {
-      this.defaults.columns.forEach((item) => {
+      this.messageData.columns.forEach((item) => {
         item.actions.push(this.ActionMessage.default);
       });
     },
@@ -493,8 +415,8 @@ export default {
 
   li.active {
     .nav-button {
-      border-left: 3px solid #28a745;
-      color: #28a745;
+      border-left: 3px solid #727cf5;
+      color: #727cf5;
       font-weight: bold;
     }
   }
@@ -626,11 +548,6 @@ export default {
           margin-bottom: 0;
           line-height: 2.5em;
           min-height: 2em;
-        }
-
-        .carousel-text {
-          // font-weight: bold;
-          // color: red;
         }
       }
 

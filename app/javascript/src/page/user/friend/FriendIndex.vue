@@ -5,13 +5,26 @@
         <!-- START: Search form -->
         <div class="ml-auto d-flex text-nowrap">
           <div class="input-group app-search">
-            <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="keyword" maxlength="64">
+            <input
+              type="text"
+              class="form-control dropdown-toggle fw-250"
+              placeholder="検索..."
+              v-model="keyword"
+              maxlength="64"
+            />
             <span class="mdi mdi-magnify search-icon"></span>
             <div class="input-group-append">
               <div class="btn btn-primary" @click="loadFriend">検索</div>
             </div>
           </div>
-          <div class="btn btn-primary text-nowrap ml-1" data-backdrop="static" data-toggle="modal" data-target="#modalFriendSearch">詳細検索</div>
+          <div
+            class="btn btn-primary text-nowrap ml-1"
+            data-backdrop="static"
+            data-toggle="modal"
+            data-target="#modalFriendSearch"
+          >
+            詳細検索
+          </div>
         </div>
         <!-- End: Search form -->
       </div>
@@ -30,15 +43,23 @@
           <tbody v-for="(friend, index) in friends" :key="index">
             <tr>
               <td class="table-user">
-                <img :src="friend.line_picture_url || '/img/no-image-profile.png'" alt="table-user" class="mr-2 rounded-circle" />
+                <img
+                  :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                  alt="table-user"
+                  class="mr-2 rounded-circle"
+                />
                 {{ friend.line_name }}
               </td>
-              <td> {{ formattedDatetime(friend.created_at) }}</td>
+              <td>{{ formattedDatetime(friend.created_at) }}</td>
               <td>
                 <friend-tag :tags="friend.tags"></friend-tag>
               </td>
               <td>
-                <friend-status :status="friend.status" :locked="friend.locked" :visible="friend.visible"></friend-status>
+                <friend-status
+                  :status="friend.status"
+                  :locked="friend.locked"
+                  :visible="friend.visible"
+                ></friend-status>
               </td>
               <td>
                 <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>

@@ -49,12 +49,12 @@
     ></message-editor-confirm>
 
     <!-- template carousel -->
-    <template-carousel-editor
+    <message-editor-carousel
       v-if="data.type === MessageType.Template && data.template.type === TemplateMessageType.Carousel"
       :data="data.template"
       @input="onTemplateContentChanged"
       :indexParent="index"
-    />
+    ></message-editor-carousel>
 
     <!-- template image caroutsel -->
     <template-image-carousel-editor
