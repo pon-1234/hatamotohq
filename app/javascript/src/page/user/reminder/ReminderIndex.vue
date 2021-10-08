@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="d-flex">
         <folder-left
-          type="template_message"
+          type="reminder"
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
@@ -14,7 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
-            :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
+            :href="`${rootPath}/user/reminders/new?folder_id=${curFolder.id}`"
             data-turbolinks="false"
             class="btn btn-primary"
           >
@@ -24,16 +24,14 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>テンプレート名</th>
-                  <th>メッセージ数</th>
+                  <th>リマインダ名</th>
                   <th>操作</th>
                   <th>フォルダ</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
-                  <td>{{ template.name }}</td>
-                  <td>{{ template.template_messages_count }}</td>
+                <tr v-for="(reminder, index) in curFolder.reminders" v-bind:key="reminder.id">
+                  <td>{{ reminder.name }}</td>
                   <td>
                     <div class="btn-group">
                       <button
@@ -45,35 +43,35 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集する</a>
+                        <a role="button" class="dropdown-item" @click="openEdit(reminder)">リマインダを編集する</a>
                         <a
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
-                          data-target="#modalCopyTemplate"
-                          @click="curTemplateIndex = index"
-                          >テンプレートをコピー</a
+                          data-target="#modalCopyReminder"
+                          @click="curReminderIndex = index"
+                          >リマインダをコピー</a
                         >
                         <a
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
                           data-target="#modalDeleteTemplate"
-                          @click="curTemplateIndex = index"
-                          >テンプレートを削除</a
+                          @click="curReminderIndex = index"
+                          >リマインダを削除</a
                         >
                       </div>
                     </div>
                   </td>
                   <td>
                     <div>{{ curFolder.name }}</div>
-                    <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
+                    <div class="text-sm">{{ formattedDate(reminder.created_at) }}</div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.templates.length === 0">
-              <b>テンプレートはありません。</b>
+            <div class="text-center mt-5" v-if="curFolder.reminders.length === 0">
+              <b>リマインダはありません。</b>
             </div>
           </div>
         </div>
@@ -94,16 +92,16 @@
     </modal-confirm>
     <!-- END: Delete folder modal -->
 
-    <!-- START: Delete template modal -->
+    <!-- START: Delete reminder modal -->
     <modal-confirm
-      title="このテンプレートを削除してもよろしいですか？"
+      title="このリマインダを削除してもよろしいですか？"
       id="modalDeleteTemplate"
       type="delete"
-      @confirm="submitDeleteTemplate"
+      @confirm="submitDeleteReminder"
     >
       <template v-slot:content>
-        <div v-if="curTemplate">
-          テンプレート名：<b>{{ curTemplate.name }}</b>
+        <div v-if="curReminder">
+          リマインダ名：<b>{{ curReminder.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -111,14 +109,14 @@
 
     <!-- START: Copy template modal -->
     <modal-confirm
-      title="このテンプレートをコピーしてもよろしいですか？"
-      id="modalCopyTemplate"
+      title="このリマインダをコピーしてもよろしいですか？"
+      id="modalCopyReminder"
       type="confirm"
       @confirm="submitCopyTemplate"
     >
       <template v-slot:content>
-        <div v-if="curTemplate">
-          テンプレート名：<b>{{ curTemplate.name }}</b>
+        <div v-if="curReminder">
+          リマインダ名：<b>{{ curReminder.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -132,22 +130,22 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
-      curTemplateIndex: null,
+      curReminderIndex: null,
       loading: true,
       contentKey: 0
     };
   },
 
   async beforeMount() {
-    await this.getTemplates();
+    await this.getReminders();
     this.loading = false;
   },
 
   computed: {
-    ...mapState('template', {
+    ...mapState('reminder', {
       folders: state => state.folders
     }),
 
@@ -155,16 +153,16 @@ export default {
       return this.folders[this.selectedFolderIndex];
     },
 
-    curTemplate() {
-      return this.curFolder ? this.curFolder.templates[this.curTemplateIndex] : null;
+    curReminder() {
+      return this.curFolder ? this.curFolder.reminders[this.curReminderIndex] : null;
     }
   },
 
   methods: {
-    ...mapActions('template', [
-      'getTemplates',
-      'deleteTemplate',
-      'copyTemplate',
+    ...mapActions('reminder', [
+      'getReminders',
+      'deleteReminder',
+      'copyReminder',
       'deleteFolder',
       'createFolder',
       'updateFolder'
@@ -196,22 +194,22 @@ export default {
       this.onSelectedFolderChanged(0);
     },
 
-    async submitDeleteTemplate() {
-      const response = await this.deleteTemplate(this.curTemplate.id);
+    async submitDeleteReminder() {
+      const response = await this.deleteReminder(this.curReminder.id);
       if (response) {
-        window.toastr.success('テンプレートの削除は完了しました。');
+        window.toastr.success('リマインダの削除は完了しました。');
       } else {
-        window.toastr.error('テンプレートの削除は失敗しました。');
+        window.toastr.error('リマインダの削除は失敗しました。');
       }
       this.forceRerender();
     },
 
     async submitCopyTemplate() {
-      const response = await this.copyTemplate(this.curTemplate.id);
+      const response = await this.copyReminder(this.curReminder.id);
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('リマインダのコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', window.location.href);
+        Util.showSuccessThenRedirect('リマインダのコピーは失敗しました。', window.location.href);
       }
       this.forceRerender();
     },
@@ -220,8 +218,8 @@ export default {
       this.isPc = false;
     },
 
-    openEdit(template) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
+    openEdit(reminder) {
+      window.open(`${process.env.MIX_ROOT_PATH}/user/reminders/${reminder.id}/edit`);
     },
 
     formattedDate(date) {
@@ -230,18 +228,3 @@ export default {
   }
 };
 </script>
-<style lang="scss"  scoped>
-  ::v-deep {
-    td .emojione {
-      width: 20px !important;
-    }
-
-    td .chat-item > .sticker-static {
-      width: 50px !important;
-    }
-
-    td .chat-item {
-      padding: 0px;
-    }
-  }
-</style>

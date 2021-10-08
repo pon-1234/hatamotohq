@@ -13,7 +13,8 @@ module FolderType
       scenario_template: 'scenario_template',
       survey: 'survey',
       survey_profile: 'survey_profile',
-      flex_message: 'flex_message'
+      flex_message: 'flex_message',
+      reminder: 'reminder'
     }, _prefix: :type
   end
 end
