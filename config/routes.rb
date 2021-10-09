@@ -82,7 +82,11 @@ Rails.application.routes.draw do
         post :copy, on: :member
       end
       resources :surveys
-      resources :reminders
+      resources :reminders do
+        member do
+          resources :episodes
+        end
+      end
       resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'

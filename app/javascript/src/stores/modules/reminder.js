@@ -1,6 +1,7 @@
 
 import ReminderAPI from '../api/reminder_api';
 import FolderAPI from '../api/folder_api';
+import EpisodeAPI from '../api/episode_api';
 
 export const state = {
   folders: []
@@ -132,6 +133,14 @@ export const actions = {
       const response = await FolderAPI.delete(id);
       context.commit('deleteFolder', id);
       return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getEpisodes(context, reminderId) {
+    try {
+      return await EpisodeAPI.list(reminderId);
     } catch (error) {
       return null;
     }

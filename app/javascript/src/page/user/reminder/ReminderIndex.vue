@@ -33,6 +33,12 @@
                 <tr v-for="(reminder, index) in curFolder.reminders" v-bind:key="reminder.id">
                   <td>{{ reminder.name }}</td>
                   <td>
+                    <a
+                      role="button"
+                      :href="`${rootPath}/user/reminders/${reminder.id}/episodes`"
+                      class="btn btn-sm btn-light"
+                      >配信タイミング一覧</a
+                    >
                     <div class="btn-group">
                       <button
                         type="button"

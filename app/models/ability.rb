@@ -38,5 +38,9 @@ class Ability
     # Tag
     can [:manage], Tag, folder: { line_account: user.line_account }
     can [:create], Tag
+
+    # Reminder
+    can [:manage], Reminder, folder: { line_account: user.line_account }
+    can [:create], Reminder
   end
 end
