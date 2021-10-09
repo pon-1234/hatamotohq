@@ -4,17 +4,30 @@
       <div class="card-header left-border">
         <h3 class="card-title">配信日時</h3>
       </div>
-      <div class="card-body"></div>
+      <div class="card-body">
+        <episode-time-editor
+          :is_initial.sync="episodeData.is_initial"
+          :date.sync="episodeData.date"
+          :time.sync="episodeData.time"
+        >
+        </episode-time-editor>
+      </div>
       <loading-indicator :loading="loading" />
     </div>
 
     <!-- アクション設定 -->
     <div class="card">
-      <div class="card-header left-border">
-        <h3 class="card-title">アクション設定</h3>
+      <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
+      <div class="card-body">
+        <message-action-editor-custom
+          name="after_action"
+          :value="episodeData.action"
+          :labelRequired="false"
+          :showTitle="false"
+          :showLaunchMesasge="false"
+          @input="updateAction"
+        ></message-action-editor-custom>
       </div>
-      <div class="card-body"></div>
-      <loading-indicator :loading="loading" />
     </div>
 
     <!-- メッセージ設定 -->
@@ -53,7 +66,7 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="createBroadcast()" :disabled="invalid">配信登録</button>
+        <button class="btn btn-success fw-120 mr-1" @click="submit()" :disabled="invalid">配信登録</button>
       </div>
     </div>
   </div>
@@ -62,14 +75,25 @@
 import { mapActions } from 'vuex';
 
 export default {
-  props: ['broadcast_id'],
+  props: {
+    reminder_id: {
+      type: Number,
+      required: true
+    },
+    episode_id: {
+      type: Number,
+      required: false
+    }
+  },
   data() {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: false,
       contentKey: 0,
       episodeData: {
-        actions: [],
+        id: this.episode_id,
+        reminder_id: this.reminder_id,
+        action: this.ActionMessage.default,
         messages: []
       }
     };
@@ -81,6 +105,9 @@ export default {
 
   methods: {
     ...mapActions('template', ['getTemplate']),
+    ...mapActions('reminder', [
+      'createEpisode'
+    ]),
 
     forceRerender() {
       this.contentKey++;
@@ -104,6 +131,11 @@ export default {
       const templateData = await this.getTemplate(template.id);
       this.episodeData.messages = templateData.messages;
       this.forceRerender();
+    },
+
+    async submit() {
+      const response = await this.createEpisode(this.episodeData);
+      console.log(response);
     }
   }
 };

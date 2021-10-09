@@ -144,5 +144,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async createEpisode(context, payload) {
+    try {
+      return await EpisodeAPI.create(payload);
+    } catch (error) {
+      return null;
+    }
   }
 };

@@ -37,19 +37,14 @@
         <div class="d-flex align-items-center">
           <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
           <div class="ml-auto" v-if="actions.length > 1">
-            <div @click="moveActionUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
+            <div @click="moveUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
               <i class="dripicons-chevron-up"></i>
             </div>
-            <div
-              type="button"
-              @click="moveActionDown(index)"
-              class="btn btn-sm btn-light"
-              v-if="index < actions.length - 1"
-            >
+            <div type="button" @click="moveDown(index)" class="btn btn-sm btn-light" v-if="index < actions.length - 1">
               <i class="dripicons-chevron-down"></i>
             </div>
-            <div @click="removeAction(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
-              <i class="mdi mdi-delete"></i>
+            <div @click="remove(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
+              <i class="dripicons-minus"></i>
             </div>
           </div>
         </div>
@@ -182,12 +177,12 @@ export default {
       this.updateData();
     },
 
-    removeAction(index) {
+    remove(index) {
       this.actions.splice(index, 1);
       this.updateData();
     },
 
-    moveActionUp(index) {
+    moveUp(index) {
       if (index > 0) {
         const to = index - 1;
         this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
@@ -195,7 +190,7 @@ export default {
       }
     },
 
-    moveActionDown(index) {
+    moveDown(index) {
       if (index < this.actions.length) {
         const to = index + 1;
         this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);

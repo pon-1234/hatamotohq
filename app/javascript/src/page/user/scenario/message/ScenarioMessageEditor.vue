@@ -45,7 +45,7 @@
           <h3 class="card-title">配信タイミング設定</h3>
         </div>
         <div class="card-body">
-          <scenario-message-time-define
+          <scenario-message-time-editor
             v-if="!loading"
             :mode="scenario.mode"
             :is_initial.sync="scenarioMessageData.is_initial"
@@ -53,7 +53,7 @@
             :time.sync="scenarioMessageData.time"
             :order.sync="scenarioMessageData.order"
           >
-          </scenario-message-time-define>
+          </scenario-message-time-editor>
         </div>
       </div>
 
@@ -115,6 +115,7 @@ export default {
         id: null,
         scenario_id: this.scenario_id,
         name: '',
+        mode: 'time',
         is_initial: false,
         date: 1,
         time: '00:00',

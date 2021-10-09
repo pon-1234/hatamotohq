@@ -42,5 +42,7 @@ class Ability
     # Reminder
     can [:manage], Reminder, folder: { line_account: user.line_account }
     can [:create], Reminder
+    can [:manage], Episode, reminder: { line_account: user.line_account }
+    can [:create], Episode
   end
 end

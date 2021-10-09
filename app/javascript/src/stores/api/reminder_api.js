@@ -18,11 +18,11 @@ export default {
     });
   },
 
-  create: (query) => {
+  create: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/reminders`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },

@@ -1,1 +1,1 @@
-json.(episode, :id, :is_initial, :date, :time, :actions, :messages)
+json.(episode, :id, :is_initial, :date, :time, :action, :messages)

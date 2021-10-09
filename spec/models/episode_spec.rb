@@ -7,7 +7,7 @@
 #  is_initial  :boolean
 #  date        :integer
 #  time        :string(255)
-#  actions     :json
+#  action      :json
 #  messages    :json
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
