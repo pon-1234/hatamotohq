@@ -451,11 +451,6 @@ function ($) {
     App.prototype.init = function () {
         $.LayoutThemeApp.init();
 
-         // remove loading
-        setTimeout(function() {
-            document.body.classList.remove('loading');
-        }, 400);
-
         $.RightBar.init();
 
         // showing the sidebar on load if user is visiting the page first time only

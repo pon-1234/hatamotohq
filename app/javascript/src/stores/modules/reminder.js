@@ -43,6 +43,16 @@ export const actions = {
     context.dispatch('preview/setMessages', template.messages, { root: true });
   },
 
+  async getFolders(context, query) {
+    try {
+      const folders = await FolderAPI.list({ type: 'reminder' });
+      context.commit('setFolders', folders);
+      return folders;
+    } catch (error) {
+      return null;
+    }
+  },
+
   // Template is belong to a folder, get all folders of current account
   async getReminders(context, query) {
     try {
@@ -53,7 +63,7 @@ export const actions = {
     }
   },
 
-  async getReminder(_, id) {
+  async getReminder(context, id) {
     try {
       return await ReminderAPI.get(id);
     } catch (error) {
@@ -70,7 +80,7 @@ export const actions = {
     }
   },
 
-  async createTemplate(context, payload) {
+  async createReminder(context, payload) {
     try {
       const response = await ReminderAPI.create(payload);
       return response;

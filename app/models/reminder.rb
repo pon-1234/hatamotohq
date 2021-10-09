@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: reminders
@@ -17,4 +19,5 @@
 #  fk_rails_...  (folder_id => folders.id)
 #
 class Reminder < ApplicationRecord
+  belongs_to :folder
 end

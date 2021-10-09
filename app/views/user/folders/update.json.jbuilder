@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.(@folder, :id, :type, :name)
+json.partial! 'models/folder', folder: @folder

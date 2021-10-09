@@ -150,10 +150,12 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="createMessage('pending')" :disabled="invalid">
+        <button class="btn btn-success fw-120 mr-1" @click="createBroadcast('pending')" :disabled="invalid">
           配信登録
         </button>
-        <button type="submit" class="btn btn-outline-success fw-120" @click="createMessage('draft')">下書き保存</button>
+        <button type="submit" class="btn btn-outline-success fw-120" @click="createBroadcast('draft')">
+          下書き保存
+        </button>
       </div>
     </div>
     <message-preview></message-preview>
@@ -239,9 +241,6 @@ export default {
     ...mapActions('template', [
       'getTemplate'
     ]),
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
 
     forceRerender() {
       this.contentKey++;
@@ -321,13 +320,12 @@ export default {
       this.broadcastData.conditions = value;
     },
 
-    async createMessage(status) {
+    async createBroadcast(status) {
       this.broadcastData.status = status;
       if (this.broadcastData.deliver_now) {
         this.changeStartDateForNow();
       }
 
-      this.setIsSubmitChange();
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
