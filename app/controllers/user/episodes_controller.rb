@@ -2,7 +2,7 @@ class User::EpisodesController < User::ApplicationController
   before_action :find_reminder
   # GET /user/reminders/:id/episodes
   def index
-    @episodes = @reminder.episodes
+    @episodes = @reminder.episodes.ordered
   end
 
   # GET /user/reminders/:id/episodes/new

@@ -11,13 +11,13 @@
         <div class="d-flex align-items-center">
           <message-type-selection v-model="messageData.message_type_id" @input="changeSelectedMessage" />
           <div class="group-action d-flex" v-if="messagesCount && messagesCount > 0">
-            <div role="button" class="d-flex btn btn-light btn-sm mr-1" @click="moveMessageUp" v-if="index >= 1">
+            <div role="button" class="d-flex btn btn-light btn-sm mr-1" @click="moveUp" v-if="index >= 1">
               <i class="dripicons-chevron-up"></i>
             </div>
             <div
               role="button"
               class="d-flex btn btn-light btn-sm mr-1"
-              @click="moveMessageDown"
+              @click="moveDown"
               v-if="index < messagesCount - 1"
             >
               <i class="dripicons-chevron-down"></i>
@@ -40,7 +40,7 @@
 </template>
 <script>
 export default {
-  props: ['data', 'index', 'messagesCount', 'isDisplayTemplate'],
+  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate'],
   data() {
     return {
       messageData: {
@@ -175,12 +175,12 @@ export default {
       this.$emit('remove', { index: this.index });
     },
 
-    moveMessageUp() {
-      this.$emit('moveMessageUp', this.index);
+    moveUp() {
+      this.$emit('moveUp', this.index);
     },
 
-    moveMessageDown() {
-      this.$emit('moveMessageDown', this.index);
+    moveDown() {
+      this.$emit('moveDown', this.index);
     }
   }
 };

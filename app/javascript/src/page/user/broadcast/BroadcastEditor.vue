@@ -117,7 +117,7 @@
           />
           <error-message :message="errors.first('broadcast_title')"></error-message>
         </div>
-        <div v-if="refresh_content">
+        <div>
           <div class="mb-2">
             <div class="btn btn-secondary" data-toggle="modal" data-target="#modalSelectTemplate">
               テンプレートから作成
@@ -126,21 +126,17 @@
           </div>
           <div v-for="(item, index) in broadcastData.messages" :key="index">
             <message-editor
-              :isDisplayTemplate="true"
+              :allowCreateFromTemplate="true"
               v-bind:data="item"
               v-bind:index="index"
               v-bind:messagesCount="broadcastData.messages.length"
               @input="changeContent"
-              @remove="removeContent"
-              @moveMessageUp="moveMessageUp"
-              @moveMessageDown="moveMessageDown"
+              @remove="removeMessage"
+              @moveUp="moveMessageUp"
+              @moveDown="moveMessageDown"
             />
           </div>
-          <div
-            class="btn btn-primary"
-            @click="addMoreMessageContentDistribution"
-            v-if="broadcastData.messages.length < 5"
-          >
+          <div class="btn btn-primary" @click="addMessage" v-if="broadcastData.messages.length < 5">
             <i class="uil-plus"></i> <span>メッセージ追加</span>
           </div>
         </div>
@@ -201,7 +197,6 @@ export default {
         deliver_now: true,
         type: 'all'
       },
-      refresh_content: true,
       currentDate: moment().tz('Asia/Tokyo').format()
     };
   },
@@ -277,32 +272,23 @@ export default {
       this.broadcastData.messages.splice(index, 1, content);
     },
 
-    removeContent({ index }) {
-      this.refresh_content = false;
+    removeMessage({ index }) {
       this.broadcastData.messages.splice(index, 1);
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     },
 
     moveMessageUp(index) {
-      this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index - 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     },
     moveMessageDown(index) {
-      this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index + 1, 1, option)[0];
-      this.$nextTick(() => {
-        this.refresh_content = true;
-      });
+      this.forceRerender();
     },
 
-    addMoreMessageContentDistribution() {
+    addMessage() {
       this.broadcastData.messages.push({
         message_type_id: this.MessageTypeIds.Text,
         content: {

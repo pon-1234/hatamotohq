@@ -18,14 +18,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>開始時</td>
+              <tr v-for="(episode, index) in episodes" :key="index">
+                <td><episode-time :episode="episode"></episode-time></td>
                 <td>
-                  <div>テキストを送信する</div>
-                  <divider></divider>
-                  <div>テンプレートを送信する</div>
+                  <episode-actions :episode="episode"></episode-actions>
                 </td>
-                <td>開始時</td>
+                <td>
+                  <episode-messages :episode="episode"></episode-messages>
+                </td>
                 <td>
                   <div class="btn-group">
                     <button
@@ -47,6 +47,7 @@
               </tr>
             </tbody>
           </table>
+          <div class="mt-4 text-center" v-if="episodes.length === 0"><b>登録配信タイミングはありません。</b></div>
         </div>
 
         <loading-indicator :loading="loading"></loading-indicator>
@@ -65,13 +66,15 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       loading: false,
       contentKey: 0,
-      curBroadcastIndex: 0,
-      queryParams: null
+      episodes: []
     };
   },
 
   async beforeMount() {
-    await this.getEpisodes(this.reminder_id);
+    const episodes = await this.getEpisodes(this.reminder_id);
+    if (episodes) {
+      this.episodes = episodes;
+    }
     this.loading = false;
   },
 
