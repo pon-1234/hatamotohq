@@ -5,7 +5,7 @@ class CreateEpisodes < ActiveRecord::Migration[6.0]
       t.boolean :is_initial
       t.integer :date
       t.string :time
-      t.json :action
+      t.json :actions
       t.json :messages
       t.timestamps
     end

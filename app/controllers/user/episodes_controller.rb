@@ -33,8 +33,8 @@ class User::EpisodesController < User::ApplicationController
         :is_initial,
         :date,
         :time,
-        :action,
-        messages: []
+        messages: [],
+        actions: {},
       )
     end
 

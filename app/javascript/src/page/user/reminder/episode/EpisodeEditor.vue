@@ -21,7 +21,7 @@
       <div class="card-body">
         <message-action-editor-custom
           name="after_action"
-          :value="episodeData.action"
+          :value="episodeData.actions"
           :labelRequired="false"
           :showTitle="false"
           :showLaunchMesasge="false"
@@ -93,7 +93,10 @@ export default {
       episodeData: {
         id: this.episode_id,
         reminder_id: this.reminder_id,
-        action: this.ActionMessage.default,
+        date: 0,
+        time: '00:00',
+        is_initial: false,
+        actions: this.ActionMessage.default,
         messages: []
       }
     };

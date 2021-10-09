@@ -162,7 +162,7 @@ ActiveRecord::Schema.define(version: 2021_10_09_112355) do
     t.boolean "is_initial"
     t.integer "date"
     t.string "time"
-    t.json "action"
+    t.json "actions"
     t.json "messages"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
