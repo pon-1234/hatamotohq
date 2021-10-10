@@ -2,17 +2,17 @@
   <section>
     <label class="w-100">
       コンテンツ
-      <required-mark/>
+      <required-mark />
     </label>
 
     <div class="btn-template mb20 fz14">
-      <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-if="currentTemplate.code">
-        <span >{{currentTemplate.name}}</span>
+      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-if="currentTemplate.code">
+        <span>{{ currentTemplate.name }}</span>
       </a>
 
-      <a data-toggle="modal" :data-target="'#'+ name" class="btn-block" v-else>テンプレートから作成</a>
-      <input type="hidden" v-model="currentTemplate.code" :name="name+'_survey_code'" v-validate="'required'"/>
-      <span v-if="errors.first(name+'_survey_code')" class="invalid-box-label">テンプレートは必須です</span>
+      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-else>テンプレートから作成</a>
+      <input type="hidden" v-model="currentTemplate.code" :name="name + '_survey_code'" v-validate="'required'" />
+      <span v-if="errors.first(name + '_survey_code')" class="invalid-box-label">テンプレートは必須です</span>
     </div>
 
     <modal-select-survey-template @selectTemplate="selectTemplate" :id="name"></modal-select-survey-template>

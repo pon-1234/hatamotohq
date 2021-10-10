@@ -22,56 +22,60 @@
     <label>アクション</label>
 
     <div>
-      <select type="text" maxlength="12" v-model="currentPostBackType" class="w-100 form-control" @change="changeSelected">
-        <option v-for="(val,key) of types" :key="key" :value="key">{{val}}</option>
+      <select
+        type="text"
+        maxlength="12"
+        v-model="currentPostBackType"
+        class="w-100 form-control"
+        @change="changeSelected"
+      >
+        <option v-for="(val, key) of types" :key="key" :value="key">{{ val }}</option>
       </select>
     </div>
     <div class="mt-2">
-      <action-postback-text
-        v-if="currentPostBackType==='text'"
-        :value="content"
-        :name="name"
-        @input="updateContent">
+      <action-postback-text v-if="currentPostBackType === 'text'" :value="content" :name="name" @input="updateContent">
       </action-postback-text>
 
       <action-postback-template
-        v-if="currentPostBackType==='template'"
+        v-if="currentPostBackType === 'template'"
         :value="content"
         @input="updateContent"
-        :name="name">
+        :name="name"
+      >
       </action-postback-template>
 
       <action-postback-scenario
-        v-if="currentPostBackType==='scenario'"
+        v-if="currentPostBackType === 'scenario'"
         :value="content"
         :name="name"
-        @input="updateContent">
+        @input="updateContent"
+      >
       </action-postback-scenario>
 
-      <action-post-back-type-flex-message v-if="currentPostBackType==='flexMessage'"
+      <action-post-back-type-flex-message
+        v-if="currentPostBackType === 'flexMessage'"
         :value="content"
         :name="name"
-        @input="updateContent" />
+        @input="updateContent"
+      />
 
       <action-postback-email
         v-if="currentPostBackType === 'email'"
         :value="content"
         :name="name"
-        @input="updateContent">
+        @input="updateContent"
+      >
       </action-postback-email>
 
-      <action-postback-tag
-        v-if="currentPostBackType==='tag'"
-        :value="content"
-        :name="name"
-        @input="updateContent">
+      <action-postback-tag v-if="currentPostBackType === 'tag'" :value="content" :name="name" @input="updateContent">
       </action-postback-tag>
 
       <action-post-back-type-survey
-        v-if="currentPostBackType==='survey'"
+        v-if="currentPostBackType === 'survey'"
         :value="content"
         :name="name"
-        @input="updateContent">
+        @input="updateContent"
+      >
       </action-post-back-type-survey>
     </div>
   </div>
@@ -146,5 +150,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

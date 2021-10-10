@@ -9,7 +9,6 @@ class ActionHandlerJob < ApplicationJob
     @action = action
     @reply_token = reply_token
     handle_message_action(@action['actions']) if @action['actions'].present?
-    handle_tag_action(@action['tag']) if @action['tag'].present?
   end
 
   def handle_message_action(actions)
@@ -23,15 +22,10 @@ class ActionHandlerJob < ApplicationJob
         send_scenario(action['content'])
       when 'template'
         send_template(action['content'])
+      when 'tag'
+        handle_tag_action(action['content'])
       end
     end
-  end
-
-  def handle_tag_action(tag_actions)
-    assign_action = tag_actions.find { |action| action['type'] == 'assign' }
-    unassign_action = tag_actions.find { |action| action['type'] == 'unassign' }
-    assign_tag(assign_action) if assign_action.present?
-    unassign_tag(unassign_action) if unassign_action.present?
   end
 
   private
@@ -58,6 +52,13 @@ class ActionHandlerJob < ApplicationJob
     def send_template(content)
       template_id = content['template_id']
       SendTemplateJob.perform_later(@friend.channel.id, template_id)
+    end
+
+    def handle_tag_action(tag_actions)
+      assign_action = tag_actions.find { |action| action['type'] == 'assign' }
+      unassign_action = tag_actions.find { |action| action['type'] == 'unassign' }
+      assign_tag(assign_action) if assign_action.present?
+      unassign_tag(unassign_action) if unassign_action.present?
     end
 
     def assign_tag(action)

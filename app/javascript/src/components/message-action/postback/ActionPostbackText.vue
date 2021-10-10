@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label>本文<required-mark/></label>
+    <label>本文<required-mark /></label>
     <textarea
-      :name="name+'_postback_text'"
+      :name="name + '_postback_text'"
       placeholder="本文を入力してください"
       type="text"
       rows="4"
@@ -12,7 +12,7 @@
       v-validate="'required'"
       data-vv-as="本文"
     />
-    <error-message :message="errors.first(name+'_postback_text')"></error-message>
+    <error-message :message="errors.first(name + '_postback_text')"></error-message>
   </div>
 </template>
 <script>

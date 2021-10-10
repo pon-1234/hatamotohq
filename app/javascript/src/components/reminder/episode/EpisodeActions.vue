@@ -1,4 +1,6 @@
-<template><div>actions</div></template>
+<template>
+  <div>{{ actions }}</div>
+</template>
 
 <script>
 export default {
@@ -6,6 +8,12 @@ export default {
     episode: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    actions() {
+      return this.episode.actions;
     }
   }
 };

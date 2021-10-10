@@ -1,7 +1,7 @@
 <template>
   <section>
     <div v-if="showTitle" style="display: contents">
-      <label class="mt-4">ラベル<required-mark v-if="labelRequired"/></label>
+      <label class="mt-4">ラベル<required-mark v-if="labelRequired" /></label>
       <div>
         <input
           :name="name + '_label'"
@@ -24,33 +24,16 @@
     </label>
 
     <div class="btn-template mb20 fz14">
-      <a
-        data-toggle="modal"
-        :data-target="'#' + name"
-        class="btn-block"
-        v-if="currentTemplate.code"
-      >
+      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-if="currentTemplate.code">
         <span>{{ currentTemplate.name }}</span>
       </a>
 
-      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-else
-        >テンプレートから作成</a
-      >
-      <input
-        type="hidden"
-        v-model="currentTemplate.code"
-        :name="name + '_survey_code'"
-        v-validate="'required'"
-      />
-      <span v-if="errors.first(name + '_survey_code')" class="invalid-box-label"
-        >テンプレートは必須です</span
-      >
+      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-else>テンプレートから作成</a>
+      <input type="hidden" v-model="currentTemplate.code" :name="name + '_survey_code'" v-validate="'required'" />
+      <span v-if="errors.first(name + '_survey_code')" class="invalid-box-label">テンプレートは必須です</span>
     </div>
 
-    <modal-select-survey-template
-      @selectTemplate="selectTemplate"
-      :id="name"
-    ></modal-select-survey-template>
+    <modal-select-survey-template @selectTemplate="selectTemplate" :id="name"></modal-select-survey-template>
   </section>
 </template>
 <script>
@@ -119,7 +102,7 @@ export default {
 </script>
 
 <style scoped>
-.btn-block {
-  cursor: pointer;
-}
+  .btn-block {
+    cursor: pointer;
+  }
 </style>

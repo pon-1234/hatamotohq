@@ -286,6 +286,7 @@ export const PostbackTypes = {
   scenario: 'ステップ送信',
   // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
+  tag: 'タグ操作',
   'no-action': '何もしない'
   // tag: 'タグを操作'
 };
@@ -296,8 +297,7 @@ export const ActionMessage = {
     data: {
       actions: [
         { type: 'no-action' }
-      ],
-      tags: { type: 'tag', content: { tag_ids: [] } }
+      ]
     }
   }
 };

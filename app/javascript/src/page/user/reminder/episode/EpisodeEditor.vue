@@ -139,6 +139,7 @@ export default {
     async submit() {
       const response = await this.createEpisode(this.episodeData);
       console.log(response);
+      location.reload();
     }
   }
 };
