@@ -1,4 +1,11 @@
-<template><div>messages</div></template>
+<template>
+  <div v-if="messages.length > 0">
+    <div v-for="(message, index) in messages" :key="index" class="text-left">
+      <message-content :data="message.content"></message-content>
+    </div>
+  </div>
+  <div v-else>メッセージなし</div>
+</template>
 
 <script>
 export default {
@@ -6,6 +13,12 @@ export default {
     episode: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    messages() {
+      return this.episode.messages;
     }
   }
 };

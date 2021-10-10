@@ -24,5 +24,5 @@ class Episode < ApplicationRecord
   belongs_to :reminder
 
   # Scope
-  scope :ordered, -> { order(is_initial: :asc, date: :desc, time: :desc) }
+  scope :ordered, -> { order(is_initial: :desc, date: :desc, time: :desc) }
 end

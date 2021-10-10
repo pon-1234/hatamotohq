@@ -283,7 +283,7 @@ export const ImageMapBounds = {
 export const PostbackTypes = {
   text: 'テキスト送信',
   template: 'テンプレート送信',
-  scenario: 'ステップ送信',
+  scenario: 'シナリオ送信',
   // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
   tag: 'タグ操作',

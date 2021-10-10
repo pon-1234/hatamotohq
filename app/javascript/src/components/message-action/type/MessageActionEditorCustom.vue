@@ -60,7 +60,7 @@
         </action-postback>
       </div>
     </div>
-    <div class="text-center mt-2" v-if="actions.length < 3">
+    <div class="text-center mt-2" v-if="actions.length < limit">
       <div class="btn btn-warning" role="button" @click="addAction()"><i class="uil-plus"></i> アクションの追加</div>
     </div>
   </div>
@@ -73,6 +73,10 @@ export default {
     labelRequired: Boolean,
     showTitle: Boolean,
     name: String,
+    limit: {
+      type: Number,
+      default: 3
+    },
 
     showLaunchMesasge: {
       default: true,

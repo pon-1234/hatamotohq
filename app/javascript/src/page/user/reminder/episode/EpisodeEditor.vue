@@ -24,6 +24,7 @@
           :value="episodeData.actions"
           :labelRequired="false"
           :showTitle="false"
+          :limit="10"
           :showLaunchMesasge="false"
           @input="updateAction"
         ></message-action-editor-custom>
@@ -132,7 +133,7 @@ export default {
 
     async onSelectTemplate(template) {
       const templateData = await this.getTemplate(template.id);
-      this.episodeData.messages = templateData.messages;
+      this.episodeData.messages = templateData.messages.map(message => _.omit(message, ['id', 'order']));
       this.forceRerender();
     },
 

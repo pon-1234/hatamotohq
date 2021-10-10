@@ -11,7 +11,7 @@
           <table class="table table-centered mb-0">
             <thead class="thead-light">
               <tr>
-                <th>配信日時</th>
+                <th class="fw-200">配信日時</th>
                 <th>アクション</th>
                 <th>メッセージ</th>
                 <th class="fw-150"></th>

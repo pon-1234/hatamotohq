@@ -12,7 +12,11 @@
     <template v-else>
       <div :class="alignBubble">
         <div class="chat-avatar">
-          <img :src="sender.line_picture_url ? sender.line_picture_url :  '/img/no-image-profile.png'" class="rounded" alt="友達" />
+          <img
+            :src="sender.line_picture_url ? sender.line_picture_url : '/img/no-image-profile.png'"
+            class="rounded"
+            alt="友達"
+          />
           <i>{{ readableTime }}</i>
         </div>
         <div class="conversation-text d-flex flex-end">
@@ -20,7 +24,7 @@
             <span class="mt-auto mr-1"><chat-item-send-status :status="message.status"></chat-item-send-status></span>
           </div>
           <div class="ctext-wrap">
-            <i>{{ sender.name || 'システム' }}</i>
+            <i>{{ sender.name || "システム" }}</i>
             <p>
               <message-content :data="message.content" :time="readableTime"></message-content>
             </p>
@@ -105,7 +109,7 @@ export default {
   ::v-deep {
     .more-option {
       display: none;
-      margin:  0 5px;
+      margin: 0 5px;
 
       button {
         cursor: pointer;
@@ -114,18 +118,18 @@ export default {
         height: 25px;
         justify-content: center;
         width: 20px;
-        background: transparent!important;
-        border: none!important;
+        background: transparent !important;
+        border: none !important;
       }
 
       button:active {
-        box-shadow: none!important;
+        box-shadow: none !important;
       }
 
       .dropdown-menu {
-        width: 50px!important;
-        min-width: 50px!important;
-        a{
+        width: 50px !important;
+        min-width: 50px !important;
+        a {
           padding: 3px 10px !important;
         }
       }
@@ -148,7 +152,8 @@ export default {
       border-top: 0;
       margin-right: -0.375rem;
     }
-    .right .direct-chat-text::after, .right .direct-chat-text::before {
+    .right .direct-chat-text::after,
+    .right .direct-chat-text::before {
       border-left-color: #88d69a !important;
       border-right-color: transparent;
       left: 100%;
@@ -162,7 +167,8 @@ export default {
       border: 1px solid #d8d8d8 !important;
       color: #000 !important;
     }
-    .right .direct-chat-text::after, .right .direct-chat-text::before {
+    .right .direct-chat-text::after,
+    .right .direct-chat-text::before {
       border-left-color: #d8d8d8 !important;
       border-right-color: transparent;
       left: 100%;
@@ -181,5 +187,4 @@ export default {
     margin-left: 5px;
     margin-right: 5px;
   }
-
 </style>

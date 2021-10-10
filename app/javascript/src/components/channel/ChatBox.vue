@@ -1,20 +1,23 @@
 <template>
   <div class="card chat-panel">
     <div class="card-body d-flex flex-column">
-      <ul ref="chatPanel" class="flex-grow-1 conversation-list overflow-auto" data-simplebar @scroll="handleScroll" @drop="onDropMessage" @dragover="allowDrop">
+      <ul
+        ref="chatPanel"
+        class="flex-grow-1 conversation-list overflow-auto"
+        data-simplebar
+        @scroll="handleScroll"
+        @drop="onDropMessage"
+        @dragover="allowDrop"
+      >
         <transition name="slide-up">
           <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status" v-show="shouldShowSpinner"></div>
           </div>
         </transition>
-        <span
-          v-for="(message, index) in messages"
-          :key="index"
-          :id="'message_content_' + message.id"
-        >
+        <span v-for="(message, index) in messages" :key="index" :id="'message_content_' + message.id">
           <chat-item
             :message="message"
-            :prevMessage="index > 0 ? messages[index -1] : null"
+            :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
           >
           </chat-item>
@@ -29,7 +32,7 @@
         @sendScenario="sendScenario"
       ></reply-box>
     </div>
-    <loading-indicator ></loading-indicator>
+    <loading-indicator></loading-indicator>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
 </template>
@@ -57,14 +60,6 @@ export default {
   },
 
   watch: {
-    messages: {
-      handler(val) {
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 500);
-      },
-      deep: true
-    },
     activeChannel(newChannel, oldChannel) {
       if (oldChannel && newChannel.id === oldChannel.id) {
         return;
@@ -263,8 +258,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@keyframes kf-flash-message {
-  from {background-color: #ffe2d5;}
-  to {background-color: transparent;}
-}
+  @keyframes kf-flash-message {
+    from {
+      background-color: #ffe2d5;
+    }
+    to {
+      background-color: transparent;
+    }
+  }
 </style>
