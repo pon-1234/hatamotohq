@@ -115,5 +115,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async getReminders(context, id) {
+    try {
+      return await FriendAPI.getReminders(id);
+    } catch (error) {
+      return null;
+    }
   }
 };

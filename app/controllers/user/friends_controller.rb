@@ -2,7 +2,7 @@
 
 class User::FriendsController < User::ApplicationController
   load_and_authorize_resource :line_friend
-  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible]
+  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders]
   include User::FriendsHelper
 
   # GET /user/friends
@@ -59,6 +59,11 @@ class User::FriendsController < User::ApplicationController
     else
       @friend.toggle_visible
     end
+  end
+
+  # GET /user/friends/:id/reminders
+  def reminders
+    @reminders = @friend.channel.reminders
   end
 
   private

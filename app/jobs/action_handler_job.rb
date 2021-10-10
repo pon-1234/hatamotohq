@@ -57,7 +57,12 @@ class ActionHandlerJob < ApplicationJob
     end
 
     def setup_reminder(content)
-      # TODO
+      type = content['type']
+      goal = content['goal']
+      reminder_id = content['reminder']['id']
+      reminder = Reminder.find(reminder_id)
+      reminding = Reminding.new(channel: @friend.channel, reminder: reminder)
+      reminding.save
     end
 
     def handle_tag_action(tag_actions)

@@ -12,7 +12,7 @@ class ChannelFinder
 
   private
     def channels
-      Channel.accessible_by(@ability).where('channels.locked = ?', false).includes([:line_friend])
+      Channel.accessible_by(@ability).where('channels.locked = ?', false).includes([line_friend: [:tags, taggings: [:tag]]])
     end
 
     def current_channels

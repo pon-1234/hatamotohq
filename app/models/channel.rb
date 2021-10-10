@@ -34,6 +34,8 @@ class Channel < ApplicationRecord
   belongs_to :line_account
   belongs_to :line_friend
   has_many :messages, dependent: :destroy, autosave: true
+  has_many :remindings
+  has_many :reminders, through: :remindings
 
   before_create do
     self.last_activity_at = Time.zone.now

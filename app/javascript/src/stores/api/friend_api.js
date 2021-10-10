@@ -39,6 +39,14 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/toggle_visible`,
       method: 'POST'
     });
-  }
+  },
 
+  getReminders: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/reminders`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  }
 };

@@ -5,26 +5,47 @@
         <div class="card-body box-profile">
           <!-- profile image -->
           <div class="text-center">
-            <img :src="friendData.line_picture_url ? friendData.line_picture_url : '/img/no-image-profile.png'" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+            <img
+              :src="friendData.line_picture_url ? friendData.line_picture_url : '/img/no-image-profile.png'"
+              class="rounded-circle avatar-lg img-thumbnail"
+              alt="profile-image"
+            />
           </div>
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
 
           <span class="d-flex flex-row w-100">
-            <friend-toggle-visible :id="friendData.id" :visible="friendData.visible" class="ml-auto mr-1"></friend-toggle-visible>
-            <friend-toggle-locked :id="friendData.id" :locked="friendData.locked" class="mr-auto"></friend-toggle-locked>
+            <friend-toggle-visible
+              :id="friendData.id"
+              :visible="friendData.visible"
+              class="ml-auto mr-1"
+            ></friend-toggle-visible>
+            <friend-toggle-locked
+              :id="friendData.id"
+              :locked="friendData.locked"
+              class="mr-auto"
+            ></friend-toggle-locked>
           </span>
 
           <ul class="list-group list-group-unbordered my-3">
             <!-- locked -->
             <li class="list-group-item">
               <b>ステータス</b>
-              <span class="float-right"><friend-status :status="friendData.status" :locked="friendData.locked" :visible="friendData.visible"></friend-status></span>
+              <span class="float-right"
+                ><friend-status
+                  :status="friendData.status"
+                  :locked="friendData.locked"
+                  :visible="friendData.visible"
+                ></friend-status
+              ></span>
             </li>
 
             <!-- go to chat -->
             <li class="list-group-item">
-              <b>トーク</b><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"><i class="uil-comment-alt-dots"></i> メッセージ</a>
+              <b>トーク</b
+              ><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"
+                ><i class="uil-comment-alt-dots"></i> メッセージ</a
+              >
             </li>
 
             <!-- friend addition time -->
@@ -46,29 +67,52 @@
         <div class="card-body">
           <p class="mb-1"><strong>表示名</strong></p>
           <p class="text-muted mt-2">
-            <input type="text" placeholder="表示名" class="form-control" v-model="friendData.display_name" name="display_name" ref="displayName" :disabled="!editing" v-validate="'max:255'" data-vv-as="表示名">
+            <input
+              type="text"
+              placeholder="表示名"
+              class="form-control"
+              v-model="friendData.display_name"
+              name="display_name"
+              ref="displayName"
+              :disabled="!editing"
+              v-validate="'max:255'"
+              data-vv-as="表示名"
+            />
             <error-message :message="errors.first('display_name')"></error-message>
           </p>
-          <hr>
+          <hr />
 
           <p class="mt-3 mb-1"><strong>メモ欄</strong></p>
           <p class="text-muted mt-2">
-            <textarea rows="2" class="form-control" v-model="friendData.note" name="note" :disabled="!editing" v-validate="'max:2000'" data-vv-as="メモ欄"></textarea>
+            <textarea
+              rows="2"
+              class="form-control"
+              v-model="friendData.note"
+              name="note"
+              :disabled="!editing"
+              v-validate="'max:2000'"
+              data-vv-as="メモ欄"
+            ></textarea>
             <error-message :message="errors.first('note')"></error-message>
           </p>
-          <hr>
+          <hr />
 
           <p class="mt-3 mb-1"><strong>タグ</strong></p>
           <p class="text-muted mt-2">
             <friend-tag :tags="friendData.tags" v-if="!editing"></friend-tag>
-            <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" v-if="editing"/>
+            <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" v-if="editing" />
           </p>
-          <hr>
+          <hr />
           <div v-if="!editing" @click="editing = true" class="btn btn-success fw-120">編集</div>
           <div class="btn btn-success fw-120" @click="onSave()" v-show="editing">更新</div>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
+    </div>
+
+    <div class="col-xl-12">
+      <!-- Reminders -->
+      {{ reminders }}
     </div>
     <!-- <div class="col-lg-12">
       <div class="tabs">
@@ -155,12 +199,9 @@ export default {
         display_name: '',
         note: ''
       },
+      reminders: [],
       friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
-      MIX_SERVEY_MEDIA_FLEXA_URL: process.env.MIX_SERVEY_MEDIA_FLEXA_URL,
       isShowDisplayName: false,
-      confirmedText: '',
-      destinationStatusFromBot: '',
-      buttonText: '',
       field_index: null,
       currentTab: '友だち情報名',
       loading: true,
@@ -171,13 +212,15 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
+    this.reminders = await this.getReminders(this.friend_id);
     this.loading = false;
   },
 
   methods: {
     ...mapActions('friend', [
       'getFriend',
-      'updateFriend'
+      'updateFriend',
+      'getReminders'
     ]),
 
     selectTags(tags) {
@@ -186,18 +229,6 @@ export default {
 
     formatDateTime(time) {
       return moment(time).format('YYYY.MM.DD HH:mm');
-    },
-
-    editDisplayName() {
-      this.isShowDisplayName = !this.isShowDisplayName;
-    },
-
-    enterSubmitName(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonChangeName.click();
     },
 
     compositionend() {
@@ -226,29 +257,6 @@ export default {
       }
       this.editing = false;
       this.loading = false;
-    },
-
-    trimMidString(originStr, maxChars, trailingCharCount) {
-      let shrinkedStr = originStr;
-      const shrinkedLength = maxChars - trailingCharCount - 3;
-      if (originStr.length > shrinkedLength) {
-        const front = originStr.substr(0, shrinkedLength);
-        const mid = '...';
-        const end = originStr.substr(-trailingCharCount);
-        shrinkedStr = front + mid + end;
-      }
-      return shrinkedStr;
-    },
-
-    openAddFileModal(index) {
-      this.field_index = index;
-      $('#modalSelectMedia').modal('show');
-    },
-
-    changeFile(file) {
-      this.friendData.survey_profile[this.field_index].content.content.alias = file.alias;
-      this.friendData.survey_profile[this.field_index].content.content.mine_type = file.type;
-      this.friendData.survey_profile[this.field_index].content.content.name = file.name;
     }
   }
 };

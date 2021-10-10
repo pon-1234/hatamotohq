@@ -47,7 +47,8 @@ export default {
       currentScrollTop: 0,
       isLoadingPrevious: true,
       scrollTopBeforeLoad: null,
-      heightBeforeLoad: null
+      heightBeforeLoad: null,
+      latestMessageId: null
     };
   },
 
@@ -60,6 +61,19 @@ export default {
   },
 
   watch: {
+    messages: {
+      handler(val) {
+        const newestMessage = _.last(val);
+        // Scroll to bottom if receive a new message
+        if (newestMessage.id > this.latestMessageId) {
+          setTimeout(() => {
+            this.latestMessageId = newestMessage.id;
+            this.scrollToBottom();
+          }, 500);
+        }
+      },
+      deep: true
+    },
     activeChannel(newChannel, oldChannel) {
       if (oldChannel && newChannel.id === oldChannel.id) {
         return;
@@ -77,6 +91,10 @@ export default {
       allMessagesLoaded: state => state.allMessagesLoaded,
       isLoadMoreMessage: state => state.isLoadMoreMessage
     }),
+
+    latestMessage() {
+      return _.last(this.messages);
+    },
 
     isMobile() {
       return Util.isMobile();
