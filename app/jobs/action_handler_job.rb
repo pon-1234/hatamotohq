@@ -24,6 +24,8 @@ class ActionHandlerJob < ApplicationJob
         send_template(action['content'])
       when 'tag'
         handle_tag_action(action['content'])
+      when 'reminder'
+        setup_reminder(action['content'])
       end
     end
   end
@@ -52,6 +54,10 @@ class ActionHandlerJob < ApplicationJob
     def send_template(content)
       template_id = content['template_id']
       SendTemplateJob.perform_later(@friend.channel.id, template_id)
+    end
+
+    def setup_reminder(content)
+      # TODO
     end
 
     def handle_tag_action(tag_actions)

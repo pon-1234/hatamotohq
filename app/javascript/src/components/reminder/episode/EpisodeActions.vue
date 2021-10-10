@@ -6,6 +6,8 @@
       <span v-else-if="action.type === 'scenario'">シナリオ送信</span>
       <span v-else-if="action.type === 'email'">メール通知</span>
       <span v-else-if="action.type === 'tag'">タグ操作</span>
+      <span v-else-if="action.type === 'reminder'">リマインダ配信</span>
+      <span v-else-if="action.type === 'none'">何もしない</span>
     </div>
   </div>
   <div v-else>アクションなし</div>

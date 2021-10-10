@@ -91,7 +91,7 @@ export default {
       displayText: null,
       actions: [
         {
-          type: 'no-action'
+          type: 'none'
         }
       ]
     };
@@ -119,7 +119,7 @@ export default {
 
     addAction() {
       this.actions.push({
-        type: 'no-action'
+        type: 'none'
       });
 
       this.updateData();

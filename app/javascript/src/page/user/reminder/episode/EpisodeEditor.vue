@@ -64,7 +64,6 @@
       </div>
       <loading-indicator :loading="loading" />
     </div>
-
     <div>
       <div class="row-form-btn d-flex">
         <button class="btn btn-success fw-120 mr-1" @click="submit()" :disabled="invalid">配信登録</button>
@@ -74,6 +73,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   props: {
@@ -138,9 +138,16 @@ export default {
     },
 
     async submit() {
+      const valid = await this.$validator.validateAll();
+      if (!valid) {
+        return;
+      }
       const response = await this.createEpisode(this.episodeData);
-      console.log(response);
-      location.reload();
+      if (response) {
+        Util.showSuccessThenRedirect('リマインダ配信タイミングの作成は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders/${this.reminder_id}/episodes`);
+      } else {
+        window.toastr.error('リマインダ配信タイミングの作成は失敗しました。');
+      }
     }
   }
 };

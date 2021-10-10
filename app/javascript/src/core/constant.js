@@ -287,8 +287,8 @@ export const PostbackTypes = {
   // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
   tag: 'タグ操作',
-  'no-action': '何もしない'
-  // tag: 'タグを操作'
+  reminder: 'リマインダ操作',
+  none: '何もしない'
 };
 
 export const ActionMessage = {
@@ -296,7 +296,7 @@ export const ActionMessage = {
     type: 'postback',
     data: {
       actions: [
-        { type: 'no-action' }
+        { type: 'none' }
       ]
     }
   }

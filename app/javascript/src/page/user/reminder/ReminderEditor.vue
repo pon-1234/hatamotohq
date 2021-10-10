@@ -29,6 +29,7 @@
           </div>
         </div>
       </div>
+      <loading-indicator :loading="loading"></loading-indicator>
       <div class="card-footer">
         <button class="btn btn-success text-nowrap mr-1" @click="submit()" :disabled="invalid">リマインダ登録</button>
       </div>
