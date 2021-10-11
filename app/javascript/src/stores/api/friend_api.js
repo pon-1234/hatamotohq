@@ -48,5 +48,14 @@ export default {
       dataType: 'json',
       contentType: 'application/json'
     });
+  },
+
+  setReminder: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${payload.friend_id}/set_reminder`,
+      method: 'POST',
+      data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
   }
 };

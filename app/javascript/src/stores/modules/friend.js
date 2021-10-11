@@ -123,5 +123,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async setReminder(context, payload) {
+    try {
+      return await FriendAPI.setReminder(payload);
+    } catch (error) {
+      return null;
+    }
   }
 };

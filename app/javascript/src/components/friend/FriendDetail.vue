@@ -111,71 +111,36 @@
     </div>
 
     <div class="col-xl-12">
-      <!-- Reminders -->
-      {{ reminders }}
-    </div>
-    <!-- <div class="col-lg-12">
-      <div class="tabs">
-        <div @click="currentTab = '友だち情報名'" :class="{'active': currentTab === '友だち情報名'}">友だち情報名</div>
-        <div @click="currentTab = '回答一覧'" :class="{'active': currentTab === '回答一覧'}">回答一覧</div>
-        <div style="flex: 1"></div>
-      </div>
-      <div class="tab-content">
-        <div v-if="currentTab === '友だち情報名'">
-          <table class="tbl-linebot01" id="table-friend"
-              style="width: 100%; max-width: initial;">
-            <tbody>
-              <tr v-for="(profile, index) in  friend.survey_profile" :key="index">
-                <th>{{profile.field_name}}</th>
-                <td>
-                  <div v-if="profile.content !== null">
-                    <div v-if="profile.content.type === 'file'">
-                      <img style="width: 150px; margin-bottom: 10px; height: 150px; object-fit: contain"
-                        :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
-                        v-if="profile.content.content.mine_type!=null && profile.content.content.mine_type.includes('image/')">
-                      <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
-                      <div>
-                        <input type="hidden" v-model="friend.survey_profile[index].content.content.alias">
-                        <button type="button" class="btn btn-secondary"
-                          @click="openAddFileModal(index)">
-                          <i class="fa fa-upload"></i> ファイルをアップロード
-                        </button>
-                      </div>
-                      <div v-if="profile.content.content.name">
-                        <a style="color: #28a745"
-                          :href="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${profile.content.content.alias}`"
-                          target="_blank">
-                          <i
-                            class="fa fa-download"></i><span>{{trimMidString(profile.content.content.name, 25, 10)}}</span>
-                        </a>
-                      </div>
-                    </div>
-                    <div v-else-if="profile.content.type === 'date'" class="input-group newgroup-inputs">
-                      <datetime
-                        type="date"
-                        v-model="friend.survey_profile[index].content.content"
-                        :input-class="{'form-control': true}">
-                      </datetime>
-                    </div>
-                    <div v-else style="input-group newgroup-inputs">
-                      <input type="text" placeholder="" class="form-control"
-                        @click.stop
-                        v-model="friend.survey_profile[index].content.content"
-                      >
-                    </div>
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link active">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">リマインダ</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#scenario" data-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+            <span class="d-none d-md-block">シナリオ</span>
+          </a>
+        </li>
+      </ul>
 
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="text-center mt-5" v-if="friend.survey_profile && friend.survey_profile.length === 0">データがありません。</div>
+      <div class="tab-content">
+        <div class="tab-pane show active" id="reminder">
+          <div>
+            <div class="row">
+              <label class="col-xl-3">リマインダ</label>
+              <label class="col-xl-9">ゴール日時</label>
+            </div>
+            <friend-detail-assign-reminder :friend_id="friend_id"></friend-detail-assign-reminder>
+          </div>
         </div>
-        <div v-if="currentTab === '回答一覧'" class="tbl-admin01 table-responsive fz14 text-center" style="overflow-x: scroll">
-          <friend-survey-answer :friendId="friendId"></friend-survey-answer>
+        <div class="tab-pane" id="scenario">
+          <p>...</p>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -257,6 +222,10 @@ export default {
       }
       this.editing = false;
       this.loading = false;
+    },
+
+    onSelectReminder() {
+      // TODO
     }
   }
 };

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: remindings
@@ -22,4 +24,7 @@
 class Reminding < ApplicationRecord
   belongs_to :channel
   belongs_to :reminder
+
+  # Validations
+  validates :goal, presence: true
 end

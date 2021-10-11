@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: reminder_events
@@ -21,6 +23,5 @@
 #
 FactoryBot.define do
   factory :reminder_event do
-    
   end
 end

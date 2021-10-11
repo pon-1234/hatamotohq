@@ -58,6 +58,7 @@ Rails.application.routes.draw do
           post :toggle_locked
           post :toggle_visible
           get :reminders
+          post :set_reminder
         end
       end
       resources :broadcasts do

@@ -96,6 +96,11 @@ class LineFriend < ApplicationRecord
     without_tag + with_tag
   end
 
+  def set_reminder!(reminder_id, goal)
+    reminding = Reminding.new(channel: self.channel, reminder_id: reminder_id, goal: goal)
+    reminding.save!
+  end
+
   private
     def exec_after_create_commit
       AcquireFriendJob.perform_later(self.id)
