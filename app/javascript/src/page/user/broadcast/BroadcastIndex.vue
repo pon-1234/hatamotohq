@@ -84,7 +84,7 @@
                         role="button"
                         class="dropdown-item"
                         data-toggle="modal"
-                        data-target="#modaldeleteBroadcast"
+                        data-target="#modalDeleteBroadcast"
                         @click="curBroadcastIndex = index"
                         >一斉配信を削除</a
                       >
@@ -114,9 +114,9 @@
     <!-- START: Delete broadcast modal -->
     <modal-confirm
       title="この一斉配信を削除してもよろしいですか？"
-      id="modaldeleteBroadcast"
+      id="modalDeleteBroadcast"
       type="delete"
-      @confirm="submitdeleteBroadcast"
+      @confirm="submitDeleteBroadcast"
     >
       <template v-slot:content>
         <div v-if="curBroadcast">
@@ -156,13 +156,16 @@ export default {
       queryParams: null
     };
   },
+
   created() {
     this.queryParams = _.cloneDeep(this.getQueryParams);
   },
+
   async beforeMount() {
     await this.getBroadcasts();
     this.loading = false;
   },
+
   computed: {
     ...mapGetters('user',
       ['getQueryParams']
@@ -177,6 +180,7 @@ export default {
       return this.broadcasts[this.curBroadcastIndex];
     }
   },
+
   methods: {
     ...mapMutations('broadcast', [
       'setCurPage',
@@ -220,7 +224,7 @@ export default {
       return Util.formattedDatetime(time);
     },
 
-    async submitdeleteBroadcast() {
+    async submitDeleteBroadcast() {
       const response = await this.deleteBroadcast(this.curBroadcast.id);
       if (response) {
         Util.showSuccessThenRedirect('一斉配信の削除は完了しました。', window.location.href);

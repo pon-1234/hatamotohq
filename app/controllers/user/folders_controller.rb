@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class User::FoldersController < User::ApplicationController
-  before_action :find_folder, only: [:update, :destroy]
+  load_and_authorize_resource
+  before_action :find_folder, only: [:show, :update, :destroy]
+
+  # GET /user/folders
+  def index
+    @folders = Folder.accessible_by(current_ability).where(type: params[:type])
+  end
 
   # POST /user/folders
   def create
@@ -10,6 +16,10 @@ class User::FoldersController < User::ApplicationController
     if !@folder.save!
       render_bad_request_with_message(@folder.first_error_message)
     end
+  end
+
+  # GET /user/folders/:id
+  def show
   end
 
   # PATCH /user/folders/:id

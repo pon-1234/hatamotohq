@@ -10,23 +10,15 @@
     >
       <template v-slot="{ tags, disabled, addTag }">
         <i
-          :class="
-            isFocus
-              ? 'fas fa-angle-up float-r'
-              : 'fas mdi mdi-chevron-down float-r'
-          "
+          :class="isFocus ? 'fas fa-angle-up float-r' : 'fas mdi mdi-chevron-down float-r'"
           class="down icon-action"
           @click.stop="showDropDown"
         ></i>
         <ul class="list-inline d-inline-block mb-2">
           <li v-for="tag in tags" :key="tag" class="list-inline-item">
-            <b-form-tag
-              @remove="removeTag(tag, addTag)"
-              :title="tag"
-              :disabled="disabled"
-              variant="info"
-              >{{ tag }}</b-form-tag
-            >
+            <b-form-tag @remove="removeTag(tag, addTag)" :title="tag" :disabled="disabled" variant="info">{{
+              tag
+            }}</b-form-tag>
           </li>
         </ul>
         <b-form-input
@@ -38,11 +30,7 @@
           autocomplete="off"
           placeholder="タグ名を入力"
         ></b-form-input>
-        <div
-          class="w-100 dropdown-tag row"
-          v-if="!disabled && isFocus"
-          :class="{ top: isShowTop() }"
-        >
+        <div class="w-100 dropdown-tag row" v-if="!disabled && isFocus" :class="{ top: isShowTop() }">
           <div :class="getClassLeftTag()">
             <div class="tag-content">
               <table class="table table-tags-header">
@@ -56,23 +44,11 @@
                 <div
                   v-for="(item, index) in folders"
                   :key="index"
-                  :class="
-                    selectedFolderIndex === index
-                      ? 'folder-item active'
-                      : 'folder-item'
-                  "
+                  :class="selectedFolderIndex === index ? 'folder-item active' : 'folder-item'"
                   @click="changeSelected(index)"
                 >
-                  <i
-                    :class="
-                      selectedFolderIndex === index
-                        ? 'fas fa-folder-open'
-                        : 'fas fa-folder'
-                    "
-                  ></i>
-                  <span class="tag-label">{{ item.name }}</span> ({{
-                    item.tags.length
-                  }})
+                  <i :class="selectedFolderIndex === index ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
+                  <span class="tag-label">{{ item.name }}</span> ({{ item.tags.length }})
                 </div>
               </div>
             </div>
@@ -89,44 +65,25 @@
               <!--</table>-->
               <div class="x-tag-header">
                 <div class="x-btn-back">
-                  <i
-                    style="margin: auto"
-                    class="fas fa-arrow-left item-sm"
-                    @click="backToFolder"
-                  ></i>
+                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i>
                 </div>
                 <div class="x-title" v-if="curFolder">{{ curFolder.name }}</div>
               </div>
 
-              <div
-                class="tag-scroll tag-list"
-                v-if="availableOptions && availableOptions.length"
-              >
+              <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
                 <div
                   v-for="(item, index) in availableOptions"
                   :key="index"
-                  :class="
-                    selectedTags.find((el) => el.id === item.id)
-                      ? 'folder-item active'
-                      : 'folder-item'
-                  "
+                  :class="selectedTags.find((el) => el.id === item.id) ? 'folder-item active' : 'folder-item'"
                   @click="onTagSelected({ item, addTag })"
                 >
                   <span class="tag-label">{{ item.name }}</span>
-                  <span class="tag-choose item-hidden"
-                    ><i class="fas fa-check"></i>選択</span
-                  >
-                  <span class="tag-checked item-hidden"
-                    ><i class="fas fa-check"></i>選択中</span
-                  >
-                  <span class="tag-remove item-hidden"
-                    ><i class="fas fa-times"></i>解除</span
-                  >
+                  <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span>
+                  <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span>
+                  <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
                 </div>
               </div>
-              <div v-else class="tag-scroll tag-empty-content text-center">
-                空のデータ
-              </div>
+              <div v-else class="tag-scroll tag-empty-content text-center">空のデータ</div>
             </div>
           </div>
         </div>

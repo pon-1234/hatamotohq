@@ -42,7 +42,6 @@ export default {
   .chat-item-text {
     padding: 8px 12px;
     line-height: 1.25;
-    text-align: center;
     position: relative;
     word-break: break-word;
     word-wrap: break-word;

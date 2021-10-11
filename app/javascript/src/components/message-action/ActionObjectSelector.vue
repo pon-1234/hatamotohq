@@ -3,9 +3,7 @@
     <select v-model="selected" class="form-control w-100" @change="changeSelected">
       <option value="none" :disabled="!isNone">- 選択してください -</option>
       <option v-for="(item, index) in action_objects" :key="index" :value="item.id">
-        {{
-        item.title
-        }}
+        {{ item.title }}
       </option>
     </select>
   </div>
@@ -166,7 +164,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep{
-
-}
+  ::v-deep {
+  }
 </style>

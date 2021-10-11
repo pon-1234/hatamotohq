@@ -44,11 +44,7 @@
     <action-default
       :showTitle="showTitle"
       v-bind:value="data"
-      v-if="
-        data.type === 'camera' ||
-          data.type === 'cameraRoll' ||
-          data.type === 'location'
-      "
+      v-if="data.type === 'camera' || data.type === 'cameraRoll' || data.type === 'location'"
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"

@@ -34,11 +34,7 @@
               false-value="disabled"
               ref="status"
             />
-            <label
-              for="scenario-onoff"
-              data-on-label="オン"
-              data-off-label="オフ"
-            ></label>
+            <label for="scenario-onoff" data-on-label="オン" data-off-label="オフ"></label>
           </div>
         </div>
       </div>
@@ -81,10 +77,7 @@
             >のキーワードが<b>{{ error.name }}</b
             >で設定されているため設定できません。</span
           >
-          <error-message
-            class="w-100"
-            :message="errors.first('keywords')"
-          ></error-message>
+          <error-message class="w-100" :message="errors.first('keywords')"></error-message>
         </div>
       </div>
     </div>
@@ -98,20 +91,11 @@
           <div class="form-group" :key="msgContentKey">
             <label>メッセージ本文</label>
             <div>
-              <div
-                class="btn btn-primary"
-                data-toggle="modal"
-                data-target="#modal-template"
-              >
-                テンプレートから作成
-              </div>
+              <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
             </div>
-            <modal-select-template
-              @selectTemplate="onSelectTemplate"
-              id="modal-template"
-            />
+            <modal-select-template @selectTemplate="onSelectTemplate" id="modal-template" />
             <message-editor
-              :isDisplayTemplate="true"
+              :allowCreateFromTemplate="true"
               v-for="(item, index) in autoResponseData.messages"
               :key="index"
               v-bind:data="item"
@@ -120,16 +104,14 @@
               @input="onMessageContentChanged"
               @selectTemplate="selectTemplate"
               @remove="removeContent"
-              @moveMessageUp="moveMessageUp"
-              @moveMessageDown="moveMessageDown"
+              @moveUp="moveUp"
+              @moveDown="moveDown"
             />
             <div>
               <div
                 class="btn btn-primary"
                 @click="addMoreMessageContentDistribution"
-                v-if="
-                  autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE
-                "
+                v-if="autoResponseData.messages.length < MAX_AUTO_RESPONSE_MESSAGE"
               >
                 <i class="uil-plus"></i><span> メッセージ追加</span>
               </div>
@@ -138,13 +120,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <button
-          type="submit"
-          class="btn btn-success fw-120"
-          @click="submitCreate()"
-        >
-          保存
-        </button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -276,12 +252,12 @@ export default {
       this.forceRerender();
     },
 
-    moveMessageUp(index) {
+    moveUp(index) {
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index - 1, 1, option)[0];
       this.forceRerender();
     },
-    moveMessageDown(index) {
+    moveDown(index) {
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index + 1, 1, option)[0];
       this.forceRerender();

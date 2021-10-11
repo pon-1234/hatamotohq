@@ -57,6 +57,8 @@ Rails.application.routes.draw do
         member do
           post :toggle_locked
           post :toggle_visible
+          get :reminders
+          post :set_reminder
         end
       end
       resources :broadcasts do
@@ -82,6 +84,11 @@ Rails.application.routes.draw do
         post :copy, on: :member
       end
       resources :surveys
+      resources :reminders do
+        member do
+          resources :episodes
+        end
+      end
       resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'

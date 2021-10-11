@@ -2,20 +2,33 @@
   <section>
     <label class="w-100">
       コンテンツ
-      <required-mark/>
+      <required-mark />
     </label>
 
     <div>
-      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary mw-150" v-if="currentTemplate.template_id">
+      <div
+        data-toggle="modal"
+        :data-target="'#' + name"
+        class="btn btn-secondary mw-150"
+        v-if="currentTemplate.template_id"
+      >
         <message-content :data="currentTemplate.content" v-if="currentTemplate.content" />
-        <span v-else>{{currentTemplate.name}}</span>
+        <span v-else>{{ currentTemplate.name }}</span>
       </div>
-      <div data-toggle="modal" :data-target="'#'+ name" class="btn btn-secondary mw-150" v-else>テンプレートを選択</div>
-      <input type="hidden" v-model="currentTemplate.template_id" :name="name+'_template_id'" v-validate="'required'" data-vv-as="テンプレート"/>
-      <error-message class="w-100" :message="errors.first(name+'_template_id')"></error-message>
+      <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary mw-150" v-else>
+        テンプレートを選択
+      </div>
+      <input
+        type="hidden"
+        v-model="currentTemplate.template_id"
+        :name="name + '_template_id'"
+        v-validate="'required'"
+        data-vv-as="テンプレート"
+      />
+      <error-message class="w-100" :message="errors.first(name + '_template_id')"></error-message>
     </div>
 
-    <modal-select-template @selectTemplate="selectTemplate" :id="name"/>
+    <modal-select-template @selectTemplate="selectTemplate" :id="name" />
   </section>
 </template>
 <script>

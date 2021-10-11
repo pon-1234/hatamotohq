@@ -1,8 +1,9 @@
 export default {
-  getFolders: (query = {}) => {
+  list: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/folders',
+      url: `${process.env.MIX_ROOT_PATH}/user/folders`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
@@ -10,7 +11,7 @@ export default {
 
   create: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/folders',
+      url: `${process.env.MIX_ROOT_PATH}/user/folders`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -19,7 +20,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/folders/' + query.id,
+      url: `${process.env.MIX_ROOT_PATH}/user/folders/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'

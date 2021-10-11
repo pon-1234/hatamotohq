@@ -5,7 +5,9 @@ class User::TemplatesController < User::ApplicationController
   include User::TemplatesHelper
   # GET /user/templates
   def index
-    @folders = Folder.accessible_by(current_ability).type_template_message
+    if request.format.json?
+      @folders = Folder.accessible_by(current_ability).type_template_message
+    end
     respond_to do |format|
       format.html
       format.json

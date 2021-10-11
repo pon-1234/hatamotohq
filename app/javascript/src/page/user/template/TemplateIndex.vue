@@ -174,10 +174,6 @@ export default {
       this.contentKey++;
     },
 
-    showConfirmDeleteModal(template) {
-      this.template = template;
-    },
-
     tags(strtag) {
       return typeof (strtag) === 'string' ? (strtag.length > 0 ? strtag.split(',') : []) : strtag;
     },

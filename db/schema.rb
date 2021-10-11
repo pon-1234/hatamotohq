@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_06_050654) do
+ActiveRecord::Schema.define(version: 2021_10_10_112845) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -158,6 +158,18 @@ ActiveRecord::Schema.define(version: 2021_10_06_050654) do
     t.datetime 'updated_at', precision: 6, null: false
   end
 
+  create_table 'episodes', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'reminder_id'
+    t.boolean 'is_initial'
+    t.integer 'date'
+    t.string 'time'
+    t.json 'actions'
+    t.json 'messages'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['reminder_id'], name: 'index_episodes_on_reminder_id'
+  end
+
   create_table 'flex_message_sent_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'flex_message_id'
     t.bigint 'line_account_id'
@@ -283,6 +295,36 @@ ActiveRecord::Schema.define(version: 2021_10_06_050654) do
     t.index ['key'], name: 'index_postback_mappers_on_key'
   end
 
+  create_table 'reminder_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'reminding_id'
+    t.bigint 'episode_id'
+    t.datetime 'schedule_at'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['episode_id'], name: 'index_reminder_events_on_episode_id'
+    t.index ['reminding_id'], name: 'index_reminder_events_on_reminding_id'
+  end
+
+  create_table 'reminders', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'folder_id'
+    t.bigint 'line_account_id'
+    t.string 'name'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['folder_id'], name: 'index_reminders_on_folder_id'
+    t.index ['line_account_id'], name: 'index_reminders_on_line_account_id'
+  end
+
+  create_table 'remindings', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'channel_id'
+    t.bigint 'reminder_id'
+    t.datetime 'goal'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['channel_id'], name: 'index_remindings_on_channel_id'
+    t.index ['reminder_id'], name: 'index_remindings_on_reminder_id'
+  end
+
   create_table 'rich_menus', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
@@ -318,6 +360,7 @@ ActiveRecord::Schema.define(version: 2021_10_06_050654) do
     t.datetime 'schedule_at'
     t.integer 'order'
     t.string 'status'
+    t.boolean 'is_last', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['channel_id'], name: 'index_scenario_events_on_channel_id'
@@ -519,6 +562,7 @@ ActiveRecord::Schema.define(version: 2021_10_06_050654) do
   add_foreign_key 'channel_members', 'channels'
   add_foreign_key 'channels', 'line_accounts'
   add_foreign_key 'channels', 'line_friends'
+  add_foreign_key 'episodes', 'reminders'
   add_foreign_key 'flex_message_sent_logs', 'flex_messages'
   add_foreign_key 'flex_message_sent_logs', 'line_accounts'
   add_foreign_key 'flex_messages', 'line_accounts'
@@ -527,6 +571,12 @@ ActiveRecord::Schema.define(version: 2021_10_06_050654) do
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
+  add_foreign_key 'reminder_events', 'episodes'
+  add_foreign_key 'reminder_events', 'remindings'
+  add_foreign_key 'reminders', 'folders'
+  add_foreign_key 'reminders', 'line_accounts'
+  add_foreign_key 'remindings', 'channels'
+  add_foreign_key 'remindings', 'reminders'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
   add_foreign_key 'rich_menus', 'media', column: 'media_id'

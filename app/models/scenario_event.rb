@@ -5,17 +5,18 @@
 # Table name: scenario_events
 #
 #  id                  :bigint           not null, primary key
-#  content             :json
-#  order               :integer
-#  schedule_at         :datetime
-#  status              :string(255)
-#  type                :string(255)
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  channel_id          :bigint
 #  line_account_id     :bigint
 #  scenario_id         :bigint
 #  scenario_message_id :bigint
+#  type                :string(255)
+#  content             :json
+#  channel_id          :bigint
+#  schedule_at         :datetime
+#  order               :integer
+#  status              :string(255)
+#  is_last             :boolean          default(FALSE)
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #
@@ -74,6 +75,8 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def execute_after_deliver
+      # If this event is the last
+      Messages::SystemLogBuilder.new(@channel).perform_scenario_end(@scenario) if self.is_last
       self.destroy
     end
 end

@@ -37,19 +37,14 @@
         <div class="d-flex align-items-center">
           <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
           <div class="ml-auto" v-if="actions.length > 1">
-            <div @click="moveActionUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
+            <div @click="moveUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
               <i class="dripicons-chevron-up"></i>
             </div>
-            <div
-              type="button"
-              @click="moveActionDown(index)"
-              class="btn btn-sm btn-light"
-              v-if="index < actions.length - 1"
-            >
+            <div type="button" @click="moveDown(index)" class="btn btn-sm btn-light" v-if="index < actions.length - 1">
               <i class="dripicons-chevron-down"></i>
             </div>
-            <div @click="removeAction(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
-              <i class="mdi mdi-delete"></i>
+            <div @click="remove(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
+              <i class="dripicons-minus"></i>
             </div>
           </div>
         </div>
@@ -65,35 +60,8 @@
         </action-postback>
       </div>
     </div>
-    <div class="text-center mt-2" v-if="actions.length < 3">
+    <div class="text-center mt-2" v-if="actions.length < limit">
       <div class="btn btn-warning" role="button" @click="addAction()"><i class="uil-plus"></i> アクションの追加</div>
-    </div>
-    <divider></divider>
-    <div>
-      <label class="w-100 mt-2"> タグ設定 </label>
-      <div class="row m-0">
-        <div class="col-md-6 d-flex-auto p-0">
-          <span>タグを追加</span>
-          <action-postback-tag
-            class="mt-2"
-            :value="assignTagsData.tags"
-            :name="name + '_tag'"
-            @input="onAssignTagsDataChanged"
-          >
-          </action-postback-tag>
-        </div>
-
-        <div class="col-md-6 d-flex-auto">
-          <span>タグをはずす</span>
-          <action-postback-tag
-            class="mt-2"
-            :value="unassignTagsData.tags"
-            :name="name + '_tag_delete'"
-            @input="onUnassignTagsDataChanged"
-          >
-          </action-postback-tag>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -105,6 +73,10 @@ export default {
     labelRequired: Boolean,
     showTitle: Boolean,
     name: String,
+    limit: {
+      type: Number,
+      default: 3
+    },
 
     showLaunchMesasge: {
       default: true,
@@ -117,11 +89,9 @@ export default {
       data: {},
       label: null,
       displayText: null,
-      assignTagsData: { type: 'assign', tags: [] },
-      unassignTagsData: { type: 'unassign', tags: [] },
       actions: [
         {
-          type: 'no-action'
+          type: 'none'
         }
       ]
     };
@@ -140,33 +110,6 @@ export default {
       this.label = this.value.label || null;
       this.actions = data.actions;
       this.displayText = this.value.displayText || null;
-      const tagActions = data.tag;
-      if (tagActions) {
-        this.assignTagsData = tagActions.find((_) => _.type === 'assign') || {
-          type: 'assign',
-          tags: []
-        };
-        this.unassignTagsData = tagActions.find(
-          (_) => _.type === 'unassign'
-        ) || { type: 'unassign', tags: [] };
-      }
-    },
-    onAssignTagsDataChanged(tags) {
-      this.assignTagsData = {
-        type: 'assign',
-        tags: tags
-      };
-
-      this.updateData();
-    },
-
-    onUnassignTagsDataChanged(tags) {
-      this.unassignTagsData = {
-        type: 'unassign',
-        tags: tags
-      };
-
-      this.updateData();
     },
 
     changeAction(index, action) {
@@ -176,18 +119,18 @@ export default {
 
     addAction() {
       this.actions.push({
-        type: 'no-action'
+        type: 'none'
       });
 
       this.updateData();
     },
 
-    removeAction(index) {
+    remove(index) {
       this.actions.splice(index, 1);
       this.updateData();
     },
 
-    moveActionUp(index) {
+    moveUp(index) {
       if (index > 0) {
         const to = index - 1;
         this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
@@ -195,7 +138,7 @@ export default {
       }
     },
 
-    moveActionDown(index) {
+    moveDown(index) {
       if (index < this.actions.length) {
         const to = index + 1;
         this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
@@ -219,8 +162,7 @@ export default {
         displayText: this.displayText,
         data: {
           displayText: this.displayText,
-          actions: this.actions,
-          tag: [this.assignTagsData, this.unassignTagsData]
+          actions: this.actions
         }
       });
     }

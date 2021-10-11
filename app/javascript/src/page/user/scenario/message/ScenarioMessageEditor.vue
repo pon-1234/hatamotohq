@@ -9,14 +9,31 @@
           <div class="form-group d-flex">
             <label class="fw-250">メッセージ名（管理用)</label>
             <div class="flex-grow-1">
-              <input type="text" name="message-name" class="form-control" placeholder="メッセージ名を入力してください" v-model="scenarioMessageData.name" v-validate="'max:255'" data-vv-as="メッセージ名">
+              <input
+                type="text"
+                name="message-name"
+                class="form-control"
+                placeholder="メッセージ名を入力してください"
+                v-model="scenarioMessageData.name"
+                v-validate="'max:255'"
+                data-vv-as="メッセージ名"
+              />
               <error-message :message="errors.first('message-name')"></error-message>
             </div>
           </div>
           <div class="fmt-2 d-flex">
             <label class="fw-250">配信する</label>
             <div class="flex-grow-1">
-              <input type="checkbox" id="messageOnoff" checked data-switch="success" v-model="scenarioMessageData.status" true-value="enabled" false-value="disabled" ref="status"/>
+              <input
+                type="checkbox"
+                id="messageOnoff"
+                checked
+                data-switch="success"
+                v-model="scenarioMessageData.status"
+                true-value="enabled"
+                false-value="disabled"
+                ref="status"
+              />
               <label for="messageOnoff" data-on-label="オン" data-off-label="オフ"></label>
             </div>
           </div>
@@ -28,15 +45,15 @@
           <h3 class="card-title">配信タイミング設定</h3>
         </div>
         <div class="card-body">
-          <scenario-message-time-define
+          <scenario-message-time-editor
             v-if="!loading"
             :mode="scenario.mode"
             :is_initial.sync="scenarioMessageData.is_initial"
             :date.sync="scenarioMessageData.date"
             :time.sync="scenarioMessageData.time"
             :order.sync="scenarioMessageData.order"
-            >
-          </scenario-message-time-define>
+          >
+          </scenario-message-time-editor>
         </div>
       </div>
 
@@ -46,7 +63,7 @@
         </div>
         <div class="card-body py-0">
           <message-editor
-            :isDisplayTemplate="true"
+            :allowCreateFromTemplate="true"
             v-for="(item, index) in scenarioMessageData.messages"
             :key="index"
             v-bind:data="item"
@@ -58,7 +75,7 @@
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
       <div>
-        <button type="submit" class="btn btn-success fw-120" @click="submit()" >保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submit()">保存</button>
       </div>
     </div>
     <message-preview></message-preview>
@@ -98,6 +115,7 @@ export default {
         id: null,
         scenario_id: this.scenario_id,
         name: '',
+        mode: 'time',
         is_initial: false,
         date: 1,
         time: '00:00',

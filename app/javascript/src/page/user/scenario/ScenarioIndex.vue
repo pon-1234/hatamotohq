@@ -17,24 +17,47 @@
               </tr>
             </thead>
             <tbody>
-                <tr v-for="(scenario, index) in scenarios" :key="index">
-                  <td>{{ scenario.mode === 'elapsed_time' ? '経過時間' : '時刻' }}</td>
-                  <td>{{ scenario.title }}</td>
-                  <td><scenario-status :status="scenario.status"></scenario-status></td>
-                  <td>
-                    <div class="btn btn-light" @click="openMessageIndex(scenario)">メッセージ一覧（{{scenario.scenario_messages_count || 0}}）</div>
-                  </td>
-                  <td>
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
-                      <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(scenario)">シナリオを編集する</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyScenario" @click="curScenarioIndex = index">シナリオをコピー</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteScenario" @click="curScenarioIndex = index">シナリオを削除</a>
-                      </div>
+              <tr v-for="(scenario, index) in scenarios" :key="index">
+                <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
+                <td>{{ scenario.title }}</td>
+                <td><scenario-status :status="scenario.status"></scenario-status></td>
+                <td>
+                  <div class="btn btn-light" @click="openMessageIndex(scenario)">
+                    メッセージ一覧（{{ scenario.scenario_messages_count || 0 }}）
+                  </div>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      type="button"
+                      class="btn btn-light btn-sm dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      操作 <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a role="button" class="dropdown-item" @click="openEdit(scenario)">シナリオを編集する</a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modalCopyScenario"
+                        @click="curScenarioIndex = index"
+                        >シナリオをコピー</a
+                      >
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        data-toggle="modal"
+                        data-target="#modalDeleteScenario"
+                        @click="curScenarioIndex = index"
+                        >シナリオを削除</a
+                      >
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-center mt-4 text-center">
@@ -55,20 +78,30 @@
     </div>
 
     <!-- START: Delete scenario modal -->
-    <modal-confirm title="このシナリオを削除してもよろしいですか？" id='modalDeleteScenario' type='delete' @confirm="submitDeleteScenario">
+    <modal-confirm
+      title="このシナリオを削除してもよろしいですか？"
+      id="modalDeleteScenario"
+      type="delete"
+      @confirm="submitDeleteScenario"
+    >
       <template v-slot:content>
         <div v-if="curScenario">
-          シナリオ名：<b>{{curScenario.title}}</b>
+          シナリオ名：<b>{{ curScenario.title }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Delete scenario modal -->
 
     <!-- START: Copy scenario modal -->
-    <modal-confirm title="このシナリオをコピーしてもよろしいですか？" id='modalCopyScenario' type='confirm' @confirm="submitCopyScenario">
+    <modal-confirm
+      title="このシナリオをコピーしてもよろしいですか？"
+      id="modalCopyScenario"
+      type="confirm"
+      @confirm="submitCopyScenario"
+    >
       <template v-slot:content>
         <div v-if="curScenario">
-          シナリオ名：<b>{{curScenario.title}}</b>
+          シナリオ名：<b>{{ curScenario.title }}</b>
         </div>
       </template>
     </modal-confirm>

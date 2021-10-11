@@ -283,11 +283,12 @@ export const ImageMapBounds = {
 export const PostbackTypes = {
   text: 'テキスト送信',
   template: 'テンプレート送信',
-  scenario: 'ステップ送信',
+  scenario: 'シナリオ送信',
   // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
-  'no-action': '何もしない'
-  // tag: 'タグを操作'
+  tag: 'タグ操作',
+  reminder: 'リマインダ操作',
+  none: '何もしない'
 };
 
 export const ActionMessage = {
@@ -295,9 +296,8 @@ export const ActionMessage = {
     type: 'postback',
     data: {
       actions: [
-        { type: 'no-action' }
-      ],
-      tags: { type: 'tag', content: { tag_ids: [] } }
+        { type: 'none' }
+      ]
     }
   }
 };

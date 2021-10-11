@@ -9,14 +9,11 @@ class ScenarioSchedulerJob < ApplicationJob
     @scenario = Scenario.find(scenario_id)
     messages = @scenario.scenario_messages.enabled.ordered
     return if messages.empty?
-    @started = false
-    @ended = false
+    save_scenario_started_log
     messages.each do |message|
       schedule(message)
     end
     schedule_after_action(messages.last)
-    save_scenario_started_log if @started
-    save_scenario_ended_log if @ended
   end
 
   private
@@ -34,8 +31,7 @@ class ScenarioSchedulerJob < ApplicationJob
         channel_id: @channel.id,
         messages: [normalized]
       }
-      PushMessageToLineJob.perform_later(payload)
-      @started = true
+      PushMessageToLineJob.perform_now(payload)
     end
 
     def schedule_delay_message(message)
@@ -47,7 +43,7 @@ class ScenarioSchedulerJob < ApplicationJob
     def schedule_after_action(last_message)
       if last_message.is_initial?
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
-        @ended = true
+        save_scenario_ended_log
       else
         schedule_at = deliver_time_for(last_message) + 1.second
         step = last_message.step + 1
@@ -90,7 +86,8 @@ class ScenarioSchedulerJob < ApplicationJob
         content: @scenario.after_action['data'],
         schedule_at: schedule_at,
         order: step,
-        status: 'queued'
+        status: 'queued',
+        is_last: true
       )
       scenario_event.save!
     end

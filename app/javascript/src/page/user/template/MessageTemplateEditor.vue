@@ -15,15 +15,13 @@
               v-validate="'required|max:255'"
               data-vv-as="テンプレート名"
             />
-            <error-message
-              :message="errors.first('template-title')"
-            ></error-message>
+            <error-message :message="errors.first('template-title')"></error-message>
           </div>
         </div>
         <div class="form-border">
           <div :key="componentKey">
             <message-editor
-              :isDisplayTemplate="false"
+              :allowCreateFromTemplate="false"
               v-for="(item, index) in templateData.messages"
               :key="item.id"
               v-bind:data="item"
@@ -31,28 +29,18 @@
               v-bind:messagesCount="templateData.messages.length"
               @input="changeContent"
               @remove="removeContent"
-              @moveMessageUp="moveMessageUp"
-              @moveMessageDown="moveMessageDown"
+              @moveUp="moveUp"
+              @moveDown="moveDown"
             />
           </div>
         </div>
 
-        <div
-          class="btn btn-primary"
-          v-if="templateData.messages.length < 3"
-          @click="addMessageBlock()"
-        >
+        <div class="btn btn-primary" v-if="templateData.messages.length < 3" @click="addMessageBlock()">
           <i class="uil-plus"></i><span> メッセージ追加</span>
         </div>
       </div>
       <div class="card-footer d-flex">
-        <button
-          type="submit"
-          class="btn btn-success fw-120"
-          @click="submitSaveTemplate"
-        >
-          保存
-        </button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitSaveTemplate">保存</button>
       </div>
 
       <loading-indicator :loading="loading"></loading-indicator>
@@ -143,14 +131,14 @@ export default {
       this.templateData.messages.splice(index, 1);
     },
 
-    moveMessageUp(index) {
+    moveUp(index) {
       const temp1 = this.templateData.messages[index - 1];
       const temp2 = this.templateData.messages[index];
       this.$set(this.templateData.messages, index - 1, temp2);
       this.$set(this.templateData.messages, index, temp1);
       this.forceRerender();
     },
-    moveMessageDown(index) {
+    moveDown(index) {
       const temp1 = this.templateData.messages[index + 1];
       const temp2 = this.templateData.messages[index];
       this.$set(this.templateData.messages, index + 1, temp2);

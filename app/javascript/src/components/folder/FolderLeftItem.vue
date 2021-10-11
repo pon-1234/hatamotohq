@@ -1,17 +1,34 @@
 <template>
   <div @click="changeSelected" :class="getClassName()">
-    <div  class="d-flex align-items-center w-100" v-if="!isEdit || !active">
-      <span class="d-flex w-100">
-        <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
-        <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">{{data.name}}</span><span>({{getCountContent()}})</span>
+    <div class="d-flex align-items-center w-100" v-if="!isEdit || !active">
+      <span class="d-flex w-100 align-items-center">
+        <i :class="active ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
+        <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">{{
+          data.name
+        }}</span
+        ><span>({{ childsCount }})</span>
 
         <div class="dropdown" v-if="active && data.name != '未分類' && !isPerview">
           <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">編集</button>
+            <button
+              type="button"
+              class="btn btn-default dropdown-toggle dropdown-icon"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              編集
+            </button>
             <div class="dropdown-menu bg-white" role="menu" style="">
               <a role="button" class="dropdown-item" @click.stop="changeName">名前を変える</a>
               <div class="dropdown-divider"></div>
-              <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteFolder" @click="deleteFolder">フォルダを削除</a>
+              <a
+                role="button"
+                class="dropdown-item"
+                data-toggle="modal"
+                data-target="#modalDeleteFolder"
+                @click="deleteFolder"
+                >フォルダを削除</a
+              >
             </div>
           </div>
         </div>
@@ -19,15 +36,19 @@
     </div>
     <div v-if="isEdit && active">
       <div class="input-group d-flex">
-        <input type="text"  placeholder="フォルダ名" class="form-control" @click.stop :value="data.name" ref="folderName"
-          @keyup.enter='enterSubmitChangeName'
+        <input
+          type="text"
+          placeholder="フォルダ名"
+          class="form-control"
+          @click.stop
+          :value="data.name"
+          ref="folderName"
+          @keyup.enter="enterSubmitChangeName"
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
-        >
+        />
         <span class="ml-auto">
-          <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">
-            決定
-          </button>
+          <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</button>
         </span>
       </div>
     </div>
@@ -42,37 +63,29 @@ export default {
       isEnter: true
     };
   },
-  methods: {
-    getCountContent() {
-      if (this.type === 'tag') {
+
+  computed: {
+    childsCount() {
+      switch (this.type) {
+      case 'tag':
         return this.data.tags.length;
-      }
-
-      if (this.type === 'scenario' || this.type === 'template_scenario') {
+      case 'scenario':
         return this.data.scenarios.length;
-      }
-
-      if (this.type === 'template_message') {
+      case 'template_message':
         return this.data.templates.length;
-      }
-
-      if (this.type === 'rich_menu') {
+      case 'rich_menu':
         return this.data.rich_menus.length;
-      }
-
-      if (this.type === 'auto_response') {
+      case 'auto_response':
         return this.data.auto_responses.length;
-      }
-
-      if (this.type === 'survey') {
+      case 'survey':
         return this.data.surveys.length;
+      case 'reminder':
+        return this.data.reminders.length;
       }
-
-      if (this.type === 'survey_profile') {
-        return this.data.survey_profile_templates.length;
-      }
-    },
-
+      return 0;
+    }
+  },
+  methods: {
     getClassName() {
       let className = 'folder-item ';
       if (this.active) {
@@ -127,25 +140,23 @@ export default {
     height: 50px;
     min-height: 50px;
   }
-  .active{
+  .active {
     background-color: #e0e0e0;
   }
 
   .fa-folder {
     color: #fedc67;
-
   }
 
   .fa-folder-open {
-
-      color: #f0ad4e;
+    color: #f0ad4e;
   }
 
   .fa-folder::before,
-  .fa-folder-open::before{
-      margin-right: 5px;
+  .fa-folder-open::before {
+    margin-right: 5px;
 
-      vertical-align: sub;
+    vertical-align: sub;
   }
 
   .action-tags {
@@ -160,6 +171,6 @@ export default {
   }
 
   input {
-    height: 36px!important;
+    height: 36px !important;
   }
 </style>

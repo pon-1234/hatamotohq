@@ -2,7 +2,7 @@
 
 class User::FriendsController < User::ApplicationController
   load_and_authorize_resource :line_friend
-  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible]
+  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders, :set_reminder]
   include User::FriendsHelper
 
   # GET /user/friends
@@ -61,12 +61,30 @@ class User::FriendsController < User::ApplicationController
     end
   end
 
+  # GET /user/friends/:id/reminders
+  def reminders
+    @remindings = @friend.channel.remindings
+  end
+
+  # POST /user/friends/:id/set_reminder
+  def set_reminder
+    @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
+    render_success
+  end
+
   private
     def update_friend_params
       params.permit(
         :display_name,
         :note,
         tag_ids: []
+      )
+    end
+
+    def reminder_params
+      params.permit(
+        :reminder_id,
+        :goal
       )
     end
 
