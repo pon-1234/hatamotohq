@@ -98,17 +98,11 @@ export default {
 
   },
   async beforeMount() {
-    const meta = {
-      total_count: 0,
-      limit_value: 0,
-      current_page: 1
-    };
-    await this.setMeta(meta);
     await this.getMessages(this.scenario.id);
     this.loading = false;
   },
   computed: {
-    ...mapState('scenario', {
+    ...mapState('scenarioMessage', {
       messages: (state) => state.messages,
       totalRows: (state) => state.totalRows,
       perPage: (state) => state.perPage
@@ -119,11 +113,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('scenario', [
-      'setMeta',
+    ...mapMutations('scenarioMessage', [
       'setCurPage'
     ]),
-    ...mapActions('scenario', [
+    ...mapActions('scenarioMessage', [
       'getMessages',
       'deleteMessage'
     ]),
