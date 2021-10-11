@@ -9,22 +9,24 @@ class DispatchRichMenuJob < ApplicationJob
   def perform(richmenu_id)
     @richmenu = RichMenu.find(richmenu_id)
     @line_account = @richmenu.line_account
+    success = true
     friend_ids = @line_account.line_friends.pluck(:line_user_id)
     Normalizer::PostbackNormalizer.new(@richmenu.areas).perform
-
     if @richmenu.disabled?
       delete_rich_menu_if_needed if @richmenu.line_menu_id.present?
     elsif @richmenu.enabled?
       delete_rich_menu_if_needed
-      create_rich_menu
-      create_rich_menu_content
-
-      if @richmenu.target_all?
-        set_default_rich_menu
-      else
-        bulk_link_rich_menus
+      success = create_rich_menu
+      success = create_rich_menu_content if success
+      if success
+        if @richmenu.target_all?
+          set_default_rich_menu
+        else
+          bulk_link_rich_menus
+        end
       end
     end
+    @richmenu.update_columns(status: 'error') unless success
   rescue StandardError => e
     logger.error(e.message)
     @richmenu.update_columns(status: 'error')
@@ -49,11 +51,15 @@ class DispatchRichMenuJob < ApplicationJob
     # Upload richmenu image to line
     def create_rich_menu_content
       image_url = @richmenu.image_url
-      response = LineApi::CreateRichMenuImage.new(@line_account).perform(@richmenu.line_menu_id, URI.parse(image_url).open)
+      LineApi::CreateRichMenuImage.new(@line_account).perform(@richmenu.line_menu_id, URI.parse(image_url).open)
     end
 
     def set_default_rich_menu
       response = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
+      # Disable other default richmenu belongs to this account
+      if response
+        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_columns(status: :disabled)
+      end
     end
 
     def bulk_link_rich_menus
@@ -70,7 +76,7 @@ class DispatchRichMenuJob < ApplicationJob
     def delete_rich_menu_if_needed
       needed = @richmenu.line_menu_id.present?
       # No need to delete if the rich menu was not registered in Line System
-      return true unless needed
+      return unless needed
       # If rich menu is registered in Line System, need to cancel it before set a new one
       LineApi::DeleteRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
     end

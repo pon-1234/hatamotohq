@@ -18,16 +18,16 @@
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
-          <div class="mt-2" v-if="curFolder">
+          <div class="mt-2 table-responsive" v-if="curFolder">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
                   <th>リッチメニュー名</th>
-                  <th>状況</th>
+                  <th class="mw-120">状況</th>
                   <th>メニュー初期状態</th>
-                  <th>画像</th>
-                  <th>メンバー数</th>
-                  <th>操作</th>
+                  <th class="mw-200">画像</th>
+                  <th class="mw-120">メンバー数</th>
+                  <th class="mw-80">操作</th>
                   <th>フォルダ</th>
                 </tr>
               </thead>
@@ -35,10 +35,7 @@
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
                   <td class="font-weight-bold">{{ richmenu.name }}</td>
                   <td>
-                    <template v-if="richmenu.status === 'enabled'">
-                      <i class="mdi mdi-circle text-success"></i> 有効
-                    </template>
-                    <template v-else> <i class="mdi mdi-circle"></i> 無効 </template>
+                    <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>
                   <td>表示しない</td>
                   <td>
@@ -153,8 +150,10 @@
 import moment from 'moment';
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
+import RichMenuStatus from '../../../components/rich-menu/RichMenuStatus.vue';
 
 export default {
+  components: { RichMenuStatus },
   props: [],
   data() {
     return {

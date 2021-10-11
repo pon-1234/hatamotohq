@@ -49,7 +49,7 @@ class RichMenu < ApplicationRecord
   validates_presence_of :size, :areas
 
   # Scope
-  enum status: { enabled: 'enabled', disabled: 'disabled' }
+  enum status: { enabled: 'enabled', disabled: 'disabled', error: 'error' }
   enum target: { all: 'all', condition: 'condition' }, _prefix: true
 
   before_destroy :exec_after_destroy

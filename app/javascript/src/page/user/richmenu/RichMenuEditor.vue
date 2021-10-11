@@ -110,12 +110,12 @@
     </div>
 
     <div>
-      <button @click="submitRichMenu" class="btn btn-success fw-120">保存</button>
+      <button @click="submit" class="btn btn-success fw-120">保存</button>
     </div>
 
     <modal-rich-menu-template-selection
       :selectionId="richMenuData.template_id"
-      @accept="templateChange"
+      @accept="onTemplateChanged"
     ></modal-rich-menu-template-selection>
 
     <modal-select-media :types="['richmenu']" :filterable="false" @select="onMediaChanged($event)"></modal-select-media>
@@ -124,7 +124,6 @@
 
 <script>
 import Util from '@/core/util';
-import moment from 'moment';
 import { mapActions } from 'vuex';
 
 export default {
@@ -154,7 +153,6 @@ export default {
       templateValue: 6,
       templateType: 'large',
       backgroundUrl: null,
-
       tags: []
     };
   },
@@ -189,7 +187,7 @@ export default {
       this.forceRerender();
     },
 
-    templateChange(data) {
+    onTemplateChanged(data) {
       this.templateValue = data.value;
       this.richMenuData.template_id = data.id;
       this.templateType = data.type;
@@ -200,23 +198,15 @@ export default {
       this.backgroundUrl = event.preview_url;
     },
 
-    disabledMaxDate() {
-      if (this.richMenuData.end_at) { return { from: new Date(this.richMenuData.end_at) }; }
-    },
-
-    disabledMinDate() {
-      return { to: new Date(this.richMenuData.start_at) };
-    },
-
     richMenu(input) {
       this.richMenuData.areas = input;
     },
 
-    async submitRichMenu() {
+    async submit() {
       let isError = !(await this.$validator.validateAll());
       // validate areas
       for (const area of this.richMenuData.areas) {
-        if (Util.checkConditionActionElement(area.action)) {
+        if (Util.validateAction(area.action)) {
           area.expand = true;
           isError = true;
         } else {
@@ -244,6 +234,9 @@ export default {
       };
 
       payload.conditions = this.buildConditions();
+      if (payload.conditions.length === 0) {
+        payload.target = 'all';
+      }
 
       if (this.templateType === 'compact') {
         payload.size.height = 843;
@@ -275,22 +268,13 @@ export default {
     },
 
     buildConditions() {
-      if (this.tags.length === 0) return;
+      if (this.tags.length === 0) return [];
       return [
         {
           type: 'tag',
           data: { tags: this.tags.map(tag => _.pick(tag, ['id', 'name'])) }
         }
       ];
-    },
-
-    getPlaceholderDate() {
-      return moment().format('YYYY-MM-DD');
-    },
-
-    resetTime() {
-      this.richMenuData.start_at = moment().format('YYYY-MM-DD');
-      this.richMenuData.end_at = moment().add(1, 'days').format('YYYY-MM-DD');
     },
 
     onTagsChanged(data) {

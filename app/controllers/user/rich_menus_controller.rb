@@ -40,7 +40,7 @@ class User::RichMenusController < User::ApplicationController
 
   # PATCH /user/rich_menus/:id
   def update
-    if @rich_menu.update(rich_menu_params.except(:target))
+    if @rich_menu.update(rich_menu_params)
       DispatchRichMenuJob.perform_later(@rich_menu.id)
     else
       render_bad_request_with_message(@rich_menu.first_error_message)

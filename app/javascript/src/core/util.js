@@ -143,7 +143,7 @@ class Util {
     }
 
     if (item.content && item.content.template && item.content.template.actions) {
-      return this.checkConditionAction(item.content.template.actions);
+      return this.validateActions(item.content.template.actions);
     }
 
     if (item.content && item.content.template && item.content.template.columns) {
@@ -172,15 +172,15 @@ class Util {
       }
     }
     if (column.actions) {
-      return this.checkConditionAction(column.actions);
+      return this.validateActions(column.actions);
     } else {
-      return this.checkConditionAction([column.action]);
+      return this.validateActions([column.action]);
     }
   }
 
-  static checkConditionAction(actions) {
+  static validateActions(actions) {
     for (const action of actions) {
-      if (this.checkConditionActionElement(action)) {
+      if (this.validateAction(action)) {
         return true;
       }
     }
@@ -188,7 +188,7 @@ class Util {
     return false;
   }
 
-  static checkConditionActionElement(action) {
+  static validateAction(action) {
     if (Object.values(ActionObjectsType).indexOf(action.type) < 0) {
       return true;
     }

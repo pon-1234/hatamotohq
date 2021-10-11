@@ -9,6 +9,7 @@
 # with the one specified in your request.
 class LineApi::SetDefaultRichMenu < LineApi::BaseRequest
   def perform(rich_menu_id)
-    client.set_default_rich_menu(rich_menu_id)
+    response = client.set_default_rich_menu(rich_menu_id)
+    response.code == HTTP_OK
   end
 end

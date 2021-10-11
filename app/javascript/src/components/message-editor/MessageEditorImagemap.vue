@@ -199,7 +199,7 @@ export default {
     isSubmitChange: {
       handler(val) {
         for (const area of this.actionObjects) {
-          if (Util.checkConditionActionElement(area.action)) {
+          if (Util.validateAction(area.action)) {
             area.expand = true;
           } else {
             area.expand = false;
