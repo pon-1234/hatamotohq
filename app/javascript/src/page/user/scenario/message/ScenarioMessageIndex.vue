@@ -44,8 +44,6 @@
                         <div class="dropdown-menu">
                           <a :href="`${rootUrl}/user/scenarios/${scenario.id}/messages/${message.id}/edit`" class="dropdown-item">メッセージを編集</a>
                           <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteScenarioMessage" @click="curMessageIndex = index">メッセージを削除</a>
-                          <!-- <%= link_to 'メッセージを編集', edit_user_scenario_message_path(@scenario, message), class: "dropdown-item" %>
-                          <%= link_to 'メッセージを削除', delete_confirm_user_scenario_message_path(@scenario, message), class: "dropdown-item" %> -->
                         </div>
                       </div>
                     </td>
@@ -61,7 +59,7 @@
                   @change="loadPage"
                   aria-controls="my-table"
                 ></b-pagination>
-                <b v-if="!loading && totalRows === 0">シナリオはありません。</b>
+                <b v-if="!loading && totalRows === 0">シナリオメッセージはありません。</b>
               </div>
             </div>
             <loading-indicator :loading="loading"></loading-indicator>
