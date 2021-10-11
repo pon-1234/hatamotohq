@@ -63,12 +63,11 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/reminders
   def reminders
-    @reminders = @friend.channel.reminders
+    @remindings = @friend.channel.remindings
   end
 
   # POST /user/friends/:id/set_reminder
   def set_reminder
-    p '------', reminder_params
     @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
     render_success
   end

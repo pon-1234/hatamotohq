@@ -133,7 +133,29 @@
               <label class="col-xl-3">リマインダ</label>
               <label class="col-xl-9">ゴール日時</label>
             </div>
-            <friend-detail-assign-reminder :friend_id="friend_id"></friend-detail-assign-reminder>
+            <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
+          </div>
+
+          <div class="card mt-2">
+            <div class="card-header"><h5>リマインダ履歴</h5></div>
+            <div class="card-body">
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th>リマインダ名</th>
+                    <th>登録日時</th>
+                    <th>ゴール</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(reminder, index) in reminders" :key="index">
+                    <td>{{ reminder.name }}</td>
+                    <td>{{ reminder.created_at }}</td>
+                    <td>{{ reminder.goal }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="tab-pane" id="scenario">

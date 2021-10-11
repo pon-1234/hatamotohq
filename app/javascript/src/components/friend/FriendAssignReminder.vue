@@ -44,6 +44,7 @@
 import moment from 'moment';
 import { Datetime } from 'vue-datetime';
 import { mapActions } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   components: {
@@ -62,7 +63,7 @@ export default {
         id: null,
         name: null
       },
-      currentDate: moment()
+      currentDate: moment().tz('Asia/Tokyo').format()
     };
   },
 
@@ -82,7 +83,11 @@ export default {
         goal: this.goal
       };
       const response = await this.setReminder(payload);
-      console.log('-----response-----', response);
+      if (response) {
+        Util.showSuccessThenRedirect('リマインダの設定は完了しました。', window.location.href);
+      } else {
+        window.toastr.error('リマインダの設定は失敗しました。');
+      }
     },
 
     onSelectReminder(reminder) {
