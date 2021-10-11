@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-xl-3">
+    <div class="col-lg-3">
       <div
         class="btn btn-secondary ml-1 d-block"
         data-toggle="modal"
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="col-xl-9 d-flex flex-start">
+    <div class="col-lg-9 d-flex flex-start">
       <div class="flex-grow-1">
         <datetime
           v-model="goal"

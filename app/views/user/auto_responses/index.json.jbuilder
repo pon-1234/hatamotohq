@@ -7,6 +7,7 @@ json.array! @folders do |folder|
       json.(auto_response, :id, :folder_id, :name, :status)
       json.created_at auto_response.created_at.strftime('%Y-%m-%d %H:%M')
       json.keywords auto_response.auto_response_keywords.map(&:keyword)
+      json.hit_count auto_response.hit_count
       json.messages do
         json.array! auto_response.auto_response_messages do |message|
           json.(message, :id, :message_type_id, :content)
