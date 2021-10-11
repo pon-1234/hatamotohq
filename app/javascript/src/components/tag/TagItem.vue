@@ -1,16 +1,37 @@
 <template>
   <tr class="tag-item">
-    <td style="min-width: 200px; vertical-align: middle;"><tag-item-editor :data="data" @deleteTag="deleteTag"  @editTag="editTag" @createTag="createTag"/></td>
-    <td class="fw-150">{{data.friends_count}}人&nbsp;<a class="detail-friend btn btn-default" data-toggle="modal" data-target="#modal-friends-tag" @click="showListFriends" v-if="data.line_friend_count > 0">表示</a></td>
-    <td class="fw-200">{{getCreatedAt(data.created_at)}}</td>
+    <td style="min-width: 200px; vertical-align: middle">
+      <tag-item-editor :data="tag" @deleteTag="deleteTag" @editTag="editTag" @createTag="createTag" />
+    </td>
+    <td class="fw-150">
+      {{ tag.friends_count }}人
+      <div
+        role="button"
+        class="btn-light btn-sm d-inline-block"
+        data-toggle="modal"
+        data-target="#modalTagFriends"
+        @click="showFriends"
+        v-if="tag.friends_count > 0"
+      >
+        表示
+      </div>
+    </td>
+    <td class="fw-200">{{ getCreatedAt(tag.created_at) }}</td>
   </tr>
 </template>
 <script>
 import moment from 'moment';
-
+import { mapActions, mapMutations } from 'vuex';
 export default {
-  props: ['data'],
+  props: ['tag'],
   methods: {
+    ...mapMutations('friend', [
+      'setQueryParam'
+    ]),
+    ...mapActions('friend', [
+      'getFriends'
+    ]),
+
     getCreatedAt(item) {
       return moment(item).format('YYYY年MM月DD日');
     },
@@ -27,10 +48,9 @@ export default {
       this.$emit('createTag', query);
     },
 
-    showListFriends() {
-      this.$emit('detailFriends', this.data.line_friend);
+    async showFriends() {
+      this.$emit('showFriends', this.tag);
     }
-
   }
 };
 </script>

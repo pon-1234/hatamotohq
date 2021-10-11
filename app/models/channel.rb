@@ -35,6 +35,11 @@ class Channel < ApplicationRecord
   belongs_to :line_friend
   has_many :messages, dependent: :destroy, autosave: true
 
+  before_create do
+    self.last_activity_at = Time.zone.now
+    self.last_seen_at = Time.zone.now
+  end
+
   after_create do
     # Make friend to be a participant
     ChannelMember.create(channel: self, participant: line_friend)

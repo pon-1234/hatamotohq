@@ -4,14 +4,18 @@ class User::TagsController < User::ApplicationController
   load_and_authorize_resource
   before_action :find_tag, only: [:update, :destroy, :friends]
 
+  # GET /user/tags
   def index
-    @folders = Folder.includes([:tags]).accessible_by(current_ability).type_tag
+    if request.format.json?
+      @folders = Folder.includes([:tags]).accessible_by(current_ability).type_tag
+    end
     respond_to do |format|
       format.html
       format.json
     end
   end
 
+  # POST /user/tags
   def create
     @tag = Tag.new(tag_params)
     @tag.line_account = Current.user.line_account
@@ -20,21 +24,17 @@ class User::TagsController < User::ApplicationController
     end
   end
 
+  # PATCH /user/tags/:id
   def update
     if !@tag.update(params.permit(:name))
       render_bad_request
     end
   end
 
+  # DELETE /user/tags/:id
   def destroy
     @tag.destroy
     render_success
-  end
-
-  # GET /user/tags/:id/friends
-  # Get all friends by tag
-  def friends
-    @friends = @tag.friends
   end
 
   private

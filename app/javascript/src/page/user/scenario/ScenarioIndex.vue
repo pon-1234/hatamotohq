@@ -5,7 +5,7 @@
         <div class="card-header">
           <div class="btn btn-success mr-2" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
         </div>
-        <div class="card-body">
+        <div class="card-body mvh-50">
           <table class="table table-centered mb-0">
             <thead class="thead-light">
               <tr>

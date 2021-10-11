@@ -6,13 +6,30 @@
       </div>
       <div class="card-body">
         <div class="radio-group">
-          <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="all"  @click="resetListTag">全員</label>
-          <label><input class="mr-1" type="radio" v-model="broadcastData.type" name="send" value="condition" >条件で絞り込む</label>
+          <label
+            ><input
+              class="mr-1"
+              type="radio"
+              v-model="broadcastData.type"
+              name="send"
+              value="all"
+              @click="resetListTag"
+            />全員</label
+          >
+          <label
+            ><input
+              class="mr-1"
+              type="radio"
+              v-model="broadcastData.type"
+              name="send"
+              value="condition"
+            />条件で絞り込む</label
+          >
         </div>
         <div v-show="broadcastData.type !== 'all'">
           <label>タグ設定</label>
           <div class="list-checkbox-tag">
-            <input-tag :tags="broadcastData.tags" @input="addListTag"/>
+            <input-tag :tags="broadcastData.tags" @input="addListTag" />
           </div>
         </div>
 
@@ -30,11 +47,16 @@
                 />友だちリスト全員
               </label>
               <label>
-                <input type="radio" name="friendCondition" value="specific"  v-model="broadcastData.conditions.type" />条件で絞り込む
+                <input
+                  type="radio"
+                  name="friendCondition"
+                  value="specific"
+                  v-model="broadcastData.conditions.type"
+                />条件で絞り込む
               </label>
             </div>
             <div v-if="broadcastData.conditions.type == 'specific'">
-              <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions"/>
+              <message-condition @input="changeCondition" v-bind:data="broadcastData.conditions" />
             </div>
           </div>
         </div>
@@ -57,7 +79,7 @@
             />今すぐ配信
           </label>
           <label>
-            <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now"/>配信日時を指定
+            <input type="radio" name="datetime" :value="false" v-model="broadcastData.deliver_now" />配信日時を指定
           </label>
         </div>
         <datetime
@@ -65,7 +87,7 @@
           v-model="broadcastData.schedule_at"
           input-class="form-control"
           type="datetime"
-          :phrases="{ok: '確定', cancel: '閉じる'}"
+          :phrases="{ ok: '確定', cancel: '閉じる' }"
           placeholder="日付を選択してください"
           :min-datetime="currentDate"
           value-zone="Asia/Tokyo"
@@ -75,22 +97,34 @@
       <loading-indicator :loading="loading" />
     </div>
 
-    <div class="card" :key="msgContentKey">
+    <!-- 本文設定 -->
+    <div class="card" :key="contentKey">
       <div class="card-header left-border">
         <h3 class="card-title">本文</h3>
       </div>
       <div class="card-body">
         <div class="form-group">
-          <label>タイトル<required-mark/></label>
-          <input type="text" class="form-control" name="deliver-title" placeholder="タイトルを入力してください" v-model="broadcastData.title"  v-validate="'required'" data-vv-as="タイトル" id="menudiv" />
-          <error-message :message="errors.first('deliver-title')"></error-message>
+          <label>タイトル<required-mark /></label>
+          <input
+            type="text"
+            class="form-control"
+            name="broadcast_title"
+            placeholder="タイトルを入力してください"
+            v-model="broadcastData.title"
+            v-validate="'required|max:255'"
+            maxlength="256"
+            data-vv-as="タイトル"
+          />
+          <error-message :message="errors.first('broadcast_title')"></error-message>
         </div>
         <div v-if="refresh_content">
           <div class="mb-2">
-            <div class="btn btn-secondary" data-toggle="modal" data-target="#modalSelectTemplate">テンプレートから作成</div>
+            <div class="btn btn-secondary" data-toggle="modal" data-target="#modalSelectTemplate">
+              テンプレートから作成
+            </div>
             <modal-select-template @selectTemplate="onSelectTemplate" id="modalSelectTemplate"></modal-select-template>
           </div>
-          <div v-for="(item, index) in broadcastData.messages"  :key="index">
+          <div v-for="(item, index) in broadcastData.messages" :key="index">
             <message-editor
               :isDisplayTemplate="true"
               v-bind:data="item"
@@ -98,8 +132,8 @@
               v-bind:messagesCount="broadcastData.messages.length"
               @input="changeContent"
               @remove="removeContent"
-              @moveTopMessage="moveTopMessage"
-              @moveBottomMessage="moveBottomMessage"
+              @moveMessageUp="moveMessageUp"
+              @moveMessageDown="moveMessageDown"
             />
           </div>
           <div
@@ -116,14 +150,10 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button
-          class="btn btn-success fw-120 mr-1"
-          @click="createMessage('pending')"
-          :disabled="invalid">送信</button>
-        <button
-          type="submit"
-          class="btn btn-outline-success fw-120"
-          @click="createMessage('draft')">下書き保存</button>
+        <button class="btn btn-success fw-120 mr-1" @click="createMessage('pending')" :disabled="invalid">
+          配信登録
+        </button>
+        <button type="submit" class="btn btn-outline-success fw-120" @click="createMessage('draft')">下書き保存</button>
       </div>
     </div>
     <message-preview></message-preview>
@@ -143,7 +173,7 @@ export default {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
-      msgContentKey: 0,
+      contentKey: 0,
       broadcastData: {
         conditions: {
           type: 'all',
@@ -187,7 +217,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     await this.fetchItem();
     this.loading = false;
   },
@@ -210,15 +239,12 @@ export default {
     ...mapActions('template', [
       'getTemplate'
     ]),
-    ...mapActions('tag', [
-      'getTags'
-    ]),
     ...mapActions('system', [
       'setIsSubmitChange'
     ]),
 
     forceRerender() {
-      this.msgContentKey++;
+      this.contentKey++;
     },
 
     async fetchItem() {
@@ -260,7 +286,7 @@ export default {
       });
     },
 
-    moveTopMessage(index) {
+    moveMessageUp(index) {
       this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index - 1, 1, option)[0];
@@ -268,7 +294,7 @@ export default {
         this.refresh_content = true;
       });
     },
-    moveBottomMessage(index) {
+    moveMessageDown(index) {
       this.refresh_content = false;
       const option = this.broadcastData.messages[index];
       this.broadcastData.messages[index] = this.broadcastData.messages.splice(index + 1, 1, option)[0];
@@ -376,7 +402,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.message-pagination-template {
-  text-align: center;
-}
+  .message-pagination-template {
+    text-align: center;
+  }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div v-b-tooltip.hover :title="title" class="ml-1">
-    <i class="mdi mdi-information-outline mdi-2x"></i>
+    <i class="mdi mdi-information-outline icon"></i>
   </div>
 </template>
 
@@ -14,3 +14,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .icon {
+    font-size: 1.2rem;
+  }
+</style>

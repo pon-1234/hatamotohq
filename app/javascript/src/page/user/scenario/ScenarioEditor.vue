@@ -89,14 +89,14 @@
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
       <div class="card-body">
-        <message-action-type-default
+        <message-action-editor-custom
           name="after_action"
           :value="scenarioData.after_action"
           :labelRequired="false"
           :showTitle="false"
           :showLaunchMesasge="false"
           @input="updateAction"
-        />
+        ></message-action-editor-custom>
       </div>
     </div>
 
@@ -136,7 +136,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     if (this.scenario_id) {
       await this.getScenarioDetail();
     }
@@ -149,9 +148,6 @@ export default {
       'getScenario',
       'createScenario',
       'updateScenario'
-    ]),
-    ...mapActions('tag', [
-      'getTags'
     ]),
 
     forceRerender() {

@@ -7,51 +7,57 @@
       <div class="card-body">
         <div class="form-group d-flex align-items-start">
           <div class="d-flex fw-300 align-items-center">
-            <span class="font-weight-bold">リッチメニュー名<required-mark/></span>
+            <span class="font-weight-bold">リッチメニュー名<required-mark /></span>
             <tool-tip title="タイトルは管理画面のみで使用され、ユーザーには表示されません。"></tool-tip>
           </div>
           <div class="flex-grow-1">
-            <input v-model.trim="richMenuData.name" type="text" name="name" class="form-control" placeholder="リッチメニュー（ホーム）" v-validate="'required'" data-vv-as="リッチメニュー名">
+            <input
+              v-model.trim="richMenuData.name"
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="リッチメニュー（ホーム）"
+              v-validate="'required'"
+              data-vv-as="リッチメニュー名"
+            />
             <error-message :message="errors.first('name')"></error-message>
           </div>
         </div>
 
         <div class="form-group d-flex align-items-start mt-2">
           <div class="d-flex fw-300 align-items-center">
-            <span class="font-weight-bold">トークルームメニュー<required-mark/></span>
+            <span class="font-weight-bold">トークルームメニュー<required-mark /></span>
             <tool-tip title="チャットルームの下部にあるメニューバーに表示するテキストです。"></tool-tip>
           </div>
           <div class="flex-grow-1">
-            <input v-model.trim="richMenuData.chat_bar_text" type="text" name="richmenu-title" class="form-control" placeholder="トップメニュー" v-validate="'required|max:14'" data-vv-as="トークルームメニュー">
+            <input
+              v-model.trim="richMenuData.chat_bar_text"
+              type="text"
+              name="richmenu-title"
+              class="form-control"
+              placeholder="トップメニュー"
+              v-validate="'required|max:14'"
+              data-vv-as="トークルームメニュー"
+            />
             <error-message :message="errors.first('richmenu-title')"></error-message>
           </div>
         </div>
 
         <div class="form-group d-flex align-items-start mt-2">
           <div class="d-flex fw-300 align-items-center">
-            <span class="font-weight-bold">メニューの初期状態<required-mark/></span>
+            <span class="font-weight-bold">メニューの初期状態<required-mark /></span>
             <tool-tip title="チャットルームを開いたときに、リッチメニューを表示するかしないかを選択します。"></tool-tip>
           </div>
           <div class="radio-group flex-grow-1 flex-column">
             <div class="radio">
-              <label class="">
-                <input
-                  v-model="richMenuData.selected"
-                  name="selected"
-                  type="radio"
-                  v-bind:value="true"
-                />
+              <label>
+                <input v-model="richMenuData.selected" name="selected" type="radio" v-bind:value="true" />
                 表示する
               </label>
             </div>
             <div class="radio">
-              <label class="">
-                <input
-                  v-model="richMenuData.selected"
-                  name="selected"
-                  type="radio"
-                  v-bind:value="false"
-                />
+              <label>
+                <input v-model="richMenuData.selected" name="selected" type="radio" v-bind:value="false" />
                 表示しない
               </label>
             </div>
@@ -69,7 +75,8 @@
       :templateId="richMenuData.template_id"
       :templateValue="templateValue"
       :templateType="templateType"
-      @onMediaChanged="onMediaChanged($event)">
+      @onMediaChanged="onMediaChanged($event)"
+    >
     </rich-menu-content-editor>
 
     <div class="card">
@@ -78,13 +85,23 @@
       </div>
       <div class="card-body">
         <div class="radio-group">
-          <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="all">全員</label>
-          <label role="button"><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="condition" >タグで絞り込む</label>
+          <label role="button"
+            ><input class="mr-1" type="radio" v-model="richMenuData.target" name="target" value="all" />全員</label
+          >
+          <label role="button"
+            ><input
+              class="mr-1"
+              type="radio"
+              v-model="richMenuData.target"
+              name="target"
+              value="condition"
+            />タグで絞り込む</label
+          >
         </div>
         <div v-if="richMenuData.target === 'condition'">
           <label>タグ</label>
           <div class="list-checkbox-tag">
-            <input-tag :tags="tags" @input="onTagsChanged"/>
+            <input-tag :tags="tags" @input="onTagsChanged" />
           </div>
         </div>
       </div>
@@ -96,7 +113,11 @@
       <button @click="submitRichMenu" class="btn btn-success fw-120">保存</button>
     </div>
 
-    <modal-rich-menu-template-selection :selectionId="richMenuData.template_id" @accept="templateChange"></modal-rich-menu-template-selection>
+    <modal-rich-menu-template-selection
+      :selectionId="richMenuData.template_id"
+      @accept="templateChange"
+    ></modal-rich-menu-template-selection>
+
     <modal-select-media :types="['richmenu']" :filterable="false" @select="onMediaChanged($event)"></modal-select-media>
   </div>
 </template>
@@ -143,7 +164,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTags();
     if (this.rich_menu_id) {
       await this.fetchRichMenu();
     }
@@ -151,9 +171,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
     ...mapActions('richmenu', [
       'getRichMenu',
       'createRichMenu',
@@ -284,22 +301,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep{
-
-    .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-        background: white !important;
+  ::v-deep {
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+      background: white !important;
     }
 
     .date-time-picker {
-      max-width: 300px!important;
-      margin: unset!important;
+      max-width: 300px !important;
+      margin: unset !important;
     }
 
     #time-select-wrapper {
-      max-width: 150px!important;
+      max-width: 150px !important;
     }
   }
-
 </style>
 <style>
   .date-input {
@@ -317,6 +334,6 @@ export default {
     width: 90%;
   }
   .error-date {
-    border-color: red!important;
+    border-color: red !important;
   }
 </style>

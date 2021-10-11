@@ -10,10 +10,12 @@
           @changeSelectedFolder="onSelectedFolderChanged"
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
-          />
+        />
         <div class="flex-grow-1" :key="contentKey">
-          <a v-if="folders && folders.length && curFolder"
+          <a
+            v-if="folders && folders.length && curFolder"
             :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
+            data-turbolinks="false"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -30,15 +32,36 @@
               </thead>
               <tbody>
                 <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
-                  <td>{{template.name}}</td>
-                  <td>{{template.template_messages_count}}</td>
+                  <td>{{ template.name }}</td>
+                  <td>{{ template.template_messages_count }}</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                      <button
+                        type="button"
+                        class="btn btn-light btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        操作 <span class="caret"></span>
+                      </button>
                       <div class="dropdown-menu">
                         <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集する</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalCopyTemplate" @click="curTemplateIndex = index">テンプレートをコピー</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteTemplate" @click="curTemplateIndex = index">テンプレートを削除</a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalCopyTemplate"
+                          @click="curTemplateIndex = index"
+                          >テンプレートをコピー</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteTemplate"
+                          @click="curTemplateIndex = index"
+                          >テンプレートを削除</a
+                        >
                       </div>
                     </div>
                   </td>
@@ -49,7 +72,9 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.templates.length === 0"><b>テンプレートはありません。</b></div>
+            <div class="text-center mt-5" v-if="curFolder.templates.length === 0">
+              <b>テンプレートはありません。</b>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +82,12 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <!-- START: Delete folder modal -->
-    <modal-confirm title="このフォルダを削除してもよろしいですか？" id="modalDeleteFolder" type='delete' @confirm="submitDeleteFolder">
+    <modal-confirm
+      title="このフォルダを削除してもよろしいですか？"
+      id="modalDeleteFolder"
+      type="delete"
+      @confirm="submitDeleteFolder"
+    >
       <template v-slot:content v-if="curFolder">
         <span>フォルダ名：{{ curFolder.name }}</span>
       </template>
@@ -65,20 +95,30 @@
     <!-- END: Delete folder modal -->
 
     <!-- START: Delete template modal -->
-    <modal-confirm title="このテンプレートを削除してもよろしいですか？" id='modalDeleteTemplate' type='delete' @confirm="submitDeleteTemplate">
+    <modal-confirm
+      title="このテンプレートを削除してもよろしいですか？"
+      id="modalDeleteTemplate"
+      type="delete"
+      @confirm="submitDeleteTemplate"
+    >
       <template v-slot:content>
         <div v-if="curTemplate">
-          テンプレート名：<b>{{curTemplate.name}}</b>
+          テンプレート名：<b>{{ curTemplate.name }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Delete template modal -->
 
     <!-- START: Copy template modal -->
-    <modal-confirm title="このテンプレートをコピーしてもよろしいですか？" id='modalCopyTemplate' type='confirm' @confirm="submitCopyTemplate">
+    <modal-confirm
+      title="このテンプレートをコピーしてもよろしいですか？"
+      id="modalCopyTemplate"
+      type="confirm"
+      @confirm="submitCopyTemplate"
+    >
       <template v-slot:content>
         <div v-if="curTemplate">
-          テンプレート名：<b>{{curTemplate.name}}</b>
+          テンプレート名：<b>{{ curTemplate.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -200,7 +240,7 @@ export default {
       width: 20px !important;
     }
 
-    td .chat-item>.sticker-static {
+    td .chat-item > .sticker-static {
       width: 50px !important;
     }
 
