@@ -59,11 +59,12 @@ class RichMenu < ApplicationRecord
     media&.url
   end
 
-  def clone
+  def clone!
     new_richmenu = self.dup
     new_richmenu.status = :disabled
     new_richmenu.name = self.name + '（コピー）'
     new_richmenu.save!
+    new_richmenu
   end
 
   private

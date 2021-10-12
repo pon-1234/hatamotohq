@@ -41,7 +41,7 @@ class Template < ApplicationRecord
     new_template.name = self.name + '（コピー）'
     new_template.template_messages_count = 0
     new_template.save!
-    self.template_messages.each { |message| message.clone_to(new_template.id) }
+    self.template_messages.each { |message| message.clone_to!(new_template.id) }
     new_template
   end
 end
