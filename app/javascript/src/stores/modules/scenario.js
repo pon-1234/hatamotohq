@@ -128,29 +128,5 @@ export const actions = {
     } catch (error) {
       return null;
     }
-  },
-
-  async getMessages(context, query) {
-    const params = {
-      page: context.state.curPage,
-      scenario_id: query
-    };
-    try {
-      const response = await ScenarioApi.listMessages(params);
-      context.commit('setMessages', response.data);
-      context.commit('setMeta', response.meta);
-      return response;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  },
-
-  async deleteMessage(_, query) {
-    try {
-      return await ScenarioApi.deleteMessage(query);
-    } catch (error) {
-      return null;
-    }
   }
 };

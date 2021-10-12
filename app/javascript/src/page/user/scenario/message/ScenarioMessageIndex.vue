@@ -126,7 +126,7 @@ export default {
           return '開始直後';
         } else {
           const sb = message.date > 0 ? `${message.date}日と` : '';
-          const time = moment(message.time, 'HH:mm:ss').format('HH時間mm分');
+          const time = moment(message.time, 'HH:mm').format('HH時間mm分');
           return `${sb}${time}後`;
         }
       } else if (this.scenario.mode === 'time') {
