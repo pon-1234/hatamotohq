@@ -76,7 +76,9 @@ Rails.application.routes.draw do
         end
         post :copy, on: :member
       end
-      resources :auto_responses
+      resources :auto_responses do
+        post :copy, on: :member
+      end
       resources :templates do
         post :copy, on: :member
       end
