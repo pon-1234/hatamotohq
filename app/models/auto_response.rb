@@ -38,4 +38,14 @@ class AutoResponse < ApplicationRecord
     self.hit_count += 1
     self.save
   end
+
+  def clone!
+    new_auto_response = self.dup
+    new_auto_response.name = self.name + '（コピー）'
+    new_auto_response.status = :disabled
+    new_auto_response.save!
+    self.auto_response_messages&.each { |message| message.clone_to!(new_auto_response.id) }
+    self.auto_response_keywords&.each { |keyword| keyword.clone_to!(new_auto_response.id) }
+    new_auto_response
+  end
 end

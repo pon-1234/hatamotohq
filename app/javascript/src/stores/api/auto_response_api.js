@@ -38,5 +38,12 @@ export default {
       data: JSON.stringify(query),
       contentType: 'application/json'
     });
+  },
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${id}/copy`,
+      method: 'POST',
+      contentType: 'application/json'
+    });
   }
 };

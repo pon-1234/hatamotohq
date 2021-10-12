@@ -76,6 +76,12 @@
                           <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)"
                             >{{ autoResponse.status === "enabled" ? "OFF" : "ON" }}にする</a
                           >
+                          <a  role="button" class="dropdown-item"
+                              data-toggle="modal"
+                              data-target="#modalCopyAutoResponse"
+                              @click="showConfirmCopyModal(autoResponse)"
+                            >copy</a
+                          >
                           <a role="button" class="dropdown-item" @click="showConfirmDeleteModal(autoResponse)"
                             >自動応答を削除する</a
                           >
@@ -128,6 +134,16 @@
       </template>
     </modal-confirm>
     <!-- END: Delete auto response modal -->
+
+    <!-- START: Copy auto response modal -->
+    <modal-confirm id="modalCopyAutoResponse" type="confirm" title="copy?" @confirm="submitCopyAutoResponse()">
+      <template v-slot:content>
+        <div>
+          <span>name: {{ autoResponse.name }}</span>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: Copy auto response modal -->
   </div>
 </template>
 <script>
@@ -171,12 +187,17 @@ export default {
       'getAutoResponses',
       'deleteAutoResponse',
       'updateAutoResponse',
+      'copyAutoResponse',
       'createFolder',
       'deleteFolder',
       'editFolder'
     ]),
 
     showConfirmDeleteModal(autoResponse) {
+      this.autoResponse = autoResponse;
+    },
+
+    showConfirmCopyModal(autoResponse) {
       this.autoResponse = autoResponse;
     },
 
@@ -218,6 +239,15 @@ export default {
       const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
       if (response) {
         this.onSelectedFolderChanged(0);
+      }
+    },
+
+    async submitCopyAutoResponse() {
+      const response = await this.copyAutoResponse(this.autoResponse.id);
+      if (response) {
+        Util.showSuccessThenRedirect('success', window.location.href);
+      } else {
+        window.toastr.error('errors');
       }
     },
 
