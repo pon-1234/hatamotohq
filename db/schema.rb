@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_11_071811) do
+ActiveRecord::Schema.define(version: 2021_10_12_043150) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
     t.datetime 'start_at'
     t.datetime 'end_at'
     t.bigint 'media_id'
+    t.integer 'member_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

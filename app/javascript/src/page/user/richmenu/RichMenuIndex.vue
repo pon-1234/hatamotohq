@@ -37,11 +37,14 @@
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>
-                  <td>表示しない</td>
+                  <td>
+                    <span v-if="richmenu.selected">表示する</span>
+                    <span v-else>表示しない</span>
+                  </td>
                   <td>
                     <div v-lazy:background-image="richmenu.image_url" class="fw-120 fh-81 thumbnail"></div>
                   </td>
-                  <td>0</td>
+                  <td>{{ richmenu.member_count }}</td>
                   <td>
                     <div class="btn-group">
                       <button

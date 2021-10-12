@@ -40,7 +40,7 @@ class ScenarioMessage < ApplicationRecord
 
   before_save :execute_before_save
 
-  def clone_to(scenario_id)
+  def clone_to!(scenario_id)
     new_message = self.dup
     new_message.scenario_id = scenario_id
     new_message.save!
