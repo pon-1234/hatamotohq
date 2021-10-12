@@ -70,9 +70,9 @@ export const actions = {
     }
   },
 
-  async uploadImageMap(_, query) {
+  async uploadImageMap(_, file) {
     try {
-      return await MediaApi.uploadImageMap({ file: query.file });
+      return await MediaApi.uploadImageMap(file);
     } catch (error) {
       console.log(error);
       return null;
