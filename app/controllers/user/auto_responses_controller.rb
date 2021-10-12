@@ -65,13 +65,8 @@ class User::AutoResponsesController < User::ApplicationController
 
   # POST /user/auto_responses/:id/copy
   def copy
-    new_auto_response = @auto_response.clone
-    if new_auto_response.present?
-      @auto_response.auto_response_messages&.each { |message| message.clone_to(new_auto_response.id) }
-      render_success
-    else
-      render_bad_request
-    end
+    @auto_response.clone!
+    render_success
   rescue => e
     logger.error e.message
     render_bad_request

@@ -22,7 +22,7 @@
 class AutoResponseMessage < ApplicationRecord
   belongs_to :auto_response
 
-  def clone_to(auto_response_id)
+  def clone_to!(auto_response_id)
     new_message = self.dup
     new_message.auto_response_id = auto_response_id
     new_message.save!

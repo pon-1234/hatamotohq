@@ -69,7 +69,7 @@ class User::BroadcastsController < User::ApplicationController
 
   # POST /user/broadcasts/:id/copy
   def copy
-    new_broadcast = @broadcast.clone!
+    @broadcast.clone!
     render_success
   rescue => e
     logger.error e.message
