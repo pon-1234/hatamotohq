@@ -36,7 +36,7 @@ class Template < ApplicationRecord
   # Scope
   enum type: { message: 'message' }, _prefix: true
 
-  def clone
+  def clone!
     new_template = self.dup
     new_template.name = self.name + '（コピー）'
     new_template.template_messages_count = 0

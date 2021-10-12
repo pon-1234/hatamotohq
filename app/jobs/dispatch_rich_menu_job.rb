@@ -55,10 +55,11 @@ class DispatchRichMenuJob < ApplicationJob
     end
 
     def set_default_rich_menu
-      response = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
+      success = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
       # Disable other default richmenu belongs to this account
-      if response
-        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_columns(status: :disabled)
+      if success
+        calc_and_set_member_count
+        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled)
       end
     end
 
@@ -69,7 +70,8 @@ class DispatchRichMenuJob < ApplicationJob
       tag_ids = tag_condition['data']['tags'].pluck('id')
       LineFriend.find_all_by_tags(@line_account.id, tag_ids).find_in_batches(batch_size: 500) do |friends|
         friend_ids = friends.pluck(:line_user_id)
-        LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
+        success = LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
+        calc_and_set_member_count if success
       end
     end
 
@@ -79,6 +81,15 @@ class DispatchRichMenuJob < ApplicationJob
       return unless needed
       # If rich menu is registered in Line System, need to cancel it before set a new one
       LineApi::DeleteRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
+    end
+
+    def calc_and_set_member_count
+      if @richmenu.target_all?
+        count = @line_account.line_friends.active.count
+      else
+        count = @line_account.line_friends.active.count
+      end
+      @richmenu.update_columns(member_count: count)
     end
 
     def richmenu_payload

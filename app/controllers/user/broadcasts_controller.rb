@@ -69,13 +69,8 @@ class User::BroadcastsController < User::ApplicationController
 
   # POST /user/broadcasts/:id/copy
   def copy
-    new_broadcast = @broadcast.clone
-    if new_broadcast.present?
-      @broadcast.broadcast_messages&.each { |message| message.clone_to(new_broadcast.id) }
-      render_success
-    else
-      render_bad_request
-    end
+    new_broadcast = @broadcast.clone!
+    render_success
   rescue => e
     logger.error e.message
     render_bad_request
