@@ -327,7 +327,7 @@ export const ImageRichMenuSize = [
 ];
 
 export const ImageImageMapSize = [
-  '500'
+  '1040'
 ];
 
 export const ImageImagemapSize = '1040x1040';
