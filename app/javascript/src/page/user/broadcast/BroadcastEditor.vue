@@ -146,12 +146,8 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="createBroadcast('pending')" :disabled="invalid">
-          配信登録
-        </button>
-        <button type="submit" class="btn btn-outline-success fw-120" @click="createBroadcast('draft')">
-          下書き保存
-        </button>
+        <button class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</button>
+        <button type="submit" class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</button>
       </div>
     </div>
     <message-preview></message-preview>
@@ -306,7 +302,7 @@ export default {
       this.broadcastData.conditions = value;
     },
 
-    async createBroadcast(status) {
+    async submit(status) {
       this.broadcastData.status = status;
       if (this.broadcastData.deliver_now) {
         this.changeStartDateForNow();
