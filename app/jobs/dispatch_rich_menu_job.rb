@@ -20,16 +20,16 @@ class DispatchRichMenuJob < ApplicationJob
       success = create_rich_menu_content if success
       if success
         if @richmenu.target_all?
-          set_default_rich_menu
+          success = set_default_rich_menu
         else
-          bulk_link_rich_menus
+          success = bulk_link_rich_menus
         end
       end
     end
-    @richmenu.update_columns(status: 'error') unless success
+    @richmenu.update_columns(status: 'error', member_count: 0) unless success
   rescue StandardError => e
     logger.error(e.message)
-    @richmenu.update_columns(status: 'error')
+    @richmenu.update_columns(status: 'error', member_count: 0)
   end
 
   private
@@ -43,7 +43,6 @@ class DispatchRichMenuJob < ApplicationJob
         @richmenu.update_columns(line_menu_id: richmenu_id)
         true
       else
-        @richmenu.update_columns(status: 'error')
         false
       end
     end
@@ -58,8 +57,8 @@ class DispatchRichMenuJob < ApplicationJob
       success = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
       # Disable other default richmenu belongs to this account
       if success
-        calc_and_set_member_count
-        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled)
+        calc_and_set_member_count(@line_account.line_friends.active.count)
+        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled, member_count: 0)
       end
     end
 
@@ -71,7 +70,11 @@ class DispatchRichMenuJob < ApplicationJob
       LineFriend.find_all_by_tags(@line_account.id, tag_ids).find_in_batches(batch_size: 500) do |friends|
         friend_ids = friends.pluck(:line_user_id)
         success = LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
-        calc_and_set_member_count if success
+        if success
+          # Set the number of user was assigned the menu
+          count = @line_account.line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids }).pluck(:id).uniq.count
+          calc_and_set_member_count(count)
+        end
       end
     end
 
@@ -83,12 +86,7 @@ class DispatchRichMenuJob < ApplicationJob
       LineApi::DeleteRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
     end
 
-    def calc_and_set_member_count
-      if @richmenu.target_all?
-        count = @line_account.line_friends.active.count
-      else
-        count = @line_account.line_friends.active.count
-      end
+    def calc_and_set_member_count(count)
       @richmenu.update_columns(member_count: count)
     end
 
