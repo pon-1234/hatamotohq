@@ -160,21 +160,21 @@ export default {
 
 @media (max-width: 1400px) {
   .channel-list {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%
+    -ms-flex: 0 0 30%;
+    flex: 0 0 30%;
+    max-width: 30%
   }
 
   .channel-chat {
-    -ms-flex: 0 0 50%;
-    flex: 0 0 50%;
-    max-width: 50%
+    -ms-flex: 0 0 70%;
+    flex: 0 0 70%;
+    max-width: 70%
   }
 
   .channel-friend {
-      -ms-flex: 0 0 50%;
-      flex: 0 0 50%;
-      max-width: 50%
+      -ms-flex: 0 0 30%;
+      flex: 0 0 30%;
+      max-width: 30%
   }
 
   .main-user-visible {
