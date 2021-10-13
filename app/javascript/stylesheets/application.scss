@@ -95,11 +95,16 @@
   min-width: 100px;
 }
 
-@for $i from 1 through 100 {
+@for $i from 1 through 500 {
   $width: 0% + $i;
 
   .w-#{$i}p {
     width: $width;
+  }
+
+  $px: 0px + $i;
+  .mvpx-#{$i} {
+    min-width: $px;
   }
 
   $vw: 0vw + $i;

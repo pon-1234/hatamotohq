@@ -30,43 +30,72 @@
       </div>
       <div class="card-body">
         <friend-search-status></friend-search-status>
-        <table class="table table-centered mt-2">
-          <thead class="thead-light">
-            <tr>
-              <th>名前</th>
-              <th>登録日時</th>
-              <th>タグ</th>
-              <th>状況</th>
-              <th class="fw-150">操作</th>
-            </tr>
-          </thead>
-          <tbody v-for="(friend, index) in friends" :key="index">
-            <tr>
-              <td class="table-user">
-                <img
-                  :src="friend.line_picture_url || '/img/no-image-profile.png'"
-                  alt="table-user"
-                  class="mr-2 rounded-circle"
-                />
-                {{ friend.line_name }}
-              </td>
-              <td>{{ formattedDatetime(friend.created_at) }}</td>
-              <td>
-                <friend-tag :tags="friend.tags"></friend-tag>
-              </td>
-              <td>
-                <friend-status
-                  :status="friend.status"
-                  :locked="friend.locked"
-                  :visible="friend.visible"
-                ></friend-status>
-              </td>
-              <td>
-                <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-centered mt-2 is-desktop">
+            <thead class="thead-light">
+              <tr>
+                <th class="mvpx-50">名前</th>
+                <th class="mvpx-200">登録日時</th>
+                <th class="mvpx-60">タグ</th>
+                <th class="mvpx-60">状況</th>
+                <th class="fw-150">操作</th>
+              </tr>
+            </thead>
+            <tbody v-for="(friend, index) in friends" :key="index">
+              <tr>
+                <td class="table-user">
+                  <img
+                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    alt="table-user"
+                    class="mr-2 rounded-circle"
+                  />
+                  {{ friend.line_name }}
+                </td>
+                <td>{{ formattedDatetime(friend.created_at) }}</td>
+                <td>
+                  <friend-tag :tags="friend.tags"></friend-tag>
+                </td>
+                <td>
+                  <friend-status
+                    :status="friend.status"
+                    :locked="friend.locked"
+                    :visible="friend.visible"
+                  ></friend-status>
+                </td>
+                <td>
+                  <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-centered mt-2 is-mobile">
+            <thead class="thead-light">
+              <tr>
+                <th>名前</th>
+                <th>状況</th>
+              </tr>
+            </thead>
+            <tbody v-for="(friend, index) in friends" :key="index">
+              <tr @click="redirectToFriendDetail(friend)">
+                <td class="table-user">
+                  <img
+                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    alt="table-user"
+                    class="mr-2 rounded-circle"
+                  />
+                  {{ friend.line_name }}
+                </td>
+                <td>
+                  <friend-status
+                    :status="friend.status"
+                    :locked="friend.locked"
+                    :visible="friend.visible"
+                  ></friend-status>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="d-flex justify-content-center mt-4">
           <b-pagination
             v-if="totalRows > perPage"
@@ -157,7 +186,28 @@ export default {
         this.getFriends();
         this.loading = false;
       });
+    },
+
+    redirectToFriendDetail(friend) {
+      window.location.href = `${this.rootUrl}/user/friends/${friend.id}`;
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+  .is-desktop {
+    display: table;
+  }
+  .is-mobile {
+    display: none;
+  }
+
+ @media (max-width: 760px) {
+    .is-desktop {
+      display: none;
+    }
+    .is-mobile {
+      display: table;
+    }
+  }
+</style>
