@@ -65,7 +65,6 @@ class DispatchRichMenuJob < ApplicationJob
     def bulk_link_rich_menus
       tag_condition = @richmenu.conditions.detect { |condition| condition['type'].eql?('tag') }
       return false if tag_condition.blank?
-
       tag_ids = tag_condition['data']['tags'].pluck('id')
       LineFriend.find_all_by_tags(@line_account.id, tag_ids).find_in_batches(batch_size: 500) do |friends|
         friend_ids = friends.pluck(:line_user_id)
