@@ -1,28 +1,28 @@
 <template>
   <div class="row">
     <!-- start chat users-->
-    <div class="col-xl-3 col-md-12 order-lg-1 order-xl-1">
+    <div class="channel-list">
       <channel-list :class="getLeftItem()"/>
       <!-- :class="getLeftItem()" -->
     </div>
     <!-- end chat users-->
     <!-- {{ showChatBox }} -->
     <!-- chat area -->
-    <div class="col-xl-6 col-md-12 order-lg-2 order-xl-2 main " :class="showChatBox ? 'main-visible' : ''">
+    <div class="channel-chat main " :class="showChatBox ? 'main-visible' : ''">
       <chat-box></chat-box>
       <!-- :class="getRightItem()" -->
     </div>
     <!-- end chat area-->
 
     <!-- start user detail -->
-    <div class="col-xl-3 col-md-12 order-lg-1 order-xl-3 main-user" :class="showUserDetail ? 'main-user-visible' : ''">
+    <div class="channel-friend main-user" :class="showUserDetail ? 'main-user-visible' : ''">
       <channel-friend-detail></channel-friend-detail>
     </div>
     <!-- end user detail -->
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import consumer from '@channels/consumer';
 import * as ActionCable from '@rails/actioncable';
 ActionCable.logger.enabled = true;
@@ -47,6 +47,12 @@ export default {
     };
   },
 
+  mounted() {
+    if (window.location.href.toString() !== `${process.env.MIX_ROOT_PATH}/user/channels`) {
+      this.setShowChatBox(true);
+    }
+  },
+
   computed: {
     ...mapState('channel', {
       activeChannel: (state) => state.activeChannel,
@@ -69,6 +75,9 @@ export default {
       'setActiveChannel'
     ]),
 
+    ...mapMutations('channel', [
+      'setShowChatBox'
+    ]),
     connectToWebsocket() {
       const _this = this;
       if (consumer.subscriptions.subscriptions.length > 0) {
@@ -120,7 +129,75 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@media (max-width: 1370px) {
+.channel-list, .channel-chat, .channel-friend {
+  position: relative;
+  width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+  -webkit-box-flex: 0;
+}
+
+.channel-list {
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+    order: 1;
+}
+
+.channel-chat {
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+   order: 2;
+}
+
+.channel-friend {
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+    order: 3;
+}
+
+@media (max-width: 1400px) {
+  .channel-list {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%
+  }
+
+  .channel-chat {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%
+  }
+
+  .channel-friend {
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+      max-width: 50%
+  }
+
+  .main-user-visible {
+    visibility: visible !important;
+    transform: translateX(0) !important;
+  }
+
+  .main-user {
+    position: fixed;
+    top: 160px;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1020;
+    visibility: hidden;
+    transform: translateX(100%);
+    transition: transform .3s ease,visibility .3s ease;
+    background: #fafbfd;
+  }
+}
+
+@media (max-width: 768px) {
   .item-pc {
     visibility: visible;
     transform: translateX(0);
@@ -129,12 +206,33 @@ export default {
     display: none !important;
   }
 
-  .main-visible, .main-user-visible {
+  .channel-list {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%
+  }
+
+  .channel-chat {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%
+  }
+
+  .channel-friend {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%
+  }
+
+  .main-visible {
     visibility: visible !important;
     transform: translateX(0) !important;
   }
+  .main-user {
+    top: 2vh;
+  }
 
-  .main, .main-user {
+  .main {
     position: fixed;
     top: 2vh;
     left: 0;

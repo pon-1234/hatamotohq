@@ -1,7 +1,7 @@
 <template>
   <div class="card chat-panel">
     <div class="card-header d-flex">
-      <a class="icon-fs" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
+      <a class="icon-fs icon-left" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
       <a class="flex-grow-1"></a>
       <a class="icon-fs" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
     </div>
@@ -298,21 +298,31 @@ export default {
     font-size: 1.5rem;
     cursor: pointer;
   }
-  @media (min-width: 1370px) {
+
+  @media (min-width: 1400px) {
     .card-header {
       display: none !important;
     }
   }
-  @media (max-width: 1370px) {
+
+  @media (max-width: 768px) {
     .chat-panel {
       height: calc(100vh - 50px);
     }
   }
+
   @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 25px);
     }
   }
+
+  @media screen and (min-width: 770px) and (max-width: 1400px) {
+    .icon-left {
+      display: none;
+    }
+  }
+
   @keyframes kf-flash-message {
     from {
       background-color: #ffe2d5;

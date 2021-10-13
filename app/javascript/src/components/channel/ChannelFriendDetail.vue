@@ -75,16 +75,19 @@ export default {
     font-size: 1.5rem;
     cursor: pointer;
   }
-  @media (min-width: 1370px) {
+
+  @media (min-width: 1400px) {
     .card-header {
       display: none !important;
     }
   }
-  @media (max-width: 1370px) {
+
+  @media (max-width: 768px) {
     .chat-panel {
       height: calc(100vh - 50px);
     }
   }
+
   @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 25px);
