@@ -4,8 +4,7 @@ export const state = {
   scenarios: [],
   totalRows: 0,
   perPage: 0,
-  curPage: 1,
-  messages: []
+  curPage: 1
 };
 
 export const mutations = {
@@ -21,10 +20,6 @@ export const mutations = {
     state.totalRows = meta.total_count;
     state.perPage = meta.limit_value;
     state.curPage = meta.current_page;
-  },
-
-  setMessages(state, messages) {
-    state.messages = messages;
   }
 };
 
