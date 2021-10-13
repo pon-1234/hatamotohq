@@ -19,11 +19,7 @@
     <div class="form-group clearfix d-flex">
       <div class="fw-200 d-flex align-items-center">
         <span>補足文</span>
-        <div
-          v-b-tooltip.hover
-          title="回答入力欄の下に表示されます"
-          class="ml-2"
-        >
+        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
           <i class="text-md far fa-question-circle"></i>
         </div>
       </div>
@@ -36,25 +32,15 @@
           placeholder=""
           data-vv-as="補足文"
         />
-        <error-message
-          :message="errors.first(name + '-subtext')"
-        ></error-message>
+        <error-message :message="errors.first(name + '-subtext')"></error-message>
       </div>
     </div>
 
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select
-          @change="changeProfileInformation"
-          class="form-control"
-          v-model="friendInformationSelected"
-        >
-          <option
-            v-for="(friendInformation, index) in friendInformations"
-            :value="friendInformation"
-            :key="index"
-          >
+        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
+          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
             {{ friendInformation.name }}
           </option>
         </select>
@@ -62,11 +48,7 @@
           <survey-profile-action
             v-if="value.profile.id === 3"
             type="text"
-            :field="
-              value.survey_profile_template
-                ? value.survey_profile_template.field_name
-                : null
-            "
+            :field="value.survey_profile_template ? value.survey_profile_template.field_name : null"
             :name="name + '-infomation'"
             @input="value.survey_profile_template = $event"
           ></survey-profile-action>
@@ -78,34 +60,18 @@
       <span class="fw-200">選択肢</span>
       <div class="flex-grow-1">
         <!-- START: checkbox options -->
-        <div
-          v-for="(item, index) of value.data"
-          :key="index"
-          class="card border-info border"
-        >
+        <div v-for="(item, index) of options" :key="index" class="card border-info border">
           <div class="card-header d-flex">
             <div>選択肢 {{ index + 1 }}</div>
             <div class="ml-auto">
-              <div
-                @click="moveUpObject(index)"
-                class="btn btn-sm btn-light"
-                v-if="index > 0"
-              >
+              <div @click="moveUpObject(index)" class="btn btn-sm btn-light" v-if="index > 0">
                 <i class="dripicons-chevron-up"></i>
               </div>
-              <div
-                @click="moveDownObject(index)"
-                class="btn btn-sm btn-light"
-                v-if="index < value.data.length - 1"
-              >
+              <div @click="moveDownObject(index)" class="btn btn-sm btn-light" v-if="index < options.length - 1">
                 <i class="dripicons-chevron-down"></i>
               </div>
 
-              <div
-                @click="removeObject(index)"
-                v-if="value.data.length > 1"
-                class="btn btn-sm btn-light"
-              >
+              <div @click="removeObject(index)" v-if="options.length > 1" class="btn btn-sm btn-light">
                 <i class="mdi mdi-delete"></i>
               </div>
             </div>
@@ -125,11 +91,7 @@
             </div>
             <div v-show="item.is_editor" class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
-                <select
-                  class="form-control d-block"
-                  v-model="item.action.type"
-                  @change="item.action.content = null"
-                >
+                <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
                   <option value="tag">タグ</option>
                   <!--<option value="information">友達情報</option>-->
                   <option value="postback">選択時のアクション</option>
@@ -138,9 +100,7 @@
               <div style="width: calc(100% - 200px)" v-if="!isBlink">
                 <div v-if="item.action.type === 'tag'">
                   <input-tag
-                    :tags="
-                      item.action.content ? item.action.content.tag_ids : null
-                    "
+                    :tags="item.action.content ? item.action.content.tag_ids : null"
                     :allTags="true"
                     @input="
                       item.action.content
@@ -150,10 +110,7 @@
                   >
                   </input-tag>
                 </div>
-                <div
-                  class="action-postback"
-                  v-else-if="item.action.type === 'postback'"
-                >
+                <div class="action-postback" v-else-if="item.action.type === 'postback'">
                   <action-postback
                     :showTitle="false"
                     :value="item.action.content"
@@ -167,11 +124,7 @@
           </div>
         </div>
         <div class="mt-2">
-          <div
-            @click="addItem()"
-            v-if="value.data.length < max"
-            class="btn btn-info"
-          >
+          <div @click="addItem()" v-if="options.length < max" class="btn btn-info">
             <i class="uil-plus"></i> 選択肢追加
           </div>
         </div>
@@ -197,13 +150,13 @@ export default {
       friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
       value: this.content || {
         text: null,
-        name: this.name,
         sub_text: null,
+        name: this.name,
         survey_profile_template: {
           field_name: null,
           id: null
         },
-        data: [
+        options: [
           {
             is_editor: true,
             value: null,
@@ -228,22 +181,13 @@ export default {
     }
     this.syncObj();
   },
-  watch: {
-    errors: {
-      deep: true,
-      handler(val) {
-        this.value.data.forEach((object, index) => {
-          const fieldText = val.items.find(item => {
-            return item.field.includes(this.name + '-postback-' + index);
-          });
 
-          if (fieldText) {
-            object.is_editor = true;
-          }
-        });
-      }
+  computed: {
+    options() {
+      return this.value ? this.value.options : [];
     }
   },
+
   methods: {
     changeProfileInformation() {
       // eslint-disable-next-line no-undef
@@ -263,11 +207,10 @@ export default {
     },
     syncObj() {
       this.blink();
-      console.log(this.value);
       this.$emit('input', this.value);
     },
     addItem() {
-      this.value.data.push({
+      this.options.push({
         is_editor: true,
         value: null,
         action: {
@@ -282,24 +225,22 @@ export default {
     moveUpObject(index) {
       if (index > 0) {
         const to = index - 1;
-        this.value.data.splice(to, 0, this.value.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     moveDownObject(index) {
-      if (index < this.value.data.length) {
+      if (index < this.options.length) {
         const to = index + 1;
-        this.value.data.splice(to, 0, this.value.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     removeObject(index) {
-      this.value.data.splice(index, 1);
+      this.options.splice(index, 1);
       this.syncObj();
     }
-
   }
-
 };
 </script>
 <style lang="scss" scoped>
@@ -322,7 +263,7 @@ export default {
       margin-right: 10px !important;
     }
     .action-postback {
-      background: #dcdcdc;
+      background: gray;
       padding: 0 10px 10px 10px;
       border-radius: 4px;
     }

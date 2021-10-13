@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group clearfix d-flex">
-      <span class="fw-200">項目名<required-mark/></span>
+      <span class="fw-200">項目名<required-mark /></span>
       <div class="flex-grow-1">
         <input
           v-model.trim="value.text"
@@ -38,27 +38,16 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select
-          @change="changeProfileInformation"
-          class="form-control"
-          v-model="friendInformationSelected"
-        >
-          <option
-            v-for="(friendInformation, index) in friendInformations"
-            :value="friendInformation"
-            :key="index"
-            >{{ friendInformation.name }}
+        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
+          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
+            {{ friendInformation.name }}
           </option>
         </select>
-        <div v-if="value.profile" style="margin-top: 10px;">
+        <div v-if="value.profile" style="margin-top: 10px">
           <survey-profile-action
             v-if="value.profile.id === 3"
             type="text"
-            :field="
-              value.survey_profile_template
-                ? value.survey_profile_template.field_name
-                : null
-            "
+            :field="value.survey_profile_template ? value.survey_profile_template.field_name : null"
             :name="name + '-infomation'"
             @input="value.survey_profile_template = $event"
           ></survey-profile-action>
@@ -83,8 +72,8 @@ export default {
           field_name: null,
           id: null
         },
-        name: this.name,
         text: null,
+        name: this.name,
         sub_text: null
       }
     };
@@ -126,3 +115,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  ::v-deep {
+    .form-group {
+      padding: 5px 0;
+    }
+  }
+</style>
