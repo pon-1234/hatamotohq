@@ -89,7 +89,8 @@ export default {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
-      curMessageIndex: 0
+      curMessageIndex: 0,
+      currentPage: 1
     };
   },
   created() {
