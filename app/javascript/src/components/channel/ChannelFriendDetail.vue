@@ -1,5 +1,8 @@
 <template>
   <div class="card chat-panel" v-if="activeChannel">
+    <div class="card-header">
+      <a class="icon-fs" @click="hiddenUserDetailBox()"><i class="dripicons-arrow-thin-left"></i></a>
+    </div>
     <div class="card-body">
       <div class="mt-3 text-center">
         <img :src="friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
@@ -28,7 +31,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -44,7 +47,8 @@ export default {
 
   computed: {
     ...mapState('channel', {
-      activeChannel: state => state.activeChannel
+      activeChannel: state => state.activeChannel,
+      showUserDetail: state => state.showUserDetail
     }),
     friend() {
       return this.activeChannel.line_friend;
@@ -55,6 +59,35 @@ export default {
     detailPath() {
       return `${this.rootPath}/user/friends/${this.friend.id}`;
     }
+  },
+  methods: {
+    ...mapMutations('channel', [
+      'setShowUserDetail'
+    ]),
+    hiddenUserDetailBox() {
+      if (this.showUserDetail) this.setShowUserDetail(false);
+    }
   }
 };
 </script>
+<style lang="scss" scoped>
+  .icon-fs {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  @media (min-width: 1370px) {
+    .card-header {
+      display: none !important;
+    }
+  }
+  @media (max-width: 1370px) {
+    .chat-panel {
+      height: calc(100vh - 50px);
+    }
+  }
+  @media (max-width: 767px) {
+    .chat-panel {
+      height: calc(100vh - 25px);
+    }
+  }
+</style>

@@ -1,21 +1,21 @@
 <template>
   <div class="row">
     <!-- start chat users-->
-    <div class="col-xl-3 col-lg-6 order-lg-1 order-xl-1">
-      <channel-list :class="getLeftItem()" />
+    <div class="col-xl-3 col-md-12 order-lg-1 order-xl-1">
+      <channel-list :class="getLeftItem()"/>
+      <!-- :class="getLeftItem()" -->
     </div>
     <!-- end chat users-->
-
+    <!-- {{ showChatBox }} -->
     <!-- chat area -->
-    <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
-      <chat-box
-        :class="getRightItem()"
-      ></chat-box>
+    <div class="col-xl-6 col-md-12 order-lg-2 order-xl-2 main " :class="showChatBox ? 'main-visible' : ''">
+      <chat-box></chat-box>
+      <!-- :class="getRightItem()" -->
     </div>
     <!-- end chat area-->
 
     <!-- start user detail -->
-    <div class="col-xl-3 col-lg-6 order-lg-1 order-xl-2">
+    <div class="col-xl-3 col-md-12 order-lg-1 order-xl-3 main-user" :class="showUserDetail ? 'main-user-visible' : ''">
       <channel-friend-detail></channel-friend-detail>
     </div>
     <!-- end user detail -->
@@ -52,7 +52,9 @@ export default {
       activeChannel: (state) => state.activeChannel,
       channels: (state) => state.channels,
       messages: (state) => state.messages,
-      unreadChannelId: (state) => state.unreadChannelId
+      unreadChannelId: (state) => state.unreadChannelId,
+      showChatBox: (state) => state.showChatBox,
+      showUserDetail: state => state.showUserDetail
     }),
     ...mapState('friend', {
       friend: (state) => state.friend
@@ -118,12 +120,32 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@media (max-width: 991px) {
+@media (max-width: 1370px) {
   .item-pc {
-    display: none !important;
+    visibility: visible;
+    transform: translateX(0);
   }
   .item-hidden {
     display: none !important;
+  }
+
+  .main-visible, .main-user-visible {
+    visibility: visible !important;
+    transform: translateX(0) !important;
+  }
+
+  .main, .main-user {
+    position: fixed;
+    top: 2vh;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1020;
+    visibility: hidden;
+    transform: translateX(100%);
+    transition: transform .3s ease,visibility .3s ease;
+    background: #fafbfd;
   }
 }
 

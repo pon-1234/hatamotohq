@@ -1,5 +1,10 @@
 <template>
   <div class="card chat-panel">
+    <div class="card-header d-flex">
+      <a class="icon-fs" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
+      <a class="flex-grow-1"></a>
+      <a class="icon-fs" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
+    </div>
     <div class="card-body d-flex flex-column">
       <ul
         ref="chatPanel"
@@ -37,7 +42,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -89,7 +94,9 @@ export default {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       allMessagesLoaded: state => state.allMessagesLoaded,
-      isLoadMoreMessage: state => state.isLoadMoreMessage
+      isLoadMoreMessage: state => state.isLoadMoreMessage,
+      showChatBox: state => state.showChatBox,
+      showUserDetail: state => state.showUserDetail
     }),
 
     latestMessage() {
@@ -116,7 +123,10 @@ export default {
       'unreadMessage',
       'markMessagesRead'
     ]),
-
+    ...mapMutations('channel', [
+      'setShowChatBox',
+      'setShowUserDetail'
+    ]),
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
@@ -136,6 +146,14 @@ export default {
     scrollToMessage(id) {
       location.href = '#';
       location.href = `#chatItem${id}`;
+    },
+
+    hiddenChatBox() {
+      if (this.showChatBox) this.setShowChatBox(false);
+    },
+
+    showUserDetailBox() {
+      if (!this.showUserDetail) this.setShowUserDetail(true);
     },
 
     async handleScroll(e) {
@@ -276,6 +294,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .icon-fs {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  @media (min-width: 1370px) {
+    .card-header {
+      display: none !important;
+    }
+  }
+  @media (max-width: 1370px) {
+    .chat-panel {
+      height: calc(100vh - 50px);
+    }
+  }
+  @media (max-width: 767px) {
+    .chat-panel {
+      height: calc(100vh - 25px);
+    }
+  }
   @keyframes kf-flash-message {
     from {
       background-color: #ffe2d5;
