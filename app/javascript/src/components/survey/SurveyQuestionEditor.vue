@@ -36,7 +36,7 @@
           >
             <option value="text">記述式（１行回答）</option>
             <option value="textarea">段落（複数行回答）</option>
-            <option value="dropdown">プルダウン</option>
+            <option value="pulldown">プルダウン</option>
             <option value="radio">ラジオボタン</option>
             <option value="checkbox">チェックボックス</option>
             <option value="file">ファイル添付（JPEG/PNG/PDF）</option>
@@ -60,6 +60,7 @@
             @input="object.content = $event"
             v-if="object.type === 'text'"
           ></survey-text-object>
+
           <survey-text-area-object
             :name="name + '-textarea-' + index"
             :content="object.content"
@@ -67,37 +68,41 @@
             v-else-if="object.type === 'textarea'"
           >
           </survey-text-area-object>
+
           <survey-radio-object
             :name="name + '-radio-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'radio'"
           ></survey-radio-object>
+
           <survey-check-box-object
             :name="name + '-checkbox-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'checkbox'"
           ></survey-check-box-object>
-          <survey-drop-down-object
-            :name="name + '-dropdown-' + index"
+
+          <survey-pulldown-object
+            :name="name + '-pulldown-' + index"
             :content="object.content"
             @input="object.content = $event"
-            v-else-if="object.type === 'dropdown'"
-          ></survey-drop-down-object>
+            v-else-if="object.type === 'pulldown'"
+          ></survey-pulldown-object>
+
           <survey-file-object
             :name="name + '-file-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'file'"
           ></survey-file-object>
+
           <survey-date-object
             :name="name + '-date-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'date'"
           ></survey-date-object>
-          <survey-none-object v-else></survey-none-object>
         </div>
       </div>
     </div>

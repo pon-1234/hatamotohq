@@ -2,18 +2,13 @@
   <div class="message-preview-el">
     <div class="card card-sliding" :style="isHidden ? 'margin-bottom: -50vh;' : 'margin-bottom: 0px;'">
       <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-        <div role="button" class="text-white" @click="toggleVisible">
+        <div role="button" class="text-white" @click="changePreview">
           <i :class="isHidden ? 'fas mr-2 fa-caret-up' : 'fas mr-2 fa-caret-down'"></i>プレビュー
         </div>
         <i id="gijvq97" class="lar la-question-circle text-white"></i>
       </div>
-      <div
-        class="card-body bg-white overflow-x-hidden p-0 cursor-not-allowed no-select"
-        style="width: 370px; height: 50vh; max-height: none"
-      >
-        <div class="bg-info" style="padding: 20px 0px 20px 20px; min-height: 50vh">
-          <message-content-preview></message-content-preview>
-        </div>
+      <div class="card-body bg-white overflow-x-hidden p-0 cursor-not-allowed no-select preview-container">
+        <div class="bg-white preview-content"><survey-preview-content :survey="survey"></survey-preview-content></div>
       </div>
     </div>
   </div>
@@ -22,6 +17,8 @@
 import Util from '@/core/util';
 
 export default {
+  props: ['survey'],
+
   data() {
     return {
       isHidden: false
@@ -35,7 +32,7 @@ export default {
   },
 
   methods: {
-    toggleVisible() {
+    changePreview() {
       this.isHidden = !this.isHidden;
     }
   }
@@ -43,6 +40,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .preview-container {
+    width: 370px;
+    height: 50vh;
+    max-height: none;
+    .preview-content {
+      padding: 20px 10px 20px 20px;
+      min-height: 50vh;
+    }
+  }
+
   ::v-deep {
     .card-sliding {
       border-bottom: 0;
@@ -68,11 +75,6 @@ export default {
 
     .card-sliding .card-body {
       overflow-y: auto;
-    }
-
-    .bg-info {
-      background-color: #666f86 !important;
-      color: black !important;
     }
   }
 </style>

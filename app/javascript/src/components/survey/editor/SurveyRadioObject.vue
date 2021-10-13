@@ -4,7 +4,7 @@
       <label class="fw-200">項目名<required-mark /></label>
       <div class="flex-grow-1">
         <input
-          v-model.trim="questionContentData.text"
+          v-model.trim="value.text"
           type="text"
           :name="name + '-text'"
           class="form-control"
@@ -19,56 +19,38 @@
     <div class="form-group clearfix d-flex">
       <div class="fw-200 d-flex align-items-center">
         <span>補足文</span>
-        <div
-          v-b-tooltip.hover
-          title="回答入力欄の下に表示されます"
-          class="ml-2"
-        >
+        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
           <i class="text-md far fa-question-circle"></i>
         </div>
       </div>
       <div class="flex-grow-1">
         <input
-          v-model.trim="questionContentData.sub_text"
+          v-model.trim="value.sub_text"
           :name="name + '-subtext'"
           type="text"
           class="form-control"
           placeholder=""
           data-vv-as="補足文"
         />
-        <error-message
-          :message="errors.first(name + '-subtext')"
-        ></error-message>
+        <error-message :message="errors.first(name + '-subtext')"></error-message>
       </div>
     </div>
 
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select
-          @change="changeProfileInformation"
-          class="form-control"
-          v-model="friendInformationSelected"
-        >
-          <option
-            v-for="(friendInformation, index) in friendInformations"
-            :value="friendInformation"
-            :key="index"
-          >
+        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
+          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
             {{ friendInformation.name }}
           </option>
         </select>
-        <div v-if="questionContentData.profile" style="margin-top: 10px">
+        <div v-if="value.profile" style="margin-top: 10px">
           <survey-profile-action
-            v-if="questionContentData.profile.id === 3"
+            v-if="value.profile.id === 3"
             type="text"
-            :field="
-              questionContentData.survey_profile_template
-                ? value.survey_profile_template.field_name
-                : null
-            "
+            :field="value.survey_profile_template ? value.survey_profile_template.field_name : null"
             :name="name + '-infomation'"
-            @input="questionContentData.survey_profile_template = $event"
+            @input="value.survey_profile_template = $event"
           ></survey-profile-action>
         </div>
       </div>
@@ -78,34 +60,18 @@
       <span class="fw-200">選択肢</span>
       <div class="flex-grow-1">
         <!-- START: checkbox options -->
-        <div
-          v-for="(item, index) of questionContentData.options"
-          :key="index"
-          class="card border-info border"
-        >
+        <div v-for="(item, index) of options" :key="index" class="card border-info border">
           <div class="card-header d-flex">
             <div>選択肢 {{ index + 1 }}</div>
             <div class="ml-auto">
-              <div
-                @click="moveUpObject(index)"
-                class="btn btn-sm btn-light"
-                v-if="index > 0"
-              >
+              <div @click="moveUpObject(index)" class="btn btn-sm btn-light" v-if="index > 0">
                 <i class="dripicons-chevron-up"></i>
               </div>
-              <div
-                @click="moveDownObject(index)"
-                class="btn btn-sm btn-light"
-                v-if="index < questionContentData.options.length - 1"
-              >
+              <div @click="moveDownObject(index)" class="btn btn-sm btn-light" v-if="index < options.length - 1">
                 <i class="dripicons-chevron-down"></i>
               </div>
 
-              <div
-                @click="removeObject(index)"
-                v-if="questionContentData.options.length > 1"
-                class="btn btn-sm btn-light"
-              >
+              <div @click="removeObject(index)" v-if="options.length > 1" class="btn btn-sm btn-light">
                 <i class="mdi mdi-delete"></i>
               </div>
             </div>
@@ -123,24 +89,18 @@
                 v-model="item.value"
               />
             </div>
-            <div v-show="item.editing" class="form-group d-flex mt-2">
+            <div v-show="item.is_editor" class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
-                <select
-                  class="form-control d-block"
-                  v-model="item.action.type"
-                  @change="item.action.content = null"
-                >
+                <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
                   <option value="tag">タグ</option>
                   <!--<option value="information">友達情報</option>-->
                   <option value="postback">選択時のアクション</option>
                 </select>
               </div>
-              <div style="width: calc(100% - 200px)" :key="contentKey">
+              <div style="width: calc(100% - 200px)" v-if="!isBlink">
                 <div v-if="item.action.type === 'tag'">
                   <input-tag
-                    :tags="
-                      item.action.content ? item.action.content.tag_ids : null
-                    "
+                    :tags="item.action.content ? item.action.content.tag_ids : null"
                     :allTags="true"
                     @input="
                       item.action.content
@@ -150,10 +110,7 @@
                   >
                   </input-tag>
                 </div>
-                <div
-                  class="action-postback"
-                  v-else-if="item.action.type === 'postback'"
-                >
+                <div class="action-postback" v-else-if="item.action.type === 'postback'">
                   <action-postback
                     :showTitle="false"
                     :value="item.action.content"
@@ -167,11 +124,7 @@
           </div>
         </div>
         <div class="mt-2">
-          <div
-            @click="addItem()"
-            v-if="questionContentData.options.length < max"
-            class="btn btn-info"
-          >
+          <div @click="addItem()" v-if="options.length < max" class="btn btn-info">
             <i class="uil-plus"></i> 選択肢追加
           </div>
         </div>
@@ -186,8 +139,8 @@ export default {
   props: ['content', 'name'],
   data() {
     return {
-      contentKey: 0,
       max: 50,
+      isBlink: false,
       friendInformations: [
         { id: 0, name: '選択なし', type: 'none' },
         { id: 1, name: '表示名', type: 'display_name' },
@@ -195,14 +148,17 @@ export default {
         { id: 3, name: '友だち情報名', type: 'survey_profile' }
       ],
       friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
-      questionContentData: this.content || {
+      value: this.content || {
         text: null,
-        sub_text: null,
         name: this.name,
-        profile: null,
+        sub_text: null,
+        survey_profile_template: {
+          field_name: null,
+          id: null
+        },
         options: [
           {
-            editing: true,
+            is_editor: true,
             value: null,
             action: {
               type: 'tag',
@@ -219,33 +175,61 @@ export default {
 
   created() {
     this.$validator = this.parentValidator;
-    this.questionContentData.name = this.name;
-    if (this.questionContentData.profile) {
-      this.friendInformationSelected = this.questionContentData.profile;
+    this.value.name = this.name;
+    if (this.value.profile) {
+      this.friendInformationSelected = this.value.profile;
     }
     this.syncObj();
   },
+
+  watch: {
+    errors: {
+      deep: true,
+      handler(val) {
+        this.options.forEach((object, index) => {
+          const fieldText = val.items.find(item => {
+            return item.field.includes(this.name + '-postback-' + index);
+          });
+
+          if (fieldText) {
+            object.is_editor = true;
+          }
+        });
+      }
+    }
+  },
+
+  computed: {
+    options() {
+      return this.value ? this.value.options : [];
+    }
+  },
+
   methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
     changeProfileInformation() {
       // eslint-disable-next-line no-undef
-      this.questionContentData.profile = _.cloneDeep(this.friendInformationSelected);
-      if (this.questionContentData.profile.id !== 3) {
-        this.questionContentData.survey_profile_template = {
+      this.value.profile = _.cloneDeep(this.friendInformationSelected);
+      if (this.value.profile.id !== 3) {
+        this.value.survey_profile_template = {
           field_name: null,
           id: null
         };
       }
     },
+    blink() {
+      this.isBlink = true;
+      this.$nextTick(() => {
+        this.isBlink = false;
+      });
+    },
     syncObj() {
-      this.forceRerender();
-      this.$emit('input', this.questionContentData);
+      this.blink();
+      console.log(this.value);
+      this.$emit('input', this.value);
     },
     addItem() {
-      this.questionContentData.options.push({
-        editing: true,
+      this.options.push({
+        is_editor: true,
         value: null,
         action: {
           type: 'tag',
@@ -259,21 +243,49 @@ export default {
     moveUpObject(index) {
       if (index > 0) {
         const to = index - 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     moveDownObject(index) {
-      if (index < this.questionContentData.data.length) {
+      if (index < this.options.length) {
         const to = index + 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     removeObject(index) {
-      this.questionContentData.data.splice(index, 1);
+      this.options.splice(index, 1);
       this.syncObj();
     }
+
   }
+
 };
 </script>
+<style lang="scss" scoped>
+  ::v-deep {
+    .survey {
+      border: 1px solid #dedede;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    a:hover {
+      cursor: pointer;
+    }
+    .form-group {
+      padding: 5px 0;
+    }
+    .mt10 {
+      margin-top: 10px !important;
+    }
+    .mr10 {
+      margin-right: 10px !important;
+    }
+    .action-postback {
+      background: #dcdcdc;
+      padding: 0 10px 10px 10px;
+      border-radius: 4px;
+    }
+  }
+</style>
