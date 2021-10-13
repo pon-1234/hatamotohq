@@ -1,22 +1,29 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-
-    <div class="mt-2">
-      <div
-        class="custom-control custom-radio custom-control-inline d-flex flex-start"
-        v-for="(option, index) in options"
-        :key="index"
-      >
-        <input type="radio" :id="`${prefix}Option${index}`" name="customRadio1" class="custom-control-input" />
-        <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
-      </div>
+    <div class="form-group">
+      <datetime
+        :name="`${prefix}DatePicker`"
+        input-class="form-control"
+        type="datetime"
+        :phrases="{ ok: '確定', cancel: '閉じる' }"
+        placeholder="日付を選択してください"
+        value-zone="Asia/Tokyo"
+        v-validate="'required'"
+        zone="Asia/Tokyo"
+      ></datetime>
     </div>
   </div>
 </template>
 
 <script>
+import { Datetime } from 'vue-datetime';
+
 export default {
+  components: {
+    Datetime
+  },
+
   props: ['question', 'qnum'],
 
   computed: {

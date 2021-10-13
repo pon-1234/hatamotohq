@@ -1,8 +1,10 @@
 <template>
   <div>
     <span class="w-100">
-      <span class="border-success question-title mr-2 font-weight-bold">{{ `質問${qnum}` }}</span>
-      {{ title }}<required-mark v-if="isRequired"></required-mark>
+      <span class="border-success question-title mr-2 font-weight-bold"
+        >{{ `Q${qnum}` }}<required-mark v-if="isRequired"></required-mark
+      ></span>
+      {{ title }}
     </span>
     <div class="w-100 text-muted text-sm mt-2">{{ subTitle }}</div>
   </div>

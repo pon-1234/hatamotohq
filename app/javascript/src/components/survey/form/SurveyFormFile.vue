@@ -1,15 +1,12 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-
-    <div class="mt-2">
-      <div
-        class="custom-control custom-radio custom-control-inline d-flex flex-start"
-        v-for="(option, index) in options"
-        :key="index"
-      >
-        <input type="radio" :id="`${prefix}Option${index}`" name="customRadio1" class="custom-control-input" />
-        <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
+    <div class="form-group">
+      <div class="input-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile04" accept="image/*,.pdf" />
+          <label class="custom-file-label" for="inputGroupFile04">ファイルを選択</label>
+        </div>
       </div>
     </div>
   </div>

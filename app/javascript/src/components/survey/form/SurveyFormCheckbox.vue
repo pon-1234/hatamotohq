@@ -4,11 +4,11 @@
 
     <div class="mt-2">
       <div
-        class="custom-control custom-radio custom-control-inline d-flex flex-start"
+        class="custom-control custom-checkbox custom-control-inline d-flex flex-start"
         v-for="(option, index) in options"
         :key="index"
       >
-        <input type="radio" :id="`${prefix}Option${index}`" name="customRadio1" class="custom-control-input" />
+        <input type="checkbox" class="custom-control-input" :id="`${prefix}Option${index}`" />
         <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
       </div>
     </div>
