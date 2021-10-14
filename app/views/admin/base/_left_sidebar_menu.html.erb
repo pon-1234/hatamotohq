@@ -9,6 +9,13 @@
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
 
+      <li class="side-nav-item <%= controller?("admin/accounts") ? 'mm-active' : '' %>">
+        <%= link_to admin_accounts_path, class: "side-nav-link #{controller?("admin/accounts") ? 'active' : '' }" do %>
+          <i class="uil-users-alt"></i>
+          <span> 管理者管理 </span>
+        <% end %>
+      </li>
+
       <li class="side-nav-item <%= controller?("admin/users") ? 'mm-active' : '' %>">
         <%= link_to admin_users_path, class: "side-nav-link #{controller?("admin/users") ? 'active' : '' }" do %>
           <i class="uil-users-alt"></i>

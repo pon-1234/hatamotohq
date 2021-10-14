@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_11_071811) do
+ActiveRecord::Schema.define(version: 2021_10_14_042949) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
 
   create_table 'admins', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'email', default: '', null: false
+    t.string 'name'
+    t.string 'status'
     t.string 'encrypted_password', default: '', null: false
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
@@ -336,13 +338,14 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
     t.string 'chat_bar_text'
     t.boolean 'selected'
     t.json 'areas'
-    t.string 'status', default: 'pending'
+    t.string 'status', default: 'enabled'
     t.string 'target', default: 'all'
     t.json 'conditions'
     t.boolean 'enabled'
     t.datetime 'start_at'
     t.datetime 'end_at'
     t.bigint 'media_id'
+    t.integer 'member_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

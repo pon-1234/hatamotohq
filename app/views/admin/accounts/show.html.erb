@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><%= link_to 'クライアント一覧',  admin_accounts_path %></>
+          <li class="breadcrumb-item"><%= @account.name %></li>
+        </ol>
+      </div>
+      <h4 class="page-title">クライアント詳細</h4>
+    </div>
+  </div>
+</div>
+
+<div class="row" >
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body row">
+        <div class="offset-xl-2 col-xl-8 text-center">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped mt-3 text-left">
+              <tbody>
+                <tr>
+                  <th class="w-200">ID</th>
+                  <td class="text-prewrap"><%= @account.id %></td>
+                </tr>
+                <tr>
+                  <th class="fw-300">メールアドレス</th>
+                  <td><%= @account.email %></td>
+                </tr>
+                <tr>
+                  <th class="fw-300">氏名</th>
+                  <td><%= @account.name %></td>
+                </tr>
+                <tr>
+                  <th>状況</th>
+                  <td>
+                    <span class="badge badge-pill <%= @account.status.eql?('active') ? 'badge-success' : (@account.status.eql?('blocked') ? 'badge-danger' : 'badge-warning') %>"><%= @account.status_i18n %></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer d-flex">
+        <%= link_to "編集", edit_admin_account_path(@account), class: "btn btn-info fw-120" %>
+      </div>
+    </div>
+  </div>
+</div>

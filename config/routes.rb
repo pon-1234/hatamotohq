@@ -121,6 +121,7 @@ Rails.application.routes.draw do
         get :search, on: :collection
         post :upload_image,  on: :collection
       end
+      resources :accounts
     end
 
     require 'sidekiq/web'

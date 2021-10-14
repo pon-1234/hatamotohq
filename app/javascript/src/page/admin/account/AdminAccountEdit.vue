@@ -1,0 +1,121 @@
+<template>
+  <div>
+    <div class="card">
+      <div class="card-header"><h4>基本情報</h4></div>
+      <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-xl-3">メールアドレス<required-mark/></label>
+          <div class="col-xl-9">
+            <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
+              <input type="text" class="form-control" name="account[email]" placeholder="入力してください" v-model="accountFormData.email" disabled>
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-xl-3">氏名<required-mark/></label>
+          <div class="col-xl-9">
+            <ValidationProvider name="氏名" rules="required|max:255" v-slot="{ errors }">
+              <input type="text" class="form-control" name="account[name]" placeholder="入力してください" v-model="accountFormData.name">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-xl-3">有効 / 無効</label>
+          <div class="col-xl-9">
+            <input type="checkbox" id="enabledCheck" checked data-switch="info" v-model="accountFormData.status" name="account[status]" true-value="active" false-value="blocked"/>
+            <label for="enabledCheck" data-on-label="有" data-off-label="無"></label>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer row-form-btn d-flex">
+        <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit)">変更</button>
+      </div>
+    </ValidationObserver>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h4>パースワード変更</h4></div>
+      <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-xl-3">パスワード<required-mark/></label>
+          <div class="col-xl-9">
+            <ValidationProvider name="パスワード" rules="required|min:8|max:128" type="password" v-slot="{ errors }" vid="password">
+              <input type="text" class="form-control" name="account[password]" placeholder="入力してください" v-model="accountFormData.password">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-xl-3">パスワード（確認用）<required-mark/></label>
+          <div class="col-xl-9">
+            <ValidationProvider name="パスワード（確認用）" rules="required|min:8|max:128|confirmed:password" type="password" v-slot="{ errors }">
+              <input type="text" class="form-control" name="account[password_confirmation]" placeholder="入力してください" v-model="accountFormData.password_confirmation">
+              <span class="error-explanation">{{ errors[0] }}</span>
+            </ValidationProvider>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer row-form-btn d-flex">
+        <button type="submit" class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onUpdatePassword)">変更</button>
+      </div>
+      </ValidationObserver>
+    </div>
+  </div>
+</template>
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  props: ['account'],
+  data() {
+    return {
+      rootUrl: process.env.MIX_ROOT_PATH,
+      submitted: false,
+      accountFormData: {
+        id: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
+        name: null
+      }
+    };
+  },
+  created() {
+    Object.assign(this.accountFormData, this.account);
+    this.accountFormData.status === 'active' ? this.enabled = true : this.enabled = false;
+  },
+  methods: {
+    ...mapActions('account', ['updateAccount']),
+
+    onSubmit(e) {
+      this.submitted = true;
+      const formData = _.omit(this.accountFormData, ['email']);
+      this.updateAccount(formData).then((response) => {
+        window.toastr.success('ユーザー情報の変更は完了しました。');
+        this.backToList();
+      }).catch((_) => {
+        window.toastr.error('エラーを発生しました。');
+      });
+    },
+    onUpdatePassword() {
+      this.submitted = true;
+      const formData = _.pick(this.accountFormData, ['id', 'password', 'password_confirmation']);
+      this.updateAccount(formData).then((response) => {
+        window.toastr.success('パースワードの変更は完了しました。');
+        this.backToList();
+      }).catch((_) => {
+        window.toastr.error('エラーを発生しました。');
+      });
+    },
+    backToList() {
+      setTimeout(() => {
+        window.location.href = `${this.rootUrl}/admin/accounts`;
+      }, 750);
+    }
+  }
+};
+</script>
