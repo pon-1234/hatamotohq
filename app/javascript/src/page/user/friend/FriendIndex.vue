@@ -35,14 +35,14 @@
             <thead class="thead-light">
               <tr>
                 <th class="mvpx-100">名前</th>
-                <th class="mvpx-200" :class="resizeResult ? 'mobile' : ''">登録日時</th>
-                <th class="mvpx-60" :class="resizeResult ? 'mobile' : ''">タグ</th>
+                <th class="mvpx-200" :class="isMobile ? 'd-none' : ''">登録日時</th>
+                <th class="mvpx-60" :class="isMobile ? 'd-none' : ''">タグ</th>
                 <th class="mvpx-60">状況</th>
-                <th class="fw-150" :class="resizeResult ? 'mobile' : ''">操作</th>
+                <th class="fw-150" :class="isMobile ? 'd-none' : ''">操作</th>
               </tr>
             </thead>
             <tbody v-for="(friend, index) in friends" :key="index">
-              <tr @click=" resizeResult ? redirectToFriendDetail(friend) : ''">
+              <tr @click=" isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex">
                   <img
                     :src="friend.line_picture_url || '/img/no-image-profile.png'"
@@ -51,8 +51,8 @@
                   />
                   <p class="text-ove m-0">{{ friend.line_name }}</p>
                 </td>
-                <td :class="resizeResult ? 'mobile' : ''">{{ formattedDatetime(friend.created_at) }}</td>
-                <td :class="resizeResult ? 'mobile' : ''">
+                <td :class="isMobile ? 'd-none' : ''">{{ formattedDatetime(friend.created_at) }}</td>
+                <td :class="isMobile ? 'd-none' : ''">
                   <friend-tag :tags="friend.tags"></friend-tag>
                 </td>
                 <td>
@@ -62,7 +62,7 @@
                     :visible="friend.visible"
                   ></friend-status>
                 </td>
-                <td :class="resizeResult ? 'mobile' : ''">
+                <td :class="isMobile ? 'd-none' : ''">
                   <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
                 </td>
               </tr>
@@ -144,7 +144,7 @@ export default {
       }
     },
 
-    resizeResult: function() {
+    isMobile: function() {
       return this.window.width < 760;
     }
   },
@@ -186,10 +186,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .mobile {
-    display: none;
-  }
-
   .text-ov {
     width: 100px;
     white-space: nowrap;
