@@ -80,6 +80,14 @@ export const actions = {
     await AutoResponseAPI.updateAutoResponse(autoResponse);
   },
 
+  async copyAutoResponse(context, id) {
+    try {
+      return await AutoResponseAPI.copy(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async deleteAutoResponse(context, query) {
     context.dispatch('system/setLoading', true, { root: true });
     try {

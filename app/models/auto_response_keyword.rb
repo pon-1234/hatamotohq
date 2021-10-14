@@ -29,4 +29,11 @@ class AutoResponseKeyword < ApplicationRecord
   before_save do
     self.keyword = self.keyword.downcase
   end
+
+  def clone_to!(auto_response_id)
+    new_keyword = self.dup
+    new_keyword.auto_response_id = auto_response_id
+    new_keyword.save!
+    new_keyword
+  end
 end

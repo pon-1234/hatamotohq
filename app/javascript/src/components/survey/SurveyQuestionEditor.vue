@@ -1,21 +1,13 @@
 <template>
   <div class="mt-2" :key="contentKey">
-    <div
-      v-for="(object, index) of objectLists"
-      :key="index"
-      class="card border-primary border"
-    >
+    <div v-for="(object, index) of objectLists" :key="index" class="card border-primary border">
       <div class="card-header d-flex">
         <h5 class="survey-title">質問 {{ index + 1 }}</h5>
         <div class="ml-auto">
           <div class="btn btn-sm btn-light" @click="copyObject(index)">
             <i class="mdi mdi-content-copy"></i>
           </div>
-          <div
-            @click="moveUpObject(index)"
-            class="btn btn-sm btn-light"
-            v-if="index > 0"
-          >
+          <div @click="moveUpObject(index)" class="btn btn-sm btn-light" v-if="index > 0">
             <i class="dripicons-chevron-up"></i>
           </div>
           <div
@@ -26,20 +18,14 @@
           >
             <i class="dripicons-chevron-down"></i>
           </div>
-          <div
-            @click="removeObject(index)"
-            v-if="objectLists.length > 1"
-            class="btn btn-sm btn-light"
-          >
+          <div @click="removeObject(index)" v-if="objectLists.length > 1" class="btn btn-sm btn-light">
             <i class="mdi mdi-delete"></i>
           </div>
         </div>
       </div>
       <div class="card-body">
         <div class="form-group d-flex mt-2 align-items-center">
-          <div class="fw-200" @click="object.editing = !object.editing">
-            質問タイプ
-          </div>
+          <div class="fw-200" @click="object.editing = !object.editing">質問タイプ</div>
           <select
             v-model="object.type"
             @change="
@@ -50,12 +36,11 @@
           >
             <option value="text">記述式（１行回答）</option>
             <option value="textarea">段落（複数行回答）</option>
+            <option value="pulldown">プルダウン</option>
             <option value="radio">ラジオボタン</option>
-            <option value="dropdown">プルダウン</option>
             <option value="checkbox">チェックボックス</option>
             <option value="file">ファイル添付（JPEG/PNG/PDF）</option>
             <option value="date">日付</option>
-            <option value="none">- NONE -</option>
           </select>
           <div class="custom-control custom-checkbox ml-2 text-nowrap">
             <input
@@ -64,12 +49,7 @@
               :id="`questionRequiredCheck${index}`"
               v-model="object.required"
             />
-            <label
-              class="custom-control-label"
-              :for="`questionRequiredCheck${index}`"
-            >
-              必須</label
-            >
+            <label class="custom-control-label" :for="`questionRequiredCheck${index}`"> 必須</label>
           </div>
         </div>
 
@@ -80,6 +60,7 @@
             @input="object.content = $event"
             v-if="object.type === 'text'"
           ></survey-text-object>
+
           <survey-text-area-object
             :name="name + '-textarea-' + index"
             :content="object.content"
@@ -87,45 +68,47 @@
             v-else-if="object.type === 'textarea'"
           >
           </survey-text-area-object>
+
           <survey-radio-object
             :name="name + '-radio-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'radio'"
           ></survey-radio-object>
+
           <survey-check-box-object
             :name="name + '-checkbox-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'checkbox'"
           ></survey-check-box-object>
-          <survey-drop-down-object
-            :name="name + '-dropdown-' + index"
+
+          <survey-pulldown-object
+            :name="name + '-pulldown-' + index"
             :content="object.content"
             @input="object.content = $event"
-            v-else-if="object.type === 'dropdown'"
-          ></survey-drop-down-object>
+            v-else-if="object.type === 'pulldown'"
+          ></survey-pulldown-object>
+
           <survey-file-object
             :name="name + '-file-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'file'"
           ></survey-file-object>
+
           <survey-date-object
             :name="name + '-date-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'date'"
           ></survey-date-object>
-          <survey-none-object v-else></survey-none-object>
         </div>
       </div>
     </div>
 
     <div class="text-center" v-if="objectLists.length < maxObject">
-      <div @click="addNewObject()" class="btn btn-primary">
-        <i class="uil-plus"></i> 質問追加
-      </div>
+      <div @click="addNewObject()" class="btn btn-primary"><i class="uil-plus"></i> 質問追加</div>
     </div>
   </div>
 </template>

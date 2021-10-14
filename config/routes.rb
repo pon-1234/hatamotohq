@@ -71,12 +71,13 @@ Rails.application.routes.draw do
           get :manual
         end
         resources :messages, controller: 'scenario_messages' do
-          get :delete_confirm, on: :member
           post :import, on: :collection
         end
         post :copy, on: :member
       end
-      resources :auto_responses
+      resources :auto_responses do
+        post :copy, on: :member
+      end
       resources :templates do
         post :copy, on: :member
       end

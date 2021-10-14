@@ -44,11 +44,7 @@
             </button>
           </div>
           <div class="my-2">
-            <button
-              type="button"
-              class="btn-block btn btn-secondary"
-              @click="isShowingEditor = true"
-            >
+            <button type="button" class="btn-block btn btn-secondary" @click="isShowingEditor = true">
               一式の個別画像を編集
             </button>
           </div>
@@ -63,52 +59,25 @@
                 <div
                   class="card mb-2"
                   :class="
-                    errors.items.find((item) =>
-                      item.field.includes('richmenu_type_' + index)
-                    )
-                      ? 'invalid-box'
-                      : ''
+                    errors.items.find((item) => item.field.includes('richmenu_type_' + index)) ? 'invalid-box' : ''
                   "
                 >
-                  <div
-                    class="p-2"
-                    @click="expandAction(item.key, false, index)"
-                  >
+                  <div class="p-2" @click="expandAction(item.key, false, index)">
                     <h5 class="m-0">
-                      <button
-                        type="button"
-                        class="
-                          btn-block btn-link
-                          text-left
-                          btn btn-outline-block
-                        "
-                      >
+                      <button type="button" class="btn-block btn-link text-left btn btn-outline-block">
                         <i
                           class="fas mr-2 mdi mdi-chevron-right"
                           style="width: 20px"
                           v-if="
-                            !item.expand &&
-                            !errors.items.find((item) =>
-                              item.field.includes('richmenu_type_' + index)
-                            )
+                            !item.expand && !errors.items.find((item) => item.field.includes('richmenu_type_' + index))
                           "
                         ></i>
-                        <i
-                          class="fas mr-2 mdi mdi-chevron-down"
-                          style="width: 20px"
-                          v-else
-                        ></i
-                        >{{ item.key }}
+                        <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{ item.key }}
                       </button>
                     </h5>
                   </div>
                   <div
-                    v-show="
-                      item.expand ||
-                      errors.items.find((item) =>
-                        item.field.includes('richmenu_type_' + index)
-                      )
-                    "
+                    v-show="item.expand || errors.items.find((item) => item.field.includes('richmenu_type_' + index))"
                   >
                     <div>
                       <div class="card-body pt-0 accordion-0 center">
@@ -117,14 +86,7 @@
                             class="form-group"
                             :name="'richmenu_type_' + index"
                             :value="item.action"
-                            :supports="[
-                              '',
-                              'postback',
-                              'uri',
-                              'message',
-                              'datetimepicker',
-                              'survey',
-                            ]"
+                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
                             :labelRequired="false"
                             :showTitle="false"
                             @input="item.action = $event"
@@ -307,8 +269,8 @@ export default {
     padding: 0.375rem 0.75rem;
     line-height: 1.5;
     border-radius: 2px;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
   }
 
   .col-form-label {

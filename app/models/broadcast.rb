@@ -61,12 +61,13 @@ class Broadcast < ApplicationRecord
     !self.sending?
   end
 
-  def clone
+  def clone!
     new_broadcast = self.dup
     new_broadcast.title = self.title + '（コピー）'
     new_broadcast.status = :draft
     new_broadcast.tag_ids = self.tag_ids
     new_broadcast.save!
+    self.broadcast_messages&.each { |message| message.clone_to!(new_broadcast.id) }
     new_broadcast
   end
 end

@@ -64,13 +64,8 @@ class User::ScenariosController < User::ApplicationController
 
   # POST /user/scenarios/:id/copy
   def copy
-    new_scenario = @scenario.clone
-    if new_scenario.present?
-      @scenario.scenario_messages&.each { |message| message.clone_to(new_scenario.id) }
-      render_success
-    else
-      render_bad_request
-    end
+    new_scenario = @scenario.clone!
+    render_success
   rescue => e
     logger.error e.message
     render_bad_request
