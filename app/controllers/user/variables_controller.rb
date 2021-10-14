@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::VariablesController < User::ApplicationController
-  before_action :find_variable, only: [:show, :update]
+  before_action :find_variable, only: [:show, :update, :copy, :destroy]
   include User::VariablesHelper
 
   # GET /user/variables
@@ -41,6 +41,18 @@ class User::VariablesController < User::ApplicationController
     unless @variable.update(variable_params)
       render_bad_request_with_message(@variable.first_error_message)
     end
+  end
+
+  # POST /user/variables/:id/copy
+  def copy
+    @variable.clone!
+    render_success
+  end
+
+  # DELETE /user/variables/:id
+  def destroy
+    @variable.destroy!
+    render_success
   end
 
   private

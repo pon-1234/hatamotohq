@@ -52,16 +52,16 @@
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
-                          data-target="#modalCopyTemplate"
-                          @click="curTemplateIndex = index"
+                          data-target="#modalCopyVariable"
+                          @click="curVariableIndex = index"
                           >友だち情報欄をコピー</a
                         >
                         <a
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
-                          data-target="#modalDeleteTemplate"
-                          @click="curTemplateIndex = index"
+                          data-target="#modalDeleteVariable"
+                          @click="curVariableIndex = index"
                           >友だち情報欄を削除</a
                         >
                       </div>
@@ -96,35 +96,35 @@
     </modal-confirm>
     <!-- END: Delete folder modal -->
 
-    <!-- START: Delete template modal -->
+    <!-- START: Delete variable modal -->
     <modal-confirm
       title="この友だち情報欄を削除してもよろしいですか？"
-      id="modalDeleteTemplate"
+      id="modalDeleteVariable"
       type="delete"
-      @confirm="submitDeleteTemplate"
+      @confirm="submitDeleteVariable"
     >
       <template v-slot:content>
-        <div v-if="curTemplate">
-          友だち情報欄名：<b>{{ curTemplate.name }}</b>
+        <div v-if="curVariable">
+          友だち情報欄名：<b>{{ curVariable.name }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Delete template modal -->
+    <!-- END: Delete variable modal -->
 
-    <!-- START: Copy template modal -->
+    <!-- START: Copy variable modal -->
     <modal-confirm
       title="この友だち情報欄をコピーしてもよろしいですか？"
-      id="modalCopyTemplate"
+      id="modalCopyVariable"
       type="confirm"
-      @confirm="submitCopyTemplate"
+      @confirm="submitCopyVariable"
     >
       <template v-slot:content>
-        <div v-if="curTemplate">
-          友だち情報欄名：<b>{{ curTemplate.name }}</b>
+        <div v-if="curVariable">
+          友だち情報欄名：<b>{{ curVariable.name }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Copy template modal -->
+    <!-- END: Copy variable modal -->
   </div>
 </template>
 <script>
@@ -137,7 +137,7 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
-      curTemplateIndex: null,
+      curVariableIndex: null,
       loading: true,
       contentKey: 0
     };
@@ -157,16 +157,16 @@ export default {
       return this.folders[this.selectedFolderIndex];
     },
 
-    curTemplate() {
-      return this.curFolder ? this.curFolder.variables[this.curTemplateIndex] : null;
+    curVariable() {
+      return this.curFolder ? this.curFolder.variables[this.curVariableIndex] : null;
     }
   },
 
   methods: {
     ...mapActions('variable', [
       'getFolders',
-      'deleteTemplate',
-      'copyTemplate',
+      'deleteVariable',
+      'copyVariable',
       'deleteFolder',
       'createFolder',
       'updateFolder'
@@ -194,8 +194,8 @@ export default {
       this.onSelectedFolderChanged(0);
     },
 
-    async submitDeleteTemplate() {
-      const response = await this.deleteTemplate(this.curTemplate.id);
+    async submitDeleteVariable() {
+      const response = await this.deleteVariable(this.curVariable.id);
       if (response) {
         window.toastr.success('友だち情報欄の削除は完了しました。');
       } else {
@@ -204,8 +204,8 @@ export default {
       this.forceRerender();
     },
 
-    async submitCopyTemplate() {
-      const response = await this.copyTemplate(this.curTemplate.id);
+    async submitCopyVariable() {
+      const response = await this.copyVariable(this.curVariable.id);
       if (response) {
         Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', window.location.href);
       } else {
@@ -218,8 +218,8 @@ export default {
       this.isPc = false;
     },
 
-    openEdit(template) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/variables/${template.id}/edit`);
+    openEdit(variable) {
+      window.open(`${process.env.MIX_ROOT_PATH}/user/variables/${variable.id}/edit`);
     },
 
     formattedDate(date) {

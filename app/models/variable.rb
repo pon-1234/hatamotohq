@@ -26,4 +26,11 @@
 class Variable < ApplicationRecord
   belongs_to :folder
   belongs_to :line_account
+
+  def clone!
+    new_varaible = self.dup
+    new_varaible.name = new_varaible.name + '（コビー）'
+    new_varaible.save!
+    new_varaible
+  end
 end
