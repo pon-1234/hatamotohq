@@ -93,11 +93,19 @@
       </li>
 
       <li class="side-nav-title side-nav-item">友だち属性</li>
-       <!-- リッチメニュー -->
+       <!-- タグ管理 -->
       <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">
         <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
           <i class="uil-tag-alt"></i>
           <span>タグ管理</span>
+        <% end %>
+      </li>
+
+       <!-- 友だち情報欄 -->
+      <li class="side-nav-item <%= controller?("user/variables") ? 'mm-active' : '' %>">
+        <%= link_to user_variables_path, class: "side-nav-link #{controller?("user/variables" ) ? 'active' : '' }" do %>
+          <i class="uil-tag-alt"></i>
+          <span>友だち情報欄</span>
         <% end %>
       </li>
 

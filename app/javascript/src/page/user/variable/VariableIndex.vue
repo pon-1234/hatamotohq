@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="d-flex">
         <folder-left
-          type="template_message"
+          type="variable"
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
@@ -14,7 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
-            :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
+            :href="`${rootPath}/user/variables/new?folder_id=${curFolder.id}`"
             data-turbolinks="false"
             class="btn btn-primary"
           >
@@ -24,16 +24,16 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>テンプレート名</th>
-                  <th>メッセージ数</th>
-                  <th>操作</th>
+                  <th>友だち情報欄名</th>
+                  <th>既定値</th>
+                  <th>人数</th>
                   <th>フォルダ</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
-                  <td>{{ template.name }}</td>
-                  <td>{{ template.template_messages_count }}</td>
+                <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
+                  <td>{{ variable.name }}</td>
+                  <td>{{ variable.default || "-" }}</td>
                   <td>
                     <div class="btn-group">
                       <button
@@ -45,14 +45,14 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
+                        <a role="button" class="dropdown-item" @click="openEdit(variable)">友だち情報欄を編集</a>
                         <a
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
                           data-target="#modalCopyTemplate"
                           @click="curTemplateIndex = index"
-                          >テンプレートをコピー</a
+                          >友だち情報欄をコピー</a
                         >
                         <a
                           role="button"
@@ -60,20 +60,20 @@
                           data-toggle="modal"
                           data-target="#modalDeleteTemplate"
                           @click="curTemplateIndex = index"
-                          >テンプレートを削除</a
+                          >友だち情報欄を削除</a
                         >
                       </div>
                     </div>
                   </td>
                   <td>
                     <div>{{ curFolder.name }}</div>
-                    <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
+                    <div class="text-sm">{{ formattedDate(variable.created_at) }}</div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.templates.length === 0">
-              <b>テンプレートはありません。</b>
+            <div class="text-center mt-5" v-if="curFolder.variables.length === 0">
+              <b>友だち情報欄はありません。</b>
             </div>
           </div>
         </div>
@@ -96,14 +96,14 @@
 
     <!-- START: Delete template modal -->
     <modal-confirm
-      title="このテンプレートを削除してもよろしいですか？"
+      title="この友だち情報欄を削除してもよろしいですか？"
       id="modalDeleteTemplate"
       type="delete"
       @confirm="submitDeleteTemplate"
     >
       <template v-slot:content>
         <div v-if="curTemplate">
-          テンプレート名：<b>{{ curTemplate.name }}</b>
+          友だち情報欄名：<b>{{ curTemplate.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -111,14 +111,14 @@
 
     <!-- START: Copy template modal -->
     <modal-confirm
-      title="このテンプレートをコピーしてもよろしいですか？"
+      title="この友だち情報欄をコピーしてもよろしいですか？"
       id="modalCopyTemplate"
       type="confirm"
       @confirm="submitCopyTemplate"
     >
       <template v-slot:content>
         <div v-if="curTemplate">
-          テンプレート名：<b>{{ curTemplate.name }}</b>
+          友だち情報欄名：<b>{{ curTemplate.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -132,7 +132,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       curTemplateIndex: null,
@@ -142,12 +142,12 @@ export default {
   },
 
   async beforeMount() {
-    await this.getTemplates();
+    await this.getFolders();
     this.loading = false;
   },
 
   computed: {
-    ...mapState('template', {
+    ...mapState('variable', {
       folders: state => state.folders
     }),
 
@@ -156,13 +156,13 @@ export default {
     },
 
     curTemplate() {
-      return this.curFolder ? this.curFolder.templates[this.curTemplateIndex] : null;
+      return this.curFolder ? this.curFolder.variables[this.curTemplateIndex] : null;
     }
   },
 
   methods: {
-    ...mapActions('template', [
-      'getTemplates',
+    ...mapActions('variable', [
+      'getFolders',
       'deleteTemplate',
       'copyTemplate',
       'deleteFolder',
@@ -195,9 +195,9 @@ export default {
     async submitDeleteTemplate() {
       const response = await this.deleteTemplate(this.curTemplate.id);
       if (response) {
-        window.toastr.success('テンプレートの削除は完了しました。');
+        window.toastr.success('友だち情報欄の削除は完了しました。');
       } else {
-        window.toastr.error('テンプレートの削除は失敗しました。');
+        window.toastr.error('友だち情報欄の削除は失敗しました。');
       }
       this.forceRerender();
     },
@@ -205,9 +205,9 @@ export default {
     async submitCopyTemplate() {
       const response = await this.copyTemplate(this.curTemplate.id);
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', window.location.href);
+        Util.showSuccessThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
       }
       this.forceRerender();
     },
@@ -217,7 +217,7 @@ export default {
     },
 
     openEdit(template) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
+      window.open(`${process.env.MIX_ROOT_PATH}/user/variables/${template.id}/edit`);
     },
 
     formattedDate(date) {

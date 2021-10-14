@@ -22,7 +22,7 @@ export default {
     },
 
     isRequired() {
-      return this.question ? this.question.required : '';
+      return this.question ? this.question.required : false;
     },
 
     content() {

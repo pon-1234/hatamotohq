@@ -79,6 +79,8 @@ export default {
         return this.data.auto_responses.length;
       case 'survey':
         return this.data.surveys.length;
+      case 'variable':
+        return this.data.variables.length;
       case 'reminder':
         return this.data.reminders.length;
       }
