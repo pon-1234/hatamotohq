@@ -27,6 +27,7 @@
                   <th>友だち情報欄名</th>
                   <th>既定値</th>
                   <th>人数</th>
+                  <th>操作</th>
                   <th>フォルダ</th>
                 </tr>
               </thead>
@@ -34,6 +35,7 @@
                 <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
                   <td>{{ variable.name }}</td>
                   <td>{{ variable.default || "-" }}</td>
+                  <td>0</td>
                   <td>
                     <div class="btn-group">
                       <button

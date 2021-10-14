@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class User::VariablesController < User::ApplicationController
+  before_action :find_variable, only: [:show, :update]
   include User::VariablesHelper
 
   # GET /user/variables
@@ -14,12 +15,17 @@ class User::VariablesController < User::ApplicationController
     end
   end
 
+  # GET /user/variables/:id
+  def show
+  end
+
   # GET /user/variables/new
   def new
   end
 
   # GET /user/variables/:id/edit
   def edit
+    @variable_id = params[:id]
   end
 
   # POST /user/variables
@@ -32,6 +38,9 @@ class User::VariablesController < User::ApplicationController
 
   # PATCH /user/variables/:id
   def update
+    unless @variable.update(variable_params)
+      render_bad_request_with_message(@variable.first_error_message)
+    end
   end
 
   private
@@ -42,5 +51,9 @@ class User::VariablesController < User::ApplicationController
         :type,
         :default
       )
+    end
+
+    def find_variable
+      @variable = Variable.find(params[:id])
     end
 end

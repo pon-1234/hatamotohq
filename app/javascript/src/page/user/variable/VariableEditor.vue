@@ -46,21 +46,23 @@
                 type="text"
                 class="form-control"
                 name="variable_default"
-                placeholder="リマインダ名を入力してください"
+                placeholder="友だち情報欄名を入力してください"
                 v-model="variableData.default"
-                v-validate="'required|max:255'"
+                v-validate="'max:255'"
                 maxlength="256"
                 data-vv-as="既定値"
               />
               <error-message :message="errors.first('variable_default')"></error-message>
             </div>
-            <div class="btn btn-light ml-1" @click="variableData.default = '{name}'">{name}を使用</div>
+            <div class="btn btn-light ml-1 mb-auto" @click="variableData.default = '{name}'">{name}を使用</div>
           </div>
         </div>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <div class="card-footer">
-        <button class="btn btn-success text-nowrap" @click="submit()" :disabled="invalid">友だち情報欄登録</button>
+        <button class="btn btn-success text-nowrap" @click="submit()" :disabled="invalid">
+          {{ variable_id ? "友だち情報欄変更" : "友だち情報欄登録" }}
+        </button>
       </div>
     </div>
   </div>
@@ -128,7 +130,10 @@ export default {
 
   methods: {
     ...mapActions('variable', [
-      'createVariable', 'getVariable', 'getFolders'
+      'createVariable',
+      'updateVariable',
+      'getVariable',
+      'getFolders'
     ]),
 
     async fetchData() {
@@ -174,16 +179,16 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect('友だち情報欄の保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
       } else {
-        window.toastr.error('リマインダの保存は失敗しました。');
+        window.toastr.error('友だち情報欄の保存は失敗しました。');
       }
     },
     onReceiveUpdateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect('友だち情報欄の更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
       } else {
-        window.toastr.error('リマインダの更新は失敗しました。');
+        window.toastr.error('友だち情報欄の更新は失敗しました。');
       }
     }
   }
