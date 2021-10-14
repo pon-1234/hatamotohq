@@ -31,28 +31,28 @@
       <div class="card-body">
         <friend-search-status></friend-search-status>
         <div class="table-responsive">
-          <table class="table table-centered mt-2 is-desktop">
+          <table class="table table-centered mt-2 pc">
             <thead class="thead-light">
               <tr>
-                <th class="mvpx-50">名前</th>
-                <th class="mvpx-200">登録日時</th>
-                <th class="mvpx-60">タグ</th>
+                <th class="mvpx-100">名前</th>
+                <th class="mvpx-200" :class="resizeResult ? 'mobile' : ''">登録日時</th>
+                <th class="mvpx-60" :class="resizeResult ? 'mobile' : ''">タグ</th>
                 <th class="mvpx-60">状況</th>
-                <th class="fw-150">操作</th>
+                <th class="fw-150" :class="resizeResult ? 'mobile' : ''">操作</th>
               </tr>
             </thead>
             <tbody v-for="(friend, index) in friends" :key="index">
-              <tr>
-                <td class="table-user">
+              <tr @click=" resizeResult ? redirectToFriendDetail(friend) : ''">
+                <td class="table-user d-flex">
                   <img
                     :src="friend.line_picture_url || '/img/no-image-profile.png'"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
-                  {{ friend.line_name }}
+                  <p class="text-ove m-0">{{ friend.line_name }}</p>
                 </td>
-                <td>{{ formattedDatetime(friend.created_at) }}</td>
-                <td>
+                <td :class="resizeResult ? 'mobile' : ''">{{ formattedDatetime(friend.created_at) }}</td>
+                <td :class="resizeResult ? 'mobile' : ''">
                   <friend-tag :tags="friend.tags"></friend-tag>
                 </td>
                 <td>
@@ -62,35 +62,8 @@
                     :visible="friend.visible"
                   ></friend-status>
                 </td>
-                <td>
+                <td :class="resizeResult ? 'mobile' : ''">
                   <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="table table-centered mt-2 is-mobile">
-            <thead class="thead-light">
-              <tr>
-                <th>名前</th>
-                <th>状況</th>
-              </tr>
-            </thead>
-            <tbody v-for="(friend, index) in friends" :key="index">
-              <tr @click="redirectToFriendDetail(friend)">
-                <td class="table-user">
-                  <img
-                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
-                    alt="table-user"
-                    class="mr-2 rounded-circle"
-                  />
-                  {{ friend.line_name }}
-                </td>
-                <td>
-                  <friend-status
-                    :status="friend.status"
-                    :locked="friend.locked"
-                    :visible="friend.visible"
-                  ></friend-status>
                 </td>
               </tr>
             </tbody>
@@ -121,8 +94,18 @@ export default {
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      loading: true
+      loading: true,
+      window: {
+        width: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   async beforeMount() {
     await this.getFriends();
@@ -159,6 +142,10 @@ export default {
       set(value) {
         this.setQueryParam({ status_eq: value });
       }
+    },
+
+    resizeResult: function() {
+      return this.window.width < 760;
     }
   },
   methods: {
@@ -190,24 +177,23 @@ export default {
 
     redirectToFriendDetail(friend) {
       window.location.href = `${this.rootUrl}/user/friends/${friend.id}`;
+    },
+
+    handleResize() {
+      this.window.width = window.innerWidth;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-  .is-desktop {
-    display: table;
-  }
-  .is-mobile {
+  .mobile {
     display: none;
   }
 
- @media (max-width: 760px) {
-    .is-desktop {
-      display: none;
-    }
-    .is-mobile {
-      display: table;
-    }
+  .text-ov {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
