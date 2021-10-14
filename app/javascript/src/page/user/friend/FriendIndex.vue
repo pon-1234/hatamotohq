@@ -30,43 +30,45 @@
       </div>
       <div class="card-body">
         <friend-search-status></friend-search-status>
-        <table class="table table-centered mt-2">
-          <thead class="thead-light">
-            <tr>
-              <th>名前</th>
-              <th>登録日時</th>
-              <th>タグ</th>
-              <th>状況</th>
-              <th class="fw-150">操作</th>
-            </tr>
-          </thead>
-          <tbody v-for="(friend, index) in friends" :key="index">
-            <tr>
-              <td class="table-user">
-                <img
-                  :src="friend.line_picture_url || '/img/no-image-profile.png'"
-                  alt="table-user"
-                  class="mr-2 rounded-circle"
-                />
-                {{ friend.line_name }}
-              </td>
-              <td>{{ formattedDatetime(friend.created_at) }}</td>
-              <td>
-                <friend-tag :tags="friend.tags"></friend-tag>
-              </td>
-              <td>
-                <friend-status
-                  :status="friend.status"
-                  :locked="friend.locked"
-                  :visible="friend.visible"
-                ></friend-status>
-              </td>
-              <td>
-                <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-centered mt-2 pc">
+            <thead class="thead-light">
+              <tr>
+                <th class="mvpx-100">名前</th>
+                <th class="mvpx-200" :class="isMobile ? 'd-none' : ''">登録日時</th>
+                <th class="mvpx-60" :class="isMobile ? 'd-none' : ''">タグ</th>
+                <th class="mvpx-60">状況</th>
+                <th class="fw-150" :class="isMobile ? 'd-none' : ''">操作</th>
+              </tr>
+            </thead>
+            <tbody v-for="(friend, index) in friends" :key="index">
+              <tr @click=" isMobile ? redirectToFriendDetail(friend) : ''">
+                <td class="table-user d-flex">
+                  <img
+                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    alt="table-user"
+                    class="mr-2 rounded-circle"
+                  />
+                  <p class="text-ove m-0">{{ friend.line_name }}</p>
+                </td>
+                <td :class="isMobile ? 'd-none' : ''">{{ formattedDatetime(friend.created_at) }}</td>
+                <td :class="isMobile ? 'd-none' : ''">
+                  <friend-tag :tags="friend.tags"></friend-tag>
+                </td>
+                <td>
+                  <friend-status
+                    :status="friend.status"
+                    :locked="friend.locked"
+                    :visible="friend.visible"
+                  ></friend-status>
+                </td>
+                <td :class="isMobile ? 'd-none' : ''">
+                  <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="d-flex justify-content-center mt-4">
           <b-pagination
             v-if="totalRows > perPage"
@@ -92,8 +94,18 @@ export default {
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      loading: true
+      loading: true,
+      window: {
+        width: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   async beforeMount() {
     await this.getFriends();
@@ -130,6 +142,10 @@ export default {
       set(value) {
         this.setQueryParam({ status_eq: value });
       }
+    },
+
+    isMobile: function() {
+      return this.window.width < 760;
     }
   },
   methods: {
@@ -157,7 +173,23 @@ export default {
         this.getFriends();
         this.loading = false;
       });
+    },
+
+    redirectToFriendDetail(friend) {
+      window.location.href = `${this.rootUrl}/user/friends/${friend.id}`;
+    },
+
+    handleResize() {
+      this.window.width = window.innerWidth;
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+  .text-ov {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
