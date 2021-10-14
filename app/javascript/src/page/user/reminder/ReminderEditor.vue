@@ -39,6 +39,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['reminder_id'],
@@ -102,19 +103,7 @@ export default {
     },
 
     scrollToRequiredField() {
-      $('input, textarea').each(function(index) {
-        var input = $(this);
-        if (
-          input.attr('aria-invalid') &&
-          input.attr('aria-invalid') === 'true'
-        ) {
-          $('html,body').animate(
-            { scrollTop: input.offset().top - 200 },
-            'slow'
-          );
-          return false;
-        }
-      });
+      return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
     },
 
     // Handle broadcast creation response

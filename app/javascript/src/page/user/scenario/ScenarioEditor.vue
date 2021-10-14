@@ -174,6 +174,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['scenario_id'],
@@ -237,19 +238,7 @@ export default {
         this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              let input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                if (input.is(':hidden')) {
-                  input = input.parent();
-                }
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
+          return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), true);
         }
       } else {
         this.scenarioData.status = status;
