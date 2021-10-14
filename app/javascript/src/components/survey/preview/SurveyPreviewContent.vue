@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <div v-for="(question, index) in questions" :key="index" class="bg-white p-2">
+  <div class="bg-white">
+    <div class="font-weight-bold">{{ survey.title }}</div>
+    <div class="font-12">{{ survey.description }}</div>
+
+    <div v-for="(question, index) in questions" :key="index">
       <!-- Input text question -->
       <survey-form-text :question="question" :qnum="index + 1" v-if="question.type === 'text'"></survey-form-text>
 

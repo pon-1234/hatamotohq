@@ -94,14 +94,14 @@
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">回答後のアクション</h3></div>
         <div class="card-body">
-          <message-action-type-default
+          <message-action-editor-custom
             name="survey-action"
             :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
             :showLaunchMesasge="false"
             @input="surveyData.after_action = $event"
-          ></message-action-type-default>
+          ></message-action-editor-custom>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
