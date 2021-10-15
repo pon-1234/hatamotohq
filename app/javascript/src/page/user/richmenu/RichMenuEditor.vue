@@ -216,7 +216,7 @@ export default {
       }
 
       if (isError) {
-        return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
+        return ViewHelper.scrollToRequiredField(false);
       }
 
       const payload = _.cloneDeep(this.richMenuData);

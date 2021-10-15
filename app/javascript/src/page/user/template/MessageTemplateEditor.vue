@@ -167,7 +167,7 @@ export default {
       this.setIsSubmitChange();
 
       if (!result) {
-        return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), true);
+        return ViewHelper.scrollToRequiredField(true);
       }
 
       const orderedMessages = this.templateData.messages.map((message, index) => {

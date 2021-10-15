@@ -185,7 +185,7 @@ export default {
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
       if (!result) {
-        return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
+        return ViewHelper.scrollToRequiredField(false);
       };
 
       const payload = _.omit(this.scenarioMessageData, ['messages']);

@@ -1,6 +1,6 @@
 class ViewHelper {
-  static scrollTopIfInvalidInput(input, parent) {
-    input.each(
+  static scrollToRequiredField(parent) {
+    $('input, textarea').each(
       function(index) {
         var input = $(this);
         if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {

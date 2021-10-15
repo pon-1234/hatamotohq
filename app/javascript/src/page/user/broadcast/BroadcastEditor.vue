@@ -312,7 +312,7 @@ export default {
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
-          return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
+          return ViewHelper.scrollToRequiredField(false);
         };
       }
 

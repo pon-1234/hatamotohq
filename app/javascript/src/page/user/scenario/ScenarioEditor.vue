@@ -238,7 +238,7 @@ export default {
         this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
-          return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), true);
+          return ViewHelper.scrollToRequiredField(true);
         }
       } else {
         this.scenarioData.status = status;

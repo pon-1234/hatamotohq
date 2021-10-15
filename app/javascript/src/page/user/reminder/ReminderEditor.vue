@@ -103,7 +103,7 @@ export default {
     },
 
     scrollToRequiredField() {
-      return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
+      return ViewHelper.scrollToRequiredField(false);
     },
 
     // Handle broadcast creation response

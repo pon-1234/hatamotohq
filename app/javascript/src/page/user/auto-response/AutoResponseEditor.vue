@@ -193,7 +193,7 @@ export default {
     async submitCreate() {
       const result = await this.$validator.validateAll();
       if (!result) {
-        return ViewHelper.scrollTopIfInvalidInput($('input, textarea'), false);
+        return ViewHelper.scrollToRequiredField(false);
       };
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
