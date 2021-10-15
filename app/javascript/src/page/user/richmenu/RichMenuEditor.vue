@@ -125,6 +125,7 @@
 <script>
 import Util from '@/core/util';
 import { mapActions } from 'vuex';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: {
@@ -215,16 +216,7 @@ export default {
       }
 
       if (isError) {
-        $('input, textarea').each(
-          function(index) {
-            var input = $(this);
-            if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-              $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-              return false;
-            }
-          }
-        );
-        return;
+        return ViewHelper.scrollToRequiredField(false);
       }
 
       const payload = _.cloneDeep(this.richMenuData);

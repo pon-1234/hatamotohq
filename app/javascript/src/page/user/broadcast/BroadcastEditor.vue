@@ -157,6 +157,7 @@
 import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['broadcast_id'],
@@ -311,16 +312,7 @@ export default {
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              var input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
+          return ViewHelper.scrollToRequiredField(false);
         };
       }
 
