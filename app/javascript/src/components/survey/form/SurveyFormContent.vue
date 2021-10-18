@@ -5,7 +5,13 @@
 
     <div class="mt-2" v-for="(question, index) in questions" :key="index">
       <!-- Input text question -->
-      <survey-form-text :question="question" :qnum="index + 1" v-if="question.type === 'text'"></survey-form-text>
+      <survey-form-text
+        :question="question"
+        :qnum="index + 1"
+        :awnser="question.answer"
+        v-if="question.type === 'text'"
+        :preview="preview"
+      ></survey-form-text>
 
       <!-- Input mmulti line text question -->
       <survey-form-textarea
@@ -42,11 +48,9 @@
 
 <script>
 export default {
-  props: ['survey'],
-
+  props: ['survey', 'preview'],
   data() {
-    return {
-    };
+    return {};
   },
 
   computed: {

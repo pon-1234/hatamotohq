@@ -76,7 +76,6 @@ class DispatchBroadcastJob < ApplicationJob
     # In the case, we have to generate survey url for each channel and send message using PushMessage
     def send_messages_with_survey_action(channels, messages)
       channels.each do |channel|
-        
       end
     end
 

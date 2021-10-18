@@ -35,10 +35,10 @@
             <thead class="thead-light">
               <tr>
                 <th class="mvpx-100">名前</th>
-                <th class="mvpx-200" :class="isMobile ? 'd-none' : ''">登録日時</th>
-                <th class="mvpx-60" :class="isMobile ? 'd-none' : ''">タグ</th>
+                <th class="mvpx-200 d-none d-lg-block">登録日時</th>
+                <th class="mvpx-60 d-none d-lg-block">タグ</th>
                 <th class="mvpx-60">状況</th>
-                <th class="fw-150" :class="isMobile ? 'd-none' : ''">操作</th>
+                <th class="fw-150 d-none d-lg-block">操作</th>
               </tr>
             </thead>
             <tbody v-for="(friend, index) in friends" :key="index">
@@ -51,8 +51,8 @@
                   />
                   <p class="text-ove m-0">{{ friend.line_name }}</p>
                 </td>
-                <td :class="isMobile ? 'd-none' : ''">{{ formattedDatetime(friend.created_at) }}</td>
-                <td :class="isMobile ? 'd-none' : ''">
+                <td class="d-none d-lg-block">{{ formattedDatetime(friend.created_at) }}</td>
+                <td class="d-none d-lg-block">
                   <friend-tag :tags="friend.tags"></friend-tag>
                 </td>
                 <td>
@@ -62,7 +62,7 @@
                     :visible="friend.visible"
                   ></friend-status>
                 </td>
-                <td :class="isMobile ? 'd-none' : ''">
+                <td class="d-none d-lg-block">
                   <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
                 </td>
               </tr>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <input type="hidden" :value="question.id" :name="`answers[${qnum}][id]`" />
     <span class="w-100">
       <span class="border-success question-title mr-2 font-weight-bold"
         >{{ `Q${qnum}` }}<required-mark v-if="isRequired"></required-mark

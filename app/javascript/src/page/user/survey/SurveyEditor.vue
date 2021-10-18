@@ -114,7 +114,7 @@
       </div>
     </div>
 
-    <survey-preview :survey="surveyData"></survey-preview>
+    <survey-form :survey="surveyData"></survey-form>
 
     <modal-confirm
       title="公開後、編集できませんがよろしいでしょうか。"
@@ -163,15 +163,8 @@ export default {
     this.loading = false;
   },
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
-    ...mapActions('survey', [
-      'getSurvey',
-      'createSurvey',
-      'updateSurvey',
-      'delete'
-    ]),
+    ...mapActions('tag', ['getTags']),
+    ...mapActions('survey', ['getSurvey', 'createSurvey', 'updateSurvey', 'delete']),
 
     forceRerender() {
       this.contentKey++;
@@ -206,7 +199,16 @@ export default {
         const valid = await this.validateForm();
         if (!valid) return;
       }
-      const payload = _.pick(this.surveyData, ['id', 'folder_id', 'name', 'title', 'description', 'success_message', 're_answer', 'after_action']);
+      const payload = _.pick(this.surveyData, [
+        'id',
+        'folder_id',
+        'name',
+        'title',
+        'description',
+        'success_message',
+        're_answer',
+        'after_action'
+      ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;
       let response = null;

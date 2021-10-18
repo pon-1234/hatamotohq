@@ -60,6 +60,20 @@ export const actions = {
   },
 
   /**
+   * Get survey by code
+   * @param {Context} _  store context
+   * @param {*} code  survey code
+   * @returns survey
+   */
+  async getSurveyByCode(_, code) {
+    try {
+      return await SurveyAPI.getByCode(code);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
    * Create a new survey
    * @param {Context} context store context
    * @param {Object} payload payload
@@ -87,75 +101,83 @@ export const actions = {
     }
   },
 
-  updateStatus(_, data) {
-    return SurveyAPI.updateStatus(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  getCustomers(_, query) {
-    return SurveyAPI.getCustomers(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  answersOfCustomer(_, query) {
-    return SurveyAPI.answersOfCustomer(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  copy(_, query) {
-    return SurveyAPI.copy(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  destroy(_, query) {
-    return SurveyAPI.delete(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async postAnswer(context, payload) {
+    try {
+      return await SurveyAPI.postAnswer(payload);
+    } catch (error) {
+      return null;
+    }
   },
 
-  addSurveyProfile(_, data) {
-    _.dispatch('system/setLoading', true, { root: true });
+  // updateStatus(_, data) {
+  //   return SurveyAPI.updateStatus(data).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
+  // getCustomers(_, query) {
+  //   return SurveyAPI.getCustomers(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
+  // answersOfCustomer(_, query) {
+  //   return SurveyAPI.answersOfCustomer(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
+  // copy(_, query) {
+  //   return SurveyAPI.copy(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
+  // destroy(_, query) {
+  //   return SurveyAPI.delete(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
 
-    return SurveyAPI.addSurveyProfile(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
-  },
+  // addSurveyProfile(_, data) {
+  //   _.dispatch('system/setLoading', true, { root: true });
 
-  getSurveyProfiles(_, query = {}) {
-    return SurveyAPI.getSurveyProfiles(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
+  //   return SurveyAPI.addSurveyProfile(data).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   }).always(function() {
+  //     _.dispatch('system/setLoading', false, { root: true });
+  //   });
+  // },
 
-  updateSurveyProfile(_, data) {
-    return SurveyAPI.updateSurveyProfile(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
+  // getSurveyProfiles(_, query = {}) {
+  //   return SurveyAPI.getSurveyProfiles(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
 
-  friendAnswers(_, query) {
-    return SurveyAPI.friendAnswers(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  }
+  // updateSurveyProfile(_, data) {
+  //   return SurveyAPI.updateSurveyProfile(data).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // },
+
+  // friendAnswers(_, query) {
+  //   return SurveyAPI.friendAnswers(query).done((res) => {
+  //     return Promise.resolve(res);
+  //   }).fail((err) => {
+  //     return Promise.reject(err);
+  //   });
+  // }
 };
