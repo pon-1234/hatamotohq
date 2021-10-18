@@ -68,7 +68,7 @@ class LineAccount < ApplicationRecord
       Folder.create(name: '未分類', line_account: self, type: :scenario)
       Folder.create(name: '未分類', line_account: self, type: :reminder)
       Folder.create(name: '未分類', line_account: self, type: :survey)
-      Folder.create(name: '未分類', line_account: self, type: :survey_profile)
+      Folder.create(name: '未分類', line_account: self, type: :variable)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)
     end
 end
