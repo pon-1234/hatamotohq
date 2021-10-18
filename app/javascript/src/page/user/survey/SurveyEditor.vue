@@ -114,7 +114,7 @@
       </div>
     </div>
 
-    <survey-form :survey="surveyData"></survey-form>
+    <survey-preview :survey="surveyData"></survey-preview>
 
     <modal-confirm
       title="公開後、編集できませんがよろしいでしょうか。"
