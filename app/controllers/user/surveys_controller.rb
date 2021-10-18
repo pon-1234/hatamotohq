@@ -5,7 +5,9 @@ class User::SurveysController < User::ApplicationController
   before_action :find_survey, only: [:show, :update]
   # GET /user/surveys
   def index
-    @folders = Folder.accessible_by(current_ability).type_survey
+    if request.format.json?
+      @folders = Folder.accessible_by(current_ability).type_survey
+    end
     respond_to do |format|
       format.html
       format.json

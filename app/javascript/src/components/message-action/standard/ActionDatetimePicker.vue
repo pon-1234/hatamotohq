@@ -17,18 +17,12 @@
           v-validate="{ required: labelRequired && showTitle }"
           data-vv-as="ラベル"
         />
-        <error-message
-          :message="errors.first('datetime-label')"
-        ></error-message>
+        <error-message :message="errors.first('datetime-label')"></error-message>
       </div>
     </div>
     <label class="w-100 mt20"> モード </label>
     <div class="w-100">
-      <select
-        v-model="data.mode"
-        class="form-control w-100 form-control"
-        @change="changeValue"
-      >
+      <select v-model="data.mode" class="form-control w-100 form-control" @change="changeValue">
         <option v-for="(item, index) in modes" :key="index" :value="item.value">
           {{ item.text }}
         </option>
@@ -37,7 +31,7 @@
   </div>
 </template>
 <script>
-import ErrorMessage from '../common/ErrorMessage.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 export default {
   components: { ErrorMessage },
   props: {

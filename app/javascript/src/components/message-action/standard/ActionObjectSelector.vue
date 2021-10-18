@@ -10,7 +10,7 @@
 </template>
 <script>
 
-import Util from '../../core/util';
+import Util from '../../../core/util';
 
 export default {
   props: {
@@ -143,7 +143,7 @@ export default {
           label: '',
           content: {
             name: '',
-            code: null
+            id: null
           }
         };
         break;
@@ -162,8 +162,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-  ::v-deep {
-  }
-</style>

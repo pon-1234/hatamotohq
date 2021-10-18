@@ -19,7 +19,7 @@
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
       <div class="card-body">
-        <message-action-editor-custom
+        <action-editor-custom
           name="after_action"
           :value="episodeData.actions"
           :labelRequired="false"
@@ -27,7 +27,7 @@
           :limit="10"
           :showLaunchMesasge="false"
           @input="updateAction"
-        ></message-action-editor-custom>
+        ></action-editor-custom>
       </div>
     </div>
 

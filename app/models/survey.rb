@@ -48,12 +48,8 @@ class Survey < ApplicationRecord
   before_create do
     self.code = generate_code
   end
-  after_create_commit :exec_after_create_commit
 
   private
-    def exec_after_create_commit
-    end
-
     def generate_code
       loop do
         code = Devise.friendly_token(10)

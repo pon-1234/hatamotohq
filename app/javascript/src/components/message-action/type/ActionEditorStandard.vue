@@ -11,7 +11,7 @@
 
     <action-object-value
       :data="action"
-      :name="'imagemap_action_' + name"
+      :name="'message_action_' + name"
       :labelRequired="labelRequired"
       :showTitle="showTitle"
       @input="changeAction"

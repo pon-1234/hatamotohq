@@ -8,7 +8,8 @@
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
+    ></action-send-message>
+
     <action-open-url
       :showTitle="showTitle"
       v-bind:value="data"
@@ -16,7 +17,8 @@
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
+    ></action-open-url>
+
     <action-open-tel
       :showTitle="showTitle"
       v-bind:value="data"
@@ -24,7 +26,8 @@
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
+    ></action-open-tel>
+
     <action-datetime-picker
       :showTitle="showTitle"
       v-bind:value="data"
@@ -32,15 +35,17 @@
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
-    <action-object-survey
+    ></action-datetime-picker>
+
+    <action-survey
       :showTitle="showTitle"
       v-bind:value="data"
       v-if="data.type === 'survey'"
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
+    ></action-survey>
+
     <action-default
       :showTitle="showTitle"
       v-bind:value="data"
@@ -48,11 +53,11 @@
       @input="changeAction"
       :name="name"
       :labelRequired="labelRequired"
-    />
+    ></action-default>
   </div>
 </template>
 <script>
-import Util from '../../core/util';
+import Util from '../../../core/util';
 
 export default {
   props: {

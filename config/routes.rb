@@ -24,6 +24,10 @@ Rails.application.routes.draw do
   post 'webhooks/:key', to: 'webhooks#index'
   post 'webhooks/push', to: 'webhooks#push'
 
+  # surveys
+  get 'surveys/:code/:friend_id', to: 'surveys#form'
+  post 'surveys/:code/:friend_id', to: 'surveys#answer'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'

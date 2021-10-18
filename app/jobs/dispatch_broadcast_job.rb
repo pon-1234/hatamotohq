@@ -5,15 +5,15 @@ class DispatchBroadcastJob < ApplicationJob
   queue_as :default
 
   def perform(broadcast_id)
+    ActiveJob::Base.logger.info "DispatchBroadcastJob ID = #{broadcast_id}"
     @broadcast = Broadcast.find(broadcast_id)
     # Change broadcast status to sending
     @broadcast.update_columns(status: 'sending', deliver_at: Time.zone.now)
-
-    dispatch_to_all if @broadcast.broadcast_type_all?
-    dispatch_with_condition if @broadcast.broadcast_type_condition?
-    @broadcast.update_columns(status: 'done')
+    success = dispatch_to_all if @broadcast.broadcast_type_all?
+    success = dispatch_with_condition if @broadcast.broadcast_type_condition?
+    @broadcast.update_columns(status: success ? 'done' : 'error')
   rescue => e
-    p e.message
+    ActiveJob::Base.logger.info "DispatchBroadcastJob exception = #{e.message}"
     @broadcast.update_columns(status: 'error')
   end
 
@@ -30,13 +30,15 @@ class DispatchBroadcastJob < ApplicationJob
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
 
-    # Deliver messages via line api
-    if !send_broadcast(line_account, nomalized_messages_data)
-      @broadcast.update_columns(status: 'error')
-      return
-    end
-    nomalized_messages_data.each do |content|
-      insert_delivered_message(channels, content)
+    if contain_survey_action?
+      send_messages_with_survey_action(channels, nomalized_messages_data)
+    else
+      # Deliver messages via line api
+      success = send_broadcast(line_account, nomalized_messages_data)
+      nomalized_messages_data.each do |content|
+        insert_delivered_message(channels, content)
+      end if success
+      success
     end
   end
 
@@ -53,15 +55,31 @@ class DispatchBroadcastJob < ApplicationJob
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
-    if !send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
-      @broadcast.update_columns(status: 'error')
-    end
-    nomalized_messages_data.each do |content|
-      insert_delivered_message(channels, content)
+
+    if contain_survey_action?
+      send_messages_with_survey_action(channels, nomalized_messages_data)
+    else
+      success = send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
+      nomalized_messages_data.each do |content|
+        insert_delivered_message(channels, content)
+      end if success
+      success
     end
   end
 
   private
+    def contain_survey_action?
+      true
+    end
+
+    # If a message in the list contain survey action, we could not use broadcast or multicast to distribute messages
+    # In the case, we have to generate survey url for each channel and send message using PushMessage
+    def send_messages_with_survey_action(channels, messages)
+      channels.each do |channel|
+        
+      end
+    end
+
     def send_broadcast(line_account, messages_data)
       LineApi::Broadcast.new(line_account).perform(messages_data)
     end
