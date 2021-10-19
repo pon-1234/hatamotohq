@@ -1,7 +1,7 @@
 <template>
   <div class="text-left">
     <span class="text-sm" v-if="type === 'image'">
-      ファイル形式：JPG、JPEG、PNG, GIF
+      ファイル形式：JPG、JPEG、PNG
       ファイルサイズ：10MB以下
     </span>
     <span
@@ -29,7 +29,7 @@
     <span class="text-sm" v-else-if="type === 'imagemap'">
       ファイル形式：JPG、JPEG、PNG<br>
       ファイルサイズ：10MB以下<br>
-      Image width: 1040px
+      画像の幅: 1040px
     </span>
     <span v-else>
       ファイル形式：JPG、JPEG、PNG、M4A、MP4<br>

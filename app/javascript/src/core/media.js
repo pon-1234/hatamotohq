@@ -106,31 +106,25 @@ class Media {
     for (let i = 0; i < arr.length; i++) {
       header += arr[i].toString(16);
     }
-    if (type === 'image' || type === 'richmenu' || type === 'imagemap') {
-      if (!ImageMimeBytes.includes(header.toString())) {
-        result.valid = false;
-        result.message = 'Invalid file format.';
-      }
-    } else if (type === 'video') {
-      if (!VideoMimeBytes.includes(header.toString())) {
-        result.valid = false;
-        result.message = 'Invalid file format.';
-      }
-    } else if (type === 'audio') {
-      if (!AudioMimeBytes.includes(header.toString())) {
-        result.valid = false;
-        result.message = 'Invalid file format.';
-      }
-    } else if (type === 'pdf') {
-      if (!PdfMimeBytes.includes(header.toString())) {
-        result.valid = false;
-        result.message = 'Invalid file format.';
-      }
-    } else if (!type) {
+    if (!this.isValidMineType(type, header)) {
       result.valid = false;
-      result.message = 'Invalid file format.';
+      result.message = 'ファイルの形式が無効です。';
     }
     return result;
+  }
+
+  static isValidMineType(type, fileHeader) {
+    if (type === 'image' || type === 'richmenu' || type === 'imagemap') {
+      return ImageMimeBytes.includes(fileHeader.toString());
+    } else if (type === 'video') {
+      return VideoMimeBytes.includes(fileHeader.toString());
+    } else if (type === 'audio') {
+      return AudioMimeBytes.includes(fileHeader.toString());
+    } else if (type === 'pdf') {
+      return PdfMimeBytes.includes(fileHeader.toString());
+    } else if (!type) {
+      return false;
+    }
   }
 
   static getDuration(data) {

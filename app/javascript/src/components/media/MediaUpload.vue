@@ -120,7 +120,8 @@ export default {
       const reader = new FileReader();
       reader.readAsArrayBuffer(input);
       reader.onload = function(e) {
-        const validMimeBytes = Media.validateFileByMimeBytes(e, _this.mediaData.type);
+        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : '';
+        const validMimeBytes = Media.validateFileByMimeBytes(e, mimetype);
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
