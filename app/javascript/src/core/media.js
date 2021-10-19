@@ -132,19 +132,6 @@ class Media {
     const duration = moment.duration(durationInMilis / 1000, 'seconds');
     return `${duration.minutes()}:${duration.seconds()}`;
   }
-
-  static async downloadMedia(element) {
-    const media = await fetch(element.url);
-    const mediaBlog = await media.blob();
-    const mediaURL = URL.createObjectURL(mediaBlog);
-
-    const link = document.createElement('a');
-    link.href = mediaURL;
-    link.download = element.filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
 }
 
 export default Media;

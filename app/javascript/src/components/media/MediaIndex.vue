@@ -107,7 +107,7 @@
                   <b>{{ media.type }}</b>
                   <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
                 </div>
-                <a href="#" class="download-icon mt-1" @click="downloadFile(media)"><i class="dripicons-cloud-download"></i></a>
+                <a :href="media.url" class="download-icon mt-1" download><i class="dripicons-cloud-download"></i></a>
               </div>
               <small class="w-100">
                 登録：<b>{{ formattedDate(media.created_at) }}</b>
@@ -172,7 +172,6 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
-import Media from '@/core/media';
 import * as moment from 'moment';
 
 export default {
@@ -286,10 +285,6 @@ export default {
 
     isPdf(media) {
       return media.type === 'pdf';
-    },
-
-    async downloadFile(media) {
-      await Media.downloadMedia(media);
     }
   }
 };
