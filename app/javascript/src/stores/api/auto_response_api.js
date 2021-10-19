@@ -4,7 +4,8 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/auto_responses`,
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
   get: (id) => {
@@ -12,7 +13,8 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${id}`,
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
   create: (data) => {
@@ -23,19 +25,19 @@ export default {
       contentType: 'application/json'
     });
   },
-  updateAutoResponse: (query) => {
+  update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${query.id}`,
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${payload.id}`,
       method: 'PATCH',
-      data: JSON.stringify(query),
-      contentType: 'application/json'
+      data: JSON.stringify(payload),
+      contentType: 'application/json',
+      cache: false
     });
   },
-  botDelete: (query = {}) => {
+  delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/automessage/' + query.id + '/delete'),
+      url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${id}`,
       method: 'DELETE',
-      data: JSON.stringify(query),
       contentType: 'application/json'
     });
   },
@@ -43,7 +45,8 @@ export default {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/auto_responses/${id}/copy`,
       method: 'POST',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   }
 };

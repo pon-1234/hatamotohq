@@ -120,7 +120,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">
+          {{ !auto_response_id ? "登録" : "保存" }}
+        </button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -175,16 +177,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('autoResponse', [
-      'getAutoResponse',
-      'createAutoResponse',
-      'updateAutoResponse',
-      'setPreviewContent'
-    ]),
+    ...mapActions('autoResponse', ['getAutoResponse', 'createAutoResponse', 'updateAutoResponse', 'setPreviewContent']),
 
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.msgContentKey++;
@@ -194,7 +189,7 @@ export default {
       const result = await this.$validator.validateAll();
       if (!result) {
         return ViewHelper.scrollToRequiredField(false);
-      };
+      }
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
@@ -207,15 +202,13 @@ export default {
     },
 
     setDefaultMessage() {
-      this.autoResponseData.messages.push(
-        {
-          message_type_id: this.MessageTypeIds.Text,
-          content: {
-            type: this.MessageType.Text,
-            text: ''
-          }
+      this.autoResponseData.messages.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
         }
-      );
+      });
     },
 
     onMessageContentChanged({ index, content }) {
