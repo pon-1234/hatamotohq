@@ -1,8 +1,10 @@
 <template>
   <div class="filter-list">
-    <div class="custom-control custom-checkbox mr-4" v-for="option in options" :key="option.type">
-      <input type="checkbox" :value="option.type" v-model="selectedTypes" class="custom-control-input" id="customCheck1">
-      <label class="custom-control-label" for="customCheck1">{{ option.text }}</label>
+    <div class="checkbox-inline" v-for="option in options" :key="option.type">
+      <div class="custom-control custom-checkbox mr-4">
+        <input type="checkbox" :value="option.type" v-model="selectedTypes" class="custom-control-input" :id="option.type">
+        <label class="custom-control-label" :for="option.type">{{ option.text }}</label>
+      </div>
     </div>
     <button class="btn btn-primary" type="submit" @click="applyFilter">表示変更</button>
   </div>
