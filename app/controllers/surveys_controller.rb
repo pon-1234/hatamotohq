@@ -19,7 +19,10 @@ class SurveysController < ApplicationController
   # POST /surveys/:code/:friend_id
   def answer
     build_answer(@survey, answer_params)
-    render_success
+    # redirect_to 
+  end
+
+  def answer_success
   end
 
   private
