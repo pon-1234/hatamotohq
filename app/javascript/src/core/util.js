@@ -1,6 +1,4 @@
 import {
-  UploadMaxSize,
-  ImageType, VideoType, AudioType, PdfType,
   MessageType,
   ActionObjectsType,
   MessageTypeIds
@@ -33,47 +31,6 @@ class Util {
 
   static formattedDatetime(datetime) {
     return moment(datetime).format('YYYY年MM月DD日 hh:mm');
-  }
-
-  static validateFileSizeByType(type, size) {
-    const result = {
-      valid: true
-    };
-
-    if (type === 'image' && size > UploadMaxSize.Image) {
-      result.valid = false;
-      result.message = '画像ファイルの最大容量は10MBになります。';
-    } else if (type === 'video' && size > UploadMaxSize.Video) {
-      result.valid = false;
-      result.message = 'ビデオファイルの最大容量は200MBになります。';
-    } else if (type === 'audio' && size > UploadMaxSize.Audio) {
-      result.valid = false;
-      result.message = 'オーディオファイルの最  大容量は200MBになります。';
-    } else if (type === 'pdf' && size > UploadMaxSize.Pdf) {
-      result.valid = false;
-      result.message = 'オーディオファイルの最大容量は10MBになります。';
-    } else if (type === 'richmenu' && size > UploadMaxSize.RichMenu) {
-      result.valid = false;
-      result.message = '画像ファイルの最大容量は1MBになります。';
-    }
-    return result;
-  }
-
-  static getMaxSizeByType(type) {
-    switch (type) {
-    case 'image':
-      return UploadMaxSize.Image;
-    case 'video':
-      return UploadMaxSize.Video;
-    case 'audio':
-      return UploadMaxSize.Audio;
-    case 'pdf':
-      return UploadMaxSize.Pdf;
-    case 'richmenu':
-      return UploadMaxSize.RichMenu;
-    default:
-      return UploadMaxSize.Image;
-    }
   }
 
   static getDuration(data) {
@@ -347,47 +304,6 @@ class Util {
     }
 
     return day + '日' + hour + '時' + min + '分';
-  }
-
-  /**
-   * Convert mine type to file type, for example: image/png → image
-   * @param {String} mineType the mine type of file
-   */
-  static convertMineTypeToMediaType(mineType) {
-    if (ImageType.includes(mineType)) return 'image';
-    if (VideoType.includes(mineType)) return 'video';
-    if (AudioType.includes(mineType)) return 'audio';
-    if (PdfType.includes(mineType)) return 'pdf';
-  }
-
-  /**
-   * Convert file types to mine types
-   * @param {Array} types array of file type
-   * @returns mine types
-   */
-  static getAcceptedMineTypes(types) {
-    const mineTypes = [];
-    if (types.includes(MessageType.Image)) {
-      mineTypes.push('image/*');
-    }
-
-    if (types.includes('richmenu') || types.includes('imagemap')) {
-      mineTypes.push('image/jpg,image/jpeg,image/png');
-    }
-
-    if (types.includes(MessageType.Video)) {
-      mineTypes.push('video/mp4');
-    }
-
-    if (types.includes(MessageType.Audio)) {
-      mineTypes.push('audio/m4a,audio/x-m4a');
-    }
-
-    if (types.includes('pdf')) {
-      mineTypes.push('application/pdf');
-    }
-
-    return mineTypes.join(',');
   }
 
   static regexFontSize() {
