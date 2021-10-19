@@ -34,15 +34,15 @@
           <table class="table table-centered mt-2 pc">
             <thead class="thead-light">
               <tr>
-                <th class="mvpx-100">名前</th>
-                <th class="mvpx-200 d-none d-lg-block">登録日時</th>
-                <th class="mvpx-60 d-none d-lg-block">タグ</th>
-                <th class="mvpx-60">状況</th>
-                <th class="fw-150 d-none d-lg-block">操作</th>
+                <th>名前</th>
+                <th class="d-none d-lg-table-cell">登録日時</th>
+                <th class="d-none d-lg-table-cell">タグ</th>
+                <th>状況</th>
+                <th class="d-none d-lg-table-cell">操作</th>
               </tr>
             </thead>
             <tbody v-for="(friend, index) in friends" :key="index">
-              <tr @click=" isMobile ? redirectToFriendDetail(friend) : ''">
+              <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex">
                   <img
                     :src="friend.line_picture_url || '/img/no-image-profile.png'"
@@ -51,8 +51,8 @@
                   />
                   <p class="text-ove m-0">{{ friend.line_name }}</p>
                 </td>
-                <td class="d-none d-lg-block">{{ formattedDatetime(friend.created_at) }}</td>
-                <td class="d-none d-lg-block">
+                <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
+                <td class="d-none d-lg-table-cell">
                   <friend-tag :tags="friend.tags"></friend-tag>
                 </td>
                 <td>
@@ -62,7 +62,7 @@
                     :visible="friend.visible"
                   ></friend-status>
                 </td>
-                <td class="d-none d-lg-block">
+                <td class="d-none d-lg-table-cell">
                   <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
                 </td>
               </tr>
@@ -113,15 +113,19 @@ export default {
   },
   computed: {
     ...mapState('friend', {
-      queryParams: (state) => state.queryParams,
-      friends: (state) => state.friends,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      queryParams: state => state.queryParams,
+      friends: state => state.friends,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curPage: {
-      get() { return this.queryParams.page; },
-      set(value) { this.setQueryParam({ page: value }); }
+      get() {
+        return this.queryParams.page;
+      },
+      set(value) {
+        this.setQueryParam({ page: value });
+      }
     },
 
     keyword: {
@@ -149,13 +153,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('friend', [
-      'setQueryParams',
-      'setQueryParam'
-    ]),
-    ...mapActions('friend', [
-      'getFriends'
-    ]),
+    ...mapMutations('friend', ['setQueryParams', 'setQueryParam']),
+    ...mapActions('friend', ['getFriends']),
 
     formattedDatetime(time) {
       return Util.formattedDatetime(time);
