@@ -1,5 +1,5 @@
 <template>
-  <div id="modalFriendSearch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+  <div id="modalFriendSearch" ref="modalFriendSearch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" :key="contentKey">
       <div class="modal-content">
         <div class="modal-header">
@@ -71,56 +71,62 @@ export default {
   data() {
     return {
       contentKey: 0,
-      selectedTags: []
+      selectedTags: [],
+      queryParamsPages: {}
     };
+  },
+  mounted() {
+    $(this.$refs.modalFriendSearch).on('shown.bs.modal', this.showModal);
   },
   computed: {
     ...mapState('friend', {
-      queryParams: (state) => state.queryParams
+      queryParams: (state) => state.queryParams,
+      clearQueryParams: (state) => state.clearQueryParams
     }),
     keyword: {
-      get() { return this.queryParams.line_name_or_display_name_cont; },
-      set(value) { this.setQueryParam({ line_name_or_display_name_cont: value }); }
+      get() { return this.queryParamsPages.line_name_or_display_name_cont; },
+      set(value) { this.queryParamsPages.line_name_or_display_name_cont = value; }
     },
 
     tags: {
-      get() { return this.queryParams.tags_id_in || []; },
+      get() { return this.queryParamsPages.tags_id_in || []; },
       set(value) {
         const tagIds = value.map(_ => _.id);
-        this.setQueryParam({ tags_id_in: tagIds });
+        this.queryParamsPages.tags_id_in = tagIds;
       }
     },
 
     status_eq: {
-      get() { return this.queryParams.status_eq; },
-      set(value) { this.setQueryParam({ status_eq: value }); }
+      get() { return this.queryParamsPages.status_eq; },
+      set(value) { this.queryParamsPages.status_eq = value; }
     },
 
     created_at_gteq: {
-      get() { return this.queryParams.created_at_gteq; },
-      set(value) { this.setQueryParam({ created_at_gteq: value }); }
+      get() { return this.queryParamsPages.created_at_gteq; },
+      set(value) { this.queryParamsPages.created_at_gteq = value; }
     },
 
     created_at_lteq: {
-      get() { return this.queryParams.created_at_lteq; },
-      set(value) { this.setQueryParam({ created_at_lteq: value }); }
+      get() { return this.queryParamsPages.created_at_lteq; },
+      set(value) { this.queryParamsPages.created_at_lteq = value; }
     },
 
     locked_eq: {
-      get() { return this.queryParams.locked_eq; },
-      set(value) { this.setQueryParam({ locked_eq: value }); }
+      get() { return this.queryParamsPages.locked_eq; },
+      set(value) { this.queryParamsPages.locked_eq = value; }
     },
 
     visible_eq: {
-      get() { return this.queryParams.visible_eq; },
-      set(value) { this.setQueryParam({ visible_eq: value }); }
+      get() { return this.queryParamsPages.visible_eq; },
+      set(value) { this.queryParamsPages.visible_eq = value; }
     }
   },
   methods: {
     ...mapMutations('friend', [
       'setQueryParams',
       'setQueryParam',
-      'resetQueryParams'
+      'resetQueryParams',
+      'setClearQueryParams'
     ]),
     ...mapActions('friend', [
       'getFriends'
@@ -133,13 +139,21 @@ export default {
       this.selectedTags = tags;
     },
     search() {
-      this.setQueryParams(this.queryParams);
+      this.setQueryParams(this.queryParamsPages);
       this.getFriends();
     },
     resetSearch() {
       this.resetQueryParams();
       this.selectedTags = [];
       this.forceRerender();
+    },
+    showModal() {
+      if (this.clearQueryParams) {
+        this.selectedTags = [];
+        this.setClearQueryParams(false);
+      }
+      this.forceRerender();
+      this.queryParamsPages = _.cloneDeep(this.queryParams);
     }
   }
 };
