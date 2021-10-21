@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id', to: 'surveys#form'
   post 'surveys/:code/:friend_id', to: 'surveys#answer'
   get 'surveys/:code', to: 'surveys#show'
+  get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
 
   # User
   constraints Subdomain::UserConstraint.new do
@@ -89,7 +90,11 @@ Rails.application.routes.draw do
       resources :rich_menus do
         post :copy, on: :member
       end
-      resources :surveys
+      resources :surveys do
+        member do
+          get :answers
+        end
+      end
       resources :reminders do
         member do
           resources :episodes

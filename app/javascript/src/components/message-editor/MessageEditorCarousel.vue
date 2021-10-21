@@ -209,9 +209,7 @@ export default {
             thumbnailImageUrl: '',
             title: '',
             text: '',
-            actions: [
-              this.ActionMessage.default
-            ]
+            actions: [this.ActionMessage.default]
           }
         ]
       }
@@ -314,11 +312,15 @@ export default {
     },
 
     coppyAllThumb() {
-      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl; });
+      this.messageData.columns.forEach(item => {
+        item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl;
+      });
     },
 
     removeAllThumb() {
-      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = ''; });
+      this.messageData.columns.forEach(item => {
+        item.thumbnailImageUrl = '';
+      });
     },
 
     changeSelectedAction(index, value) {
@@ -332,7 +334,11 @@ export default {
     moveTopAction(index) {
       const option = this.messageData.columns[this.selected].actions[index];
       if (this.messageData.columns[this.selected].actions[index - 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index - 1, 1, option)[0];
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
+          index - 1,
+          1,
+          option
+        )[0];
 
         if (this.selectedAction === index) {
           this.selectedAction -= 1;
@@ -343,7 +349,11 @@ export default {
     moveBottomAction(index) {
       const option = this.messageData.columns[this.selected].actions[index];
       if (this.messageData.columns[this.selected].actions[index + 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index + 1, 1, option)[0];
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
+          index + 1,
+          1,
+          option
+        )[0];
         if (this.selectedAction === index) {
           this.selectedAction += 1;
         }
@@ -352,7 +362,7 @@ export default {
 
     copyCurrentAction(index) {
       if (this.messageData.columns[this.selected].actions.length < 3) {
-        this.messageData.columns.forEach((item) => {
+        this.messageData.columns.forEach(item => {
           // eslint-disable-next-line no-undef
           item.actions.splice(index + 1, 0, _.cloneDeep(item.actions[index]));
         });
@@ -360,7 +370,7 @@ export default {
     },
 
     removeCurrentAction(index) {
-      this.messageData.columns.forEach((item) => {
+      this.messageData.columns.forEach(item => {
         item.actions.splice(index, 1);
       });
 
@@ -370,7 +380,7 @@ export default {
     },
 
     addMoreAction() {
-      this.messageData.columns.forEach((item) => {
+      this.messageData.columns.forEach(item => {
         item.actions.push(this.ActionMessage.default);
       });
     },

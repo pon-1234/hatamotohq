@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white" v-if="survey">
     <div class="font-weight-bold">{{ survey.title }}</div>
     <div class="font-12">{{ survey.description }}</div>
 

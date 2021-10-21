@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update]
+  before_action :find_survey, only: [:show, :update, :answers]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -16,6 +16,10 @@ class User::SurveysController < User::ApplicationController
 
   # GET /user/surveys/:id
   def show
+  end
+
+  def answers
+    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(1)
   end
 
   # GET /user/surveys/new
