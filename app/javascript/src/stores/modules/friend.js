@@ -14,7 +14,8 @@ export const state = {
     created_at_lteq: null,
     visible_eq: true,
     locked_eq: false
-  }
+  },
+  clearQueryParams: false
 };
 
 export const mutations = {
@@ -55,6 +56,10 @@ export const mutations = {
 
   resetFriends(state) {
     state.friends = [];
+  },
+
+  setClearQueryParams(state, clearQueryParams) {
+    state.clearQueryParams = clearQueryParams;
   }
 };
 

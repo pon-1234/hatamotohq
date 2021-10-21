@@ -45,7 +45,7 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集する</a>
+                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
                         <a
                           role="button"
                           class="dropdown-item"
@@ -172,10 +172,6 @@ export default {
 
     forceRerender() {
       this.contentKey++;
-    },
-
-    tags(strtag) {
-      return typeof (strtag) === 'string' ? (strtag.length > 0 ? strtag.split(',') : []) : strtag;
     },
 
     onSelectedFolderChanged(index) {

@@ -1,33 +1,49 @@
 <template>
   <div>
-    <div :key="contentKey">
+    <div class="mxw-1200" :key="contentKey">
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
           <div class="row">
             <div class="col-xl-6">
               <div class="form-group">
-                <label class="fw-300">フォーム名(管理用)<required-mark/></label>
+                <label class="fw-300">フォーム名(管理用)<required-mark /></label>
                 <div class="flex-grow-1">
-                  <input v-model.trim="surveyData.name" type="text" name="survey-name" class="form-control" placeholder="" v-validate="'required|max:255'" data-vv-as="フォーム名(管理用)">
+                  <input
+                    v-model.trim="surveyData.name"
+                    type="text"
+                    name="survey-name"
+                    class="form-control"
+                    placeholder=""
+                    v-validate="'required|max:255'"
+                    data-vv-as="フォーム名(管理用)"
+                  />
                   <error-message :message="errors.first('survey-name')"></error-message>
                 </div>
               </div>
               <div class="form-group">
-                <label>タイトル<required-mark/></label>
-                <input v-model.trim="surveyData.title" type="text" name="survey-title" class="form-control" placeholder="" v-validate="'required|max:255'" data-vv-as="タイトル">
+                <label>タイトル<required-mark /></label>
+                <input
+                  v-model.trim="surveyData.title"
+                  type="text"
+                  name="survey-title"
+                  class="form-control"
+                  placeholder=""
+                  v-validate="'required|max:255'"
+                  data-vv-as="タイトル"
+                />
                 <error-message :message="errors.first('survey-title')"></error-message>
               </div>
 
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer">
+                <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer" />
                 <label class="custom-control-label" for="customCheck1">何度でも回答可能にする</label>
               </div>
             </div>
 
             <div class="col-xl-6">
               <div class="form-group">
-                <label>説明<required-mark/></label>
+                <label>説明<required-mark /></label>
                 <textarea
                   rows="3"
                   v-model.trim="surveyData.description"
@@ -36,7 +52,8 @@
                   class="form-control"
                   placeholder=""
                   v-validate="'required'"
-                  data-vv-as="説明">
+                  data-vv-as="説明"
+                >
                 </textarea>
                 <error-message :message="errors.first('survey-description')"></error-message>
               </div>
@@ -49,7 +66,8 @@
                   name="survey-success-message"
                   class="form-control"
                   placeholder=""
-                  data-vv-as="回答後の文章">
+                  data-vv-as="回答後の文章"
+                >
                 </textarea>
               </div>
             </div>
@@ -66,7 +84,8 @@
           <survey-question-editor
             :data="surveyData.questions"
             name="survey-question-editor"
-            @input="surveyData.questions = $event">
+            @input="onQuestionsChanged($event)"
+          >
           </survey-question-editor>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
@@ -75,14 +94,14 @@
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">回答後のアクション</h3></div>
         <div class="card-body">
-          <message-action-type-default
+          <message-action-editor-custom
             name="survey-action"
             :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
             :showLaunchMesasge="false"
             @input="surveyData.after_action = $event"
-          ></message-action-type-default>
+          ></message-action-editor-custom>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
@@ -94,8 +113,14 @@
       </div>
     </div>
 
-    <modal-confirm title="公開後、編集できませんがよろしいでしょうか。" id='modal-publish' type='confirm'
-                  @input="submit(true)"/>
+    <survey-preview :survey="surveyData"></survey-preview>
+
+    <modal-confirm
+      title="公開後、編集できませんがよろしいでしょうか。"
+      id="modal-publish"
+      type="confirm"
+      @input="submit(true)"
+    />
   </div>
 </template>
 
@@ -152,6 +177,7 @@ export default {
     },
 
     parseSurvey(survey) {
+      console.log('-------', survey);
       this.surveyData = _.cloneDeep(survey);
     },
 
@@ -195,8 +221,9 @@ export default {
       }
     },
 
-    previewSurvey() {
-      // TODO
+    onQuestionsChanged(questions) {
+      this.surveyData.questions = questions;
+      // this.forceRerender();
     }
   }
 };
@@ -215,8 +242,8 @@ export default {
 
     .btn-link {
       text-transform: uppercase;
-      background: #00B900;
-      border: 1px solid #00B900;
+      background: #00b900;
+      border: 1px solid #00b900;
       color: #ffffff;
       font-weight: bold;
       font-size: 16pt;
@@ -231,8 +258,8 @@ export default {
     .btn-confirm {
       text-transform: uppercase;
       background: white;
-      border: 1px solid #00B900;
-      color: #00B900;
+      border: 1px solid #00b900;
+      color: #00b900;
     }
     .survey {
       border: 1px solid #dedede;

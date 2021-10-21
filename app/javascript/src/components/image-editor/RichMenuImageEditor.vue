@@ -1,521 +1,715 @@
 <template>
   <div>
     <div class="editor-content">
-      <div style="display: flex; flex-direction: column; background: rgb(245, 245, 245); max-width: 300px;">
+      <div style="display: flex; flex-direction: column; background: rgb(245, 245, 245); max-width: 300px">
         <div class="line-nav-bar">
-          <p v-if="editor==='richmenu'">リッチメニュー</p>
-          <p v-else>BOT</p>
+          <p>プレビュー</p>
         </div>
-        <div v-if="editor==='richmenu'" style="height: 400px !important" class="d-flex flex-column justify-content-center">
-          <table v-if="templateId===201" style="width: 300px; height: 200px;">
+        <div
+          v-if="editor === 'richmenu'"
+          style="height: 400px !important"
+          class="d-flex flex-column justify-content-center"
+        >
+          <table v-if="templateId === 201" style="width: 300px; height: 200px">
             <tbody>
-            <tr>
-              <td style="width: 100px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 100px;">
-
-              <div class="preview-area " :id="objectLists[3].name" @click="chooseActive(3)">
-                  <img :id="'preview_'+objectLists[3].name"></div>
-              </td>
-              <td style="width: 100px;">
-              <div class="preview-area" :id="objectLists[4].name" @click="chooseActive(4)">
-                  <img :id="'preview_'+objectLists[4].name"></div>
-              </td>
-              <td style="width: 100px;">
-
-              <div class="preview-area " :id="objectLists[5].name" @click="chooseActive(5)">
-                  <img :id="'preview_'+objectLists[5].name"></div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[3].name" @click="chooseActive(3)">
+                    <img :id="'preview_' + objectLists[3].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[4].name" @click="chooseActive(4)">
+                    <img :id="'preview_' + objectLists[4].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[5].name" @click="chooseActive(5)">
+                    <img :id="'preview_' + objectLists[5].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===202" style="width: 300px">
+          <table v-if="templateId === 202" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 150px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 150px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-
-            </tr>
-            <tr>
-              <td style="width: 150px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-              <td style="width: 150px;">
-                <div class="preview-area " :id="objectLists[3].name" @click="chooseActive(3)">
-                  <img :id="'preview_'+objectLists[3].name"></div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 150px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 150px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 150px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+                <td style="width: 150px">
+                  <div class="preview-area" :id="objectLists[3].name" @click="chooseActive(3)">
+                    <img :id="'preview_' + objectLists[3].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===203" style="width: 300px">
+          <table v-if="templateId === 203" style="width: 300px">
             <tbody>
-            <tr>
-              <td colspan="3" style="width: 300px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 100px;">
-
-              <div class="preview-area " :id="objectLists[1].name" @click="chooseActive(1)">
-                  <img :id="'preview_'+objectLists[1].name"></div>
-              </td>
-              <td style="width: 100px;">
-
-              <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)">
-                  <img :id="'preview_'+objectLists[2].name"></div>
-              </td>
-              <td style="width: 100px;">
-
-              <div class="preview-area " :id="objectLists[3].name" @click="chooseActive(3)">
-                  <img :id="'preview_'+objectLists[3].name"></div>
-              </td>
-            </tr>
+              <tr>
+                <td colspan="3" style="width: 300px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)">
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)">
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div class="preview-area" :id="objectLists[3].name" @click="chooseActive(3)">
+                    <img :id="'preview_' + objectLists[3].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===204" style="width: 300px">
+          <table v-if="templateId === 204" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 200px; height: 100%" rowspan="2">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100%;">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 200px; height: 100%" rowspan="2">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100%"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===205" style="width: 300px">
+          <table v-if="templateId === 205" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 300px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-
-            </tr>
-            <tr>
-              <td style="width: 300px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 300px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 300px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===206" style="width: 300px">
+          <table v-if="templateId === 206" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 150px; height: 200px" rowspan="2">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100%">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-
-            </tr>
-            <tr>
-              <td style="width: 150px; height: 200px" rowspan="2">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100%">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 150px; height: 200px" rowspan="2">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100%"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 150px; height: 200px" rowspan="2">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100%"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===207" style="width: 300px">
+          <table v-if="templateId === 207" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 300px; height: 200px" rowspan="2">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100%">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-
-            </tr>
-
+              <tr>
+                <td style="width: 300px; height: 200px" rowspan="2">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100%"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1001" style="width: 300px;">
+          <table v-if="templateId === 1001" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 100px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1002" style="width: 300px;">
+          <table v-if="templateId === 1002" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 100px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 200px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 200px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1003" style="width: 300px;">
+          <table v-if="templateId === 1003" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 200px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 100px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 200px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 100px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1004" style="width: 300px;">
+          <table v-if="templateId === 1004" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 150px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 150px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 150px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 150px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===1005" style="width: 300px;">
+          <table v-if="templateId === 1005" style="width: 300px">
             <tbody>
-            <tr>
-              <td style="width: 300px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 100px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 300px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 100px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <div v-if="editor==='imagemap'" style="width: 300px; margin-bottom: 20px">
-          <table v-if="templateId===201" style="width: 270px; height: 270px">
+        <div v-if="editor === 'imagemap'" style="width: 300px; margin-bottom: 20px">
+          <table v-if="templateId === 201" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area " :id="objectLists[3].name" @click="chooseActive(3)"
-                     style="width: 100%; height: 135px">
-
-                <img :id="'preview_'+objectLists[3].name"></div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[4].name" @click="chooseActive(4)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[4].name"></div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area " :id="objectLists[5].name" @click="chooseActive(5)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[5].name"></div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[3].name"
+                    @click="chooseActive(3)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[3].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[4].name"
+                    @click="chooseActive(4)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[4].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[5].name"
+                    @click="chooseActive(5)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[5].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <table v-if="templateId===202" style="width: 270px; height: 270px">
+          <table v-if="templateId === 202" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 135px;">
-                <div class="preview-area " :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 135px">
-
-                  <img :id="'preview_'+objectLists[2].name"></div>
-              </td>
-              <td style="width: 135px;">
-                <div class="preview-area" :id="objectLists[3].name" @click="chooseActive(3)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[3].name"></div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
-          <table v-if="templateId===203" style="width: 270px; height: 270px">
-            <tbody>
-            <tr>
-              <td style="width: 270px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 90px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 270px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 90px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 270px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 90px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
-          <table v-if="templateId===204" style="width: 270px; height: 270px">
-            <tbody>
-            <tr>
-              <td style="width: 270px;" colspan="2">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 135px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+                <td style="width: 135px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[3].name"
+                    @click="chooseActive(3)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[3].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <table v-if="templateId===208" style="width: 270px; height: 270px">
+          <table v-if="templateId === 203" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 75px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[2].name" @click="chooseActive(2)"
-                     style="width: 100%; height: 75px">
-                  <img :id="'preview_'+objectLists[2].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 270px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 90px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 270px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 90px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 270px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 90px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <table v-if="templateId===205" style="width: 270px; height: 270px">
+          <table v-if="templateId === 204" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 100%; height: 135px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
+              <tr>
+                <td style="width: 270px" colspan="2">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <table v-if="templateId===206" style="width: 270px; height: 270px">
+          <table v-if="templateId === 208" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 135px; height: 270px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-              <td style="width: 90px;">
-                <div class="preview-area" :id="objectLists[1].name" @click="chooseActive(1)"
-                     style="width: 135px; height: 270px">
-                  <img :id="'preview_'+objectLists[1].name">
-                </div>
-              </td>
-            </tr>
-
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 75px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[2].name"
+                    @click="chooseActive(2)"
+                    style="width: 100%; height: 75px"
+                  >
+                    <img :id="'preview_' + objectLists[2].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <table v-if="templateId===207" style="width: 270px; height: 270px">
+          <table v-if="templateId === 205" style="width: 270px; height: 270px">
             <tbody>
-            <tr>
-              <td style="width: 90px;">
-                <div class="preview-area active" :id="objectLists[0].name" @click="chooseActive(0)"
-                     style="width: 270px; height: 270px">
-                  <img :id="'preview_'+objectLists[0].name">
-                </div>
-              </td>
-
-            </tr>
-
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 100%; height: 135px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-        </div>
-        <div class="line-nav-bar">
-          <p>テキストメッセージ</p>
+          <table v-if="templateId === 206" style="width: 270px; height: 270px">
+            <tbody>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 135px; height: 270px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area"
+                    :id="objectLists[1].name"
+                    @click="chooseActive(1)"
+                    style="width: 135px; height: 270px"
+                  >
+                    <img :id="'preview_' + objectLists[1].name" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table v-if="templateId === 207" style="width: 270px; height: 270px">
+            <tbody>
+              <tr>
+                <td style="width: 90px">
+                  <div
+                    class="preview-area active"
+                    :id="objectLists[0].name"
+                    @click="chooseActive(0)"
+                    style="width: 270px; height: 270px"
+                  >
+                    <img :id="'preview_' + objectLists[0].name" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="editor-divider"></div>
       <div class="d-flex flex-column editor-container w-100">
         <div class="d-flex mb-2">
-          <button class="btn btn-info btn-xs ml-auto mr-1" @click="imageGeneration()"><i
-            class="fa fa-download"></i>
+          <button class="btn btn-info btn-xs ml-auto mr-1" @click="imageGeneration()">
+            <i class="fa fa-download"></i>
             ダウンロード
           </button>
           <button class="btn btn-xs btn-info" @click="imageGeneration(false)"><i class="fa fa-save"></i> 保存</button>
         </div>
-        <image-editor :data="objectLists[selectIndex]" :preview="'#preview_'+objectLists[selectIndex].name"
-                      :width="width" :height="height"
-                      @input="objectLists[selectIndex] = $event"></image-editor>
-        <div style="text-align: center; flex: 1; height: 50px">
-        </div>
+        <image-editor
+          :data="objectLists[selectIndex]"
+          :preview="'#preview_' + objectLists[selectIndex].name"
+          :width="width"
+          :height="height"
+          @input="objectLists[selectIndex] = $event"
+        ></image-editor>
+        <div style="text-align: center; flex: 1; height: 50px"></div>
       </div>
     </div>
   </div>
@@ -675,7 +869,7 @@ export default {
     overflow: hidden;
     border: 1px solid #ededed;
   }
-  .preview-area>img{
+  .preview-area > img {
     width: 100%;
   }
 
@@ -695,7 +889,7 @@ export default {
       display: flex;
       flex-direction: row;
     }
-    .editor-divider{
+    .editor-divider {
       width: 20px;
     }
 
@@ -704,7 +898,7 @@ export default {
         flex-direction: column;
       }
 
-      .editor-divider{
+      .editor-divider {
         width: 100%;
         height: 20px;
       }
@@ -712,16 +906,15 @@ export default {
     .btn-close {
       background: transparent;
       border: 1px solid #ededed;
-      color: #00B900;
+      color: #00b900;
       padding: 5px 15px;
       font-size: 13px;
       border-radius: 4px;
       min-width: 100px;
-
     }
 
     .btn-save0 {
-      background: #00B900;
+      background: #00b900;
       border: 1px solid #ededed;
       color: white;
       padding: 5px 15px;
@@ -737,17 +930,14 @@ export default {
     .line-nav-bar {
       width: 100%;
       height: 50px;
-      background: #0A2F4C;
+      background: #0a2f4c;
       color: white;
-      display: flex
-
+      display: flex;
     }
     .line-nav-bar > p {
-      background: #0A2F4C;
+      background: #0a2f4c;
       display: inline-block;
       margin: auto;
     }
-
   }
-
 </style>

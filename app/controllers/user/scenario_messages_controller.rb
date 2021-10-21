@@ -8,7 +8,13 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # GET /user/scenarios/:scenario_id/messages
   def index
-    @messages = @scenario.scenario_messages.ordered.page(params[:page])
+    if request.format.json?
+      @messages = @scenario.scenario_messages.ordered.page(params[:page])
+    end
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/scenarios/:scenario_id/messages/:id
@@ -57,18 +63,8 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # DELETE /user/scenarios/:scenario_id/messages/:id
   def destroy
-    if @message.destroy
-      @scenario.reorder_messages
-      redirect_to user_scenario_messages_path, flash: { success: 'シナリオメッセージの削除は成功しました。' }
-    else
-      redirect_to user_scenario_messages_path, flash: { error: 'シナリオメッセージの削除は失敗しました。' }
-    end
-  end
-
-  def delete_confirm
-    @scenario_id = params[:scenario_id]
-    respond_to do |format|
-      format.js
+    if @message.destroy!
+      render_success
     end
   end
 

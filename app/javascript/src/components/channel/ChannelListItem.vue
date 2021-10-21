@@ -1,17 +1,24 @@
 <template>
   <div class="text-body">
     <div :class="itemClass" role="button">
-      <img :src="friend.avatar_url || '/img/no-image-profile.png'" class="mr-2 rounded-circle" height="48"
-        alt="User avatar" />
+      <img
+        :src="friend.avatar_url || '/img/no-image-profile.png'"
+        class="mr-2 rounded-circle"
+        height="48"
+        alt="User avatar"
+      />
       <div class="media-body">
         <h5 class="my-0 font-14">
           <span class="float-right text-muted font-12">{{ readableTime }}</span>
-          {{ friend.name }}
+          {{ truncate(friend.name, 15) }}
         </h5>
         <p class="mt-1 mb-0 text-muted font-14">
-          <span class="w-25 float-right text-right"><span
-              class="badge badge-danger-lighten" v-show="isUnread">{{ unreadCountLabel }}</span></span>
-          <span :class="isUnread ? 'w-75 font-weight-bold': 'w-75'"><last-message :message="channel.last_message"/></span>
+          <span class="w-25 float-right text-right"
+            ><span class="badge badge-danger-lighten" v-show="isUnread">{{ unreadCountLabel }}</span></span
+          >
+          <span :class="isUnread ? 'w-75 font-weight-bold' : 'w-75'"
+            ><last-message :message="channel.last_message"
+          /></span>
         </p>
       </div>
     </div>
@@ -58,6 +65,12 @@ export default {
       }
 
       return className;
+    },
+
+    truncate(str, length = 15) {
+      return _.truncate(str, {
+        length: length
+      });
     }
   }
 };

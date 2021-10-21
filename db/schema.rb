@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_11_071811) do
+ActiveRecord::Schema.define(version: 2021_10_14_032428) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
     t.datetime 'start_at'
     t.datetime 'end_at'
     t.bigint 'media_id'
+    t.integer 'member_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
@@ -553,6 +554,18 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
 
+  create_table 'variables', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.bigint 'folder_id'
+    t.string 'name'
+    t.string 'type'
+    t.string 'default'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['folder_id'], name: 'index_variables_on_folder_id'
+    t.index ['line_account_id'], name: 'index_variables_on_line_account_id'
+  end
+
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'auto_response_keywords', 'auto_responses'
   add_foreign_key 'auto_response_messages', 'auto_responses'
@@ -607,4 +620,6 @@ ActiveRecord::Schema.define(version: 2021_10_11_071811) do
   add_foreign_key 'template_messages', 'templates'
   add_foreign_key 'templates', 'folders'
   add_foreign_key 'templates', 'line_accounts'
+  add_foreign_key 'variables', 'folders'
+  add_foreign_key 'variables', 'line_accounts'
 end

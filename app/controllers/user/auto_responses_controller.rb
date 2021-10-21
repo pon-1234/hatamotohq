@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::AutoResponsesController < User::ApplicationController
-  before_action :find_auto_response, only: [:show, :update]
+  before_action :find_auto_response, only: [:show, :update, :copy, :destroy]
 
   include User::AutoResponsesHelper
 
@@ -61,6 +61,21 @@ class User::AutoResponsesController < User::ApplicationController
     respond_to do |format|
       format.json
     end
+  end
+
+  # POST /user/auto_responses/:id/copy
+  def copy
+    @auto_response.clone!
+    render_success
+  rescue => e
+    logger.error e.message
+    render_bad_request
+  end
+
+  # DELETE /user/auto_responses/:id
+  def destroy
+    @auto_response.destroy!
+    render_success
   end
 
   private

@@ -5,7 +5,8 @@ export default {
       method: 'GET',
       data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
@@ -14,7 +15,8 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}`,
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 

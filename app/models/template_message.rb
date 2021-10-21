@@ -29,7 +29,7 @@ class TemplateMessage < ApplicationRecord
   validates :message_type_id, presence: true
   validates :content, presence: true
 
-  def clone_to(template_id)
+  def clone_to!(template_id)
     new_message = self.dup
     new_message.template_id = template_id
     new_message.save!

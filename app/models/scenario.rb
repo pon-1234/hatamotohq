@@ -45,13 +45,14 @@ class Scenario < ApplicationRecord
   # Scope
   scope :not_empty, -> { where('scenario_messages_count > 0') }
 
-  def clone
+  def clone!
     new_scenario = self.dup
     new_scenario.title = self.title + '（コピー）'
     new_scenario.status = :draft
     new_scenario.scenario_messages_count = nil
     new_scenario.tag_ids = self.tag_ids
     new_scenario.save!
+    self.scenario_messages&.each { |message| message.clone_to!(new_scenario.id) }
     new_scenario
   end
 

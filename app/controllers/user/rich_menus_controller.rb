@@ -55,7 +55,7 @@ class User::RichMenusController < User::ApplicationController
 
   # POST /user/rich_menus/:id/copy
   def copy
-    rich_menu = @rich_menu.clone
+    rich_menu = @rich_menu.clone!
     if rich_menu.present?
       render_success
     else

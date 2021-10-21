@@ -9,12 +9,12 @@
       v-else-if="type === 'video'"
     >
       ファイル形式：MP4<br>
-      ファイルサイズ：10MB以下
+      ファイルサイズ：200MB以下
     </span>
     <span v-else-if="type === 'audio'"
       class="text-sm">
       ファイル形式：M4A<br>
-      ファイルサイズ：10MB以下
+      ファイルサイズ：200MB以下
     </span>
     <span class="text-sm" v-else-if="type === 'richmenu'"
     >
@@ -25,6 +25,11 @@
     <span class="text-sm" v-else-if="type === 'pdf'">
       ファイル形式：PDF<br>
       ファイルサイズ：10MB以下
+    </span>
+    <span class="text-sm" v-else-if="type === 'imagemap'">
+      ファイル形式：JPG、JPEG、PNG<br>
+      ファイルサイズ：10MB以下<br>
+      画像の幅: 1040px
     </span>
     <span v-else>
       ファイル形式：JPG、JPEG、PNG、M4A、MP4<br>

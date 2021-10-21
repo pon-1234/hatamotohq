@@ -120,7 +120,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">
+          {{ !auto_response_id ? "登録" : "保存" }}
+        </button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -130,6 +132,7 @@
 <script>
 import { mapActions } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: {
@@ -174,16 +177,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('autoResponse', [
-      'getAutoResponse',
-      'createAutoResponse',
-      'updateAutoResponse',
-      'setPreviewContent'
-    ]),
+    ...mapActions('autoResponse', ['getAutoResponse', 'createAutoResponse', 'updateAutoResponse', 'setPreviewContent']),
 
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.msgContentKey++;
@@ -191,19 +187,9 @@ export default {
 
     async submitCreate() {
       const result = await this.$validator.validateAll();
-
       if (!result) {
-        $('input, textarea').each(
-          function(index) {
-            var input = $(this);
-            if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-              $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-              return false;
-            }
-          }
-        );
-        return;
-      };
+        return ViewHelper.scrollToRequiredField(false);
+      }
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
@@ -216,15 +202,13 @@ export default {
     },
 
     setDefaultMessage() {
-      this.autoResponseData.messages.push(
-        {
-          message_type_id: this.MessageTypeIds.Text,
-          content: {
-            type: this.MessageType.Text,
-            text: ''
-          }
+      this.autoResponseData.messages.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
         }
-      );
+      });
     },
 
     onMessageContentChanged({ index, content }) {

@@ -56,7 +56,7 @@ class User::TemplatesController < User::ApplicationController
 
   # POST /user/templates/:id/copy
   def copy
-    @template.clone
+    @template.clone!
     render_success
   end
 

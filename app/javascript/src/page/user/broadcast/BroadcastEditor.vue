@@ -146,12 +146,8 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="createBroadcast('pending')" :disabled="invalid">
-          配信登録
-        </button>
-        <button type="submit" class="btn btn-outline-success fw-120" @click="createBroadcast('draft')">
-          下書き保存
-        </button>
+        <button class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</button>
+        <button type="submit" class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</button>
       </div>
     </div>
     <message-preview></message-preview>
@@ -161,6 +157,7 @@
 import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['broadcast_id'],
@@ -306,7 +303,7 @@ export default {
       this.broadcastData.conditions = value;
     },
 
-    async createBroadcast(status) {
+    async submit(status) {
       this.broadcastData.status = status;
       if (this.broadcastData.deliver_now) {
         this.changeStartDateForNow();
@@ -315,16 +312,7 @@ export default {
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              var input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
+          return ViewHelper.scrollToRequiredField(false);
         };
       }
 

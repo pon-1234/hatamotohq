@@ -88,6 +88,7 @@ import {
 } from '@/core/constant';
 import { mapActions } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: {
@@ -184,16 +185,7 @@ export default {
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
       if (!result) {
-        $('input, textarea').each(
-          function(index) {
-            var input = $(this);
-            if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-              $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-              return false;
-            }
-          }
-        );
-        return;
+        return ViewHelper.scrollToRequiredField(false);
       };
 
       const payload = _.omit(this.scenarioMessageData, ['messages']);

@@ -4,7 +4,7 @@
       <div class="text-center my-auto" v-if="isPreview">
         <button class="btn-delete-media" @click="deleteMedia()"><span class="close">×</span></button>
         <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL">
-        <img v-if="mediaData.type === 'image' || mediaData.type === 'richmenu'" :src="fileURL">
+        <img v-if="mediaData.type === 'image' || mediaData.type ===  'richmenu' || mediaData.type === 'imagemap'" :src="fileURL">
         <audio controls v-if="mediaData.type === 'audio'" @loadedmetadata="onTimeUpdate" ref="audio">
           <source :src="fileURL">
         </audio>
@@ -40,7 +40,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
-import Util from '@/core/util';
+import Media from '@/core/media';
 
 export default {
   props: {
@@ -63,7 +63,8 @@ export default {
       input: null,
       fileURL: '',
       inputFile: null,
-      duration: null
+      duration: null,
+      oldType: null
     };
   },
 
@@ -71,6 +72,7 @@ export default {
     types: {
       handler(val) {
         this.mediaData.type = val[0];
+        this.oldType = val[0];
       }
     }
   },
@@ -82,11 +84,11 @@ export default {
       'uploadImageMap'
     ]),
     getMaxSize() {
-      return Util.getMaxSizeByType(this.mediaData.type);
+      return Media.getMaxSizeByType(this.mediaData.type);
     },
 
     getAcceptedMineTypes() {
-      return Util.getAcceptedMineTypes(this.types);
+      return Media.getAcceptedMineTypes(this.types);
     },
 
     addFile(event) {
@@ -96,7 +98,7 @@ export default {
     async addMedia(event) {
       const input = event.currentTarget.files[0];
       this.inputFile = input;
-      const mediaType = Util.convertMineTypeToMediaType(input.type);
+      const mediaType = Media.convertMineTypeToMediaType(input.type);
       if (mediaType === 'image') {
         if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
         else if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
@@ -104,25 +106,43 @@ export default {
       } else {
         this.mediaData.type = mediaType;
       }
-      const validationResult = Util.validateFileSizeByType(this.mediaData.type, input.size);
+      const validationResult = Media.validateFileSizeByType(this.mediaData.type, input.size);
       if (!validationResult) return;
 
       if (!validationResult.valid) {
         this.errorMessage = validationResult.message;
         return;
       }
-      // Generate preview
-      if (this.mediaData.type === 'image') {
-        this.generateImagePreview(input);
-      } else if (this.mediaData.type === 'video') {
-        this.generateVideoPreview(input);
-      } else if (this.mediaData.type === 'pdf') {
-        this.generatePdfPreview(input);
-      } else if (this.mediaData.type === 'audio') {
-        this.generateAudioPreview(input);
-      } else if (this.mediaData.type === 'richmenu') {
-        this.generateRichMenuPreview(input);
-      }
+      // set default type if file cannot be read error
+      if (!this.mediaData.type) this.mediaData.type = this.oldType;
+
+      const _this = this;
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(input);
+      reader.onload = function(e) {
+        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : '';
+        const validMimeBytes = Media.validateFileByMimeBytes(e, mimetype);
+        // check the valid first 4 bytes of the header
+        if (!validMimeBytes.valid) {
+          _this.errorMessage = validMimeBytes.message;
+          return;
+        }
+
+        // Generate preview
+        if (_this.mediaData.type === 'image') {
+          _this.generateImagePreview(input);
+        } else if (_this.mediaData.type === 'video') {
+          _this.generateVideoPreview(input);
+        } else if (_this.mediaData.type === 'pdf') {
+          _this.generatePdfPreview(input);
+        } else if (_this.mediaData.type === 'audio') {
+          _this.generateAudioPreview(input);
+        } else if (_this.mediaData.type === 'richmenu') {
+          _this.generateRichMenuPreview(input);
+        } else if (_this.mediaData.type === 'imagemap') {
+          _this.generateImageMapPreview(input);
+        }
+      };
       this.errorMessage = '';
       // Clear file input data
       event.target.value = '';
@@ -160,8 +180,28 @@ export default {
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-          const size = this.width + 'x' + this.height;
+          const size = `${this.width}x${this.height}`;
           if (_this.ImageRichMenuSize.includes(size)) {
+            _this.fileURL = e.target.result;
+            _this.isPreview = true;
+          } else {
+            _this.isPreview = false;
+            _this.errorMessage = '指定されたサイズの画像をアップロードしてください。';
+          }
+        };
+        img.src = e.target.result;
+      };
+    },
+
+    generateImageMapPreview(input) {
+      const _this = this;
+      const reader = new FileReader();
+      reader.readAsDataURL(input);
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const size = `${this.width}`;
+          if (_this.ImageImageMapSize.includes(size)) {
             _this.fileURL = e.target.result;
             _this.isPreview = true;
           } else {
@@ -185,7 +225,7 @@ export default {
 
       let response = null;
       if (this.mediaData.type === 'imagemap') {
-        response = await this.uploadImageMap({ file: this.inputFile });
+        response = await this.uploadImageMap(this.inputFile);
       } else if (this.mediaData.type === 'richmenu') {
         response = await this.uploadRichMenu(this.inputFile);
       } else {
@@ -202,7 +242,7 @@ export default {
     },
 
     getDuration(media) {
-      return media.duration ? Util.getDuration(media) : '00:00';
+      return media.duration ? Media.getDuration(media) : '00:00';
     },
 
     deleteMedia() {
