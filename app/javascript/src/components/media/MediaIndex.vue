@@ -101,10 +101,13 @@
               </div>
             </div>
             <div class="card-footer" v-if="isManageMode">
-              <div class="d-flex align-items-center mt-1">
-                <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
-                <b>{{ media.type }}</b>
-                <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
+              <div class="d-flex">
+                <div class="d-flex align-items-center mt-1 mr-auto">
+                  <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
+                  <b>{{ media.type }}</b>
+                  <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
+                </div>
+                <a :href="media.url" class="download-icon mt-1" download><i class="dripicons-cloud-download"></i></a>
               </div>
               <small class="w-100">
                 登録：<b>{{ formattedDate(media.created_at) }}</b>
@@ -188,6 +191,7 @@ export default {
   },
   data() {
     return {
+      rootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       currentPage: 1,
@@ -328,5 +332,9 @@ export default {
   .bg-position-center {
     background-position: center;
     background-size: cover;
+  }
+
+  .download-icon {
+    font-size: 1rem;
   }
 </style>
