@@ -19,8 +19,8 @@ class User::SurveysController < User::ApplicationController
   end
 
   def answers
-    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(1)
-    @answers = Kaminari.paginate_array(@survey.survey_responses).page(params[:answer_page]).per(1)
+    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(10)
+    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question]])).page(params[:response_page]).per(10)
   end
 
   # GET /user/surveys/new

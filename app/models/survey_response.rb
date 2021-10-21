@@ -24,4 +24,5 @@
 class SurveyResponse < ApplicationRecord
   belongs_to :survey
   belongs_to :line_friend
+  has_many :survey_answers
 end
