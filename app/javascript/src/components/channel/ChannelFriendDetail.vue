@@ -2,9 +2,12 @@
   <div class="card chat-panel" v-if="activeChannel">
     <div class="card-body">
       <div class="mt-3 text-center">
-        <img :src="friend.avatar_url || '/img/no-image-profile.png'" alt="shreyu"
-          class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>{{ friend.name }}</h4>
+        <img
+          :src="friend.avatar_url || '/img/no-image-profile.png'"
+          alt="shreyu"
+          class="img-thumbnail avatar-lg rounded-circle"
+        />
+        <h4>{{ truncate(friend.name, 15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -14,17 +17,25 @@
         </div>
         <hr class="" />
 
-        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-notes'></i> メモ欄:</strong></p>
-        <p class="text-prewrap max-3-lines">{{ friend.note || 'なし' }}</p>
+        <p class="mt-3 mb-1 font-12">
+          <strong><i class="uil uil-notes"></i> メモ欄:</strong>
+        </p>
+        <p class="text-prewrap max-3-lines">{{ friend.note || "なし" }}</p>
 
-        <p class="mt-3 mb-1 font-12"><strong><i class='uil uil-tag'></i> タグ:</strong></p>
+        <p class="mt-3 mb-1 font-12">
+          <strong><i class="uil uil-tag"></i> タグ:</strong>
+        </p>
         <p><friend-tag :tags="friend.tags"></friend-tag></p>
 
-        <p class="mt-4 mb-1 font-12"><strong><i class='uil uil-clock'></i> 登録日時:</strong></p>
+        <p class="mt-4 mb-1 font-12">
+          <strong><i class="uil uil-clock"></i> 登録日時:</strong>
+        </p>
         <p>{{ friendAddedAt }}</p>
       </div>
-    </div> <!-- end card-body -->
-  </div> <!-- end card-->
+    </div>
+    <!-- end card-body -->
+  </div>
+  <!-- end card-->
 </template>
 
 <script>
@@ -54,6 +65,14 @@ export default {
     },
     detailPath() {
       return `${this.rootPath}/user/friends/${this.friend.id}`;
+    }
+  },
+
+  methods: {
+    truncate(str, length = 15) {
+      return _.truncate(str, {
+        length: length
+      });
     }
   }
 };
