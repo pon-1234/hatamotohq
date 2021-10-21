@@ -20,6 +20,7 @@ class User::SurveysController < User::ApplicationController
 
   def answers
     @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(1)
+    @answers = Kaminari.paginate_array(@survey.survey_responses).page(params[:answer_page]).per(1)
   end
 
   # GET /user/surveys/new

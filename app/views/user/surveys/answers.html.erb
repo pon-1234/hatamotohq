@@ -51,13 +51,38 @@
           <% end %>
         </tbody>
       </table>
-      <div>
+      <div class="text-center">
         <%= paginate @answered_users, param_name: :user_page %>
       </div>
     </div>
     <div class="tab-pane" id="answers">
-      <div>
-
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th>回答者</th>
+            <th>フォームの回答</th>
+            <th>回答日</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @answers.each do |answer| %>
+            <tr>
+              <td class="table-user d-flex">
+                <img
+                  src="<%= answer.line_friend.line_picture_url || '/img/no-image-profile.png' %>"
+                  alt="table-user"
+                  class="mr-2 rounded-circle"
+                />
+                <p class="text-ove m-0"><%= answer.line_friend.display_name %></p>
+              </td>
+              <td></td>
+              <td><%= answer.created_at.strftime('%Y.%m.%d %H:%M') %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <%= paginate @answers, param_name: :answer_page %>
       </div>
     </div>
   </div>
