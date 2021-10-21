@@ -71,7 +71,7 @@
               type="text"
               placeholder="表示名"
               class="form-control"
-              v-model="friendData.display_name"
+              v-model.trim="friendData.display_name"
               name="display_name"
               ref="displayName"
               :disabled="!editing"
@@ -87,7 +87,7 @@
             <textarea
               rows="2"
               class="form-control"
-              v-model="friendData.note"
+              v-model.trim="friendData.note"
               name="note"
               :disabled="!editing"
               v-validate="'max:2000'"
@@ -204,11 +204,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('friend', [
-      'getFriend',
-      'updateFriend',
-      'getReminders'
-    ]),
+    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders']),
 
     selectTags(tags) {
       this.friendData.tags = tags;
