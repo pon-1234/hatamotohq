@@ -43,13 +43,13 @@
             </thead>
             <tbody v-for="(friend, index) in friends" :key="index">
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
-                <td class="table-user d-flex">
+                <td class="table-user d-flex align-items-center">
                   <img
                     :src="friend.line_picture_url || '/img/no-image-profile.png'"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
-                  <p class="text-ove m-0">{{ friend.line_name }}</p>
+                  <p class="m-0">{{ friend.line_name }}</p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">

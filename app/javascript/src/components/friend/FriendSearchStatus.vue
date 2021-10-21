@@ -45,7 +45,8 @@ export default {
   },
   methods: {
     ...mapMutations('friend', [
-      'resetQueryParams'
+      'resetQueryParams',
+      'setClearQueryParams'
     ]),
     ...mapActions('friend', [
       'getFriends'
@@ -62,6 +63,7 @@ export default {
     async clearSearch() {
       this.resetQueryParams();
       await this.getFriends();
+      this.setClearQueryParams(true);
     },
 
     formattedDate(date) {
