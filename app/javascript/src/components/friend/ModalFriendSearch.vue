@@ -204,7 +204,7 @@ export default {
         visible_eq: true,
         locked_eq: false
       };
-      this.params = _.cloneDeep(resetParams);
+      Object.assign(this.params, resetParams);
     },
     showModal() {
       if (this.clearQueryParams) {
