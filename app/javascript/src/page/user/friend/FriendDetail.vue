@@ -230,6 +230,10 @@ export default {
       const valid = await this.$validator.validateAll();
       if (!valid) return;
       this.loading = true;
+      // start: trim value
+      this.friendData.display_name = this.friendData.display_name.trim();
+      this.friendData.note = this.friendData.note.trim();
+      // end: trim value
       const formData = {
         id: this.friendData.id,
         display_name: this.friendData.display_name,
