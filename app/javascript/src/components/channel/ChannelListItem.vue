@@ -2,7 +2,7 @@
   <div class="text-body">
     <div :class="itemClass" role="button">
       <img
-        :src="friend.avatar_url || '/img/no-image-profile.png'"
+        v-lazy="imgObj"
         class="mr-2 rounded-circle"
         height="48"
         alt="User avatar"
@@ -29,6 +29,20 @@ import moment from 'moment';
 
 export default {
   props: ['channel', 'active'],
+  data() {
+    return {
+      imgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      }
+    };
+  },
+
+  created() {
+    this.imgObj.src = this.friend.avatar_url;
+  },
+
   computed: {
     friend() {
       return this.channel.line_friend;

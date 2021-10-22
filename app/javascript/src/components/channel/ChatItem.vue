@@ -13,7 +13,7 @@
       <div :class="alignBubble">
         <div class="chat-avatar">
           <img
-            :src="sender.line_picture_url ? sender.line_picture_url : '/img/no-image-profile.png'"
+            v-lazy="imgObj"
             class="rounded"
             alt="友達"
           />
@@ -54,6 +54,20 @@ export default {
       default: moment()
     }
   },
+  data() {
+    return {
+      imgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      }
+    };
+  },
+
+  created() {
+    this.imgObj.src = this.sender.line_picture_url;
+  },
+
   computed: {
     isSystemMessage() {
       return this.message.from === 'system';

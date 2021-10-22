@@ -6,7 +6,7 @@
           <!-- profile image -->
           <div class="text-center">
             <img
-              :src="friendData.line_picture_url ? friendData.line_picture_url : '/img/no-image-profile.png'"
+              v-lazy="imgObj"
               class="rounded-circle avatar-lg img-thumbnail"
               alt="profile-image"
             />
@@ -186,6 +186,11 @@ export default {
         display_name: '',
         note: ''
       },
+      imgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      },
       reminders: [],
       friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
       isShowDisplayName: false,
@@ -200,6 +205,7 @@ export default {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
     this.reminders = await this.getReminders(this.friend_id);
+    this.imgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
