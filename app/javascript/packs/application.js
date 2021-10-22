@@ -20,7 +20,6 @@ import {
   DropdownPlugin,
   TabsPlugin
 } from 'bootstrap-vue';
-import 'bootstrap';
 // Import constant
 import * as constant from '@/core/constant';
 import 'vue-select/dist/vue-select.css';

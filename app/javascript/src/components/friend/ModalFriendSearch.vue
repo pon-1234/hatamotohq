@@ -104,9 +104,7 @@ export default {
       params: {}
     };
   },
-  mounted() {
-    $(this.$refs.modalFriendSearch).on('shown.bs.modal', this.showModal);
-  },
+
   computed: {
     ...mapState('friend', {
       queryParams: state => state.queryParams,
