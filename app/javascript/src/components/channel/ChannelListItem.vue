@@ -2,7 +2,7 @@
   <div class="text-body">
     <div :class="itemClass" role="button">
       <img
-        v-lazy="imgObj"
+        v-lazy="avatarImgObj"
         class="mr-2 rounded-circle"
         height="48"
         alt="User avatar"
@@ -31,7 +31,7 @@ export default {
   props: ['channel', 'active'],
   data() {
     return {
-      imgObj: {
+      avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
@@ -40,7 +40,7 @@ export default {
   },
 
   created() {
-    this.imgObj.src = this.friend.avatar_url;
+    this.avatarImgObj.src = this.friend.avatar_url;
   },
 
   computed: {

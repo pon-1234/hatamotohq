@@ -13,7 +13,7 @@
       <div :class="alignBubble">
         <div class="chat-avatar">
           <img
-            v-lazy="imgObj"
+            v-lazy="avatarImgObj"
             class="rounded"
             alt="友達"
           />
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      imgObj: {
+      avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
@@ -65,7 +65,7 @@ export default {
   },
 
   created() {
-    this.imgObj.src = this.sender.line_picture_url;
+    this.avatarImgObj.src = this.sender.line_picture_url;
   },
 
   computed: {

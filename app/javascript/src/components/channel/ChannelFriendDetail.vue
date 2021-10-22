@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="mt-3 text-center">
         <img
-          v-lazy="filterImage(friend.avatar_url)"
+          v-lazy="genAvatarImgObj(friend.avatar_url)"
           alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle"
         />
@@ -74,13 +74,13 @@ export default {
         length: length
       });
     },
-    filterImage(url) {
-      const imgObj = {
+    genAvatarImgObj(url) {
+      const avatarImgObj = {
         src: url,
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
       };
-      return imgObj;
+      return avatarImgObj;
     }
   }
 };

@@ -45,7 +45,7 @@
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
                   <img
-                    v-lazy="filterImage(friend.line_picture_url)"
+                    v-lazy="genAvatarImgObj(friend.line_picture_url)"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
@@ -182,13 +182,13 @@ export default {
       this.window.width = window.innerWidth;
     },
 
-    filterImage(url) {
-      const imgObj = {
+    genAvatarImgObj(url) {
+      const avatarImgObj = {
         src: url,
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
       };
-      return imgObj;
+      return avatarImgObj;
     }
   }
 };

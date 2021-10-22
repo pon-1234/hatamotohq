@@ -9,7 +9,7 @@
         <div class="modal-body" v-if="friendDetail">
           <div class="center" style="text-align: center">
             <img
-              v-lazy="imgObj"
+              v-lazy="avatarImgObj"
               style="width: 150px;height: 150px;object-fit: cover;border-radius: 150px;"
             />
           </div>
@@ -80,7 +80,7 @@ export default {
       isShowDisplayName: true,
       friendDetail: null,
       displayName: null,
-      imgObj: {
+      avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
@@ -103,7 +103,7 @@ export default {
   },
 
   created() {
-    this.imgObj.src = this.friendDetail.line_customer.line_picture_url;
+    this.avatarImgObj.src = this.friendDetail.line_customer.line_picture_url;
   },
 
   methods: {

@@ -6,7 +6,7 @@
           <!-- profile image -->
           <div class="text-center">
             <img
-              v-lazy="imgObj"
+              v-lazy="avatarImgObj"
               class="rounded-circle avatar-lg img-thumbnail"
               alt="profile-image"
             />
@@ -186,7 +186,7 @@ export default {
         display_name: '',
         note: ''
       },
-      imgObj: {
+      avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
@@ -205,7 +205,7 @@ export default {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
     this.reminders = await this.getReminders(this.friend_id);
-    this.imgObj.src = this.friendData.line_picture_url;
+    this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
