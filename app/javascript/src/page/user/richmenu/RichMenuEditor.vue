@@ -5,6 +5,16 @@
         <h3 class="card-title">基本設定</h3>
       </div>
       <div class="card-body">
+        <div class="form-group d-flex align-items-center">
+          <label class="fw-300">フォルダ</label>
+          <div class="flex-grow-1">
+            <select v-model="richMenuData.folder_id" class="form-control fw-300">
+              <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                {{ folder.name }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="form-group d-flex align-items-start">
           <div class="d-flex fw-300 align-items-center">
             <span class="font-weight-bold">リッチメニュー名<required-mark /></span>
@@ -124,7 +134,7 @@
 
 <script>
 import Util from '@/core/util';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
 export default {
@@ -166,14 +176,22 @@ export default {
     if (this.rich_menu_id) {
       await this.fetchRichMenu();
     }
+    await this.getRichMenus();
     this.loading = false;
+  },
+
+  computed: {
+    ...mapState('richmenu', {
+      folders: state => state.folders
+    })
   },
 
   methods: {
     ...mapActions('richmenu', [
       'getRichMenu',
       'createRichMenu',
-      'updateRichMenu'
+      'updateRichMenu',
+      'getRichMenus'
     ]),
 
     forceRerender() {

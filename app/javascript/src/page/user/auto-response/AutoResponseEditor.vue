@@ -5,6 +5,17 @@
         <h3 class="card-title">基本設定</h3>
       </div>
       <div class="card-body">
+        <div class="form-group d-flex align-items-center">
+          <label class="fw-200">フォルダ</label>
+          <div class="flex-grow-1">
+            <select v-model="autoResponseData.folder_id" class="form-control fw-300">
+              <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                {{ folder.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group d-flex">
           <label class="fw-200">自動応答名<required-mark /></label>
           <div class="flex-grow-1">
@@ -130,7 +141,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
 import ViewHelper from '@/core/view_helper';
 
@@ -146,6 +157,7 @@ export default {
       msgContentKey: 0,
       error: null,
       autoResponseData: {
+        folder_id: null,
         name: '',
         status: 'enabled',
         keywords: [],
@@ -155,6 +167,11 @@ export default {
   },
   provide() {
     return { parentValidator: this.$validator };
+  },
+
+  async created() {
+    this.autoResponseData.folder_id = Util.getParamFromUrl('folder_id');
+    await this.getAutoResponses();
   },
 
   async beforeMount() {
@@ -176,8 +193,14 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('autoResponse', {
+      folders: state => state.folders
+    })
+  },
+
   methods: {
-    ...mapActions('autoResponse', ['getAutoResponse', 'createAutoResponse', 'updateAutoResponse', 'setPreviewContent']),
+    ...mapActions('autoResponse', ['getAutoResponse', 'createAutoResponse', 'updateAutoResponse', 'setPreviewContent', 'getAutoResponses']),
 
     ...mapActions('template', ['getTemplate']),
 

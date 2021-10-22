@@ -5,6 +5,18 @@
         <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
           <div class="row">
+            <div class="col-xl-12">
+              <div class="form-group">
+                <label class="fw-300">フォルダ</label>
+                <div class="flex-grow-1">
+                  <select v-model="surveyData.folder_id" class="form-control fw-300">
+                    <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                      {{ folder.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="col-xl-6">
               <div class="form-group">
                 <label class="fw-300">フォーム名(管理用)<required-mark /></label>
@@ -126,7 +138,7 @@
 
 <script>
 import Util from '@/core/util';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   props: ['survey_id', 'plan', 'liff_id'],
@@ -159,8 +171,16 @@ export default {
       this.parseSurvey(response);
       this.forceRerender();
     }
+    await this.getSurveys();
     this.loading = false;
   },
+
+  computed: {
+    ...mapState('survey', {
+      folders: state => state.folders
+    })
+  },
+
   methods: {
     ...mapActions('tag', [
       'getTags'
@@ -169,7 +189,8 @@ export default {
       'getSurvey',
       'createSurvey',
       'updateSurvey',
-      'delete'
+      'delete',
+      'getSurveys'
     ]),
 
     forceRerender() {
