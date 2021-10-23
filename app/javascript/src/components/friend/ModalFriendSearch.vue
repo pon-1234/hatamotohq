@@ -192,6 +192,17 @@ export default {
       this.resetQueryParams();
       this.selectedTags = [];
       this.forceRerender();
+      const resetParams = {
+        page: 1,
+        status_eq: 'active',
+        line_name_or_display_name_cont: null,
+        tags_id_in: null,
+        created_at_gteq: null,
+        created_at_lteq: null,
+        visible_eq: true,
+        locked_eq: false
+      };
+      Object.assign(this.params, resetParams);
     },
     showModal() {
       if (this.clearQueryParams) {
