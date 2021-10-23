@@ -2,6 +2,7 @@
 
 class DispatchBroadcastJob < ApplicationJob
   sidekiq_options retry: false
+  include Rails.application.routes.url_helpers
   queue_as :default
   MULTICAST_BATCH_SIZE = 500
 
@@ -57,7 +58,7 @@ class DispatchBroadcastJob < ApplicationJob
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
 
-    if contain_survey_action?
+    if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
     else
       success = send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
@@ -69,8 +70,11 @@ class DispatchBroadcastJob < ApplicationJob
   end
 
   private
-    def contain_survey_action?
-      true
+    # Check if any action contains a survey action
+    def contain_survey_action?(messages)
+      messages.extend Hashie::Extensions::DeepLocate
+      survey_actions = messages.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('survey') }
+      !survey_actions.blank?
     end
 
     # If a message in the list contain survey action, we could not use broadcast or multicast to distribute messages
@@ -93,7 +97,7 @@ class DispatchBroadcastJob < ApplicationJob
     end
 
     def gen_survey_url(survey, friend_id)
-      new_survey_answer_form(code: survey.code, friend_id: friend_id)
+      new_survey_answer_form_url(code: survey.code, friend_id: friend_id)
     end
 
     def send_broadcast(line_account, messages_data)

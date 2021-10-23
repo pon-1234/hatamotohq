@@ -6,7 +6,7 @@ class User::TemplatesController < User::ApplicationController
   # GET /user/templates
   def index
     if request.format.json?
-      @folders = Folder.accessible_by(current_ability).type_template_message
+      @folders = Folder.accessible_by(current_ability).type_template_message.includes([:templates])
     end
     respond_to do |format|
       format.html
