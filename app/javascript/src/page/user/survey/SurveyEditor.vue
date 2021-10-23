@@ -7,7 +7,7 @@
           <div class="row">
             <div class="col-xl-12">
               <div class="form-group">
-                <label class="fw-300">フォルダ</label>
+                <label class="fw-300">フォルダー</label>
                 <div class="flex-grow-1">
                   <select v-model="surveyData.folder_id" class="form-control fw-300">
                     <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -182,16 +182,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
-    ...mapActions('survey', [
-      'getSurvey',
-      'createSurvey',
-      'updateSurvey',
-      'delete',
-      'getSurveys'
-    ]),
+    ...mapActions('tag', ['getTags']),
+    ...mapActions('survey', ['getSurvey', 'createSurvey', 'updateSurvey', 'delete', 'getSurveys']),
 
     forceRerender() {
       this.contentKey++;
@@ -226,7 +218,16 @@ export default {
         const valid = await this.validateForm();
         if (!valid) return;
       }
-      const payload = _.pick(this.surveyData, ['id', 'folder_id', 'name', 'title', 'description', 'success_message', 're_answer', 'after_action']);
+      const payload = _.pick(this.surveyData, [
+        'id',
+        'folder_id',
+        'name',
+        'title',
+        'description',
+        'success_message',
+        're_answer',
+        'after_action'
+      ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;
       let response = null;

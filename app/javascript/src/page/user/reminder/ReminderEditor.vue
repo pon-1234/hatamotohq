@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group d-flex align-items-center">
-          <label class="fw-300">フォルダ</label>
+          <label class="fw-300">フォルダー</label>
           <div class="flex-grow-1">
             <select v-model="reminderData.folder_id" class="form-control fw-300">
               <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -74,9 +74,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reminder', [
-      'createReminder', 'getReminder', 'getFolders'
-    ]),
+    ...mapActions('reminder', ['createReminder', 'getReminder', 'getFolders']),
 
     async fetchData() {
       await this.getFolders();

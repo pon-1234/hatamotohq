@@ -22,86 +22,85 @@
             </a>
           </div>
           <div class="mt-2">
-            <div class="table-responsive">
-              <table class="table table-centered mb-0">
-                <thead class="thead-light">
-                  <tr>
-                    <th>自動応答名</th>
-                    <th>キーワード</th>
-                    <th>メッセージ</th>
-                    <th>状況</th>
-                    <th>ヒット数</th>
-                    <th>操作</th>
-                    <th>登録日</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
-                    <td>{{ autoResponse.name }}</td>
-                    <td>
-                      <div><small>どれか1つにマッチ</small></div>
-                      <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"
-                        ><span v-if="index > 0">or</span>「{{ tag }}」</span
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th class="mw-100">自動応答名</th>
+                  <th class="mw-100">キーワード</th>
+                  <th class="mw-100">メッセージ</th>
+                  <th class="fw-100">状況</th>
+                  <th class="fw-100">ヒット数</th>
+                  <th class="fw-100">操作</th>
+                  <th class="fw-150">フォルダー</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
+                  <td>{{ autoResponse.name }}</td>
+                  <td>
+                    <div><small>どれか1つにマッチ</small></div>
+                    <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"
+                      ><span v-if="index > 0">or</span>「{{ tag }}」</span
+                    >
+                  </td>
+                  <td>
+                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2 text-left">
+                      <message-content :data="item.content"></message-content>
+                    </div>
+                  </td>
+
+                  <td>
+                    <template v-if="autoResponse.status === 'enabled'">
+                      <i class="mdi mdi-circle text-success"></i> 有効
+                    </template>
+                    <template v-else> <i class="mdi mdi-circle"></i> 無効 </template>
+                  </td>
+
+                  <td>
+                    {{ autoResponse.hit_count }}
+                  </td>
+
+                  <td>
+                    <div class="btn-group">
+                      <button
+                        type="button"
+                        class="btn btn-light btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
                       >
-                    </td>
-                    <td>
-                      <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2 text-left">
-                        <message-content :data="item.content"></message-content>
-                      </div>
-                    </td>
-
-                    <td>
-                      <template v-if="autoResponse.status === 'enabled'">
-                        <i class="mdi mdi-circle text-success"></i> 有効
-                      </template>
-                      <template v-else> <i class="mdi mdi-circle"></i> 無効 </template>
-                    </td>
-
-                    <td>
-                      {{ autoResponse.hit_count }}
-                    </td>
-
-                    <td>
-                      <div class="btn-group">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm dropdown-toggle"
-                          data-toggle="dropdown"
-                          aria-expanded="false"
+                        操作 <span class="caret"></span>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集</a>
+                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)"
+                          >{{ autoResponse.status === "enabled" ? "OFF" : "ON" }}にする</a
                         >
-                          操作 <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集</a>
-                          <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)"
-                            >{{ autoResponse.status === "enabled" ? "OFF" : "ON" }}にする</a
-                          >
-                          <a
-                            role="button"
-                            class="dropdown-item"
-                            data-toggle="modal"
-                            data-target="#modalCopyAutoResponse"
-                            @click="showConfirmCopyModal(autoResponse)"
-                            >自動応答をコピー</a
-                          >
-                          <a
-                            role="button"
-                            class="dropdown-item"
-                            data-toggle="modal"
-                            data-target="#modalDeleteAutoResponse"
-                            @click="showConfirmDeleteModal(autoResponse)"
-                            >自動応答を削除</a
-                          >
-                        </div>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalCopyAutoResponse"
+                          @click="showConfirmCopyModal(autoResponse)"
+                          >自動応答をコピー</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteAutoResponse"
+                          @click="showConfirmDeleteModal(autoResponse)"
+                          >自動応答を削除</a
+                        >
                       </div>
-                    </td>
-                    <td>
-                      <span>{{ formattedDate(autoResponse.created_at) }}</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div v-if="curFolder">{{ curFolder.name }}</div>
+                    <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <div class="text-center mt-5" v-if="!autoResponses || autoResponses.length === 0">
               <b>自動応答はありません。</b>
             </div>
@@ -112,7 +111,7 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <!-- START: Delete folder modal -->
-    <modal-confirm id="modalDeleteFolder" type="delete" @confirm="submitDeleteFolder">
+    <modal-confirm id="modalDeleteFolder" title="フォルダー" type="delete" @confirm="submitDeleteFolder">
       <template v-slot:content v-if="folders[selectedFolderIndex]">
         <span>フォルダ名：{{ folders[selectedFolderIndex].name }}</span>
       </template>
@@ -174,7 +173,11 @@ export default {
   computed: {
     ...mapState('autoResponse', {
       folders: state => state.folders
-    })
+    }),
+
+    curFolder() {
+      return this.folders[this.selectedFolderIndex];
+    }
   },
 
   watch: {
@@ -235,7 +238,12 @@ export default {
     },
 
     async submitCreateFolder(value) {
-      this.createFolder(value);
+      const response = await this.createFolder(value);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {

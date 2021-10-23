@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="form-border">
           <div class="form-group">
-            <label class="fw-300">フォルダ</label>
+            <label class="fw-300">フォルダー</label>
             <div class="flex-grow-1">
               <select v-model="templateData.folder_id" class="form-control fw-300">
                 <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -132,9 +132,7 @@ export default {
       'getTemplates'
     ]),
 
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
+    ...mapActions('system', ['setIsSubmitChange']),
 
     forceRerender() {
       this.componentKey += 1;
@@ -206,14 +204,20 @@ export default {
       if (!this.template_id) {
         const response = await this.createTemplate(payload);
         if (response) {
-          Util.showSuccessThenRedirect('テンプレートの作成は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+          Util.showSuccessThenRedirect(
+            'テンプレートの作成は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/templates`
+          );
         } else {
           window.toastr.error('エラーを発生しました。');
         }
       } else {
         const response = await this.updateTemplate(payload);
         if (response) {
-          Util.showSuccessThenRedirect('テンプレートの変更は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+          Util.showSuccessThenRedirect(
+            'テンプレートの変更は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/templates`
+          );
         } else {
           window.toastr.error('エラーを発生しました。');
         }

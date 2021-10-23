@@ -1,33 +1,44 @@
 <template>
   <div @click="changeSelected" :class="getClassName()">
-    <div  class="d-flex align-items-center" v-if="!isEdit || !active">
+    <div class="d-flex align-items-center" v-if="!isEdit || !active">
       <span>
-        <i :class="active? 'fas fa-folder-open': 'fas fa-folder'"></i>
-        {{data.name}} ({{data.tags_count}})
+        <i :class="active ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
+        {{ data.name }} ({{ data.tags_count }})
       </span>
-      <div class="dropdown" v-if="active && index!=0">
-        <button type="button" class="btn dropdown-toggle btn-default action-tags" data-toggle="dropdown" aria-expanded="false">
+      <div class="dropdown" v-if="active && index != 0">
+        <button
+          type="button"
+          class="btn dropdown-toggle btn-default action-tags"
+          data-toggle="dropdown"
+          aria-expanded="false"
+        >
           編集<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li role="presentation" @click.stop="changeName"><a role="menuitem" tabindex="-1">名前を変える</a></li>
-            <li role="presentation" @click="deleteFolder"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modalDeleteFolder">フォルダを削除</a></li>
+          <li role="presentation" @click.stop="changeName"><a role="menuitem" tabindex="-1">名前を変える</a></li>
+          <li role="presentation" @click="deleteFolder">
+            <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#modalDeleteFolder">フォルダーを削除</a>
+          </li>
         </ul>
       </div>
     </div>
     <div v-if="isEdit && active">
       <div class="input-group d-flex">
-        <input type="text"  placeholder="フォルダ名" class="form-control" @click.stop :value="data.name" ref="folderName"
-          @keyup.enter='enterSubmitChangeName'
+        <input
+          type="text"
+          placeholder="フォルダー名"
+          class="form-control"
+          @click.stop
+          :value="data.name"
+          ref="folderName"
+          @keyup.enter="enterSubmitChangeName"
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
-        >
-          <span class="ml-auto">
-            <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">
-              決定
-            </button>
-          </span>
-        </div>
+        />
+        <span class="ml-auto">
+          <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</button>
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -85,7 +96,6 @@ export default {
     compositionstart() {
       this.isEnter = true;
     }
-
   }
 };
 </script>
@@ -95,7 +105,7 @@ export default {
     padding: 10px;
   }
 
-  .active{
+  .active {
     background-color: #e0e0e0;
   }
 
@@ -119,6 +129,6 @@ export default {
   }
 
   input {
-    height: 36px!important;
+    height: 36px !important;
   }
 </style>

@@ -36,7 +36,7 @@
               <table class="table table-tags-header">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col" style="height: 42px">フォルダ</th>
+                    <th scope="col" style="height: 42px">フォルダー</th>
                   </tr>
                 </thead>
               </table>
@@ -171,12 +171,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('tag', [
-      'getTags'
-    ]),
+    ...mapActions('tag', ['getTags']),
     isShowTop() {
       const rect = this.$refs.inputTag.$el.getBoundingClientRect();
-      return document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || (rect.top + window.scrollY) < 100;
+      return (
+        document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || rect.top + window.scrollY < 100
+      );
     },
     changeSelected(index) {
       this.selectedFolderIndex = index;
@@ -240,7 +240,6 @@ export default {
     backToFolder() {
       this.isPc = false;
     }
-
   }
 };
 </script>

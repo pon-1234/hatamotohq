@@ -28,7 +28,7 @@
                   <th>既定値</th>
                   <th>人数</th>
                   <th>操作</th>
-                  <th>フォルダ</th>
+                  <th>フォルダー</th>
                 </tr>
               </thead>
               <tbody>
@@ -85,13 +85,13 @@
 
     <!-- START: Delete folder modal -->
     <modal-confirm
-      title="このフォルダを削除してもよろしいですか？"
+      title="このフォルダーを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder"
     >
       <template v-slot:content v-if="curFolder">
-        <span>フォルダ名：{{ curFolder.name }}</span>
+        <span>フォルダー名：{{ curFolder.name }}</span>
       </template>
     </modal-confirm>
     <!-- END: Delete folder modal -->

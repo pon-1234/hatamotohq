@@ -6,7 +6,7 @@
       </div>
       <div class="card-body">
         <div class="form-group d-flex align-items-center">
-          <label class="fw-200">フォルダ</label>
+          <label class="fw-200">フォルダー</label>
           <div class="flex-grow-1">
             <select v-model="autoResponseData.folder_id" class="form-control fw-300">
               <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -25,7 +25,8 @@
               class="form-control"
               v-model="autoResponseData.name"
               placeholder="自動応答名を入力してください"
-              v-validate="'required'"
+              v-validate="'required|max:64'"
+              maxlength="65"
               data-vv-as="自動応答名"
             />
             <error-message :message="errors.first('name')"></error-message>
@@ -56,7 +57,7 @@
         <h3>反応するキーワードを設定する</h3>
       </div>
       <div class="card-body">
-        <div class="form-group d-flex flex-column">
+        <div class="form-group d-flex flex-column m-0">
           <label class="mb10">キーワード<required-mark /></label>
           <b-form-tags
             size="md"
@@ -66,7 +67,10 @@
             v-model="autoResponseData.keywords"
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
-            separator=" ,;"
+            separator=",;"
+            :tag-validator="tagValidator"
+            invalid-tag-text="無効なタグ"
+            duplicateTagText="タグはすでに存在します"
             add-on-change
             :add-button-text="'追加'"
           >
@@ -78,9 +82,10 @@
             v-model="autoResponseData.keywords"
             v-validate="'required'"
           />
-          <div>
-            <small
-              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small
+          <div class="mt-1">
+            <small class="text-muted font-12"
+              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03<br />
+              タグの長さは1〜20文字です</small
             >
           </div>
           <span class="invalid-box-label" v-if="error"
@@ -200,12 +205,23 @@ export default {
   },
 
   methods: {
-    ...mapActions('autoResponse', ['getAutoResponse', 'createAutoResponse', 'updateAutoResponse', 'setPreviewContent', 'getAutoResponses']),
+    ...mapActions('autoResponse', [
+      'getAutoResponse',
+      'createAutoResponse',
+      'updateAutoResponse',
+      'setPreviewContent',
+      'getAutoResponses'
+    ]),
 
     ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.msgContentKey++;
+    },
+
+    tagValidator(tag) {
+      // Individual tag validator function
+      return tag === tag.toLowerCase() && tag.length < 20;
     },
 
     async submitCreate() {

@@ -1,32 +1,42 @@
 <template>
-
   <section>
-    <div class="modal fade modal-template modal-common01" :id="id? id:'modal-template'" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
+    <div
+      class="modal fade modal-template modal-common01"
+      :id="id ? id : 'modal-template'"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-body overflow-hidden">
             <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
-              <h3 class="hdg3">フォルダ <span v-if="model">(Edit)</span><span v-else>(Create)</span></h3>
+              <h3 class="hdg3">フォルダー <span v-if="model">(Edit)</span><span v-else>(Create)</span></h3>
             </div>
 
             <div style="display: contents">
               <label class="w-100 mt20">
                 友だち情報名
-                <required-mark/>
+                <required-mark />
               </label>
               <div class="w-100">
-                <input name="label" placeholder="ラベルを入力してください" type="text" maxlength="12" v-model="data.field_name"
-                       class="w-100 form-control" v-validate="'required'"/>
+                <input
+                  name="label"
+                  placeholder="ラベルを入力してください"
+                  type="text"
+                  maxlength="12"
+                  v-model="data.field_name"
+                  class="w-100 form-control"
+                  v-validate="'required'"
+                />
                 <span v-if="errors.has('label')" class="invalid-box-label">友だち情報名は必須です</span>
               </div>
-              <label style="margin-top: 20px">
-                形式
-              </label>
-              <div class="w-100" >
+              <label style="margin-top: 20px"> 形式 </label>
+              <div class="w-100">
                 <select v-model="data.type" v-validate="'required'" name="selectBox">
                   <option v-for="(item, key) of typese" :key="key" :value="key">
-                    {{item}}
+                    {{ item }}
                   </option>
                 </select>
                 <span v-if="errors.has('selectBox')" class="invalid-box-label">形式は必須です</span>
@@ -43,7 +53,6 @@
 </template>
 
 <script>
-
 import { mapActions } from 'vuex';
 
 export default {
@@ -61,31 +70,28 @@ export default {
         file: 'ファイル添付',
         date: '日付'
       }
-
     };
   },
-  created() {
-  },
+  created() {},
 
   watch: {
     model: {
       deep: true,
       handler(val) {
         // eslint-disable-next-line no-undef
-        this.data = _.cloneDeep(val || {
-          field_name: null,
-          type: null,
-          description: null
-        });
+        this.data = _.cloneDeep(
+          val || {
+            field_name: null,
+            type: null,
+            description: null
+          }
+        );
         // console.log(val);
       }
     }
   },
   methods: {
-    ...mapActions('survey', [
-      'addSurveyProfile',
-      'updateSurveyProfile'
-    ]),
+    ...mapActions('survey', ['addSurveyProfile', 'updateSurveyProfile']),
 
     async submitForm() {
       const passed = await this.$validator.validateAll();
@@ -95,18 +101,19 @@ export default {
 
       if (this.model && this.model.id) {
         // edit
-        this.updateSurveyProfile(this.data).then((e) => {
+        this.updateSurveyProfile(this.data).then(e => {
           this.$emit('submited', e);
         });
       } else {
-        this.addSurveyProfile(Object.assign(this.data, {
-          folder_id: this.folderId
-        })).then((e) => {
+        this.addSurveyProfile(
+          Object.assign(this.data, {
+            folder_id: this.folderId
+          })
+        ).then(e => {
           this.$emit('submited', e);
         });
       }
     }
-
   }
 };
 </script>

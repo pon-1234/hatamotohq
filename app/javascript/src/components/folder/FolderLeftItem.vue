@@ -27,7 +27,7 @@
                 data-toggle="modal"
                 data-target="#modalDeleteFolder"
                 @click="deleteFolder"
-                >フォルダを削除</a
+                >フォルダーを削除</a
               >
             </div>
           </div>
@@ -38,7 +38,7 @@
       <div class="input-group d-flex">
         <input
           type="text"
-          placeholder="フォルダ名"
+          placeholder="フォルダー名"
           class="form-control"
           @click.stop
           :value="data.name"
