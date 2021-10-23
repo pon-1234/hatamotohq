@@ -46,7 +46,7 @@
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
                   <img
-                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    v-lazy="genAvatarImgObj(friend.line_picture_url)"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
@@ -181,6 +181,15 @@ export default {
 
     handleResize() {
       this.window.width = window.innerWidth;
+    },
+
+    genAvatarImgObj(url) {
+      const avatarImgObj = {
+        src: url,
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      };
+      return avatarImgObj;
     },
 
     openModal() {

@@ -27,7 +27,7 @@
               <tr>
                 <td class="table-user">
                   <img
-                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    v-lazy="avatarImgObj"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
@@ -79,8 +79,17 @@ export default {
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
-      loading: false
+      loading: false,
+      avatarImgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      }
     };
+  },
+
+  created() {
+    this.avatarImgObj.src = this.friend.line_picture_url;
   },
 
   watch: {

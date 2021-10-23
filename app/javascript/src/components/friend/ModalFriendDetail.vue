@@ -9,7 +9,7 @@
         <div class="modal-body" v-if="friendDetail">
           <div class="center" style="text-align: center">
             <img
-              :src="friendDetail.line_customer.line_picture_url ? friendDetail.line_customer.line_picture_url : '/img/no-image-profile.png'"
+              v-lazy="avatarImgObj"
               style="width: 150px;height: 150px;object-fit: cover;border-radius: 150px;"
             />
           </div>
@@ -79,7 +79,12 @@ export default {
       isEnter: true,
       isShowDisplayName: true,
       friendDetail: null,
-      displayName: null
+      displayName: null,
+      avatarImgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      }
     };
   },
 
@@ -96,6 +101,11 @@ export default {
       deep: true
     }
   },
+
+  created() {
+    this.avatarImgObj.src = this.friendDetail.line_customer.line_picture_url;
+  },
+
   methods: {
     showListTag() {
       if (!this.isShowTags) {
