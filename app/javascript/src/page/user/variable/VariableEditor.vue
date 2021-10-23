@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group d-flex align-items-center">
-          <label class="fw-300">フォルダ</label>
+          <label class="fw-300">フォルダー</label>
           <div class="flex-grow-1">
             <select v-model="variableData.folder_id" class="form-control fw-300">
               <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -130,12 +130,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('variable', [
-      'createVariable',
-      'updateVariable',
-      'getVariable',
-      'getFolders'
-    ]),
+    ...mapActions('variable', ['createVariable', 'updateVariable', 'getVariable', 'getFolders']),
 
     async fetchData() {
       await this.getFolders();
@@ -168,14 +163,20 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('友だち情報欄の保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
+        Util.showSuccessThenRedirect(
+          '友だち情報欄の保存は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/variables`
+        );
       } else {
         window.toastr.error('友だち情報欄の保存は失敗しました。');
       }
     },
     onReceiveUpdateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('友だち情報欄の更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
+        Util.showSuccessThenRedirect(
+          '友だち情報欄の更新は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/variables`
+        );
       } else {
         window.toastr.error('友だち情報欄の更新は失敗しました。');
       }

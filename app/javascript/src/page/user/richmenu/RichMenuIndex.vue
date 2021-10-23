@@ -28,7 +28,7 @@
                   <th class="mw-200">画像</th>
                   <!-- <th class="mw-120">メンバー数</th> -->
                   <th class="mw-80">操作</th>
-                  <th>フォルダ</th>
+                  <th>フォルダー</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,12 +102,12 @@
     <loading-indicator :loading="loading"></loading-indicator>
     <!-- START: modal delete folder -->
     <modal-confirm
-      title="こちらのフォルダを削除してもよろしいですか？"
+      title="こちらのフォルダーを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder"
     >
-      <template v-slot:content v-if="curFolder"> フォルダ名：{{ curFolder.name }} </template>
+      <template v-slot:content v-if="curFolder"> フォルダー名：{{ curFolder.name }} </template>
     </modal-confirm>
     <!-- END: modal delete folder -->
 

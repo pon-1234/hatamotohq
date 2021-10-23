@@ -17,60 +17,67 @@
         <div class="tag-header">
           <div class="col-r">
             <div class="btn-common02 fz14">
-              <a @click="addProfile()"
-                 v-if="surveyProfiles && surveyProfiles.length > selectedFolder && surveyProfiles[selectedFolder]"><span>新規作成</span></a>
+              <a
+                @click="addProfile()"
+                v-if="surveyProfiles && surveyProfiles.length > selectedFolder && surveyProfiles[selectedFolder]"
+                ><span>新規作成</span></a
+              >
             </div>
           </div>
         </div>
         <div class="tag-content">
           <div class="x-tag-header">
             <div class="x-btn-back">
-              <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i></div>
-            <div class="x-title"
-                 v-if="surveyProfiles[selectedFolder]">{{surveyProfiles[selectedFolder].name}}
+              <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i>
             </div>
+            <div class="x-title" v-if="surveyProfiles[selectedFolder]">{{ surveyProfiles[selectedFolder].name }}</div>
           </div>
 
           <div class="tag-scroll" v-if="!isBlink">
-            <div class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center"
-                 style="overflow-x: scroll; width: 100%">
+            <div
+              class="tbl-admin01 tbl-linebot01 table-responsive fz14 text-center"
+              style="overflow-x: scroll; width: 100%"
+            >
               <table class="table table-hover table-scenario">
                 <thead>
-                <tr>
-                  <th class="w20">友だち情報名</th>
-                  <th class="" style="width: 25%">形式</th>
-                  <th class="w20" style="min-width: 83px; width: 20%">ステータス</th>
-                  <th class="w20" style="min-width: 83px;  width: 10%">操作</th>
-                </tr>
+                  <tr>
+                    <th class="w20">友だち情報名</th>
+                    <th class="" style="width: 25%">形式</th>
+                    <th class="w20" style="min-width: 83px; width: 20%">ステータス</th>
+                    <th class="w20" style="min-width: 83px; width: 10%">操作</th>
+                  </tr>
                 </thead>
                 <tbody v-if="surveyContents && surveyContents.length">
-                <tr v-for="(survey, index) in surveyContents" v-bind:key="index">
-                  <td style="text-align: left">{{survey.field_name}}</td>
-                  <td>{{survey.type}}</td>
-                  <td>
-                    <div class="toggle-switch" style="margin: auto;">
-                      <input class="toggle-input" type="checkbox"
-                             v-model="survey.status"
-                             true-value="enable"
-                             false-value="disable"
-                             @change="updateStatus(survey)">
-                      <label v-bind:for="survey.id" class="toggle-label"/>
-                      <span></span>
-                    </div>
-                  </td>
-                  <td>
-                    <div data-toggle="tooltip" title="編集" class="btn-edit01">
-                      <a class="btn-more btn-more-linebot btn-block" @click="showProfileEditor(index, survey)"> <i class="fas fa-edit"></i> </a>
-                    </div>
-                  </td>
-                </tr>
+                  <tr v-for="(survey, index) in surveyContents" v-bind:key="index">
+                    <td style="text-align: left">{{ survey.field_name }}</td>
+                    <td>{{ survey.type }}</td>
+                    <td>
+                      <div class="toggle-switch" style="margin: auto">
+                        <input
+                          class="toggle-input"
+                          type="checkbox"
+                          v-model="survey.status"
+                          true-value="enable"
+                          false-value="disable"
+                          @change="updateStatus(survey)"
+                        />
+                        <label v-bind:for="survey.id" class="toggle-label" />
+                        <span></span>
+                      </div>
+                    </td>
+                    <td>
+                      <div data-toggle="tooltip" title="編集" class="btn-edit01">
+                        <a class="btn-more btn-more-linebot btn-block" @click="showProfileEditor(index, survey)">
+                          <i class="fas fa-edit"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
                 <tbody v-else>
-                <tr>
-                  <td colspan="3">
-                    データなし
-                  </td>
-                </tr>
+                  <tr>
+                    <td colspan="3">データなし</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -78,12 +85,21 @@
         </div>
       </div>
     </div>
-    <survey-profile-editor :model="currentModel" :folderId="currentFolderId"
-                           id="survey-profile-editor" @submited="onSubmit()"></survey-profile-editor>
+    <survey-profile-editor
+      :model="currentModel"
+      :folderId="currentFolderId"
+      id="survey-profile-editor"
+      @submited="onSubmit()"
+    ></survey-profile-editor>
     <!--<modal-confirm v-bind:title="'コピーしますか？'" type='confirm' @input="copySurvey"></modal-confirm>-->
     <!--<modal-confirm title="こちらのアンケートをご確認ください。" id="modal-delete-confirm" type='confirm'-->
     <!--@input="deleteSurvey"></modal-confirm>-->
-    <modal-confirm title="こちらのフォルダを削除してもよろしいですか？" id='modalDeleteFolder' type='delete' @input="submitDeleteTag"/>
+    <modal-confirm
+      title="こちらのフォルダーを削除してもよろしいですか？"
+      id="modalDeleteFolder"
+      type="delete"
+      @input="submitDeleteTag"
+    />
   </section>
 </template>
 
@@ -104,7 +120,7 @@ export default {
     };
   },
   created() {
-    this.getSurveyProfiles().then((res) => {
+    this.getSurveyProfiles().then(res => {
       this.surveyProfiles = res;
       this.changeSelectedFolder(this.selectedFolder);
     });
@@ -153,11 +169,11 @@ export default {
       this.$store
         .dispatch('global/createFolder', value)
         .done(res => {
-          this.getSurveyProfiles().then((res) => {
+          this.getSurveyProfiles().then(res => {
             this.surveyProfiles = res;
           });
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     },
 
     submitUpdateFolder(value) {
@@ -165,8 +181,8 @@ export default {
         .dispatch('global/editFolder', value)
         .done(res => {
           this.surveyProfiles[this.selectedFolder].name = res.name;
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     },
 
     showProfileEditor(index, value) {
@@ -176,12 +192,14 @@ export default {
 
     onSubmit() {
       $('#survey-profile-editor').modal('hide');
-      this.getSurveyProfiles().then((res) => {
-        this.surveyProfiles = res;
-        this.changeSelectedFolder(this.selectedFolder);
-      }).always(() => {
-        this.currentModel = null;
-      });
+      this.getSurveyProfiles()
+        .then(res => {
+          this.surveyProfiles = res;
+          this.changeSelectedFolder(this.selectedFolder);
+        })
+        .always(() => {
+          this.currentModel = null;
+        });
     },
 
     updateStatus(survey) {
@@ -195,10 +213,9 @@ export default {
           this.surveyProfiles.splice(this.selectedFolder, 1);
           this.selectedFolder -= 1;
           this.surveyContents = this.surveyProfiles[this.selectedFolder].surveys;
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     }
-
   }
 };
 </script>
@@ -262,7 +279,6 @@ export default {
       margin-right: 10px;
       cursor: pointer;
     }
-
   }
 
   .table-scenario {
@@ -288,8 +304,8 @@ export default {
   }
 
   .btn-copy {
-    border: 1px solid #00B900 !important;
-    color: #00B900 !important;
+    border: 1px solid #00b900 !important;
+    color: #00b900 !important;
     background: transparent !important;
   }
 
@@ -304,7 +320,7 @@ export default {
     .modal-dialog {
       margin: auto !important;
     }
-    @media(max-width: 991px) {
+    @media (max-width: 991px) {
       .btn-copy {
         min-width: 80px;
         margin-bottom: 10px;

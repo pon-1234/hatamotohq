@@ -5,6 +5,17 @@
         <h3 class="card-title">基本設定</h3>
       </div>
       <div class="card-body">
+        <div class="form-group d-flex align-items-center">
+          <label class="fw-200">フォルダー</label>
+          <div class="flex-grow-1">
+            <select v-model="autoResponseData.folder_id" class="form-control fw-300">
+              <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                {{ folder.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group d-flex">
           <label class="fw-200">自動応答名<required-mark /></label>
           <div class="flex-grow-1">
@@ -14,7 +25,8 @@
               class="form-control"
               v-model="autoResponseData.name"
               placeholder="自動応答名を入力してください"
-              v-validate="'required'"
+              v-validate="'required|max:64'"
+              maxlength="65"
               data-vv-as="自動応答名"
             />
             <error-message :message="errors.first('name')"></error-message>
@@ -45,7 +57,7 @@
         <h3>反応するキーワードを設定する</h3>
       </div>
       <div class="card-body">
-        <div class="form-group d-flex flex-column">
+        <div class="form-group d-flex flex-column m-0">
           <label class="mb10">キーワード<required-mark /></label>
           <b-form-tags
             size="md"
@@ -55,7 +67,10 @@
             v-model="autoResponseData.keywords"
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
-            separator=" ,;"
+            separator=",;"
+            :tag-validator="tagValidator"
+            invalid-tag-text="無効なタグ"
+            duplicateTagText="タグはすでに存在します"
             add-on-change
             :add-button-text="'追加'"
           >
@@ -67,9 +82,10 @@
             v-model="autoResponseData.keywords"
             v-validate="'required'"
           />
-          <div>
-            <small
-              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small
+          <div class="mt-1">
+            <small class="text-muted font-12"
+              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03<br />
+              タグの長さは1〜20文字です</small
             >
           </div>
           <span class="invalid-box-label" v-if="error"
@@ -120,7 +136,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">
+          {{ !auto_response_id ? "登録" : "保存" }}
+        </button>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -128,7 +146,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
 import ViewHelper from '@/core/view_helper';
 
@@ -144,6 +162,7 @@ export default {
       msgContentKey: 0,
       error: null,
       autoResponseData: {
+        folder_id: null,
         name: '',
         status: 'enabled',
         keywords: [],
@@ -153,6 +172,11 @@ export default {
   },
   provide() {
     return { parentValidator: this.$validator };
+  },
+
+  async created() {
+    this.autoResponseData.folder_id = Util.getParamFromUrl('folder_id');
+    await this.getAutoResponses();
   },
 
   async beforeMount() {
@@ -174,27 +198,37 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('autoResponse', {
+      folders: state => state.folders
+    })
+  },
+
   methods: {
     ...mapActions('autoResponse', [
       'getAutoResponse',
       'createAutoResponse',
       'updateAutoResponse',
-      'setPreviewContent'
+      'setPreviewContent',
+      'getAutoResponses'
     ]),
 
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.msgContentKey++;
+    },
+
+    tagValidator(tag) {
+      // Individual tag validator function
+      return tag === tag.toLowerCase() && tag.length < 20;
     },
 
     async submitCreate() {
       const result = await this.$validator.validateAll();
       if (!result) {
         return ViewHelper.scrollToRequiredField(false);
-      };
+      }
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
@@ -207,15 +241,13 @@ export default {
     },
 
     setDefaultMessage() {
-      this.autoResponseData.messages.push(
-        {
-          message_type_id: this.MessageTypeIds.Text,
-          content: {
-            type: this.MessageType.Text,
-            text: ''
-          }
+      this.autoResponseData.messages.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
         }
-      );
+      });
     },
 
     onMessageContentChanged({ index, content }) {

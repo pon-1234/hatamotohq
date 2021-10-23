@@ -21,21 +21,7 @@ export const mutations = {
     state.perPage = perPage;
   },
 
-  SET_MESSAGE(state, message) {
-    message.keywords = message.keyword && message.keyword.length > 0 ? message.keyword.split(',') : [];
-    state.message = message;
-  },
-
-  SET_MESSAGES_DELETE(state, params) {
-    state.folders.find(item => item.id === params.folder_id).auto_messages = state.folders.find(item => item.id === params.folder_id).auto_messages.filter(item => item.id !== params.id);
-  },
-
-  ADD_NEW_MESSAGE(state, params) {
-    params.auto_messages = [];
-    state.folders.push(params);
-  },
-
-  EDIT_MESSAGE(state, params) {
+  updateFolder(state, params) {
     const item = state.folders.find(item => item.id === params.id);
     if (item) {
       item.name = params.name;
@@ -77,7 +63,11 @@ export const actions = {
   },
 
   async updateAutoResponse(context, autoResponse) {
-    await AutoResponseAPI.updateAutoResponse(autoResponse);
+    try {
+      return await AutoResponseAPI.update(autoResponse);
+    } catch (error) {
+      return null;
+    }
   },
 
   async copyAutoResponse(context, id) {
@@ -88,16 +78,12 @@ export const actions = {
     }
   },
 
-  async deleteAutoResponse(context, query) {
-    context.dispatch('system/setLoading', true, { root: true });
+  async deleteAutoResponse(context, id) {
     try {
-      await AutoResponseAPI.botDelete(query);
-      context.commit('SET_MESSAGES_DELETE', query);
-      context.dispatch('system/setSuccess', { status: true, message: '成功しました' }, { root: true });
+      return await AutoResponseAPI.delete(id);
     } catch (error) {
-      context.dispatch('system/setSuccess', { status: false, message: 'エラーを発生しました' }, { root: true });
+      return null;
     }
-    context.dispatch('system/setLoading', false, { root: true });
   },
 
   async createFolder(context, payload) {
@@ -110,8 +96,8 @@ export const actions = {
     }
   },
 
-  editFolder(context, payload) {
-    context.commit('EDIT_MESSAGE', payload);
+  updateFolder(context, payload) {
+    context.commit('updateFolder', payload);
   },
 
   async deleteFolder(context, id) {

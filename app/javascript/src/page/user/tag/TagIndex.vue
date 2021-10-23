@@ -64,14 +64,14 @@
       </div>
 
       <modal-confirm
-        title="このフォルダを削除してもよろしいですか？"
+        title="このフォルダーを削除してもよろしいですか？"
         id="modalDeleteFolder"
         type="delete"
         @confirm="submitDeleteFolder"
       >
         <template v-slot:content v-if="curFolder">
           <div>
-            フォルダ名：<b>{{ curFolder.name }}</b>
+            フォルダー名：<b>{{ curFolder.name }}</b>
           </div>
         </template>
       </modal-confirm>
@@ -84,7 +84,7 @@
       >
         <template v-slot:content v-if="curFolder && curTag">
           <div>
-            フォルダ名：<b>{{ curFolder.name }}</b>
+            フォルダー名：<b>{{ curFolder.name }}</b>
           </div>
           <div class="mt-2">
             タグ名：<b>{{ curTag.name }}</b>
@@ -174,18 +174,18 @@ export default {
     async submitCreateFolder(value) {
       const response = await this.createFolder(value);
       if (response) {
-        window.toastr.success('フォルダの作成は完了しました。');
+        window.toastr.success('フォルダーの作成は完了しました。');
       } else {
-        window.toastr.error('フォルダの作成は失敗しました。');
+        window.toastr.error('フォルダーの作成は失敗しました。');
       }
     },
 
     async submitUpdateFolder(value) {
       const response = await this.updateFolder(value);
       if (response) {
-        window.toastr.success('フォルダの変更は完了しました。');
+        window.toastr.success('フォルダーの変更は完了しました。');
       } else {
-        window.toastr.error('フォルダの変更は失敗しました。');
+        window.toastr.error('フォルダーの変更は失敗しました。');
       }
     },
 
@@ -219,7 +219,7 @@ export default {
         if (response) {
           window.toastr.success('タグの作成は完了しました。');
         } else {
-          window.toastr.error('フォルダの作成は失敗しました。');
+          window.toastr.error('フォルダーの作成は失敗しました。');
         }
         this.resetTagInput();
       }
@@ -232,7 +232,7 @@ export default {
       if (response) {
         window.toastr.success('タグの変更は完了しました。');
       } else {
-        window.toastr.error('フォルダの変更は失敗しました。');
+        window.toastr.error('フォルダーの変更は失敗しました。');
       }
       this.forceRerender();
     },
@@ -260,7 +260,7 @@ export default {
 
     onReceiveCreateTagResponse(response) {
       if (response && response.id) {
-        window.toastr.success('フォルダまたはタグの作成は完了しました。');
+        window.toastr.success('フォルダーまたはタグの作成は完了しました。');
       } else {
         window.toastr.error(response.message);
       }

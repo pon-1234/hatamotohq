@@ -22,6 +22,7 @@
             data-backdrop="static"
             data-toggle="modal"
             data-target="#modalFriendSearch"
+            @click="openModal()"
           >
             詳細検索
           </div>
@@ -83,7 +84,7 @@
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
-    <modal-friend-search></modal-friend-search>
+    <modal-friend-search ref="modalFriendSearch"></modal-friend-search>
   </div>
 </template>
 <script>
@@ -180,6 +181,10 @@ export default {
 
     handleResize() {
       this.window.width = window.innerWidth;
+    },
+
+    openModal() {
+      this.$refs.modalFriendSearch.showModal();
     }
   }
 };

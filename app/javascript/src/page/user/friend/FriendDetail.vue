@@ -71,7 +71,7 @@
               type="text"
               placeholder="表示名"
               class="form-control"
-              v-model="friendData.display_name"
+              v-model.trim="friendData.display_name"
               name="display_name"
               ref="displayName"
               :disabled="!editing"
