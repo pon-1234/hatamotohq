@@ -74,7 +74,7 @@
                 <div>
                   <div class="card-body pt-0 accordion-0 center">
                     <div>
-                      <message-action-editor
+                      <action-editor
                         :index="index"
                         :value="item.action"
                         :supports="['message', 'uri', 'survey']"

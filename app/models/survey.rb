@@ -34,6 +34,7 @@ class Survey < ApplicationRecord
   default_scope { order(created_at: :desc) }
   belongs_to :line_account
   belongs_to :folder
+  has_many :survey_responses
   has_many :survey_questions, dependent: :destroy
   accepts_nested_attributes_for :survey_questions, allow_destroy: true
 
@@ -48,12 +49,33 @@ class Survey < ApplicationRecord
   before_create do
     self.code = generate_code
   end
-  after_create_commit :exec_after_create_commit
+
+  def responses_count
+    survey_responses.count
+  end
+
+  def users_count
+    survey_responses.count
+  end
+
+  def answered_users
+    SurveyResponse.find_by_sql('
+      SELECT
+        lf.id,
+        lf.display_name,
+        max(sr.created_at) AS answered_at
+      FROM
+        survey_responses sr,
+        line_friends lf
+      WHERE
+        sr.line_friend_id = lf .id
+      GROUP BY
+        lf.id,
+        lf.display_name
+    ').map { |_| _.attributes }
+  end
 
   private
-    def exec_after_create_commit
-    end
-
     def generate_code
       loop do
         code = Devise.friendly_token(10)

@@ -4,6 +4,8 @@
 class LineApi::PushMessage < LineApi::BaseRequest
   def perform(messages, friend_id)
     response = client.push_message(friend_id, messages)
+    p '-------'
+    p response.body
     response.code == HTTP_OK
   end
 end

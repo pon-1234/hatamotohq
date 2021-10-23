@@ -82,7 +82,7 @@
                     <div>
                       <div class="card-body pt-0 accordion-0 center">
                         <div>
-                          <message-action-editor
+                          <action-editor
                             class="form-group"
                             :name="'richmenu_type_' + index"
                             :value="item.action"
@@ -91,7 +91,7 @@
                             :showTitle="false"
                             @input="item.action = $event"
                           >
-                          </message-action-editor>
+                          </action-editor>
                         </div>
                       </div>
                     </div>

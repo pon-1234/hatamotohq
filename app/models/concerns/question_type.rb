@@ -9,7 +9,7 @@ module QuestionType
       textarea: 'textarea',
       radio: 'radio',
       checkbox: 'checkbox',
-      dropdown: 'dropdown',
+      pulldown: 'pulldown',
       file: 'file',
       date: 'date'
     }, _prefix: true

@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item">メッセージ</li>
+          <li class="breadcrumb-item"><%= link_to '回答フォーム一覧', user_surveys_path %></li>
+          <li class="breadcrumb-item active">回答フォーム詳細</li>
+        </ol>
+      </div>
+      <h4 class="page-title">回答フォーム詳細</h4>
+    </div>
+  </div>
+</div>
+
+<div class="col-xl-12">
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a href="#users" data-toggle="tab" aria-expanded="true" class="nav-link active">
+        <i class="mdi mdi-home-variant d-md-none d-block"></i>
+        <span class="d-none d-md-block">回答者一覧</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#answers" data-toggle="tab" aria-expanded="false" class="nav-link">
+        <i class="mdi mdi-account-circle d-md-none d-block"></i>
+        <span class="d-none d-md-block">回答一覧</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane show active" id="users">
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th>名前</th>
+            <th>回答日時</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @answered_users.each do |user| %>
+            <tr>
+              <td><%= user['display_name'] %></td>
+              <td><%= user['answered_at'].strftime('%Y.%m.%d %H:%M') %></td>
+              <td>
+                <div class="btn btn-sm btn-secondary">回答表示</div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <div>
+          <%= paginate @answered_users, param_name: :user_page %>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane" id="answers">
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th>回答者</th>
+            <th>フォームの回答</th>
+            <th>回答日</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @responses.each do |response| %>
+            <tr>
+              <td class="table-user d-flex align-items-center">
+                <img
+                  src="<%= response.line_friend.line_picture_url || '/img/no-image-profile.png' %>"
+                  alt="table-user"
+                  class="mr-2 rounded-circle"
+                />
+                <p class="m-0"><%= response.line_friend.display_name %></p>
+              </td>
+              <td>
+                <table class="table table-striped table-bordered text-break">
+                  <tbody>
+                    <% response.survey_answers.each do |answer| %>
+                      <tr>
+                        <th width="40%"><%= answer.survey_question.content['text'] %></th>
+                        <td width="60%"><%= answer.answer %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </td>
+              <td><%= response.created_at.strftime('%Y.%m.%d %H:%M') %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <div>
+          <%= paginate @responses, param_name: :response_page %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

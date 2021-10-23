@@ -4,11 +4,7 @@
       <span class="float-left">テキスト</span>
       <i class="mdi mdi-arrow-expand" aria-hidden="true"></i>
     </p>
-    <div
-      style="margin-top: 10px; display: none"
-      :class="name + '-expand'"
-      class="card-container"
-    >
+    <div style="margin-top: 10px; display: none" :class="name + '-expand'" class="card-container">
       <div class="card">
         <h5 class="card-header">Text</h5>
         <div class="card-body">
@@ -37,11 +33,7 @@
                 @change="changeSize"
                 classes="form-control"
               />
-              <span
-                v-if="errors.first('size_' + name)"
-                class="invalid-box-label"
-                >サイズが無効です</span
-              >
+              <span v-if="errors.first('size_' + name)" class="invalid-box-label">サイズが無効です</span>
             </div>
           </div>
         </div>
@@ -51,16 +43,10 @@
         <div class="card-body">
           <div class="form-group">
             <label class="col-form-label"> タイプ </label>
-            <message-action-editor
+            <action-editor
               class="form-group"
               :title="'Action Type'"
-              :supports="[
-                'postback',
-                'uri',
-                'message',
-                'datetimepicker',
-                'survey',
-              ]"
+              :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
               :showTitle="false"
               :name="name"
               :value="action"

@@ -96,7 +96,7 @@
             <div class="col-sm-8">
               <div class="form-group">
                 <label>選択後の挙動</label>
-                <message-action-editor
+                <action-editor
                   :name="'image_carousel' + indexColum"
                   :value="column.action"
                   @input="changeActionColumn(indexColum, $event)"

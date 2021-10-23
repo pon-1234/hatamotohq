@@ -48,8 +48,13 @@
               </div>
 
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer" />
-                <label class="custom-control-label" for="customCheck1">何度でも回答可能にする</label>
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="repeatAnswerCheck"
+                  v-model.trim="surveyData.re_answer"
+                />
+                <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
               </div>
             </div>
 
@@ -106,22 +111,23 @@
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">回答後のアクション</h3></div>
         <div class="card-body">
-          <message-action-editor-custom
+          <action-editor-custom
             name="survey-action"
             :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
             :showLaunchMesasge="false"
             @input="surveyData.after_action = $event"
-          ></message-action-editor-custom>
+          ></action-editor-custom>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
 
-      <div class="d-flex">
-        <div class="btn btn-success mr-2" @click="submit()">保存＆公開</div>
-        <div class="btn btn-outline-success mw-120" @click="submit(false)">下書き保存</div>
-        <div class="btn btn-secondary ml-auto" @click="previewSurvey()">プレビュー</div>
+      <div class="card">
+        <div class="card-body">
+          <div class="btn btn-success mr-2" @click="submit()">保存＆公開</div>
+          <div class="btn btn-outline-success mw-120" @click="submit(false)">下書き保存</div>
+        </div>
       </div>
     </div>
 

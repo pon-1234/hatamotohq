@@ -2,10 +2,12 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update]
+  before_action :find_survey, only: [:show, :update, :answers]
   # GET /user/surveys
   def index
-    @folders = Folder.accessible_by(current_ability).type_survey
+    if request.format.json?
+      @folders = Folder.accessible_by(current_ability).type_survey
+    end
     respond_to do |format|
       format.html
       format.json
@@ -14,6 +16,11 @@ class User::SurveysController < User::ApplicationController
 
   # GET /user/surveys/:id
   def show
+  end
+
+  def answers
+    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(10)
+    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question]])).page(params[:response_page]).per(10)
   end
 
   # GET /user/surveys/new

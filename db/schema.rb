@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_14_032428) do
+ActiveRecord::Schema.define(version: 2021_10_18_104237) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -406,28 +406,14 @@ ActiveRecord::Schema.define(version: 2021_10_14_032428) do
     t.index ['line_account_id'], name: 'index_scenarios_on_line_account_id'
   end
 
-  create_table 'survey_customer_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'survey_id'
+  create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
-    t.bigint 'survey_customer_id'
-    t.text 'content', size: :long
+    t.json 'answer'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_customer_answers_on_line_account_id'
-    t.index ['survey_customer_id'], name: 'index_survey_customer_answers_on_survey_customer_id'
-    t.index ['survey_id'], name: 'index_survey_customer_answers_on_survey_id'
-    t.index ['survey_question_id'], name: 'index_survey_customer_answers_on_survey_question_id'
-  end
-
-  create_table 'survey_customers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'survey_id'
-    t.bigint 'line_account_id'
-    t.integer 'answer_num', default: 0
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_customers_on_line_account_id'
-    t.index ['survey_id'], name: 'index_survey_customers_on_survey_id'
+    t.index ['survey_question_id'], name: 'index_survey_answers_on_survey_question_id'
+    t.index ['survey_response_id'], name: 'index_survey_answers_on_survey_response_id'
   end
 
   create_table 'survey_profile_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -463,6 +449,16 @@ ActiveRecord::Schema.define(version: 2021_10_14_032428) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['survey_id'], name: 'index_survey_questions_on_survey_id'
+  end
+
+  create_table 'survey_responses', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'survey_id'
+    t.bigint 'line_friend_id'
+    t.integer 'answer_count', default: 0
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_survey_responses_on_line_friend_id'
+    t.index ['survey_id'], name: 'index_survey_responses_on_survey_id'
   end
 
   create_table 'surveys', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -601,17 +597,15 @@ ActiveRecord::Schema.define(version: 2021_10_14_032428) do
   add_foreign_key 'scenario_messages', 'scenarios'
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'
-  add_foreign_key 'survey_customer_answers', 'line_accounts'
-  add_foreign_key 'survey_customer_answers', 'survey_customers'
-  add_foreign_key 'survey_customer_answers', 'survey_questions'
-  add_foreign_key 'survey_customer_answers', 'surveys'
-  add_foreign_key 'survey_customers', 'line_accounts'
-  add_foreign_key 'survey_customers', 'surveys'
+  add_foreign_key 'survey_answers', 'survey_questions'
+  add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_profile_templates', 'folders'
   add_foreign_key 'survey_profile_templates', 'line_accounts'
   add_foreign_key 'survey_profiles', 'line_accounts'
   add_foreign_key 'survey_profiles', 'survey_profile_templates'
   add_foreign_key 'survey_questions', 'surveys'
+  add_foreign_key 'survey_responses', 'line_friends'
+  add_foreign_key 'survey_responses', 'surveys'
   add_foreign_key 'surveys', 'folders'
   add_foreign_key 'surveys', 'line_accounts'
   add_foreign_key 'taggings', 'tags'

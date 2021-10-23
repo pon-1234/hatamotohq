@@ -32,6 +32,7 @@ class LineFriend < ApplicationRecord
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
   has_many :messages, as: :sender
+  has_many :survey_responses
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }

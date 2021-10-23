@@ -4,26 +4,16 @@
       <span class="float-left">ボタン</span>
       <i class="mdi mdi-arrow-expand" aria-hidden="true"></i>
     </p>
-    <div
-      style="margin-top: 10px; display: none"
-      :class="name + '-expand'"
-      class="card-container"
-    >
+    <div style="margin-top: 10px; display: none" :class="name + '-expand'" class="card-container">
       <div class="card">
         <h5 class="card-header">アクション設定</h5>
         <div class="card-body">
           <div class="form-group">
-            <message-action-editor
+            <action-editor
               class="form-group"
               :isNone="false"
               :title="'Action Type'"
-              :supports="[
-                'postback',
-                'uri',
-                'message',
-                'datetimepicker',
-                'survey',
-              ]"
+              :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
               :name="name"
               :value="action"
               @input="action = $event"

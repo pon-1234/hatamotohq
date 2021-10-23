@@ -13,7 +13,7 @@
         ></folder-left>
         <div class="flex-grow-1" :key="contentKey">
           <a
-            :href="`${MIX_ROOT_PATH}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`"
+            :href="`${rootPath}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -47,7 +47,15 @@
                     <span v-else class="text-danger">下書き</span>
                   </td>
                   <td>{{ survey.name }}</td>
-                  <td>未回答</td>
+                  <td>
+                    <template v-if="survey.responses_count === 0"> 未回答 </template>
+                    <template v-else>
+                      {{ survey.responses_count }}回答／<span class="font-12">{{ survey.users_count }}人</span>
+                      <a :href="`${rootPath}/user/surveys/${survey.id}/answers`" class="btn btn-sm btn-light ml-2"
+                        >表示</a
+                      >
+                    </template>
+                  </td>
                   <td>
                     <div class="btn-group">
                       <button
@@ -62,7 +70,7 @@
                         <a
                           role="button"
                           class="dropdown-item"
-                          :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/edit`"
+                          :href="`${rootPath}/user/surveys/${survey.id}/edit`"
                           v-if="survey.status !== 'published'"
                           >回答フォームを編集</a
                         >
@@ -87,7 +95,7 @@
                     <div class="btn-edit01 btn-info-linebot" v-if="survey.is_publish" v-tooltip="'回答一覧'">
                       <a
                         class="btn-more btn-more-linebot btn-block"
-                        :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/info`"
+                        :href="`${rootPath}/user/surveys/${survey.id}/info`"
                       >
                         回答一覧
                       </a>
@@ -131,7 +139,7 @@ import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       surveysData: [],
@@ -163,9 +171,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', [
-      'getSurveys'
-    ]),
+    ...mapActions('survey', ['getSurveys']),
     forceRerender() {
       this.contentKey++;
     },
@@ -180,26 +186,29 @@ export default {
         .dispatch('global/editFolder', value)
         .done(res => {
           this.curFolder.name = res.name;
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     },
     submitCreateFolder(value) {
       this.$store
         .dispatch('global/createFolder', value)
         .done(res => {
           this.getSurveys();
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     },
     updateStatus(survey) {
-      this.$store.dispatch('survey/updateStatus', {
-        id: survey.id,
-        status: survey.status
-      }).done((res) => {
-        window.toastr.success('ステータスが変更されました');
-      }).fail(() => {
-        window.toastr.error('ステータスの変更はエラーになりました');
-      });
+      this.$store
+        .dispatch('survey/updateStatus', {
+          id: survey.id,
+          status: survey.status
+        })
+        .done(res => {
+          window.toastr.success('ステータスが変更されました');
+        })
+        .fail(() => {
+          window.toastr.error('ステータスの変更はエラーになりました');
+        });
     },
     modalCopy(survey) {
       this.survey = survey;
@@ -211,13 +220,16 @@ export default {
     },
     submitCopySurvey() {
       if (this.survey) {
-        this.$store.dispatch('survey/copy', {
-          id: this.survey.id
-        }).done(() => {
-          this.getSurveys();
-        }).fail(() => {
-          window.toastr.error('コピーエラー');
-        });
+        this.$store
+          .dispatch('survey/copy', {
+            id: this.survey.id
+          })
+          .done(() => {
+            this.getSurveys();
+          })
+          .fail(() => {
+            window.toastr.error('コピーエラー');
+          });
       }
     },
     modalDelete(survey) {
@@ -230,13 +242,16 @@ export default {
     },
     submitDeleteSurvey() {
       if (this.survey) {
-        this.$store.dispatch('survey/destroy', {
-          id: this.survey.id
-        }).done(() => {
-          this.getSurveys();
-        }).fail(() => {
-          window.toastr.error('削除エラー');
-        });
+        this.$store
+          .dispatch('survey/destroy', {
+            id: this.survey.id
+          })
+          .done(() => {
+            this.getSurveys();
+          })
+          .fail(() => {
+            window.toastr.error('削除エラー');
+          });
       }
     },
 
@@ -247,10 +262,9 @@ export default {
           this.surveys.splice(this.selectedFolderIndex, 1);
           this.selectedFolderIndex -= 1;
           this.surveyContents = this.surveys[this.selectedFolderIndex].surveys;
-        }).fail(e => {
-        });
+        })
+        .fail(e => {});
     }
-
   }
 };
 </script>

@@ -1,8 +1,9 @@
 export default {
-  list: () => {
+  list: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
       method: 'GET',
+      data: query,
       dataType: 'json',
       contentType: 'application/json'
     });
@@ -11,6 +12,15 @@ export default {
   get: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json'
+    });
+  },
+
+  getByCode: (code) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/surveys/${code}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -43,59 +53,68 @@ export default {
     });
   },
 
-  updateStatus(data) {
+  postAnswer(payload) {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/status'),
-      method: 'PUT',
-      data: JSON.stringify(data),
-      contentType: 'application/json'
-    });
-  },
-  getCustomers(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/customers')
-    });
-  },
-
-  answersOfCustomer(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/answersOfCustomer')
-    });
-  },
-  copy(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/copy'),
+      url: `${process.env.MIX_ROOT_PATH}/surveys/${payload.code}/${payload.friend_id}`,
       method: 'POST',
+      data: JSON.stringify(payload),
       contentType: 'application/json'
-    });
-  },
-
-  addSurveyProfile(data) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/addProfileTemplate'),
-      method: 'POST',
-      data: JSON.stringify(data),
-      contentType: 'application/json'
-    });
-  },
-
-  getSurveyProfiles(query) {
-    query._pid = btoa('/surveys/getProfileTemplates');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-
-  updateSurveyProfile(data) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/updateSurveyProfile'),
-      method: 'PUT',
-      data: JSON.stringify(data),
-      contentType: 'application/json'
-    });
-  },
-
-  friendAnswers(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/friendAnswers/' + query.id)
     });
   }
+
+  // updateStatus(data) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/status'),
+  //     method: 'PUT',
+  //     data: JSON.stringify(data),
+  //     contentType: 'application/json'
+  //   });
+  // },
+  // getCustomers(query) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/customers')
+  //   });
+  // },
+
+  // answersOfCustomer(query) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/answersOfCustomer')
+  //   });
+  // },
+  // copy(query) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/copy'),
+  //     method: 'POST',
+  //     contentType: 'application/json'
+  //   });
+  // },
+
+  // addSurveyProfile(data) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/addProfileTemplate'),
+  //     method: 'POST',
+  //     data: JSON.stringify(data),
+  //     contentType: 'application/json'
+  //   });
+  // },
+
+  // getSurveyProfiles(query) {
+  //   query._pid = btoa('/surveys/getProfileTemplates');
+  //   return window.$.get(process.env.MIX_ROOT_PATH, query);
+  // },
+
+  // updateSurveyProfile(data) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/updateSurveyProfile'),
+  //     method: 'PUT',
+  //     data: JSON.stringify(data),
+  //     contentType: 'application/json'
+  //   });
+  // },
+
+  // friendAnswers(query) {
+  //   return window.$.ajax({
+  //     url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/friendAnswers/' + query.id)
+  //   });
+  // }
 };

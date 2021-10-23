@@ -9,8 +9,7 @@
   </div>
 </template>
 <script>
-
-import Util from '../../core/util';
+import Util from '../../../core/util';
 
 export default {
   props: {
@@ -36,7 +35,7 @@ export default {
     if (this.data.type === 'uri') {
       this.selected = this.data.id || (Util.validateUrl(this.data.uri) ? 1 : 2);
     } else {
-      const val = this.action_objects.firstWhere((item) => {
+      const val = _.find(this.action_objects, item => {
         return item.type === this.data.type;
       });
       this.selected = val ? val.id : 'none';
@@ -143,7 +142,7 @@ export default {
           label: '',
           content: {
             name: '',
-            code: null
+            id: null
           }
         };
         break;
@@ -156,14 +155,12 @@ export default {
     action_objects() {
       const objects = this.$store.getters['global/actionObjects'];
       return objects != null
-        ? objects.filter(item => (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback')
+        ? objects.filter(
+          item =>
+            (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
+        )
         : null;
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-  ::v-deep {
-  }
-</style>

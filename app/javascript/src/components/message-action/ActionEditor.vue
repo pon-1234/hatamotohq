@@ -28,7 +28,7 @@
     </div>
 
     <div class="mt-2">
-      <message-action-editor-custom
+      <action-editor-custom
         v-if="type === 'default' && isSupportPostback"
         :name="name"
         :value="data"
@@ -37,7 +37,7 @@
         @input="updateAction"
       />
 
-      <message-action-editor-basic
+      <action-editor-standard
         v-if="type === 'basic'"
         :value="data"
         :name="name"

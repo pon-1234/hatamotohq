@@ -24,6 +24,12 @@ Rails.application.routes.draw do
   post 'webhooks/:key', to: 'webhooks#index'
   post 'webhooks/push', to: 'webhooks#push'
 
+  # surveys
+  get 'surveys/:code/:friend_id', to: 'surveys#form', as: 'new_survey_answer_form'
+  post 'surveys/:code/:friend_id', to: 'surveys#answer', as: 'survey_answer_form'
+  get 'surveys/:code', to: 'surveys#show'
+  get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -84,7 +90,11 @@ Rails.application.routes.draw do
       resources :rich_menus do
         post :copy, on: :member
       end
-      resources :surveys
+      resources :surveys do
+        member do
+          get :answers
+        end
+      end
       resources :reminders do
         member do
           resources :episodes

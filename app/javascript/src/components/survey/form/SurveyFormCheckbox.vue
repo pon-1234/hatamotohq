@@ -1,17 +1,25 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-
-    <div class="mt-2">
-      <div
-        class="custom-control custom-checkbox custom-control-inline d-flex flex-start"
-        v-for="(option, index) in options"
-        :key="index"
-      >
-        <input type="checkbox" class="custom-control-input" :id="`${prefix}Option${index}`" />
-        <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
+    <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
+      <div class="mt-2">
+        <div
+          class="custom-control custom-checkbox custom-control-inline d-flex flex-start"
+          v-for="(option, index) in options"
+          :key="index"
+        >
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            :id="`${prefix}Option${index}`"
+            :name="`answers[${qnum}][answer]`"
+            :value="option.value"
+          />
+          <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
+        </div>
+        <error-message :message="errors[0]"></error-message>
       </div>
-    </div>
+    </ValidationProvider>
   </div>
 </template>
 
