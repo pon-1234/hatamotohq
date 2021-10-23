@@ -36,8 +36,13 @@
               </div>
 
               <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="" v-model.trim="surveyData.re_answer" />
-                <label class="custom-control-label" for="customCheck1">何度でも回答可能にする</label>
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="repeatAnswerCheck"
+                  v-model.trim="surveyData.re_answer"
+                />
+                <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
               </div>
             </div>
 
