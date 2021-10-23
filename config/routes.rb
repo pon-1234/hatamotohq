@@ -25,8 +25,8 @@ Rails.application.routes.draw do
   post 'webhooks/push', to: 'webhooks#push'
 
   # surveys
-  get 'surveys/:code/:friend_id', to: 'surveys#form'
-  post 'surveys/:code/:friend_id', to: 'surveys#answer'
+  get 'surveys/:code/:friend_id', to: 'surveys#form', as: 'new_survey_answer_form'
+  post 'surveys/:code/:friend_id', to: 'surveys#answer', as: 'survey_answer_form'
   get 'surveys/:code', to: 'surveys#show'
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
 

@@ -4,6 +4,7 @@
 class LineApi::PushMessage < LineApi::BaseRequest
   def perform(messages, friend_id)
     response = client.push_message(friend_id, messages)
+    byebug
     response.code == HTTP_OK
   end
 end

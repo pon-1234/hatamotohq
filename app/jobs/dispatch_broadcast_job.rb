@@ -3,6 +3,7 @@
 class DispatchBroadcastJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
+  MULTICAST_BATCH_SIZE = 500
 
   def perform(broadcast_id)
     ActiveJob::Base.logger.info "DispatchBroadcastJob ID = #{broadcast_id}"
@@ -76,7 +77,23 @@ class DispatchBroadcastJob < ApplicationJob
     # In the case, we have to generate survey url for each channel and send message using PushMessage
     def send_messages_with_survey_action(channels, messages)
       channels.each do |channel|
+        messages.extend Hashie::Extensions::DeepLocate
+        # Find all postback action
+        survey_actions = messages.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('survey') }
+        survey_actions.each do |action|
+          survey_id = action['content']['id']
+          survey = Survey.find(survey_id)
+          survey_url = gen_survey_url(survey, channel.line_friend.line_user_id)
+          action['type'] = 'uri'
+          action['uri'] = survey_id
+          action['linkUri'] = survey_id
+        end
+        LineApi::PushMessage.new(@broadcast.line_account).perform(messages, channel.line_friend.line_user_id)
       end
+    end
+
+    def gen_survey_url(survey, friend_id)
+      new_survey_answer_form(code: survey.code, friend_id: friend_id)
     end
 
     def send_broadcast(line_account, messages_data)
@@ -84,7 +101,7 @@ class DispatchBroadcastJob < ApplicationJob
     end
 
     def send_multicast(line_account, messages_data, friend_ids)
-      friend_ids.in_groups_of(500, false) do |ids|
+      friend_ids.in_groups_of(MULTICAST_BATCH_SIZE, false) do |ids|
         LineApi::Multicast.new(line_account).perform(messages_data, ids)
       end
     end

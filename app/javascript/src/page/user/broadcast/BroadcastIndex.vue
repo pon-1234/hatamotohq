@@ -37,7 +37,7 @@
               <tr>
                 <th>配信日時</th>
                 <th>タイトル</th>
-                <th>状況</th>
+                <th class="fw-150">状況</th>
                 <th class="fw-300">配信先</th>
                 <th hidden>配信数</th>
                 <th class="fw-150">操作</th>
@@ -71,7 +71,13 @@
                       操作 <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                      <a role="button" class="dropdown-item" @click="openEdit(broadcast)">一斉配信を編集する</a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        :href="`${rootPath}/user/broadcasts/${broadcast.id}/edit`"
+                        @click="openEdit(broadcast)"
+                        >一斉配信を編集する</a
+                      >
                       <a
                         role="button"
                         class="dropdown-item"
@@ -150,6 +156,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       curBroadcastIndex: 0,
@@ -167,13 +174,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters('user',
-      ['getQueryParams']
-    ),
+    ...mapGetters('user', ['getQueryParams']),
     ...mapState('broadcast', {
-      broadcasts: (state) => state.broadcasts,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      broadcasts: state => state.broadcasts,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curBroadcast() {
@@ -182,15 +187,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations('broadcast', [
-      'setCurPage',
-      'setQueryParams'
-    ]),
-    ...mapActions('broadcast', [
-      'getBroadcasts',
-      'copyBroadcast',
-      'deleteBroadcast'
-    ]),
+    ...mapMutations('broadcast', ['setCurPage', 'setQueryParams']),
+    ...mapActions('broadcast', ['getBroadcasts', 'copyBroadcast', 'deleteBroadcast']),
 
     forceRerender() {
       this.contentKey++;
@@ -210,10 +208,6 @@ export default {
 
     openNew() {
       window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
-    },
-
-    openEdit(broadcast) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/edit`);
     },
 
     openMessageIndex(broadcast) {
