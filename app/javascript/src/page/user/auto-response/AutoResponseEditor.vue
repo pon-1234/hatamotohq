@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group d-flex">
-          <label class="fw-200">設定</label>
+          <label class="fw-200">自動応答 ON/OFF</label>
           <div class="flex-grow-1 d-flex">
             <input
               type="checkbox"
