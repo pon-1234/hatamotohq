@@ -32,7 +32,7 @@ class DispatchBroadcastJob < ApplicationJob
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
 
-    if contain_survey_action?
+    if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
     else
       # Deliver messages via line api

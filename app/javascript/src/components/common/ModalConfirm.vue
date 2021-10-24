@@ -1,9 +1,16 @@
 <template>
-  <div :id="id ? id : 'confirmModal'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
+  <div
+    :id="id ? id : 'confirmModal'"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="info-header-modalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="info-header-modalLabel">{{ title || 'お知らせ'  }}</h5>
+          <h5 class="modal-title" id="info-header-modalLabel">{{ title || "お知らせ" }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body">
@@ -11,12 +18,31 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">キャンセル</button>
-          <button type="button" class="btn btn-sm btn-info" data-dismiss="modal" @click="confirm" v-if="type === 'confirm'">確認</button>
-          <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" @click="confirm" v-if="type === 'delete'">削除</button>
+          <button
+            type="button"
+            class="btn btn-sm btn-info"
+            data-dismiss="modal"
+            @click="confirm"
+            v-if="type === 'confirm'"
+          >
+            確認
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-danger"
+            data-dismiss="modal"
+            @click="confirm"
+            v-if="type === 'delete'"
+          >
+            削除
+          </button>
         </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 </template>
 <script>
 export default {

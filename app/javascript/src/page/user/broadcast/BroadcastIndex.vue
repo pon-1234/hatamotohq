@@ -37,10 +37,10 @@
               <tr>
                 <th>配信日時</th>
                 <th>タイトル</th>
-                <th class="fw-150">状況</th>
-                <th class="fw-300">配信先</th>
+                <th>状況</th>
+                <th>配信先</th>
                 <th hidden>配信数</th>
-                <th class="fw-150">操作</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -56,11 +56,11 @@
                     </div>
                   </template>
                 </td>
-                <td>{{ broadcast.title }}</td>
-                <td><broadcast-status :status="broadcast.status"></broadcast-status></td>
-                <td><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
+                <td class="mxw-300">{{ broadcast.title }}</td>
+                <td class="fw-150"><broadcast-status :status="broadcast.status"></broadcast-status></td>
+                <td class="fw-300"><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
                 <td hidden></td>
-                <td>
+                <td class="fw-150">
                   <div class="btn-group">
                     <button
                       type="button"
@@ -125,7 +125,7 @@
       @confirm="submitDeleteBroadcast"
     >
       <template v-slot:content>
-        <div v-if="curBroadcast">
+        <div v-if="curBroadcast" class="text-truncate mxw-400">
           一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>
@@ -140,7 +140,7 @@
       @confirm="submitcopyBroadcast"
     >
       <template v-slot:content>
-        <div v-if="curBroadcast">
+        <div v-if="curBroadcast" class="text-truncate mxw-400">
           一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>

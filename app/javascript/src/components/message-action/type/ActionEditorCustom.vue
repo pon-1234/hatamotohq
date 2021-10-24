@@ -10,14 +10,15 @@
           type="text"
           :name="name + '_label'"
           placeholder="ラベルを入力してください"
-          maxlength="12"
+          maxlength="21"
           v-model="label"
           class="w-100 form-control"
-          v-validate="{ required: labelRequired && showTitle }"
+          v-validate="{ required: labelRequired && showTitle, max: 20 }"
           data-vv-as="ラベル"
           @keyup="changeLabel"
         />
-        <error-message :message="errors.first(name + '_label')"></error-message>
+        <div class="w-100 mt-1 font-12 text-muted">10文字を超える場合、文が途中で途切れる場合があります。</div>
+        <error-message class="w-100" :message="errors.first(name + '_label')"></error-message>
       </div>
     </div>
 
@@ -32,34 +33,43 @@
       />
     </div>
 
-    <div class="card border-warning border" v-for="(action, index) in actions" :key="index">
-      <div class="card-header">
-        <div class="d-flex align-items-center">
-          <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
-          <div class="ml-auto" v-if="actions.length > 1">
-            <div @click="moveUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
-              <i class="dripicons-chevron-up"></i>
-            </div>
-            <div type="button" @click="moveDown(index)" class="btn btn-sm btn-light" v-if="index < actions.length - 1">
-              <i class="dripicons-chevron-down"></i>
-            </div>
-            <div @click="remove(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
-              <i class="dripicons-minus"></i>
+    <div>
+      <label>選択後の挙動</label>
+      <div class="card border-warning border" v-for="(action, index) in actions" :key="index">
+        <div class="card-header">
+          <div class="d-flex align-items-center">
+            <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
+            <div class="ml-auto" v-if="actions.length > 1">
+              <div @click="moveUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
+                <i class="dripicons-chevron-up"></i>
+              </div>
+              <div
+                type="button"
+                @click="moveDown(index)"
+                class="btn btn-sm btn-light"
+                v-if="index < actions.length - 1"
+              >
+                <i class="dripicons-chevron-down"></i>
+              </div>
+              <div @click="remove(index)" v-if="actions.length > 1" class="btn btn-sm btn-light">
+                <i class="dripicons-minus"></i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="card-body">
-        <action-postback
-          :showTitle="false"
-          :value="action"
-          :name="name + '_postback_' + index"
-          :labelRequired="false"
-          @input="changeAction(index, $event)"
-        >
-        </action-postback>
+        <div class="card-body">
+          <action-postback
+            :showTitle="false"
+            :value="action"
+            :name="name + '_postback_' + index"
+            :labelRequired="false"
+            @input="changeAction(index, $event)"
+          >
+          </action-postback>
+        </div>
       </div>
     </div>
+
     <div class="text-center mt-2" v-if="actions.length < limit">
       <div class="btn btn-warning" role="button" @click="addAction()"><i class="uil-plus"></i> アクションの追加</div>
     </div>
