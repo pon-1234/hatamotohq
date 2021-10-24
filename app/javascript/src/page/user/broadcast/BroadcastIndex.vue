@@ -24,7 +24,7 @@
               />
               <span class="mdi mdi-magnify search-icon"></span>
               <div class="input-group-append">
-                <div class="btn btn-primary" @click="loadPage()">検索</div>
+                <div class="btn btn-primary" @click="search()">検索</div>
               </div>
             </div>
           </div>
@@ -76,6 +76,7 @@
                         class="dropdown-item"
                         :href="`${rootPath}/user/broadcasts/${broadcast.id}/edit`"
                         @click="openEdit(broadcast)"
+                        v-if="broadcast.editable"
                         >一斉配信を編集する</a
                       >
                       <a
@@ -92,6 +93,7 @@
                         data-toggle="modal"
                         data-target="#modalDeleteBroadcast"
                         @click="curBroadcastIndex = index"
+                        v-if="broadcast.editable"
                         >一斉配信を削除</a
                       >
                     </div>
@@ -192,6 +194,11 @@ export default {
 
     forceRerender() {
       this.contentKey++;
+    },
+
+    search() {
+      this.queryParams.page = 0;
+      this.loadPage();
     },
 
     async loadPage() {

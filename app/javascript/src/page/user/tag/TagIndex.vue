@@ -190,8 +190,13 @@ export default {
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder(this.curFolder.id);
-      this.onFolderChanged(0);
+      const response = await this.deleteFolder(this.curFolder.id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.onFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は完了しました。');
+      }
     },
 
     addTag() {

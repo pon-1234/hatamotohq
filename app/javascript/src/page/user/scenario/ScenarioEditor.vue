@@ -120,7 +120,7 @@
           <div class="d-flex flex-start">
             <div class="fw-200">
               <label class="w-100">配信タイミング</label>
-              <span class="text-sm text-muted">作成した後、変更不可</span>
+              <span class="text-sm text-muted font-12">作成した後、変更不可</span>
             </div>
 
             <div class="flex-grow-1">
@@ -210,11 +210,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('scenario', [
-      'getScenario',
-      'createScenario',
-      'updateScenario'
-    ]),
+    ...mapActions('scenario', ['getScenario', 'createScenario', 'updateScenario']),
 
     forceRerender() {
       this.componentKey += 1;

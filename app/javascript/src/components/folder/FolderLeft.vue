@@ -27,12 +27,12 @@
               @keyup.enter="enterSubmitAddNewFolder"
               @compositionend="compositionend($event)"
               @compositionstart="compositionstart($event)"
-              name="folder_name"
+              maxlength="33"
               data-vv-as="フォルダー名"
-              v-validate="'required'"
+              v-validate="'required|max:32'"
             />
             <span class="ml-auto">
-              <button type="button" class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">決定</button>
+              <div class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">決定</div>
             </span>
           </div>
           <error-message :message="errors.first('folder_name')"></error-message>
@@ -85,9 +85,9 @@ export default {
 
     submitCreateFolder(e) {
       this.$validator.validateAll().then(passed => {
+        if (!passed) return;
         if (this.folderData.name) {
           this.$emit('submitCreateFolder', this.folderData);
-          // this.folderData.name = '';
           this.isAddMoreFolder = false;
         }
       });

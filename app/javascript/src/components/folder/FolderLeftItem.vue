@@ -1,5 +1,5 @@
 <template>
-  <div @click="changeSelected" :class="getClassName()">
+  <div @click="changeSelected" :class="getClassName">
     <div class="d-flex align-items-center w-100" v-if="!isEdit || !active">
       <span class="d-flex w-100 align-items-center">
         <i :class="active ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
@@ -10,15 +10,14 @@
 
         <div class="dropdown" v-if="active && data.name != '未分類' && !isPerview">
           <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-default dropdown-toggle dropdown-icon"
+            <div
+              class="btn btn-light btn-sm dropdown-toggle dropdown-icon"
               data-toggle="dropdown"
               aria-expanded="false"
             >
               編集
-            </button>
-            <div class="dropdown-menu bg-white" role="menu" style="">
+            </div>
+            <div class="dropdown-menu bg-white" role="menu">
               <a role="button" class="dropdown-item" @click.stop="changeName">名前を変える</a>
               <div class="dropdown-divider"></div>
               <a
@@ -34,23 +33,25 @@
         </div>
       </span>
     </div>
-    <div v-if="isEdit && active">
-      <div class="input-group d-flex">
+    <div class="d-flex flex-column w-100" v-if="isEdit && active">
+      <div class="d-flex align-items-center input-group">
         <input
           type="text"
           placeholder="フォルダー名"
           class="form-control"
-          @click.stop
-          :value="data.name"
-          ref="folderName"
+          v-model="folderName"
           @keyup.enter="enterSubmitChangeName"
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
+          @click.stop
+          maxlength="33"
+          name="folder_name"
+          data-vv-as="フォルダー名"
+          v-validate="'required|max:32'"
         />
-        <span class="ml-auto">
-          <button type="button" class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</button>
-        </span>
+        <div class="btn btn-light btn-sm ml-auto" @click="submitChangeName" ref="buttonChange">決定</div>
       </div>
+      <error-message :message="errors.first('folder_name')" v-if="errors.first('folder_name')"></error-message>
     </div>
   </div>
 </template>
@@ -60,8 +61,13 @@ export default {
   data() {
     return {
       isEdit: false,
-      isEnter: true
+      isEnter: true,
+      folderName: ''
     };
+  },
+
+  created() {
+    this.folderName = this.data.name;
   },
 
   computed: {
@@ -85,18 +91,13 @@ export default {
         return this.data.reminders.length;
       }
       return 0;
+    },
+
+    getClassName() {
+      return 'folder-item ' + (this.active ? 'active' : '');
     }
   },
   methods: {
-    getClassName() {
-      let className = 'folder-item ';
-      if (this.active) {
-        className += 'active';
-      }
-
-      return className;
-    },
-
     changeName() {
       this.isEdit = true;
     },
@@ -107,9 +108,15 @@ export default {
     },
 
     submitChangeName() {
-      if (this.$refs.folderName.value !== this.data.name) {
-        this.$emit('editTag', { id: this.data.id, name: this.$refs.folderName.value });
-      }
+      this.$validator.validateAll().then(passed => {
+        if (!passed) {
+          window.toastr.error('フォルダー名の変更は失敗しました。');
+          return;
+        }
+        if (this.folderName !== this.data.name) {
+          this.$emit('editTag', { id: this.data.id, name: this.folderName });
+        }
+      });
     },
 
     enterSubmitChangeName(e) {
@@ -139,8 +146,7 @@ export default {
     display: flex;
     cursor: pointer;
     padding: 10px;
-    height: 50px;
-    min-height: 50px;
+    min-height: 55px !important;
   }
   .active {
     background-color: #e0e0e0;

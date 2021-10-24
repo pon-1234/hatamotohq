@@ -233,8 +233,13 @@ export default {
       this.autoResponses = this.folders[index].auto_responses;
     },
 
-    submitUpdateFolder(value) {
-      this.updateFolder(value);
+    submitUpdateFolder(folder) {
+      const response = this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
     },
 
     async submitCreateFolder(value) {
