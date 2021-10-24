@@ -1,14 +1,15 @@
 export default {
-  listMessages: (query) => {
+  list: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages`,
       method: 'GET',
       data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
-  deleteMessage: (query) => {
+  delete: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages/${query.id}`,
       method: 'DELETE',

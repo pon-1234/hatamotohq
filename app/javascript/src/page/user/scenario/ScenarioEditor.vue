@@ -39,7 +39,7 @@
       <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
       <div class="card-body">
         <div class="form-group d-flex">
-          <label class="fw-200">配信</label>
+          <label class="fw-200">配信 ON/OFF</label>
           <div class="flex-grow-1 d-flex">
             <input
               type="checkbox"

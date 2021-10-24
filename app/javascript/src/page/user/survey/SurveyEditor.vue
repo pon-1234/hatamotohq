@@ -196,7 +196,6 @@ export default {
     },
 
     parseSurvey(survey) {
-      console.log('-------', survey);
       this.surveyData = _.cloneDeep(survey);
     },
 
