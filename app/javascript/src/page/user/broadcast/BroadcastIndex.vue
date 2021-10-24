@@ -93,7 +93,6 @@
                         data-toggle="modal"
                         data-target="#modalDeleteBroadcast"
                         @click="curBroadcastIndex = index"
-                        v-if="broadcast.editable"
                         >一斉配信を削除</a
                       >
                     </div>

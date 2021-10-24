@@ -128,9 +128,9 @@ export default {
   },
   computed: {
     ...mapState('scenario', {
-      scenarios: (state) => state.scenarios,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      scenarios: state => state.scenarios,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curScenario() {
@@ -138,14 +138,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('scenario', [
-      'setCurPage'
-    ]),
-    ...mapActions('scenario', [
-      'getScenarios',
-      'copyScenario',
-      'deleteScenario'
-    ]),
+    ...mapMutations('scenario', ['setCurPage']),
+    ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario']),
 
     forceRerender() {
       this.contentKey++;
@@ -178,7 +172,7 @@ export default {
     async submitDeleteScenario() {
       const response = await this.deleteScenario(this.curScenario.id);
       if (response) {
-        window.toastr.success('シナリオの削除は完了しました。');
+        Util.showSuccessThenRedirect('シナリオの削除は完了しました。', location.href);
       } else {
         window.toastr.error('シナリオの削除は失敗しました。');
       }
@@ -188,7 +182,7 @@ export default {
     async submitCopyScenario() {
       const response = await this.copyScenario(this.curScenario.id);
       if (response) {
-        Util.showSuccessThenRedirect('シナリオのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('シナリオのコピーは完了しました。', location.href);
       } else {
         window.toastr.error('シナリオのコピーは失敗しました。');
       }
