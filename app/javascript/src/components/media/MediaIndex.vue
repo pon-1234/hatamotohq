@@ -105,9 +105,13 @@
                 <div class="d-flex align-items-center mt-1 mr-auto">
                   <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
                   <b>{{ media.type }}</b>
-                  <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
+                  <a :href="media.download_url" class="ml-auto text-sm text-info" download
+                    ><i class="fas fa-download"></i
+                  ></a>
                 </div>
-                <a :href="media.url" class="download-icon mt-1" download><i class="dripicons-cloud-download"></i></a>
+                <a :href="media.download_url" class="download-icon mt-1" download
+                  ><i class="dripicons-cloud-download"></i
+                ></a>
               </div>
               <small class="w-100">
                 登録：<b>{{ formattedDate(media.created_at) }}</b>
@@ -208,9 +212,9 @@ export default {
 
   computed: {
     ...mapState('media', {
-      medias: (state) => state.medias,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      medias: state => state.medias,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     isManageMode() {
@@ -254,13 +258,10 @@ export default {
 
     async deleteSelectedMedia() {
       this.loading = true;
-      const mediaIds = this.selectedMedias.map((_) => _.id);
+      const mediaIds = this.selectedMedias.map(_ => _.id);
       const response = await this.deleteMedias(mediaIds);
       if (response) {
-        Util.showSuccessThenRedirect(
-          '選択したメディアの削除は完了しました。',
-          window.location.href
-        );
+        Util.showSuccessThenRedirect('選択したメディアの削除は完了しました。', window.location.href);
       } else {
         window.toastr.error('選択したメディアの削除は失敗しました。');
       }

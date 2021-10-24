@@ -54,6 +54,10 @@ class Media < ApplicationRecord
     logger.error("Could not generate preview url #{e.message}")
   end
 
+  def download_url
+    url_for(file) if file.attached?
+  end
+
   def set_blob_duration(duration)
     file.blob.update_columns(duration: duration)
   end
