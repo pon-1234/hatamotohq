@@ -153,7 +153,20 @@
   }
 }
 
-@for $i from 1 through 800 {
+@for $i from 1 through 99 {
+  $width: 0px + $i;
+  .mw-#{$i} {
+    min-width: $width;
+  }
+  .mxw-#{$i} {
+    max-width: $width;
+  }
+  .w-#{$i} {
+    width: $width;
+  }
+}
+
+@for $i from 101 through 800 {
   $width: 0px + $i;
   .mw-#{$i} {
     min-width: $width;
@@ -175,10 +188,6 @@
     -webkit-line-clamp: $line_num; /* number of lines to show */
     -webkit-box-orient: vertical;
   }
-}
-
-.w-100 {
-  width: 100% !important;
 }
 
 .mxw-1200 {

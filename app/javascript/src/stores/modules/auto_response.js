@@ -108,7 +108,7 @@ export const actions = {
 
   async deleteFolder(context, id) {
     try {
-      const response = await FolderAPI.deleteFolder(id);
+      const response = await FolderAPI.delete(id);
       context.commit('deleteFolder', id);
       return response;
     } catch (error) {

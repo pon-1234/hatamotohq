@@ -254,7 +254,10 @@ export default {
     async submitDeleteFolder() {
       const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
       if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
         this.onSelectedFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
       }
     },
 
