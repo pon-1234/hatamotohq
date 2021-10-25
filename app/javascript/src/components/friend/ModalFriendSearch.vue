@@ -109,7 +109,7 @@ export default {
     ...mapState('friend', {
       queryParams: state => state.queryParams,
       clearQueryParams: state => state.clearQueryParams,
-      listTags: state => state.listTags
+      listSelectedTags: state => state.listSelectedTags
     }),
     keyword: {
       get() {
@@ -176,17 +176,17 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams', 'setListTags']),
+    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams', 'setListSelectedTags']),
     ...mapActions('friend', ['getFriends']),
     forceRerender() {
       this.contentKey++;
     },
     onSelectTags(tags) {
       this.tags = tags;
-      this.setListTags(tags);
       this.selectedTags = tags;
     },
     search() {
+      this.setListSelectedTags(this.selectedTags);
       this.setQueryParams(this.params);
       this.getFriends();
     },
@@ -194,7 +194,7 @@ export default {
       this.resetQueryParams();
       this.selectedTags = [];
       this.forceRerender();
-      this.setListTags();
+      this.setListSelectedTags();
       const resetParams = {
         page: 1,
         status_eq: 'active',
@@ -218,7 +218,7 @@ export default {
       this.forceRerender();
       this.params = _.cloneDeep(this.queryParams);
       if (this.params.tags_id_in) {
-        this.listTags.forEach(elem => {
+        this.listSelectedTags.forEach(elem => {
           if (this.params.tags_id_in.includes(elem.id)) {
             this.selectedTags.push(elem);
           }
