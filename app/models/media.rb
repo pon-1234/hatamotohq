@@ -58,6 +58,10 @@ class Media < ApplicationRecord
     url_for(file) if file.attached?
   end
 
+  def file_name
+    self.file.blob.filename
+  end
+
   def set_blob_duration(duration)
     file.blob.update_columns(duration: duration)
   end
