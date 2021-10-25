@@ -15,7 +15,6 @@
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
-            data-turbolinks="false"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成

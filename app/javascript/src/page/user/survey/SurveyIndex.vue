@@ -72,7 +72,6 @@
                           class="dropdown-item"
                           :href="`${rootPath}/user/surveys/${survey.id}/edit`"
                           v-if="survey.status !== 'published'"
-                          data-turbolinks="false"
                           >回答フォームを編集</a
                         >
                         <a

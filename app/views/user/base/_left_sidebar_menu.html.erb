@@ -12,7 +12,7 @@
     <ul class="metismenu side-nav">
 
       <li class="side-nav-item <%= controller?("user/home") ? 'mm-active' : '' %>">
-        <%= link_to user_root_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
+        <%= link_to user_root_path, class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
           <i class="uil-home-alt"></i>
           <span> ホーム </span>
         <% end %>
@@ -21,7 +21,7 @@
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
       <li class="side-nav-item <%= controller?("user/channels") ? 'mm-active' : '' %>">
-        <%= link_to user_channels_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
+        <%= link_to user_channels_path, class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
           <i class="uil-comments-alt"></i>
           <span> 個別トーク </span>
         <% end %>
@@ -38,7 +38,7 @@
       <li class="side-nav-title side-nav-item">メッセージ</li>
       <!-- シナリオ -->
       <li class="side-nav-item <%= controller?("user/scenarios", "user/scenario_messages") ? 'mm-active' : '' %>">
-        <%= link_to user_scenarios_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : '' }" do %>
+        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : '' }" do %>
           <i class="uil-sort-amount-down"></i>
           <span>シナリオ配信</span>
         <% end %>
@@ -46,7 +46,7 @@
 
       <!-- 一斉配信 -->
       <li class="side-nav-item <%= controller?("user/broadcasts") ? 'mm-active' : '' %>">
-        <%= link_to user_broadcasts_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/broadcasts" ) ? 'active' : '' }" do %>
+        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/broadcasts" ) ? 'active' : '' }" do %>
           <i class="uil-message"></i>
           <span>一斉配信</span>
         <% end %>
@@ -54,7 +54,7 @@
 
       <!-- 自動応答 -->
       <li class="side-nav-item <%= controller?("user/auto_responses") ? 'mm-active' : '' %>">
-        <%= link_to user_auto_responses_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
+        <%= link_to user_auto_responses_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
           <i class="uil-robot"></i>
           <span>自動応答</span>
         <% end %>
@@ -62,7 +62,7 @@
 
       <!-- テンプレート -->
       <li class="side-nav-item <%= controller?("user/templates") ? 'mm-active' : '' %>">
-        <%= link_to user_templates_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
+        <%= link_to user_templates_path, class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
           <i class="uil-box"></i>
           <span> テンプレート</span>
         <% end %>
