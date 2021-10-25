@@ -89,8 +89,8 @@ class DispatchBroadcastJob < ApplicationJob
           survey = Survey.find(survey_id)
           survey_url = gen_survey_url(survey, channel.line_friend.line_user_id)
           action['type'] = 'uri'
-          action['uri'] = survey_id
-          action['linkUri'] = survey_id
+          action['uri'] = survey_url
+          action['linkUri'] = survey_url
         end
         LineApi::PushMessage.new(@broadcast.line_account).perform(messages, channel.line_friend.line_user_id)
       end

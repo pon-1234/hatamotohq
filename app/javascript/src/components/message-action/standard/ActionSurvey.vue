@@ -29,7 +29,13 @@
       </div>
 
       <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary" v-else>回答フォームを選択する</div>
-      <input type="hidden" v-model="actionData.content.id" :name="name + '_survey_code'" v-validate="'required'" />
+      <input
+        type="hidden"
+        v-model="actionData.content.id"
+        :name="name + '_survey_code'"
+        v-validate="'required'"
+        data-vv-as="回答フォーム"
+      />
       <error-message :message="errors.first(name + '_survey_code')"></error-message>
     </div>
     <modal-select-survey @selectSurvey="selectSurvey($event)" :id="name"></modal-select-survey>
