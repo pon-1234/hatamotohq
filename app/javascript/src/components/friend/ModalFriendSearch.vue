@@ -84,7 +84,7 @@
         </div>
         <div class="modal-footer d-flex">
           <button type="button" class="btn btn-sm btn-light" @click="resetSearch()">リセット</button>
-          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal" @click="closeModal()">キャンセル</button>
           <button type="button" class="btn btn-sm btn-info" data-dismiss="modal" @click="search">検索</button>
         </div>
       </div>
@@ -108,7 +108,8 @@ export default {
   computed: {
     ...mapState('friend', {
       queryParams: state => state.queryParams,
-      clearQueryParams: state => state.clearQueryParams
+      clearQueryParams: state => state.clearQueryParams,
+      listTags: state => state.listTags
     }),
     keyword: {
       get() {
@@ -175,13 +176,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
+    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams', 'setListTags']),
     ...mapActions('friend', ['getFriends']),
     forceRerender() {
       this.contentKey++;
     },
     onSelectTags(tags) {
       this.tags = tags;
+      this.setListTags(tags);
       this.selectedTags = tags;
     },
     search() {
@@ -192,6 +194,7 @@ export default {
       this.resetQueryParams();
       this.selectedTags = [];
       this.forceRerender();
+      this.setListTags();
       const resetParams = {
         page: 1,
         status_eq: 'active',
@@ -204,6 +207,9 @@ export default {
       };
       Object.assign(this.params, resetParams);
     },
+    closeModal() {
+      this.selectedTags = [];
+    },
     showModal() {
       if (this.clearQueryParams) {
         this.selectedTags = [];
@@ -211,6 +217,13 @@ export default {
       }
       this.forceRerender();
       this.params = _.cloneDeep(this.queryParams);
+      if (this.params.tags_id_in) {
+        this.listTags.forEach(elem => {
+          if (this.params.tags_id_in.includes(elem.id)) {
+            this.selectedTags.push(elem);
+          }
+        });
+      }
     }
   }
 };

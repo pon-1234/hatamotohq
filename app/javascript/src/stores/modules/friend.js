@@ -5,6 +5,7 @@ export const state = {
   friends: [],
   totalRows: 0,
   perPage: 0,
+  listTags: [],
   queryParams: {
     page: 1,
     status_eq: 'active',
@@ -39,6 +40,10 @@ export const mutations = {
 
   setQueryParam(state, param) {
     Object.assign(state.queryParams, param);
+  },
+
+  setListTags(state, listTags) {
+    state.listTags = [...listTags];
   },
 
   resetQueryParams(state) {
