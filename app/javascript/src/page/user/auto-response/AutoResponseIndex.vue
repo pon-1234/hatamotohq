@@ -170,8 +170,10 @@ export default {
     const folderId = Util.getParamFromUrl('folder_id');
     setTimeout(() => {
       if (folderId) {
-        const index = _.findIndex(this.folders, _ => _.id === 69);
-        this.onSelectedFolderChanged(index);
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onSelectedFolderChanged(index);
+        }
       }
     }, 0);
     this.loading = false;
