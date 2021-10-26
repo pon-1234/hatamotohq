@@ -238,7 +238,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             '自動応答の変更は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/auto_responses`
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
           );
         } else {
           window.toastr.error('自動応答の変更は失敗しました。');
@@ -248,7 +248,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             '自動応答の作成は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/auto_responses`
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
           );
         } else {
           window.toastr.error('自動応答の作成は失敗しました。');

@@ -167,6 +167,13 @@ export default {
 
   async beforeMount() {
     await this.getAutoResponses();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === 69);
+        this.onSelectedFolderChanged(index);
+      }
+    }, 0);
     this.loading = false;
   },
 
