@@ -233,8 +233,8 @@ export default {
       this.autoResponses = this.folders[index].auto_responses;
     },
 
-    submitUpdateFolder(folder) {
-      const response = this.updateFolder(folder);
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
       if (response) {
         window.toastr.success('フォルダーの変更は完了しました。');
       } else {
