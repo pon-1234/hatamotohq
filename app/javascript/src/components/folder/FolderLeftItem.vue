@@ -1,6 +1,11 @@
 <template>
-  <div :class="getClassName">
-    <div class="d-flex align-items-center w-100" v-if="!isEdit || !active" @click="changeSelected">
+  <div>
+    <div
+      class="d-flex align-items-center w-100"
+      :class="getClassName"
+      v-if="!isEdit || !active"
+      @click="changeSelected"
+    >
       <span class="d-flex w-100 align-items-center">
         <i :class="active ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
         <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">{{
@@ -33,7 +38,7 @@
         </div>
       </span>
     </div>
-    <div class="d-flex flex-column w-100" v-if="isEdit && active">
+    <div class="d-flex flex-column w-100" :class="getClassName" v-if="isEdit && active">
       <div class="d-flex align-items-center input-group">
         <input
           type="text"
