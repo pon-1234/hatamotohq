@@ -114,8 +114,8 @@ export default {
 </script>
 <style lang="scss" scoped>
   .folder-list {
-    border-right: thin solid #ccc;
     min-height: 70vh;
+    background: #f3f3f3;
   }
 
   .tag-content-preview {
