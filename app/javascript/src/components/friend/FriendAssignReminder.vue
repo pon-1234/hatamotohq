@@ -63,14 +63,14 @@ export default {
         id: null,
         name: null
       },
-      currentDate: moment().tz('Asia/Tokyo').format()
+      currentDate: moment()
+        .tz('Asia/Tokyo')
+        .format()
     };
   },
 
   methods: {
-    ...mapActions('friend', [
-      'setReminder'
-    ]),
+    ...mapActions('friend', ['setReminder']),
 
     async submit() {
       const valid = await this.$validator.validateAll();
@@ -84,7 +84,7 @@ export default {
       };
       const response = await this.setReminder(payload);
       if (response) {
-        Util.showSuccessThenRedirect('リマインダの設定は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('リマインダの設定は完了しました。', location.href);
       } else {
         window.toastr.error('リマインダの設定は失敗しました。');
       }

@@ -234,9 +234,25 @@ export default {
         ...this.autoResponseData
       };
       if (this.auto_response_id) {
-        await this.updateAutoResponse(data);
+        const response = await this.updateAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の変更は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses`
+          );
+        } else {
+          window.toastr.error('自動応答の変更は失敗しました。');
+        }
       } else {
-        await this.createAutoResponse(data);
+        const response = await this.createAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の作成は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses`
+          );
+        } else {
+          window.toastr.error('自動応答の作成は失敗しました。');
+        }
       }
     },
 
