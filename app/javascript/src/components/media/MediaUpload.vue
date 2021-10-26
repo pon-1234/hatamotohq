@@ -1,19 +1,25 @@
 <template>
   <div class="card upload-container my-auto d-flex flex-column">
-    <div class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative" @drop.prevent="addFile" @dragover.prevent>
+    <div
+      class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative"
+      @drop.prevent="addFile"
+      @dragover.prevent
+    >
       <div class="text-center my-auto" v-if="isPreview">
         <button class="btn-delete-media" @click="deleteMedia()"><span class="close">×</span></button>
-        <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL">
-        <img v-if="mediaData.type === 'image' || mediaData.type ===  'richmenu' || mediaData.type === 'imagemap'" :src="fileURL">
+        <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL" />
+        <img
+          v-if="mediaData.type === 'image' || mediaData.type === 'richmenu' || mediaData.type === 'imagemap'"
+          :src="fileURL"
+        />
         <audio controls v-if="mediaData.type === 'audio'" @loadedmetadata="onTimeUpdate" ref="audio">
-          <source :src="fileURL">
+          <source :src="fileURL" />
         </audio>
         <video v-else-if="mediaData.type === 'video'" width="320" height="240" controls autoplay>
-          <source :src="fileURL" type="video/mp4">
+          <source :src="fileURL" type="video/mp4" />
         </video>
       </div>
       <div class="text-center text-md my-auto" v-else>
-        <p><label>ここにファイルをドラッグ＆ドロップ<br>または</label></p>
         <div class="custom-file fw-200">
           <div class="custom-file-input h-100 w-100">
             <input
@@ -27,7 +33,7 @@
           </div>
           <label class="custom-file-label text-left">ファイルを選択</label>
         </div>
-        <span v-if="errorMessage" class="w-100 error">{{errorMessage}}</span>
+        <span v-if="errorMessage" class="w-100 error">{{ errorMessage }}</span>
         <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       </div>
 
@@ -78,11 +84,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('media', [
-      'uploadMedia',
-      'uploadRichMenu',
-      'uploadImageMap'
-    ]),
+    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
     getMaxSize() {
       return Media.getMaxSizeByType(this.mediaData.type);
     },
@@ -257,7 +259,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .upload-container  {
+  .upload-container {
     min-height: 500px;
   }
 
@@ -353,10 +355,9 @@ export default {
       height: 350px;
       object-fit: contain;
     }
-    #preview-file{
+    #preview-file {
       width: 100px;
       height: 100px;
     }
-
   }
 </style>
