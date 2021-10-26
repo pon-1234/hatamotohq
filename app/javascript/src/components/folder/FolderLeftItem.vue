@@ -1,6 +1,6 @@
 <template>
-  <div @click="changeSelected" :class="getClassName">
-    <div class="d-flex align-items-center w-100" v-if="!isEdit || !active">
+  <div :class="getClassName">
+    <div class="d-flex align-items-center w-100" v-if="!isEdit || !active" @click="changeSelected">
       <span class="d-flex w-100 align-items-center">
         <i :class="active ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
         <span style="vertical-align: middle; text-overflow: ellipsis; white-space: nowrap; overflow: hidden">{{
@@ -104,15 +104,17 @@ export default {
 
     changeSelected() {
       this.isEdit = false;
+      this.folderName = this.data.name;
+
       this.$emit('changeSelected', { index: this.index, folderId: this.data.id });
     },
 
     submitChangeName() {
       this.$validator.validateAll().then(passed => {
         if (!passed) {
-          window.toastr.error('フォルダー名の変更は失敗しました。');
           return;
         }
+        this.isEdit = false;
         if (this.folderName !== this.data.name) {
           this.$emit('editTag', { id: this.data.id, name: this.folderName });
         }
