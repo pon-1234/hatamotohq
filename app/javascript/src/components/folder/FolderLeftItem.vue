@@ -39,7 +39,7 @@
           type="text"
           placeholder="フォルダー名"
           class="form-control"
-          v-model="folderName"
+          v-model.trim="folderName"
           @keyup.enter="enterSubmitChangeName"
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
