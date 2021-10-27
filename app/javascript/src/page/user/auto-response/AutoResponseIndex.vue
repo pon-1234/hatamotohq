@@ -41,10 +41,15 @@
                   </td>
                   <td>
                     <div><small>どれか1つにマッチ</small></div>
-                    <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"
-                      ><span class="mx-1" v-if="index > 0">or</span>
-                      <div class="fw-200 text-truncate">{{ tag }}</div>
-                    </span>
+                    <div>
+                      <span
+                        class="badge badge-pill badge-warning mr-1 pt-1"
+                        v-for="(keyword, index) in autoResponse.keywords"
+                        v-bind:key="index"
+                      >
+                        <div class="mxw-200 text-truncate">{{ keyword }}</div>
+                      </span>
+                    </div>
                   </td>
                   <td>
                     <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
