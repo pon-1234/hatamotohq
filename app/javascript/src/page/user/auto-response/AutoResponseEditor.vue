@@ -71,6 +71,7 @@
             :tag-validator="tagValidator"
             invalid-tag-text="無効なタグ"
             duplicateTagText="タグはすでに存在します"
+            limitTagsText="キーワード数が上限に達しました"
             add-on-change
             :add-button-text="'追加'"
           >
