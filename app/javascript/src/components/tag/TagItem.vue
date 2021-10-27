@@ -4,10 +4,10 @@
       <tag-item-editor :data="tag" @deleteTag="deleteTag" @editTag="editTag" @createTag="createTag" />
     </td>
     <td class="fw-150">
-      {{ tag.friends_count }}人
+      <span class="mt-2">{{ tag.friends_count }}人</span>
       <div
         role="button"
-        class="btn-light btn-sm d-inline-block"
+        class="btn btn-light btn-sm d-inline-block"
         data-toggle="modal"
         data-target="#modalTagFriends"
         @click="showFriends"
@@ -25,12 +25,8 @@ import { mapActions, mapMutations } from 'vuex';
 export default {
   props: ['tag'],
   methods: {
-    ...mapMutations('friend', [
-      'setQueryParam'
-    ]),
-    ...mapActions('friend', [
-      'getFriends'
-    ]),
+    ...mapMutations('friend', ['setQueryParam']),
+    ...mapActions('friend', ['getFriends']),
 
     getCreatedAt(item) {
       return moment(item).format('YYYY年MM月DD日');

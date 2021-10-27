@@ -14,7 +14,7 @@
         <div class="flex-grow-1">
           <div class="btn btn-primary" @click="addTag"><i class="uil-plus"></i> 新規登録</div>
           <div class="mt-2">
-            <table class="table table-centered mb-0">
+            <table class="table mb-0">
               <thead class="thead-light">
                 <tr>
                   <th>タグ名</th>
@@ -24,8 +24,8 @@
               </thead>
               <tbody v-if="curFolder">
                 <tr v-if="showTagInput">
-                  <td class="mw-200 vetical-align-middle">
-                    <div class="folder-item">
+                  <td class="mw-200">
+                    <div>
                       <div class="input-group newgroup-inputs">
                         <input
                           type="text"
@@ -36,6 +36,7 @@
                           ref="tagName"
                           name="tag_name"
                           v-validate="'required|max:32'"
+                          data-vv-as="タグ名"
                         />
                         <span class="input-group-btn">
                           <div role="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
@@ -49,7 +50,7 @@
                       ></error-message>
                     </div>
                   </td>
-                  <td>0人</td>
+                  <td><span class="mt-2">0人</span></td>
                   <td>{{ getCreatedAt() }}</td>
                 </tr>
                 <tag-item
@@ -221,7 +222,7 @@ export default {
     },
 
     async submitCreateTag() {
-      const passed = this.$validator.validateAll();
+      const passed = await this.$validator.validateAll();
       if (!passed) return;
       const payload = {
         folder_id: this.curFolder.id,
@@ -243,7 +244,7 @@ export default {
       if (response) {
         window.toastr.success('タグの変更は完了しました。');
       } else {
-        window.toastr.error('フォルダーの変更は失敗しました。');
+        window.toastr.error('タグの変更は失敗しました。');
       }
       this.forceRerender();
     },
