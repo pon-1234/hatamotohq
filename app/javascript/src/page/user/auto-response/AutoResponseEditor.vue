@@ -67,7 +67,7 @@
             v-model="autoResponseData.keywords"
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
-            separator=",;"
+            separator=" ,;"
             :tag-validator="tagValidator"
             invalid-tag-text="無効なタグ"
             duplicateTagText="タグはすでに存在します"
