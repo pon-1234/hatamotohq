@@ -31,7 +31,7 @@
                   <th class="fw-100">状況</th>
                   <th class="fw-100">ヒット数</th>
                   <th class="fw-100">操作</th>
-                  <th class="fw-150">フォルダー</th>
+                  <th class="fw-120 d-none d-xl-block">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
@@ -97,7 +97,7 @@
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td class="d-none d-xl-block">
                     <div v-if="curFolder">{{ curFolder.name }}</div>
                     <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
                   </td>
@@ -226,7 +226,13 @@ export default {
 
     async updateAutoResponseStatus(autoResponse) {
       const payload = { id: autoResponse.id, status: autoResponse.status === 'enabled' ? 'disabled' : 'enabled' };
-      await this.updateAutoResponse(payload);
+      console.log('-----update auto response ----', payload);
+      const response = await this.updateAutoResponse(payload);
+      if (response) {
+        Util.showSuccessThenRedirect('自動応答状況の変更は完了しました。', location.href);
+      } else {
+        window.toastr.error('自動応答状況の変更は失敗しました。');
+      }
     },
 
     async submitDeleteAutoResponse() {
