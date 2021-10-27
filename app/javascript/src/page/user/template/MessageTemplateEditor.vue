@@ -20,14 +20,14 @@
             <input
               type="text"
               class="form-control"
-              name="template-title"
+              name="template_name"
               placeholder="テンプレート名を入力してください"
-              v-model="templateData.name"
-              maxlength="256"
-              v-validate="'required|max:255'"
+              v-model.trim="templateData.name"
+              maxlength="65"
+              v-validate="'required|max:64'"
               data-vv-as="テンプレート名"
             />
-            <error-message :message="errors.first('template-title')"></error-message>
+            <error-message :message="errors.first('template_name')"></error-message>
           </div>
         </div>
         <div class="form-border">

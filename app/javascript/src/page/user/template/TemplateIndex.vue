@@ -31,7 +31,9 @@
               </thead>
               <tbody>
                 <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
-                  <td>{{ template.name }}</td>
+                  <td>
+                    <div class="fw-300 text-truncate">{{ template.name }}</div>
+                  </td>
                   <td>{{ template.template_messages_count }}</td>
                   <td>
                     <div class="btn-group">
@@ -65,7 +67,9 @@
                     </div>
                   </td>
                   <td>
-                    <div>{{ curFolder.name }}</div>
+                    <div>
+                      <div class="mxw-200 text-truncate">{{ curFolder.name }}</div>
+                    </div>
                     <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
                   </td>
                 </tr>

@@ -222,7 +222,7 @@ export default {
 
     tagValidator(tag) {
       // Individual tag validator function
-      return tag === tag.toLowerCase() && tag.length < 20;
+      return tag === tag.toLowerCase() && tag.length <= 20;
     },
 
     async submitCreate() {
