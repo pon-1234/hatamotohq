@@ -32,15 +32,21 @@
                           placeholder="タグ名"
                           class="form-control"
                           @click.stop
-                          v-model="tagData.name"
+                          v-model.trim="tagData.name"
                           ref="tagName"
+                          name="tag_name"
+                          v-validate="'required|max:32'"
                         />
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
+                          <div role="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
                             決定
-                          </button>
+                          </div>
                         </span>
                       </div>
+                      <error-message
+                        :message="errors.first('tag_name')"
+                        v-if="errors.first('tag_name')"
+                      ></error-message>
                     </div>
                   </td>
                   <td>0人</td>
@@ -57,7 +63,7 @@
               </tbody>
             </table>
             <div v-if="curFolder && curFolder.tags.length === 0" class="mt-5 text-md text-center">
-              <b>タグはありません</b>
+              <b>登録したタグはありません。</b>
             </div>
           </div>
         </div>
@@ -215,19 +221,19 @@ export default {
     },
 
     async submitCreateTag() {
-      if (this.tagData.name && this.tagData.name.trim().length > 0) {
-        const payload = {
-          folder_id: this.curFolder.id,
-          name: this.tagData.name
-        };
-        const response = await this.createTag(payload);
-        if (response) {
-          window.toastr.success('タグの作成は完了しました。');
-        } else {
-          window.toastr.error('フォルダーの作成は失敗しました。');
-        }
-        this.resetTagInput();
+      const passed = this.$validator.validateAll();
+      if (!passed) return;
+      const payload = {
+        folder_id: this.curFolder.id,
+        name: this.tagData.name
+      };
+      const response = await this.createTag(payload);
+      if (response) {
+        window.toastr.success('タグの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
       }
+      this.resetTagInput();
     },
 
     async submitUpdateTag(tag) {

@@ -23,7 +23,7 @@
               type="text"
               name="name"
               class="form-control"
-              v-model="autoResponseData.name"
+              v-model.trim="autoResponseData.name"
               placeholder="自動応答名を入力してください"
               v-validate="'required|max:64'"
               maxlength="65"

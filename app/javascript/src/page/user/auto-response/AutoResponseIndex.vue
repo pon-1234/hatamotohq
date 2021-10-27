@@ -22,7 +22,7 @@
             </a>
           </div>
           <div class="mt-2">
-            <table class="table table-centered mb-0">
+            <table class="table mb-0">
               <thead class="thead-light">
                 <tr>
                   <th class="mw-100">自動応答名</th>
@@ -36,15 +36,18 @@
               </thead>
               <tbody>
                 <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
-                  <td>{{ autoResponse.name }}</td>
+                  <td>
+                    <div class="mxw-400 max-2-lines">{{ autoResponse.name }}</div>
+                  </td>
                   <td>
                     <div><small>どれか1つにマッチ</small></div>
                     <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"
-                      ><span v-if="index > 0">or</span>「{{ tag }}」</span
-                    >
+                      ><span class="mx-1" v-if="index > 0">or</span>
+                      <div class="fw-200 text-truncate">{{ tag }}</div>
+                    </span>
                   </td>
                   <td>
-                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2 text-left">
+                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
                       <message-content :data="item.content"></message-content>
                     </div>
                   </td>

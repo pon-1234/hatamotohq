@@ -83,7 +83,7 @@ export default {
   },
 
   created() {
-    this.avatarImgObj.src = this.friend.line_picture_url;
+    this.avatarImgObj.src = this.friend ? this.friend.line_picture_url : '';
   },
 
   watch: {
