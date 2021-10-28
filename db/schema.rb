@@ -336,7 +336,7 @@ ActiveRecord::Schema.define(version: 2021_10_18_104237) do
     t.string 'chat_bar_text'
     t.boolean 'selected'
     t.json 'areas'
-    t.string 'status', default: 'pending'
+    t.string 'status', default: 'enabled'
     t.string 'target', default: 'all'
     t.json 'conditions'
     t.boolean 'enabled'
@@ -416,27 +416,12 @@ ActiveRecord::Schema.define(version: 2021_10_18_104237) do
     t.index ['survey_response_id'], name: 'index_survey_answers_on_survey_response_id'
   end
 
-  create_table 'survey_profile_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'folder_id'
-    t.string 'field_name'
-    t.string 'description'
-    t.string 'type'
-    t.string 'status', default: 'enable'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['folder_id'], name: 'index_survey_profile_templates_on_folder_id'
-    t.index ['line_account_id'], name: 'index_survey_profile_templates_on_line_account_id'
-  end
-
   create_table 'survey_profiles', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
-    t.bigint 'survey_profile_template_id'
     t.text 'content', size: :long
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['line_account_id'], name: 'index_survey_profiles_on_line_account_id'
-    t.index ['survey_profile_template_id'], name: 'index_survey_profiles_on_survey_profile_template_id'
   end
 
   create_table 'survey_questions', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -599,10 +584,7 @@ ActiveRecord::Schema.define(version: 2021_10_18_104237) do
   add_foreign_key 'scenarios', 'line_accounts'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
-  add_foreign_key 'survey_profile_templates', 'folders'
-  add_foreign_key 'survey_profile_templates', 'line_accounts'
   add_foreign_key 'survey_profiles', 'line_accounts'
-  add_foreign_key 'survey_profiles', 'survey_profile_templates'
   add_foreign_key 'survey_questions', 'surveys'
   add_foreign_key 'survey_responses', 'line_friends'
   add_foreign_key 'survey_responses', 'surveys'
