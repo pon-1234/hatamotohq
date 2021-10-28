@@ -50,7 +50,7 @@ class Media {
   static getAcceptedMineTypes(types) {
     const mineTypes = [];
     if (types.includes(MessageType.Image)) {
-      mineTypes.push('image/*');
+      mineTypes.push('image/jpg,image/jpeg,image/png');
     }
 
     if (types.includes('richmenu') || types.includes('imagemap')) {
