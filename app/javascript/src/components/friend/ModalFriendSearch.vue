@@ -108,9 +108,12 @@ export default {
   computed: {
     ...mapState('friend', {
       queryParams: state => state.queryParams,
-      clearQueryParams: state => state.clearQueryParams,
-      listSelectedTags: state => state.listSelectedTags
+      clearQueryParams: state => state.clearQueryParams
     }),
+    ...mapState('tag', {
+      folders: state => state.folders
+    }),
+
     keyword: {
       get() {
         return this.params.line_name_or_display_name_cont;
@@ -176,8 +179,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams', 'setListSelectedTags']),
+    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
     ...mapActions('friend', ['getFriends']),
+    ...mapActions('tag', ['getTags']),
+
     forceRerender() {
       this.contentKey++;
     },
@@ -186,7 +191,6 @@ export default {
       this.selectedTags = tags;
     },
     search() {
-      this.setListSelectedTags(this.selectedTags);
       this.setQueryParams(this.params);
       this.getFriends();
     },
@@ -194,7 +198,6 @@ export default {
       this.resetQueryParams();
       this.selectedTags = [];
       this.forceRerender();
-      this.setListSelectedTags();
       const resetParams = {
         page: 1,
         status_eq: 'active',
@@ -210,7 +213,8 @@ export default {
     closeModal() {
       this.selectedTags = [];
     },
-    showModal() {
+    async showModal() {
+      await this.getTags();
       if (this.clearQueryParams) {
         this.selectedTags = [];
         this.setClearQueryParams(false);
@@ -218,11 +222,9 @@ export default {
       this.forceRerender();
       this.params = _.cloneDeep(this.queryParams);
       if (this.params.tags_id_in) {
-        this.listSelectedTags.forEach(elem => {
-          if (this.params.tags_id_in.includes(elem.id)) {
-            this.selectedTags.push(elem);
-          }
-        });
+        _.flatMap(this.folders, ({ tags }) =>
+          _.each(tags, tag => { if (this.params.tags_id_in.includes(tag.id)) this.selectedTags.push(tag); })
+        );
       }
     }
   }
