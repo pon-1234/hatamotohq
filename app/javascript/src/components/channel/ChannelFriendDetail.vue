@@ -7,7 +7,7 @@
           alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle"
         />
-        <h4>{{ truncate(friend.name, 15) }}</h4>
+        <h4>{{ truncate(friend, 15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -69,8 +69,9 @@ export default {
   },
 
   methods: {
-    truncate(str, length = 15) {
-      return _.truncate(str, {
+    truncate(rd, length = 15) {
+      const name = rd.display_name ? rd.display_name : rd.line_name;
+      return _.truncate(name, {
         length: length
       });
     },

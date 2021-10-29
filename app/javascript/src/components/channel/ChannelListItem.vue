@@ -10,7 +10,7 @@
       <div class="media-body">
         <h5 class="my-0 font-14">
           <span class="float-right text-muted font-12">{{ readableTime }}</span>
-          {{ truncate(friend.name, 15) }}
+          {{ truncate(friend, 15) }}
         </h5>
         <p class="mt-1 mb-0 text-muted font-14">
           <span class="w-25 float-right text-right"
@@ -81,8 +81,9 @@ export default {
       return className;
     },
 
-    truncate(str, length = 15) {
-      return _.truncate(str, {
+    truncate(rd, length = 15) {
+      const name = rd.display_name ? rd.display_name : rd.line_name;
+      return _.truncate(name, {
         length: length
       });
     }
