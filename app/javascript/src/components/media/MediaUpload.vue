@@ -1,5 +1,8 @@
 <template>
-  <div class="card upload-container my-auto d-flex flex-column">
+  <div class="card upload-container my-auto d-flex flex-column"
+    @drop.prevent="addMedia($event, 'drop')"
+    @dragover.prevent
+  >
     <div
       class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative"
       @drop.prevent="addFile"
@@ -28,7 +31,7 @@
               :maxsize="getMaxSize()"
               type="file"
               ref="file"
-              @change="addMedia($event)"
+              @change="addMedia($event, 'input')"
             />
           </div>
           <label class="custom-file-label text-left">ファイルを選択</label>
@@ -97,8 +100,9 @@ export default {
       this.addMedia(event);
     },
 
-    async addMedia(event) {
-      const input = event.currentTarget.files[0];
+    async addMedia(event, status) {
+      const input = status === 'input' ? event.currentTarget.files[0] : event.dataTransfer.files[0];
+      this.isPreview = false;
       this.inputFile = input;
       const mediaType = Media.convertMineTypeToMediaType(input.type);
       if (mediaType === 'image') {
@@ -147,7 +151,8 @@ export default {
       };
       this.errorMessage = '';
       // Clear file input data
-      event.target.value = '';
+
+      if (status === 'input') event.target.value = '';
     },
 
     generateImagePreview(input) {
