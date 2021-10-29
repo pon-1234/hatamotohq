@@ -14,6 +14,7 @@ import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
+import 'bootstrap/js/dist/modal';
 
 import {
   BootstrapVue,
