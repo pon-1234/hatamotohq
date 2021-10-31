@@ -14,7 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
-            :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
+            :href="`${rootPath}/user/templates/new?folder_id=${curFolder.id}`"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -135,7 +135,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       curTemplateIndex: null,
@@ -146,6 +146,15 @@ export default {
 
   async beforeMount() {
     await this.getTemplates();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onSelectedFolderChanged(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -207,10 +216,11 @@ export default {
 
     async submitCopyTemplate() {
       const response = await this.copyTemplate(this.curTemplate.id);
+      const url = `${this.rootPath}/user/templates?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', url);
       } else {
-        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', url);
       }
       this.forceRerender();
     },
