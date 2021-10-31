@@ -14,7 +14,7 @@
 
         <div class="flex-grow-1">
           <div v-if="curFolder">
-            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
+            <a :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
@@ -56,7 +56,9 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
+                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
+                          >リッチメニューを編集</a
+                        >
                         <a
                           role="button"
                           class="dropdown-item"
@@ -153,14 +155,12 @@
 import moment from 'moment';
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
-import RichMenuStatus from '../../../components/rich-menu/RichMenuStatus.vue';
 
 export default {
-  components: { RichMenuStatus },
   props: [],
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       isPc: true,
       selectedFolderIndex: 0,
@@ -257,10 +257,6 @@ export default {
 
     backToFolder() {
       this.isPc = false;
-    },
-
-    openEdit(richmenu) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/rich_menus/${richmenu.id}/edit`);
     }
   }
 };
