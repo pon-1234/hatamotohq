@@ -31,7 +31,7 @@
                   <th class="fw-100">状況</th>
                   <th class="fw-100">ヒット数</th>
                   <th class="fw-100">操作</th>
-                  <th class="fw-120 d-none d-xl-block">フォルダー</th>
+                  <th class="fw-120">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,10 +102,10 @@
                       </div>
                     </div>
                   </td>
-                  <td class="d-none d-xl-block">
+                  <thead>
                     <div v-if="curFolder">{{ curFolder.name }}</div>
                     <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
-                  </td>
+                  </thead>
                 </tr>
               </tbody>
             </table>

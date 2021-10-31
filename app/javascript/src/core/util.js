@@ -30,7 +30,7 @@ class Util {
   }
 
   static formattedDatetime(datetime) {
-    return moment(datetime).format('YYYY年MM月DD日 hh:mm');
+    return moment(datetime).format('YYYY年MM月DD日 HH:mm');
   }
 
   static getDuration(data) {
