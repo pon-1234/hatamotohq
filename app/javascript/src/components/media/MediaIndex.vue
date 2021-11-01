@@ -237,6 +237,8 @@ export default {
         this.loading = true;
         this.setCurPage(this.currentPage);
         await this.getMedias();
+        this.checkedAll = false;
+        this.selectedMedias = [];
         this.forceRerender();
         this.loading = false;
       });
