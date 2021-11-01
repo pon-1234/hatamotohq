@@ -33,7 +33,7 @@
           <div class="row form-group">
             <div class="col-lg-4">タグ</div>
             <div class="col-lg-8">
-              <input-tag :tags="selectedTags" @input="onSelectTags" :allTags="true" />
+              <input-tag ref="inputTag" :tags="selectedTags" @input="onSelectTags" :allTags="true" />
             </div>
           </div>
           <!-- 登録日時 -->
@@ -110,9 +110,6 @@ export default {
       queryParams: state => state.queryParams,
       clearQueryParams: state => state.clearQueryParams
     }),
-    ...mapState('tag', {
-      folders: state => state.folders
-    }),
 
     keyword: {
       get() {
@@ -128,8 +125,8 @@ export default {
         return this.params.tags_id_in || [];
       },
       set(value) {
-        const tagIds = value.map(_ => _.id);
-        this.params.tags_id_in = tagIds;
+        const selectedTagIds = value.map(_ => _.id);
+        this.params.tags_id_in = selectedTagIds;
       }
     },
 
@@ -181,7 +178,7 @@ export default {
   methods: {
     ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
     ...mapActions('friend', ['getFriends']),
-    ...mapActions('tag', ['getTags']),
+    ...mapMutations('tag', ['setTagIds']),
 
     forceRerender() {
       this.contentKey++;
@@ -214,17 +211,16 @@ export default {
       this.selectedTags = [];
     },
     async showModal() {
-      await this.getTags();
       if (this.clearQueryParams) {
         this.selectedTags = [];
         this.setClearQueryParams(false);
       }
       this.forceRerender();
       this.params = _.cloneDeep(this.queryParams);
+
       if (this.params.tags_id_in) {
-        _.flatMap(this.folders, ({ tags }) =>
-          _.each(tags, tag => { if (this.params.tags_id_in.includes(tag.id)) this.selectedTags.push(tag); })
-        );
+        this.setTagIds(this.params.tags_id_in);
+        this.$refs.inputTag.initData();
       }
     }
   }

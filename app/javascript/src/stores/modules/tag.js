@@ -2,7 +2,8 @@ import TagAPI from '../api/tag_api';
 import FolderAPI from '../api/folder_api';
 
 export const state = {
-  folders: []
+  folders: [],
+  tagIds: []
 };
 
 // TODO need refactor
@@ -45,6 +46,10 @@ export const mutations = {
     const folder = state.folders.find(_ => _.id === tag.folder_id);
     const oldIndex = folder.tags.findIndex(_ => _.id === tag.id);
     folder.tags.splice(oldIndex, 1, tag);
+  },
+
+  setTagIds(state, tagIds) {
+    state.tagIds = [...tagIds];
   }
 };
 

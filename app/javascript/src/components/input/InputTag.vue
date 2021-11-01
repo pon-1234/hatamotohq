@@ -144,7 +144,8 @@ export default {
   },
   computed: {
     ...mapState('tag', {
-      folders: state => state.folders
+      folders: state => state.folders,
+      tagIds: state => state.tagIds
     }),
 
     criteria() {
@@ -239,6 +240,16 @@ export default {
 
     backToFolder() {
       this.isPc = false;
+    },
+
+    initData() {
+      _.flatMap(this.folders, ({ tags }) =>
+        _.each(tags, tag => {
+          if (this.tagIds.includes(tag.id)) {
+            this.selectedTags.push(tag);
+          }
+        })
+      );
     }
   }
 };
