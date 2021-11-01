@@ -254,6 +254,7 @@ export default {
 
     deleteMedia() {
       this.isPreview = false;
+      this.errorMessage = '';
     },
 
     onTimeUpdate() {
