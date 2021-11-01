@@ -2,8 +2,16 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex align-items-center">
           <div class="btn btn-success mr-2" @click="openNew()"><i class="uil-plus"></i> 新規作成</div>
+          <div class="ml-auto d-flex">
+            <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq" @change="search()">
+              <option value="">すべて</option>
+              <option value="enabled">稼働中</option>
+              <option value="disabled">停止中</option>
+              <option value="draft">下書き</option>
+            </select>
+          </div>
         </div>
         <div class="card-body mvh-50">
           <table class="table table-centered mb-0">
@@ -63,7 +71,7 @@
           <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
               v-if="totalRows > perPage"
-              v-model="currentPage"
+              v-model="queryParams.page"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="loadPage"
@@ -110,7 +118,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -119,14 +127,22 @@ export default {
       loading: true,
       contentKey: 0,
       currentPage: 1,
+      queryParams: null,
       curScenarioIndex: 0
     };
   },
+
+  created() {
+    this.queryParams = _.cloneDeep(this.getQueryParams);
+  },
+
   async beforeMount() {
     await this.getScenarios();
     this.loading = false;
   },
+
   computed: {
+    ...mapGetters('scenario', ['getQueryParams']),
     ...mapState('scenario', {
       scenarios: state => state.scenarios,
       totalRows: state => state.totalRows,
@@ -137,12 +153,18 @@ export default {
       return this.scenarios[this.curScenarioIndex];
     }
   },
+
   methods: {
-    ...mapMutations('scenario', ['setCurPage']),
+    ...mapMutations('scenario', ['setQueryParams']),
     ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario']),
 
     forceRerender() {
       this.contentKey++;
+    },
+
+    search() {
+      this.queryParams.page = 0;
+      this.loadPage();
     },
 
     async loadPage() {
@@ -150,7 +172,7 @@ export default {
       // using nextTick to solve the issue
       this.$nextTick(async() => {
         this.loading = true;
-        this.setCurPage(this.currentPage);
+        this.setQueryParams(this.queryParams);
         await this.getScenarios();
         this.forceRerender();
         this.loading = false;
