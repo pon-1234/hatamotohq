@@ -77,7 +77,10 @@ class Media {
       valid: true
     };
 
-    if ((type === 'image' || 'imagemap') && size > UploadMaxSize.Image) {
+    if (type === 'image' && size > UploadMaxSize.Image) {
+      result.valid = false;
+      result.message = '画像ファイルの最大容量は10MBになります。';
+    } else if (type === 'imagemap' && size > UploadMaxSize.Image) {
       result.valid = false;
       result.message = '画像ファイルの最大容量は10MBになります。';
     } else if (type === 'video' && size > UploadMaxSize.Video) {
@@ -85,7 +88,7 @@ class Media {
       result.message = 'ビデオファイルの最大容量は200MBになります。';
     } else if (type === 'audio' && size > UploadMaxSize.Audio) {
       result.valid = false;
-      result.message = 'オーディオファイルの最  大容量は200MBになります。';
+      result.message = 'オーディオファイルの最大容量は200MBになります。';
     } else if (type === 'pdf' && size > UploadMaxSize.Pdf) {
       result.valid = false;
       result.message = 'オーディオファイルの最大容量は10MBになります。';
@@ -93,6 +96,7 @@ class Media {
       result.valid = false;
       result.message = '画像ファイルの最大容量は1MBになります。';
     }
+
     return result;
   }
 
