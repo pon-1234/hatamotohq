@@ -131,6 +131,7 @@ export default {
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
+          _this.mediaData.type = _this.oldType;
           return;
         }
 
