@@ -6,7 +6,7 @@
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
-    ref="mediaModal"
+    ref="modalUploadMedia"
     :key="contentKey"
   >
     <div class="modal-dialog modal-xl" role="document">
@@ -40,7 +40,7 @@ export default {
     };
   },
   mounted() {
-    $(this.$refs.mediaModal).on('show.bs.modal', this.shownModal);
+    $(this.$refs.modalUploadMedia).on('show.bs.modal', this.shownModal);
   },
   methods: {
     onUploadFinished(event) {
