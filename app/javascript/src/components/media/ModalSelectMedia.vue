@@ -95,7 +95,7 @@ export default {
     },
 
     shownModal() {
-      this.$refs.modalMediaIndex.initPage();
+      this.$refs.modalMediaIndex.resetData();
     }
   }
 };

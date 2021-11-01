@@ -297,7 +297,7 @@ export default {
       document.body.removeChild(a);
     },
 
-    initPage() {
+    resetData() {
       this.currentPage = 1;
       this.loadPage();
     }
