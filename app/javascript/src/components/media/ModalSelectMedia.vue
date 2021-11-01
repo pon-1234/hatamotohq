@@ -2,6 +2,7 @@
   <div
     class="modal fade"
     :id="id ? id : 'modalSelectMedia'"
+    ref="mediaSelectModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -36,6 +37,7 @@
             </div>
             <div class="tab-pane" id="selectMedia">
               <media-index
+                ref="modalMediaIndex"
                 mode="read"
                 @select="selectMedia($event)"
                 :filterable="filterable"
@@ -72,6 +74,10 @@ export default {
     };
   },
 
+  mounted() {
+    $(this.$refs.mediaSelectModal).on('show.bs.modal', this.shownModal);
+  },
+
   methods: {
     ...mapActions('media', [
       'uploadMedia',
@@ -86,6 +92,10 @@ export default {
     selectMedia(media) {
       this.$emit('select', media);
       this.$refs.close.click();
+    },
+
+    shownModal() {
+      this.$refs.modalMediaIndex.initPage();
     }
   }
 };
