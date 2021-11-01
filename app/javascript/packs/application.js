@@ -14,6 +14,7 @@ import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
+import 'bootstrap/js/dist/modal';
 
 import {
   BootstrapVue,
@@ -39,7 +40,6 @@ Object.keys(constant).forEach((key) => {
   Vue.prototype[key] = constant[key];
 });
 
-require('turbolinks').start();
 require('@rails/activestorage').start();
 require('chart.js');
 
@@ -86,7 +86,7 @@ files.keys().map((key) => {
 });
 
 // We have to re-create vue app when change the page url
-document.addEventListener('turbolinks:load', () => {
+jQuery(() => {
   new Vue({
     locale: 'ja',
     store

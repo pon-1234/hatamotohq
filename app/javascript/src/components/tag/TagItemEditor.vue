@@ -1,5 +1,5 @@
 <template>
-  <div class="folder-item">
+  <div>
     <div class="d-flex align-items-center" v-if="!isEdit">
       <span class="flex-grow-1">
         {{ data.name }}
@@ -21,19 +21,23 @@
       <div class="input-group newgroup-inputs">
         <input
           type="text"
-          placeholder="フォルダー名"
+          placeholder="タグ名"
           class="form-control"
           @click.stop
-          :value="data.name"
-          ref="tagName"
+          v-model.trim="tagName"
           @keyup.enter="enterSubmitChangeName"
           @compositionend="compositionend($event)"
           @compositionstart="compositionstart($event)"
+          name="tag_name"
+          data-vv-as="タグ名"
+          maxlength="33"
+          v-validate="'required|max:32'"
         />
         <span class="input-group-btn">
           <button type="button" class="btn btn-light" @click="submitChangeName" ref="buttonChange">決定</button>
         </span>
       </div>
+      <error-message :message="errors.first('tag_name')"></error-message>
     </div>
   </div>
 </template>
@@ -43,17 +47,25 @@ export default {
   data() {
     return {
       isEdit: false,
-      isEnter: true
+      isEnter: true,
+      tagName: null
     };
   },
+
+  created() {
+    this.tagName = this.data.name;
+  },
+
   methods: {
     changeName() {
       this.isEdit = true;
     },
 
-    submitChangeName() {
-      if (this.$refs.tagName.value !== this.data.name) {
-        this.$emit('editTag', { id: this.data.id, name: this.$refs.tagName.value });
+    async submitChangeName() {
+      const passed = await this.$validator.validateAll();
+      if (!passed) return;
+      if (this.tagName !== this.data.name) {
+        this.$emit('editTag', { id: this.data.id, name: this.tagName });
       }
 
       this.isEdit = false;
@@ -82,11 +94,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .folder-item {
-    cursor: pointer;
-    padding: 10px;
-  }
-
   .active {
     background-color: #e0e0e0;
   }

@@ -21,12 +21,13 @@
               type="text"
               placeholder="フォルダー名"
               class="form-control"
-              v-model="folderData.name"
+              v-model.trim="folderData.name"
               @click.stop
               ref="folderName"
               @keyup.enter="enterSubmitAddNewFolder"
               @compositionend="compositionend($event)"
               @compositionstart="compositionstart($event)"
+              name="folder_name"
               maxlength="33"
               data-vv-as="フォルダー名"
               v-validate="'required|max:32'"
@@ -113,8 +114,8 @@ export default {
 </script>
 <style lang="scss" scoped>
   .folder-list {
-    border-right: thin solid #ccc;
     min-height: 70vh;
+    background: #f3f3f3;
   }
 
   .tag-content-preview {

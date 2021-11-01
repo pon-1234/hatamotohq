@@ -14,7 +14,7 @@
 #  chat_bar_text            :string(255)
 #  selected                 :boolean
 #  areas                    :json
-#  status                   :string(255)      default(NULL)
+#  status                   :string(255)      default("enabled")
 #  target                   :string(255)      default("all")
 #  conditions               :json
 #  enabled                  :boolean

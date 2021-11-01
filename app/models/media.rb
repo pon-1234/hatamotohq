@@ -48,7 +48,7 @@ class Media < ApplicationRecord
 
   def preview_url
     if file.attached? && file.representable?
-      rails_public_blob_url(file.representation(resize: '240x240').processed)
+      url_for(file.representation(resize: '240x240').processed)
     end
   rescue StandardError => e
     logger.error("Could not generate preview url #{e.message}")
@@ -56,6 +56,10 @@ class Media < ApplicationRecord
 
   def download_url
     url_for(file) if file.attached?
+  end
+
+  def file_name
+    self.file.blob.filename
   end
 
   def set_blob_duration(duration)

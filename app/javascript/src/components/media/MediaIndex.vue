@@ -105,11 +105,11 @@
                 <div class="d-flex align-items-center mt-1 mr-auto">
                   <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
                   <b>{{ media.type }}</b>
-                  <a :href="media.download_url" class="ml-auto text-sm text-info" download
+                  <a @click="download(media)" role="button" class="ml-auto text-sm text-info"
                     ><i class="fas fa-download"></i
                   ></a>
                 </div>
-                <a :href="media.download_url" class="download-icon mt-1" download
+                <a @click="download(media)" role="button" class="download-icon mt-1"
                   ><i class="dripicons-cloud-download"></i
                 ></a>
               </div>
@@ -286,6 +286,15 @@ export default {
 
     isPdf(media) {
       return media.type === 'pdf';
+    },
+
+    download(media) {
+      var a = document.createElement('a');
+      a.href = media.download_url;
+      a.download = media.file_name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
   }
 };

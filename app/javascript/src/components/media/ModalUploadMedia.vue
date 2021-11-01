@@ -20,14 +20,13 @@
           </button>
         </div>
         <div class="modal-body overflow-hidden position-relative">
-          <media-upload :types="types" @upload="onUploadFinished(event)"></media-upload>
+          <media-upload ref="mediaUpload" :types="types" @upload="onUploadFinished(event)"></media-upload>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-
 export default {
   props: {
     types: {
@@ -40,10 +39,16 @@ export default {
 
     };
   },
+  mounted() {
+    $(this.$refs.mediaModal).on('show.bs.modal', this.shownModal);
+  },
   methods: {
     onUploadFinished(event) {
       this.$emit('upload', event);
       this.$refs.close.click();
+    },
+    shownModal() {
+      this.$refs.mediaUpload.deleteMedia();
     }
   }
 };

@@ -23,7 +23,7 @@
               type="text"
               name="name"
               class="form-control"
-              v-model="autoResponseData.name"
+              v-model.trim="autoResponseData.name"
               placeholder="自動応答名を入力してください"
               v-validate="'required|max:64'"
               maxlength="65"
@@ -67,10 +67,11 @@
             v-model="autoResponseData.keywords"
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
-            separator=",;"
+            separator=" ,;"
             :tag-validator="tagValidator"
             invalid-tag-text="無効なタグ"
             duplicateTagText="タグはすでに存在します"
+            limitTagsText="キーワード数が上限に達しました"
             add-on-change
             :add-button-text="'追加'"
           >
@@ -221,7 +222,7 @@ export default {
 
     tagValidator(tag) {
       // Individual tag validator function
-      return tag === tag.toLowerCase() && tag.length < 20;
+      return tag === tag.toLowerCase() && tag.length <= 20;
     },
 
     async submitCreate() {
@@ -234,9 +235,25 @@ export default {
         ...this.autoResponseData
       };
       if (this.auto_response_id) {
-        await this.updateAutoResponse(data);
+        const response = await this.updateAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の変更は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+          );
+        } else {
+          window.toastr.error('自動応答の変更は失敗しました。');
+        }
       } else {
-        await this.createAutoResponse(data);
+        const response = await this.createAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の作成は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+          );
+        } else {
+          window.toastr.error('自動応答の作成は失敗しました。');
+        }
       }
     },
 

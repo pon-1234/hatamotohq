@@ -13,7 +13,7 @@ class User::FoldersController < User::ApplicationController
   def create
     @folder = Folder.new(create_params)
     @folder.line_account = Current.user.line_account
-    if !@folder.save!
+    unless @folder.save
       render_bad_request_with_message(@folder.first_error_message)
     end
   end
@@ -24,7 +24,9 @@ class User::FoldersController < User::ApplicationController
 
   # PATCH /user/folders/:id
   def update
-    @folder.update(update_params)
+    unless @folder.update(update_params)
+      render_bad_request_with_message(@folder.first_error_message)
+    end
   end
 
   # DELETE /user/folders/:id

@@ -22,7 +22,7 @@
             </a>
           </div>
           <div class="mt-2">
-            <table class="table table-centered mb-0">
+            <table class="table mb-0">
               <thead class="thead-light">
                 <tr>
                   <th class="mw-100">自動応答名</th>
@@ -31,20 +31,28 @@
                   <th class="fw-100">状況</th>
                   <th class="fw-100">ヒット数</th>
                   <th class="fw-100">操作</th>
-                  <th class="fw-150">フォルダー</th>
+                  <th class="fw-120 d-none d-xl-block">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
-                  <td>{{ autoResponse.name }}</td>
                   <td>
-                    <div><small>どれか1つにマッチ</small></div>
-                    <span class="mr-1" v-for="(tag, index) in autoResponse.keywords" v-bind:key="index"
-                      ><span v-if="index > 0">or</span>「{{ tag }}」</span
-                    >
+                    <div class="mxw-400 max-2-lines">{{ autoResponse.name }}</div>
                   </td>
                   <td>
-                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="mt-2 text-left">
+                    <div><small>どれか1つにマッチ</small></div>
+                    <div>
+                      <span
+                        class="badge badge-pill badge-warning mr-1 pt-1"
+                        v-for="(keyword, index) in autoResponse.keywords"
+                        v-bind:key="index"
+                      >
+                        <div class="mxw-200 text-truncate">{{ keyword }}</div>
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
                       <message-content :data="item.content"></message-content>
                     </div>
                   </td>
@@ -94,7 +102,7 @@
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td class="d-none d-xl-block">
                     <div v-if="curFolder">{{ curFolder.name }}</div>
                     <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
                   </td>
@@ -167,6 +175,15 @@ export default {
 
   async beforeMount() {
     await this.getAutoResponses();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onSelectedFolderChanged(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -214,7 +231,13 @@ export default {
 
     async updateAutoResponseStatus(autoResponse) {
       const payload = { id: autoResponse.id, status: autoResponse.status === 'enabled' ? 'disabled' : 'enabled' };
-      await this.updateAutoResponse(payload);
+      console.log('-----update auto response ----', payload);
+      const response = await this.updateAutoResponse(payload);
+      if (response) {
+        Util.showSuccessThenRedirect('自動応答状況の変更は完了しました。', location.href);
+      } else {
+        window.toastr.error('自動応答状況の変更は失敗しました。');
+      }
     },
 
     async submitDeleteAutoResponse() {
@@ -233,8 +256,8 @@ export default {
       this.autoResponses = this.folders[index].auto_responses;
     },
 
-    submitUpdateFolder(folder) {
-      const response = this.updateFolder(folder);
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
       if (response) {
         window.toastr.success('フォルダーの変更は完了しました。');
       } else {

@@ -107,7 +107,7 @@ export const actions = {
     } catch (error) {
       return null;
     }
-  },
+  }
 
   // updateStatus(_, data) {
   //   return SurveyAPI.updateStatus(data).done((res) => {

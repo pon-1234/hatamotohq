@@ -43,7 +43,7 @@
             <!-- go to chat -->
             <li class="list-group-item">
               <b>トーク</b
-              ><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"
+              ><a class="float-right" :href="`/user/channels/${channel_id}`"
                 ><i class="uil-comment-alt-dots"></i> メッセージ</a
               >
             </li>

@@ -57,7 +57,6 @@ class DispatchBroadcastJob < ApplicationJob
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
-
     if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
     else
@@ -89,8 +88,8 @@ class DispatchBroadcastJob < ApplicationJob
           survey = Survey.find(survey_id)
           survey_url = gen_survey_url(survey, channel.line_friend.line_user_id)
           action['type'] = 'uri'
-          action['uri'] = survey_id
-          action['linkUri'] = survey_id
+          action['uri'] = survey_url
+          action['linkUri'] = survey_url
         end
         LineApi::PushMessage.new(@broadcast.line_account).perform(messages, channel.line_friend.line_user_id)
       end
@@ -108,6 +107,7 @@ class DispatchBroadcastJob < ApplicationJob
       friend_ids.in_groups_of(MULTICAST_BATCH_SIZE, false) do |ids|
         LineApi::Multicast.new(line_account).perform(messages_data, ids)
       end
+      true
     end
 
     # TODO need refactoring

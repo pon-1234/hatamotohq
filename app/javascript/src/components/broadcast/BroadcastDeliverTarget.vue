@@ -3,10 +3,15 @@
   <div v-else-if="broadcast.type === 'condition'">
     <div v-if="broadcast.tags && broadcast.tags.length > 0" class="d-flex align-items-center flex-wrap">
       <span class="text-sm mr-2">タグ</span>
-      <span v-for="(tag, index) in broadcast.tags" :key="index" class="badge badge-outline-info badge-pill pt-1">{{tag.name}}</span>
-      <divider></divider>
+      <span v-for="(tag, index) in broadcast.tags" :key="index" class="badge badge-warning badge-pill mr-1">{{
+        tag.name
+      }}</span>
     </div>
-    <div v-if="broadcast.conditions && broadcast.conditions.type === 'specific'" class="d-flex align-items-center flex-wrap">
+    <divider v-if="broadcast.conditions && broadcast.conditions.type === 'specific'"></divider>
+    <div
+      v-if="broadcast.conditions && broadcast.conditions.type === 'specific'"
+      class="d-flex align-items-center flex-wrap"
+    >
       <span class="text-sm mr-2">友だち登録日</span>
       <span class="font-weight-bold">{{ friendAddCondition.start_date }} ~ {{ friendAddCondition.end_date }}</span>
     </div>

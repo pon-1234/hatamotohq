@@ -14,7 +14,7 @@
         <div class="flex-grow-1">
           <div class="btn btn-primary" @click="addTag"><i class="uil-plus"></i> 新規登録</div>
           <div class="mt-2">
-            <table class="table table-centered mb-0">
+            <table class="table mb-0">
               <thead class="thead-light">
                 <tr>
                   <th>タグ名</th>
@@ -24,26 +24,33 @@
               </thead>
               <tbody v-if="curFolder">
                 <tr v-if="showTagInput">
-                  <td class="mw-200 vetical-align-middle">
-                    <div class="folder-item">
+                  <td class="mw-200">
+                    <div>
                       <div class="input-group newgroup-inputs">
                         <input
                           type="text"
                           placeholder="タグ名"
                           class="form-control"
                           @click.stop
-                          v-model="tagData.name"
+                          v-model.trim="tagData.name"
                           ref="tagName"
+                          name="tag_name"
+                          v-validate="'required|max:32'"
+                          data-vv-as="タグ名"
                         />
                         <span class="input-group-btn">
-                          <button type="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
+                          <div role="button" class="btn btn-light" @click="submitCreateTag" ref="buttonAddTag">
                             決定
-                          </button>
+                          </div>
                         </span>
                       </div>
+                      <error-message
+                        :message="errors.first('tag_name')"
+                        v-if="errors.first('tag_name')"
+                      ></error-message>
                     </div>
                   </td>
-                  <td>0人</td>
+                  <td><span class="mt-2">0人</span></td>
                   <td>{{ getCreatedAt() }}</td>
                 </tr>
                 <tag-item
@@ -57,7 +64,7 @@
               </tbody>
             </table>
             <div v-if="curFolder && curFolder.tags.length === 0" class="mt-5 text-md text-center">
-              <b>タグはありません</b>
+              <b>登録したタグはありません。</b>
             </div>
           </div>
         </div>
@@ -215,19 +222,19 @@ export default {
     },
 
     async submitCreateTag() {
-      if (this.tagData.name && this.tagData.name.trim().length > 0) {
-        const payload = {
-          folder_id: this.curFolder.id,
-          name: this.tagData.name
-        };
-        const response = await this.createTag(payload);
-        if (response) {
-          window.toastr.success('タグの作成は完了しました。');
-        } else {
-          window.toastr.error('フォルダーの作成は失敗しました。');
-        }
-        this.resetTagInput();
+      const passed = await this.$validator.validateAll();
+      if (!passed) return;
+      const payload = {
+        folder_id: this.curFolder.id,
+        name: this.tagData.name
+      };
+      const response = await this.createTag(payload);
+      if (response) {
+        window.toastr.success('タグの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
       }
+      this.resetTagInput();
     },
 
     async submitUpdateTag(tag) {
@@ -237,7 +244,7 @@ export default {
       if (response) {
         window.toastr.success('タグの変更は完了しました。');
       } else {
-        window.toastr.error('フォルダーの変更は失敗しました。');
+        window.toastr.error('タグの変更は失敗しました。');
       }
       this.forceRerender();
     },

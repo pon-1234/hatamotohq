@@ -26,11 +26,7 @@
             <tbody v-for="(friend, index) in friends" :key="index">
               <tr>
                 <td class="table-user">
-                  <img
-                    v-lazy="avatarImgObj"
-                    alt="table-user"
-                    class="mr-2 rounded-circle"
-                  />
+                  <img v-lazy="avatarImgObj" alt="table-user" class="mr-2 rounded-circle" />
                   {{ friend.line_name }}
                 </td>
                 <td>{{ formattedDatetime(friend.created_at) }}</td>
@@ -42,9 +38,7 @@
                   ></friend-status>
                 </td>
                 <td>
-                  <a :href="`${rootUrl}/user/friends/${friend.id}`" data-turbolinks="false" class="btn btn-sm btn-light"
-                    >詳細</a
-                  >
+                  <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
                 </td>
               </tr>
             </tbody>
@@ -89,7 +83,7 @@ export default {
   },
 
   created() {
-    this.avatarImgObj.src = this.friend.line_picture_url;
+    this.avatarImgObj.src = this.friend ? this.friend.line_picture_url : '';
   },
 
   watch: {
@@ -106,25 +100,24 @@ export default {
 
   computed: {
     ...mapState('friend', {
-      queryParams: (state) => state.queryParams,
+      queryParams: state => state.queryParams,
       friends: state => state.friends,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curPage: {
-      get() { return this.queryParams.page; },
-      set(value) { this.setQueryParam({ page: value }); }
+      get() {
+        return this.queryParams.page;
+      },
+      set(value) {
+        this.setQueryParam({ page: value });
+      }
     }
   },
   methods: {
-    ...mapMutations('friend', [
-      'resetFriends',
-      'setQueryParam'
-    ]),
-    ...mapActions('friend', [
-      'getFriends'
-    ]),
+    ...mapMutations('friend', ['resetFriends', 'setQueryParam']),
+    ...mapActions('friend', ['getFriends']),
 
     async loadPage() {
       this.$nextTick(async() => {

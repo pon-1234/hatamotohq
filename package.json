@@ -48,7 +48,6 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "toastr": "^2.1.4",
-    "turbolinks": "^5.2.0",
     "v-clipboard": "^2.2.3",
     "v-tooltip": "^2.0.3",
     "vee-validate": "^2.2.15",

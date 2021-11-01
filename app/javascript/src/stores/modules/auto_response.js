@@ -59,7 +59,11 @@ export const actions = {
   },
 
   async createAutoResponse(context, autoResponseData) {
-    return await AutoResponseAPI.create(autoResponseData);
+    try {
+      return await AutoResponseAPI.create(autoResponseData);
+    } catch (error) {
+      return null;
+    }
   },
 
   async updateAutoResponse(context, autoResponse) {

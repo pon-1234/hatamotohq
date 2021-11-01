@@ -8,9 +8,7 @@
 
     <!-- chat area -->
     <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
-      <chat-box
-        :class="getRightItem()"
-      ></chat-box>
+      <chat-box :class="getRightItem()"></chat-box>
     </div>
     <!-- end chat area-->
 
@@ -49,27 +47,23 @@ export default {
 
   computed: {
     ...mapState('channel', {
-      activeChannel: (state) => state.activeChannel,
-      channels: (state) => state.channels,
-      messages: (state) => state.messages,
-      unreadChannelId: (state) => state.unreadChannelId
+      activeChannel: state => state.activeChannel,
+      channels: state => state.channels,
+      messages: state => state.messages,
+      unreadChannelId: state => state.unreadChannelId
     }),
     ...mapState('friend', {
-      friend: (state) => state.friend
+      friend: state => state.friend
     })
   },
 
   methods: {
-    ...mapActions('channel', [
-      'getChannels',
-      'onReceiveWebsocketEvent',
-      'pushMessage',
-      'setActiveChannel'
-    ]),
+    ...mapActions('channel', ['getChannels', 'onReceiveWebsocketEvent', 'pushMessage', 'setActiveChannel']),
 
     connectToWebsocket() {
       const _this = this;
       if (consumer.subscriptions.subscriptions.length > 0) {
+        console.log('already connected to websocket');
         // Already connected, keep only one connection at the same time
         return;
       }
@@ -118,32 +112,32 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@media (max-width: 991px) {
-  .item-pc {
-    display: none !important;
+  @media (max-width: 991px) {
+    .item-pc {
+      display: none !important;
+    }
+    .item-hidden {
+      display: none !important;
+    }
   }
-  .item-hidden {
-    display: none !important;
-  }
-}
 
-@media (min-width: 992px) {
-  .chatbox {
-    width: calc(100vw - 250px);
+  @media (min-width: 992px) {
+    .chatbox {
+      width: calc(100vw - 250px);
+    }
+    .item-hidden {
+      display: block;
+    }
+    .bottom {
+      right: 0px;
+      left: 0px;
+      position: relative;
+      width: 100%;
+      z-index: 0;
+    }
   }
-  .item-hidden {
-    display: block;
-  }
-  .bottom {
-    right: 0px;
-    left: 0px;
-    position: relative;
-    width: 100%;
-    z-index: 0;
-  }
-}
 
-.container {
-  background: white;
-}
+  .container {
+    background: white;
+  }
 </style>
