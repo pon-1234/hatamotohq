@@ -182,7 +182,7 @@ export default {
   props: {
     types: {
       type: Array,
-      default: () => ['image', 'audio', 'video']
+      default: () => ['image', 'audio', 'video', 'richmenu']
     },
     mode: {
       type: String,
