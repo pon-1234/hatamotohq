@@ -96,6 +96,7 @@ export default {
 
     shownModal() {
       this.$refs.modalMediaIndex.resetData();
+      this.$refs.mediaUpload.deleteMedia();
     }
   }
 };
