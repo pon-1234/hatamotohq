@@ -37,6 +37,7 @@
             </div>
             <div class="tab-pane" id="selectMedia">
               <media-index
+                ref="modalMediaIndex"
                 mode="read"
                 @select="selectMedia($event)"
                 :filterable="filterable"
@@ -94,7 +95,7 @@ export default {
     },
 
     shownModal() {
-      this.$refs.mediaUpload.deleteMedia();
+      this.$refs.modalMediaIndex.resetData();
     }
   }
 };

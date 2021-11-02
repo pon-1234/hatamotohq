@@ -297,6 +297,11 @@ export default {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    },
+
+    resetData() {
+      this.currentPage = 1;
+      this.loadPage();
     }
   }
 };
