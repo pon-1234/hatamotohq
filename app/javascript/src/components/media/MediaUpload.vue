@@ -23,6 +23,7 @@
         </video>
       </div>
       <div class="text-center text-md my-auto" v-else>
+        <p><label>ここにファイルをドラッグ＆ドロップ<br>または</label></p>
         <div class="custom-file fw-200">
           <div class="custom-file-input h-100 w-100">
             <input
@@ -131,6 +132,7 @@ export default {
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
+          _this.mediaData.type = _this.oldType;
           return;
         }
 

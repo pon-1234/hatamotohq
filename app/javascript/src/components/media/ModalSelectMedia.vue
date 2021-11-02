@@ -2,7 +2,7 @@
   <div
     class="modal fade"
     :id="id ? id : 'modalSelectMedia'"
-    ref="mediaSelectModal"
+    ref="modalSelectMedia"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -33,7 +33,7 @@
           </ul>
           <div class="tab-content">
             <div class="tab-pane show active" id="uploadMedia">
-              <media-upload :types="types" @upload="selectMedia($event)"></media-upload>
+              <media-upload ref="mediaUpload" :types="types" @upload="selectMedia($event)"></media-upload>
             </div>
             <div class="tab-pane" id="selectMedia">
               <media-index
@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    $(this.$refs.mediaSelectModal).on('show.bs.modal', this.shownModal);
+    $(this.$refs.modalSelectMedia).on('show.bs.modal', this.shownModal);
   },
 
   methods: {

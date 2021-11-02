@@ -52,7 +52,9 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <button type="submit" class="btn btn-success fw-120" @click="submitSaveTemplate">保存</button>
+        <button type="submit" class="btn btn-success fw-120" @click="submitSaveTemplate">
+          {{ template_id ? "保存" : "新規登録" }}
+        </button>
       </div>
 
       <loading-indicator :loading="loading"></loading-indicator>
@@ -206,7 +208,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             'テンプレートの作成は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/templates`
+            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
           );
         } else {
           window.toastr.error('エラーを発生しました。');
@@ -216,7 +218,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             'テンプレートの変更は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/templates`
+            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
           );
         } else {
           window.toastr.error('エラーを発生しました。');

@@ -35,6 +35,7 @@
                           v-model.trim="tagData.name"
                           ref="tagName"
                           name="tag_name"
+                          maxlength="33"
                           v-validate="'required|max:32'"
                           data-vv-as="タグ名"
                         />
