@@ -18,8 +18,8 @@ export const mutations = {
   },
 
   updateFolder(state, folder) {
-    folder.reminders = [];
-    folder.reminders_count = 0;
+    // folder.reminders = [];
+    // folder.reminders_count = 0;
     const index = state.folders.findIndex(_ => _.id === folder.id);
     state.folders.splice(index, 1, folder);
   },

@@ -17,8 +17,8 @@ export const mutations = {
   },
 
   updateFolder(state, folder) {
-    folder.variables = [];
-    folder.variables_count = 0;
+    // folder.variables = [];
+    // folder.variables_count = 0;
     const index = state.folders.findIndex(_ => _.id === folder.id);
     state.folders.splice(index, 1, folder);
   },
