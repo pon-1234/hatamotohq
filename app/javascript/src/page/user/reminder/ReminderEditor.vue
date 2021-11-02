@@ -20,7 +20,7 @@
               class="form-control"
               name="reminder_name"
               placeholder="リマインダ名を入力してください"
-              v-model="reminderData.name"
+              v-model.trim="reminderData.name"
               v-validate="'required|max:255'"
               maxlength="256"
               data-vv-as="リマインダ名"
