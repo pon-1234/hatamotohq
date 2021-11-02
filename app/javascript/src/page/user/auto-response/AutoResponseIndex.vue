@@ -15,23 +15,23 @@
           <div class="col-r">
             <a
               v-if="folders && folders.length && folders[selectedFolderIndex]"
-              :href="MIX_ROOT_PATH + '/user/auto_responses/new?folder_id=' + folders[selectedFolderIndex].id"
+              :href="rootPath + '/user/auto_responses/new?folder_id=' + folders[selectedFolderIndex].id"
               class="btn btn-primary"
             >
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
           <div class="mt-2">
-            <table class="table mb-0">
+            <table class="table mb-0 table-centered">
               <thead class="thead-light">
                 <tr>
                   <th class="mw-100">自動応答名</th>
-                  <th class="mw-100">キーワード</th>
+                  <th class="mw-120">キーワード</th>
                   <th class="mw-100">メッセージ</th>
                   <th class="fw-100">状況</th>
                   <th class="fw-100">ヒット数</th>
                   <th class="fw-100">操作</th>
-                  <th class="fw-120">フォルダー</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,10 +102,10 @@
                       </div>
                     </div>
                   </td>
-                  <thead>
+                  <td>
                     <div v-if="curFolder">{{ curFolder.name }}</div>
                     <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
-                  </thead>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -164,7 +164,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       autoResponses: [],
@@ -231,10 +231,10 @@ export default {
 
     async updateAutoResponseStatus(autoResponse) {
       const payload = { id: autoResponse.id, status: autoResponse.status === 'enabled' ? 'disabled' : 'enabled' };
-      console.log('-----update auto response ----', payload);
       const response = await this.updateAutoResponse(payload);
+      const url = `${this.rootPath}/user/auto_responses?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('自動応答状況の変更は完了しました。', location.href);
+        Util.showSuccessThenRedirect('自動応答状況の変更は完了しました。', url);
       } else {
         window.toastr.error('自動応答状況の変更は失敗しました。');
       }
@@ -243,8 +243,9 @@ export default {
     async submitDeleteAutoResponse() {
       if (!this.autoResponse) return;
       const response = await this.deleteAutoResponse(this.autoResponse.id);
+      const url = `${this.rootPath}/user/auto_responses?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('自動応答の削除は完了しました。', location.href);
+        Util.showSuccessThenRedirect('自動応答の削除は完了しました。', url);
       } else {
         window.toastr.error('自動応答の削除は失敗しました。');
       }
@@ -286,10 +287,11 @@ export default {
 
     async submitCopyAutoResponse() {
       const response = await this.copyAutoResponse(this.autoResponse.id);
+      const url = `${this.rootPath}/user/auto_responses?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('success', window.location.href);
+        Util.showSuccessThenRedirect('自動応答のコピーは完了しました。', url);
       } else {
-        window.toastr.error('errors');
+        window.toastr.error('自動応答のコピーは失敗しました。');
       }
     },
 
