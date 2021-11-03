@@ -165,7 +165,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables`
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         window.toastr.error('友だち情報欄の保存は失敗しました。');
@@ -175,7 +175,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の更新は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables`
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         window.toastr.error('友だち情報欄の更新は失敗しました。');

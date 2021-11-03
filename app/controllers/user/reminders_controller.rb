@@ -33,11 +33,21 @@ class User::RemindersController < User::ApplicationController
     end
   end
 
+  def update
+    unless @reminder.update!(reminder_params)
+      render_bad_request_with_message(@reminder.first_error_message)
+    end
+  end
+
   private
     def reminder_params
       params.permit(
         :folder_id,
         :name
       )
+    end
+
+    def find_reminder
+      @reminder = Reminder.find(params[:id])
     end
 end
