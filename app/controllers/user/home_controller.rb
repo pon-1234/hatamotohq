@@ -5,6 +5,7 @@ class User::HomeController < User::ApplicationController
   def index
     @friend_count = Current.user.line_account.line_friends.count
     @messages = Current.user.line_account.latest_messages
+    @insight = Insight.where(line_account: Current.user.line_account).this_month.first
   end
 
   # GET /user/home/announcements

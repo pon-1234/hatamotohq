@@ -30,4 +30,9 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Insight < ApplicationRecord
+  belongs_to :line_account
+
+  # scope
+  scope :belongs_to_account, -> (account_id) { where(line_account: account_id) }
+  scope :this_month, -> { where(date: Time.zone.today.all_month) }
 end
