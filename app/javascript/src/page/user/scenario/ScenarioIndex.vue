@@ -191,7 +191,7 @@ export default {
     },
 
     openMessageIndex(scenario) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`);
     },
 
     async submitDeleteScenario() {
