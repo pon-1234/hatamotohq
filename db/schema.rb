@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_18_104237) do
+ActiveRecord::Schema.define(version: 2021_11_02_094027) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -201,6 +201,25 @@ ActiveRecord::Schema.define(version: 2021_10_18_104237) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['line_account_id'], name: 'index_folders_on_line_account_id'
+  end
+
+  create_table 'insights', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.string 'type', default: 'daily'
+    t.date 'date'
+    t.integer 'broadcast'
+    t.integer 'targeting'
+    t.integer 'auto_response'
+    t.integer 'welcome_response'
+    t.integer 'chat'
+    t.integer 'api_broadcast'
+    t.integer 'api_push'
+    t.integer 'api_multicast'
+    t.integer 'api_narrowcast'
+    t.integer 'api_reply'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_account_id'], name: 'index_insights_on_line_account_id'
   end
 
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -562,6 +581,7 @@ ActiveRecord::Schema.define(version: 2021_10_18_104237) do
   add_foreign_key 'flex_message_sent_logs', 'line_accounts'
   add_foreign_key 'flex_messages', 'line_accounts'
   add_foreign_key 'folders', 'line_accounts'
+  add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'

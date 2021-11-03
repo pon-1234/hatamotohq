@@ -10,6 +10,7 @@ json.data do
   json.array! @broadcasts do |broadcast|
     json.(broadcast, :id, :title, :type, :status, :deliver_now, :deliver_at, :schedule_at, :conditions)
     json.editable broadcast.editable?
+    json.destroyable broadcast.destroyable?
     json.tags do
       json.array! broadcast.tags do |tag|
         json.partial! 'models/tag', tag: tag

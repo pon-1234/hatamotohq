@@ -92,6 +92,7 @@
                         class="dropdown-item"
                         data-toggle="modal"
                         data-target="#modalDeleteBroadcast"
+                        v-if="broadcast.destroyable"
                         @click="curBroadcastIndex = index"
                         >一斉配信を削除</a
                       >
