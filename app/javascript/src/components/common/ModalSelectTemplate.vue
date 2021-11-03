@@ -35,12 +35,7 @@
                   </tr>
                 </thead>
                 <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
-                  <tr
-                    v-for="(item, index) in folders[this.selectedFolder].templates"
-                    :key="index"
-                    class="folder-item"
-                    data-dismiss="modal"
-                  >
+                  <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
                     <td class="d-flex w-100">
                       <div>{{ item.name }}</div>
                       <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)">選択</div>
@@ -84,9 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('template', [
-      'getTemplates'
-    ]),
+    ...mapActions('template', ['getTemplates']),
 
     backToFolder() {
       this.isPc = false;
@@ -102,7 +95,6 @@ export default {
       this.selectedFolder = index;
       this.isPc = true;
     }
-
   }
 };
 </script>
