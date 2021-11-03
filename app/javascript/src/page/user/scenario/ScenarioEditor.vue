@@ -12,6 +12,7 @@
               class="form-control"
               placeholder="シナリオ名を入力してください"
               v-model.trim="scenarioData.title"
+              maxlength="256"
               v-validate="'required|max:255'"
               data-vv-as="シナリオ名"
             />
