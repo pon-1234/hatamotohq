@@ -45,7 +45,9 @@
                       操作 <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                      <a role="button" class="dropdown-item" @click="openEdit(scenario)">シナリオを編集する</a>
+                      <a role="button" class="dropdown-item" :href="`${rootPath}/user/scenarios/${scenario.id}/edit`"
+                        >シナリオを編集する</a
+                      >
                       <a
                         role="button"
                         class="dropdown-item"
@@ -124,6 +126,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       currentPage: 1,
