@@ -257,7 +257,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect(
           'リッチメニュの保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/rich_menus`
+          `${process.env.MIX_ROOT_PATH}/user/rich_menus?folder_id=${this.richMenuData.folder_id}`
         );
       } else {
         window.toastr.error('リッチメニューの保存は失敗しました。');
