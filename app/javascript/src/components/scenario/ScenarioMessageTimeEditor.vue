@@ -65,6 +65,7 @@
               autocomplete="off"
               name="step"
               type="number"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @change="$emit('update:date', date)"
             />
             <span>日と</span>
