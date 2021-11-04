@@ -46,7 +46,9 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
+                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/templates/${template.id}/edit`"
+                          >テンプレートを編集</a
+                        >
                         <a
                           role="button"
                           class="dropdown-item"
@@ -191,15 +193,6 @@ export default {
       this.isPc = true;
     },
 
-    async submitUpdateFolder(folder) {
-      const response = await this.updateFolder(folder);
-      if (response) {
-        window.toastr.success('フォルダーの変更は完了しました。');
-      } else {
-        window.toastr.error('フォルダーの変更は失敗しました。');
-      }
-    },
-
     async submitCreateFolder(folder) {
       const response = await this.createFolder(folder);
       if (response) {
@@ -209,8 +202,17 @@ export default {
       }
     },
 
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
+    },
+
     async submitDeleteFolder() {
-      const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
+      const response = await this.deleteFolder(this.curFolder.id);
       if (response) {
         window.toastr.success('フォルダーの削除は完了しました。');
         this.onSelectedFolderChanged(0);
@@ -242,10 +244,6 @@ export default {
 
     backToFolder() {
       this.isPc = false;
-    },
-
-    openEdit(template) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
     },
 
     formattedDate(date) {

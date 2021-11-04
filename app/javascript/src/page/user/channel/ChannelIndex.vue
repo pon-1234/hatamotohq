@@ -62,11 +62,6 @@ export default {
 
     connectToWebsocket() {
       const _this = this;
-      if (consumer.subscriptions.subscriptions.length > 0) {
-        console.log('already connected to websocket');
-        // Already connected, keep only one connection at the same time
-        return;
-      }
       consumer.subscriptions.create(
         { channel: 'ConversationChannel' },
         {

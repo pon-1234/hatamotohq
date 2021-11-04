@@ -48,7 +48,7 @@ class Media < ApplicationRecord
 
   def preview_url
     if file.attached? && file.representable?
-      url_for(file.representation(resize: '240x240').processed)
+      url_for(file.preview(resize: '240x240').processed)
     end
   rescue StandardError => e
     logger.error("Could not generate preview url #{e.message}")

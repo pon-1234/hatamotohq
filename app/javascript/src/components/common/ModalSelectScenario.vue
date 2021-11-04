@@ -13,10 +13,10 @@
             <thead class="thead-light">
               <tr>
                 <th>#</th>
-                <th>配信方式</th>
-                <th>シナリオ名</th>
-                <th>メッセージ数</th>
-                <th>選択</th>
+                <th class="mw-150">配信方式</th>
+                <th class="mw-150">シナリオ名</th>
+                <th class="mw-150">メッセージ数</th>
+                <th class="mw-120">選択</th>
               </tr>
             </thead>
             <tbody>
