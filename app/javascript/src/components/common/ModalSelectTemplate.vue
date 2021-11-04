@@ -25,7 +25,7 @@
               :selectedFolder="selectedFolder"
               @changeSelectedFolder="changeSelectedFolderTemplate"
             />
-            <div class="flex-grow-1">
+            <div class="flex-grow-1 scroll-table">
               <table class="table table-hover">
                 <thead class="thead-light">
                   <tr>
@@ -104,6 +104,10 @@ export default {
   .modal-template {
     .item-sm {
       display: none;
+    }
+    .scroll-table {
+      overflow-y: scroll;
+      height: 75vh;
     }
 
     @media (max-width: 991px) {
