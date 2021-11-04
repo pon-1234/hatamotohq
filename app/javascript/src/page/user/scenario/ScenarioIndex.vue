@@ -17,10 +17,10 @@
           <table class="table table-centered mb-0">
             <thead class="thead-light">
               <tr>
-                <th>配信方式</th>
+                <th class="mw-120">配信方式</th>
                 <th>シナリオ名</th>
-                <th>状況</th>
-                <th>メッセージ</th>
+                <th class="mw-120">状況</th>
+                <th class="mw-200">メッセージ</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -45,7 +45,9 @@
                       操作 <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                      <a role="button" class="dropdown-item" @click="openEdit(scenario)">シナリオを編集する</a>
+                      <a role="button" class="dropdown-item" :href="`${rootPath}/user/scenarios/${scenario.id}/edit`"
+                        >シナリオを編集する</a
+                      >
                       <a
                         role="button"
                         class="dropdown-item"
@@ -124,6 +126,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       currentPage: 1,
@@ -188,7 +191,7 @@ export default {
     },
 
     openMessageIndex(scenario) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`);
     },
 
     async submitDeleteScenario() {

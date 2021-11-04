@@ -20,7 +20,7 @@
               class="form-control"
               name="reminder_name"
               placeholder="リマインダ名を入力してください"
-              v-model="reminderData.name"
+              v-model.trim="reminderData.name"
               v-validate="'required|max:255'"
               maxlength="256"
               data-vv-as="リマインダ名"
@@ -74,7 +74,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reminder', ['createReminder', 'getReminder', 'getFolders']),
+    ...mapActions('reminder', ['createReminder', 'getReminder', 'getFolders', 'updateReminder']),
 
     async fetchData() {
       await this.getFolders();
@@ -107,7 +107,7 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateReminder(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect('リマインダの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`);
       } else {
         window.toastr.error('リマインダの保存は失敗しました。');
       }

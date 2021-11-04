@@ -83,6 +83,7 @@ class User::AutoResponsesController < User::ApplicationController
 
     def update_auto_response_params
       params.permit(
+        :folder_id,
         :name,
         :status,
         keywords: []

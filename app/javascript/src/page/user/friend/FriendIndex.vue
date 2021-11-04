@@ -50,7 +50,7 @@
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
-                  <p class="m-0">{{ friend.line_name }}</p>
+                  <p class="m-0">{{ truncate(friend.display_name || friend. line_name, 15) }}</p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">
@@ -194,6 +194,12 @@ export default {
 
     openModal() {
       this.$refs.modalFriendSearch.showModal();
+    },
+
+    truncate(name, length = 15) {
+      return _.truncate(name, {
+        length: length
+      });
     }
   }
 };

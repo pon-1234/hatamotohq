@@ -110,7 +110,7 @@
             class="form-control"
             name="broadcast_title"
             placeholder="タイトルを入力してください"
-            v-model="broadcastData.title"
+            v-model.trim="broadcastData.title"
             v-validate="'required|max:255'"
             maxlength="256"
             data-vv-as="タイトル"

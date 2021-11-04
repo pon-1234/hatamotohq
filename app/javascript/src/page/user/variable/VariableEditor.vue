@@ -20,7 +20,7 @@
               class="form-control"
               name="variable_name"
               placeholder="友だち情報欄名を入力してください"
-              v-model="variableData.name"
+              v-model.trim="variableData.name"
               v-validate="'required|max:255'"
               maxlength="256"
               data-vv-as="友だち情報欄名"
@@ -47,7 +47,7 @@
                 class="form-control"
                 name="variable_default"
                 placeholder="友だち情報欄名を入力してください"
-                v-model="variableData.default"
+                v-model.trim="variableData.default"
                 v-validate="'max:255'"
                 maxlength="256"
                 data-vv-as="既定値"
@@ -165,7 +165,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables`
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         window.toastr.error('友だち情報欄の保存は失敗しました。');
@@ -175,7 +175,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の更新は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables`
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         window.toastr.error('友だち情報欄の更新は失敗しました。');

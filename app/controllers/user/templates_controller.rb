@@ -43,7 +43,7 @@ class User::TemplatesController < User::ApplicationController
 
   # PATCH /user/templates/:id
   def update
-    unless @template.update!(template_params.except(:folder_id))
+    unless @template.update!(template_params)
       render_bad_request_with_message(@template.first_error_message)
     end
   end

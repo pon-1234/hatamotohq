@@ -76,7 +76,7 @@ class ScenarioEvent < ApplicationRecord
 
     def execute_after_deliver
       # If this event is the last
-      Messages::SystemLogBuilder.new(@channel).perform_scenario_end(self.scenario) if self.is_last
+      Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario) if self.is_last
       self.destroy
     end
 end

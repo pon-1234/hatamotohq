@@ -27,3 +27,15 @@ staging:
     include_metadata: true
     description: "This worker dispatch scenario event that was enqueued"
     enabled: true
+
+  WorkerGetNumberOfMessageDelivery:
+    cron: "0 0 * * * *" # Runs every hour
+    include_metadata: true
+    description: "This worker retrieve insight data using line api"
+    enabled: true
+
+  WorkerMonthlyInsightAnalyzer:
+    cron: "0 0 3 * * *" # Runs every hour
+    include_metadata: true
+    description: "This worker analyze quota consumption"
+    enabled: true
