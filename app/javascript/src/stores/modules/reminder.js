@@ -17,11 +17,11 @@ export const mutations = {
     state.folders = folders;
   },
 
-  updateFolder(state, folder) {
-    // folder.reminders = [];
-    // folder.reminders_count = 0;
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
   },
 
   deleteFolder(state, id) {
