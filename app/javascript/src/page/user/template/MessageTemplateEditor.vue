@@ -52,8 +52,8 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <button type="submit" class="btn btn-success fw-120" @click="submitSaveTemplate">
-          {{ template_id ? "保存" : "新規登録" }}
+        <button type="submit" class="btn btn-success mw-120" @click="submitSaveTemplate">
+          {{ template_id ? "保存" : "テンプレート登録" }}
         </button>
       </div>
 
