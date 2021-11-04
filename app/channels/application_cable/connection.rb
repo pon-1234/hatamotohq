@@ -8,9 +8,6 @@ class ApplicationCable::Connection < ActionCable::Connection::Base
     if verified_user = User.find_by(id: cookies.signed[:user_id])
       self.current_user = verified_user
       logger.add_tags 'ActionCable', current_user.email
-    else
-      self.current_user = find_verified_user access_token, uid, client
-      logger.add_tags 'ActionCable', current_user.email
     end
   end
 

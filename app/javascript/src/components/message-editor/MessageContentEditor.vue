@@ -85,7 +85,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: ['data', 'index'],
   data() {
@@ -119,7 +118,6 @@ export default {
       this.$emit('changeContent', this.messageData);
     },
     onMediaChanged(value) {
-      console.log('----on media changed----', value);
       this.messageData = value;
       this.$emit('changeContent', this.messageData);
     },

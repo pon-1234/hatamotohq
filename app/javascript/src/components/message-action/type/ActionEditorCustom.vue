@@ -29,8 +29,13 @@
         placeholder="選択時のメッセージを入力してください"
         v-model="displayText"
         class="w-100 form-control"
+        :name="name + '_display_text'"
+        maxlength="301"
+        v-validate="'max:300'"
+        data-vv-as="選択時のメッセージ"
         @keyup="changeDisplayText($event)"
       />
+      <error-message class="w-100" :message="errors.first(name + '_display_text')"></error-message>
     </div>
 
     <div>
