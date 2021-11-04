@@ -9,7 +9,7 @@
       v-model="content.text"
       class="form-control"
       @keyup="changeValue($event)"
-      v-validate="'required'"
+      v-validate="'required|max:1000'"
       data-vv-as="本文"
     />
     <error-message :message="errors.first(name + '_postback_text')"></error-message>
