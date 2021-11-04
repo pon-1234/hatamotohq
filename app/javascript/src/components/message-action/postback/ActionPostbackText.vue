@@ -9,6 +9,7 @@
       v-model="content.text"
       class="form-control"
       @keyup="changeValue($event)"
+      maxlength="1001"
       v-validate="'required|max:1000'"
       data-vv-as="本文"
     />
