@@ -14,7 +14,7 @@
                 name="message-name"
                 class="form-control"
                 placeholder="メッセージ名を入力してください"
-                v-model="scenarioMessageData.name"
+                v-model.trim="scenarioMessageData.name"
                 v-validate="'max:255'"
                 data-vv-as="メッセージ名"
               />
