@@ -48,7 +48,6 @@ export const actions = {
     };
     try {
       const response = await AnnouncementApi.list(params);
-      console.log(response);
       context.commit('setAnnouncements', response.data);
       context.commit('setMeta', response.meta);
       return response;
@@ -64,7 +63,6 @@ export const actions = {
     };
     try {
       const response = await AnnouncementApi.published(params);
-      console.log(response);
       context.commit('setAnnouncements', response.data);
       context.commit('setMeta', response.meta);
       return response;
