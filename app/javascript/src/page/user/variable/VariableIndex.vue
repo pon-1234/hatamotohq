@@ -190,17 +190,32 @@ export default {
       this.autoResponses = this.folders[index].auto_responses;
     },
 
-    async submitCreateFolder(folder) {
-      await this.createFolder(folder);
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
     },
 
-    async submitUpdateFolder(folder) {
-      await this.updateFolder(folder);
+    async submitCreateFolder(folder) {
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder(this.curFolder.id);
-      this.onSelectedFolderChanged(0);
+      const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.onSelectedFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     },
 
     async submitDeleteVariable() {
