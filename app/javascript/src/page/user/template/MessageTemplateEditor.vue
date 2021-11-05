@@ -198,7 +198,7 @@ export default {
       });
       const payload = {
         id: this.template_id,
-        folder_id: Util.getParamFromUrl('folder_id') || this.templateData.folder_id,
+        folder_id: this.templateData.folder_id,
         name: this.templateData.name,
         template_messages_attributes: orderedMessages
       };
