@@ -34,7 +34,7 @@
             <input
               v-model="date"
               class="form-control"
-              min="1"
+              min="0"
               style="width: 5em"
               autocomplete="off"
               name="step"
@@ -60,7 +60,7 @@
             <input
               v-model.number="date"
               class="form-control"
-              min="1"
+              min="0"
               style="width: 5em"
               autocomplete="off"
               name="step"
