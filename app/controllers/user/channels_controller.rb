@@ -35,6 +35,7 @@ class User::ChannelsController < User::ApplicationController
     authorize! :update, @channel
     @channel.last_seen_at = Time.zone.now
     @channel.save!
+    render_success
   end
 
   private
