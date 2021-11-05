@@ -37,7 +37,7 @@
                 <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
                   <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
                     <td class="d-flex w-100">
-                      <div>{{ item.name }}</div>
+                      <div class="box-item-name"><p class="m-0 item-name">{{ item.name }}</p></div>
                       <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)" data-dismiss="modal">
                         選択
                       </div>
@@ -110,6 +110,18 @@ export default {
       height: 75vh;
     }
 
+    .box-item-name {
+      width: 85%;
+      .item-name {
+        width: 100%;
+        white-space: pre-wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+      }
+    }
     @media (max-width: 991px) {
       .item-pc {
         display: none !important;
