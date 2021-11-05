@@ -65,6 +65,7 @@
               autocomplete="off"
               name="step"
               type="number"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @change="$emit('update:date', date)"
             />
             <span>日と</span>
@@ -84,11 +85,13 @@
         <input
           class="form-control"
           min="1"
-          style="width: 4em"
+          style="width: 5em"
           autocomplete="off"
           type="number"
-          v-model.number="order"
-          @change="$emit('update:order', order)"
+          v-model="order"
+          onblur="this.value = (this.value == 0 ? 1 : this.value);"
+          onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+          @input="$emit('update:order', order)"
         />
       </div>
       <div class="mt-2" v-if="!is_initial">
