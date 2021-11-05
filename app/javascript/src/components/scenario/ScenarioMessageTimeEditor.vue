@@ -85,10 +85,11 @@
         <input
           class="form-control"
           min="1"
-          style="width: 4em"
+          style="width: 5em"
           autocomplete="off"
           type="number"
           v-model.number="order"
+          onkeypress="return event.charCode >= 48 && event.charCode <= 57"
           @change="$emit('update:order', order)"
         />
       </div>
