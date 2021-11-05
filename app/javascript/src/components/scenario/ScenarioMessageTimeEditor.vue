@@ -89,7 +89,7 @@
           autocomplete="off"
           type="number"
           v-model.number="order"
-          onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+          onkeypress="return event.charCode >= 49 && event.charCode <= 57"
           @change="$emit('update:order', order)"
         />
       </div>
