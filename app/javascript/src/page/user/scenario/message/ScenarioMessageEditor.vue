@@ -141,7 +141,9 @@ export default {
     scenarioMessageData: {
       handler(val) {
         if (val.order < 1) {
-          this.scenarioMessageData.order = 1;
+          setTimeout(() => {
+            this.scenarioMessageData.order = 1;
+          }, 1000);
         }
       },
       deep: true

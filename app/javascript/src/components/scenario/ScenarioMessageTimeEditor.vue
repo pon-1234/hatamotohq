@@ -90,7 +90,7 @@
           type="number"
           v-model.number="order"
           onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-          @change="$emit('update:order', order)"
+          @input="$emit('update:order', order)"
         />
       </div>
       <div class="mt-2" v-if="!is_initial">
