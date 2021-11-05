@@ -137,6 +137,17 @@ export default {
     };
   },
 
+  watch: {
+    scenarioMessageData: {
+      handler(val) {
+        if (val.order < 1) {
+          this.scenarioMessageData.order = 1;
+        }
+      },
+      deep: true
+    }
+  },
+
   async beforeMount() {
     await this.fetchItem();
     this.loading = false;
