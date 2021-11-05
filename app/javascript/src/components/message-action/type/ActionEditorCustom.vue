@@ -68,7 +68,7 @@
             :value="action"
             :name="name + '_postback_' + index"
             :labelRequired="false"
-            @input="changeAction(index, $event)"
+            @input="changeActionType(index, $event)"
           >
           </action-postback>
         </div>
@@ -127,7 +127,8 @@ export default {
       this.displayText = this.value.displayText || null;
     },
 
-    changeAction(index, action) {
+    changeActionType(index, action) {
+      console.log('------change action type------', index, action);
       this.$set(this.actions, index, action);
       this.updateData();
     },

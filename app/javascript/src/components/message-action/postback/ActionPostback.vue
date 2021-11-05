@@ -22,7 +22,13 @@
     <label>アクション</label>
 
     <div>
-      <select type="text" maxlength="12" v-model="curPostbackType" class="w-100 form-control" @change="changeSelected">
+      <select
+        type="text"
+        maxlength="12"
+        v-model="curPostbackType"
+        class="w-100 form-control"
+        @change="changeActionType"
+      >
         <option v-for="(val, key) of types" :key="key" :value="key">{{ val }}</option>
       </select>
     </div>
@@ -77,7 +83,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: {
     value: String,
@@ -131,7 +136,7 @@ export default {
       });
     },
 
-    changeSelected() {
+    changeActionType() {
       this.emitData();
     },
 

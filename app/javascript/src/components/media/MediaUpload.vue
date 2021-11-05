@@ -1,5 +1,6 @@
 <template>
-  <div class="card upload-container my-auto d-flex flex-column"
+  <div
+    class="card upload-container my-auto d-flex flex-column"
     @drop.prevent="addMedia($event, 'drop')"
     @dragover.prevent
   >
@@ -23,7 +24,9 @@
         </video>
       </div>
       <div class="text-center text-md my-auto" v-else>
-        <p><label>ここにファイルをドラッグ＆ドロップ<br>または</label></p>
+        <p>
+          <label>ここにファイルをドラッグ＆ドロップ<br />または</label>
+        </p>
         <div class="custom-file fw-200">
           <div class="custom-file-input h-100 w-100">
             <input
