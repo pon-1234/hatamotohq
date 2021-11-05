@@ -137,19 +137,6 @@ export default {
     };
   },
 
-  watch: {
-    scenarioMessageData: {
-      handler(val) {
-        if (val.order < 1) {
-          setTimeout(() => {
-            this.scenarioMessageData.order = 1;
-          }, 1000);
-        }
-      },
-      deep: true
-    }
-  },
-
   async beforeMount() {
     await this.fetchItem();
     this.loading = false;

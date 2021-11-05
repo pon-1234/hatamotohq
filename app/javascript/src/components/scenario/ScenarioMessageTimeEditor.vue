@@ -88,7 +88,8 @@
           style="width: 5em"
           autocomplete="off"
           type="number"
-          v-model.number="order"
+          v-model="order"
+          onblur="this.value = (this.value == 0 ? 1 : this.value);"
           onkeypress="return event.charCode >= 48 && event.charCode <= 57"
           @input="$emit('update:order', order)"
         />
