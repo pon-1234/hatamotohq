@@ -11,7 +11,7 @@
           :name="name + '_label'"
           placeholder="ラベルを入力してください"
           maxlength="21"
-          v-model="label"
+          v-model.trim="label"
           class="w-100 form-control"
           v-validate="{ required: labelRequired && showTitle, max: 20 }"
           data-vv-as="ラベル"
@@ -27,7 +27,7 @@
       <input
         type="text"
         placeholder="選択時のメッセージを入力してください"
-        v-model="displayText"
+        v-model.trim="displayText"
         class="w-100 form-control"
         :name="name + '_display_text'"
         maxlength="301"
