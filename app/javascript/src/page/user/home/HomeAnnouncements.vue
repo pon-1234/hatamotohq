@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -35,7 +35,8 @@ export default {
     return {
       loading: true,
       currentPage: 1,
-      curAnnouncement: null
+      curAnnouncement: null,
+      contentKey: 0
     };
   },
 
@@ -53,9 +54,11 @@ export default {
   },
 
   methods: {
-    ...mapActions('announcement', [
-      'getPublishedAnnouncements',
+    ...mapMutations('announcement', [
       'setCurPage'
+    ]),
+    ...mapActions('announcement', [
+      'getPublishedAnnouncements'
     ]),
 
     async loadPage() {
@@ -68,6 +71,10 @@ export default {
         this.forceRerender();
         this.loading = false;
       });
+    },
+
+    forceRerender() {
+      this.contentKey++;
     },
 
     formattedDate(time) {
