@@ -5,9 +5,18 @@
         <b>お知らせ</b>
       </div>
       <div class="card-body" v-if="!loading">
-        <div v-for="announcement in announcements" :key="announcement.id" role="button" data-toggle="modal" data-target="#modalAnnouncementDetail" @click="curAnnouncement = announcement">
-          <h4 class="mt-0 mb-1 font-16">{{ announcement.title }}</h4>
-          <p class="text-muted"><small>{{ formattedDate(announcement.announced_at) }}</small></p>
+        <div
+          v-for="announcement in announcements"
+          :key="announcement.id"
+          role="button"
+          data-toggle="modal"
+          data-target="#modalAnnouncementDetail"
+          @click="curAnnouncement = announcement"
+        >
+          <h4 class="mt-0 mb-1 font-16 max-3-lines">{{ announcement.title }}</h4>
+          <p class="text-muted">
+            <small>{{ formattedDate(announcement.announced_at) }}</small>
+          </p>
         </div>
         <div class="d-flex justify-content-center mt-4" v-if="totalRows > perPage">
           <b-pagination
@@ -48,18 +57,14 @@ export default {
   computed: {
     ...mapState('announcement', {
       announcements: state => state.announcements,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     })
   },
 
   methods: {
-    ...mapMutations('announcement', [
-      'setCurPage'
-    ]),
-    ...mapActions('announcement', [
-      'getPublishedAnnouncements'
-    ]),
+    ...mapMutations('announcement', ['setCurPage']),
+    ...mapActions('announcement', ['getPublishedAnnouncements']),
 
     async loadPage() {
       // bootstrap pagination return old value of current page,
