@@ -29,13 +29,13 @@ staging:
     enabled: true
 
   WorkerGetNumberOfMessageDelivery:
-    cron: "0 0 * * * *" # Runs every hour
+    cron: "0 0 5 * * *" # Runs every day
     include_metadata: true
     description: "This worker retrieve insight data using line api"
     enabled: true
 
   WorkerMonthlyInsightAnalyzer:
-    cron: "0 0 3 * * *" # Runs every hour
+    cron: "0 0 6 * * *" # Runs every day
     include_metadata: true
     description: "This worker analyze quota consumption"
     enabled: true
