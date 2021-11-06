@@ -5,6 +5,7 @@ class WorkerGetNumberOfMessageDelivery
 
   def perform(*args)
     LineAccount.active.each do |line_account|
+      next if line_account.channel_id.nil?
       response = LineApi::GetNumberOfMessageDeliveries.new(line_account).perform(Time.zone.today)
       next unless response.code == '200'
       data = response.body
