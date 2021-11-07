@@ -12,7 +12,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="info-header-modalLabel">詳細検索</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="closeModal()">×</button>
         </div>
         <div class="modal-body">
           <!-- 名前検索 -->
@@ -33,7 +33,7 @@
           <div class="row form-group">
             <div class="col-lg-4">タグ</div>
             <div class="col-lg-8">
-              <input-tag ref="inputTag" :tags="selectedTags" @input="onSelectTags" :allTags="true" />
+              <input-tag ref="inputTag" :tags="selectedTags" :tagIds="queryParams.tags_id_in" @input="onSelectTags" :allTags="true" />
             </div>
           </div>
           <!-- 登録日時 -->
@@ -178,7 +178,6 @@ export default {
   methods: {
     ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
     ...mapActions('friend', ['getFriends']),
-    ...mapMutations('tag', ['setTagIds']),
 
     forceRerender() {
       this.contentKey++;
@@ -219,7 +218,6 @@ export default {
       this.params = _.cloneDeep(this.queryParams);
 
       if (this.params.tags_id_in) {
-        this.setTagIds(this.params.tags_id_in);
         this.$refs.inputTag.initData();
       }
     }

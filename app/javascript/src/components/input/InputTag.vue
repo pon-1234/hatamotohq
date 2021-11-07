@@ -109,6 +109,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    tagIds: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -144,8 +148,7 @@ export default {
   },
   computed: {
     ...mapState('tag', {
-      folders: state => state.folders,
-      tagIds: state => state.tagIds
+      folders: state => state.folders
     }),
 
     criteria() {
@@ -247,6 +250,7 @@ export default {
         _.each(tags, tag => {
           if (this.tagIds.includes(tag.id)) {
             this.selectedTags.push(tag);
+            this.$emit('input', this.selectedTags);
           }
         })
       );
