@@ -52,6 +52,7 @@ class Media < ApplicationRecord
     end
   rescue StandardError => e
     logger.error("Could not generate preview url #{e.message}")
+    url
   end
 
   def download_url
