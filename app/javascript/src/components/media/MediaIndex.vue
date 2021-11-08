@@ -73,7 +73,7 @@
                     />
                     <div
                       v-else
-                      v-lazy:background-image="media.preview_url"
+                      v-lazy:background-image="media.preview_url || media.url"
                       class="fw-200 fh-150 bg-position-center"
                     ></div>
                   </template>

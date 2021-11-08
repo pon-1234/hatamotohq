@@ -80,7 +80,7 @@
     <template v-if="activeChannel">
       <modal-select-media
         id="modalSendMedia"
-        :types="['image', 'audio', 'video']"
+        :types="['image', 'audio', 'video', 'richmenu']"
         @select="sendMediaMessage($event)"
       ></modal-select-media>
       <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
