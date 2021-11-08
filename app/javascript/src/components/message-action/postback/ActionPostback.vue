@@ -126,18 +126,19 @@ export default {
   methods: {
     updateContent(content) {
       this.content = content;
-      this.emitData(false);
+      this.emitData();
     },
 
     emitData(changeType) {
       this.$emit('input', {
         type: this.curPostbackType,
-        content: !changeType ? this.content : undefined
+        content: this.content
       });
     },
 
     changeActionType() {
-      this.emitData(true);
+      this.content = undefined;
+      this.emitData();
     },
 
     setupData() {
