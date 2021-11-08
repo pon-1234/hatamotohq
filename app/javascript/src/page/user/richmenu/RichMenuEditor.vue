@@ -27,8 +27,9 @@
               name="name"
               class="form-control"
               placeholder="リッチメニュー（ホーム）"
-              v-validate="'required'"
+              v-validate="'required|max:255'"
               data-vv-as="リッチメニュー名"
+              maxlength="256"
             />
             <error-message :message="errors.first('name')"></error-message>
           </div>
@@ -47,6 +48,7 @@
               class="form-control"
               placeholder="トップメニュー"
               v-validate="'required|max:14'"
+              maxlength="15"
               data-vv-as="トークルームメニュー"
             />
             <error-message :message="errors.first('richmenu-title')"></error-message>
