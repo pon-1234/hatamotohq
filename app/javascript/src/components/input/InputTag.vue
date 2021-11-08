@@ -109,6 +109,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    tagIds: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -239,6 +243,17 @@ export default {
 
     backToFolder() {
       this.isPc = false;
+    },
+
+    initData() {
+      _.flatMap(this.folders, ({ tags }) =>
+        _.each(tags, tag => {
+          if (this.tagIds.includes(tag.id)) {
+            this.selectedTags.push(tag);
+            this.$emit('input', this.selectedTags);
+          }
+        })
+      );
     }
   }
 };

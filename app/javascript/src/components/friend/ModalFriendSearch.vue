@@ -12,7 +12,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="info-header-modalLabel">詳細検索</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="closeModal()">×</button>
         </div>
         <div class="modal-body">
           <!-- 名前検索 -->
@@ -33,7 +33,7 @@
           <div class="row form-group">
             <div class="col-lg-4">タグ</div>
             <div class="col-lg-8">
-              <input-tag :tags="selectedTags" @input="onSelectTags" :allTags="true" />
+              <input-tag ref="inputTag" :tags="selectedTags" :tagIds="queryParams.tags_id_in" @input="onSelectTags" :allTags="true" />
             </div>
           </div>
           <!-- 登録日時 -->
@@ -84,7 +84,7 @@
         </div>
         <div class="modal-footer d-flex">
           <button type="button" class="btn btn-sm btn-light" @click="resetSearch()">リセット</button>
-          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal" @click="closeModal()">キャンセル</button>
           <button type="button" class="btn btn-sm btn-info" data-dismiss="modal" @click="search">検索</button>
         </div>
       </div>
@@ -110,6 +110,7 @@ export default {
       queryParams: state => state.queryParams,
       clearQueryParams: state => state.clearQueryParams
     }),
+
     keyword: {
       get() {
         return this.params.line_name_or_display_name_cont;
@@ -124,8 +125,8 @@ export default {
         return this.params.tags_id_in || [];
       },
       set(value) {
-        const tagIds = value.map(_ => _.id);
-        this.params.tags_id_in = tagIds;
+        const selectedTagIds = value.map(_ => _.id);
+        this.params.tags_id_in = selectedTagIds;
       }
     },
 
@@ -177,6 +178,7 @@ export default {
   methods: {
     ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
     ...mapActions('friend', ['getFriends']),
+
     forceRerender() {
       this.contentKey++;
     },
@@ -204,13 +206,20 @@ export default {
       };
       Object.assign(this.params, resetParams);
     },
-    showModal() {
+    closeModal() {
+      this.selectedTags = [];
+    },
+    async showModal() {
       if (this.clearQueryParams) {
         this.selectedTags = [];
         this.setClearQueryParams(false);
       }
       this.forceRerender();
       this.params = _.cloneDeep(this.queryParams);
+
+      if (this.params.tags_id_in) {
+        this.$refs.inputTag.initData();
+      }
     }
   }
 };
