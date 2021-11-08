@@ -79,7 +79,7 @@ export default {
       return this.message.sender || {};
     },
     readableTime() {
-      return moment(this.message.timestamp).format('HH:mm');
+      return moment(this.message.timestamp, 'DD/MMM/YYYY HH:mm').format('HH:mm');
     },
     readableDate() {
       return moment(this.message.timestamp).format('YYYY/MM/DD');
