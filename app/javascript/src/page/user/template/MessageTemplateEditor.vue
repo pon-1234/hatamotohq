@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <button type="submit" class="btn btn-success mw-120" @click="submitSaveTemplate">
+        <button type="submit" class="btn btn-success mw-120" @click="submitSaveTemplate" autofocus="false">
           {{ template_id ? "保存" : "テンプレート登録" }}
         </button>
       </div>
