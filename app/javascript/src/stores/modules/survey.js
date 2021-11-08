@@ -107,6 +107,19 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  /**
+   * Clone survey
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async copySurvey(context, id) {
+    try {
+      return await SurveyAPI.copy(id);
+    } catch (error) {
+      return null;
+    }
   }
 
   // updateStatus(_, data) {

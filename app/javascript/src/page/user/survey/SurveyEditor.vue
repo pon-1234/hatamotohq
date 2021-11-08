@@ -46,16 +46,6 @@
                 />
                 <error-message :message="errors.first('survey-title')"></error-message>
               </div>
-
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="repeatAnswerCheck"
-                  v-model.trim="surveyData.re_answer"
-                />
-                <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
-              </div>
             </div>
 
             <div class="col-xl-6">
@@ -86,6 +76,18 @@
                   data-vv-as="回答後の文章"
                 >
                 </textarea>
+              </div>
+            </div>
+
+            <div class="col-xl-12">
+              <div class="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="repeatAnswerCheck"
+                  v-model.trim="surveyData.re_answer"
+                />
+                <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
               </div>
             </div>
           </div>

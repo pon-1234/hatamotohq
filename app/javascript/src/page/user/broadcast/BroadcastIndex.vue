@@ -75,7 +75,6 @@
                         role="button"
                         class="dropdown-item"
                         :href="`${rootPath}/user/broadcasts/${broadcast.id}/edit`"
-                        @click="openEdit(broadcast)"
                         v-if="broadcast.editable"
                         >一斉配信を編集する</a
                       >

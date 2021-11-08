@@ -38,7 +38,7 @@ export default {
     });
   },
 
-  update(payload) {
+  update: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys/${payload.id}`,
       method: 'PATCH',
@@ -46,6 +46,7 @@ export default {
       contentType: 'application/json'
     });
   },
+
   delete(query) {
     return window.$.ajax({
       url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/delete'),
@@ -60,6 +61,14 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/surveys/${payload.code}/${payload.friend_id}`,
       method: 'POST',
       data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
+  },
+
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/copy`,
+      method: 'POST',
       contentType: 'application/json'
     });
   }

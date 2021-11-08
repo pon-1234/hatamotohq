@@ -93,6 +93,7 @@ Rails.application.routes.draw do
       resources :surveys do
         member do
           get :answers
+          post :copy
         end
       end
       resources :reminders do

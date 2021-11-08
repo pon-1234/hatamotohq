@@ -75,6 +75,15 @@ class Survey < ApplicationRecord
     ').map { |_| _.attributes }
   end
 
+  def clone!
+    new_survey = self.dup
+    new_survey.name = self.name + '（コピー）'
+    new_survey.status = :draft
+    new_survey.save!
+    self.survey_questions&.each { |question| question.clone_to!(new_survey.id) }
+    new_survey
+  end
+
   private
     def generate_code
       loop do

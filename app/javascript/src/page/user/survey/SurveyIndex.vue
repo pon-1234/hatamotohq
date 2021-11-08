@@ -136,6 +136,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import Util from '@/core/util';
+
 export default {
   data() {
     return {
@@ -171,7 +173,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', ['getSurveys']),
+    ...mapActions('survey', ['getSurveys', 'copySurvey']),
     forceRerender() {
       this.contentKey++;
     },
@@ -210,26 +212,13 @@ export default {
           window.toastr.error('ステータスの変更はエラーになりました');
         });
     },
-    modalCopy(survey) {
-      this.survey = survey;
-      $('#modal-confirm').modal('show');
-      $('#modal-confirm').on('hidden.bs.modal', function() {
-        this.survey = null;
-        $('#modal-confirm').off();
-      });
-    },
-    submitCopySurvey() {
-      if (this.survey) {
-        this.$store
-          .dispatch('survey/copy', {
-            id: this.survey.id
-          })
-          .done(() => {
-            this.getSurveys();
-          })
-          .fail(() => {
-            window.toastr.error('コピーエラー');
-          });
+
+    async submitCopySurvey() {
+      const response = await this.copySurvey(this.curSurvey.id);
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォームのコピーは完成しました。', location.href);
+      } else {
+        window.toastr.error('回答フォームのコピーは失敗しました。');
       }
     },
     modalDelete(survey) {

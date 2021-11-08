@@ -2,14 +2,14 @@
   <div>
     <div class="border template-buttons row">
       <div class="d-flex group-title col-12">
-        <label class="mt-2"> タイトル</label>
+        <label class="mt-2"> タイトル<required-mark /></label>
         <input
           class="form-control"
           placeholder="タイトルを入力してください"
           type="text"
           maxlength="41"
           v-model="templateData.title"
-          v-validate="'max:40'"
+          v-validate="'required|max:40'"
           data-vv-as="タイトル"
           :name="'button-title' + indexParent"
         />
@@ -82,7 +82,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
@@ -95,9 +94,7 @@ export default {
         title: '',
         text: '',
         altText: '',
-        actions: [
-          this.ActionMessage.default
-        ]
+        actions: [this.ActionMessage.default]
       }
     };
   },

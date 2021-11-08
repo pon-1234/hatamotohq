@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :answers]
+  before_action :find_survey, only: [:show, :update, :answers, :copy]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -46,6 +46,15 @@ class User::SurveysController < User::ApplicationController
     unless @survey.save(validate: !@survey.draft?)
       render_bad_request_with_message(@survey.first_error_message)
     end
+  end
+
+  # POST /user/surveys/:id/copy
+  def copy
+    @survey.clone!
+    render_success
+  rescue => e
+    logger.error e.message
+    render_bad_request
   end
 
   private

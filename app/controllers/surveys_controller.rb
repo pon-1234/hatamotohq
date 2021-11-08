@@ -20,6 +20,8 @@ class SurveysController < ApplicationController
   def answer
     build_answer(@survey, answer_params)
     redirect_to survey_answer_success_path(code: params[:code], friend_id: params[:friend_id])
+  rescue
+    render_bad_request
   end
 
   # GET /surveys/:code/:friend_id/answer_success
