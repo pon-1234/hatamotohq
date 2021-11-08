@@ -92,8 +92,8 @@
 
                   <template v-else-if="isAudio(media)">
                     <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
-                      <audio controls class="audio-player mx-2">
-                        <source :src="media.url" />
+                      <audio controls class="audio-player mx-2 mx-safari">
+                        <source :src="media.url"/>
                       </audio>
                     </div>
                   </template>
@@ -354,4 +354,14 @@ export default {
   .download-icon {
     font-size: 1rem;
   }
+
+  .audio-player {
+    width: 100%;
+  }
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0){
+  .mx-safari {
+    margin: 0 1px !important;
+  }
+}
 </style>
