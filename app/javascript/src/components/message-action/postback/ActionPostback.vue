@@ -129,7 +129,7 @@ export default {
       this.emitData();
     },
 
-    emitData(changeType) {
+    emitData() {
       this.$emit('input', {
         type: this.curPostbackType,
         content: this.content
