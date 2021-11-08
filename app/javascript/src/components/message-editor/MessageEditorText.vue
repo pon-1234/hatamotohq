@@ -2,15 +2,20 @@
   <div class="mt-2">
     <span class="title-editor ml-3">絵文字</span>
     <textarea
-      :name="'message-editor' + index"
       ref="textarea"
-      v-validate="'required|max:5000'"
-      data-vv-as="本文"
       class="form-control"
       rows="5"
       placeholder="本文を入力してください"
+      maxlength="5001"
       v-model="input_value"
     ></textarea>
+    <input
+      type="hidden"
+      v-model="input_value"
+      data-vv-as="本文"
+      v-validate="'required|max:5000'"
+      :name="'message-editor' + index"
+    />
     <error-message :message="errors.first('message-editor' + index)"></error-message>
   </div>
 </template>

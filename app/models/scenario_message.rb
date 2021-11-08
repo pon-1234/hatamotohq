@@ -49,6 +49,7 @@ class ScenarioMessage < ApplicationRecord
 
   private
     def execute_before_save
+      self.order = 1 if order.blank?
       if date == 0 && time.to_time&.seconds_since_midnight == 0
         self.is_initial = true
       end
