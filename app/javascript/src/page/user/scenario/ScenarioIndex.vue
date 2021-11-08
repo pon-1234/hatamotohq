@@ -14,62 +14,64 @@
           </div>
         </div>
         <div class="card-body mvh-50">
-          <table class="table table-centered mb-0">
-            <thead class="thead-light">
-              <tr>
-                <th class="mw-120">配信方式</th>
-                <th>シナリオ名</th>
-                <th class="mw-120">状況</th>
-                <th class="mw-200">メッセージ</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(scenario, index) in scenarios" :key="index">
-                <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
-                <td>{{ scenario.title }}</td>
-                <td><scenario-status :status="scenario.status"></scenario-status></td>
-                <td>
-                  <div class="btn btn-light" @click="openMessageIndex(scenario)">
-                    メッセージ一覧（{{ scenario.scenario_messages_count || 0 }}）
-                  </div>
-                </td>
-                <td>
-                  <div class="btn-group">
-                    <button
-                      type="button"
-                      class="btn btn-light btn-sm dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      操作 <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                      <a role="button" class="dropdown-item" :href="`${rootPath}/user/scenarios/${scenario.id}/edit`"
-                        >シナリオを編集する</a
-                      >
-                      <a
-                        role="button"
-                        class="dropdown-item"
-                        data-toggle="modal"
-                        data-target="#modalCopyScenario"
-                        @click="curScenarioIndex = index"
-                        >シナリオをコピー</a
-                      >
-                      <a
-                        role="button"
-                        class="dropdown-item"
-                        data-toggle="modal"
-                        data-target="#modalDeleteScenario"
-                        @click="curScenarioIndex = index"
-                        >シナリオを削除</a
-                      >
+          <div class="table-responsive">
+            <table class="table table-centered mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th class="mw-120">配信方式</th>
+                  <th>シナリオ名</th>
+                  <th class="mw-120">状況</th>
+                  <th class="mw-200">メッセージ</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(scenario, index) in scenarios" :key="index">
+                  <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
+                  <td class="scenario_title">{{ scenario.title }}</td>
+                  <td><scenario-status :status="scenario.status"></scenario-status></td>
+                  <td>
+                    <div class="btn btn-light" @click="openMessageIndex(scenario)">
+                      メッセージ一覧（{{ scenario.scenario_messages_count || 0 }}）
                     </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button
+                        type="button"
+                        class="btn btn-light btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        操作 <span class="caret"></span>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/scenarios/${scenario.id}/edit`"
+                          >シナリオを編集する</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalCopyScenario"
+                          @click="curScenarioIndex = index"
+                          >シナリオをコピー</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteScenario"
+                          @click="curScenarioIndex = index"
+                          >シナリオを削除</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="d-flex justify-content-center mt-4 text-center">
             <b-pagination
               v-if="totalRows > perPage"
@@ -215,3 +217,11 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .scenario_title {
+    width: 40vw;
+    white-space: pre-wrap;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
+</style>
