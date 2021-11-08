@@ -2,7 +2,7 @@
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
     <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-      <div class="form-group mt-1 position-relative">
+      <div class="form-group mt-2 position-relative">
         <datetime
           input-class="form-control btn border border-light"
           type="datetime"

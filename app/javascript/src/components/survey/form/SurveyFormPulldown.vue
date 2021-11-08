@@ -2,7 +2,7 @@
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
     <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-      <select class="form-control w-100" :name="`answers[${qnum}][answer]`">
+      <select class="form-control w-100" :name="`answers[${qnum}][answer]`" v-model="answer">
         <option v-for="(option, index) in options" :key="index" :value="option.value">
           {{ option.value }}
         </option>
@@ -15,6 +15,16 @@
 <script>
 export default {
   props: ['question', 'qnum'],
+
+  data() {
+    return {
+      answer: null
+    };
+  },
+
+  created() {
+    this.answer = this.options ? this.options[0].value : null;
+  },
 
   computed: {
     isRequired() {

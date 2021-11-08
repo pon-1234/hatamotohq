@@ -14,6 +14,7 @@
             :name="`answers[${qnum}][answer]`"
             class="custom-control-input"
             :value="option.value"
+            v-model="answer"
           />
           <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
         </div>
@@ -26,6 +27,12 @@
 <script>
 export default {
   props: ['question', 'qnum'],
+
+  data() {
+    return {
+      answer: null
+    };
+  },
 
   computed: {
     prefix() {
