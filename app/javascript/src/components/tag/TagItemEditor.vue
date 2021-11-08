@@ -52,6 +52,12 @@ export default {
     };
   },
 
+  watch: {
+    data(val) {
+      this.tagName = val.name;
+    }
+  },
+
   created() {
     this.tagName = this.data.name;
   },
