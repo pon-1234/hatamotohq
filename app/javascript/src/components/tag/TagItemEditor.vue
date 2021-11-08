@@ -55,6 +55,7 @@ export default {
   watch: {
     data(val) {
       this.tagName = val.name;
+      this.isEdit = false;
     }
   },
 
