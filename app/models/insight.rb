@@ -32,6 +32,8 @@
 class Insight < ApplicationRecord
   belongs_to :line_account
 
+  enum type: { monthly: 'monthly', daily: 'daily' }
+
   # scope
   scope :belongs_to_account, -> (account_id) { where(line_account: account_id) }
   scope :this_month, -> { where(date: Time.zone.today.all_month) }

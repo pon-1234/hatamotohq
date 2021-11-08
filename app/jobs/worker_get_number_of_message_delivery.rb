@@ -12,16 +12,16 @@ class WorkerGetNumberOfMessageDelivery
       data = JSON.parse(response.body)
       ActiveJob::Base.logger.info "Response WorkerGetNumberOfMessageDelivery #{data}"
       insight = Insight.find_or_initialize_by(line_account: line_account, type: :daily, date: Time.zone.yesterday)
-      insight.broadcast = data["broadcast"]
-      insight.targeting = data["targeting"]
-      insight.auto_response = data["autoResponse"]
-      insight.welcome_response = data["welcomeResponse"]
-      insight.chat = data["chat"]
-      insight.api_broadcast = data["apiBroadcast"]
-      insight.api_push = data["apiPush"]
-      insight.api_multicast = data["apiMulticast"]
-      insight.api_narrowcast = data["apiNarrowcast"]
-      insight.api_reply = data["apiReply"]
+      insight.broadcast = data['broadcast']
+      insight.targeting = data['targeting']
+      insight.auto_response = data['autoResponse']
+      insight.welcome_response = data['welcomeResponse']
+      insight.chat = data['chat']
+      insight.api_broadcast = data['apiBroadcast']
+      insight.api_push = data['apiPush']
+      insight.api_multicast = data['apiMulticast']
+      insight.api_narrowcast = data['apiNarrowcast']
+      insight.api_reply = data['apiReply']
       insight.save!
       ActiveJob::Base.logger.info "End WorkerGetNumberOfMessageDelivery Account ID = #{line_account.id}"
     end
