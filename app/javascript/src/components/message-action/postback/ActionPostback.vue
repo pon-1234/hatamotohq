@@ -137,6 +137,7 @@ export default {
     },
 
     changeActionType() {
+      this.content = undefined;
       this.emitData();
     },
 
