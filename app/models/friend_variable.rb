@@ -25,4 +25,7 @@
 #  fk_rails_...  (variable_id => variables.id)
 #
 class FriendVariable < ApplicationRecord
+  belongs_to :line_friend
+  belongs_to :variable
+  belongs_to :survey_answer
 end
