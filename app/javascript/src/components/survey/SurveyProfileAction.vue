@@ -1,12 +1,15 @@
 <template>
   <div>
-    <div class="btn-template fz14" data-toggle="modal" :data-target="`#${name}-modal-survey-profile-template`">
-      {{this.field_name || '選択'}}
+    <div class="btn btn-secondary mw-200" data-toggle="modal" :data-target="`#${name}-modal-select-profile-variable`">
+      {{ this.variable_name || "友だち情報を選択" }}
     </div>
-    <modal-select-survey-profile-template :type="type" :id="`${name}-modal-survey-profile-template`"
-                                          @selectTemplate="pick($event)"></modal-select-survey-profile-template>
+    <modal-select-profile-variable
+      :type="type"
+      :id="`${name}-modal-select-profile-variable`"
+      @selectVariable="selectVariable($event)"
+    >
+    </modal-select-profile-variable>
   </div>
-
 </template>
 <script>
 export default {
@@ -26,15 +29,15 @@ export default {
   },
   data() {
     return {
-      field_name: this.field
+      variable_name: this.field
     };
   },
   methods: {
-    pick(data) {
-      this.field_name = data.field_name;
+    selectVariable(variable) {
+      this.variable_name = variable.name;
       this.$emit('input', {
-        id: data.id,
-        field_name: data.field_name
+        id: variable.id,
+        name: variable.name
       });
     }
   }
@@ -52,5 +55,4 @@ export default {
       cursor: pointer;
     }
   }
-
 </style>

@@ -49,7 +49,7 @@
                 </thead>
                 <tbody v-if="surveyContents && surveyContents.length">
                   <tr v-for="(survey, index) in surveyContents" v-bind:key="index">
-                    <td style="text-align: left">{{ survey.field_name }}</td>
+                    <td style="text-align: left">{{ survey.name }}</td>
                     <td>{{ survey.type }}</td>
                     <td>
                       <div class="toggle-switch" style="margin: auto">
@@ -162,7 +162,7 @@ export default {
     changeSelectedFolder(index) {
       this.selectedFolder = index;
       this.isPc = true;
-      this.surveyContents = this.surveyProfiles[index].survey_profile_templates;
+      this.surveyContents = this.surveyProfiles[index].variables;
       this.blink();
     },
     submitCreateFolder(value) {

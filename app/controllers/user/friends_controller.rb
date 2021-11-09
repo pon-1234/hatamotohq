@@ -77,7 +77,6 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/custom_infos
   def custom_infos
-    
   end
 
   private

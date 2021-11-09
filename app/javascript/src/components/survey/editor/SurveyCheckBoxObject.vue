@@ -39,20 +39,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
-          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
-            {{ friendInformation.name }}
-          </option>
-        </select>
-        <div v-if="questionContentData.profile" style="margin-top: 10px">
-          <survey-profile-action
-            v-if="questionContentData.profile.id === 3"
-            type="text"
-            :field="questionContentData.survey_profile_template ? value.survey_profile_template.field_name : null"
-            :name="name + '-infomation'"
-            @input="questionContentData.survey_profile_template = $event"
-          ></survey-profile-action>
-        </div>
+        <survey-profile-action
+          type="text"
+          :field="questionContentData.variable ? value.variable.name : null"
+          :name="name + '-infomation'"
+          @input="questionContentData.variable = $event"
+        ></survey-profile-action>
       </div>
     </div>
 
@@ -194,8 +186,8 @@ export default {
       // eslint-disable-next-line no-undef
       this.questionContentData.profile = _.cloneDeep(this.friendInformationSelected);
       if (this.questionContentData.profile.id !== 3) {
-        this.questionContentData.survey_profile_template = {
-          field_name: null,
+        this.questionContentData.variable = {
+          name: null,
           id: null
         };
       }

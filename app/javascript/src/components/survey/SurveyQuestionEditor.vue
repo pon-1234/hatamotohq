@@ -142,7 +142,7 @@ export default {
       deep: true,
       handler(val) {
         this.objectLists.forEach((object, index) => {
-          const fieldText = val.items.find((item) => {
+          const fieldText = val.items.find(item => {
             return (
               item.field.includes(this.name + '-text-' + index) ||
               item.field.includes(this.name + '-textarea-' + index) ||

@@ -38,20 +38,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
-          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
-            {{ friendInformation.name }}
-          </option>
-        </select>
-        <div v-if="value.profile" style="margin-top: 10px">
-          <survey-profile-action
-            v-if="value.profile.id === 3"
-            type="text"
-            :field="value.survey_profile_template ? value.survey_profile_template.field_name : null"
-            :name="name + '-infomation'"
-            @input="value.survey_profile_template = $event"
-          ></survey-profile-action>
-        </div>
+        <survey-profile-action
+          type="text"
+          :field="value.variable ? value.variable.name : null"
+          :name="name + '-infomation'"
+          @input="value.variable = $event"
+        ></survey-profile-action>
       </div>
     </div>
   </div>
@@ -68,8 +60,8 @@ export default {
       ],
       friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
       value: this.content || {
-        survey_profile_template: {
-          field_name: null,
+        variable: {
+          name: null,
           id: null
         },
         text: null,
@@ -103,8 +95,8 @@ export default {
       // eslint-disable-next-line no-undef
       this.value.profile = _.cloneDeep(this.friendInformationSelected);
       if (this.value.profile.id !== 3) {
-        this.value.survey_profile_template = {
-          field_name: null,
+        this.value.variable = {
+          name: null,
           id: null
         };
       }

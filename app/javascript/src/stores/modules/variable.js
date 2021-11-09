@@ -43,6 +43,7 @@ export const actions = {
     try {
       const folders = await VariableAPI.list(query);
       context.commit('setFolders', folders);
+      return folders;
     } catch (error) {
       console.log(error);
     }

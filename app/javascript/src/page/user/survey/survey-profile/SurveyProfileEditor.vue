@@ -26,7 +26,7 @@
                   placeholder="ラベルを入力してください"
                   type="text"
                   maxlength="12"
-                  v-model="data.field_name"
+                  v-model="data.name"
                   class="w-100 form-control"
                   v-validate="'required'"
                 />
@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       data: this.model || {
-        field_name: null,
+        name: null,
         type: null,
         description: null
       },
@@ -81,7 +81,7 @@ export default {
         // eslint-disable-next-line no-undef
         this.data = _.cloneDeep(
           val || {
-            field_name: null,
+            name: null,
             type: null,
             description: null
           }
