@@ -5,11 +5,7 @@
         <div class="card-body box-profile">
           <!-- profile image -->
           <div class="text-center">
-            <img
-              v-lazy="avatarImgObj"
-              class="rounded-circle avatar-lg img-thumbnail"
-              alt="profile-image"
-            />
+            <img v-lazy="avatarImgObj" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
           </div>
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
@@ -113,7 +109,13 @@
     <div class="col-xl-12">
       <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
-          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link active">
+          <a href="#customInfo" data-toggle="tab" aria-expanded="true" class="nav-link active">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">友達情報</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link">
             <i class="mdi mdi-home-variant d-md-none d-block"></i>
             <span class="d-none d-md-block">リマインダ</span>
           </a>
@@ -127,7 +129,11 @@
       </ul>
 
       <div class="tab-content">
-        <div class="tab-pane show active" id="reminder">
+        <!-- 友達情報 -->
+        <div class="tab-pane show active" id="customInfo"></div>
+
+        <!-- リマインダー -->
+        <div class="tab-pane show" id="reminder">
           <div>
             <div class="row">
               <label class="col-xl-3">リマインダ</label>
@@ -158,6 +164,8 @@
             </div>
           </div>
         </div>
+
+        <!-- シナリオ -->
         <div class="tab-pane" id="scenario">
           <p>...</p>
         </div>
@@ -186,6 +194,7 @@ export default {
         display_name: '',
         note: ''
       },
+      customInfos: [],
       avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
@@ -204,17 +213,14 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
+    this.customInfos = await this.getCustomInfos(this.friend_id);
     this.reminders = await this.getReminders(this.friend_id);
     this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
   methods: {
-    ...mapActions('friend', [
-      'getFriend',
-      'updateFriend',
-      'getReminders'
-    ]),
+    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders', 'getCustomInfos']),
 
     selectTags(tags) {
       this.friendData.tags = tags;

@@ -75,6 +75,11 @@ class User::FriendsController < User::ApplicationController
     render_success
   end
 
+  # GET /user/friends/:id/custom_infos
+  def custom_infos
+    
+  end
+
   private
     def update_friend_params
       params.permit(

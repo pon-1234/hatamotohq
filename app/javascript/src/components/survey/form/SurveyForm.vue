@@ -1,6 +1,12 @@
 <template>
   <ValidationObserver ref="observer" v-slot="{ validate }">
-    <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="formAction" method="post">
+    <form
+      ref="form"
+      @submit.prevent="validate().then(onSubmit)"
+      :action="formAction"
+      method="post"
+      enctype="multipart/form-data"
+    >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
       <div class="card">
         <div class="card-body">

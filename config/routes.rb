@@ -65,6 +65,7 @@ Rails.application.routes.draw do
           post :toggle_visible
           get :reminders
           post :set_reminder
+          get :custom_infos
         end
       end
       resources :broadcasts do

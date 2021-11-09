@@ -4,7 +4,14 @@
     <div class="form-group mt-2">
       <div class="input-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="inputFile" accept="image/*,.pdf" @change="onFileChange" />
+          <input
+            type="file"
+            class="custom-file-input"
+            id="inputFile"
+            accept="image/*,.pdf"
+            :name="`answers[${qnum}][answer]`"
+            @change="onFileChange"
+          />
           <label class="custom-file-label" for="inputFile">{{ fileName || "ファイルを選択" }}</label>
         </div>
       </div>

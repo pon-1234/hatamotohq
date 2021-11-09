@@ -12,6 +12,6 @@ module QuestionType
       pulldown: 'pulldown',
       file: 'file',
       date: 'date'
-    }, _prefix: true
+    }
   end
 end

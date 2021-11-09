@@ -11,7 +11,12 @@ module SurveysHelper
     answer_params.each do |k, answer|
       survey_answer = SurveyAnswer.new(survey_response: response)
       survey_answer.survey_question_id = answer[:id]
-      survey_answer.answer = answer[:answer]
+      question = SurveyQuestion.find(survey_answer.survey_question_id)
+      if question.file?
+        survey_answer.file = answer[:answer]
+      else
+        survey_answer.answer = answer[:answer]
+      end
       survey_answer.save!
     end
   end

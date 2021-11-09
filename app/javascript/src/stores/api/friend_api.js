@@ -43,6 +43,7 @@ export default {
     });
   },
 
+  // Reminder
   getReminders: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/reminders`,
@@ -57,6 +58,15 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${payload.friend_id}/set_reminder`,
       method: 'POST',
       data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
+  },
+
+  // Custom info
+  getCustomInfos: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/custom_infos`,
+      method: 'GET',
       contentType: 'application/json'
     });
   }
