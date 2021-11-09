@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_094027) do
+ActiveRecord::Schema.define(version: 2021_11_09_025627) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -412,7 +412,7 @@ ActiveRecord::Schema.define(version: 2021_11_02_094027) do
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
     t.string 'title'
-    t.string 'description'
+    t.text 'description'
     t.string 'status', default: 'disabled'
     t.string 'mode', default: 'time'
     t.string 'type', default: 'manual'

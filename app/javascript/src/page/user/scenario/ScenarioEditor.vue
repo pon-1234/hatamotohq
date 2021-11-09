@@ -28,6 +28,7 @@
               rows="3"
               placeholder="シナリオ説明を入力してください"
               v-model="scenarioData.description"
+              maxlength="2001"
               v-validate="'max:2000'"
               data-vv-as="シナリオ説明"
             ></textarea>
