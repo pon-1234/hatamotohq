@@ -12,6 +12,7 @@ module SurveysHelper
       survey_answer = SurveyAnswer.new(survey_response: response)
       survey_answer.survey_question_id = answer[:id]
       question = SurveyQuestion.find(survey_answer.survey_question_id)
+      byebug
       if question.file?
         survey_answer.file = answer[:answer]
       else
