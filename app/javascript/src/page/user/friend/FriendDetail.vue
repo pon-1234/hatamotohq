@@ -213,14 +213,14 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
-    this.customInfos = await this.getCustomInfos(this.friend_id);
+    this.customInfos = await this.getVariables(this.friend_id);
     this.reminders = await this.getReminders(this.friend_id);
     this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
   methods: {
-    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders', 'getCustomInfos']),
+    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders', 'getVariables']),
 
     selectTags(tags) {
       this.friendData.tags = tags;

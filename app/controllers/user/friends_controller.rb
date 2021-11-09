@@ -75,8 +75,9 @@ class User::FriendsController < User::ApplicationController
     render_success
   end
 
-  # GET /user/friends/:id/custom_infos
-  def custom_infos
+  # GET /user/friends/:id/variables
+  def variables
+    # TODO
   end
 
   private

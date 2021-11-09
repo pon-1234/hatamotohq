@@ -63,9 +63,9 @@ export default {
   },
 
   // Custom info
-  getCustomInfos: (id) => {
+  getVariables: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/custom_infos`,
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/variables`,
       method: 'GET',
       contentType: 'application/json'
     });

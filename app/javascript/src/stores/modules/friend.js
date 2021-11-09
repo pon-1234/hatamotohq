@@ -138,9 +138,9 @@ export const actions = {
     }
   },
 
-  async getCustomInfos(context, id) {
+  async getVariables(context, id) {
     try {
-      return await FriendAPI.getCustomInfos(id);
+      return await FriendAPI.getVariables(id);
     } catch (error) {
       return null;
     }
