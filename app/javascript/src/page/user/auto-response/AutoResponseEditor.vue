@@ -137,9 +137,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">
+        <div class="btn btn-success fw-120" @click="submitCreate()">
           {{ !auto_response_id ? "登録" : "保存" }}
-        </button>
+        </div>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />

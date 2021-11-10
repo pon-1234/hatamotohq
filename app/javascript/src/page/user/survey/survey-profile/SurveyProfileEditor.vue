@@ -42,7 +42,7 @@
                 <span v-if="errors.has('selectBox')" class="invalid-box-label">形式は必須です</span>
               </div>
               <div class="d-flex justify-content-center" style="margin-top: 40px">
-                <button type="submit" class="btn btn-submit btn-block" @click="submitForm()">保存</button>
+                <div class="btn btn-submit btn-block" @click="submitForm()">保存</div>
               </div>
             </div>
           </div>

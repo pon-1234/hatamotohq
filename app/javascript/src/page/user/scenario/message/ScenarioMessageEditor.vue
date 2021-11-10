@@ -75,9 +75,9 @@
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
       <div>
-        <button type="submit" class="btn btn-success mw-120" @click="submit()">
+        <div class="btn btn-success mw-120" @click="submit()">
           {{ message_id ? "保存" : "メッセージ登録" }}
-        </button>
+        </div>
       </div>
     </div>
     <message-preview></message-preview>

@@ -16,6 +16,7 @@
             <a
               v-if="folders && folders.length && folders[selectedFolderIndex]"
               :href="rootPath + '/user/auto_responses/new?folder_id=' + folders[selectedFolderIndex].id"
+              target="_blank"
               class="btn btn-primary"
             >
               <i class="uil-plus"></i> 新規作成
@@ -300,7 +301,7 @@ export default {
     },
 
     openEdit(autoResponse) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`);
     },
 
     formattedDate(date) {

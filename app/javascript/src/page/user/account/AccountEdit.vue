@@ -97,7 +97,7 @@
           </dl>
         </div>
         <div class="d-flex justify-content-center">
-          <button type="submit" class="btn btn-submit btn-block" :disabled="isDisabled" @click="submitForm">保存</button>
+          <div class="btn btn-submit btn-block" :disabled="isDisabled" @click="submitForm">保存</div>
         </div>
       </div>
     </div>

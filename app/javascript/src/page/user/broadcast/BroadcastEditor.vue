@@ -146,8 +146,8 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</button>
-        <button type="submit" class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</button>
+        <div class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</div>
+        <div class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</div>
       </div>
     </div>
     <message-preview></message-preview>
@@ -187,14 +187,20 @@ export default {
         },
         tags: [],
         title: '',
-        schedule_at: moment().tz('Asia/Tokyo').format(),
-        created_at: moment().tz('Asia/Tokyo').format(),
+        schedule_at: moment()
+          .tz('Asia/Tokyo')
+          .format(),
+        created_at: moment()
+          .tz('Asia/Tokyo')
+          .format(),
         status: this.MessageDeliveriesStatus.Pending,
         messages: [],
         deliver_now: true,
         type: 'all'
       },
-      currentDate: moment().tz('Asia/Tokyo').format()
+      currentDate: moment()
+        .tz('Asia/Tokyo')
+        .format()
     };
   },
 
@@ -224,15 +230,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('broadcast', [
-      'createBroadcast',
-      'updateBroadcast',
-      'getBroadcast',
-      'setPreviewContent'
-    ]),
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('broadcast', ['createBroadcast', 'updateBroadcast', 'getBroadcast', 'setPreviewContent']),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.contentKey++;
@@ -313,7 +312,7 @@ export default {
         const result = await this.$validator.validateAll();
         if (!result) {
           return ViewHelper.scrollToRequiredField(false);
-        };
+        }
       }
 
       // Normalize data
