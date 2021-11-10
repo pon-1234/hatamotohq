@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="card mvh-50">
-      <div class="card-header text-md">
+      <div class="card-header border-bottom border-primary text-md">
         <b>お知らせ</b>
       </div>
       <div class="card-body" v-if="!loading">
