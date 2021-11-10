@@ -62,9 +62,7 @@ export default {
       folders: [],
       selectedFolderIndex: 0,
       surveyContents: 0,
-      isPc: true,
-      survey: null,
-      textSearch: null
+      survey: null
     };
   },
 
@@ -74,7 +72,7 @@ export default {
     },
 
     variables() {
-      return this.curFolder ? this.curFolder.variables : [];
+      return this.curFolder ? this.curFolder.variables.filter(_ => _.type === this.type) : [];
     }
   },
 

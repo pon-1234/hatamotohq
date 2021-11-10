@@ -7,11 +7,11 @@
       rows="5"
       placeholder="本文を入力してください"
       maxlength="5001"
-      v-model="input_value"
+      v-model="value"
     ></textarea>
     <input
       type="hidden"
-      v-model="input_value"
+      v-model="value"
       data-vv-as="本文"
       v-validate="'required|max:5000'"
       :name="'message-editor' + index"
@@ -50,14 +50,14 @@ export default {
         }
       }
     });
-  },
-  computed: {
-    input_value: {
-      get() {
-        return this.value;
-      }
-    }
   }
+  // computed: {
+  //   input_value: {
+  //     get() {
+  //       return this.value;
+  //     }
+  //   }
+  // }
 };
 </script>
 

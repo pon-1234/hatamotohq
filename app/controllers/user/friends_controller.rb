@@ -2,7 +2,7 @@
 
 class User::FriendsController < User::ApplicationController
   load_and_authorize_resource :line_friend
-  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders, :set_reminder]
+  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders, :set_reminder, :variables]
   include User::FriendsHelper
 
   # GET /user/friends
@@ -77,7 +77,7 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/variables
   def variables
-    # TODO
+    @variables = @friend.variables
   end
 
   private

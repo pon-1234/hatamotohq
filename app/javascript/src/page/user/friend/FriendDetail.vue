@@ -107,7 +107,7 @@
     </div>
 
     <div class="col-xl-12">
-      <ul class="nav nav-tabs mb-3">
+      <ul class="nav nav-tabs">
         <li class="nav-item">
           <a href="#customInfo" data-toggle="tab" aria-expanded="true" class="nav-link active">
             <i class="mdi mdi-home-variant d-md-none d-block"></i>
@@ -130,16 +130,38 @@
 
       <div class="tab-content">
         <!-- 友達情報 -->
-        <div class="tab-pane show active" id="customInfo"></div>
+        <div class="tab-pane show active border border-light" id="customInfo">
+          <div class="card m-0 p-0">
+            <div class="card-body p-0">
+              <table class="table table-striped table-centered">
+                <tbody>
+                  <tr v-for="(variable, index) in variables" :key="index">
+                    <th>{{ variable.name }}</th>
+                    <td v-if="variable.type === 'file'">
+                      <img
+                        :src="variable.value || '/img/no-image-profile.png'"
+                        alt="table-user"
+                        class="mr-2 rounded-circle"
+                      />
+                    </td>
+                    <td v-else>{{ variable.value || "未設定" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
         <!-- リマインダー -->
-        <div class="tab-pane show" id="reminder">
-          <div>
-            <div class="row">
-              <label class="col-xl-3">リマインダ</label>
-              <label class="col-xl-9">ゴール日時</label>
+        <div class="tab-pane show border border-light" id="reminder">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <label class="col-xl-3">リマインダ</label>
+                <label class="col-xl-9">ゴール日時</label>
+              </div>
+              <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
             </div>
-            <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
           </div>
 
           <div class="card mt-2">
@@ -166,7 +188,7 @@
         </div>
 
         <!-- シナリオ -->
-        <div class="tab-pane" id="scenario">
+        <div class="tab-pane border border-light" id="scenario">
           <p>...</p>
         </div>
       </div>
@@ -194,7 +216,7 @@ export default {
         display_name: '',
         note: ''
       },
-      customInfos: [],
+      variables: [],
       avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
@@ -213,7 +235,7 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
-    this.customInfos = await this.getVariables(this.friend_id);
+    this.variables = await this.getVariables(this.friend_id);
     this.reminders = await this.getReminders(this.friend_id);
     this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;

@@ -33,6 +33,7 @@ class LineFriend < ApplicationRecord
   has_many :tags, through: :taggings
   has_many :messages, as: :sender
   has_many :survey_responses
+  has_many :friend_variables
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }
@@ -100,6 +101,28 @@ class LineFriend < ApplicationRecord
   def set_reminder!(reminder_id, goal)
     reminding = Reminding.new(channel: self.channel, reminder_id: reminder_id, goal: goal)
     reminding.save!
+  end
+
+  def variables
+    FriendVariable.find_by_sql(['
+      WITH rfv AS (
+      SELECT
+        fv.*, ROW_NUMBER() OVER (PARTITION BY variable_id, line_friend_id
+      ORDER BY
+        id DESC) AS rn
+      FROM
+        friend_variables AS fv )
+      SELECT
+        variables.name AS name,
+        rfv.value AS value,
+        variables.type AS type
+      FROM
+        variables
+      LEFT JOIN rfv ON
+        variables .id = rfv.variable_id
+        AND rn = 1
+        AND rfv.line_friend_id = ?
+    ', self.id]).map { |_| _.attributes }
   end
 
   private

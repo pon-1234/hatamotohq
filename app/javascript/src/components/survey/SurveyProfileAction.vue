@@ -15,7 +15,7 @@
 export default {
   props: {
     name: {
-      default: '',
+      default: 'text',
       type: String
     },
     field: {
@@ -43,16 +43,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  ::v-deep {
-    .btn-template {
-      max-width: 200px;
-      width: 100%;
-      padding: 8px;
-      text-align: center;
-      background: #d2d2d2;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  }
-</style>
