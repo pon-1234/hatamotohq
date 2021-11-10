@@ -61,7 +61,7 @@
                   </div>
 
                   <div class="form-group mb-0 text-center">
-                    <div class="btn btn-success" :disabled="invalid">ログイン</div>
+                    <button type="submit" class="btn btn-success" :disabled="invalid">ログイン</button>
                   </div>
                 </form>
               </div>
