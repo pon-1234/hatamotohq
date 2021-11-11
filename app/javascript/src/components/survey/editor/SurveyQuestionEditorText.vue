@@ -30,6 +30,7 @@
           type="text"
           class="form-control"
           placeholder="補足文を入力してください"
+          maxlength="256"
           v-validate="'max:255'"
           data-vv-as="補足文"
         />

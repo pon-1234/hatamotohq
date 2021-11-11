@@ -8,9 +8,9 @@
           type="text"
           :name="name + '-text'"
           class="form-control"
-          maxlength="140"
-          placeholder=""
-          v-validate="'required'"
+          maxlength="256"
+          placeholder="項目名を入力してください"
+          v-validate="'required|max:255'"
           data-vv-as="項目名"
         />
         <error-message :message="errors.first(name + '-text')"></error-message>
@@ -29,7 +29,9 @@
           :name="name + '-subtext'"
           type="text"
           class="form-control"
-          placeholder=""
+          placeholder="補足文を入力してください"
+          maxlength="256"
+          v-validate="'max:255'"
           data-vv-as="補足文"
         />
         <error-message :message="errors.first(name + '-subtext')"></error-message>

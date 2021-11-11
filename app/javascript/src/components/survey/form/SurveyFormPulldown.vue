@@ -23,7 +23,7 @@ export default {
   },
 
   created() {
-    this.answer = this.options ? this.options[0].value : null;
+    this.answer = this.options && this.options.length > 0 ? this.options[0].value : null;
   },
 
   computed: {
