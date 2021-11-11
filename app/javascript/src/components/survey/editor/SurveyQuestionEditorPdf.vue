@@ -41,7 +41,7 @@
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
         <survey-variable-config
-          type="text"
+          type="pdf"
           :field="value.variable ? value.variable.name : null"
           :name="name + '-infomation'"
           @input="value.variable = $event"

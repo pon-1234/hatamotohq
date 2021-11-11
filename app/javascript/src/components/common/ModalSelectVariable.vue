@@ -88,8 +88,7 @@ export default {
     },
 
     async reloadVariables() {
-      console.log('-------reload variables-------');
-      this.folders = await this.getFolders();
+      this.folders = await this.getFolders({ type: this.type });
     },
 
     changeSelectedFolder(index) {

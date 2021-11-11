@@ -7,7 +7,7 @@ class User::VariablesController < User::ApplicationController
   # GET /user/variables
   def index
     if request.format.json?
-      @folders = Folder.accessible_by(current_ability).includes([:variables]).type_variable
+      @folders = Folder.accessible_by(current_ability).includes([:variables]).references(:variables).type_variable.where('variables.type = ?', params[:type])
     end
     respond_to do |format|
       format.html
