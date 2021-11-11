@@ -146,7 +146,7 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <div class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</div>
+        <div class="btn btn-success fw-120 mr-1" @click="submit('pending')">配信登録</div>
         <div class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</div>
       </div>
     </div>
