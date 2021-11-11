@@ -117,14 +117,16 @@ export default {
         this.mediaData.type = mediaType;
       }
       const validationResult = Media.validateFileSizeByType(this.mediaData.type, input.size);
+
+      // set default type if file cannot be read error
+      if (!this.mediaData.type || !validationResult.valid) this.mediaData.type = this.oldType;
+
       if (!validationResult) return;
 
       if (!validationResult.valid) {
         this.errorMessage = validationResult.message;
         return;
       }
-      // set default type if file cannot be read error
-      if (!this.mediaData.type) this.mediaData.type = this.oldType;
 
       const _this = this;
       const reader = new FileReader();

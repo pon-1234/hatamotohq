@@ -32,10 +32,10 @@
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane show active" id="uploadMedia">
+            <div class="tab-pane fade show active" id="uploadMedia">
               <media-upload ref="mediaUpload" :types="types" @upload="selectMedia($event)"></media-upload>
             </div>
-            <div class="tab-pane" id="selectMedia">
+            <div class="tab-pane fade" id="selectMedia">
               <media-index
                 ref="modalMediaIndex"
                 mode="read"
