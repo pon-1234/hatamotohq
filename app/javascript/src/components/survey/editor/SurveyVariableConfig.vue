@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div class="btn btn-secondary mw-200" data-toggle="modal" :data-target="`#${name}-modal-select-profile-variable`">
+    <div class="btn btn-secondary mw-200" data-toggle="modal" :data-target="`#${name}-modal-select-variable`">
       {{ this.variable_name || "友だち情報を選択" }}
     </div>
-    <modal-select-profile-variable
-      :type="type"
-      :id="`${name}-modal-select-profile-variable`"
-      @selectVariable="selectVariable($event)"
-    >
-    </modal-select-profile-variable>
+    <modal-select-variable :type="type" :id="`${name}-modal-select-variable`" @selectVariable="selectVariable($event)">
+    </modal-select-variable>
   </div>
 </template>
 <script>

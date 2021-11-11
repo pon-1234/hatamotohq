@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="survey">
     <div class="form-group clearfix d-flex">
       <label class="fw-200">項目名<required-mark /></label>
       <div class="flex-grow-1">
         <input
-          v-model.trim="questionContentData.text"
+          v-model.trim="value.text"
           type="text"
           :name="name + '-text'"
           class="form-control"
@@ -25,7 +25,7 @@
       </div>
       <div class="flex-grow-1">
         <input
-          v-model.trim="questionContentData.sub_text"
+          v-model.trim="value.sub_text"
           :name="name + '-subtext'"
           type="text"
           class="form-control"
@@ -39,12 +39,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <survey-profile-action
+        <survey-variable-config
           type="text"
-          :field="questionContentData.variable ? value.variable.name : null"
+          :field="value.variable ? value.variable.name : null"
           :name="name + '-infomation'"
-          @input="questionContentData.variable = $event"
-        ></survey-profile-action>
+          @input="value.variable = $event"
+        ></survey-variable-config>
       </div>
     </div>
 
@@ -52,26 +52,18 @@
       <span class="fw-200">選択肢</span>
       <div class="flex-grow-1">
         <!-- START: checkbox options -->
-        <div v-for="(item, index) of questionContentData.options" :key="index" class="card border-info border">
+        <div v-for="(item, index) of options" :key="index" class="card border-info border">
           <div class="card-header d-flex">
             <div>選択肢 {{ index + 1 }}</div>
             <div class="ml-auto">
               <div @click="moveUpObject(index)" class="btn btn-sm btn-light" v-if="index > 0">
                 <i class="dripicons-chevron-up"></i>
               </div>
-              <div
-                @click="moveDownObject(index)"
-                class="btn btn-sm btn-light"
-                v-if="index < questionContentData.options.length - 1"
-              >
+              <div @click="moveDownObject(index)" class="btn btn-sm btn-light" v-if="index < options.length - 1">
                 <i class="dripicons-chevron-down"></i>
               </div>
 
-              <div
-                @click="removeObject(index)"
-                v-if="questionContentData.options.length > 1"
-                class="btn btn-sm btn-light"
-              >
+              <div @click="removeObject(index)" v-if="options.length > 1" class="btn btn-sm btn-light">
                 <i class="mdi mdi-delete"></i>
               </div>
             </div>
@@ -89,7 +81,7 @@
                 v-model="item.value"
               />
             </div>
-            <div v-show="item.editing" class="form-group d-flex mt-2">
+            <div v-show="item.is_editor" class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
                 <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
                   <option value="tag">タグ</option>
@@ -97,7 +89,7 @@
                   <option value="postback">選択時のアクション</option>
                 </select>
               </div>
-              <div style="width: calc(100% - 200px)" :key="contentKey">
+              <div style="width: calc(100% - 200px)" v-if="!isBlink">
                 <div v-if="item.action.type === 'tag'">
                   <input-tag
                     :tags="item.action.content ? item.action.content.tag_ids : null"
@@ -124,7 +116,7 @@
           </div>
         </div>
         <div class="mt-2">
-          <div @click="addItem()" v-if="questionContentData.options.length < max" class="btn btn-info">
+          <div @click="addItem()" v-if="options.length < max" class="btn btn-info">
             <i class="uil-plus"></i> 選択肢追加
           </div>
         </div>
@@ -139,23 +131,19 @@ export default {
   props: ['content', 'name'],
   data() {
     return {
-      contentKey: 0,
       max: 50,
-      friendInformations: [
-        { id: 0, name: '選択なし', type: 'none' },
-        { id: 1, name: '表示名', type: 'display_name' },
-        { id: 2, name: 'メモ欄', type: 'note' },
-        { id: 3, name: '友だち情報名', type: 'survey_profile' }
-      ],
-      friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
-      questionContentData: this.content || {
+      isBlink: false,
+      value: this.content || {
         text: null,
         sub_text: null,
         name: this.name,
-        profile: null,
+        variable: {
+          name: null,
+          id: null
+        },
         options: [
           {
-            editing: true,
+            is_editor: true,
             value: null,
             action: {
               type: 'tag',
@@ -172,33 +160,30 @@ export default {
 
   created() {
     this.$validator = this.parentValidator;
-    this.questionContentData.name = this.name;
-    if (this.questionContentData.profile) {
-      this.friendInformationSelected = this.questionContentData.profile;
-    }
+    this.value.name = this.name;
     this.syncObj();
   },
+
+  computed: {
+    options() {
+      return this.value ? this.value.options : [];
+    }
+  },
+
   methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
-    changeProfileInformation() {
-      // eslint-disable-next-line no-undef
-      this.questionContentData.profile = _.cloneDeep(this.friendInformationSelected);
-      if (this.questionContentData.profile.id !== 3) {
-        this.questionContentData.variable = {
-          name: null,
-          id: null
-        };
-      }
+    blink() {
+      this.isBlink = true;
+      this.$nextTick(() => {
+        this.isBlink = false;
+      });
     },
     syncObj() {
-      this.forceRerender();
-      this.$emit('input', this.questionContentData);
+      this.blink();
+      this.$emit('input', this.value);
     },
     addItem() {
-      this.questionContentData.options.push({
-        editing: true,
+      this.options.push({
+        is_editor: true,
         value: null,
         action: {
           type: 'tag',
@@ -212,21 +197,47 @@ export default {
     moveUpObject(index) {
       if (index > 0) {
         const to = index - 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     moveDownObject(index) {
-      if (index < this.questionContentData.data.length) {
+      if (index < this.options.length) {
         const to = index + 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     removeObject(index) {
-      this.questionContentData.data.splice(index, 1);
+      this.options.splice(index, 1);
       this.syncObj();
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+  ::v-deep {
+    .survey {
+      border: 1px solid #dedede;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    a:hover {
+      cursor: pointer;
+    }
+    .form-group {
+      padding: 5px 0;
+    }
+    .mt10 {
+      margin-top: 10px !important;
+    }
+    .mr10 {
+      margin-right: 10px !important;
+    }
+    .action-postback {
+      background: gray;
+      padding: 0 10px 10px 10px;
+      border-radius: 4px;
+    }
+  }
+</style>

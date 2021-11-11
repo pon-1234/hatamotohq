@@ -35,7 +35,7 @@
               <label style="margin-top: 20px"> 形式 </label>
               <div class="w-100">
                 <select v-model="data.type" v-validate="'required'" name="selectBox">
-                  <option v-for="(item, key) of typese" :key="key" :value="key">
+                  <option v-for="(item, key) of types" :key="key" :value="key">
                     {{ item }}
                   </option>
                 </select>
@@ -65,7 +65,7 @@ export default {
         description: null
       },
 
-      typese: {
+      types: {
         text: 'テキスト',
         file: 'ファイル添付',
         date: '日付'

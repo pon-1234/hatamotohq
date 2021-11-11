@@ -6,6 +6,7 @@
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
+    ref="modalSelectVariable"
   >
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
       <div class="modal-content">
@@ -21,7 +22,6 @@
               type="variable"
               :isPerview="true"
               :data="folders"
-              :isPc="isPc"
               :selectedFolder="selectedFolderIndex"
               @changeSelectedFolder="changeSelectedFolder"
             ></folder-left>
@@ -76,8 +76,8 @@ export default {
     }
   },
 
-  async beforeMount() {
-    this.folders = await this.getFolders();
+  mounted() {
+    $(this.$refs.modalSelectVariable).on('show.bs.modal', this.reloadVariables);
   },
 
   methods: {
@@ -85,6 +85,11 @@ export default {
 
     forceRerender() {
       this.contentKey++;
+    },
+
+    async reloadVariables() {
+      console.log('-------reload variables-------');
+      this.folders = await this.getFolders();
     },
 
     changeSelectedFolder(index) {
@@ -101,94 +106,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  .modal-template {
-    .item-sm {
-      display: none;
-    }
-
-    @media (max-width: 991px) {
-      .item-pc {
-        display: none !important;
-      }
-
-      .item-sm {
-        display: inline-block !important;
-      }
-
-      .fa-arrow-left {
-        margin-right: 10px;
-        cursor: pointer;
-      }
-    }
-    .message-title {
-      width: 150px !important;
-    }
-
-    .modal-dialog {
-      max-width: 800px;
-      .table-tags-header {
-        margin-bottom: 0px !important;
-        max-width: none !important;
-      }
-
-      .template-list-content {
-        background-color: #f0f0f0;
-
-        .folder-item {
-          cursor: pointer;
-        }
-
-        .folder-item:hover {
-          background: #f0ad4e;
-        }
-
-        .list-content {
-          height: 100%;
-          max-height: 500px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          .list-scroll {
-            height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin: 0 0;
-            display: flex;
-            flex-direction: column;
-          }
-        }
-      }
-    }
-  }
-
-  ::v-deep {
-    .carousel-content {
-      width: 130px !important;
-      .carousel-thumb {
-        height: 70px !important;
-        line-height: 70px !important;
-      }
-    }
-
-    .buttons-content,
-    .imagemap,
-    .location-content,
-    .chat-item-voice,
-    .thumbnail-item,
-    .confirm-content {
-      width: 150px;
-      max-width: 150px;
-    }
-
-    .thumbnail-item {
-      max-height: 100px;
-      height: 100px;
-    }
-
-    .sticker-static {
-      max-width: 110px !important;
-      max-height: 100px !important;
-    }
-  }
-</style>

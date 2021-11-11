@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="survey">
     <div class="form-group clearfix d-flex">
       <label class="fw-200">項目名<required-mark /></label>
       <div class="flex-grow-1">
@@ -39,12 +39,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <survey-profile-action
+        <survey-variable-config
           type="text"
           :field="value.variable ? value.variable.name : null"
           :name="name + '-infomation'"
           @input="value.variable = $event"
-        ></survey-profile-action>
+        ></survey-variable-config>
       </div>
     </div>
 
@@ -133,13 +133,6 @@ export default {
     return {
       max: 50,
       isBlink: false,
-      friendInformations: [
-        { id: 0, name: '選択なし', type: 'none' },
-        { id: 1, name: '表示名', type: 'display_name' },
-        { id: 2, name: 'メモ欄', type: 'note' },
-        { id: 3, name: '友だち情報名', type: 'survey_profile' }
-      ],
-      friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
       value: this.content || {
         text: null,
         name: this.name,
@@ -168,9 +161,6 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     this.value.name = this.name;
-    if (this.value.profile) {
-      this.friendInformationSelected = this.value.profile;
-    }
     this.syncObj();
   },
 
@@ -198,16 +188,6 @@ export default {
   },
 
   methods: {
-    changeProfileInformation() {
-      // eslint-disable-next-line no-undef
-      this.value.profile = _.cloneDeep(this.friendInformationSelected);
-      if (this.value.profile.id !== 3) {
-        this.value.variable = {
-          name: null,
-          id: null
-        };
-      }
-    },
     blink() {
       this.isBlink = true;
       this.$nextTick(() => {

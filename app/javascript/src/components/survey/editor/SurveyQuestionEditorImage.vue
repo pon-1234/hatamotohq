@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="survey">
     <div class="form-group clearfix d-flex">
       <span class="fw-200">項目名<required-mark /></span>
       <div class="flex-grow-1">
@@ -8,9 +8,9 @@
           type="text"
           :name="name + '-text'"
           class="form-control"
-          maxlength="256"
-          placeholder="項目名を入力してください"
-          v-validate="'required|max:255'"
+          maxlength="140"
+          placeholder=""
+          v-validate="'required'"
           data-vv-as="項目名"
         />
         <error-message :message="errors.first(name + '-text')"></error-message>
@@ -29,8 +29,7 @@
           :name="name + '-subtext'"
           type="text"
           class="form-control"
-          placeholder="補足文を入力してください"
-          v-validate="'max:255'"
+          placeholder=""
           data-vv-as="補足文"
         />
         <error-message :message="errors.first(name + '-subtext')"></error-message>
@@ -39,12 +38,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <survey-profile-action
+        <survey-variable-config
           type="text"
           :field="value.variable ? value.variable.name : null"
           :name="name + '-infomation'"
           @input="value.variable = $event"
-        ></survey-profile-action>
+        ></survey-variable-config>
       </div>
     </div>
   </div>
@@ -55,21 +54,14 @@ export default {
   props: ['content', 'name'],
   data() {
     return {
-      friendInformations: [
-        { id: 0, name: '選択なし', type: 'none' },
-        { id: 1, name: '表示名', type: 'display_name' },
-        { id: 2, name: 'メモ欄', type: 'note' },
-        { id: 3, name: '友だち情報名', type: 'survey_profile' }
-      ],
-      friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
       value: this.content || {
-        name: this.name,
-        text: null,
-        sub_text: null,
         variable: {
           name: null,
           id: null
-        }
+        },
+        text: null,
+        name: this.name,
+        sub_text: null
       }
     };
   },
@@ -78,31 +70,19 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     this.value.name = this.name;
-    if (this.value.profile) {
-      this.friendInformationSelected = this.value.profile;
-    }
     this.syncObj();
   },
   watch: {
     content(val) {
       this.value = val || {
         name: this.name,
+
         text: null,
         sub_text: null
       };
     }
   },
   methods: {
-    changeProfileInformation() {
-      // eslint-disable-next-line no-undef
-      this.value.profile = _.cloneDeep(this.friendInformationSelected);
-      if (this.value.profile.id !== 3) {
-        this.value.variable = {
-          name: null,
-          id: null
-        };
-      }
-    },
     syncObj() {
       this.$emit('input', this.value);
     }
