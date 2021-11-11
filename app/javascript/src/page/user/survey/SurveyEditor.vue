@@ -24,13 +24,14 @@
                   <input
                     v-model.trim="surveyData.name"
                     type="text"
-                    name="survey-name"
+                    name="survey_name"
                     class="form-control"
-                    placeholder=""
+                    placeholder="フォーム名(管理用)を入力してください"
                     v-validate="'required|max:255'"
+                    maxlength="256"
                     data-vv-as="フォーム名(管理用)"
                   />
-                  <error-message :message="errors.first('survey-name')"></error-message>
+                  <error-message :message="errors.first('survey_name')"></error-message>
                 </div>
               </div>
               <div class="form-group">
@@ -38,13 +39,13 @@
                 <input
                   v-model.trim="surveyData.title"
                   type="text"
-                  name="survey-title"
+                  name="survey_title"
                   class="form-control"
-                  placeholder=""
+                  placeholder="タイトルを入力してください"
                   v-validate="'required|max:255'"
                   data-vv-as="タイトル"
                 />
-                <error-message :message="errors.first('survey-title')"></error-message>
+                <error-message :message="errors.first('survey_title')"></error-message>
               </div>
             </div>
 
@@ -53,29 +54,33 @@
                 <label>説明<required-mark /></label>
                 <textarea
                   rows="3"
-                  v-model.trim="surveyData.description"
+                  v-model="surveyData.description"
                   type="text"
-                  name="survey-description"
+                  name="survey_description"
                   class="form-control"
-                  placeholder=""
-                  v-validate="'required'"
+                  placeholder="説明を入力してください"
+                  maxlength="1001"
+                  v-validate="'required|max:1000'"
                   data-vv-as="説明"
                 >
                 </textarea>
-                <error-message :message="errors.first('survey-description')"></error-message>
+                <error-message :message="errors.first('survey_description')"></error-message>
               </div>
               <div class="form-group mt-2">
                 <label>回答後の文章</label>
                 <textarea
                   rows="2"
-                  v-model.trim="surveyData.success_message"
+                  v-model="surveyData.success_message"
                   type="text"
-                  name="survey-success-message"
+                  name="survey_success_message"
                   class="form-control"
-                  placeholder=""
+                  placeholder="回答後の文章を入力してください"
                   data-vv-as="回答後の文章"
+                  maxlength="1001"
+                  v-validate="'max:1000'"
                 >
                 </textarea>
+                <error-message :message="errors.first('survey_success_message')"></error-message>
               </div>
             </div>
 
