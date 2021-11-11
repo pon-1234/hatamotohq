@@ -42,7 +42,7 @@ export default {
       searchPosition: 'bottom',
       pickerPosition: 'bottom',
       events: {
-        keyup(editor, event) {
+        keydown(editor, event) {
           _this.$emit('input', this.getText());
         },
         emojibtn_click(editor, event) {
