@@ -28,7 +28,7 @@
               <tbody>
                 <tr v-for="(scenario, index) in scenarios" :key="index">
                   <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
-                  <td class="scenario_title">{{ scenario.title }}</td>
+                  <td><p class="scenario_title"> {{ scenario.title }}</p></td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">
@@ -220,6 +220,7 @@ export default {
 <style lang="scss" scoped>
   .scenario_title {
     width: 40vw;
+    margin: 0;
     white-space: pre-wrap;
     -webkit-box-orient: vertical;
     display: -webkit-box;
