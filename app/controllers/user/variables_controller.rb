@@ -10,7 +10,7 @@ class User::VariablesController < User::ApplicationController
       @folders = Folder.accessible_by(current_ability)
         .includes([:variables]).references(:variables)
         .type_variable
-        .where('variables.type = ?', params[:type])
+      @folders = @folders.where('variables.type = ?', params[:type]) if params[:type].present?
     end
     respond_to do |format|
       format.html
