@@ -26,7 +26,7 @@
                   placeholder="ラベルを入力してください"
                   type="text"
                   maxlength="12"
-                  v-model="data.field_name"
+                  v-model="data.name"
                   class="w-100 form-control"
                   v-validate="'required'"
                 />
@@ -35,7 +35,7 @@
               <label style="margin-top: 20px"> 形式 </label>
               <div class="w-100">
                 <select v-model="data.type" v-validate="'required'" name="selectBox">
-                  <option v-for="(item, key) of typese" :key="key" :value="key">
+                  <option v-for="(item, key) of types" :key="key" :value="key">
                     {{ item }}
                   </option>
                 </select>
@@ -60,12 +60,12 @@ export default {
   data() {
     return {
       data: this.model || {
-        field_name: null,
+        name: null,
         type: null,
         description: null
       },
 
-      typese: {
+      types: {
         text: 'テキスト',
         file: 'ファイル添付',
         date: '日付'
@@ -81,7 +81,7 @@ export default {
         // eslint-disable-next-line no-undef
         this.data = _.cloneDeep(
           val || {
-            field_name: null,
+            name: null,
             type: null,
             description: null
           }

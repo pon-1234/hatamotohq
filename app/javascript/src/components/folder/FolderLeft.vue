@@ -50,6 +50,8 @@
           @changeSelected="changeSelectedFolder(index)"
           @editTag="submitUpdateFolder"
         />
+
+        <div class="text-center mt-4" v-if="data.length === 0">データはありません</div>
       </div>
     </div>
   </div>

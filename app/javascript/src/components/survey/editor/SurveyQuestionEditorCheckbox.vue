@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="survey">
     <div class="form-group clearfix d-flex">
       <label class="fw-200">項目名<required-mark /></label>
       <div class="flex-grow-1">
@@ -8,9 +8,9 @@
           type="text"
           :name="name + '-text'"
           class="form-control"
-          maxlength="140"
-          placeholder=""
-          v-validate="'required'"
+          maxlength="256"
+          placeholder="項目名を入力してください"
+          v-validate="'required|max:255'"
           data-vv-as="項目名"
         />
         <error-message :message="errors.first(name + '-text')"></error-message>
@@ -29,7 +29,9 @@
           :name="name + '-subtext'"
           type="text"
           class="form-control"
-          placeholder=""
+          placeholder="補足文を入力してください"
+          maxlength="256"
+          v-validate="'max:255'"
           data-vv-as="補足文"
         />
         <error-message :message="errors.first(name + '-subtext')"></error-message>
@@ -39,20 +41,12 @@
     <div class="form-group clearfix d-flex">
       <span class="fw-200">回答の情報登録</span>
       <div class="flex-grow-1">
-        <select @change="changeProfileInformation" class="form-control" v-model="friendInformationSelected">
-          <option v-for="(friendInformation, index) in friendInformations" :value="friendInformation" :key="index">
-            {{ friendInformation.name }}
-          </option>
-        </select>
-        <div v-if="questionContentData.profile" style="margin-top: 10px">
-          <survey-profile-action
-            v-if="questionContentData.profile.id === 3"
-            type="text"
-            :field="questionContentData.survey_profile_template ? value.survey_profile_template.field_name : null"
-            :name="name + '-infomation'"
-            @input="questionContentData.survey_profile_template = $event"
-          ></survey-profile-action>
-        </div>
+        <survey-variable-config
+          type="text"
+          :field="questionContentData.variable ? value.variable.name : null"
+          :name="name + '-infomation'"
+          @input="questionContentData.variable = $event"
+        ></survey-variable-config>
       </div>
     </div>
 
@@ -149,13 +143,6 @@ export default {
     return {
       contentKey: 0,
       max: 50,
-      friendInformations: [
-        { id: 0, name: '選択なし', type: 'none' },
-        { id: 1, name: '表示名', type: 'display_name' },
-        { id: 2, name: 'メモ欄', type: 'note' },
-        { id: 3, name: '友だち情報名', type: 'survey_profile' }
-      ],
-      friendInformationSelected: { id: 0, name: '選択なし', type: 'none' },
       questionContentData: this.content || {
         text: null,
         sub_text: null,
@@ -181,24 +168,11 @@ export default {
   created() {
     this.$validator = this.parentValidator;
     this.questionContentData.name = this.name;
-    if (this.questionContentData.profile) {
-      this.friendInformationSelected = this.questionContentData.profile;
-    }
     this.syncObj();
   },
   methods: {
     forceRerender() {
       this.contentKey++;
-    },
-    changeProfileInformation() {
-      // eslint-disable-next-line no-undef
-      this.questionContentData.profile = _.cloneDeep(this.friendInformationSelected);
-      if (this.questionContentData.profile.id !== 3) {
-        this.questionContentData.survey_profile_template = {
-          field_name: null,
-          id: null
-        };
-      }
     },
     syncObj() {
       this.forceRerender();

@@ -1,8 +1,14 @@
 <template>
   <ValidationObserver ref="observer" v-slot="{ validate }">
-    <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="formAction" method="post">
+    <form
+      ref="form"
+      @submit.prevent="validate().then(onSubmit)"
+      :action="formAction"
+      method="post"
+      enctype="multipart/form-data"
+    >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
-      <div class="card">
+      <div class="card" v-if="survey">
         <div class="card-body">
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
@@ -10,6 +16,10 @@
           <div class="btn btn-success fw-120">送信</div>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
+      </div>
+      <div class="alert alert-warning" role="alert" v-if="!survey && !loading">
+        <h4 class="alert-heading">エラー</h4>
+        <p>アクセスが拒否されました。</p>
       </div>
     </form>
   </ValidationObserver>
@@ -53,6 +63,7 @@ export default {
     ...mapActions('survey', ['getSurveyByCode', 'postAnswer']),
 
     async onSubmit(e) {
+      console.log('======');
       this.$refs.form.submit();
     }
     // async submit() {

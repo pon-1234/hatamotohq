@@ -20,7 +20,7 @@ class User::SurveysController < User::ApplicationController
 
   def answers
     @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(10)
-    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question]])).page(params[:response_page]).per(10)
+    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])).page(params[:response_page]).per(10)
   end
 
   # GET /user/surveys/new

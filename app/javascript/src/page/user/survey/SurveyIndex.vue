@@ -42,7 +42,7 @@
                         false-value="unpublished"
                         @change="updateStatus(survey)"
                       />
-                      <label :for="`switchStatus${index}`"></label>
+                      <label class="m-0" :for="`switchStatus${index}`"></label>
                     </div>
                     <span v-else class="text-danger">下書き</span>
                   </td>

@@ -5,9 +5,9 @@
       <div class="form-group mt-2 position-relative">
         <datetime
           input-class="form-control btn border border-light text-left"
-          type="date"
+          type="datetime"
           :phrases="{ ok: '確定', cancel: '閉じる' }"
-          placeholder="日付を選択してください"
+          placeholder="日付・時刻を選択してください"
           value-zone="Asia/Tokyo"
           zone="Asia/Tokyo"
           :name="`answers[${qnum}][answer]`"
@@ -15,7 +15,6 @@
         ></datetime>
         <i class="dripicons-chevron-down dropdown-icon"></i>
       </div>
-      <!-- the below check is to fix bug datetime component auto validate on show -->
       <error-message :message="errors[0]"></error-message>
     </ValidationProvider>
   </div>

@@ -39,12 +39,6 @@
                 <span>{{ webhook }}<i class="fa fa-check-circle" aria-hidden="true"></i></span>
               </dd>
             </dl>
-            <dl class="flex group-admin01 group-linebot01">
-              <dt><span class="ja">LIFF ID</span></dt>
-              <dd class="fz14">
-                <span>{{ liff_id }}</span>
-              </dd>
-            </dl>
           </div>
         </div>
       </div>
@@ -131,7 +125,6 @@ export default {
       lineClientId: '',
       lineSecret: '',
       webhook: '',
-      liff_id: '',
       isLoading: true,
       form: {
         lineClientId: '',
@@ -164,7 +157,6 @@ export default {
           this.lineClientId = res.line_setting.client_id;
           this.lineSecret = res.line_setting.channel_secret;
           this.webhook = res.line_setting.webhook_url;
-          this.liff_id = res.line_setting.liff_id;
 
           this.form.lineClientId = res.line_setting.client_id;
           this.form.lineSecret = res.line_setting.channel_secret;

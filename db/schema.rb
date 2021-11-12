@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_025627) do
+ActiveRecord::Schema.define(version: 2021_11_09_144441) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -201,6 +201,18 @@ ActiveRecord::Schema.define(version: 2021_11_09_025627) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['line_account_id'], name: 'index_folders_on_line_account_id'
+  end
+
+  create_table 'friend_variables', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_friend_id'
+    t.bigint 'variable_id'
+    t.bigint 'survey_answer_id'
+    t.text 'value'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_friend_variables_on_line_friend_id'
+    t.index ['survey_answer_id'], name: 'index_friend_variables_on_survey_answer_id'
+    t.index ['variable_id'], name: 'index_friend_variables_on_variable_id'
   end
 
   create_table 'insights', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -435,14 +447,6 @@ ActiveRecord::Schema.define(version: 2021_11_09_025627) do
     t.index ['survey_response_id'], name: 'index_survey_answers_on_survey_response_id'
   end
 
-  create_table 'survey_profiles', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.text 'content', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_profiles_on_line_account_id'
-  end
-
   create_table 'survey_questions', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'survey_id'
     t.string 'name'
@@ -581,6 +585,9 @@ ActiveRecord::Schema.define(version: 2021_11_09_025627) do
   add_foreign_key 'flex_message_sent_logs', 'line_accounts'
   add_foreign_key 'flex_messages', 'line_accounts'
   add_foreign_key 'folders', 'line_accounts'
+  add_foreign_key 'friend_variables', 'line_friends'
+  add_foreign_key 'friend_variables', 'survey_answers'
+  add_foreign_key 'friend_variables', 'variables'
   add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
@@ -604,7 +611,6 @@ ActiveRecord::Schema.define(version: 2021_11_09_025627) do
   add_foreign_key 'scenarios', 'line_accounts'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
-  add_foreign_key 'survey_profiles', 'line_accounts'
   add_foreign_key 'survey_questions', 'surveys'
   add_foreign_key 'survey_responses', 'line_friends'
   add_foreign_key 'survey_responses', 'surveys'

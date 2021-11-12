@@ -5,11 +5,7 @@
         <div class="card-body box-profile">
           <!-- profile image -->
           <div class="text-center">
-            <img
-              v-lazy="avatarImgObj"
-              class="rounded-circle avatar-lg img-thumbnail"
-              alt="profile-image"
-            />
+            <img v-lazy="avatarImgObj" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
           </div>
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
@@ -111,9 +107,15 @@
     </div>
 
     <div class="col-xl-12">
-      <ul class="nav nav-tabs mb-3">
+      <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link active">
+          <a href="#customInfo" data-toggle="tab" aria-expanded="true" class="nav-link active">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">友達情報</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link">
             <i class="mdi mdi-home-variant d-md-none d-block"></i>
             <span class="d-none d-md-block">リマインダ</span>
           </a>
@@ -127,13 +129,39 @@
       </ul>
 
       <div class="tab-content">
-        <div class="tab-pane show active" id="reminder">
-          <div>
-            <div class="row">
-              <label class="col-xl-3">リマインダ</label>
-              <label class="col-xl-9">ゴール日時</label>
+        <!-- 友達情報 -->
+        <div class="tab-pane show active border border-light" id="customInfo">
+          <div class="card m-0 p-0">
+            <div class="card-body p-0">
+              <table class="table table-striped table-centered">
+                <tbody>
+                  <tr v-for="(variable, index) in variables" :key="index">
+                    <th>{{ variable.name }}</th>
+                    <td v-if="variable.type === 'image'">
+                      <div v-lazy:background-image="variable.value" class="fw-120 fh-81 background-cover"></div>
+                    </td>
+                    <td v-else-if="variable.type === 'pdf'">
+                      <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
+                      <a class="btn btn-sm btn-light" :href="variable.value" download="lineinsight.pdf">ダウンロード</a>
+                    </td>
+                    <td v-else>{{ variable.value || "未設定" }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
+          </div>
+        </div>
+
+        <!-- リマインダー -->
+        <div class="tab-pane show border border-light" id="reminder">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <label class="col-xl-3">リマインダ</label>
+                <label class="col-xl-9">ゴール日時</label>
+              </div>
+              <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
+            </div>
           </div>
 
           <div class="card mt-2">
@@ -158,7 +186,9 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane" id="scenario">
+
+        <!-- シナリオ -->
+        <div class="tab-pane border border-light" id="scenario">
           <p>...</p>
         </div>
       </div>
@@ -177,6 +207,7 @@ export default {
   },
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       friendData: {
         status: 'active',
         locked: null,
@@ -186,6 +217,7 @@ export default {
         display_name: '',
         note: ''
       },
+      variables: [],
       avatarImgObj: {
         src: '',
         error: '/img/no-image-profile.png',
@@ -204,17 +236,14 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
+    this.variables = await this.getVariables(this.friend_id);
     this.reminders = await this.getReminders(this.friend_id);
     this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
   methods: {
-    ...mapActions('friend', [
-      'getFriend',
-      'updateFriend',
-      'getReminders'
-    ]),
+    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders', 'getVariables']),
 
     selectTags(tags) {
       this.friendData.tags = tags;

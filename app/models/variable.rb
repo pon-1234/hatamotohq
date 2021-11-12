@@ -26,6 +26,7 @@
 class Variable < ApplicationRecord
   belongs_to :folder
   belongs_to :line_account
+  include VariableType
 
   def clone!
     new_varaible = self.dup

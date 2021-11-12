@@ -17,8 +17,12 @@
 
 <script>
 export default {
-  props: ['question', 'qnum', 'answer', 'preview'],
-
+  props: ['question', 'qnum', 'preview'],
+  data() {
+    return {
+      answer: undefined
+    };
+  },
   computed: {
     isRequired() {
       return this.question ? this.question.required : false;

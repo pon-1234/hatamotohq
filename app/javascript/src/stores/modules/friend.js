@@ -136,5 +136,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async getVariables(context, id) {
+    try {
+      return await FriendAPI.getVariables(id);
+    } catch (error) {
+      return null;
+    }
   }
 };
