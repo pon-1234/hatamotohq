@@ -4,104 +4,92 @@
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-xl-12">
-              <div class="form-group">
-                <label class="fw-300">フォルダー</label>
-                <div class="flex-grow-1">
-                  <select v-model="surveyData.folder_id" class="form-control fw-300">
-                    <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
-                      {{ folder.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
+          <div class="form-group d-flex">
+            <label class="fw-300">フォルダー</label>
+            <div class="flex-grow-1">
+              <select v-model="surveyData.folder_id" class="form-control fw-300">
+                <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                  {{ folder.name }}
+                </option>
+              </select>
             </div>
-            <div class="col-xl-6">
-              <div class="form-group">
-                <label class="fw-300">フォーム名(管理用)<required-mark /></label>
-                <div class="flex-grow-1">
-                  <input
-                    v-model.trim="surveyData.name"
-                    type="text"
-                    name="survey_name"
-                    class="form-control"
-                    placeholder="フォーム名(管理用)を入力してください"
-                    v-validate="'required|max:255'"
-                    maxlength="256"
-                    data-vv-as="フォーム名(管理用)"
-                  />
-                  <error-message :message="errors.first('survey_name')"></error-message>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>タイトル<required-mark /></label>
-                <input
-                  v-model.trim="surveyData.title"
-                  type="text"
-                  name="survey_title"
-                  class="form-control"
-                  placeholder="タイトルを入力してください"
-                  v-validate="'required|max:255'"
-                  data-vv-as="タイトル"
-                />
-                <error-message :message="errors.first('survey_title')"></error-message>
-              </div>
+          </div>
+          <div class="form-group d-flex">
+            <label class="fw-300">フォーム名(管理用)<required-mark /></label>
+            <div class="flex-grow-1">
+              <input
+                v-model.trim="surveyData.name"
+                type="text"
+                name="survey_name"
+                class="form-control"
+                placeholder="フォーム名(管理用)を入力してください"
+                v-validate="'required|max:255'"
+                maxlength="256"
+                data-vv-as="フォーム名(管理用)"
+              />
+              <error-message :message="errors.first('survey_name')"></error-message>
             </div>
+          </div>
+          <div class="form-group d-flex">
+            <label class="fw-300">タイトル<required-mark /></label>
+            <input
+              v-model.trim="surveyData.title"
+              type="text"
+              name="survey_title"
+              class="form-control flex-grow-1"
+              placeholder="タイトルを入力してください"
+              v-validate="'required|max:255'"
+              data-vv-as="タイトル"
+            />
+            <error-message :message="errors.first('survey_title')"></error-message>
+          </div>
 
-            <div class="col-xl-6">
-              <div class="form-group">
-                <label>説明<required-mark /></label>
-                <textarea
-                  rows="3"
-                  v-model="surveyData.description"
-                  type="text"
-                  name="survey_description"
-                  class="form-control"
-                  placeholder="説明を入力してください"
-                  maxlength="1001"
-                  v-validate="'required|max:1000'"
-                  data-vv-as="説明"
-                >
-                </textarea>
-                <error-message :message="errors.first('survey_description')"></error-message>
-              </div>
-              <div class="form-group mt-2">
-                <label>回答後の文章</label>
-                <textarea
-                  rows="2"
-                  v-model="surveyData.success_message"
-                  type="text"
-                  name="survey_success_message"
-                  class="form-control"
-                  placeholder="回答後の文章を入力してください"
-                  data-vv-as="回答後の文章"
-                  maxlength="1001"
-                  v-validate="'max:1000'"
-                >
-                </textarea>
-                <error-message :message="errors.first('survey_success_message')"></error-message>
-              </div>
-            </div>
+          <div class="form-group d-flex">
+            <label class="fw-300">説明<required-mark /></label>
+            <textarea
+              rows="3"
+              v-model="surveyData.description"
+              type="text"
+              name="survey_description"
+              class="form-control flex-grow-1"
+              placeholder="説明を入力してください"
+              maxlength="1001"
+              v-validate="'required|max:1000'"
+              data-vv-as="説明"
+            >
+            </textarea>
+            <error-message :message="errors.first('survey_description')"></error-message>
+          </div>
+          <div class="form-group d-flex">
+            <label class="fw-300">回答後の文章</label>
+            <textarea
+              rows="2"
+              v-model="surveyData.success_message"
+              type="text"
+              name="survey_success_message"
+              class="form-control flex-grow-1"
+              placeholder="回答後の文章を入力してください"
+              data-vv-as="回答後の文章"
+              maxlength="1001"
+              v-validate="'max:1000'"
+            >
+            </textarea>
+            <error-message :message="errors.first('survey_success_message')"></error-message>
+          </div>
 
-            <div class="col-xl-12">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  id="repeatAnswerCheck"
-                  v-model.trim="surveyData.re_answer"
-                />
-                <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
-              </div>
-            </div>
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="repeatAnswerCheck"
+              v-model.trim="surveyData.re_answer"
+            />
+            <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
           </div>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
 
-      <!-- <input v-model.trim="surveyData.liff_id" type="hidden" name="liff_id" class="form-control"
-              placeholder="" v-validate="'required'"> -->
       <div class="card">
         <div class="card-header left-border"><h3 class="card-title">質問一覧</h3></div>
         <div class="card-body">
@@ -154,7 +142,7 @@ import Util from '@/core/util';
 import { mapActions, mapState } from 'vuex';
 
 export default {
-  props: ['survey_id', 'plan', 'liff_id'],
+  props: ['survey_id', 'plan'],
   provide() {
     return { parentValidator: this.$validator };
   },
@@ -167,7 +155,6 @@ export default {
         id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
         name: null,
-        liff_id: this.liff_id,
         title: null,
         description: null,
         questions: null,

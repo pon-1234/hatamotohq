@@ -51,13 +51,6 @@ export default {
       }
     });
   }
-  // computed: {
-  //   input_value: {
-  //     get() {
-  //       return this.value;
-  //     }
-  //   }
-  // }
 };
 </script>
 
