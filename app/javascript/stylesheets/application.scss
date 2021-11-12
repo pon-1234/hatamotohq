@@ -313,3 +313,24 @@
     }
   }
 }
+
+.fw-table {
+  width: 50vw;
+}
+
+.table_elem_name {
+  width: 10vw;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+@media screen and (max-width:1350px) {
+  .fw-table {
+    width: 35vw;
+  }
+}

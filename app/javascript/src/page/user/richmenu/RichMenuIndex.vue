@@ -12,7 +12,7 @@
           @submitCreateFolder="submitCreateFolder"
         />
 
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 fw-table">
           <div v-if="curFolder">
             <a
               :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`"
@@ -26,18 +26,18 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>リッチメニュー名</th>
+                  <th class="mw-150">リッチメニュー名</th>
                   <th class="mw-120">状況</th>
-                  <th>メニュー初期状態</th>
+                  <th class="mw-150">メニュー初期状態</th>
                   <th class="mw-200">画像</th>
                   <!-- <th class="mw-120">メンバー数</th> -->
                   <th class="mw-80">操作</th>
-                  <th>フォルダー</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
-                  <td class="font-weight-bold">{{ richmenu.name }}</td>
+                  <td><p class="table_elem_name font-weight-bold">{{ richmenu.name }}</p></td>
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>

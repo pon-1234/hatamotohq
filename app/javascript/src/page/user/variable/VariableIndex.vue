@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1" :key="contentKey">
+        <div class="flex-grow-1 fw-table" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/variables/new?folder_id=${curFolder.id}`"
@@ -19,21 +19,21 @@
           >
             <i class="uil-plus"></i> 新規作成
           </a>
-          <div class="mt-2" v-if="curFolder">
+          <div class="table-responsive mt-2" v-if="curFolder">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>友だち情報欄名</th>
-                  <th>既定値</th>
-                  <th>人数</th>
-                  <th>操作</th>
-                  <th>フォルダー</th>
+                  <th class="mw-150">友だち情報欄名</th>
+                  <th class="mw-120">既定値</th>
+                  <th class="mw-60">人数</th>
+                  <th class="mw-60">操作</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
-                  <td>{{ variable.name }}</td>
-                  <td>{{ variable.default || "-" }}</td>
+                  <td><p class="table_elem_name">{{ variable.name }}</p></td>
+                  <td><p class="table_elem_name">{{ variable.default || "-" }}</p></td>
                   <td>0</td>
                   <td>
                     <div class="btn-group">
