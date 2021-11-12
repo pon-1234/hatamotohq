@@ -10,7 +10,8 @@ module QuestionType
       radio: 'radio',
       checkbox: 'checkbox',
       pulldown: 'pulldown',
-      file: 'file',
+      image: 'image',
+      pdf: 'pdf',
       date: 'date'
     }
   end

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post 'surveys/:code/:friend_id', to: 'surveys#answer', as: 'survey_answer_form'
   get 'surveys/:code', to: 'surveys#show'
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
+  get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
 
   # User
   constraints Subdomain::UserConstraint.new do

@@ -8,7 +8,7 @@
       enctype="multipart/form-data"
     >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
-      <div class="card">
+      <div class="card" v-if="survey">
         <div class="card-body">
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
@@ -16,6 +16,10 @@
           <button class="btn btn-success fw-120" type="submit">送信</button>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
+      </div>
+      <div class="alert alert-warning" role="alert" v-else>
+        <h4 class="alert-heading">エラー</h4>
+        <p>アクセスが拒否されました。</p>
       </div>
     </form>
   </ValidationObserver>
