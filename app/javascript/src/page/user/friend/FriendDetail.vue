@@ -138,9 +138,12 @@
                   <tr v-for="(variable, index) in variables" :key="index">
                     <th>{{ variable.name }}</th>
                     <td v-if="variable.type === 'image'">
-                      <div v-lazy:background-image="variable.value" class="fw-120 fh-81 thumbnail"></div>
+                      <div v-lazy:background-image="variable.value" class="fw-120 fh-81 background-cover"></div>
                     </td>
-                    <td v-else-if="variable.type === 'pdf'">PDF</td>
+                    <td v-else-if="variable.type === 'pdf'">
+                      <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
+                      <a class="btn btn-sm btn-light" :href="variable.value" download="lineinsight.pdf">ダウンロード</a>
+                    </td>
                     <td v-else>{{ variable.value || "未設定" }}</td>
                   </tr>
                 </tbody>
@@ -204,6 +207,7 @@ export default {
   },
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       friendData: {
         status: 'active',
         locked: null,
