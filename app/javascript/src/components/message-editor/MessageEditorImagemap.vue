@@ -7,7 +7,7 @@
         :name="`altText${index}`"
         class="form-control"
         placeholder="代替テキストを入力してください"
-        v-model="altText"
+        v-model.trim="altText"
         maxlength="401"
         v-validate="'max:400'"
         data-vv-as="代替テキスト"

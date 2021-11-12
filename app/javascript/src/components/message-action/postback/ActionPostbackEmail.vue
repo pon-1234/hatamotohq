@@ -14,7 +14,7 @@
         :aria-invalid="errors.first(name + '_postback_email') ? true : false"
         class="form-control d-flex"
         input-id="tags-basic"
-        v-model="form.emails"
+        v-model.trim="form.emails"
         :tag-validator="tagValidator"
         :add-button-text="'追加'"
         :invalid-tag-text="null"

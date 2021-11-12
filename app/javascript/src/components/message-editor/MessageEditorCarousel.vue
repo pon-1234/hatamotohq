@@ -46,7 +46,7 @@
                   :name="'carousel-title' + indexColumn"
                   placeholder="タイトル"
                   class="form-control"
-                  v-model="column.title"
+                  v-model.trim="column.title"
                   maxlength="40"
                   v-validate="{ required: requiredTitle }"
                   data-vv-as="タイトル"

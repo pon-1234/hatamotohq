@@ -8,7 +8,7 @@
           placeholder="タイトルを入力してください"
           type="text"
           maxlength="41"
-          v-model="templateData.title"
+          v-model.trim="templateData.title"
           v-validate="'required|max:40'"
           data-vv-as="タイトル"
           :name="'button-title' + indexParent"
@@ -24,7 +24,7 @@
           :name="'button-text' + indexParent"
           type="text"
           maxlength="61"
-          v-model="templateData.text"
+          v-model.trim="templateData.text"
           v-validate="'required|max:60'"
           data-vv-as="テキスト"
         />

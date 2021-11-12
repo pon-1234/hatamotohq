@@ -10,7 +10,7 @@
         maxlength="241"
         autocomplete="off"
         type="text"
-        v-model="messageData.text"
+        v-model.trim="messageData.text"
         v-validate="'required|max:240'"
         data-vv-as="質問文"
       />

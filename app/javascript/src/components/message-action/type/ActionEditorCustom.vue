@@ -167,7 +167,7 @@ export default {
     },
 
     changeDisplayText($event) {
-      this.displayText = $event.target.value;
+      this.displayText = $event.target.value.trim();
       this.updateData();
     },
 
