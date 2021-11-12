@@ -314,11 +314,11 @@
   }
 }
 
-.fw-table {
+.folder-right {
   width: 50vw;
 }
 
-.table_elem_name {
+.item-name {
   width: 10vw;
   margin: 0;
   white-space: pre-wrap;
@@ -330,7 +330,7 @@
 }
 
 @media screen and (max-width:1350px) {
-  .fw-table {
+  .folder-right {
     width: 35vw;
   }
 }

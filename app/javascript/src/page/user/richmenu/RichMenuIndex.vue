@@ -12,7 +12,7 @@
           @submitCreateFolder="submitCreateFolder"
         />
 
-        <div class="flex-grow-1 fw-table">
+        <div class="flex-grow-1 folder-right">
           <div v-if="curFolder">
             <a
               :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`"
@@ -37,7 +37,7 @@
               </thead>
               <tbody>
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
-                  <td><p class="table_elem_name font-weight-bold">{{ richmenu.name }}</p></td>
+                  <td><p class="item-name font-weight-bold">{{ richmenu.name }}</p></td>
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>

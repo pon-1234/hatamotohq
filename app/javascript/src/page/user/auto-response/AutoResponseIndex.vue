@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1 fw-table">
+        <div class="flex-grow-1 folder-right">
           <div class="col-r">
             <a
               v-if="folders && folders.length && folders[selectedFolderIndex]"

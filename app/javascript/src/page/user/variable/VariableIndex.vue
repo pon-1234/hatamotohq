@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1 fw-table" :key="contentKey">
+        <div class="flex-grow-1 folder-right" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/variables/new?folder_id=${curFolder.id}`"
@@ -32,8 +32,8 @@
               </thead>
               <tbody>
                 <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
-                  <td><p class="table_elem_name">{{ variable.name }}</p></td>
-                  <td><p class="table_elem_name">{{ variable.default || "-" }}</p></td>
+                  <td><p class="item-name">{{ variable.name }}</p></td>
+                  <td><p class="item-name">{{ variable.default || "-" }}</p></td>
                   <td>0</td>
                   <td>
                     <div class="btn-group">

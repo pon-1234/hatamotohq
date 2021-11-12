@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1 fw-table" :key="contentKey">
+        <div class="flex-grow-1 folder-right" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/reminders/new?folder_id=${curFolder.id}`"
@@ -30,7 +30,7 @@
               </thead>
               <tbody>
                 <tr v-for="(reminder, index) in curFolder.reminders" v-bind:key="reminder.id">
-                  <td><p class="table_elem_name">{{ reminder.name }}</p></td>
+                  <td><p class="item-name">{{ reminder.name }}</p></td>
                   <td>
                     <div class="d-flex">
                       <a
