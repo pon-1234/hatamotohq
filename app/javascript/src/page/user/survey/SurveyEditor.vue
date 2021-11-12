@@ -32,49 +32,54 @@
           </div>
           <div class="form-group d-flex">
             <label class="fw-300">タイトル<required-mark /></label>
-            <input
-              v-model.trim="surveyData.title"
-              type="text"
-              name="survey_title"
-              class="form-control flex-grow-1"
-              placeholder="タイトルを入力してください"
-              v-validate="'required|max:255'"
-              data-vv-as="タイトル"
-            />
-            <error-message :message="errors.first('survey_title')"></error-message>
+            <div class="flex-grow-1">
+              <input
+                v-model.trim="surveyData.title"
+                type="text"
+                name="survey_title"
+                class="form-control"
+                placeholder="タイトルを入力してください"
+                v-validate="'required|max:255'"
+                data-vv-as="タイトル"
+              />
+              <error-message :message="errors.first('survey_title')"></error-message>
+            </div>
           </div>
-
           <div class="form-group d-flex">
             <label class="fw-300">説明<required-mark /></label>
-            <textarea
-              rows="3"
-              v-model="surveyData.description"
-              type="text"
-              name="survey_description"
-              class="form-control flex-grow-1"
-              placeholder="説明を入力してください"
-              maxlength="1001"
-              v-validate="'required|max:1000'"
-              data-vv-as="説明"
-            >
-            </textarea>
-            <error-message :message="errors.first('survey_description')"></error-message>
+            <div class="flex-grow-1">
+              <textarea
+                rows="3"
+                v-model="surveyData.description"
+                type="text"
+                name="survey_description"
+                class="form-control flex-grow-1"
+                placeholder="説明を入力してください"
+                maxlength="1001"
+                v-validate="'required|max:1000'"
+                data-vv-as="説明"
+              >
+              </textarea>
+              <error-message :message="errors.first('survey_description')"></error-message>
+            </div>
           </div>
           <div class="form-group d-flex">
             <label class="fw-300">回答後の文章</label>
-            <textarea
-              rows="2"
-              v-model="surveyData.success_message"
-              type="text"
-              name="survey_success_message"
-              class="form-control flex-grow-1"
-              placeholder="回答後の文章を入力してください"
-              data-vv-as="回答後の文章"
-              maxlength="1001"
-              v-validate="'max:1000'"
-            >
-            </textarea>
-            <error-message :message="errors.first('survey_success_message')"></error-message>
+            <div class="flex-grow-1">
+              <textarea
+                rows="2"
+                v-model="surveyData.success_message"
+                type="text"
+                name="survey_success_message"
+                class="form-control"
+                placeholder="回答後の文章を入力してください"
+                data-vv-as="回答後の文章"
+                maxlength="1001"
+                v-validate="'max:1000'"
+              >
+              </textarea>
+              <error-message :message="errors.first('survey_success_message')"></error-message>
+            </div>
           </div>
 
           <div class="custom-control custom-checkbox">
