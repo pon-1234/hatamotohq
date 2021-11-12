@@ -15,8 +15,10 @@ export const mutations = {
   },
 
   updateFolder(state, folder) {
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+    const item = state.folders.find(item => item.id === folder.id);
+    if (item) {
+      item.name = folder.name;
+    }
   },
 
   deleteFolder(state, id) {
