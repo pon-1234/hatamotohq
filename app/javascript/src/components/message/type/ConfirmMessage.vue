@@ -6,7 +6,7 @@
       </div>
 
       <div class="d-flex">
-        <div v-for="(item, index) in data.actions" :key="index" class="d-flex button-item align-items-center justify-content-center">
+        <div v-for="(item, index) in data.actions" :key="index" class="d-flex button-item align-items-center justify-content-center btn-content-break">
           {{item.label}}&nbsp;
         </div>
       </div>
@@ -47,4 +47,9 @@ export default {
 .button-item:first-child {
   border-right: 1px solid #ccc;
 }
+
+.btn-content-break {
+  word-break: break-all;
+}
+
 </style>
