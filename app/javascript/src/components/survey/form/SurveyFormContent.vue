@@ -8,7 +8,6 @@
       <survey-form-text
         :question="question"
         :qnum="index + 1"
-        :awnser="question.answer"
         v-if="question.type === 'text'"
         :preview="preview"
       ></survey-form-text>
@@ -37,11 +36,21 @@
         v-if="question.type === 'checkbox'"
       ></survey-form-checkbox>
 
-      <!-- RaFile picker -->
-      <survey-form-file :question="question" :qnum="index + 1" v-if="question.type === 'file'"></survey-form-file>
+      <!-- Image picker -->
+      <survey-form-image :question="question" :qnum="index + 1" v-if="question.type === 'image'"></survey-form-image>
 
-      <!-- RaFile picker -->
+      <!-- Date picker -->
       <survey-form-date :question="question" :qnum="index + 1" v-if="question.type === 'date'"></survey-form-date>
+
+      <!-- Time picker -->
+      <survey-form-time :question="question" :qnum="index + 1" v-if="question.type === 'time'"></survey-form-time>
+
+      <!-- Datetime picker -->
+      <survey-form-datetime
+        :question="question"
+        :qnum="index + 1"
+        v-if="question.type === 'datetime'"
+      ></survey-form-datetime>
     </div>
   </div>
 </template>

@@ -17,7 +17,7 @@
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
-      <div class="alert alert-warning" role="alert" v-else>
+      <div class="alert alert-warning" role="alert" v-if="!survey && !loading">
         <h4 class="alert-heading">エラー</h4>
         <p>アクセスが拒否されました。</p>
       </div>
@@ -63,6 +63,7 @@ export default {
     ...mapActions('survey', ['getSurveyByCode', 'postAnswer']),
 
     async onSubmit(e) {
+      console.log('======');
       this.$refs.form.submit();
     }
     // async submit() {

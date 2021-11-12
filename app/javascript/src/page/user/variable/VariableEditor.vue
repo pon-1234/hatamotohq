@@ -103,12 +103,12 @@ export default {
           type: 'date'
         },
         {
-          name: '日付・時刻',
-          type: 'datetime'
-        },
-        {
           name: '時刻',
           type: 'time'
+        },
+        {
+          name: '日付・時刻',
+          type: 'datetime'
         }
       ]
     };

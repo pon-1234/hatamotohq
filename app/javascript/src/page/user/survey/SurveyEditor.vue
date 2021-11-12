@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label class="fw-300">フォーム名(管理用)<required-mark /></label>
+            <label class="fw-300 mb-auto">フォーム名(管理用)<required-mark /></label>
             <div class="flex-grow-1">
               <input
                 v-model.trim="surveyData.name"
@@ -31,7 +31,7 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label class="fw-300">タイトル<required-mark /></label>
+            <label class="fw-300 mb-auto">タイトル<required-mark /></label>
             <div class="flex-grow-1">
               <input
                 v-model.trim="surveyData.title"
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label class="fw-300">説明<required-mark /></label>
+            <label class="fw-300 mb-auto">説明<required-mark /></label>
             <div class="flex-grow-1">
               <textarea
                 rows="3"
@@ -64,7 +64,7 @@
             </div>
           </div>
           <div class="form-group d-flex">
-            <label class="fw-300">回答後の文章</label>
+            <label class="fw-300 mb-auto">回答後の文章</label>
             <div class="flex-grow-1">
               <textarea
                 rows="2"

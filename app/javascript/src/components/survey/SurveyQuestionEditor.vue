@@ -42,6 +42,8 @@
             <option value="image">画像</option>
             <option value="pdf">PDF</option>
             <option value="date">日付</option>
+            <option value="time">時刻</option>
+            <option value="datetime">日付・時刻</option>
           </select>
           <div class="custom-control custom-checkbox ml-2 text-nowrap">
             <input
@@ -111,6 +113,20 @@
             @input="object.content = $event"
             v-else-if="object.type === 'date'"
           ></survey-question-editor-date>
+
+          <survey-question-editor-datetime
+            :name="name + '-date-' + index"
+            :content="object.content"
+            @input="object.content = $event"
+            v-else-if="object.type === 'datetime'"
+          ></survey-question-editor-datetime>
+
+          <survey-question-editor-time
+            :name="name + '-date-' + index"
+            :content="object.content"
+            @input="object.content = $event"
+            v-else-if="object.type === 'time'"
+          ></survey-question-editor-time>
         </div>
       </div>
     </div>
