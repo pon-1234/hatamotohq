@@ -224,7 +224,7 @@
         <label>メールアドレス<span class="required">*</span></label>
         <input type="email" class="form-control" placeholder="メールアドレスを入力して下さい。" v-model="setting.email" required>
       </div>
-      <button type="submit" class="btn btn-save btn-block" @click="editSetting()" :disabled="isSubmit">保存</button>
+      <div class="btn btn-save btn-block" @click="editSetting()" :disabled="isSubmit">保存</div>
     </div>
   </div>
 </template>

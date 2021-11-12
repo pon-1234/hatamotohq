@@ -15,6 +15,7 @@
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/templates/new?folder_id=${curFolder.id}`"
+            target="_blank"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -46,7 +47,11 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/templates/${template.id}/edit`"
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/templates/${template.id}/edit`"
+                          target="_blank"
                           >テンプレートを編集</a
                         >
                         <a

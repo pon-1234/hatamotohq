@@ -13,7 +13,7 @@
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
         <div class="card-footer">
-          <button class="btn btn-success fw-120" type="submit">送信</button>
+          <div class="btn btn-success fw-120">送信</div>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
       </div>

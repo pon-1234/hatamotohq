@@ -168,8 +168,8 @@
     </div>
 
     <div class="d-flex">
-      <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()">保存</button>
-      <button type="submit" class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</button>
+      <div class="btn btn-success fw-120 mr-2" @click="saveScenario()">保存</div>
+      <div class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</div>
     </div>
     <loading-indicator :loading="loading" />
   </div>

@@ -185,7 +185,7 @@ export default {
     },
 
     openNew() {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/new`);
     },
 
     openEdit(scenario) {

@@ -2,11 +2,17 @@
   <div class="filter-list">
     <div class="checkbox-inline" v-for="option in options" :key="option.type">
       <div class="custom-control custom-checkbox mr-4">
-        <input type="checkbox" :value="option.type" v-model="selectedTypes" class="custom-control-input" :id="option.type">
+        <input
+          type="checkbox"
+          :value="option.type"
+          v-model="selectedTypes"
+          class="custom-control-input"
+          :id="option.type"
+        />
         <label class="custom-control-label" :for="option.type">{{ option.text }}</label>
       </div>
     </div>
-    <button class="btn btn-primary" type="submit" @click="applyFilter">表示変更</button>
+    <div class="btn btn-primary" @click="applyFilter">表示変更</div>
   </div>
 </template>
 <script>
@@ -25,9 +31,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations('media', [
-      'setFilter'
-    ]),
+    ...mapMutations('media', ['setFilter']),
 
     applyFilter() {
       this.setFilter(this.selectedTypes);
@@ -37,24 +41,24 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.form-check-label {
-  margin-bottom: 0px!important;
-  font-size: 16px!important;
-}
-
-.filter-list {
-  display: inline-flex;
-  align-items: center;
-}
-
-.btn-default {
-  margin-left: 10px;
-}
-
-@media(max-width: 600px) {
-  .filter-list {
-    flex-direction: column;
-    align-items: flex-start;
+  .form-check-label {
+    margin-bottom: 0px !important;
+    font-size: 16px !important;
   }
-}
+
+  .filter-list {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-default {
+    margin-left: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .filter-list {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 </style>

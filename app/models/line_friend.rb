@@ -42,8 +42,8 @@ class LineFriend < ApplicationRecord
 
   # Scope
   enum status: { active: 'active', blocked: 'blocked' }
-  scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
-  scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
+  scope :created_at_gteq, ->(date_str) { where('line_friends.created_at >= ?', date_str&.to_date&.beginning_of_day) }
+  scope :created_at_lteq, ->(date_str) { where('line_friends.created_at <= ?', date_str&.to_date&.end_of_day) }
 
   after_create_commit :exec_after_create_commit
 

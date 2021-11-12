@@ -101,8 +101,8 @@
             <input type="hidden" name="uid" :value="auth.uid" />
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
-              <button type="submit" class="btn btn-default btn-disconnect">同意する</button>
+              <div class="btn btn-default" data-dismiss="modal">キャンセル</div>
+              <div class="btn btn-default btn-disconnect">同意する</div>
             </div>
           </form>
         </div>

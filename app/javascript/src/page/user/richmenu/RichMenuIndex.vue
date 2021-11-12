@@ -14,7 +14,11 @@
 
         <div class="flex-grow-1">
           <div v-if="curFolder">
-            <a :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
+            <a
+              :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`"
+              class="btn btn-primary"
+              target="_blank"
+            >
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
@@ -56,7 +60,11 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
+                          target="_blank"
                           >リッチメニューを編集</a
                         >
                         <a

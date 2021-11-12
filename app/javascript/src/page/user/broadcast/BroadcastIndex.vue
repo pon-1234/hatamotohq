@@ -75,6 +75,7 @@
                         role="button"
                         class="dropdown-item"
                         :href="`${rootPath}/user/broadcasts/${broadcast.id}/edit`"
+                        target="_blank"
                         v-if="broadcast.editable"
                         >一斉配信を編集する</a
                       >
@@ -213,11 +214,11 @@ export default {
     },
 
     openNew() {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/new`);
     },
 
     openMessageIndex(broadcast) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`);
     },
 
     formattedDatetime(time) {
