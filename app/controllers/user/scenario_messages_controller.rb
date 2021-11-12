@@ -9,7 +9,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   # GET /user/scenarios/:scenario_id/messages
   def index
     if request.format.json?
-      @messages = @scenario.scenario_messages.ordered.page(params[:page])
+      @messages = @scenario.scenario_messages.order(step: :asc).page(params[:page])
     end
     respond_to do |format|
       format.html
