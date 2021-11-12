@@ -11,9 +11,9 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 folder-right">
           <div class="btn btn-primary" @click="addTag"><i class="uil-plus"></i> 新規登録</div>
-          <div class="mt-2">
+          <div class="table-responsive mt-2">
             <table class="table mb-0">
               <thead class="thead-light">
                 <tr>

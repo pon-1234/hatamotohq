@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1" :key="contentKey">
+        <div class="flex-grow-1 folder-right" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/reminders/new?folder_id=${curFolder.id}`"
@@ -19,52 +19,54 @@
           >
             <i class="uil-plus"></i> 新規作成
           </a>
-          <div class="mt-2" v-if="curFolder">
+          <div class="table-responsive mt-2" v-if="curFolder">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>リマインダ名</th>
-                  <th>操作</th>
-                  <th>フォルダー</th>
+                  <th class="mw-120">リマインダ名</th>
+                  <th class="mw-260">操作</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(reminder, index) in curFolder.reminders" v-bind:key="reminder.id">
-                  <td>{{ reminder.name }}</td>
+                  <td><p class="item-name">{{ reminder.name }}</p></td>
                   <td>
-                    <a
-                      role="button"
-                      :href="`${rootPath}/user/reminders/${reminder.id}/episodes`"
-                      class="btn btn-sm btn-light"
-                      >配信タイミング一覧</a
-                    >
-                    <div class="btn-group">
-                      <button
-                        type="button"
-                        class="btn btn-light btn-sm dropdown-toggle"
-                        data-toggle="dropdown"
-                        aria-expanded="false"
+                    <div class="d-flex">
+                      <a
+                        role="button"
+                        :href="`${rootPath}/user/reminders/${reminder.id}/episodes`"
+                        class="btn btn-sm btn-light mr-1"
+                        >配信タイミング一覧</a
                       >
-                        操作 <span class="caret"></span>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(reminder)">リマインダを編集する</a>
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          data-toggle="modal"
-                          data-target="#modalCopyReminder"
-                          @click="curReminderIndex = index"
-                          >リマインダをコピー</a
+                      <div class="btn-group">
+                        <button
+                          type="button"
+                          class="btn btn-light btn-sm dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
                         >
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          data-toggle="modal"
-                          data-target="#modalDeleteTemplate"
-                          @click="curReminderIndex = index"
-                          >リマインダを削除</a
-                        >
+                          操作 <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a role="button" class="dropdown-item" @click="openEdit(reminder)">リマインダを編集する</a>
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalCopyReminder"
+                            @click="curReminderIndex = index"
+                            >リマインダをコピー</a
+                          >
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalDeleteTemplate"
+                            @click="curReminderIndex = index"
+                            >リマインダを削除</a
+                          >
+                        </div>
                       </div>
                     </div>
                   </td>

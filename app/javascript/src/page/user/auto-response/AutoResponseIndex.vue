@@ -11,7 +11,7 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 folder-right">
           <div class="col-r">
             <a
               v-if="folders && folders.length && folders[selectedFolderIndex]"
@@ -23,93 +23,95 @@
             </a>
           </div>
           <div class="mt-2">
-            <table class="table mb-0 table-centered">
-              <thead class="thead-light">
-                <tr>
-                  <th class="mw-100">自動応答名</th>
-                  <th class="mw-120">キーワード</th>
-                  <th class="mw-100">メッセージ</th>
-                  <th class="fw-100">状況</th>
-                  <th class="fw-100">ヒット数</th>
-                  <th class="fw-100">操作</th>
-                  <th class="mw-150">フォルダー</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
-                  <td>
-                    <div class="mxw-400 max-2-lines">{{ autoResponse.name }}</div>
-                  </td>
-                  <td>
-                    <div><small>どれか1つにマッチ</small></div>
-                    <div>
-                      <span
-                        class="badge badge-pill badge-warning mr-1 pt-1"
-                        v-for="(keyword, index) in autoResponse.keywords"
-                        v-bind:key="index"
-                      >
-                        <div class="mxw-200 text-truncate">{{ keyword }}</div>
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
-                      <message-content :data="item.content"></message-content>
-                    </div>
-                  </td>
-
-                  <td>
-                    <template v-if="autoResponse.status === 'enabled'">
-                      <i class="mdi mdi-circle text-success"></i> 有効
-                    </template>
-                    <template v-else> <i class="mdi mdi-circle"></i> 無効 </template>
-                  </td>
-
-                  <td>
-                    {{ autoResponse.hit_count }}
-                  </td>
-
-                  <td>
-                    <div class="btn-group">
-                      <button
-                        type="button"
-                        class="btn btn-light btn-sm dropdown-toggle"
-                        data-toggle="dropdown"
-                        aria-expanded="false"
-                      >
-                        操作 <span class="caret"></span>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集</a>
-                        <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)"
-                          >{{ autoResponse.status === "enabled" ? "OFF" : "ON" }}にする</a
+            <div class="table-responsive">
+              <table class="table mb-0 table-centered">
+                <thead class="thead-light">
+                  <tr>
+                    <th class="mw-120">自動応答名</th>
+                    <th class="mw-120">キーワード</th>
+                    <th class="mw-100">メッセージ</th>
+                    <th class="fw-100">状況</th>
+                    <th class="fw-100">ヒット数</th>
+                    <th class="fw-100">操作</th>
+                    <th class="mw-150">フォルダー</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="autoResponse in autoResponses" v-bind:key="autoResponse.id">
+                    <td>
+                      <div class="mxw-400 max-2-lines">{{ autoResponse.name }}</div>
+                    </td>
+                    <td>
+                      <div><small>どれか1つにマッチ</small></div>
+                      <div>
+                        <span
+                          class="badge badge-pill badge-warning mr-1 pt-1"
+                          v-for="(keyword, index) in autoResponse.keywords"
+                          v-bind:key="index"
                         >
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          data-toggle="modal"
-                          data-target="#modalCopyAutoResponse"
-                          @click="showConfirmCopyModal(autoResponse)"
-                          >自動応答をコピー</a
-                        >
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          data-toggle="modal"
-                          data-target="#modalDeleteAutoResponse"
-                          @click="showConfirmDeleteModal(autoResponse)"
-                          >自動応答を削除</a
-                        >
+                          <div class="mxw-200 text-truncate">{{ keyword }}</div>
+                        </span>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div v-if="curFolder">{{ curFolder.name }}</div>
-                    <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    </td>
+                    <td>
+                      <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
+                        <message-content :data="item.content"></message-content>
+                      </div>
+                    </td>
+
+                    <td>
+                      <template v-if="autoResponse.status === 'enabled'">
+                        <i class="mdi mdi-circle text-success"></i> 有効
+                      </template>
+                      <template v-else> <i class="mdi mdi-circle"></i> 無効 </template>
+                    </td>
+
+                    <td>
+                      {{ autoResponse.hit_count }}
+                    </td>
+
+                    <td>
+                      <div class="btn-group">
+                        <button
+                          type="button"
+                          class="btn btn-light btn-sm dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          操作 <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a role="button" class="dropdown-item" @click="openEdit(autoResponse)">自動応答を編集</a>
+                          <a role="button" class="dropdown-item" @click="updateAutoResponseStatus(autoResponse)"
+                            >{{ autoResponse.status === "enabled" ? "OFF" : "ON" }}にする</a
+                          >
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalCopyAutoResponse"
+                            @click="showConfirmCopyModal(autoResponse)"
+                            >自動応答をコピー</a
+                          >
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalDeleteAutoResponse"
+                            @click="showConfirmDeleteModal(autoResponse)"
+                            >自動応答を削除</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div v-if="curFolder">{{ curFolder.name }}</div>
+                      <span class="font-12">{{ formattedDate(autoResponse.created_at) }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <div class="text-center mt-5" v-if="!autoResponses || autoResponses.length === 0">
               <b>自動応答はありません。</b>
             </div>
