@@ -4,10 +4,10 @@
     <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
       <div class="form-group mt-2 position-relative">
         <datetime
-          input-class="form-control btn border border-light"
+          input-class="form-control btn border border-light text-left"
           type="time"
           :phrases="{ ok: '確定', cancel: '閉じる' }"
-          placeholder="日付を選択してください"
+          placeholder="時刻を選択してください"
           value-zone="Asia/Tokyo"
           zone="Asia/Tokyo"
           :name="`answers[${qnum}][answer]`"

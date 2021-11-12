@@ -39,6 +39,9 @@
       <!-- Image picker -->
       <survey-form-image :question="question" :qnum="index + 1" v-if="question.type === 'image'"></survey-form-image>
 
+      <!-- Image picker -->
+      <survey-form-pdf :question="question" :qnum="index + 1" v-if="question.type === 'pdf'"></survey-form-pdf>
+
       <!-- Date picker -->
       <survey-form-date :question="question" :qnum="index + 1" v-if="question.type === 'date'"></survey-form-date>
 

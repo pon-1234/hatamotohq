@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkerDispatchBroadcast
+class DispatchBroadcastWorker
   include Sidekiq::Worker
 
   def perform(*args)

@@ -26,6 +26,7 @@ module SurveysHelper
 
   def assign_variable(friend, variable, answer)
     friend_variable = FriendVariable.find_or_initialize_by(line_friend: friend, variable_id: variable['id'], survey_answer_id: answer.id)
+    byebug
     if answer.survey_question.file?
       friend_variable.value = rails_blob_url(answer.file) if answer.file.attached?
     else

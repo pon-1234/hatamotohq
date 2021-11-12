@@ -12,7 +12,9 @@ module QuestionType
       pulldown: 'pulldown',
       image: 'image',
       pdf: 'pdf',
-      date: 'date'
+      date: 'date',
+      time: 'time',
+      datetime: 'datetime'
     }
   end
 end

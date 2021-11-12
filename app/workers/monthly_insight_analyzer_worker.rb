@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkerMonthlyInsightAnalyzer
+class MonthlyInsightAnalyzerWorker
   include Sidekiq::Worker
 
   def perform(*args)

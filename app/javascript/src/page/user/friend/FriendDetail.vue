@@ -137,13 +137,10 @@
                 <tbody>
                   <tr v-for="(variable, index) in variables" :key="index">
                     <th>{{ variable.name }}</th>
-                    <td v-if="variable.type === 'file'">
-                      <img
-                        :src="variable.value || '/img/no-image-profile.png'"
-                        alt="table-user"
-                        class="mr-2 rounded-circle"
-                      />
+                    <td v-if="variable.type === 'image'">
+                      <div v-lazy:background-image="variable.value" class="fw-120 fh-81 thumbnail"></div>
                     </td>
+                    <td v-else-if="variable.type === 'pdf'">PDF</td>
                     <td v-else>{{ variable.value || "未設定" }}</td>
                   </tr>
                 </tbody>

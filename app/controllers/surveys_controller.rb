@@ -8,7 +8,7 @@ class SurveysController < ApplicationController
   # GET /surveys/:code
   def show
     @survey = Survey.find_by(code: params[:code])
-    unless @survey.published?
+    if @survey.blank? || !@survey.published?
       render_bad_request
     end
   end
@@ -23,9 +23,9 @@ class SurveysController < ApplicationController
   def answer
     build_answer(@survey, answer_params)
     redirect_to survey_answer_success_path(code: params[:code], friend_id: params[:friend_id])
-  rescue => e
-    p e
-    redirect_to survey_answer_error_path(code: params[:code], friend_id: params[:friend_id])
+    # rescue => e
+    #   p e
+    #   redirect_to survey_answer_error_path(code: params[:code], friend_id: params[:friend_id])
   end
 
   # GET /surveys/:code/:friend_id/answer_success

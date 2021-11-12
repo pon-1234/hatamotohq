@@ -8,7 +8,7 @@
             type="file"
             class="custom-file-input"
             id="inputFile"
-            accept="image/*"
+            accept=".pdf"
             :name="`answers[${qnum}][answer]`"
             @change="onFileChange"
           />
