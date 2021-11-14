@@ -14,18 +14,20 @@
       </div>
 
     </div>
-
+    <span v-if="errorMessage" class="w-100 text-center error">{{ errorMessage }}</span>
     <div style="position: relative; text-align: center; height: 40px; display: flex;">
       <label class="btn-img-upload text-info" role="button">
         <input @change="changeImage($event)" type="file" name="image"
                style="position: absolute; z-index: 1; top: 0; opacity: 0; width: 100%">
-        <i class="fa fa-image"></i> アップロード
+        <i class="mdi mdi-image-size-select-actual"></i> アップロード
       </label>
     </div>
   </div>
 </template>
 
 <script>
+import Media from '@/core/media';
+
 export default {
   props: ['preview', 'data', 'width', 'height'],
 
@@ -49,7 +51,8 @@ export default {
       mouseY: 0,
       ratioW: 1,
       ratioH: 1,
-      remoteW: 0
+      remoteW: 0,
+      errorMessage: null
     };
   },
 
@@ -346,25 +349,38 @@ export default {
       img.x += delta.x;
       img.y += delta.y;
     },
+
     changeImage(ev) {
       const blob = ev.currentTarget.files[0];
-      const img = new Image();
-      img.onload = () => {
-        const imgObj = this.object.image;
-        imgObj.data = img;
-        imgObj.zoom = 1;
-        imgObj.x = this.wCenter - img.width / 2;
-        imgObj.y = this.hCenter - img.height / 2;
-        imgObj.w = img.width;
-        imgObj.h = img.height;
-        imgObj.origin = {
-          w: img.width,
-          h: img.height
+      const _this = this;
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(blob);
+      reader.onload = function(e) {
+        const validMimeBytes = Media.validateFileByMimeBytes(e, 'image');
+        if (!validMimeBytes.valid) {
+          _this.errorMessage = validMimeBytes.message;
+          return;
+        }
+        const img = new Image();
+        img.onload = () => {
+          const imgObj = _this.object.image;
+          imgObj.data = img;
+          imgObj.zoom = 1;
+          imgObj.x = _this.wCenter - img.width / 2;
+          imgObj.y = _this.hCenter - img.height / 2;
+          imgObj.w = img.width;
+          imgObj.h = img.height;
+          imgObj.origin = {
+            w: img.width,
+            h: img.height
+          };
+          $('input[type="file"]').val(null);
+          _this.canvasRender();
         };
-        $('input[type="file"]').val(null);
-        this.canvasRender();
+        img.src = URL.createObjectURL(blob);
       };
-      img.src = URL.createObjectURL(blob);
+      this.errorMessage = '';
+      ev.target.value = '';
     },
 
     syncObj() {
@@ -376,11 +392,14 @@ export default {
 
 <style scoped lang="scss">
   ::v-deep {
-
     .btn-img-upload {
       font-weight: normal;
       position: relative;
       margin: auto;
     }
+  }
+
+  .error {
+    color: red;
   }
 </style>
