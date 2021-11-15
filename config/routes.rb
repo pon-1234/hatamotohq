@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'surveys/:code', to: 'surveys#show'
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
+  get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
 
   # User
   constraints Subdomain::UserConstraint.new do

@@ -3,6 +3,11 @@
 module SurveysHelper
   def build_answer(survey, params)
     @friend = LineFriend.find_by(line_user_id: params[:friend_id])
+    old_response = SurveyResponse.find_by(survey: survey, line_friend: @friend)
+    if old_response.present? && !survey.re_answer?
+      byebug
+      return raise 'You are already responsed!'
+    end
     response = SurveyResponse.new(survey: survey, line_friend: @friend)
     response.answer_count += 1
     response.save!

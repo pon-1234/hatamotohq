@@ -13,7 +13,7 @@
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
         <div class="card-footer">
-          <div class="btn btn-success fw-120">送信</div>
+          <button type="submit" class="btn btn-success fw-120">送信</button>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
@@ -63,7 +63,7 @@ export default {
     ...mapActions('survey', ['getSurveyByCode', 'postAnswer']),
 
     async onSubmit(e) {
-      console.log('======');
+      console.log('=========');
       this.$refs.form.submit();
     }
     // async submit() {

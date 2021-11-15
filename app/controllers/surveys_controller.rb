@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SurveysController < ApplicationController
-  before_action :find_survey, only: [:show, :answer]
+  before_action :find_survey, only: [:show, :answer, :form]
 
   include SurveysHelper
 
@@ -17,6 +17,8 @@ class SurveysController < ApplicationController
   def form
     @code = params[:code]
     @friend_id = params[:friend_id]
+
+    redirect_if_already_answered
   end
 
   # POST /surveys/:code/:friend_id
@@ -35,6 +37,10 @@ class SurveysController < ApplicationController
   def answer_error
   end
 
+  # GET /surveys/:code/:friend_id/already_answer
+  def already_answer
+  end
+
   private
     def answer_params
       params.permit(
@@ -49,5 +55,13 @@ class SurveysController < ApplicationController
 
     def find_survey
       @survey = Survey.find_by(code: params[:code])
+    end
+
+    def redirect_if_already_answered
+      friend = LineFriend.find_by(line_user_id: @friend_id)
+      response = SurveyResponse.find_by(survey: @survey, line_friend_id: friend.id)
+      if !@survey.re_answer? && response.present?
+        redirect_to survey_already_answer_path(code: params[:code], friend_id: params[:friend_id])
+      end
     end
 end
