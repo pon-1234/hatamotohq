@@ -131,9 +131,10 @@ export default {
       const _this = this;
       const reader = new FileReader();
       reader.readAsArrayBuffer(input);
-      reader.onload = function(e) {
-        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : '';
-        const validMimeBytes = Media.validateFileByMimeBytes(e, mimetype);
+      reader.onload = async function(e) {
+        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : _this.oldType;
+        const validMimeBytes = await Media.validateFileByMimeBytes(e, mimetype, (window.URL || window.webkitURL).createObjectURL(input));
+
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;

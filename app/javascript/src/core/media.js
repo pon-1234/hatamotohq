@@ -100,7 +100,7 @@ class Media {
     return result;
   }
 
-  static validateFileByMimeBytes(even, type) {
+  static async validateFileByMimeBytes(even, type, url) {
     const result = {
       valid: true
     };
@@ -110,10 +110,26 @@ class Media {
     for (let i = 0; i < arr.length; i++) {
       header += arr[i].toString(16);
     }
-    if (!this.isValidMineType(type, header)) {
+
+    if ((type === 'video' || type === 'audio')) {
+      let total = 0;
+      for (let i = 0; i < arr.length - 1; i++) {
+        total += arr[i];
+      }
+      if (total === 0) {
+        const isValidFileUploadIsVideo = await this.validateFileIsVideo(url);
+        if ((type === 'video' && isValidFileUploadIsVideo) || (type === 'audio' && !isValidFileUploadIsVideo)) {
+          return result;
+        }
+      }
+    }
+
+    const isValidType = await this.isValidMineType(type, header);
+    if (!isValidType) {
       result.valid = false;
       result.message = 'ファイルの形式が無効です。';
     }
+
     return result;
   }
 
@@ -129,6 +145,19 @@ class Media {
     } else if (!type) {
       return false;
     }
+  }
+
+  static validateFileIsVideo(url) {
+    // eslint-disable-next-line promise/param-names
+    return new Promise((res, rej) => {
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.onloadedmetadata = (evt) => {
+        res(!!(video.videoHeight && video.videoWidth));
+        video.src = null;
+      };
+      video.src = url;
+    });
   }
 
   static getDuration(data) {
