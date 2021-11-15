@@ -19,7 +19,9 @@ export default {
 
   computed: {
     readableTime() {
-      return moment(this.message.timestamp).format('HH:mm');
+      return moment(this.message.timestamp)
+        .tz('Asia/Tokyo')
+        .format('HH:mm');
     }
   }
 };
