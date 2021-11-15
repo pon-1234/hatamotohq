@@ -1,4 +1,5 @@
 import SurveyAPI from '../api/survey_api';
+import FolderAPI from '../api/folder_api';
 
 export const state = {
   folders: []
@@ -14,11 +15,11 @@ export const mutations = {
     state.folders = folders;
   },
 
-  updateFolder(state, folder) {
-    // folder.surveys = [];
-    // folder.surveys_count = 0;
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
   },
 
   deleteFolder(state, id) {
@@ -30,6 +31,36 @@ export const mutations = {
 export const getters = {};
 
 export const actions = {
+  async createFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.create(payload);
+      context.commit('pushFolder', folder);
+      return folder;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateFolder(context, payload) {
+    try {
+      const response = await FolderAPI.update(payload);
+      context.commit('updateFolder', response);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async deleteFolder(context, id) {
+    try {
+      const response = await FolderAPI.delete(id);
+      context.commit('deleteFolder', id);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
   /**
    * Survey is belong to a folder, get all folders of current account
    * @param {Context} context store context

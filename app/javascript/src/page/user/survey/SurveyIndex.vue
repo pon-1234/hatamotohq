@@ -173,7 +173,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', ['getSurveys', 'copySurvey']),
+    ...mapActions('survey', ['createFolder', 'updateFolder', 'getSurveys', 'copySurvey']),
     forceRerender() {
       this.contentKey++;
     },
@@ -181,23 +181,24 @@ export default {
     changeSelectedFolder(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
-      this.blink();
     },
-    submitUpdateFolder(value) {
-      this.$store
-        .dispatch('global/editFolder', value)
-        .done(res => {
-          this.curFolder.name = res.name;
-        })
-        .fail(e => {});
+
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
     },
-    submitCreateFolder(value) {
-      this.$store
-        .dispatch('global/createFolder', value)
-        .done(res => {
-          this.getSurveys();
-        })
-        .fail(e => {});
+
+    async submitCreateFolder(folder) {
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
     updateStatus(survey) {
       this.$store
