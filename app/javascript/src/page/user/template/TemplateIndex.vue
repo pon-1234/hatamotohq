@@ -15,7 +15,6 @@
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/templates/new?folder_id=${curFolder.id}`"
-            target="_blank"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成

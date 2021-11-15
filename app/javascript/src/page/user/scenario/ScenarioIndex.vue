@@ -28,7 +28,9 @@
               <tbody>
                 <tr v-for="(scenario, index) in scenarios" :key="index">
                   <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
-                  <td><p class="scenario_title"> {{ scenario.title }}</p></td>
+                  <td>
+                    <p class="scenario_title">{{ scenario.title }}</p>
+                  </td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">
@@ -185,7 +187,7 @@ export default {
     },
 
     openNew() {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/new`);
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
     },
 
     openEdit(scenario) {

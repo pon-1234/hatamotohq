@@ -14,11 +14,7 @@
 
         <div class="flex-grow-1 folder-right">
           <div v-if="curFolder">
-            <a
-              :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`"
-              class="btn btn-primary"
-              target="_blank"
-            >
+            <a :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
@@ -37,7 +33,9 @@
               </thead>
               <tbody>
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
-                  <td><p class="item-name font-weight-bold">{{ richmenu.name }}</p></td>
+                  <td>
+                    <p class="item-name font-weight-bold">{{ richmenu.name }}</p>
+                  </td>
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>

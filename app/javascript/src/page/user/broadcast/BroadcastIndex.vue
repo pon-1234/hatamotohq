@@ -214,7 +214,7 @@ export default {
     },
 
     openNew() {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/new`);
+      window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
     },
 
     openMessageIndex(broadcast) {

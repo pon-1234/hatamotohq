@@ -16,7 +16,6 @@
             <a
               v-if="folders && folders.length && folders[selectedFolderIndex]"
               :href="rootPath + '/user/auto_responses/new?folder_id=' + folders[selectedFolderIndex].id"
-              target="_blank"
               class="btn btn-primary"
             >
               <i class="uil-plus"></i> 新規作成
