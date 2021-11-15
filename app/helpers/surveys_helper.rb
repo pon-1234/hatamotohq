@@ -16,6 +16,7 @@ module SurveysHelper
       survey_answer = SurveyAnswer.new(survey_response: response)
       survey_answer.survey_question_id = answer[:id]
       question = SurveyQuestion.find(survey_answer.survey_question_id)
+
       if question.file?
         survey_answer.file = answer[:answer]
       else
@@ -26,9 +27,7 @@ module SurveysHelper
       variable = question.content['variable']
       assign_variable(friend, variable, survey_answer) if variable.present? && variable['id'].present?
     end
-
-    # Invoke action after answer survey
-    invoke_after_action(survey, friend) if survey.after_action.present?
+    AfterAnsweredSurveyJob.perform_later(response.id)
   end
 
   private
@@ -40,9 +39,5 @@ module SurveysHelper
         friend_variable.value = answer.answer
       end
       friend_variable.save!
-    end
-
-    def invoke_after_action(survey, friend)
-      ActionHandlerJob.perform_now(friend, survey.after_action['data'])
     end
 end

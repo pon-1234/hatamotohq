@@ -39,6 +39,5 @@ module Api
       .delete('image/svg+xml')
     ActiveSupport::Deprecation.silenced = true
     config.active_job.queue_adapter = :sidekiq
-    ActiveJob::Base.logger = Logger.new(nil)
   end
 end

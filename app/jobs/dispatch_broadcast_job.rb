@@ -7,7 +7,6 @@ class DispatchBroadcastJob < ApplicationJob
   MULTICAST_BATCH_SIZE = 500
 
   def perform(broadcast_id)
-    ActiveJob::Base.logger.info "DispatchBroadcastJob ID = #{broadcast_id}"
     @broadcast = Broadcast.find(broadcast_id)
     # Change broadcast status to sending
     @broadcast.update_columns(status: 'sending', deliver_at: Time.zone.now)
@@ -15,7 +14,6 @@ class DispatchBroadcastJob < ApplicationJob
     success = dispatch_with_condition if @broadcast.broadcast_type_condition?
     @broadcast.update_columns(status: success ? 'done' : 'error')
   rescue => e
-    ActiveJob::Base.logger.info "DispatchBroadcastJob exception = #{e.message}"
     @broadcast.update_columns(status: 'error')
   end
 
@@ -36,10 +34,16 @@ class DispatchBroadcastJob < ApplicationJob
       send_messages_with_survey_action(channels, nomalized_messages_data)
     else
       # Deliver messages via line api
-      success = send_broadcast(line_account, nomalized_messages_data)
-      nomalized_messages_data.each do |content|
-        insert_delivered_message(channels, content)
-      end if success
+      response = send_broadcast(line_account, nomalized_messages_data)
+      success = response.code == '200'
+      if success
+        nomalized_messages_data.each do |content|
+          insert_delivered_message(channels, content)
+        end
+      else
+        @broadcast.logs = response.body
+        @broadcast.save!
+      end
       success
     end
   end

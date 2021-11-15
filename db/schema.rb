@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_144441) do
+ActiveRecord::Schema.define(version: 2021_11_15_160932) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 2021_11_09_144441) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.text 'logs'
     t.index ['line_account_id'], name: 'index_broadcasts_on_line_account_id'
   end
 
