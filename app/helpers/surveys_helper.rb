@@ -2,13 +2,12 @@
 
 module SurveysHelper
   def build_answer(survey, params)
-    @friend = LineFriend.find_by(line_user_id: params[:friend_id])
-    old_response = SurveyResponse.find_by(survey: survey, line_friend: @friend)
+    friend = LineFriend.find_by(line_user_id: params[:friend_id])
+    old_response = SurveyResponse.find_by(survey: survey, line_friend: friend)
     if old_response.present? && !survey.re_answer?
-      byebug
       return raise 'You are already responsed!'
     end
-    response = SurveyResponse.new(survey: survey, line_friend: @friend)
+    response = SurveyResponse.new(survey: survey, line_friend: friend)
     response.answer_count += 1
     response.save!
 
@@ -25,17 +24,25 @@ module SurveysHelper
       survey_answer.save!
 
       variable = question.content['variable']
-      assign_variable(@friend, variable, survey_answer) if variable['id'].present?
+      assign_variable(friend, variable, survey_answer) if variable.present? && variable['id'].present?
     end
+
+    # Invoke action after answer survey
+    invoke_after_action(survey, friend) if survey.after_action.present?
   end
 
-  def assign_variable(friend, variable, answer)
-    friend_variable = FriendVariable.find_or_initialize_by(line_friend: friend, variable_id: variable['id'], survey_answer_id: answer.id)
-    if answer.survey_question.file?
-      friend_variable.value = rails_blob_url(answer.file) if answer.file.attached?
-    else
-      friend_variable.value = answer.answer
+  private
+    def assign_variable(friend, variable, answer)
+      friend_variable = FriendVariable.find_or_initialize_by(line_friend: friend, variable_id: variable['id'], survey_answer_id: answer.id)
+      if answer.survey_question.file?
+        friend_variable.value = rails_blob_url(answer.file) if answer.file.attached?
+      else
+        friend_variable.value = answer.answer
+      end
+      friend_variable.save!
     end
-    friend_variable.save!
-  end
+
+    def invoke_after_action(survey, friend)
+      ActionHandlerJob.perform_now(friend, survey.after_action['data'])
+    end
 end

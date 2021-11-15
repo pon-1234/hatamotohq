@@ -223,6 +223,7 @@ export default {
         'after_action'
       ]);
       payload.status = published ? 'published' : 'draft';
+      console.log('----ffffff--', this.surveyData.questions);
       payload.survey_questions_attributes = this.surveyData.questions;
       let response = null;
       if (this.survey_id) {
