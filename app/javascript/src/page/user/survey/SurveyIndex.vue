@@ -155,6 +155,15 @@ export default {
   },
   async beforeMount() {
     await this.getSurveys();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.changeSelectedFolder(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -200,6 +209,7 @@ export default {
         window.toastr.error('フォルダーの作成は失敗しました。');
       }
     },
+
     updateStatus(survey) {
       this.$store
         .dispatch('survey/updateStatus', {

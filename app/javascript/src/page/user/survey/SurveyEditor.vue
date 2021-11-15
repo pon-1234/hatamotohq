@@ -145,6 +145,7 @@
 <script>
 import Util from '@/core/util';
 import { mapActions, mapState } from 'vuex';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['survey_id', 'plan'],
@@ -153,7 +154,7 @@ export default {
   },
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       contentKey: 0,
       loading: true,
       surveyData: {
@@ -201,18 +202,7 @@ export default {
     async validateForm() {
       const result = await this.$validator.validateAll();
       if (!result) {
-        const $input = $('input, textarea');
-        for (const ele of $input) {
-          let input = $(ele);
-          if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-            if (input.is(':hidden')) {
-              input = input.parent();
-            }
-            $('html,body').animate({ scrollTop: input.offset().top - 250 }, 'fast');
-            break;
-          }
-        }
-        return false;
+        return ViewHelper.scrollToRequiredField(false);
       }
       return true;
     },
@@ -241,7 +231,10 @@ export default {
         response = await this.createSurvey(payload);
       }
       if (response) {
-        Util.showSuccessThenRedirect('回答フォームの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/surveys`);
+        Util.showSuccessThenRedirect(
+          '回答フォームの保存は完了しました。',
+          `${this.rootPath}/user/surveys?folder_id=${this.surveyData.folder_id}`
+        );
       } else {
         window.toastr.error('回答フォームの保存は失敗しました。');
       }
