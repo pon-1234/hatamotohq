@@ -51,9 +51,7 @@
                     <template v-if="survey.responses_count === 0"> 未回答 </template>
                     <template v-else>
                       {{ survey.responses_count }}回答／<span class="font-12">{{ survey.users_count }}人</span>
-                      <a :href="`${rootPath}/user/surveys/${survey.id}/answers`" class="btn btn-sm btn-light ml-2"
-                        >表示</a
-                      >
+                      <a :href="`${rootPath}/user/surveys/${survey.id}`" class="btn btn-sm btn-light ml-2">表示</a>
                     </template>
                   </td>
                   <td>

@@ -22,8 +22,14 @@
 #  fk_rails_...  (survey_response_id => survey_responses.id)
 #
 class SurveyAnswer < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   belongs_to :survey_response
   belongs_to :survey_question
 
   has_one_attached :file
+
+  def file_url
+    rails_public_blob_url(file) if file.attached?
+  end
 end

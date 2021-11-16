@@ -2,7 +2,15 @@ import SurveyAPI from '../api/survey_api';
 import FolderAPI from '../api/folder_api';
 
 export const state = {
-  folders: []
+  folders: [],
+  users: [],
+  responses: [],
+  usersTotalRows: 0,
+  usersPerPage: 0,
+  usersCurPage: 0,
+  responsesTotalRows: 0,
+  responsesPerPage: 0,
+  responsesCurPage: 0,
 };
 
 export const mutations = {
@@ -25,6 +33,26 @@ export const mutations = {
   deleteFolder(state, id) {
     const index = state.folders.findIndex(_ => _.id === id);
     state.folders.splice(index, 1);
+  },
+
+  setUsers(state, users) {
+    state.users = users;
+  },
+
+  setUsersMeta(state, meta) {
+    state.usersTotalRows = meta.total_count;
+    state.usersPerPage = meta.limit_value;
+    state.usersCurPage = meta.current_page;
+  },
+
+  setResponses(state, responses) {
+    state.responses = responses;
+  },
+
+  setResponsesMeta(state, meta) {
+    state.responsesTotalRows = meta.total_count;
+    state.responsesPerPage = meta.limit_value;
+    state.responsesCurPage = meta.current_page;
   }
 };
 
@@ -151,77 +179,27 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async getAnsweredUsers(context, query) {
+    try {
+      const response = await SurveyAPI.answeredUsers(query);
+      context.commit('setUsers', response.data);
+      context.commit('setUsersMeta', response.meta);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getResponses(context, query) {
+    try {
+      const response = await SurveyAPI.responses(query);
+      context.commit('setResponses', response.data);
+      context.commit('setResponsesMeta', response.meta);
+      return response;
+    } catch (error) {
+      return null;
+    }
   }
-
-  // updateStatus(_, data) {
-  //   return SurveyAPI.updateStatus(data).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-  // getCustomers(_, query) {
-  //   return SurveyAPI.getCustomers(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-  // answersOfCustomer(_, query) {
-  //   return SurveyAPI.answersOfCustomer(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-  // copy(_, query) {
-  //   return SurveyAPI.copy(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-  // destroy(_, query) {
-  //   return SurveyAPI.delete(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-
-  // addSurveyProfile(_, data) {
-  //   _.dispatch('system/setLoading', true, { root: true });
-
-  //   return SurveyAPI.addSurveyProfile(data).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   }).always(function() {
-  //     _.dispatch('system/setLoading', false, { root: true });
-  //   });
-  // },
-
-  // getSurveyProfiles(_, query = {}) {
-  //   return SurveyAPI.getSurveyProfiles(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-
-  // updateSurveyProfile(_, data) {
-  //   return SurveyAPI.updateSurveyProfile(data).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // },
-
-  // friendAnswers(_, query) {
-  //   return SurveyAPI.friendAnswers(query).done((res) => {
-  //     return Promise.resolve(res);
-  //   }).fail((err) => {
-  //     return Promise.reject(err);
-  //   });
-  // }
 };

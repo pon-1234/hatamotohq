@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :answers, :copy]
+  before_action :find_survey, only: [:show, :update, :answered_users, :responses, :copy]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -18,9 +18,12 @@ class User::SurveysController < User::ApplicationController
   def show
   end
 
-  def answers
-    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:user_page]).per(10)
-    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])).page(params[:response_page]).per(10)
+  def answered_users
+    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:page]).per(10)
+  end
+
+  def responses
+    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])).page(params[:page]).per(10)
   end
 
   # GET /user/surveys/new

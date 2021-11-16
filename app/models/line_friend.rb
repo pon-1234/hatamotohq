@@ -122,7 +122,8 @@ class LineFriend < ApplicationRecord
         variables .id = rfv.variable_id
         AND rn = 1
         AND rfv.line_friend_id = ?
-    ', self.id]).map { |_| _.attributes }
+      WHERE variables.line_account_id = ?
+    ', self.id, self.line_account_id]).map { |_| _.attributes }
   end
 
   private

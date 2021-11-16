@@ -95,7 +95,8 @@ Rails.application.routes.draw do
       end
       resources :surveys do
         member do
-          get :answers
+          get :answered_users
+          get :responses
           post :copy
         end
       end

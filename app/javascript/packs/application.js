@@ -15,6 +15,7 @@ import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
 import 'bootstrap/js/dist/modal';
+import moment from 'moment-timezone';
 
 import {
   BootstrapVue,
@@ -116,4 +117,11 @@ $(document).ajaxError((e, xhr, settings) => {
   if (xhr.status === 401) {
     location.reload();
   }
+});
+
+// Custom filters
+Vue.filter('formatted_time', (value) => {
+  if (!value) return '';
+  value = value.toString();
+  return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH:mm');
 });
