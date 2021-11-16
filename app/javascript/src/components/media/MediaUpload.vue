@@ -109,7 +109,7 @@ export default {
       this.isPreview = false;
       this.inputFile = input;
       const mediaType = Media.convertMineTypeToMediaType(input.type);
-      if (mediaType === 'image') {
+      if (mediaType === 'image' && this.types.length < 4) {
         if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
         else if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
         else this.mediaData.type = 'image';
@@ -261,6 +261,7 @@ export default {
     },
 
     deleteMedia() {
+      console.log(this.types);
       this.isPreview = false;
       this.errorMessage = '';
     },
