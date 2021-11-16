@@ -231,7 +231,8 @@ export default {
     async handleUpload() {
       this.loading = true;
       const query = {
-        file: this.inputFile
+        file: this.inputFile,
+        type: this.mediaData.type
       };
 
       if (this.mediaData.type === 'audio') {
