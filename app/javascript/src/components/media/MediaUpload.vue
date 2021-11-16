@@ -261,7 +261,6 @@ export default {
     },
 
     deleteMedia() {
-      console.log(this.types);
       this.isPreview = false;
       this.errorMessage = '';
     },
