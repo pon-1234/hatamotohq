@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group">
-      <label>代替テキスト</label>
+      <label>代替テキスト<required-mark></required-mark></label>
       <input
         type="text"
         :name="`altText${index}`"
@@ -9,7 +9,7 @@
         placeholder="代替テキストを入力してください"
         v-model.trim="altText"
         maxlength="401"
-        v-validate="'max:400'"
+        v-validate="'required|max:400'"
         data-vv-as="代替テキスト"
       />
       <error-message :message="errors.first(`altText${index}`)"></error-message>
@@ -232,7 +232,7 @@ export default {
           }
         });
       } else {
-        const index = this.actionObjects.findIndex((val) => val.key === key);
+        const index = this.actionObjects.findIndex(val => val.key === key);
         this.$set(this.actionObjects[index], 'expand', !this.actionObjects[index].expand);
       }
     },
@@ -251,7 +251,7 @@ export default {
     },
 
     publish(actionObject) {
-      const actions = actionObject.map((object) => {
+      const actions = actionObject.map(object => {
         let objectNew = JSON.parse(JSON.stringify(object));
         objectNew = Object.assign(objectNew, objectNew.action);
         return objectNew;
@@ -278,12 +278,14 @@ export default {
       // upload image
       this.uploadImageMap({
         file: this.b64toBlob(data)
-      }).then((res) => {
-        this.backgroundUrl = res.url;
-        this.publish(this.actionObjects);
-      }).catch((err) => {
-        console.log(err);
-      });
+      })
+        .then(res => {
+          this.backgroundUrl = res.url;
+          this.publish(this.actionObjects);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
@@ -304,9 +306,7 @@ export default {
 
       return new Blob(byteArrays, { type: contentType });
     }
-
   }
-
 };
 </script>
 
