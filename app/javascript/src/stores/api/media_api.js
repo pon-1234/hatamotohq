@@ -13,6 +13,7 @@ export default {
   uploadMedia: (payload) => {
     const formData = new FormData();
     formData.append('file', payload.file);
+    formData.append('type', payload.type);
     if (payload.duration) {
       formData.append('duration', payload.duration);
     }

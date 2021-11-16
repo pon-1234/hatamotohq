@@ -355,8 +355,8 @@ export default {
       const _this = this;
       const reader = new FileReader();
       reader.readAsArrayBuffer(blob);
-      reader.onload = function(e) {
-        const validMimeBytes = Media.validateFileByMimeBytes(e, 'image');
+      reader.onload = async function(e) {
+        const validMimeBytes = await Media.validateFileByMimeBytes(e, 'image', null);
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
           return;
