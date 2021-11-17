@@ -201,7 +201,6 @@ export default {
     async fetchRichMenu() {
       const richMenu = await this.getRichMenu(this.rich_menu_id);
       this.richMenuData = _.omit(richMenu, ['conditions']);
-      console.log(this.richMenuData.template_id);
       this.templateValue = RichMenuValue[this.richMenuData.template_id];
       this.parseConditions(richMenu.conditions);
       this.backgroundUrl = richMenu.image_url;
