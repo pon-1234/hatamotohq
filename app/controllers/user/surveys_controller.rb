@@ -16,6 +16,10 @@ class User::SurveysController < User::ApplicationController
 
   # GET /user/surveys/:id
   def show
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/surveys/:id/answered_users

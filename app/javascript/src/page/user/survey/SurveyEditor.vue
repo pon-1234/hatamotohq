@@ -148,7 +148,7 @@ import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
 export default {
-  props: ['survey_id', 'plan'],
+  props: ['survey_id'],
   provide() {
     return { parentValidator: this.$validator };
   },
@@ -196,6 +196,7 @@ export default {
     },
 
     parseSurvey(survey) {
+      console.log('parsing survey.....', survey);
       this.surveyData = _.cloneDeep(survey);
     },
 
@@ -223,7 +224,6 @@ export default {
         'after_action'
       ]);
       payload.status = published ? 'published' : 'draft';
-      console.log('----ffffff--', this.surveyData.questions);
       payload.survey_questions_attributes = this.surveyData.questions;
       let response = null;
       if (this.survey_id) {
