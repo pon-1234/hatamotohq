@@ -122,7 +122,7 @@ export default {
       type: Number,
       default: 201
     },
-    templateValue: Number,
+    piecesCount: Number,
     background: String,
     areas: {
       type: Array,
@@ -137,17 +137,18 @@ export default {
     return {
       isShowingEditor: false,
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      actionObjects: this.areas
+      actionObjects: []
     };
   },
 
   inject: ['parentValidator'],
   created() {
     this.$validator = this.parentValidator;
+    this.actionObjects = [...this.areas];
   },
 
   watch: {
-    templateValue(val, old) {
+    piecesCount(val, old) {
       if (old < val) {
         for (let i = old; i < val; i++) {
           this.actionObjects.push({
@@ -176,7 +177,7 @@ export default {
 
   beforeMount() {
     const old = this.actionObjects.length;
-    const val = this.templateValue;
+    const val = this.piecesCount;
 
     if (old < val) {
       for (let i = old; i < val; i++) {

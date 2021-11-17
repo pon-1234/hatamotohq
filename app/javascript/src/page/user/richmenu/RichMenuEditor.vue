@@ -82,11 +82,13 @@
 
     <!--Editor-->
     <rich-menu-content-editor
+      v-if="!loading"
       @input="richMenu"
       :background="backgroundUrl"
       :templateId="richMenuData.template_id"
-      :templateValue="templateValue"
+      :piecesCount="templateValue"
       :templateType="templateType"
+      :areas="richMenuData.areas"
       @onMediaChanged="onMediaChanged($event)"
     >
     </rich-menu-content-editor>
@@ -136,6 +138,7 @@
 
 <script>
 import Util from '@/core/util';
+import { RichMenuValue } from '@/core/constant';
 import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
@@ -198,6 +201,7 @@ export default {
     async fetchRichMenu() {
       const richMenu = await this.getRichMenu(this.rich_menu_id);
       this.richMenuData = _.omit(richMenu, ['conditions']);
+      this.templateValue = RichMenuValue[this.richMenuData.template_id];
       this.parseConditions(richMenu.conditions);
       this.backgroundUrl = richMenu.image_url;
       this.forceRerender();
