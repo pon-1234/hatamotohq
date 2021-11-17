@@ -8,6 +8,7 @@
         class="form-control mt-2"
         placeholder="入力してください"
         v-validate="'required|max:255'"
+        v-model.trim="answer"
         data-vv-as="答え"
       />
       <error-message :message="errors[0]"></error-message>

@@ -44,7 +44,7 @@
                     >
                       <td class="d-flex w-100">
                         <div>{{ item.name }}</div>
-                        <div class="btn btn-info btn-sm ml-auto" @click="selectSurvey(item)">選択</div>
+                        <div class="btn btn-info btn-sm ml-auto mw-80 my-auto" @click="selectSurvey(item)">選択</div>
                       </td>
                     </tr>
                   </tbody>
@@ -89,9 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', [
-      'getSurveys'
-    ]),
+    ...mapActions('survey', ['getSurveys']),
 
     forceRerender() {
       this.contentKey++;

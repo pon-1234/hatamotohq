@@ -7,7 +7,7 @@
         :name="`answers[${qnum}][answer]`"
         class="form-control mt-2"
         placeholder="入力してください"
-        v-model="answer"
+        v-model.trim="answer"
         :disabled="preview"
       />
       <error-message :message="errors[0]"></error-message>

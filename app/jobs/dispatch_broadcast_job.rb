@@ -2,8 +2,10 @@
 
 class DispatchBroadcastJob < ApplicationJob
   sidekiq_options retry: false
-  include Rails.application.routes.url_helpers
   queue_as :default
+  include Rails.application.routes.url_helpers
+  include User::MessagesHelper
+
   MULTICAST_BATCH_SIZE = 500
 
   def perform(broadcast_id)
