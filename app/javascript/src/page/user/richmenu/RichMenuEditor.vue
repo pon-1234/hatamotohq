@@ -82,11 +82,13 @@
 
     <!--Editor-->
     <rich-menu-content-editor
+      v-if="!loading"
       @input="richMenu"
       :background="backgroundUrl"
       :templateId="richMenuData.template_id"
-      :templateValue="templateValue"
+      :piecesCount="richMenuData.pieces_count"
       :templateType="templateType"
+      :areas="richMenuData.areas"
       @onMediaChanged="onMediaChanged($event)"
     >
     </rich-menu-content-editor>
@@ -157,6 +159,7 @@ export default {
         media_id: null,
         name: null,
         template_id: 201,
+        pieces_count: 6,
         chat_bar_text: null,
         areas: [],
         selected: false,
@@ -204,7 +207,7 @@ export default {
     },
 
     onTemplateChanged(data) {
-      this.templateValue = data.value;
+      this.richMenuData.pieces_count = data.value;
       this.richMenuData.template_id = data.id;
       this.templateType = data.type;
     },

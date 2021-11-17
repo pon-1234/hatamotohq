@@ -76,6 +76,7 @@ class User::RichMenusController < User::ApplicationController
         :start_at,
         :end_at,
         :template_id,
+        :pieces_count,
         :target,
         :selected,
         :status,
