@@ -80,9 +80,11 @@ export default {
   methods: {
     onValueChanged() {
       const data = {
+        id: this.value.id,
         label: this.label,
-        linkUri: 'tel://' + this.uri,
-        uri: 'tel://' + this.uri
+        linkUri: `tel://${this.uri}`,
+        uri: `tel://${this.uri}`,
+        type: this.value.type
       };
       this.$emit('input', data);
     }
