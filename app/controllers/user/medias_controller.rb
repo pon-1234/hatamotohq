@@ -35,7 +35,8 @@ class User::MediasController < User::ApplicationController
   # GET /user/medias/:id/content/:width
   def variant
     width = params[:width] || 1040
-    redirect_to @media.variant_url(width)
+    data = open(@media.url)
+    send_data data.read, filename: 'imagemap.png', type: @media.file.content_type, disposition: 'inline', stream: 'true', buffer_size: '4096' 
   end
 
   private
