@@ -47,7 +47,7 @@
                     <span v-else class="text-danger">下書き</span>
                   </td>
                   <td>{{ survey.name }}</td>
-                  <td>
+                  <td class="mw-200">
                     <template v-if="survey.responses_count === 0"> 未回答 </template>
                     <template v-else>
                       {{ survey.responses_count }}回答／<span class="font-12">{{ survey.users_count }}人</span>

@@ -55,7 +55,7 @@ class Survey < ApplicationRecord
   end
 
   def users_count
-    survey_responses.count
+    survey_responses.pluck(:line_friend_id).uniq.size
   end
 
   def answered_users

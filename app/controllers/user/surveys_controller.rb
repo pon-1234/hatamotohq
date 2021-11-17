@@ -6,7 +6,7 @@ class User::SurveysController < User::ApplicationController
   # GET /user/surveys
   def index
     if request.format.json?
-      @folders = Folder.accessible_by(current_ability).type_survey
+      @folders = Folder.accessible_by(current_ability).includes([:surveys]).type_survey
     end
     respond_to do |format|
       format.html
