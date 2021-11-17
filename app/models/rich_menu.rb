@@ -22,7 +22,6 @@
 #  end_at                   :datetime
 #  media_id                 :bigint
 #  member_count             :integer          default(0)
-#  pieces_count             :integer          default(0)
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  deleted_at               :datetime

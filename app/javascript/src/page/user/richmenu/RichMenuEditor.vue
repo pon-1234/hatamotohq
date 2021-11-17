@@ -86,7 +86,7 @@
       @input="richMenu"
       :background="backgroundUrl"
       :templateId="richMenuData.template_id"
-      :piecesCount="richMenuData.pieces_count"
+      :piecesCount="templateValue"
       :templateType="templateType"
       :areas="richMenuData.areas"
       @onMediaChanged="onMediaChanged($event)"
@@ -138,6 +138,7 @@
 
 <script>
 import Util from '@/core/util';
+import { RichMenuValue } from '@/core/constant';
 import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
@@ -159,7 +160,6 @@ export default {
         media_id: null,
         name: null,
         template_id: 201,
-        pieces_count: 6,
         chat_bar_text: null,
         areas: [],
         selected: false,
@@ -201,13 +201,15 @@ export default {
     async fetchRichMenu() {
       const richMenu = await this.getRichMenu(this.rich_menu_id);
       this.richMenuData = _.omit(richMenu, ['conditions']);
+      console.log(this.richMenuData.template_id);
+      this.templateValue = RichMenuValue[this.richMenuData.template_id];
       this.parseConditions(richMenu.conditions);
       this.backgroundUrl = richMenu.image_url;
       this.forceRerender();
     },
 
     onTemplateChanged(data) {
-      this.richMenuData.pieces_count = data.value;
+      this.templateValue = data.value;
       this.richMenuData.template_id = data.id;
       this.templateType = data.type;
     },
