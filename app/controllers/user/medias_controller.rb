@@ -2,6 +2,7 @@
 
 class User::MediasController < User::ApplicationController
   load_and_authorize_resource
+  before_action :find_media, only: [:variant]
 
   # GET /user/medias
   def index
@@ -31,11 +32,21 @@ class User::MediasController < User::ApplicationController
     render_success
   end
 
+  # GET /user/medias/:id/content/:width
+  def variant
+    width = params[:width] || 1040
+    redirect_to @media.variant_url(width)
+  end
+
   private
     def media_params
       params.permit(
         :file,
         :type
       )
+    end
+
+    def find_media
+      @media = Media.find(params[:id])
     end
 end

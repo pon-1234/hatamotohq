@@ -59,6 +59,10 @@ class Media < ApplicationRecord
     url_for(file) if file.attached?
   end
 
+  def variant_url(width)
+    url_for(file.variant(resize_to_fit: [width, width]))
+  end
+
   def file_name
     self.file.blob.filename
   end

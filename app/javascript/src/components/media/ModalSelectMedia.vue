@@ -79,11 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('media', [
-      'uploadMedia',
-      'uploadRichMenu',
-      'uploadImageMap'
-    ]),
+    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
 
     forceRerender() {
       this.contentKey++;

@@ -128,6 +128,7 @@ export default {
   props: ['index', 'data'],
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       isShowingEditor: false,
       templateId: this.data.templateId,
       templateValue: this.data.templateValue,
@@ -247,7 +248,7 @@ export default {
     },
 
     onSelectMedia(media) {
-      this.backgroundUrl = media.url;
+      this.backgroundUrl = `${this.rootPath}/user/medias/${media.id}/content`;
     },
 
     publish(actionObject) {
@@ -280,7 +281,7 @@ export default {
         file: this.b64toBlob(data)
       })
         .then(res => {
-          this.backgroundUrl = res.url;
+          this.backgroundUrl = `${this.rootPath}/user/medias/${res.id}/content`;
           this.publish(this.actionObjects);
         })
         .catch(err => {

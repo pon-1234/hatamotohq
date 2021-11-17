@@ -116,6 +116,10 @@ Rails.application.routes.draw do
       get '/action_objects', to: 'action_objects#index'
       resources :medias do
         post :bulk_delete, on: :collection
+        member do
+          get '/content', to: 'medias#variant'
+          get '/content/:width', to: 'medias#variant'
+        end
       end
       resources :setting, only: [:index] do
         get :edit, on: :collection
