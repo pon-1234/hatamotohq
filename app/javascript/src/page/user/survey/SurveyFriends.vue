@@ -4,14 +4,17 @@
       <thead class="thead-light">
         <tr>
           <th>名前</th>
-          <th>回答日時</th>
+          <th>回答数</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
-          <td class="mxw-500 text-truncate">{{ user.display_name }}</td>
-          <td class="mxw-400">{{ user.answered_at | formatted_time }}</td>
+          <td class="mw-200 text-truncate table-user">
+            <img :src="user.avatar_url || '/img/no-image-profile.png'" alt="table-user" class="mr-2 rounded-circle" />
+            {{ user.display_name }}
+          </td>
+          <td class="mw-400">{{ user.responses_count }}</td>
           <td>
             <div class="btn btn-sm btn-secondary">回答表示</div>
           </td>

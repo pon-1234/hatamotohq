@@ -59,20 +59,9 @@ class Survey < ApplicationRecord
   end
 
   def answered_users
-    SurveyResponse.find_by_sql('
-      SELECT
-        lf.id,
-        lf.display_name,
-        max(sr.created_at) AS answered_at
-      FROM
-        survey_responses sr,
-        line_friends lf
-      WHERE
-        sr.line_friend_id = lf .id
-      GROUP BY
-        lf.id,
-        lf.display_name
-    ').map { |_| _.attributes }
+    LineFriend.distinct.joins(:survey_responses)
+      .references(:survey_responses)
+      .where('survey_responses.line_friend_id = line_friends.id AND survey_responses.survey_id = ?', self.id)
   end
 
   def clone!

@@ -1,6 +1,6 @@
 <template>
   <div class="col-xl-12">
-    <ul class="nav nav-tabs mb-3">
+    <ul class="nav nav-tabs">
       <li class="nav-item">
         <a href="#users" data-toggle="tab" aria-expanded="true" class="nav-link active">
           <i class="mdi mdi-home-variant d-md-none d-block"></i>

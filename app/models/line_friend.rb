@@ -126,6 +126,10 @@ class LineFriend < ApplicationRecord
     ', self.id, self.line_account_id]).map { |_| _.attributes }
   end
 
+  def responses_count_for(survey_id)
+    self.survey_responses.where(survey_id: survey_id).count
+  end
+
   private
     def exec_after_create_commit
       AcquireFriendJob.perform_later(self.id)

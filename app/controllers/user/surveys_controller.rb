@@ -18,10 +18,12 @@ class User::SurveysController < User::ApplicationController
   def show
   end
 
+  # GET /user/surveys/:id/answered_users
   def answered_users
-    @answered_users = Kaminari.paginate_array(@survey.answered_users).page(params[:page]).per(10)
+    @answered_users = @survey.answered_users.page(params[:page]).per(10)
   end
 
+  # GET /user/surveys/:id/responses
   def responses
     @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])).page(params[:page]).per(10)
   end

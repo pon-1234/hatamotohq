@@ -9,8 +9,9 @@ end
 
 json.data do
   json.array! @answered_users do |user|
-    json.id user['id']
-    json.display_name user['display_name']
-    json.answered_at user['answered_at']
+    json.id user.id
+    json.display_name user.display_name
+    json.avatar_url user.avatar_url
+    json.responses_count user.responses_count_for(@survey.id)
   end
 end
