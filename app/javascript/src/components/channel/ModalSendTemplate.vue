@@ -8,7 +8,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body mh-400 overflow-hidden">
+        <div class="modal-body mh-400 modal-overflow-vertical">
           <div class="d-flex" v-if="folders && folders.length">
             <folder-left
               type="template_message"
@@ -97,6 +97,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+.modal-overflow-vertical {
+  height: 85vh;
+  overflow-y: auto;
+}
+
 .modal-template {
   .item-sm {
     display: none;
