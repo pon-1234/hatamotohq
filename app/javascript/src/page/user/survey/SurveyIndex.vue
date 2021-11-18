@@ -86,6 +86,7 @@
                           data-toggle="modal"
                           data-target="#modalDeleteSurvey"
                           @click="curSurveyIndex = index"
+                          v-if="survey.destroyable"
                           >回答フォームを削除</a
                         >
                       </div>
@@ -180,7 +181,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', ['createFolder', 'updateFolder', 'getSurveys', 'copySurvey']),
+    ...mapActions('survey', ['createFolder', 'updateFolder', 'getSurveys', 'copySurvey', 'deleteSurvey']),
     forceRerender() {
       this.contentKey++;
     },
@@ -208,19 +209,7 @@ export default {
       }
     },
 
-    updateStatus(survey) {
-      this.$store
-        .dispatch('survey/updateStatus', {
-          id: survey.id,
-          status: survey.status
-        })
-        .done(res => {
-          window.toastr.success('ステータスが変更されました');
-        })
-        .fail(() => {
-          window.toastr.error('ステータスの変更はエラーになりました');
-        });
-    },
+    updateStatus(survey) {},
 
     async submitCopySurvey() {
       const response = await this.copySurvey(this.curSurvey.id);
@@ -230,26 +219,15 @@ export default {
         window.toastr.error('回答フォームのコピーは失敗しました。');
       }
     },
-    modalDelete(survey) {
-      this.survey = survey;
-      $('#modal-delete-confirm').modal('show');
-      $('#modal-delete-confirm').on('hidden.bs.modal', function() {
-        this.survey = null;
-        $('#modal-delete-confirm').off();
-      });
-    },
-    submitDeleteSurvey() {
-      if (this.survey) {
-        this.$store
-          .dispatch('survey/destroy', {
-            id: this.survey.id
-          })
-          .done(() => {
-            this.getSurveys();
-          })
-          .fail(() => {
-            window.toastr.error('削除エラー');
-          });
+
+    async submitDeleteSurvey() {
+      if (!this.curSurvey) return;
+      const response = await this.deleteSurvey(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォームの削除は完了しました。', url);
+      } else {
+        window.toastr.error('回答フォームの削除は失敗しました。');
       }
     },
 

@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :answered_users, :responses, :copy]
+  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :copy]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -63,6 +63,14 @@ class User::SurveysController < User::ApplicationController
     render_success
   rescue => e
     logger.error e.message
+    render_bad_request
+  end
+
+  # DELETE /user/surveys/:id
+  def destroy
+    @survey.destroy! if @survey.destroyable?
+    render_success
+  rescue => e
     render_bad_request
   end
 

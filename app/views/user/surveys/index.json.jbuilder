@@ -8,6 +8,7 @@ json.array! @folders do |folder|
       json.responses_count survey.responses_count
       json.users_count survey.users_count
       json.created_at survey.created_at.strftime('%Y-%m-%d %H:%M')
+      json.destroyable survey.destroyable?
     end
   end
 end

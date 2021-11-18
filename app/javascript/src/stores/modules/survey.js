@@ -181,6 +181,19 @@ export const actions = {
     }
   },
 
+  /**
+   * Delete survey
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async deleteSurvey(context, id) {
+    try {
+      return await SurveyAPI.delete(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async getAnsweredUsers(context, query) {
     try {
       const response = await SurveyAPI.answeredUsers(query);

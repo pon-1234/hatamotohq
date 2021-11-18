@@ -47,12 +47,10 @@ export default {
     });
   },
 
-  delete(query) {
+  delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/delete'),
-      method: 'DELETE',
-      data: JSON.stringify(query),
-      contentType: 'application/json'
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      method: 'DELETE'
     });
   },
 

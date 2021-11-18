@@ -50,6 +50,10 @@ class Survey < ApplicationRecord
     self.code = generate_code
   end
 
+  def destroyable?
+    self.survey_responses.count == 0
+  end
+
   def responses_count
     survey_responses.count
   end
