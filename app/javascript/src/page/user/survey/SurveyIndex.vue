@@ -5,7 +5,6 @@
         <folder-left
           type="survey"
           :data="folders"
-          :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
           @changeSelectedFolder="changeSelectedFolder"
           @submitUpdateFolder="submitUpdateFolder"
@@ -110,6 +109,20 @@
         </div>
       </div>
     </div>
+
+    <!-- START: Delete folder modal -->
+    <modal-confirm
+      id="modalDeleteFolder"
+      title="このフォルダーを削除してもよろしいですか？"
+      type="delete"
+      @confirm="submitDeleteFolder"
+    >
+      <template v-slot:content v-if="curFolder">
+        <span>フォルダ名：{{ curFolder.name }}</span>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete folder modal -->
+
     <modal-confirm
       title="この回答フォームをコピーしてもよろしいですか？"
       id="modalCopySurvey"
@@ -147,7 +160,6 @@ export default {
       selectedFolderIndex: 0,
       curSurveyIndex: 0,
       surveyContents: 0,
-      isPc: true,
       survey: null,
       textSearch: null
     };
@@ -181,14 +193,20 @@ export default {
   },
 
   methods: {
-    ...mapActions('survey', ['createFolder', 'updateFolder', 'getSurveys', 'copySurvey', 'deleteSurvey']),
+    ...mapActions('survey', [
+      'createFolder',
+      'updateFolder',
+      'deleteFolder',
+      'getSurveys',
+      'copySurvey',
+      'deleteSurvey'
+    ]),
     forceRerender() {
       this.contentKey++;
     },
 
     changeSelectedFolder(index) {
       this.selectedFolderIndex = index;
-      this.isPc = true;
     },
 
     async submitUpdateFolder(folder) {
@@ -231,15 +249,14 @@ export default {
       }
     },
 
-    submitDeleteTag() {
-      this.$store
-        .dispatch('global/deleteFolder', { id: this.surveys[this.selectedFolderIndex].id, type: 'survey' })
-        .done(res => {
-          this.surveys.splice(this.selectedFolderIndex, 1);
-          this.selectedFolderIndex -= 1;
-          this.surveyContents = this.surveys[this.selectedFolderIndex].surveys;
-        })
-        .fail(e => {});
+    async submitDeleteFolder() {
+      const response = await this.deleteFolder(this.curFolder.id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.changeSelectedFolder(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     }
   }
 };

@@ -121,7 +121,12 @@
     <loading-indicator :loading="loading"></loading-indicator>
 
     <!-- START: Delete folder modal -->
-    <modal-confirm id="modalDeleteFolder" title="フォルダー" type="delete" @confirm="submitDeleteFolder">
+    <modal-confirm
+      id="modalDeleteFolder"
+      title="このフォルダーを削除してもよろしいですか？"
+      type="delete"
+      @confirm="submitDeleteFolder"
+    >
       <template v-slot:content v-if="folders[selectedFolderIndex]">
         <span>フォルダ名：{{ folders[selectedFolderIndex].name }}</span>
       </template>

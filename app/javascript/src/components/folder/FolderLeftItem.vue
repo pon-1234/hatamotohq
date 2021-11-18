@@ -24,13 +24,14 @@
             </div>
             <div class="dropdown-menu bg-white" role="menu">
               <a role="button" class="dropdown-item" @click.stop="changeName">名前を変える</a>
-              <div class="dropdown-divider"></div>
+              <div class="dropdown-divider" v-if="canDelete(data)"></div>
               <a
                 role="button"
                 class="dropdown-item"
                 data-toggle="modal"
                 data-target="#modalDeleteFolder"
                 @click="deleteFolder"
+                v-if="canDelete(data)"
                 >フォルダーを削除</a
               >
             </div>
@@ -103,6 +104,10 @@ export default {
     }
   },
   methods: {
+    canDelete() {
+      return !(this.type === 'survey' && this.data.surveys.length > 0);
+    },
+
     changeName() {
       this.isEdit = true;
     },
