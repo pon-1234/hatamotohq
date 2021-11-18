@@ -81,6 +81,12 @@ export default {
     };
   },
 
+  computed: {
+    isChannel() {
+      return this.types.length > 1;
+    }
+  },
+
   watch: {
     types: {
       handler(val) {
@@ -109,7 +115,7 @@ export default {
       this.isPreview = false;
       this.inputFile = input;
       const mediaType = Media.convertMineTypeToMediaType(input.type);
-      if (mediaType === 'image' && this.types.length < 4) {
+      if (mediaType === 'image' && !this.isChannel) {
         if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
         else if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
         else this.mediaData.type = 'image';
