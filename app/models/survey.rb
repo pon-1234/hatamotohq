@@ -77,6 +77,11 @@ class Survey < ApplicationRecord
     new_survey
   end
 
+  def toggle_status
+    self.status = self.published? ? 'unpublished' : 'published'
+    self.save
+  end
+
   private
     def generate_code
       loop do

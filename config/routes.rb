@@ -98,6 +98,7 @@ Rails.application.routes.draw do
           get :answered_users
           get :responses
           post :copy
+          post :toggle_status
         end
       end
       resources :reminders do

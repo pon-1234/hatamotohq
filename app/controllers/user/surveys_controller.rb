@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :copy]
+  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :copy, :toggle_status]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -55,6 +55,12 @@ class User::SurveysController < User::ApplicationController
     unless @survey.save(validate: !@survey.draft?)
       render_bad_request_with_message(@survey.first_error_message)
     end
+  end
+
+  # POST /user/surveys/:id/toggle_status
+  def toggle_status
+    @survey.toggle_status
+    render_success
   end
 
   # POST /user/surveys/:id/copy
