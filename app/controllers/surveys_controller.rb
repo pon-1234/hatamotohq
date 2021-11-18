@@ -17,9 +17,10 @@ class SurveysController < ApplicationController
   def form
     @code = params[:code]
     @friend_id = params[:friend_id]
-    # unless can_answer?(@survey, @friend)
-    #   redirect_to root_path, flash: { warning: '回答フォームにアクセスできません。' }
-    # end
+    friend = LineFriend.find_by(line_user_id: @friend_id)
+    unless can_answer?(@survey, friend)
+      return redirect_to root_path, flash: { warning: '回答フォームにアクセスできません。' }
+    end
 
     redirect_if_already_answered
   end
