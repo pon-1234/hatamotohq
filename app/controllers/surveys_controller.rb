@@ -17,6 +17,9 @@ class SurveysController < ApplicationController
   def form
     @code = params[:code]
     @friend_id = params[:friend_id]
+    unless can_answer?(@survey, @friend)
+      redirect_to root_path, flash: { warning: '回答フォームにアクセスできません。' }
+    end
 
     redirect_if_already_answered
   end
@@ -57,8 +60,12 @@ class SurveysController < ApplicationController
       @survey = Survey.find_by(code: params[:code])
     end
 
+    def can_answer?(survey, friend)
+      survey.present? and friend.present? and survey.line_account_id == friend.line_account_id
+    end
+
     def redirect_if_already_answered
-      friend = LineFriend.find_by(line_user_id: @friend_id)
+      friend = LineFriend.find_by(line_user_id: @friend_id, line_account_id: @survey.line_account)
       response = SurveyResponse.find_by(survey: @survey, line_friend_id: friend&.id)
       if !@survey.re_answer? && response.present?
         redirect_to survey_already_answer_path(code: params[:code], friend_id: params[:friend_id])

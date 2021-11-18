@@ -36,7 +36,7 @@ class User::MediasController < User::ApplicationController
   def variant
     width = params[:width] || 1040
     data = open(@media.url)
-    send_data data.read, filename: 'imagemap.png', type: @media.file.content_type, disposition: 'inline', stream: 'true', buffer_size: '4096' 
+    send_data data.read, filename: 'imagemap.png', type: @media.file.content_type, disposition: 'inline', stream: 'true', buffer_size: '4096'
   end
 
   private

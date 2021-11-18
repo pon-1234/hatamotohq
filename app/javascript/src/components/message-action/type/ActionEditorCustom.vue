@@ -128,7 +128,6 @@ export default {
     },
 
     changeActionType(index, action) {
-      console.log('------change action type------', index, action);
       this.$set(this.actions, index, action);
       this.updateData();
     },

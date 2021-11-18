@@ -10,7 +10,7 @@
       </thead>
       <tbody>
         <tr v-for="(response, index) in responses" :key="index">
-          <td class="table-user d-flex align-items-center">
+          <td class="table-user d-flex align-items-center mw-200">
             <img
               :src="response.line_friend.avatar_url || '/img/no-image-profile.png'"
               alt="table-user"
