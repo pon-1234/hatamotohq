@@ -34,4 +34,14 @@ class Variable < ApplicationRecord
     new_varaible.save!
     new_varaible
   end
+
+  def default_value(friend)
+    return self.default if self.default.blank?
+    bind_data(friend)
+  end
+
+  private
+    def bind_data(friend)
+      self.default&.gsub(/{name}/, friend.display_name)
+    end
 end

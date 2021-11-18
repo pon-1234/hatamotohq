@@ -25,18 +25,24 @@ module SurveysHelper
       survey_answer.save!
 
       variable = question.content['variable']
-      assign_variable(friend, variable, survey_answer) if variable.present? && variable['id'].present?
+      assign_variable(friend, variable['id'], survey_answer) if variable.present? && variable['id'].present?
     end
     AfterAnsweredSurveyJob.perform_later(response.id)
   end
 
   private
-    def assign_variable(friend, variable, answer)
-      friend_variable = FriendVariable.find_or_initialize_by(line_friend: friend, variable_id: variable['id'], survey_answer_id: answer.id)
+    def assign_variable(friend, variable_id, answer)
+      variable = Variable.find(variable_id)
+      friend_variable = FriendVariable.find_or_initialize_by(line_friend: friend, variable_id: variable_id, survey_answer_id: answer.id)
       if answer.survey_question.file?
         friend_variable.value = rails_blob_url(answer.file) if answer.file.attached?
       else
-        friend_variable.value = answer.answer
+        # If answer is empty, set value to variable's default value
+        if answer.answer.empty?
+          friend_variable.value = variable.default_value(friend)
+        else
+          friend_variable.value = answer.answer
+        end
       end
       friend_variable.save!
     end
