@@ -112,6 +112,8 @@
       </div>
     </div>
 
+    <loading-indicator :loading="loading"></loading-indicator>
+
     <!-- START: Delete folder modal -->
     <modal-confirm
       id="modalDeleteFolder"
