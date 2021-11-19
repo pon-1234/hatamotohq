@@ -195,19 +195,19 @@ export default {
     moveUpObject(index) {
       if (index > 0) {
         const to = index - 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.questionContentData.options.splice(to, 0, this.questionContentData.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     moveDownObject(index) {
-      if (index < this.questionContentData.data.length) {
+      if (index < this.questionContentData.options.length) {
         const to = index + 1;
-        this.questionContentData.data.splice(to, 0, this.questionContentData.data.splice(index, 1)[0]);
+        this.questionContentData.options.splice(to, 0, this.questionContentData.options.splice(index, 1)[0]);
         this.syncObj();
       }
     },
     removeObject(index) {
-      this.questionContentData.data.splice(index, 1);
+      this.questionContentData.options.splice(index, 1);
       this.syncObj();
     }
   }
