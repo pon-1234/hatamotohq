@@ -45,5 +45,6 @@ module SurveysHelper
         end
       end
       friend_variable.save!
+      variable.refresh_friends_count
     end
 end
