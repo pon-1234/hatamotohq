@@ -38,7 +38,7 @@
                   <td>
                     <p class="item-name vw-10">{{ variable.default || "-" }}</p>
                   </td>
-                  <td>FIXME</td>
+                  <td>{{ variable.friends_count }}</td>
                   <td>
                     <div class="btn-group">
                       <button

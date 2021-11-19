@@ -10,6 +10,7 @@
 #  name            :string(255)
 #  type            :string(255)
 #  default         :string(255)
+#  friends_count   :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

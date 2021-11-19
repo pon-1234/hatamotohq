@@ -10,6 +10,7 @@
 #  name            :string(255)
 #  type            :string(255)
 #  default         :string(255)
+#  friends_count   :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -26,6 +27,7 @@
 class Variable < ApplicationRecord
   belongs_to :folder
   belongs_to :line_account
+  has_many :friend_variables
   include VariableType
 
   def clone!
@@ -38,6 +40,11 @@ class Variable < ApplicationRecord
   def default_value(friend)
     return self.default if self.default.blank?
     bind_data(friend)
+  end
+
+  def refresh_friends_count
+    self.friends_count = self.friend_variables.pluck(:line_friend_id).uniq.count
+    self.save
   end
 
   private
