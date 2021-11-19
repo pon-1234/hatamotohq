@@ -39,7 +39,7 @@ class Survey < ApplicationRecord
   accepts_nested_attributes_for :survey_questions, allow_destroy: true
 
   # Validation
-  validates :name, presence: true, length: { maximum: 255 }
+  validates :name, presence: true, length: { maximum: 64 }
   validates :title, presence: true, length: { maximum: 255 }
   validates :description, presence: true
 

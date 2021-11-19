@@ -23,8 +23,8 @@
                 name="survey_name"
                 class="form-control"
                 placeholder="フォーム名(管理用)を入力してください"
-                v-validate="'required|max:255'"
-                maxlength="256"
+                v-validate="'required|max:64'"
+                maxlength="65"
                 data-vv-as="フォーム名(管理用)"
               />
               <error-message :message="errors.first('survey_name')"></error-message>
