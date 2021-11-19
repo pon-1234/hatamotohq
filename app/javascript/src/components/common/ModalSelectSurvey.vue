@@ -7,7 +7,7 @@
     aria-labelledby="myModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">回答フォームを選択してください</h4>
@@ -15,7 +15,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body overflow-hidden">
+        <div class="modal-body">
           <div class="d-flex" v-if="folders && folders.length">
             <folder-left
               type="survey"
@@ -36,15 +36,16 @@
                     </tr>
                   </thead>
                   <tbody v-if="curFolder.surveys && curFolder.surveys.length">
-                    <tr
-                      v-for="(item, index) in curFolder.surveys"
-                      :key="index"
-                      class="folder-item"
-                      data-dismiss="modal"
-                    >
+                    <tr v-for="(item, index) in curFolder.surveys" :key="index" class="folder-item">
                       <td class="d-flex w-100">
-                        <div>{{ item.name }}</div>
-                        <div class="btn btn-info btn-sm ml-auto mw-80 my-auto" @click="selectSurvey(item)">選択</div>
+                        <div class="item-name mr-3">{{ item.name }}</div>
+                        <div
+                          class="btn btn-info btn-sm ml-auto mw-80 my-auto"
+                          @click="selectSurvey(item)"
+                          data-dismiss="modal"
+                        >
+                          選択
+                        </div>
                       </td>
                     </tr>
                   </tbody>
