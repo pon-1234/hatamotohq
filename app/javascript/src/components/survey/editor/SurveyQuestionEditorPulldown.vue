@@ -80,7 +80,8 @@
                 aria-describedby="basic-addon1"
                 v-validate="'required'"
                 :name="name + '-value-' + index"
-                v-model="item.value"
+                v-model.trim="item.value"
+                placeholder="ラベルを入力してください"
               />
             </div>
             <div v-show="item.is_editor" class="form-group d-flex mt-2">
