@@ -99,6 +99,7 @@ Rails.application.routes.draw do
           get :responses
           post :copy
           post :toggle_status
+          get '/:friend_id/responses', to: 'surveys#friend_responses'
         end
       end
       resources :reminders do

@@ -16,7 +16,9 @@
           </td>
           <td class="mw-400">{{ user.responses_count }}</td>
           <td>
-            <div class="btn btn-sm btn-secondary">回答表示</div>
+            <a class="btn btn-sm btn-secondary" :href="`${rootPath}/user/surveys/${survey_id}/${user.id}/responses`"
+              >回答表示</a
+            >
           </td>
         </tr>
       </tbody>
@@ -43,7 +45,7 @@ export default {
   props: ['survey_id'],
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       currentPage: 1

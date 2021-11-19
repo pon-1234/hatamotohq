@@ -91,5 +91,15 @@ export default {
       contentType: 'application/json',
       cache: false
     });
+  },
+
+  friendResponses: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.survey_id}/${query.friend_id}/responses`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
   }
 };

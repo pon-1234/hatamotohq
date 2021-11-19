@@ -68,6 +68,14 @@ class Survey < ApplicationRecord
       .where('survey_responses.line_friend_id = line_friends.id AND survey_responses.survey_id = ?', self.id)
   end
 
+  def responses
+    self.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])
+  end
+
+  def responses_by(friend_id)
+    self.survey_responses.where('survey_responses.line_friend_id = ?', friend_id).includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])
+  end
+
   def clone!
     new_survey = self.dup
     new_survey.name = self.name + '（コピー）'

@@ -214,5 +214,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async getFriendResponses(context, query) {
+    try {
+      return await SurveyAPI.friendResponses(query);
+    } catch (error) {
+      return null;
+    }
   }
 };

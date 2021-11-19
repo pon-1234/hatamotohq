@@ -2,7 +2,7 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :copy, :toggle_status]
+  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :friend_responses, :copy, :toggle_status]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -29,7 +29,21 @@ class User::SurveysController < User::ApplicationController
 
   # GET /user/surveys/:id/responses
   def responses
-    @responses = Kaminari.paginate_array(@survey.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])).page(params[:page]).per(10)
+    @responses = Kaminari.paginate_array(@survey.responses).page(params[:page]).per(10)
+  end
+
+  # GET /user/surveys/:id/:friend_id/:responses
+  def friend_responses
+    @survey_id = params[:id]
+    @friend_id = params[:friend_id]
+    @friend = LineFriend.find(@friend_id)
+    if request.format.json?
+      @responses = @survey.responses_by(@friend_id)
+    end
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /user/surveys/new
