@@ -21,7 +21,7 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>公開化</th>
+                  <th>状況</th>
                   <th>フォーム名</th>
                   <th>回答状態</th>
                   <th></th>
@@ -30,20 +30,7 @@
               <tbody v-if="curFolder">
                 <tr v-for="(survey, index) in curFolder.surveys" v-bind:key="index">
                   <td>
-                    <div v-if="survey.status !== 'draft'">
-                      <input
-                        type="checkbox"
-                        :id="`switchStatus${index}`"
-                        checked
-                        data-switch="success"
-                        v-model="survey.status"
-                        true-value="published"
-                        false-value="unpublished"
-                        @change="updateStatus(survey)"
-                      />
-                      <label class="m-0" :for="`switchStatus${index}`"></label>
-                    </div>
-                    <span v-else class="text-danger">下書き</span>
+                    <survey-status :status="survey.status"></survey-status>
                   </td>
                   <td>
                     <div class="vw-20 max-2-lines">{{ survey.name }}</div>
@@ -80,6 +67,15 @@
                           data-target="#modalCopySurvey"
                           @click="curSurveyIndex = index"
                           >回答フォームをコピー</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalToggleSurvey"
+                          @click="curSurveyIndex = index"
+                          v-if="survey.status !== 'draft'"
+                          >{{ survey.status === "published" ? "未公開" : "公開" }}にする</a
                         >
                         <a
                           role="button"
@@ -147,6 +143,20 @@
         <span>回答フォーム名：{{ curSurvey.name }}</span>
       </template>
     </modal-confirm>
+
+    <!-- START: modal enable/disable richmenu -->
+    <modal-confirm
+      :title="`この回答フォームの状況を変更してもよろしいですか？`"
+      id="modalToggleSurvey"
+      type="confirm"
+      @confirm="submitToggleSurvey"
+    >
+      <template v-slot:content v-if="curSurvey">
+        状況変更：<b>{{ curSurvey.status === "published" ? "公開" : "未公開" }}</b>
+        <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curSurvey.status === "published" ? "未公開" : "公開" }}</b>
+      </template>
+    </modal-confirm>
+    <!-- END: modal delete richmenu -->
   </div>
 </template>
 
@@ -203,7 +213,8 @@ export default {
       'deleteFolder',
       'getSurveys',
       'copySurvey',
-      'deleteSurvey'
+      'deleteSurvey',
+      'toggleStatus'
     ]),
     forceRerender() {
       this.contentKey++;
@@ -250,6 +261,17 @@ export default {
         Util.showSuccessThenRedirect('回答フォームの削除は完了しました。', url);
       } else {
         window.toastr.error('回答フォームの削除は失敗しました。');
+      }
+    },
+
+    async submitToggleSurvey() {
+      if (!this.curSurvey) return;
+      const response = await this.toggleStatus(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォーム状況の変更は完了しました。', url);
+      } else {
+        window.toastr.error('回答フォーム状況の変更は失敗しました。');
       }
     },
 

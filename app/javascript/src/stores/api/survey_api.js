@@ -71,6 +71,14 @@ export default {
     });
   },
 
+  toggleStatus: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/toggle_status`,
+      method: 'POST',
+      contentType: 'application/json'
+    });
+  },
+
   answeredUsers: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.id}/answered_users`,

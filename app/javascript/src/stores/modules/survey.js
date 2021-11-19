@@ -194,6 +194,19 @@ export const actions = {
     }
   },
 
+  /**
+   * Toggle survey status
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async toggleStatus(context, id) {
+    try {
+      return await SurveyAPI.toggleStatus(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async getAnsweredUsers(context, query) {
     try {
       const response = await SurveyAPI.answeredUsers(query);
