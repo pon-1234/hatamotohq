@@ -5,11 +5,11 @@
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">メッセージ</li>
           <li class="breadcrumb-item"><%= link_to '回答フォーム一覧', user_surveys_path %></li>
-          <li class="breadcrumb-item"><%= link_to '回答フォーム一覧', user_surveys_path %></li>
+          <li class="breadcrumb-item"><%= link_to @survey.name, user_survey_path(@survey) %></li>
           <li class="breadcrumb-item active">フォーム回答(個人)</li>
         </ol>
       </div>
-      <h4 class="page-title">フォーム回答(個人)</h4>
+      <h4 class="page-title">フォーム回答（個人）</h4>
     </div>
   </div>
 </div>

@@ -323,7 +323,6 @@
 }
 
 .item-name {
-  width: 10vw;
   margin: 0;
   white-space: pre-wrap;
   overflow: hidden;
@@ -331,9 +330,10 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   display: -webkit-box;
+  word-break: break-all;
 }
 
-@media screen and (max-width:1350px) {
+@media screen and (max-width: 1350px) {
   .folder-right {
     width: 35vw;
   }

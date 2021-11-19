@@ -32,9 +32,13 @@
               </thead>
               <tbody>
                 <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
-                  <td><p class="item-name">{{ variable.name }}</p></td>
-                  <td><p class="item-name">{{ variable.default || "-" }}</p></td>
-                  <td>0</td>
+                  <td>
+                    <p class="item-name vw-10">{{ variable.name }}</p>
+                  </td>
+                  <td>
+                    <p class="item-name vw-10">{{ variable.default || "-" }}</p>
+                  </td>
+                  <td>FIXME</td>
                   <td>
                     <div class="btn-group">
                       <button

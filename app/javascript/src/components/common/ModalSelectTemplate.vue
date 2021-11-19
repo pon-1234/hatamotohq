@@ -37,7 +37,9 @@
                 <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
                   <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
                     <td class="d-flex w-100">
-                      <div class="box-item-name"><p class="m-0 item-name">{{ item.name }}</p></div>
+                      <div class="box-item-name">
+                        <p class="m-0 vw-10 item-name">{{ item.name }}</p>
+                      </div>
                       <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)" data-dismiss="modal">
                         選択
                       </div>

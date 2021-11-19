@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table">
+    <table class="table table-centered">
       <thead class="thead-light">
         <tr>
           <th>名前</th>

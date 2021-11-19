@@ -34,7 +34,7 @@
               <tbody>
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
                   <td>
-                    <p class="item-name font-weight-bold">{{ richmenu.name }}</p>
+                    <p class="item-name vw-10 font-weight-bold">{{ richmenu.name }}</p>
                   </td>
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>

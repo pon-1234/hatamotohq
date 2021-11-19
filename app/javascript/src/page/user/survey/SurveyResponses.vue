@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-responsive">
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -18,33 +18,35 @@
             />
             <p class="m-0 text-truncate">{{ response.line_friend.display_name }}</p>
           </td>
-          <td class="mw-400">
+          <td>
             <label>フォームの回答</label>
-            <div v-for="(answer, index) in response.survey_answers" :key="index">
-              <div class="divider my-2"></div>
-              <div class="d-flex border-bottom border-light my-1">
-                <div class="mw-300 mr-2 font-weight-bold">{{ answer.survey_question.content["text"] }}</div>
-                <div class="mw-250">
-                  <div v-if="answer.survey_question.type === 'image'">
-                    <div v-lazy:background-image="answer.file_url" class="fw-120 fh-81 background-cover"></div>
-                  </div>
-                  <div v-else-if="answer.survey_question.type === 'pdf'" class="d-flex">
-                    <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
-                    <a
-                      class="btn btn-sm btn-light my-auto text-nowrap"
-                      :href="answer.file_url"
-                      download="lineinsight.pdf"
-                      >ダウンロード</a
-                    >
-                  </div>
-                  <div v-else>
-                    {{ answer.answer || "未設定" }}
+            <div class="card">
+              <div class="card-body">
+                <div v-for="(answer, index) in response.survey_answers" :key="index">
+                  <div class="divider my-2" v-if="index > 0"></div>
+                  <div class="d-flex my-1">
+                    <div class="mw-200 mr-2 font-weight-bold">{{ answer.survey_question.content["text"] }}</div>
+                    <div class="flex-grow-1">
+                      <div v-if="answer.survey_question.type === 'image'">
+                        <div v-lazy:background-image="answer.file_url" class="fw-120 fh-81 background-cover"></div>
+                      </div>
+                      <div v-else-if="answer.survey_question.type === 'pdf'" class="d-flex">
+                        <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
+                        <a
+                          class="btn btn-sm btn-light my-auto text-nowrap"
+                          :href="answer.file_url"
+                          download="lineinsight.pdf"
+                          >ダウンロード</a
+                        >
+                      </div>
+                      <p v-else class="vw-40 item-name">{{ answer.answer || "未設定" }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </td>
-          <td>{{ response.created_at | formatted_time }}</td>
+          <td class="mw-200">{{ response.created_at | formatted_time }}</td>
         </tr>
       </tbody>
     </table>

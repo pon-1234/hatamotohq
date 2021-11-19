@@ -21,6 +21,8 @@
           <survey-response :response="response"></survey-response>
         </div>
       </div>
+
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
   </div>
 </template>
@@ -46,6 +48,7 @@ export default {
 
   async beforeMount() {
     this.responses = await this.getFriendResponses({ survey_id: this.survey_id, friend_id: this.friend.id });
+    this.loading = false;
   },
 
   methods: {
