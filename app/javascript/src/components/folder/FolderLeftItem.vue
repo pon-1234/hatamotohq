@@ -105,7 +105,10 @@ export default {
   },
   methods: {
     canDelete() {
-      return !(this.type === 'survey' && this.data.surveys.length > 0);
+      return !(
+        (this.type === 'survey' && this.data.surveys.length > 0) ||
+        (this.type === 'variable' && this.data.variables.length > 0)
+      );
     },
 
     changeName() {

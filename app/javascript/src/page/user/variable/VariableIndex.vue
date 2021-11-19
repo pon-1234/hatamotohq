@@ -59,14 +59,6 @@
                           @click="curVariableIndex = index"
                           >友だち情報欄をコピー</a
                         >
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          data-toggle="modal"
-                          data-target="#modalDeleteVariable"
-                          @click="curVariableIndex = index"
-                          >友だち情報欄を削除</a
-                        >
                       </div>
                     </div>
                   </td>
