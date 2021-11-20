@@ -86,7 +86,7 @@
                             class="form-group"
                             :name="'richmenu_type_' + index"
                             :value="item.action"
-                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker']"
                             :labelRequired="false"
                             :showTitle="false"
                             @input="item.action = $event"
@@ -211,7 +211,7 @@ export default {
           }
         });
       } else {
-        const index = this.actionObjects.findIndex((val) => val.key === key);
+        const index = this.actionObjects.findIndex(val => val.key === key);
         this.$set(this.actionObjects[index], 'expand', !this.actionObjects[index].expand);
       }
     },
@@ -226,11 +226,13 @@ export default {
       // upload image
       this.uploadRichMenu({
         file: this.b64toBlob(data)
-      }).then((response) => {
-        this.$emit('onMediaChanged', response);
-      }).catch((err) => {
-        console.log(err);
-      });
+      })
+        .then(response => {
+          this.$emit('onMediaChanged', response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
@@ -251,7 +253,6 @@ export default {
 
       return new Blob(byteArrays, { type: contentType });
     }
-
   }
 };
 </script>
