@@ -33,6 +33,8 @@
 #  fk_rails_...  (scenario_message_id => scenario_messages.id)
 #
 class ScenarioEvent < ApplicationRecord
+  include User::MessagesHelper
+
   belongs_to :line_account
   belongs_to :scenario
   belongs_to :scenario_message, required: false # root message can be deleted
