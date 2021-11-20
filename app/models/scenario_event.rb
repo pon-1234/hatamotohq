@@ -58,6 +58,10 @@ class ScenarioEvent < ApplicationRecord
 
   private
     def deliver_message
+      normalized = normalize_message
+      if contain_survey_action?(normalized)
+        normalized = normalize_messages_with_survey_action(self.channel, normalized)
+      end
       payload = {
         channel_id: self.channel.id,
         messages: [normalized]
@@ -67,10 +71,10 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def deliver_after_action
-      ActionHandlerJob.perform_now(self.channel.line_friend, normalized)
+      ActionHandlerJob.perform_now(self.channel.line_friend, normalize_message)
     end
 
-    def normalized
+    def normalize_message
       Normalizer::MessageNormalizer.new(self.content).perform
     end
 

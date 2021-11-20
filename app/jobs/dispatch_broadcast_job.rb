@@ -3,7 +3,6 @@
 class DispatchBroadcastJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
-  include Rails.application.routes.url_helpers
   include User::MessagesHelper
 
   MULTICAST_BATCH_SIZE = 500
@@ -63,6 +62,7 @@ class DispatchBroadcastJob < ApplicationJob
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
+
     if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
     else
@@ -86,23 +86,11 @@ class DispatchBroadcastJob < ApplicationJob
     # In the case, we have to generate survey url for each channel and send message using PushMessage
     def send_messages_with_survey_action(channels, messages)
       channels.each do |channel|
-        messages.extend Hashie::Extensions::DeepLocate
-        # Find all postback action
-        survey_actions = messages.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('survey') }
-        survey_actions.each do |action|
-          survey_id = action['content']['id']
-          survey = Survey.find(survey_id)
-          survey_url = gen_survey_url(survey, channel.line_friend.line_user_id)
-          action['type'] = 'uri'
-          action['uri'] = survey_url
-          action['linkUri'] = survey_url
-        end
-        LineApi::PushMessage.new(@broadcast.line_account).perform(messages, channel.line_friend.line_user_id)
+        LineApi::PushMessage.new(@broadcast.line_account)
+          .perform(
+            normalize_messages_with_survey_action(channel, messages),
+            channel.line_friend.line_user_id)
       end
-    end
-
-    def gen_survey_url(survey, friend_id)
-      new_survey_answer_form_url(code: survey.code, friend_id: friend_id)
     end
 
     def send_broadcast(line_account, messages_data)

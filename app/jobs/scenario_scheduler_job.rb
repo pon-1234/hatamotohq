@@ -3,6 +3,7 @@
 class ScenarioSchedulerJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
+  include User::MessagesHelper
 
   def perform(channel_id, scenario_id)
     @channel = Channel.find(channel_id)
@@ -21,21 +22,20 @@ class ScenarioSchedulerJob < ApplicationJob
       if message.is_initial?
         deliver_now(message)
       else
-        schedule_delay_message(message)
+        create_message_event(message, deliver_time_for(message))
       end
     end
 
     def deliver_now(message)
       normalized = Normalizer::MessageNormalizer.new(message.content).perform
+      if contain_survey_action?(normalized)
+        normalized = normalize_messages_with_survey_action(@channel, normalized)
+      end
       payload = {
         channel_id: @channel.id,
         messages: [normalized]
       }
       PushMessageToLineJob.perform_now(payload)
-    end
-
-    def schedule_delay_message(message)
-      create_message_event(message, deliver_time_for(message))
     end
 
     # If last message is initial message then perform after action immediately
