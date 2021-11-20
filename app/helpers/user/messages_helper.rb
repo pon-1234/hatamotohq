@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module User::MessagesHelper
-  include Rails.application.routes.url_helpers
-
   # Check if any action contains a survey action
   def contain_survey_action?(messages)
     messages.extend Hashie::Extensions::DeepLocate
@@ -12,7 +10,8 @@ module User::MessagesHelper
 
   # Generate survey url before sending to each friend
   def gen_survey_url(survey, friend_id)
-    new_survey_answer_form_url(code: survey.code, friend_id: friend_id)
+    routes = Rails.application.routes.url_helpers
+    routes.new_survey_answer_form_url(code: survey.code, friend_id: friend_id)
   end
 
   def normalize_messages_with_survey_action(channel, messages)
