@@ -23,7 +23,9 @@
               <tr v-for="(scenario, index) in scenarios" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ scenario.mode === "time" ? "時刻" : "経過時間" }}</td>
-                <td>{{ scenario.title }}</td>
+                <td>
+                  <p class="item-name mxw-400">{{ scenario.title }}</p>
+                </td>
                 <td>{{ scenario.scenario_messages_count || 0 }}</td>
                 <td>
                   <div role="button" class="btn btn-info btn-sm" @click="selectScenario(scenario)" data-dismiss="modal">
