@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_111427) do
+ActiveRecord::Schema.define(version: 2021_11_20_043427) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -242,7 +242,6 @@ ActiveRecord::Schema.define(version: 2021_11_19_111427) do
     t.string 'display_name'
     t.string 'channel_id'
     t.string 'channel_secret'
-    t.string 'line_channel_access_token'
     t.string 'invite_url'
     t.string 'webhook_url'
     t.string 'liff_id'

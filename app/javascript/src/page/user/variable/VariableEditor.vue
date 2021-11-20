@@ -38,7 +38,7 @@
             </select>
           </div>
         </div>
-        <div class="form-group d-flex">
+        <div class="form-group d-flex" v-if="isSupportDefaultValue">
           <label class="fw-300">既定値</label>
           <div class="grow-flex-1 d-flex">
             <div class="fw-300">
@@ -126,7 +126,11 @@ export default {
   computed: {
     ...mapState('variable', {
       folders: state => state.folders
-    })
+    }),
+
+    isSupportDefaultValue() {
+      return this.variableData.type === 'text';
+    }
   },
 
   methods: {
