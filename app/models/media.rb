@@ -51,7 +51,7 @@ class Media < ApplicationRecord
       url_for(file.preview(resize: '240x240').processed)
     end
   rescue StandardError => e
-    logger.error("Could not generate preview url #{e.message}")
+    p "Could not generate preview url #{e.message}"
     url
   end
 
