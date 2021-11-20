@@ -113,7 +113,6 @@
           >
         </div>
         <div v-if="richMenuData.target === 'condition'">
-          <label>タグ</label>
           <div class="list-checkbox-tag">
             <input-tag :tags="tags" @input="onTagsChanged" />
           </div>

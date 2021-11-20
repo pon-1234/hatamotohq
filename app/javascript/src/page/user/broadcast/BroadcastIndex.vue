@@ -207,7 +207,7 @@ export default {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getBroadcasts();
+        await this.getBroadcasts();
         this.forceRerender();
         this.loading = false;
       });
