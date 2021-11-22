@@ -137,10 +137,10 @@
                 <tbody>
                   <tr v-for="(variable, index) in variables" :key="index">
                     <th>{{ variable.name }}</th>
-                    <td v-if="variable.type === 'image'">
+                    <td v-if="variable.type === 'image' && variable.value">
                       <div v-lazy:background-image="variable.value" class="fw-120 fh-81 background-cover"></div>
                     </td>
-                    <td v-else-if="variable.type === 'pdf'">
+                    <td v-else-if="variable.type === 'pdf' && variable.value">
                       <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
                       <a class="btn btn-sm btn-light" :href="variable.value" download="lineinsight.pdf">ダウンロード</a>
                     </td>
