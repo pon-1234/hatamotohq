@@ -250,8 +250,9 @@ export default {
 
     async submitCopySurvey() {
       const response = await this.copySurvey(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('回答フォームのコピーは完成しました。', location.href);
+        Util.showSuccessThenRedirect('回答フォームのコピーは完成しました。', url);
       } else {
         window.toastr.error('回答フォームのコピーは失敗しました。');
       }

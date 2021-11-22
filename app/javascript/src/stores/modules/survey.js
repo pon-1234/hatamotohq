@@ -10,7 +10,7 @@ export const state = {
   usersCurPage: 0,
   responsesTotalRows: 0,
   responsesPerPage: 0,
-  responsesCurPage: 0,
+  responsesCurPage: 0
 };
 
 export const mutations = {
