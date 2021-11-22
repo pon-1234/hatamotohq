@@ -59,6 +59,15 @@
                           @click="curVariableIndex = index"
                           >友だち情報欄をコピー</a
                         >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteVariable"
+                          @click="curVariableIndex = index"
+                          v-if="variable.destroyable"
+                          >友だち情報欄を削除</a
+                        >
                       </div>
                     </div>
                   </td>
@@ -217,9 +226,9 @@ export default {
     async submitDeleteVariable() {
       const response = await this.deleteVariable(this.curVariable.id);
       if (response) {
-        window.toastr.success('友だち情報欄の削除は完了しました。');
+        Util.showSuccessThenRedirect('友だち情報欄の削除は完了しました。', window.location.href);
       } else {
-        window.toastr.error('友だち情報欄の削除は失敗しました。');
+        Util.showErrorThenRedirect('友だち情報欄の削除は失敗しました。', window.location.href);
       }
       this.forceRerender();
     },
@@ -229,7 +238,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
+        Util.showErrorThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
       }
       this.forceRerender();
     },

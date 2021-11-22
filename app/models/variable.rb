@@ -30,6 +30,14 @@ class Variable < ApplicationRecord
   has_many :friend_variables
   include VariableType
 
+  after_destroy do
+    handle_after_destroy
+  end
+
+  def destroyable?
+    self.friend_variables.length == 0
+  end
+
   def clone!
     new_varaible = self.dup
     new_varaible.name = new_varaible.name + '（コビー）'
@@ -50,5 +58,12 @@ class Variable < ApplicationRecord
   private
     def bind_data(friend)
       self.default&.gsub(/{name}/, friend.display_name)
+    end
+
+    def handle_after_destroy
+      p '-------handle after destroy-----'
+      byebug
+      p self.line_account.surveys
+      
     end
 end

@@ -77,9 +77,7 @@ export const actions = {
 
   async deleteVariable(context, id) {
     try {
-      const response = await VariableAPI.delete(id);
-      context.commit('deleteVariable', id);
-      return response;
+      return await VariableAPI.delete(id);
     } catch (error) {
       return null;
     }
