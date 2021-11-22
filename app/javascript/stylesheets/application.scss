@@ -116,6 +116,10 @@
     min-width: $vw;
   }
 
+  .mxvw-#{$i} {
+    max-width: $vw;
+  }
+
   $vh: 0vh + $i;
   .vh-#{$i} {
     height: $vh;

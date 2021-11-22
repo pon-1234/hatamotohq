@@ -29,11 +29,11 @@
               </thead>
               <tbody v-if="curFolder">
                 <tr v-for="(survey, index) in curFolder.surveys" v-bind:key="index">
-                  <td>
+                  <td class="mw-120">
                     <survey-status :status="survey.status"></survey-status>
                   </td>
                   <td>
-                    <div class="vw-20 max-2-lines">{{ survey.name }}</div>
+                    <div class="mxvw-15 max-2-lines">{{ survey.name }}</div>
                   </td>
                   <td class="mw-200">
                     <template v-if="survey.responses_count === 0"> 未回答 </template>
@@ -42,7 +42,7 @@
                       <a :href="`${rootPath}/user/surveys/${survey.id}`" class="btn btn-sm btn-light ml-2">表示</a>
                     </template>
                   </td>
-                  <td>
+                  <td class="mw-200">
                     <div class="btn-group">
                       <button
                         type="button"
@@ -88,13 +88,13 @@
                         >
                       </div>
                     </div>
-                    <div class="btn-edit01 btn-info-linebot" v-if="survey.is_publish" v-tooltip="'回答一覧'">
-                      <a
-                        class="btn-more btn-more-linebot btn-block"
-                        :href="`${rootPath}/user/surveys/${survey.id}/info`"
-                      >
-                        回答一覧
-                      </a>
+                    <div
+                      class="btn btn-sm btn-light my-1"
+                      data-toggle="modal"
+                      data-target="#modalSurveyPreview"
+                      @click="curSurveyIndex = index"
+                    >
+                      プレビュー
                     </div>
                   </td>
                 </tr>
@@ -157,6 +157,10 @@
       </template>
     </modal-confirm>
     <!-- END: modal delete richmenu -->
+
+    <!-- START: modal survey preview -->
+    <modal-survey-preview :survey_id="curSurvey.id" v-if="curSurvey"></modal-survey-preview>
+    <!-- END: modal survey preview -->
   </div>
 </template>
 
