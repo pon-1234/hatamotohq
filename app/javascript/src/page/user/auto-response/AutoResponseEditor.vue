@@ -1,5 +1,5 @@
 <template>
-  <div class="fw-1200">
+  <div class="mxw-1200">
     <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">基本設定</h3>
@@ -221,8 +221,13 @@ export default {
     },
 
     tagValidator(tag) {
-      // Individual tag validator function
-      return tag === tag.toLowerCase() && tag.length <= 20;
+      // Restrict input %
+      if (tag.includes('%')) {
+        return false;
+      } else {
+        // Individual tag validator function
+        return tag === tag.toLowerCase() && tag.length <= 20;
+      }
     },
 
     async submitCreate() {
