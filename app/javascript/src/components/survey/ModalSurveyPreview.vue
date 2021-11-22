@@ -37,7 +37,6 @@ export default {
   },
 
   mounted() {
-    console.log('----before mount----');
     $(this.$refs.modalSurveyPreview).on('show.bs.modal', this.onShow);
   },
 
@@ -49,7 +48,6 @@ export default {
     },
 
     async onShow() {
-      console.log('------on show preview modal-----');
       this.survey = await this.getSurvey(this.survey_id);
       this.forceRerender();
     }

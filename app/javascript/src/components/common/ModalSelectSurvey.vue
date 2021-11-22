@@ -7,7 +7,7 @@
     aria-labelledby="myModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-xl vh-90 modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">回答フォームを選択してください</h4>
