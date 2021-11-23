@@ -31,7 +31,9 @@
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <div class="card-footer">
-        <button class="btn btn-success text-nowrap mr-1" @click="submit()" :disabled="invalid">リマインダ登録</button>
+        <button class="btn btn-success text-nowrap mr-1" @click="submit()" :disabled="invalid">
+          {{ reminder_id ? "リマインダ保存" : "リマインダ登録" }}
+        </button>
       </div>
     </div>
   </div>
@@ -107,7 +109,10 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateReminder(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`);
+        Util.showSuccessThenRedirect(
+          'リマインダの保存は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+        );
       } else {
         window.toastr.error('リマインダの保存は失敗しました。');
       }
