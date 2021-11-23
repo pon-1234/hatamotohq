@@ -175,6 +175,7 @@ export default {
     forceRerender() {
       this.contentKey++;
     },
+
     syncObj() {
       this.forceRerender();
       this.$emit('input', this.questionContentData);

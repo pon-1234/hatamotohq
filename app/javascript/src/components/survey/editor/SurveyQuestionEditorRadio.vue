@@ -92,7 +92,7 @@
                   <option value="postback">選択時のアクション</option>
                 </select>
               </div>
-              <div style="width: calc(100% - 200px)" v-if="!isBlink">
+              <div style="width: calc(100% - 200px)" :key="contentKey">
                 <div v-if="item.action.type === 'tag'">
                   <input-tag
                     :tags="item.action.content ? item.action.content.tag_ids : null"
@@ -135,7 +135,7 @@ export default {
   data() {
     return {
       max: 50,
-      isBlink: false,
+      contentKey: 0,
       value: this.content || {
         text: null,
         name: this.name,
@@ -191,14 +191,12 @@ export default {
   },
 
   methods: {
-    blink() {
-      this.isBlink = true;
-      this.$nextTick(() => {
-        this.isBlink = false;
-      });
+    forceRerender() {
+      this.contentKey++;
     },
+
     syncObj() {
-      this.blink();
+      this.forceRerender();
       console.log(this.value);
       this.$emit('input', this.value);
     },
@@ -254,11 +252,6 @@ export default {
     }
     .mr10 {
       margin-right: 10px !important;
-    }
-    .action-postback {
-      background: #dcdcdc;
-      padding: 0 10px 10px 10px;
-      border-radius: 4px;
     }
   }
 </style>
