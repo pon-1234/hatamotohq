@@ -33,6 +33,10 @@ class SurveyQuestion < ApplicationRecord
     image? or pdf?
   end
 
+  def selectable?
+    radio? or checkbox? or pulldown?
+  end
+
   def clone_to!(survey_id)
     new_question = self.dup
     new_question.survey_id = survey_id

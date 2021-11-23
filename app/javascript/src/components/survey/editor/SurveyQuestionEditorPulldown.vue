@@ -93,26 +93,19 @@
                 </select>
               </div>
               <div style="width: calc(100% - 200px)" :key="contentKey">
-                <div v-if="item.action.type === 'tag'">
-                  <input-tag
-                    :tags="item.action.content ? item.action.content.tag_ids : null"
-                    :allTags="true"
-                    @input="
-                      item.action.content
-                        ? (item.action.content.tag_ids = $event)
-                        : (item.action.content = { tag_ids: $event })
-                    "
-                  >
-                  </input-tag>
+                <div class="fw-200 pr-2">
+                  <span class="fw-200">選択時のアクション</span>
                 </div>
-                <div class="action-postback" v-else-if="item.action.type === 'postback'">
-                  <action-postback
-                    :showTitle="false"
-                    :value="item.action.content"
-                    :name="name + '-postback-' + index"
-                    :labelRequired="false"
-                    @input="item.action.content = $event"
-                  ></action-postback>
+                <div style="width: calc(100% - 200px)" :key="contentKey">
+                  <div class="action-postback">
+                    <action-postback
+                      :showTitle="false"
+                      :value="item.action"
+                      :name="name + '-postback-' + index"
+                      :labelRequired="false"
+                      @input="item.action = $event"
+                    ></action-postback>
+                  </div>
                 </div>
               </div>
             </div>

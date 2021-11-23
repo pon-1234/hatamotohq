@@ -46,10 +46,6 @@ export default {
     }
   },
 
-  created() {
-    console.log('value', this.value);
-  },
-
   methods: {
     onAssignTagsDataChanged(tags) {
       this.value[0].tags = tags;
