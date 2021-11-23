@@ -14,6 +14,7 @@
           <label class="custom-file-label" for="inputFile">{{ fileName || "ファイルを選択" }}</label>
         </div>
       </div>
+      <error-message message="ファイルの形式が無効です。" v-if="!this.isValidMineType"></error-message>
       <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
         <input type="hidden" v-model="fileName" />
         <error-message :message="errors[0]"></error-message>
@@ -28,7 +29,8 @@ export default {
 
   data() {
     return {
-      fileName: null
+      fileName: null,
+      isValidMineType: true
     };
   },
 
@@ -57,7 +59,12 @@ export default {
   methods: {
     onFileChange(event) {
       var fileData = event.target.files[0];
-      this.fileName = fileData.name;
+      this.fileName = null;
+      this.isValidMineType = false;
+      if (fileData && fileData.type === 'application/pdf') {
+        this.isValidMineType = true;
+        this.fileName = fileData.name;
+      }
     }
   }
 };
