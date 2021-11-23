@@ -33,6 +33,9 @@ class DispatchBroadcastJob < ApplicationJob
 
     if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
+      nomalized_messages_data.each do |content|
+        insert_delivered_message(channels, content)
+      end
     else
       # Deliver messages via line api
       response = send_broadcast(line_account, nomalized_messages_data)
@@ -89,7 +92,8 @@ class DispatchBroadcastJob < ApplicationJob
         LineApi::PushMessage.new(@broadcast.line_account)
           .perform(
             normalize_messages_with_survey_action(channel, messages),
-            channel.line_friend.line_user_id)
+            channel.line_friend.line_user_id
+          )
       end
     end
 
