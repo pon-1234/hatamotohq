@@ -11,7 +11,7 @@
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
           <td class="mw-200 text-truncate table-user">
-            <img :src="user.avatar_url || '/img/no-image-profile.png'" alt="table-user" class="mr-2 rounded-circle" />
+            <img v-lazy="user.avatar_url || '/img/no-image-profile.png'" class="mr-2 rounded-circle" />
             {{ user.display_name }}
           </td>
           <td class="mw-400">{{ user.responses_count }}</td>
