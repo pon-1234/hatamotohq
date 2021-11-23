@@ -20,7 +20,6 @@
     </div> -->
 
     <label>アクション</label>
-
     <div>
       <select
         type="text"
@@ -142,13 +141,14 @@ export default {
     },
 
     setupData() {
-      const data = this.value;
-      this.content = data.content;
-      this.curPostbackType = data.type || 'none';
+      if (this.value) {
+        const data = this.value;
+        this.content = data.content;
+        this.curPostbackType = data.type || 'none';
+      } else {
+        this.curPostbackType = 'none';
+      }
     }
   }
 };
 </script>
-
-<style scoped>
-</style>

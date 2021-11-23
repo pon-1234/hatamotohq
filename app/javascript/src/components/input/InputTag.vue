@@ -23,7 +23,7 @@
         </ul>
         <b-form-input
           :disabled="disabled"
-          v-model="search"
+          v-model.trim="search"
           ref="inputTag"
           class="input-text-tag"
           type="search"

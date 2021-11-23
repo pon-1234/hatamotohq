@@ -8,7 +8,10 @@ class ActionHandlerJob < ApplicationJob
     @friend = friend
     @action = action
     @reply_token = reply_token
-    handle_message_action(@action['actions']) if @action['actions'].present?
+    # Handle multiple actions
+    return handle_message_action(@action['actions']) if @action['actions'].present?
+    # Handle single action
+    return handle_message_action([@action['action']]) if @action['action'].present?
   end
 
   def handle_message_action(actions)

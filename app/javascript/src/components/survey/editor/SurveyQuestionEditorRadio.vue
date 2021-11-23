@@ -86,32 +86,16 @@
             </div>
             <div v-show="item.is_editor" class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
-                <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
-                  <option value="tag">タグ</option>
-                  <!--<option value="information">友達情報</option>-->
-                  <option value="postback">選択時のアクション</option>
-                </select>
+                <span class="fw-200">選択時のアクション</span>
               </div>
-              <div style="width: calc(100% - 200px)" v-if="!isBlink">
-                <div v-if="item.action.type === 'tag'">
-                  <input-tag
-                    :tags="item.action.content ? item.action.content.tag_ids : null"
-                    :allTags="true"
-                    @input="
-                      item.action.content
-                        ? (item.action.content.tag_ids = $event)
-                        : (item.action.content = { tag_ids: $event })
-                    "
-                  >
-                  </input-tag>
-                </div>
-                <div class="action-postback" v-else-if="item.action.type === 'postback'">
+              <div style="width: calc(100% - 200px)" :key="contentKey">
+                <div class="action-postback">
                   <action-postback
                     :showTitle="false"
-                    :value="item.action.content"
+                    :value="item.action"
                     :name="name + '-postback-' + index"
                     :labelRequired="false"
-                    @input="item.action.content = $event"
+                    @input="item.action = $event"
                   ></action-postback>
                 </div>
               </div>
@@ -135,7 +119,7 @@ export default {
   data() {
     return {
       max: 50,
-      isBlink: false,
+      contentKey: 0,
       value: this.content || {
         text: null,
         name: this.name,
@@ -149,10 +133,7 @@ export default {
             is_editor: true,
             value: null,
             action: {
-              type: 'tag',
-              content: {
-                tag_ids: null
-              }
+              type: 'none'
             }
           }
         ]
@@ -191,14 +172,12 @@ export default {
   },
 
   methods: {
-    blink() {
-      this.isBlink = true;
-      this.$nextTick(() => {
-        this.isBlink = false;
-      });
+    forceRerender() {
+      this.contentKey++;
     },
+
     syncObj() {
-      this.blink();
+      this.forceRerender();
       console.log(this.value);
       this.$emit('input', this.value);
     },
@@ -207,10 +186,7 @@ export default {
         is_editor: true,
         value: null,
         action: {
-          type: 'tag',
-          content: {
-            tag_ids: null
-          }
+          type: 'none'
         }
       });
       this.syncObj();
@@ -254,11 +230,6 @@ export default {
     }
     .mr10 {
       margin-right: 10px !important;
-    }
-    .action-postback {
-      background: #dcdcdc;
-      padding: 0 10px 10px 10px;
-      border-radius: 4px;
     }
   }
 </style>

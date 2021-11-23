@@ -1,6 +1,8 @@
 <div class="alert alert-success" role="alert">
   <h4 class="alert-heading">送信完了</h4>
-  <p>ご回答ありがとうございました！</p>
+  <p>
+    <%= @survey.success_message || 'ご回答ありがとうございました！' %>
+  </p>
   <hr>
   <p class="mb-0">上部✖︎ボタンを押して終了してください</p>
 </div>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SurveysController < ApplicationController
-  before_action :find_survey, only: [:show, :answer, :form]
+  before_action :find_survey, only: [:show, :answer, :form, :answer_success]
 
   include SurveysHelper
 
