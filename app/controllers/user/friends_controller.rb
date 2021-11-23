@@ -71,8 +71,7 @@ class User::FriendsController < User::ApplicationController
 
   # POST /user/friends/:id/set_reminder
   def set_reminder
-    @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
-    render_success
+    @reminding = @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
   end
 
   # GET /user/friends/:id/variables

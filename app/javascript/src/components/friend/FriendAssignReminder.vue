@@ -84,7 +84,7 @@ export default {
       };
       const response = await this.setReminder(payload);
       if (response) {
-        Util.showSuccessThenRedirect('リマインダの設定は完了しました。', location.href);
+        window.toastr.success('リマインダの設定は完了しました。');
       } else {
         window.toastr.error('リマインダの設定は失敗しました。');
       }

@@ -101,6 +101,7 @@ class LineFriend < ApplicationRecord
   def set_reminder!(reminder_id, goal)
     reminding = Reminding.new(channel: self.channel, reminder_id: reminder_id, goal: goal)
     reminding.save!
+    reminding
   end
 
   def variables

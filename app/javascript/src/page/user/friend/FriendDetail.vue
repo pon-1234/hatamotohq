@@ -46,7 +46,7 @@
 
             <!-- friend addition time -->
             <li class="list-group-item">
-              <b>登録日</b><span class="float-right">{{ formatDateTime(friendData.created_at) }}</span>
+              <b>登録日</b><span class="float-right">{{ friendData.created_at | formatted_time }}</span>
             </li>
           </ul>
         </div>
@@ -120,12 +120,6 @@
             <span class="d-none d-md-block">リマインダ</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="#scenario" data-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-            <span class="d-none d-md-block">シナリオ</span>
-          </a>
-        </li>
       </ul>
 
       <div class="tab-content">
@@ -188,19 +182,13 @@
             </div>
           </div>
         </div>
-
-        <!-- シナリオ -->
-        <div class="tab-pane border border-light" id="scenario">
-          <p>...</p>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   props: {
@@ -225,7 +213,6 @@ export default {
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
       },
-      reminders: [],
       friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
       isShowDisplayName: false,
       field_index: null,
@@ -239,9 +226,15 @@ export default {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
     this.variables = await this.getVariables(this.friend_id);
-    this.reminders = await this.getReminders(this.friend_id);
+    await this.getReminders(this.friend_id);
     this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
+  },
+
+  computed: {
+    ...mapState('friend', {
+      reminders: state => state.reminders
+    })
   },
 
   methods: {
@@ -249,18 +242,6 @@ export default {
 
     selectTags(tags) {
       this.friendData.tags = tags;
-    },
-
-    formatDateTime(time) {
-      return moment(time).format('YYYY.MM.DD HH:mm');
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
     },
 
     async onSave() {

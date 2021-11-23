@@ -3,6 +3,7 @@ import FriendAPI from '../api/friend_api';
 export const state = {
   friend: null,
   friends: [],
+  reminders: [],
   totalRows: 0,
   perPage: 0,
   queryParams: {
@@ -25,6 +26,14 @@ export const mutations = {
 
   setFriends(state, friends) {
     state.friends = friends;
+  },
+
+  setReminders(state, reminders) {
+    state.reminders = reminders;
+  },
+
+  setReminder(state, reminder) {
+    state.reminders.push(reminder);
   },
 
   setMeta(state, meta) {
@@ -124,7 +133,9 @@ export const actions = {
 
   async getReminders(context, id) {
     try {
-      return await FriendAPI.getReminders(id);
+      const reminders = await FriendAPI.getReminders(id);
+      context.commit('setReminders', reminders);
+      return reminders;
     } catch (error) {
       return null;
     }
@@ -132,7 +143,9 @@ export const actions = {
 
   async setReminder(context, payload) {
     try {
-      return await FriendAPI.setReminder(payload);
+      const reminder = await FriendAPI.setReminder(payload);
+      context.commit('setReminder', reminder);
+      return reminder;
     } catch (error) {
       return null;
     }
