@@ -2,7 +2,7 @@
 
 class User::RemindersController < User::ApplicationController
   load_and_authorize_resource
-  before_action :find_reminder, only: [:update]
+  before_action :find_reminder, only: [:update, :show]
   include User::ReminderHelper
 
   # GET /user/reminders
@@ -14,6 +14,10 @@ class User::RemindersController < User::ApplicationController
       format.html
       format.json
     end
+  end
+
+  # GET /user/reminders/:id
+  def show
   end
 
   # GET /user/reminders/new
@@ -33,6 +37,7 @@ class User::RemindersController < User::ApplicationController
     end
   end
 
+  # PATCH /user/reminders/:id
   def update
     unless @reminder.update!(reminder_params)
       render_bad_request_with_message(@reminder.first_error_message)

@@ -172,8 +172,8 @@
                 <tbody>
                   <tr v-for="(reminder, index) in reminders" :key="index">
                     <td>{{ reminder.name }}</td>
-                    <td>{{ reminder.created_at }}</td>
-                    <td>{{ reminder.goal }}</td>
+                    <td>{{ reminder.created_at | formatted_time }}</td>
+                    <td>{{ reminder.goal | formatted_time }}</td>
                   </tr>
                 </tbody>
               </table>

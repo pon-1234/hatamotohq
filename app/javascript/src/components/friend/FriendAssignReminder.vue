@@ -33,10 +33,16 @@
         ></datetime>
         <error-message :message="errors.first('reminder_goal')"></error-message>
       </div>
-      <div class="btn btn-light mr-1 mb-auto">プレビュー</div>
+      <div class="btn btn-sm btn-light mr-1 mb-auto" data-toggle="modal" data-target="#modalReminderPreview">
+        プレビュー
+      </div>
       <div class="btn btn-success fw-120 mb-auto" @click="submit()">開始</div>
     </div>
     <modal-select-reminder id="modalSelectReminder" @selectReminder="onSelectReminder($event)"></modal-select-reminder>
+
+    <!-- START: modal survey preview -->
+    <modal-reminder-preview :reminder_id="reminder.id" v-if="reminder"></modal-reminder-preview>
+    <!-- END: modal survey preview -->
   </div>
 </template>
 
@@ -44,7 +50,6 @@
 import moment from 'moment';
 import { Datetime } from 'vue-datetime';
 import { mapActions } from 'vuex';
-import Util from '@/core/util';
 
 export default {
   components: {
