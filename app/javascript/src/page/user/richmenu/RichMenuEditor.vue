@@ -5,6 +5,16 @@
         <h3 class="card-title">基本設定</h3>
       </div>
       <div class="card-body">
+        <div class="form-group d-flex align-items-center">
+          <label class="fw-300">フォルダー</label>
+          <div class="flex-grow-1">
+            <select v-model="richMenuData.folder_id" class="form-control fw-300">
+              <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                {{ folder.name }}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="form-group d-flex align-items-start">
           <div class="d-flex fw-300 align-items-center">
             <span class="font-weight-bold">リッチメニュー名<required-mark /></span>
@@ -17,8 +27,9 @@
               name="name"
               class="form-control"
               placeholder="リッチメニュー（ホーム）"
-              v-validate="'required'"
+              v-validate="'required|max:255'"
               data-vv-as="リッチメニュー名"
+              maxlength="256"
             />
             <error-message :message="errors.first('name')"></error-message>
           </div>
@@ -37,6 +48,7 @@
               class="form-control"
               placeholder="トップメニュー"
               v-validate="'required|max:14'"
+              maxlength="15"
               data-vv-as="トークルームメニュー"
             />
             <error-message :message="errors.first('richmenu-title')"></error-message>
@@ -70,11 +82,13 @@
 
     <!--Editor-->
     <rich-menu-content-editor
+      v-if="!loading"
       @input="richMenu"
       :background="backgroundUrl"
       :templateId="richMenuData.template_id"
-      :templateValue="templateValue"
+      :piecesCount="templateValue"
       :templateType="templateType"
+      :areas="richMenuData.areas"
       @onMediaChanged="onMediaChanged($event)"
     >
     </rich-menu-content-editor>
@@ -99,7 +113,6 @@
           >
         </div>
         <div v-if="richMenuData.target === 'condition'">
-          <label>タグ</label>
           <div class="list-checkbox-tag">
             <input-tag :tags="tags" @input="onTagsChanged" />
           </div>
@@ -124,7 +137,8 @@
 
 <script>
 import Util from '@/core/util';
-import { mapActions } from 'vuex';
+import { RichMenuValue } from '@/core/constant';
+import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
 export default {
@@ -166,15 +180,18 @@ export default {
     if (this.rich_menu_id) {
       await this.fetchRichMenu();
     }
+    await this.getRichMenus();
     this.loading = false;
   },
 
+  computed: {
+    ...mapState('richmenu', {
+      folders: state => state.folders
+    })
+  },
+
   methods: {
-    ...mapActions('richmenu', [
-      'getRichMenu',
-      'createRichMenu',
-      'updateRichMenu'
-    ]),
+    ...mapActions('richmenu', ['getRichMenu', 'createRichMenu', 'updateRichMenu', 'getRichMenus']),
 
     forceRerender() {
       this.contentKey++;
@@ -183,6 +200,7 @@ export default {
     async fetchRichMenu() {
       const richMenu = await this.getRichMenu(this.rich_menu_id);
       this.richMenuData = _.omit(richMenu, ['conditions']);
+      this.templateValue = RichMenuValue[this.richMenuData.template_id];
       this.parseConditions(richMenu.conditions);
       this.backgroundUrl = richMenu.image_url;
       this.forceRerender();
@@ -244,7 +262,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect(
           'リッチメニュの保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/rich_menus`
+          `${process.env.MIX_ROOT_PATH}/user/rich_menus?folder_id=${this.richMenuData.folder_id}`
         );
       } else {
         window.toastr.error('リッチメニューの保存は失敗しました。');

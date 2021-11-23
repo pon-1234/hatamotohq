@@ -70,11 +70,11 @@ json_arr = [
   {
     "id": 7,
     "type": 'survey',
-    "title": 'アンケート',
-    "description": 'This action can be configured only with quick reply buttons. When a button associated with this action is tapped, the location screen in LINE is opened.',
+    "title": '回答フォーム',
+    "description": 'This action can be configured only with quick reply buttons. When a button associated with this action is tapped, the survey screen in LINE is opened.',
     "format": {
       "type": 'survey',
-      "label": 'Location'
+      "label": '回答フォーム'
     }
   }
 ]

@@ -73,7 +73,7 @@
                     />
                     <div
                       v-else
-                      v-lazy:background-image="media.preview_url"
+                      v-lazy:background-image="media.preview_url || media.url"
                       class="fw-200 fh-150 bg-position-center"
                     ></div>
                   </template>
@@ -92,8 +92,8 @@
 
                   <template v-else-if="isAudio(media)">
                     <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
-                      <audio controls class="audio-player mx-2">
-                        <source :src="media.url" />
+                      <audio controls class="audio-player mx-2 mx-safari">
+                        <source :src="media.url"/>
                       </audio>
                     </div>
                   </template>
@@ -105,9 +105,13 @@
                 <div class="d-flex align-items-center mt-1 mr-auto">
                   <input class="select-media-cb mr-1" type="checkbox" :value="media" v-model="selectedMedias" />
                   <b>{{ media.type }}</b>
-                  <a :href="media.url" class="ml-auto text-sm text-info" download><i class="fas fa-download"></i></a>
+                  <a @click="download(media)" role="button" class="ml-auto text-sm text-info"
+                    ><i class="fas fa-download"></i
+                  ></a>
                 </div>
-                <a :href="media.url" class="download-icon mt-1" download><i class="dripicons-cloud-download"></i></a>
+                <a @click="download(media)" role="button" class="download-icon mt-1"
+                  ><i class="dripicons-cloud-download"></i
+                ></a>
               </div>
               <small class="w-100">
                 登録：<b>{{ formattedDate(media.created_at) }}</b>
@@ -178,7 +182,7 @@ export default {
   props: {
     types: {
       type: Array,
-      default: () => ['image', 'audio', 'video']
+      default: () => ['image', 'audio', 'video', 'richmenu']
     },
     mode: {
       type: String,
@@ -208,9 +212,9 @@ export default {
 
   computed: {
     ...mapState('media', {
-      medias: (state) => state.medias,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      medias: state => state.medias,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     isManageMode() {
@@ -233,6 +237,8 @@ export default {
         this.loading = true;
         this.setCurPage(this.currentPage);
         await this.getMedias();
+        this.checkedAll = false;
+        this.selectedMedias = [];
         this.forceRerender();
         this.loading = false;
       });
@@ -254,13 +260,10 @@ export default {
 
     async deleteSelectedMedia() {
       this.loading = true;
-      const mediaIds = this.selectedMedias.map((_) => _.id);
+      const mediaIds = this.selectedMedias.map(_ => _.id);
       const response = await this.deleteMedias(mediaIds);
       if (response) {
-        Util.showSuccessThenRedirect(
-          '選択したメディアの削除は完了しました。',
-          window.location.href
-        );
+        Util.showSuccessThenRedirect('選択したメディアの削除は完了しました。', window.location.href);
       } else {
         window.toastr.error('選択したメディアの削除は失敗しました。');
       }
@@ -285,6 +288,20 @@ export default {
 
     isPdf(media) {
       return media.type === 'pdf';
+    },
+
+    download(media) {
+      var a = document.createElement('a');
+      a.href = media.download_url;
+      a.download = media.file_name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    },
+
+    resetData() {
+      this.currentPage = 1;
+      this.loadPage();
     }
   }
 };
@@ -337,4 +354,14 @@ export default {
   .download-icon {
     font-size: 1rem;
   }
+
+  .audio-player {
+    width: 100%;
+  }
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0){
+  .mx-safari {
+    margin: 0 1px !important;
+  }
+}
 </style>

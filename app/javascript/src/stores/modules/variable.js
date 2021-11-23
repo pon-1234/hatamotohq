@@ -16,11 +16,11 @@ export const mutations = {
     state.folders = folders;
   },
 
-  updateFolder(state, folder) {
-    folder.variables = [];
-    folder.variables_count = 0;
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
   },
 
   deleteFolder(state, id) {
@@ -43,6 +43,7 @@ export const actions = {
     try {
       const folders = await VariableAPI.list(query);
       context.commit('setFolders', folders);
+      return folders;
     } catch (error) {
       console.log(error);
     }
@@ -76,9 +77,7 @@ export const actions = {
 
   async deleteVariable(context, id) {
     try {
-      const response = await VariableAPI.delete(id);
-      context.commit('deleteVariable', id);
-      return response;
+      return await VariableAPI.delete(id);
     } catch (error) {
       return null;
     }

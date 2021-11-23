@@ -8,34 +8,58 @@
         <h5 class="m-auto font-weight-bold">設定変更</h5>
       </div>
       <ValidationObserver ref="observer" v-slot="{ validate }">
-        <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="getAction()" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="authenticity_token" :value="csrfToken">
+        <form
+          ref="form"
+          @submit.prevent="validate().then(onSubmit)"
+          :action="getAction()"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" name="authenticity_token" :value="csrfToken" />
           <input type="hidden" name="_method" value="patch" />
-          <input type="hidden" name="setting[id]" :value="settingFormData.id">
+          <input type="hidden" name="setting[id]" :value="settingFormData.id" />
           <div class="card-body">
             <div class="form-group d-flex">
-              <label class="fw-350">LINE公式アカウントID<required-mark/></label>
+              <label class="fw-350">LINE公式アカウントID<required-mark /></label>
               <div class="flex-grow-1">
                 <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="setting[line_user_id]" placeholder="入力してください" v-model="settingFormData.line_user_id">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="setting[line_user_id]"
+                    placeholder="入力してください"
+                    v-model="settingFormData.line_user_id"
+                  />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
             <div class="form-group d-flex">
-              <label class="fw-350">LINEアカウント名<required-mark/></label>
+              <label class="fw-350">LINEアカウント名<required-mark /></label>
               <div class="flex-grow-1">
                 <ValidationProvider name="LINEアカウント名" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="setting[line_name]" placeholder="入力してください" v-model="settingFormData.line_name">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="setting[line_name]"
+                    placeholder="入力してください"
+                    v-model="settingFormData.line_name"
+                  />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
             <div class="form-group d-flex">
-              <label class="fw-350">表示名<required-mark/></label>
+              <label class="fw-350">表示名<required-mark /></label>
               <div class="flex-grow-1">
                 <ValidationProvider name="表示名" rules="required" v-slot="{ errors }">
-                  <input type="text" class="form-control" name="setting[display_name]" placeholder="入力してください" v-model="settingFormData.display_name">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="setting[display_name]"
+                    placeholder="入力してください"
+                    v-model="settingFormData.display_name"
+                  />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
@@ -43,25 +67,31 @@
             <div class="form-group d-flex">
               <label class="fw-350">チャネルID</label>
               <div class="flex-grow-1">
-                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_id" disabled>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  v-model="settingFormData.channel_id"
+                  disabled
+                />
               </div>
             </div>
             <div class="form-group d-flex">
               <label class="fw-350">チャネルシークレット</label>
               <div class="flex-grow-1">
-                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.channel_secret" disabled>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  v-model="settingFormData.channel_secret"
+                  disabled
+                />
               </div>
             </div>
             <div class="form-group d-flex">
               <label class="fw-350">Webhook URL</label>
               <div class="flex-grow-1">
-                <input type="text" class="form-control" placeholder="入力してください" :value="webhookUrl()" disabled>
-              </div>
-            </div>
-            <div class="form-group d-flex">
-              <label class="fw-350">LIFF ID</label>
-              <div class="flex-grow-1">
-                <input type="text" class="form-control" placeholder="入力してください" v-model="settingFormData.liff_id" disabled>
+                <input type="text" class="form-control" placeholder="入力してください" :value="webhookUrl()" disabled />
               </div>
             </div>
           </div>
@@ -120,5 +150,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

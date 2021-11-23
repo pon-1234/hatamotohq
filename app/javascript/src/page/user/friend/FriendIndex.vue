@@ -22,6 +22,7 @@
             data-backdrop="static"
             data-toggle="modal"
             data-target="#modalFriendSearch"
+            @click="openModal()"
           >
             詳細検索
           </div>
@@ -45,11 +46,11 @@
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
                   <img
-                    :src="friend.line_picture_url || '/img/no-image-profile.png'"
+                    v-lazy="genAvatarImgObj(friend.line_picture_url)"
                     alt="table-user"
                     class="mr-2 rounded-circle"
                   />
-                  <p class="m-0">{{ friend.line_name }}</p>
+                  <p class="m-0">{{ truncate(friend.display_name || friend. line_name, 15) }}</p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">
@@ -83,7 +84,7 @@
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
-    <modal-friend-search></modal-friend-search>
+    <modal-friend-search ref="modalFriendSearch"></modal-friend-search>
   </div>
 </template>
 <script>
@@ -180,6 +181,25 @@ export default {
 
     handleResize() {
       this.window.width = window.innerWidth;
+    },
+
+    genAvatarImgObj(url) {
+      const avatarImgObj = {
+        src: url,
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      };
+      return avatarImgObj;
+    },
+
+    openModal() {
+      this.$refs.modalFriendSearch.showModal();
+    },
+
+    truncate(name, length = 15) {
+      return _.truncate(name, {
+        length: length
+      });
     }
   }
 };

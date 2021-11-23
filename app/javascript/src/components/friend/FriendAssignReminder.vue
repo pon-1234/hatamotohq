@@ -7,7 +7,7 @@
         data-target="#modalSelectReminder"
         data-backdrop="static"
       >
-        {{ reminder.id ? reminder.name : "リマインダを選択する" }}
+        <span class="max-1-lines">{{ reminder.id ? reminder.name : "リマインダを選択する" }}</span>
       </div>
       <div>
         <input type="hidden" v-model="reminder.id" name="reminder_id" v-validate="'required'" data-vv-as="リマインダ" />
@@ -33,10 +33,16 @@
         ></datetime>
         <error-message :message="errors.first('reminder_goal')"></error-message>
       </div>
-      <div class="btn btn-light mr-1 mb-auto">プレビュー</div>
+      <div class="btn btn-sm btn-light mr-1 mb-auto" data-toggle="modal" data-target="#modalReminderPreview">
+        プレビュー
+      </div>
       <div class="btn btn-success fw-120 mb-auto" @click="submit()">開始</div>
     </div>
     <modal-select-reminder id="modalSelectReminder" @selectReminder="onSelectReminder($event)"></modal-select-reminder>
+
+    <!-- START: modal survey preview -->
+    <modal-reminder-preview :reminder_id="reminder.id" v-if="reminder"></modal-reminder-preview>
+    <!-- END: modal survey preview -->
   </div>
 </template>
 
@@ -44,7 +50,6 @@
 import moment from 'moment';
 import { Datetime } from 'vue-datetime';
 import { mapActions } from 'vuex';
-import Util from '@/core/util';
 
 export default {
   components: {
@@ -63,14 +68,14 @@ export default {
         id: null,
         name: null
       },
-      currentDate: moment().tz('Asia/Tokyo').format()
+      currentDate: moment()
+        .tz('Asia/Tokyo')
+        .format()
     };
   },
 
   methods: {
-    ...mapActions('friend', [
-      'setReminder'
-    ]),
+    ...mapActions('friend', ['setReminder']),
 
     async submit() {
       const valid = await this.$validator.validateAll();
@@ -84,7 +89,7 @@ export default {
       };
       const response = await this.setReminder(payload);
       if (response) {
-        Util.showSuccessThenRedirect('リマインダの設定は完了しました。', window.location.href);
+        window.toastr.success('リマインダの設定は完了しました。');
       } else {
         window.toastr.error('リマインダの設定は失敗しました。');
       }

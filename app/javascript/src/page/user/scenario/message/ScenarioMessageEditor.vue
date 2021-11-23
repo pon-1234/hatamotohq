@@ -14,7 +14,7 @@
                 name="message-name"
                 class="form-control"
                 placeholder="メッセージ名を入力してください"
-                v-model="scenarioMessageData.name"
+                v-model.trim="scenarioMessageData.name"
                 v-validate="'max:255'"
                 data-vv-as="メッセージ名"
               />
@@ -75,17 +75,16 @@
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
       <div>
-        <button type="submit" class="btn btn-success fw-120" @click="submit()">保存</button>
+        <div class="btn btn-success mw-120" @click="submit()">
+          {{ message_id ? "保存" : "メッセージ登録" }}
+        </div>
       </div>
     </div>
     <message-preview></message-preview>
   </div>
 </template>
 <script>
-import {
-  MessageTypeIds,
-  MessageType
-} from '@/core/constant';
+import { MessageTypeIds, MessageType } from '@/core/constant';
 import { mapActions } from 'vuex';
 import Util from '@/core/util';
 import ViewHelper from '@/core/view_helper';
@@ -122,7 +121,8 @@ export default {
         time: '00:00',
         order: 1,
         status: 'enabled', // or 'disabled'
-        messages: [ // Each scenario message contains only one message, but we use array to reuse component
+        messages: [
+          // Each scenario message contains only one message, but we use array to reuse component
           {
             message_type_id: MessageTypeIds.Text,
             content: {
@@ -151,9 +151,7 @@ export default {
       'updateMessage',
       'setPreviewContent'
     ]),
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
+    ...mapActions('system', ['setIsSubmitChange']),
 
     forceRerender() {
       this.componentKey++;
@@ -169,10 +167,12 @@ export default {
         const messageData = await this.getScenarioMessage(query);
         if (messageData) {
           this.scenarioMessageData = _.omit(messageData, ['message_type_id', 'content']);
-          this.scenarioMessageData.messages = [{
-            message_type_id: messageData.message_type_id,
-            content: messageData.content
-          }];
+          this.scenarioMessageData.messages = [
+            {
+              message_type_id: messageData.message_type_id,
+              content: messageData.content
+            }
+          ];
         }
       }
     },
@@ -186,7 +186,7 @@ export default {
       this.setIsSubmitChange();
       if (!result) {
         return ViewHelper.scrollToRequiredField(false);
-      };
+      }
 
       const payload = _.omit(this.scenarioMessageData, ['messages']);
       const messageContent = this.scenarioMessageData.messages[0];
@@ -201,9 +201,15 @@ export default {
       }
 
       if (response) {
-        Util.showSuccessThenRedirect('シナリオにメッセージを保存しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+        Util.showSuccessThenRedirect(
+          'シナリオにメッセージを保存しました。',
+          `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
+        );
       } else {
-        Util.showErrorThenRedirect('シナリオにメッセージの保存は失敗しました。', `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`);
+        Util.showErrorThenRedirect(
+          'シナリオにメッセージの保存は失敗しました。',
+          `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
+        );
       }
     }
   }

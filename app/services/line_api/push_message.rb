@@ -5,5 +5,7 @@ class LineApi::PushMessage < LineApi::BaseRequest
   def perform(messages, friend_id)
     response = client.push_message(friend_id, messages)
     response.code == HTTP_OK
+  rescue
+    false
   end
 end

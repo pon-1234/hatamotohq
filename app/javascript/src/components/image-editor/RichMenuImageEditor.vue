@@ -380,7 +380,7 @@
             </tbody>
           </table>
         </div>
-        <div v-if="editor === 'imagemap'" style="width: 300px; margin-bottom: 20px">
+        <div v-if="editor === 'imagemap'" style="height: 400px; width: 300px;"  class="d-flex flex-column justify-content-center align-items-center">
           <table v-if="templateId === 201" style="width: 270px; height: 270px">
             <tbody>
               <tr>

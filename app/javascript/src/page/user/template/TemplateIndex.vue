@@ -14,8 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
-            :href="`${MIX_ROOT_PATH}/user/templates/new?folder_id=${curFolder.id}`"
-            data-turbolinks="false"
+            :href="`${rootPath}/user/templates/new?folder_id=${curFolder.id}`"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -27,12 +26,14 @@
                   <th>テンプレート名</th>
                   <th>メッセージ数</th>
                   <th>操作</th>
-                  <th>フォルダ</th>
+                  <th>フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(template, index) in curFolder.templates" v-bind:key="template.id">
-                  <td>{{ template.name }}</td>
+                  <td>
+                    <div class="fw-300 text-truncate">{{ template.name }}</div>
+                  </td>
                   <td>{{ template.template_messages_count }}</td>
                   <td>
                     <div class="btn-group">
@@ -45,7 +46,13 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(template)">テンプレートを編集</a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/templates/${template.id}/edit`"
+                          target="_blank"
+                          >テンプレートを編集</a
+                        >
                         <a
                           role="button"
                           class="dropdown-item"
@@ -66,7 +73,9 @@
                     </div>
                   </td>
                   <td>
-                    <div>{{ curFolder.name }}</div>
+                    <div>
+                      <div class="mxw-200 text-truncate">{{ curFolder.name }}</div>
+                    </div>
                     <div class="text-sm">{{ formattedDate(template.created_at) }}</div>
                   </td>
                 </tr>
@@ -83,13 +92,13 @@
 
     <!-- START: Delete folder modal -->
     <modal-confirm
-      title="このフォルダを削除してもよろしいですか？"
+      title="このフォルダーを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder"
     >
       <template v-slot:content v-if="curFolder">
-        <span>フォルダ名：{{ curFolder.name }}</span>
+        <span>フォルダー名：{{ curFolder.name }}</span>
       </template>
     </modal-confirm>
     <!-- END: Delete folder modal -->
@@ -132,7 +141,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       curTemplateIndex: null,
@@ -143,6 +152,15 @@ export default {
 
   async beforeMount() {
     await this.getTemplates();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onSelectedFolderChanged(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -180,16 +198,31 @@ export default {
     },
 
     async submitCreateFolder(folder) {
-      await this.createFolder(folder);
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
 
     async submitUpdateFolder(folder) {
-      await this.updateFolder(folder);
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder(this.curFolder.id);
-      this.onSelectedFolderChanged(0);
+      const response = await this.deleteFolder(this.curFolder.id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.onSelectedFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     },
 
     async submitDeleteTemplate() {
@@ -204,20 +237,17 @@ export default {
 
     async submitCopyTemplate() {
       const response = await this.copyTemplate(this.curTemplate.id);
+      const url = `${this.rootPath}/user/templates?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは完了しました。', url);
       } else {
-        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', window.location.href);
+        Util.showSuccessThenRedirect('テンプレートのコピーは失敗しました。', url);
       }
       this.forceRerender();
     },
 
     backToFolder() {
       this.isPc = false;
-    },
-
-    openEdit(template) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/templates/${template.id}/edit`);
     },
 
     formattedDate(date) {

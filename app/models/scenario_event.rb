@@ -33,6 +33,8 @@
 #  fk_rails_...  (scenario_message_id => scenario_messages.id)
 #
 class ScenarioEvent < ApplicationRecord
+  include User::MessagesHelper
+
   belongs_to :line_account
   belongs_to :scenario
   belongs_to :scenario_message, required: false # root message can be deleted
@@ -58,6 +60,10 @@ class ScenarioEvent < ApplicationRecord
 
   private
     def deliver_message
+      normalized = normalize_message
+      if contain_survey_action?(normalized)
+        normalized = normalize_messages_with_survey_action(self.channel, normalized)
+      end
       payload = {
         channel_id: self.channel.id,
         messages: [normalized]
@@ -67,16 +73,16 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def deliver_after_action
-      ActionHandlerJob.perform_now(self.channel.line_friend, normalized)
+      ActionHandlerJob.perform_now(self.channel.line_friend, normalize_message)
     end
 
-    def normalized
+    def normalize_message
       Normalizer::MessageNormalizer.new(self.content).perform
     end
 
     def execute_after_deliver
       # If this event is the last
-      Messages::SystemLogBuilder.new(@channel).perform_scenario_end(@scenario) if self.is_last
+      Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario) if self.is_last
       self.destroy
     end
 end

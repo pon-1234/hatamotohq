@@ -38,7 +38,12 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item">配信タイミングを編集する</a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/reminders/${reminder_id}/episodes/${episode.id}/edit`"
+                          >配信タイミングを編集する</a
+                        >
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modelDeleteEpisode"
                           >配信タイミングを削除</a
                         >
@@ -81,9 +86,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reminder', [
-      'getEpisodes'
-    ])
+    ...mapActions('reminder', ['getEpisodes'])
   }
 };
 </script>

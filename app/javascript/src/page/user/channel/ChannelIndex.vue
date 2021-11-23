@@ -2,13 +2,13 @@
   <div class="row">
     <!-- start chat users-->
     <div class="channel-list">
-      <channel-list :class="getLeftItem()"/>
+      <channel-list :class="getLeftItem()" />
       <!-- :class="getLeftItem()" -->
     </div>
     <!-- end chat users-->
     <!-- {{ showChatBox }} -->
     <!-- chat area -->
-    <div class="channel-chat main " :class="showChatBox ? 'main-visible' : ''">
+    <div class="channel-chat main" :class="showChatBox ? 'main-visible' : ''">
       <chat-box></chat-box>
       <!-- :class="getRightItem()" -->
     </div>
@@ -55,35 +55,24 @@ export default {
 
   computed: {
     ...mapState('channel', {
-      activeChannel: (state) => state.activeChannel,
-      channels: (state) => state.channels,
-      messages: (state) => state.messages,
-      unreadChannelId: (state) => state.unreadChannelId,
-      showChatBox: (state) => state.showChatBox,
+      activeChannel: state => state.activeChannel,
+      channels: state => state.channels,
+      messages: state => state.messages,
+      unreadChannelId: state => state.unreadChannelId,
+      showChatBox: state => state.showChatBox,
       showUserDetail: state => state.showUserDetail
     }),
     ...mapState('friend', {
-      friend: (state) => state.friend
+      friend: state => state.friend
     })
   },
 
   methods: {
-    ...mapActions('channel', [
-      'getChannels',
-      'onReceiveWebsocketEvent',
-      'pushMessage',
-      'setActiveChannel'
-    ]),
+    ...mapActions('channel', ['getChannels', 'onReceiveWebsocketEvent', 'pushMessage', 'setActiveChannel']),
 
-    ...mapMutations('channel', [
-      'setShowChatBox'
-    ]),
+    ...mapMutations('channel', ['setShowChatBox']),
     connectToWebsocket() {
       const _this = this;
-      if (consumer.subscriptions.subscriptions.length > 0) {
-        // Already connected, keep only one connection at the same time
-        return;
-      }
       consumer.subscriptions.create(
         { channel: 'ConversationChannel' },
         {
@@ -129,141 +118,140 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.channel-list, .channel-chat, .channel-friend {
-  position: relative;
-  width: 100%;
-  padding-right: 12px;
-  padding-left: 12px;
-  -webkit-box-flex: 0;
-}
+  .channel-chat,
+  .channel-friend {
+    position: relative;
+    width: 100%;
+    padding-right: 12px;
+    padding-left: 12px;
+    -webkit-box-flex: 0;
+  }
 
-.channel-list {
+  .channel-list {
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
     order: 1;
-}
+  }
 
-.channel-chat {
-  -ms-flex: 0 0 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
-   order: 2;
-}
+  .channel-chat {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+    order: 2;
+  }
 
-.channel-friend {
+  .channel-friend {
     -ms-flex: 0 0 25%;
     flex: 0 0 25%;
     max-width: 25%;
     order: 3;
-}
-
-@media (max-width: 1400px) {
-  .channel-list {
-    -ms-flex: 0 0 30%;
-    flex: 0 0 30%;
-    max-width: 30%
   }
 
-  .channel-chat {
-    -ms-flex: 0 0 70%;
-    flex: 0 0 70%;
-    max-width: 70%
-  }
-
-  .channel-friend {
+  @media (max-width: 1400px) {
+    .channel-list {
       -ms-flex: 0 0 30%;
       flex: 0 0 30%;
-      max-width: 30%
+      max-width: 30%;
+    }
+
+    .channel-chat {
+      -ms-flex: 0 0 70%;
+      flex: 0 0 70%;
+      max-width: 70%;
+    }
+
+    .channel-friend {
+      -ms-flex: 0 0 30%;
+      flex: 0 0 30%;
+      max-width: 30%;
+    }
+
+    .main-user-visible {
+      visibility: visible !important;
+      transform: translateX(0) !important;
+    }
+
+    .main-user {
+      position: fixed;
+      top: 160px;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1020;
+      visibility: hidden;
+      transform: translateX(100%);
+      transition: transform 0.3s ease, visibility 0.3s ease;
+      background: #fafbfd;
+    }
   }
 
-  .main-user-visible {
-    visibility: visible !important;
-    transform: translateX(0) !important;
-  }
+  @media (max-width: 768px) {
+    .item-pc {
+      visibility: visible;
+      transform: translateX(0);
+    }
+    .item-hidden {
+      display: none !important;
+    }
 
-  .main-user {
-    position: fixed;
-    top: 160px;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 1020;
-    visibility: hidden;
-    transform: translateX(100%);
-    transition: transform .3s ease,visibility .3s ease;
-    background: #fafbfd;
-  }
-}
-
-@media (max-width: 768px) {
-  .item-pc {
-    visibility: visible;
-    transform: translateX(0);
-  }
-  .item-hidden {
-    display: none !important;
-  }
-
-  .channel-list {
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%
-  }
-
-  .channel-chat {
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%
-  }
-
-  .channel-friend {
+    .channel-list {
       -ms-flex: 0 0 100%;
       flex: 0 0 100%;
-      max-width: 100%
+      max-width: 100%;
+    }
+
+    .channel-chat {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .channel-friend {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .main-visible {
+      visibility: visible !important;
+      transform: translateX(0) !important;
+    }
+    .main-user {
+      top: 2vh;
+    }
+
+    .main {
+      position: fixed;
+      top: 2vh;
+      left: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1020;
+      visibility: hidden;
+      transform: translateX(100%);
+      transition: transform 0.3s ease, visibility 0.3s ease;
+      background: #fafbfd;
+    }
+
+    .chatbox {
+      width: calc(100vw - 250px);
+    }
+    .item-hidden {
+      display: block;
+    }
+    .bottom {
+      right: 0px;
+      left: 0px;
+      position: relative;
+      width: 100%;
+      z-index: 0;
+    }
   }
 
-  .main-visible {
-    visibility: visible !important;
-    transform: translateX(0) !important;
+  .container {
+    background: white;
   }
-  .main-user {
-    top: 2vh;
-  }
-
-  .main {
-    position: fixed;
-    top: 2vh;
-    left: 0;
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 1020;
-    visibility: hidden;
-    transform: translateX(100%);
-    transition: transform .3s ease,visibility .3s ease;
-    background: #fafbfd;
-  }
-}
-
-@media (min-width: 992px) {
-  .chatbox {
-    width: calc(100vw - 250px);
-  }
-  .item-hidden {
-    display: block;
-  }
-  .bottom {
-    right: 0px;
-    left: 0px;
-    position: relative;
-    width: 100%;
-    z-index: 0;
-  }
-}
-
-.container {
-  background: white;
-}
 </style>

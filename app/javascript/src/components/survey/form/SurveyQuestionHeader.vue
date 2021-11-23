@@ -1,12 +1,11 @@
 <template>
   <div>
-    <span class="w-100">
-      <span class="border-success question-title mr-2 font-weight-bold"
-        >{{ `Q${qnum}` }}<required-mark v-if="isRequired"></required-mark
-      ></span>
-      {{ title }}
-    </span>
-    <div class="w-100 text-muted text-sm mt-2">{{ subTitle }}</div>
+    <input type="hidden" :value="question.id" :name="`answers[${qnum}][id]`" />
+    <p class="w-100">
+      <span class="border-success question-title mr-2 font-weight-bold">{{ `Q${qnum}` }}</span
+      >{{ title }} <required-mark v-if="isRequired"></required-mark>
+    </p>
+    <div class="w-100 text-muted text-sm my-1">{{ subTitle }}</div>
   </div>
 </template>
 

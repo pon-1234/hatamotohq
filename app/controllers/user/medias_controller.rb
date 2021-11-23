@@ -2,6 +2,7 @@
 
 class User::MediasController < User::ApplicationController
   load_and_authorize_resource
+  before_action :find_media, only: [:variant]
 
   # GET /user/medias
   def index
@@ -31,11 +32,22 @@ class User::MediasController < User::ApplicationController
     render_success
   end
 
+  # GET /user/medias/:id/content/:width
+  def variant
+    width = params[:width] || 1040
+    data = open(@media.variant_url(width))
+    send_data data.read, filename: 'imagemap.png', type: @media.file.content_type, disposition: 'inline', stream: 'true', buffer_size: '4096'
+  end
+
   private
     def media_params
       params.permit(
         :file,
         :type
       )
+    end
+
+    def find_media
+      @media = Media.find(params[:id])
     end
 end

@@ -8,7 +8,7 @@
         name="location-title"
         class="form-control"
         maxlength="101"
-        v-model="defaults.title"
+        v-model.trim="defaults.title"
         v-validate="'required|max:100'"
         data-vv-as="タイトル"
       />

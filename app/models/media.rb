@@ -28,8 +28,8 @@ class Media < ApplicationRecord
   has_one_attached :file
   has_one :rich_menu, dependent: :nullify
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], if: :type_image?
-  validates :file, content_type: ['audio/m4a'], if: :type_audio?
-  validates :file, content_type: ['video/mp4'], if: :type_video?
+  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'video/quicktime'], if: :type_audio?
+  validates :file, content_type: ['video/mp4', 'video/quicktime'], if: :type_video?
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040 }, if: :type_imagemap?
   validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
   validates_with MediaValidator
@@ -48,10 +48,23 @@ class Media < ApplicationRecord
 
   def preview_url
     if file.attached? && file.representable?
-      url_for(file.representation(resize: '240x240').processed)
+      url_for(file.preview(resize: '240x240').processed)
     end
   rescue StandardError => e
-    logger.error("Could not generate preview url #{e.message}")
+    p "Could not generate preview url #{e.message}"
+    url
+  end
+
+  def download_url
+    url_for(file) if file.attached?
+  end
+
+  def variant_url(width)
+    url_for(file.variant(resize_to_fit: [width, width]))
+  end
+
+  def file_name
+    self.file.blob.filename
   end
 
   def set_blob_duration(duration)

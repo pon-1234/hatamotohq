@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group d-flex align-items-center">
-          <label class="fw-300">フォルダ</label>
+          <label class="fw-300">フォルダー</label>
           <div class="flex-grow-1">
             <select v-model="variableData.folder_id" class="form-control fw-300">
               <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -20,7 +20,7 @@
               class="form-control"
               name="variable_name"
               placeholder="友だち情報欄名を入力してください"
-              v-model="variableData.name"
+              v-model.trim="variableData.name"
               v-validate="'required|max:255'"
               maxlength="256"
               data-vv-as="友だち情報欄名"
@@ -38,7 +38,7 @@
             </select>
           </div>
         </div>
-        <div class="form-group d-flex">
+        <div class="form-group d-flex" v-if="isSupportDefaultValue">
           <label class="fw-300">既定値</label>
           <div class="grow-flex-1 d-flex">
             <div class="fw-300">
@@ -47,7 +47,7 @@
                 class="form-control"
                 name="variable_default"
                 placeholder="友だち情報欄名を入力してください"
-                v-model="variableData.default"
+                v-model.trim="variableData.default"
                 v-validate="'max:255'"
                 maxlength="256"
                 data-vv-as="既定値"
@@ -103,12 +103,12 @@ export default {
           type: 'date'
         },
         {
-          name: '日付・時刻',
-          type: 'datetime'
-        },
-        {
           name: '時刻',
           type: 'time'
+        },
+        {
+          name: '日付・時刻',
+          type: 'datetime'
         }
       ]
     };
@@ -126,16 +126,15 @@ export default {
   computed: {
     ...mapState('variable', {
       folders: state => state.folders
-    })
+    }),
+
+    isSupportDefaultValue() {
+      return this.variableData.type === 'text';
+    }
   },
 
   methods: {
-    ...mapActions('variable', [
-      'createVariable',
-      'updateVariable',
-      'getVariable',
-      'getFolders'
-    ]),
+    ...mapActions('variable', ['createVariable', 'updateVariable', 'getVariable', 'getFolders']),
 
     async fetchData() {
       await this.getFolders();
@@ -168,14 +167,20 @@ export default {
     // Handle broadcast creation response
     onReceiveCreateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('友だち情報欄の保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
+        Util.showSuccessThenRedirect(
+          '友だち情報欄の保存は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
+        );
       } else {
         window.toastr.error('友だち情報欄の保存は失敗しました。');
       }
     },
     onReceiveUpdateVariable(success) {
       if (success) {
-        Util.showSuccessThenRedirect('友だち情報欄の更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/variables`);
+        Util.showSuccessThenRedirect(
+          '友だち情報欄の更新は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
+        );
       } else {
         window.toastr.error('友だち情報欄の更新は失敗しました。');
       }

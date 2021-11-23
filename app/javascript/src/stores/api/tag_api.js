@@ -4,7 +4,8 @@ export default {
       url: process.env.MIX_ROOT_PATH + '/user/tags',
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 

@@ -15,28 +15,13 @@
       <loading-indicator :loading="loading" />
     </div>
 
-    <!-- アクション設定 -->
-    <div class="card">
-      <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
-      <div class="card-body">
-        <message-action-editor-custom
-          name="after_action"
-          :value="episodeData.actions"
-          :labelRequired="false"
-          :showTitle="false"
-          :limit="10"
-          :showLaunchMesasge="false"
-          @input="updateAction"
-        ></message-action-editor-custom>
-      </div>
-    </div>
-
     <!-- メッセージ設定 -->
     <div class="card" :key="contentKey">
       <div class="card-header left-border">
         <h3 class="card-title">メッセージ設定</h3>
       </div>
       <div class="card-body">
+        <div class="mb-2">登録したメッセージがありません。</div>
         <div>
           <div v-for="(item, index) in episodeData.messages" :key="index">
             <message-editor
@@ -64,6 +49,23 @@
       </div>
       <loading-indicator :loading="loading" />
     </div>
+
+    <!-- アクション設定 -->
+    <div class="card">
+      <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
+      <div class="card-body">
+        <action-editor-custom
+          name="after_action"
+          :value="episodeData.actions"
+          :labelRequired="false"
+          :showTitle="false"
+          :limit="10"
+          :showLaunchMesasge="false"
+          @input="updateAction"
+        ></action-editor-custom>
+      </div>
+    </div>
+
     <div>
       <div class="row-form-btn d-flex">
         <button class="btn btn-success fw-120 mr-1" @click="submit()" :disabled="invalid">配信登録</button>
@@ -88,7 +90,7 @@ export default {
   },
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: false,
       contentKey: 0,
       episodeData: {
@@ -107,11 +109,11 @@ export default {
     return { parentValidator: this.$validator };
   },
 
+  beforeMount() {},
+
   methods: {
     ...mapActions('template', ['getTemplate']),
-    ...mapActions('reminder', [
-      'createEpisode'
-    ]),
+    ...mapActions('reminder', ['createEpisode']),
 
     forceRerender() {
       this.contentKey++;
@@ -144,7 +146,10 @@ export default {
       }
       const response = await this.createEpisode(this.episodeData);
       if (response) {
-        Util.showSuccessThenRedirect('リマインダ配信タイミングの作成は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders/${this.reminder_id}/episodes`);
+        Util.showSuccessThenRedirect(
+          'リマインダ配信タイミングの作成は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/reminders/${this.reminder_id}/episodes`
+        );
       } else {
         window.toastr.error('リマインダ配信タイミングの作成は失敗しました。');
       }

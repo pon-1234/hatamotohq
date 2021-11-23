@@ -13,17 +13,19 @@
             <thead class="thead-light">
               <tr>
                 <th>#</th>
-                <th>配信方式</th>
-                <th>シナリオ名</th>
-                <th>メッセージ数</th>
-                <th>選択</th>
+                <th class="mw-150">配信方式</th>
+                <th class="mw-150">シナリオ名</th>
+                <th class="mw-150">メッセージ数</th>
+                <th class="mw-120">選択</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(scenario, index) in scenarios" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ scenario.mode === "time" ? "時刻" : "経過時間" }}</td>
-                <td>{{ scenario.title }}</td>
+                <td>
+                  <p class="item-name mxw-400">{{ scenario.title }}</p>
+                </td>
                 <td>{{ scenario.scenario_messages_count || 0 }}</td>
                 <td>
                   <div role="button" class="btn btn-info btn-sm" @click="selectScenario(scenario)" data-dismiss="modal">

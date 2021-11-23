@@ -1,80 +1,71 @@
 <template>
-  <div v-if="isLoading">
-   ローディング...
-  </div>
+  <div v-if="isLoading">ローディング...</div>
   <div v-else>
     <div class="row-ttl01 flex ai_center mb40 flex-wrap justify-content-between">
       <h3 class="hdg3">アカウント情報</h3>
     </div>
     <div class="form-common01 create-content">
-      <div class="panel  panel-linebot01">
+      <div class="panel panel-linebot01">
         <div class="panel-body">
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">LINEアカウント名<required-mark/></span
-              ><span class="en">Account name</span>
+              <span class="ja">LINEアカウント名<required-mark /></span><span class="en">Account name</span>
             </dt>
             <dd>
-              <input type="text" class="form-control"  placeholder="LINEアカウント名を入力してください" v-model="userInfo.accountName"/>
-              <input type="text" :value="userInfo.email" autocomplete="username" class="hidden"/>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="LINEアカウント名を入力してください"
+                v-model="userInfo.accountName"
+              />
+              <input type="text" :value="userInfo.email" autocomplete="username" class="hidden" />
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
-            <dt>
-              <span class="ja">プラン</span><span class="en">Plan</span>
-            </dt>
+            <dt><span class="ja">プラン</span><span class="en">Plan</span></dt>
             <dd>{{ plan.title }}</dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
-            <dt>
-              <span class="ja">クライアントID</span
-              ><span class="en">Client id</span>
-            </dt>
+            <dt><span class="ja">クライアントID</span><span class="en">Client id</span></dt>
             <dd class="fz14">{{ lineClientId }}</dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
-            <dt>
-              <span class="ja">チャネルシークレット</span
-              ><span class="en">Channel Secret</span>
-            </dt>
+            <dt><span class="ja">チャネルシークレット</span><span class="en">Channel Secret</span></dt>
             <dd class="fz14 flex ai_center">
-              <span
-                >{{ lineSecret
-                }}<i class="fa fa-check-circle" aria-hidden="true"></i
-              ></span>
+              <span>{{ lineSecret }}<i class="fa fa-check-circle" aria-hidden="true"></i></span>
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt><span class="ja">Webhook URL</span></dt>
             <dd class="fz14">
-              <span
-                >{{ webhook
-                }}<i class="fa fa-check-circle" aria-hidden="true"></i
-              ></span>
+              <span>{{ webhook }}<i class="fa fa-check-circle" aria-hidden="true"></i></span>
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt><span class="ja">管理者</span></dt>
             <dd class="fz14">
-              <span>{{admin.name}}</span>
+              <span>{{ admin.name }}</span>
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">LIFF ID<required-mark/></span>
+              <span class="ja">LIFF ID<required-mark /></span>
               <span class="en">from LIFFアプリ詳細</span>
             </dt>
-            <dd class="fz14">
-              <input id="liff_id" type="liff_id" class="form-control" v-model="userInfo.liff_id" autocomplete="off" >
-            </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
             <dt>
-              <span class="ja">現在のパスワード<required-mark/></span>
+              <span class="ja">現在のパスワード<required-mark /></span>
               <span class="en">Current password</span>
             </dt>
             <dd class="fz14">
-              <input id="password" type="password" class="form-control" v-model="userInfo.currentPassword" autocomplete="off" >
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                v-model="userInfo.currentPassword"
+                autocomplete="off"
+              />
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
@@ -83,7 +74,13 @@
               <span class="en">Password</span>
             </dt>
             <dd class="fz14">
-              <input id="password" type="password" class="form-control" v-model="userInfo.newPassword" autocomplete="new-password">
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                v-model="userInfo.newPassword"
+                autocomplete="new-password"
+              />
             </dd>
           </dl>
           <dl class="flex group-admin01 group-linebot01">
@@ -92,12 +89,18 @@
               <span class="en">Password confirm</span>
             </dt>
             <dd class="fz14">
-              <input id="password" type="password" class="form-control" v-model="userInfo.passwordConfirm" autocomplete="new-password">
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                v-model="userInfo.passwordConfirm"
+                autocomplete="new-password"
+              />
             </dd>
           </dl>
         </div>
         <div class="d-flex justify-content-center">
-          <button type="submit" class="btn btn-submit btn-block" :disabled="isDisabled" @click="submitForm">保存</button>
+          <div class="btn btn-submit btn-block" :disabled="isDisabled" @click="submitForm">保存</div>
         </div>
       </div>
     </div>
@@ -117,8 +120,7 @@ export default {
         currentPassword: '',
         newPassword: '',
         passwordConfirm: '',
-        email: this.auth.email,
-        liff_id: ''
+        email: this.auth.email
       },
       lineClientId: '',
       lineSecret: '',
@@ -133,8 +135,7 @@ export default {
     this.getAcount();
   },
 
-  mounted() {
-  },
+  mounted() {},
 
   watch: {
     userInfo: {
@@ -157,7 +158,6 @@ export default {
       },
       deep: true
     }
-
   },
 
   methods: {
@@ -169,7 +169,6 @@ export default {
           this.lineClientId = res.line_setting.client_id;
           this.lineSecret = res.line_setting.channel_secret;
           this.webhook = res.line_setting.webhook_url;
-          this.userInfo.liff_id = res.line_setting.liff_id;
           this.$nextTick(() => {
             window.initShowPassword();
           });
@@ -217,8 +216,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.group-admin01 {
-  border-bottom: 1px solid #e5e5e5;
-}
-
+  .group-admin01 {
+    border-bottom: 1px solid #e5e5e5;
+  }
 </style>

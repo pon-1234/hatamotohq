@@ -438,9 +438,6 @@ GEM
     thwait (0.2.0)
       e2mmap
     tilt (2.0.10)
-    turbolinks (5.2.1)
-      turbolinks-source (~> 5.2)
-    turbolinks-source (5.2.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
@@ -528,7 +525,6 @@ DEPENDENCIES
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
-  turbolinks (~> 5)
   webpacker (~> 4.0)
 
 RUBY VERSION

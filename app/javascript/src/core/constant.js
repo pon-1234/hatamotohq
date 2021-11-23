@@ -59,9 +59,9 @@ export const PdfType = ['application/pdf', 'application/x-pdf'];
 
 export const ImageMimeBytes = ['89504e47', 'ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', 'ffd8ffdb', 'ffd8ffee'];
 
-export const VideoMimeBytes = ['00020', '66747970'];
+export const VideoMimeBytes = ['66747970'];
 
-export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920', '0001c'];
+export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920'];
 
 export const PdfMimeBytes = ['255044462D'];
 

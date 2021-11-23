@@ -23,7 +23,7 @@
       "
       :data="data.template.columns"
     />
-    <imagemap-message v-if="data.type === MessageType.Imagemap" :data="data.baseUrl" />
+    <imagemap-message v-if="data.type === MessageType.Imagemap" :baseUrl="data.baseUrl" />
     <location-message v-if="data.type === MessageType.Location" :data="data" />
     <!-- <flex-message v-if="data.type === MessageType.Flex"  :data="data" :source="source"/> -->
   </div>

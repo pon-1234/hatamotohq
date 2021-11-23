@@ -82,16 +82,16 @@
                     <div>
                       <div class="card-body pt-0 accordion-0 center">
                         <div>
-                          <message-action-editor
+                          <action-editor
                             class="form-group"
                             :name="'richmenu_type_' + index"
                             :value="item.action"
-                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker']"
                             :labelRequired="false"
                             :showTitle="false"
                             @input="item.action = $event"
                           >
-                          </message-action-editor>
+                          </action-editor>
                         </div>
                       </div>
                     </div>
@@ -122,7 +122,7 @@ export default {
       type: Number,
       default: 201
     },
-    templateValue: Number,
+    piecesCount: Number,
     background: String,
     areas: {
       type: Array,
@@ -137,17 +137,18 @@ export default {
     return {
       isShowingEditor: false,
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      actionObjects: this.areas
+      actionObjects: []
     };
   },
 
   inject: ['parentValidator'],
   created() {
     this.$validator = this.parentValidator;
+    this.actionObjects = [...this.areas];
   },
 
   watch: {
-    templateValue(val, old) {
+    piecesCount(val, old) {
       if (old < val) {
         for (let i = old; i < val; i++) {
           this.actionObjects.push({
@@ -176,7 +177,7 @@ export default {
 
   beforeMount() {
     const old = this.actionObjects.length;
-    const val = this.templateValue;
+    const val = this.piecesCount;
 
     if (old < val) {
       for (let i = old; i < val; i++) {
@@ -210,7 +211,7 @@ export default {
           }
         });
       } else {
-        const index = this.actionObjects.findIndex((val) => val.key === key);
+        const index = this.actionObjects.findIndex(val => val.key === key);
         this.$set(this.actionObjects[index], 'expand', !this.actionObjects[index].expand);
       }
     },
@@ -225,11 +226,13 @@ export default {
       // upload image
       this.uploadRichMenu({
         file: this.b64toBlob(data)
-      }).then((response) => {
-        this.$emit('onMediaChanged', response);
-      }).catch((err) => {
-        console.log(err);
-      });
+      })
+        .then(response => {
+          this.$emit('onMediaChanged', response);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
 
     b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
@@ -250,7 +253,6 @@ export default {
 
       return new Blob(byteArrays, { type: contentType });
     }
-
   }
 };
 </script>

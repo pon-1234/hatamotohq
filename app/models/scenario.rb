@@ -5,18 +5,18 @@
 # Table name: scenarios
 #
 #  id                      :bigint           not null, primary key
-#  after_action            :json
-#  deleted_at              :datetime
-#  description             :string(255)
-#  mode                    :string(255)      default("time")
-#  scenario_messages_count :integer
-#  status                  :string(255)      default("disabled")
+#  line_account_id         :bigint
+#  folder_id               :bigint
 #  title                   :string(255)
+#  description             :text(65535)
+#  status                  :string(255)      default("disabled")
+#  mode                    :string(255)      default("time")
 #  type                    :string(255)      default("manual")
+#  after_action            :json
+#  scenario_messages_count :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  folder_id               :bigint
-#  line_account_id         :bigint
+#  deleted_at              :datetime
 #
 # Indexes
 #
@@ -29,6 +29,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Scenario < ApplicationRecord
+  default_scope { order(created_at: :desc) }
   belongs_to :line_account
   has_many :scenario_events, dependent: :destroy
   has_many :scenario_messages, dependent: :destroy

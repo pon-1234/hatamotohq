@@ -5,7 +5,6 @@
         <folder-left
           type="survey"
           :data="folders"
-          :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
           @changeSelectedFolder="changeSelectedFolder"
           @submitUpdateFolder="submitUpdateFolder"
@@ -13,7 +12,7 @@
         ></folder-left>
         <div class="flex-grow-1" :key="contentKey">
           <a
-            :href="`${MIX_ROOT_PATH}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`"
+            :href="`${rootPath}/user/surveys/new?folder_id=${curFolder ? curFolder.id : null}`"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
@@ -22,7 +21,7 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>公開化</th>
+                  <th>状況</th>
                   <th>フォーム名</th>
                   <th>回答状態</th>
                   <th></th>
@@ -30,25 +29,20 @@
               </thead>
               <tbody v-if="curFolder">
                 <tr v-for="(survey, index) in curFolder.surveys" v-bind:key="index">
-                  <td>
-                    <div v-if="survey.status !== 'draft'">
-                      <input
-                        type="checkbox"
-                        :id="`switchStatus${index}`"
-                        checked
-                        data-switch="success"
-                        v-model="survey.status"
-                        true-value="published"
-                        false-value="unpublished"
-                        @change="updateStatus(survey)"
-                      />
-                      <label :for="`switchStatus${index}`"></label>
-                    </div>
-                    <span v-else class="text-danger">下書き</span>
+                  <td class="mw-120">
+                    <survey-status :status="survey.status"></survey-status>
                   </td>
-                  <td>{{ survey.name }}</td>
-                  <td>未回答</td>
                   <td>
+                    <div class="mxvw-15 max-2-lines">{{ survey.name }}</div>
+                  </td>
+                  <td class="mw-200">
+                    <template v-if="survey.responses_count === 0"> 未回答 </template>
+                    <template v-else>
+                      {{ survey.responses_count }}回答／<span class="font-12">{{ survey.users_count }}人</span>
+                      <a :href="`${rootPath}/user/surveys/${survey.id}`" class="btn btn-sm btn-light ml-2">表示</a>
+                    </template>
+                  </td>
+                  <td class="mw-200">
                     <div class="btn-group">
                       <button
                         type="button"
@@ -62,7 +56,7 @@
                         <a
                           role="button"
                           class="dropdown-item"
-                          :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/edit`"
+                          :href="`${rootPath}/user/surveys/${survey.id}/edit`"
                           v-if="survey.status !== 'published'"
                           >回答フォームを編集</a
                         >
@@ -78,19 +72,29 @@
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
+                          data-target="#modalToggleSurvey"
+                          @click="curSurveyIndex = index"
+                          v-if="survey.status !== 'draft'"
+                          >{{ survey.status === "published" ? "未公開" : "公開" }}にする</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
                           data-target="#modalDeleteSurvey"
                           @click="curSurveyIndex = index"
+                          v-if="survey.destroyable"
                           >回答フォームを削除</a
                         >
                       </div>
                     </div>
-                    <div class="btn-edit01 btn-info-linebot" v-if="survey.is_publish" v-tooltip="'回答一覧'">
-                      <a
-                        class="btn-more btn-more-linebot btn-block"
-                        :href="`${MIX_ROOT_PATH}/user/surveys/${survey.id}/info`"
-                      >
-                        回答一覧
-                      </a>
+                    <div
+                      class="btn btn-sm btn-light my-1"
+                      data-toggle="modal"
+                      data-target="#modalSurveyPreview"
+                      @click="curSurveyIndex = index"
+                    >
+                      プレビュー
                     </div>
                   </td>
                 </tr>
@@ -103,6 +107,22 @@
         </div>
       </div>
     </div>
+
+    <loading-indicator :loading="loading"></loading-indicator>
+
+    <!-- START: Delete folder modal -->
+    <modal-confirm
+      id="modalDeleteFolder"
+      title="このフォルダーを削除してもよろしいですか？"
+      type="delete"
+      @confirm="submitDeleteFolder"
+    >
+      <template v-slot:content v-if="curFolder">
+        <span>フォルダ名：{{ curFolder.name }}</span>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete folder modal -->
+
     <modal-confirm
       title="この回答フォームをコピーしてもよろしいですか？"
       id="modalCopySurvey"
@@ -123,28 +143,56 @@
         <span>回答フォーム名：{{ curSurvey.name }}</span>
       </template>
     </modal-confirm>
+
+    <!-- START: modal enable/disable richmenu -->
+    <modal-confirm
+      :title="`この回答フォームの状況を変更してもよろしいですか？`"
+      id="modalToggleSurvey"
+      type="confirm"
+      @confirm="submitToggleSurvey"
+    >
+      <template v-slot:content v-if="curSurvey">
+        状況変更：<b>{{ curSurvey.status === "published" ? "公開" : "未公開" }}</b>
+        <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curSurvey.status === "published" ? "未公開" : "公開" }}</b>
+      </template>
+    </modal-confirm>
+    <!-- END: modal delete richmenu -->
+
+    <!-- START: modal survey preview -->
+    <modal-survey-preview :survey_id="curSurvey.id" v-if="curSurvey"></modal-survey-preview>
+    <!-- END: modal survey preview -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import Util from '@/core/util';
+
 export default {
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       surveysData: [],
       selectedFolderIndex: 0,
       curSurveyIndex: 0,
       surveyContents: 0,
-      isPc: true,
       survey: null,
       textSearch: null
     };
   },
   async beforeMount() {
     await this.getSurveys();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.changeSelectedFolder(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -164,7 +212,13 @@ export default {
 
   methods: {
     ...mapActions('survey', [
-      'getSurveys'
+      'createFolder',
+      'updateFolder',
+      'deleteFolder',
+      'getSurveys',
+      'copySurvey',
+      'deleteSurvey',
+      'toggleStatus'
     ]),
     forceRerender() {
       this.contentKey++;
@@ -172,85 +226,69 @@ export default {
 
     changeSelectedFolder(index) {
       this.selectedFolderIndex = index;
-      this.isPc = true;
-      this.blink();
     },
-    submitUpdateFolder(value) {
-      this.$store
-        .dispatch('global/editFolder', value)
-        .done(res => {
-          this.curFolder.name = res.name;
-        }).fail(e => {
-        });
-    },
-    submitCreateFolder(value) {
-      this.$store
-        .dispatch('global/createFolder', value)
-        .done(res => {
-          this.getSurveys();
-        }).fail(e => {
-        });
-    },
-    updateStatus(survey) {
-      this.$store.dispatch('survey/updateStatus', {
-        id: survey.id,
-        status: survey.status
-      }).done((res) => {
-        window.toastr.success('ステータスが変更されました');
-      }).fail(() => {
-        window.toastr.error('ステータスの変更はエラーになりました');
-      });
-    },
-    modalCopy(survey) {
-      this.survey = survey;
-      $('#modal-confirm').modal('show');
-      $('#modal-confirm').on('hidden.bs.modal', function() {
-        this.survey = null;
-        $('#modal-confirm').off();
-      });
-    },
-    submitCopySurvey() {
-      if (this.survey) {
-        this.$store.dispatch('survey/copy', {
-          id: this.survey.id
-        }).done(() => {
-          this.getSurveys();
-        }).fail(() => {
-          window.toastr.error('コピーエラー');
-        });
-      }
-    },
-    modalDelete(survey) {
-      this.survey = survey;
-      $('#modal-delete-confirm').modal('show');
-      $('#modal-delete-confirm').on('hidden.bs.modal', function() {
-        this.survey = null;
-        $('#modal-delete-confirm').off();
-      });
-    },
-    submitDeleteSurvey() {
-      if (this.survey) {
-        this.$store.dispatch('survey/destroy', {
-          id: this.survey.id
-        }).done(() => {
-          this.getSurveys();
-        }).fail(() => {
-          window.toastr.error('削除エラー');
-        });
+
+    async submitUpdateFolder(folder) {
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
       }
     },
 
-    submitDeleteTag() {
-      this.$store
-        .dispatch('global/deleteFolder', { id: this.surveys[this.selectedFolderIndex].id, type: 'survey' })
-        .done(res => {
-          this.surveys.splice(this.selectedFolderIndex, 1);
-          this.selectedFolderIndex -= 1;
-          this.surveyContents = this.surveys[this.selectedFolderIndex].surveys;
-        }).fail(e => {
-        });
+    async submitCreateFolder(folder) {
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
+    },
+
+    updateStatus(survey) {},
+
+    async submitCopySurvey() {
+      const response = await this.copySurvey(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォームのコピーは完成しました。', url);
+      } else {
+        window.toastr.error('回答フォームのコピーは失敗しました。');
+      }
+    },
+
+    async submitDeleteSurvey() {
+      if (!this.curSurvey) return;
+      const response = await this.deleteSurvey(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォームの削除は完了しました。', url);
+      } else {
+        window.toastr.error('回答フォームの削除は失敗しました。');
+      }
+    },
+
+    async submitToggleSurvey() {
+      if (!this.curSurvey) return;
+      const response = await this.toggleStatus(this.curSurvey.id);
+      const url = `${this.rootPath}/user/surveys?folder_id=${this.curFolder.id}`;
+      if (response) {
+        Util.showSuccessThenRedirect('回答フォーム状況の変更は完了しました。', url);
+      } else {
+        window.toastr.error('回答フォーム状況の変更は失敗しました。');
+      }
+    },
+
+    async submitDeleteFolder() {
+      const response = await this.deleteFolder(this.curFolder.id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.changeSelectedFolder(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     }
-
   }
 };
 </script>

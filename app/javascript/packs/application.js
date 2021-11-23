@@ -14,13 +14,14 @@ import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
+import 'bootstrap/js/dist/modal';
+import moment from 'moment-timezone';
 
 import {
   BootstrapVue,
   DropdownPlugin,
   TabsPlugin
 } from 'bootstrap-vue';
-import 'bootstrap';
 // Import constant
 import * as constant from '@/core/constant';
 import 'vue-select/dist/vue-select.css';
@@ -40,7 +41,6 @@ Object.keys(constant).forEach((key) => {
   Vue.prototype[key] = constant[key];
 });
 
-require('turbolinks').start();
 require('@rails/activestorage').start();
 require('chart.js');
 
@@ -87,7 +87,7 @@ files.keys().map((key) => {
 });
 
 // We have to re-create vue app when change the page url
-document.addEventListener('turbolinks:load', () => {
+jQuery(() => {
   new Vue({
     locale: 'ja',
     store
@@ -117,4 +117,11 @@ $(document).ajaxError((e, xhr, settings) => {
   if (xhr.status === 401) {
     location.reload();
   }
+});
+
+// Custom filters
+Vue.filter('formatted_time', (value) => {
+  if (!value) return '';
+  value = value.toString();
+  return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH:mm');
 });

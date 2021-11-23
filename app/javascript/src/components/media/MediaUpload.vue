@@ -1,19 +1,32 @@
 <template>
-  <div class="card upload-container my-auto d-flex flex-column">
-    <div class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative" @drop.prevent="addFile" @dragover.prevent>
+  <div
+    class="card upload-container my-auto d-flex flex-column"
+    @drop.prevent="addMedia($event, 'drop')"
+    @dragover.prevent
+  >
+    <div
+      class="card-body flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative"
+      @drop.prevent="addFile"
+      @dragover.prevent
+    >
       <div class="text-center my-auto" v-if="isPreview">
         <button class="btn-delete-media" @click="deleteMedia()"><span class="close">×</span></button>
-        <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL">
-        <img v-if="mediaData.type === 'image' || mediaData.type ===  'richmenu' || mediaData.type === 'imagemap'" :src="fileURL">
+        <img class="fw-120 fh-120" v-if="mediaData.type === 'pdf'" :src="fileURL" />
+        <img
+          v-if="mediaData.type === 'image' || mediaData.type === 'richmenu' || mediaData.type === 'imagemap'"
+          :src="fileURL"
+        />
         <audio controls v-if="mediaData.type === 'audio'" @loadedmetadata="onTimeUpdate" ref="audio">
-          <source :src="fileURL">
+          <source :src="fileURL" />
         </audio>
         <video v-else-if="mediaData.type === 'video'" width="320" height="240" controls autoplay>
-          <source :src="fileURL" type="video/mp4">
+          <source :src="fileURL" type="video/mp4" />
         </video>
       </div>
       <div class="text-center text-md my-auto" v-else>
-        <p><label>ここにファイルをドラッグ＆ドロップ<br>または</label></p>
+        <p>
+          <label>ここにファイルをドラッグ＆ドロップ<br />または</label>
+        </p>
         <div class="custom-file fw-200">
           <div class="custom-file-input h-100 w-100">
             <input
@@ -22,12 +35,12 @@
               :maxsize="getMaxSize()"
               type="file"
               ref="file"
-              @change="addMedia($event)"
+              @change="addMedia($event, 'input')"
             />
           </div>
           <label class="custom-file-label text-left">ファイルを選択</label>
         </div>
-        <span v-if="errorMessage" class="w-100 error">{{errorMessage}}</span>
+        <span v-if="errorMessage" class="w-100 error">{{ errorMessage }}</span>
         <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
       </div>
 
@@ -68,6 +81,12 @@ export default {
     };
   },
 
+  computed: {
+    isChannel() {
+      return this.types.length > 1;
+    }
+  },
+
   watch: {
     types: {
       handler(val) {
@@ -78,11 +97,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('media', [
-      'uploadMedia',
-      'uploadRichMenu',
-      'uploadImageMap'
-    ]),
+    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
     getMaxSize() {
       return Media.getMaxSizeByType(this.mediaData.type);
     },
@@ -95,11 +110,12 @@ export default {
       this.addMedia(event);
     },
 
-    async addMedia(event) {
-      const input = event.currentTarget.files[0];
+    async addMedia(event, status) {
+      const input = status === 'input' ? event.currentTarget.files[0] : event.dataTransfer.files[0];
+      this.isPreview = false;
       this.inputFile = input;
       const mediaType = Media.convertMineTypeToMediaType(input.type);
-      if (mediaType === 'image') {
+      if (mediaType === 'image' && !this.isChannel) {
         if (this.types.includes('richmenu')) this.mediaData.type = 'richmenu';
         else if (this.types.includes('imagemap')) this.mediaData.type = 'imagemap';
         else this.mediaData.type = 'image';
@@ -107,24 +123,28 @@ export default {
         this.mediaData.type = mediaType;
       }
       const validationResult = Media.validateFileSizeByType(this.mediaData.type, input.size);
+
+      // set default type if file cannot be read error
+      if (!this.mediaData.type || !validationResult.valid) this.mediaData.type = this.oldType;
+
       if (!validationResult) return;
 
       if (!validationResult.valid) {
         this.errorMessage = validationResult.message;
         return;
       }
-      // set default type if file cannot be read error
-      if (!this.mediaData.type) this.mediaData.type = this.oldType;
 
       const _this = this;
       const reader = new FileReader();
       reader.readAsArrayBuffer(input);
-      reader.onload = function(e) {
-        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : '';
-        const validMimeBytes = Media.validateFileByMimeBytes(e, mimetype);
+      reader.onload = async function(e) {
+        const mimetype = _this.types.includes(_this.mediaData.type) ? _this.mediaData.type : _this.oldType;
+        const validMimeBytes = await Media.validateFileByMimeBytes(e, mimetype, (window.URL || window.webkitURL).createObjectURL(input));
+
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
+          _this.mediaData.type = _this.oldType;
           return;
         }
 
@@ -145,7 +165,8 @@ export default {
       };
       this.errorMessage = '';
       // Clear file input data
-      event.target.value = '';
+
+      if (status === 'input') event.target.value = '';
     },
 
     generateImagePreview(input) {
@@ -216,7 +237,8 @@ export default {
     async handleUpload() {
       this.loading = true;
       const query = {
-        file: this.inputFile
+        file: this.inputFile,
+        type: this.mediaData.type
       };
 
       if (this.mediaData.type === 'audio') {
@@ -247,6 +269,7 @@ export default {
 
     deleteMedia() {
       this.isPreview = false;
+      this.errorMessage = '';
     },
 
     onTimeUpdate() {
@@ -257,7 +280,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .upload-container  {
+  .upload-container {
     min-height: 500px;
   }
 
@@ -353,10 +376,9 @@ export default {
       height: 350px;
       object-fit: contain;
     }
-    #preview-file{
+    #preview-file {
       width: 100px;
       height: 100px;
     }
-
   }
 </style>

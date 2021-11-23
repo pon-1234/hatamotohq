@@ -3,6 +3,7 @@
 class AutoResponseJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
+  include User::MessagesHelper
 
   def perform(message_id)
     message = Message.find(message_id)
@@ -15,6 +16,10 @@ class AutoResponseJob < ApplicationJob
     auto_responses.each do |auto_response|
       auto_response.increase_hit_count
       reply_messages += auto_response.auto_response_messages.pluck(:content)
+    end
+
+    if contain_survey_action?(reply_messages)
+      reply_messages = normalize_messages_with_survey_action(message.channel, reply_messages)
     end
 
     # Rebuild payload

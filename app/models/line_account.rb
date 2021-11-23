@@ -4,23 +4,22 @@
 #
 # Table name: line_accounts
 #
-#  id                        :bigint           not null, primary key
-#  bot_initialized           :boolean          default(FALSE)
-#  channel_secret            :string(255)
-#  deleted_at                :datetime
-#  display_name              :string(255)
-#  invite_url                :string(255)
-#  line_channel_access_token :string(255)
-#  line_name                 :string(255)
-#  note                      :text(65535)
-#  status                    :string(255)      default("inactive")
-#  webhook_url               :string(255)
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  channel_id                :string(255)
-#  liff_id                   :string(255)
-#  line_user_id              :string(255)
-#  owner_id                  :bigint
+#  id              :bigint           not null, primary key
+#  owner_id        :bigint
+#  line_user_id    :string(255)
+#  line_name       :string(255)
+#  display_name    :string(255)
+#  channel_id      :string(255)
+#  channel_secret  :string(255)
+#  invite_url      :string(255)
+#  webhook_url     :string(255)
+#  liff_id         :string(255)
+#  note            :text(65535)
+#  bot_initialized :boolean          default(FALSE)
+#  status          :string(255)      default("inactive")
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  deleted_at      :datetime
 #
 # Indexes
 #

@@ -86,7 +86,7 @@ class Message < ApplicationRecord
 
     def dispatch_create_events
       # Broadcast message via websocket
-      ws_channel = "channel_user_#{channel.line_account.id}"
+      ws_channel = "channel_user_#{channel.line_account.owner_id}"
       Ws::ChannelWs.new(ws_channel).send_message(self)
     end
 

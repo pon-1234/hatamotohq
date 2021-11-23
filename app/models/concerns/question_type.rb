@@ -9,9 +9,12 @@ module QuestionType
       textarea: 'textarea',
       radio: 'radio',
       checkbox: 'checkbox',
-      dropdown: 'dropdown',
-      file: 'file',
-      date: 'date'
-    }, _prefix: true
+      pulldown: 'pulldown',
+      image: 'image',
+      pdf: 'pdf',
+      date: 'date',
+      time: 'time',
+      datetime: 'datetime'
+    }
   end
 end

@@ -25,7 +25,7 @@
               :selectedFolder="selectedFolder"
               @changeSelectedFolder="changeSelectedFolderTemplate"
             />
-            <div class="flex-grow-1">
+            <div class="flex-grow-1 scroll-table">
               <table class="table table-hover">
                 <thead class="thead-light">
                   <tr>
@@ -35,15 +35,14 @@
                   </tr>
                 </thead>
                 <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
-                  <tr
-                    v-for="(item, index) in folders[this.selectedFolder].templates"
-                    :key="index"
-                    class="folder-item"
-                    data-dismiss="modal"
-                  >
+                  <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
                     <td class="d-flex w-100">
-                      <div>{{ item.name }}</div>
-                      <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)">選択</div>
+                      <div class="box-item-name">
+                        <p class="m-0 vw-10 item-name">{{ item.name }}</p>
+                      </div>
+                      <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)" data-dismiss="modal">
+                        選択
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -84,9 +83,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('template', [
-      'getTemplates'
-    ]),
+    ...mapActions('template', ['getTemplates']),
 
     backToFolder() {
       this.isPc = false;
@@ -102,7 +99,6 @@ export default {
       this.selectedFolder = index;
       this.isPc = true;
     }
-
   }
 };
 </script>
@@ -111,7 +107,23 @@ export default {
     .item-sm {
       display: none;
     }
+    .scroll-table {
+      overflow-y: scroll;
+      height: 75vh;
+    }
 
+    .box-item-name {
+      width: 85%;
+      .item-name {
+        width: 100%;
+        white-space: pre-wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+      }
+    }
     @media (max-width: 991px) {
       .item-pc {
         display: none !important;

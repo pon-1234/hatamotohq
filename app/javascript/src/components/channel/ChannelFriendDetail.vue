@@ -6,11 +6,11 @@
     <div class="card-body">
       <div class="mt-3 text-center">
         <img
-          :src="friend.avatar_url || '/img/no-image-profile.png'"
+          v-lazy="genAvatarImgObj(friend.avatar_url)"
           alt="shreyu"
           class="img-thumbnail avatar-lg rounded-circle"
         />
-        <h4>{{ truncate(friend.name, 15) }}</h4>
+        <h4>{{ truncate(friend.display_name || friend. line_name, 15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -76,10 +76,18 @@ export default {
     hiddenUserDetailBox() {
       if (this.showUserDetail) this.setShowUserDetail(false);
     },
-    truncate(str, length = 15) {
-      return _.truncate(str, {
+    truncate(name, length = 15) {
+      return _.truncate(name, {
         length: length
       });
+    },
+    genAvatarImgObj(url) {
+      const avatarImgObj = {
+        src: url,
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      };
+      return avatarImgObj;
     }
   }
 };

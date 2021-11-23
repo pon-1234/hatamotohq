@@ -55,7 +55,7 @@ export const actions = {
 
   async uploadMedia(_, payload) {
     try {
-      return await MediaApi.uploadMedia({ file: payload.file, duration: payload.duration });
+      return await MediaApi.uploadMedia({ file: payload.file, duration: payload.duration, type: payload.type });
     } catch (error) {
       return null;
     }

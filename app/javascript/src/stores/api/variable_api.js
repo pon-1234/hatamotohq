@@ -1,9 +1,10 @@
 export default {
-  list: () => {
+  list: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/variables`,
       method: 'GET',
       dataType: 'json',
+      data: query,
       contentType: 'application/json',
       cache: false
     });
@@ -18,20 +19,20 @@ export default {
     });
   },
 
-  create: (query) => {
+  create: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/variables`,
       method: 'POST',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },
 
-  update: (query) => {
+  update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/variables/${query.id}`,
+      url: `${process.env.MIX_ROOT_PATH}/user/variables/${payload.id}`,
       method: 'PATCH',
-      data: JSON.stringify(query),
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },

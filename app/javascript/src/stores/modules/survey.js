@@ -1,7 +1,16 @@
 import SurveyAPI from '../api/survey_api';
+import FolderAPI from '../api/folder_api';
 
 export const state = {
-  folders: []
+  folders: [],
+  users: [],
+  responses: [],
+  usersTotalRows: 0,
+  usersPerPage: 0,
+  usersCurPage: 0,
+  responsesTotalRows: 0,
+  responsesPerPage: 0,
+  responsesCurPage: 0
 };
 
 export const mutations = {
@@ -14,22 +23,72 @@ export const mutations = {
     state.folders = folders;
   },
 
-  updateFolder(state, folder) {
-    folder.surveys = [];
-    folder.surveys_count = 0;
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
   },
 
   deleteFolder(state, id) {
     const index = state.folders.findIndex(_ => _.id === id);
     state.folders.splice(index, 1);
+  },
+
+  setUsers(state, users) {
+    state.users = users;
+  },
+
+  setUsersMeta(state, meta) {
+    state.usersTotalRows = meta.total_count;
+    state.usersPerPage = meta.limit_value;
+    state.usersCurPage = meta.current_page;
+  },
+
+  setResponses(state, responses) {
+    state.responses = responses;
+  },
+
+  setResponsesMeta(state, meta) {
+    state.responsesTotalRows = meta.total_count;
+    state.responsesPerPage = meta.limit_value;
+    state.responsesCurPage = meta.current_page;
   }
 };
 
 export const getters = {};
 
 export const actions = {
+  async createFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.create(payload);
+      context.commit('pushFolder', folder);
+      return folder;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateFolder(context, payload) {
+    try {
+      const response = await FolderAPI.update(payload);
+      context.commit('updateFolder', response);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async deleteFolder(context, id) {
+    try {
+      const response = await FolderAPI.delete(id);
+      context.commit('deleteFolder', id);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
   /**
    * Survey is belong to a folder, get all folders of current account
    * @param {Context} context store context
@@ -54,6 +113,20 @@ export const actions = {
   async getSurvey(_, id) {
     try {
       return await SurveyAPI.get(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  /**
+   * Get survey by code
+   * @param {Context} _  store context
+   * @param {*} code  survey code
+   * @returns survey
+   */
+  async getSurveyByCode(_, code) {
+    try {
+      return await SurveyAPI.getByCode(code);
     } catch (error) {
       return null;
     }
@@ -87,75 +160,80 @@ export const actions = {
     }
   },
 
-  updateStatus(_, data) {
-    return SurveyAPI.updateStatus(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  getCustomers(_, query) {
-    return SurveyAPI.getCustomers(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  answersOfCustomer(_, query) {
-    return SurveyAPI.answersOfCustomer(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  copy(_, query) {
-    return SurveyAPI.copy(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
-  },
-  destroy(_, query) {
-    return SurveyAPI.delete(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async postAnswer(context, payload) {
+    try {
+      return await SurveyAPI.postAnswer(payload);
+    } catch (error) {
+      return null;
+    }
   },
 
-  addSurveyProfile(_, data) {
-    _.dispatch('system/setLoading', true, { root: true });
-
-    return SurveyAPI.addSurveyProfile(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    }).always(function() {
-      _.dispatch('system/setLoading', false, { root: true });
-    });
+  /**
+   * Clone survey
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async copySurvey(context, id) {
+    try {
+      return await SurveyAPI.copy(id);
+    } catch (error) {
+      return null;
+    }
   },
 
-  getSurveyProfiles(_, query = {}) {
-    return SurveyAPI.getSurveyProfiles(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  /**
+   * Delete survey
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async deleteSurvey(context, id) {
+    try {
+      return await SurveyAPI.delete(id);
+    } catch (error) {
+      return null;
+    }
   },
 
-  updateSurveyProfile(_, data) {
-    return SurveyAPI.updateSurveyProfile(data).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  /**
+   * Toggle survey status
+   * @param {Context} context store context
+   * @param {Number} id survey id
+   */
+  async toggleStatus(context, id) {
+    try {
+      return await SurveyAPI.toggleStatus(id);
+    } catch (error) {
+      return null;
+    }
   },
 
-  friendAnswers(_, query) {
-    return SurveyAPI.friendAnswers(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async getAnsweredUsers(context, query) {
+    try {
+      const response = await SurveyAPI.answeredUsers(query);
+      context.commit('setUsers', response.data);
+      context.commit('setUsersMeta', response.meta);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getResponses(context, query) {
+    try {
+      const response = await SurveyAPI.responses(query);
+      context.commit('setResponses', response.data);
+      context.commit('setResponsesMeta', response.meta);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async getFriendResponses(context, query) {
+    try {
+      return await SurveyAPI.friendResponses(query);
+    } catch (error) {
+      return null;
+    }
   }
 };

@@ -31,7 +31,7 @@
                   class="form-control"
                   name="announcement[title]"
                   placeholder="入力してください"
-                  v-model="announcementData.title"
+                  v-model.trim="announcementData.title"
                 />
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>

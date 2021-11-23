@@ -11,31 +11,34 @@
           @submitUpdateFolder="submitUpdateFolder"
           @submitCreateFolder="submitCreateFolder"
         />
-        <div class="flex-grow-1" :key="contentKey">
+        <div class="flex-grow-1 folder-right" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
             :href="`${rootPath}/user/variables/new?folder_id=${curFolder.id}`"
-            data-turbolinks="false"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規作成
           </a>
-          <div class="mt-2" v-if="curFolder">
+          <div class="table-responsive mt-2" v-if="curFolder">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>友だち情報欄名</th>
-                  <th>既定値</th>
-                  <th>人数</th>
-                  <th>操作</th>
-                  <th>フォルダ</th>
+                  <th class="mw-150">友だち情報欄名</th>
+                  <th class="mw-120">既定値</th>
+                  <th class="mw-60">人数</th>
+                  <th class="mw-60">操作</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(variable, index) in curFolder.variables" v-bind:key="variable.id">
-                  <td>{{ variable.name }}</td>
-                  <td>{{ variable.default || "-" }}</td>
-                  <td>0</td>
+                  <td>
+                    <p class="item-name vw-10">{{ variable.name }}</p>
+                  </td>
+                  <td>
+                    <p class="item-name vw-10">{{ variable.default || "-" }}</p>
+                  </td>
+                  <td>{{ variable.friends_count }}</td>
                   <td>
                     <div class="btn-group">
                       <button
@@ -62,6 +65,7 @@
                           data-toggle="modal"
                           data-target="#modalDeleteVariable"
                           @click="curVariableIndex = index"
+                          v-if="variable.destroyable"
                           >友だち情報欄を削除</a
                         >
                       </div>
@@ -85,13 +89,13 @@
 
     <!-- START: Delete folder modal -->
     <modal-confirm
-      title="このフォルダを削除してもよろしいですか？"
+      title="このフォルダーを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder"
     >
       <template v-slot:content v-if="curFolder">
-        <span>フォルダ名：{{ curFolder.name }}</span>
+        <span>フォルダー名：{{ curFolder.name }}</span>
       </template>
     </modal-confirm>
     <!-- END: Delete folder modal -->
@@ -145,6 +149,15 @@ export default {
 
   async beforeMount() {
     await this.getFolders();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onSelectedFolderChanged(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -179,27 +192,43 @@ export default {
     onSelectedFolderChanged(index) {
       this.selectedFolderIndex = index;
       this.isPc = true;
-    },
-
-    async submitCreateFolder(folder) {
-      await this.createFolder(folder);
+      this.autoResponses = this.folders[index].auto_responses;
     },
 
     async submitUpdateFolder(folder) {
-      await this.updateFolder(folder);
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
+    },
+
+    async submitCreateFolder(folder) {
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder(this.curFolder.id);
-      this.onSelectedFolderChanged(0);
+      const response = await this.deleteFolder(this.folders[this.selectedFolderIndex].id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.onSelectedFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     },
 
     async submitDeleteVariable() {
       const response = await this.deleteVariable(this.curVariable.id);
       if (response) {
-        window.toastr.success('友だち情報欄の削除は完了しました。');
+        Util.showSuccessThenRedirect('友だち情報欄の削除は完了しました。', window.location.href);
       } else {
-        window.toastr.error('友だち情報欄の削除は失敗しました。');
+        Util.showErrorThenRedirect('友だち情報欄の削除は失敗しました。', window.location.href);
       }
       this.forceRerender();
     },
@@ -209,7 +238,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', window.location.href);
       } else {
-        Util.showSuccessThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
+        Util.showErrorThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
       }
       this.forceRerender();
     },

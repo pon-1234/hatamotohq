@@ -8,7 +8,7 @@
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
-      <div class="modal-content" style="    padding: 0 15px;">
+      <div class="modal-content" style="padding: 0 15px">
         <div class="modal-header">
           <h4 class="modal-title">Flexメッセージを選択</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -23,24 +23,26 @@
                   <div class="folder-list-title">
                     <table class="table table-tags-header">
                       <thead class="thead-light">
-                      <tr>
-                        <th scope="col" class="header-title">フォルダ</th>
-                        <th scope="col" style="text-align: right">
-                        </th>
-                      </tr>
+                        <tr>
+                          <th scope="col" class="header-title">フォルダー</th>
+                          <th scope="col" style="text-align: right"></th>
+                        </tr>
                       </thead>
                     </table>
                   </div>
                   <div class="tag-scroll folder-list">
                     <div class="folder-item new-folder" v-if="isAddMoreFolder">
                       <div class="input-group newgroup-inputs">
-                        <input type="text" placeholder="フォルダ名" v-model.trim="folderForm.name" class="form-control">
+                        <input
+                          type="text"
+                          placeholder="フォルダー名"
+                          v-model.trim="folderForm.name"
+                          class="form-control"
+                        />
                         <span class="input-group-btn"></span>
                       </div>
                     </div>
-                    <div v-if="loading.folderLoading">
-                      Loading...
-                    </div>
+                    <div v-if="loading.folderLoading">Loading...</div>
                     <flexmesasge-folder-item
                       v-else
                       v-for="(item, index) in folderLists"
@@ -49,63 +51,71 @@
                       :active="folderId == item.id"
                       :disableEditor="true"
                       :index="index"
-                      @changeSelected="folderId = ($event).folderId"
+                      @changeSelected="folderId = $event.folderId"
                     />
                   </div>
                 </div>
               </div>
-              <div class="col-md-8 tag-content-right" :class="currentFolder !== null? 'show': ''">
-                <div class="tag-content" style="background: rgb(249, 249, 249);">
+              <div class="col-md-8 tag-content-right" :class="currentFolder !== null ? 'show' : ''">
+                <div class="tag-content" style="background: rgb(249, 249, 249)">
                   <table class="table table-tags-header" v-if="currentFolder !== null">
                     <thead class="thead-light">
-                    <tr>
-                      <th class="hidden-pc">
-                        <i class="mdi mdi-arrow-left" @click="backToFolder"></i>
-                      </th>
-                      <th class="header-title folder-title">
-                        {{ currentFolder.name || '' }}
-                      </th>
-                      <!--<th style="text-align: right">-->
-                      <!---->
-                      <!--</th>-->
-                    </tr>
+                      <tr>
+                        <th class="hidden-pc">
+                          <i class="mdi mdi-arrow-left" @click="backToFolder"></i>
+                        </th>
+                        <th class="header-title folder-title">
+                          {{ currentFolder.name || "" }}
+                        </th>
+                        <!--<th style="text-align: right">-->
+                        <!---->
+                        <!--</th>-->
+                      </tr>
                     </thead>
                   </table>
 
                   <div class="tag-scroll tag-list">
-                    <div v-if="loading.flexMessageLoading">
-                      Loading...
-                    </div>
-                    <table class="table" style="max-width: initial !important;" v-else>
+                    <div v-if="loading.flexMessageLoading">Loading...</div>
+                    <table class="table" style="max-width: initial !important" v-else>
                       <tbody>
-                      <div v-if="flexMessageList && flexMessageList.length">
-                        <template v-for="(item, index) in flexMessageList" >
-                          <tr style="display: flex;" :key="index">
-                            <td class="flex-item">
-                              <span>{{item.name}}</span>
-                            </td>
-                            <td style="text-align: right; width: auto">
-                              <a
-                                @click="(currentFlexMessage === item? currentFlexMessage= null: currentFlexMessage = item)"
-                                class="btn-more btn-more-linebot btn-block cursor-pointer">
-                                プレビュー
-                              </a>
-                              <a class="btn-more btn-more-linebot btn-block cursor-pointer" @click="pickFlexMessage(item)"
-                                data-dismiss="modal">
-                                選択
-                              </a>
-                            </td>
-                          </tr>
-                          <tr v-if="item === currentFlexMessage" style="background: #ededed;" :key="index+'_preview'">
-                            <td colspan="2">
-                              <div v-html="item.html_template" style="zoom: 0.6"></div>
-                            </td>
-                          </tr>
-                        </template>
-                      </div>
-                      <div v-else class="text-center mt40">
-                        データーがありません
-                      </div>
+                        <div v-if="flexMessageList && flexMessageList.length">
+                          <template v-for="(item, index) in flexMessageList">
+                            <tr style="display: flex" :key="index">
+                              <td class="flex-item">
+                                <span>{{ item.name }}</span>
+                              </td>
+                              <td style="text-align: right; width: auto">
+                                <a
+                                  @click="
+                                    currentFlexMessage === item
+                                      ? (currentFlexMessage = null)
+                                      : (currentFlexMessage = item)
+                                  "
+                                  class="btn-more btn-more-linebot btn-block cursor-pointer"
+                                >
+                                  プレビュー
+                                </a>
+                                <a
+                                  class="btn-more btn-more-linebot btn-block cursor-pointer"
+                                  @click="pickFlexMessage(item)"
+                                  data-dismiss="modal"
+                                >
+                                  選択
+                                </a>
+                              </td>
+                            </tr>
+                            <tr
+                              v-if="item === currentFlexMessage"
+                              style="background: #ededed"
+                              :key="index + '_preview'"
+                            >
+                              <td colspan="2">
+                                <div v-html="item.html_template" style="zoom: 0.6"></div>
+                              </td>
+                            </tr>
+                          </template>
+                        </div>
+                        <div v-else class="text-center mt40">データーがありません</div>
                       </tbody>
                     </table>
                   </div>
@@ -116,8 +126,8 @@
             <flexmessage-modal-preview
               :id="'flexMessagePreview'"
               :model="currentFlexMessage"
-              v-if="currentFlexMessage != null"/>
-
+              v-if="currentFlexMessage != null"
+            />
           </div>
         </div>
       </div>
@@ -164,32 +174,38 @@ export default {
     },
 
     folderFlexMessages(id, isLoading = true) {
-      this.currentFolder = this.folderLists.firstWhere((folder) => folder.id === id);
+      this.currentFolder = this.folderLists.firstWhere(folder => folder.id === id);
       if (this.currentFolder) {
         this.folderId = id;
       }
 
       this.loading.flexMessageLoading = isLoading;
-      this.$store.dispatch('flexMessage/folderFlexMessages', {
-        folderId: id
-      }).done((res) => {
-        this.flexMessageList = res;
-      }).always(() => {
-        this.loading.flexMessageLoading = false;
-      });
+      this.$store
+        .dispatch('flexMessage/folderFlexMessages', {
+          folderId: id
+        })
+        .done(res => {
+          this.flexMessageList = res;
+        })
+        .always(() => {
+          this.loading.flexMessageLoading = false;
+        });
     },
     indexFolders(isLoading = true) {
       this.loading.folderLoading = isLoading;
-      this.$store.dispatch('flexMessage/indexFolders').done((res) => {
-        this.folderLists = res;
-        if (this.folderId && this.folderId > 0) {
-          this.folderFlexMessages(this.folderId, isLoading);
-        } else if (this.folderLists.length > 0) {
-          this.folderId = this.folderLists[0].id;
-        }
-      }).always(() => {
-        this.loading.folderLoading = false;
-      });
+      this.$store
+        .dispatch('flexMessage/indexFolders')
+        .done(res => {
+          this.folderLists = res;
+          if (this.folderId && this.folderId > 0) {
+            this.folderFlexMessages(this.folderId, isLoading);
+          } else if (this.folderLists.length > 0) {
+            this.folderId = this.folderLists[0].id;
+          }
+        })
+        .always(() => {
+          this.loading.folderLoading = false;
+        });
     },
 
     pickFlexMessage(item) {
@@ -245,7 +261,6 @@ export default {
       .modal-dialog {
         margin: auto;
         padding: 80px 20px !important;
-
       }
     }
     @media (max-width: 768px) {
@@ -270,7 +285,6 @@ export default {
         max-width: 95%;
       }
     }
-
   }
 
   .btn-block {
@@ -289,7 +303,6 @@ export default {
 
   .tag-list {
     position: relative;
-
   }
 
   .tag-header {
@@ -319,7 +332,6 @@ export default {
 
   .tag-content-right {
     max-width: calc(100% - 250px);
-
   }
 
   .thead-light {
@@ -331,7 +343,7 @@ export default {
     min-height: 47px;
     display: flex;
     max-width: initial !important;
-    margin-top: 0px!important;
+    margin-top: 0px !important;
   }
 
   .table-tags-header tr {
@@ -402,10 +414,8 @@ export default {
       .tag-scroll {
         padding-left: 10px;
         padding-right: 10px;
-
       }
     }
-
   }
 
   .btn-sm {
@@ -439,12 +449,11 @@ export default {
     .flex-editor:hover {
       border: 0px solid #0a90eb;
     }
-
   }
 
-.tag-scroll {
-  table {
-    margin-top: 0px!important;
+  .tag-scroll {
+    table {
+      margin-top: 0px !important;
+    }
   }
-}
 </style>

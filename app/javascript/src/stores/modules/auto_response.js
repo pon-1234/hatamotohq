@@ -59,7 +59,11 @@ export const actions = {
   },
 
   async createAutoResponse(context, autoResponseData) {
-    return await AutoResponseAPI.create(autoResponseData);
+    try {
+      return await AutoResponseAPI.create(autoResponseData);
+    } catch (error) {
+      return null;
+    }
   },
 
   async updateAutoResponse(context, autoResponse) {
@@ -96,13 +100,19 @@ export const actions = {
     }
   },
 
-  updateFolder(context, payload) {
-    context.commit('updateFolder', payload);
+  async updateFolder(context, payload) {
+    try {
+      const res = await FolderAPI.update(payload);
+      context.commit('updateFolder', payload);
+      return res;
+    } catch (error) {
+      return null;
+    }
   },
 
   async deleteFolder(context, id) {
     try {
-      const response = await FolderAPI.deleteFolder(id);
+      const response = await FolderAPI.delete(id);
       context.commit('deleteFolder', id);
       return response;
     } catch (error) {

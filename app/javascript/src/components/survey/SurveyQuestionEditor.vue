@@ -39,8 +39,11 @@
             <option value="pulldown">プルダウン</option>
             <option value="radio">ラジオボタン</option>
             <option value="checkbox">チェックボックス</option>
-            <option value="file">ファイル添付（JPEG/PNG/PDF）</option>
+            <option value="image">画像</option>
+            <option value="pdf">PDF</option>
             <option value="date">日付</option>
+            <option value="time">時刻</option>
+            <option value="datetime">日付・時刻</option>
           </select>
           <div class="custom-control custom-checkbox ml-2 text-nowrap">
             <input
@@ -54,55 +57,76 @@
         </div>
 
         <div class="mt-2">
-          <survey-text-object
+          <survey-question-editor-text
             :name="name + '-text-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-if="object.type === 'text'"
-          ></survey-text-object>
+          ></survey-question-editor-text>
 
-          <survey-text-area-object
+          <survey-question-editor-textarea
             :name="name + '-textarea-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'textarea'"
           >
-          </survey-text-area-object>
+          </survey-question-editor-textarea>
 
-          <survey-radio-object
+          <survey-question-editor-radio
             :name="name + '-radio-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'radio'"
-          ></survey-radio-object>
+          ></survey-question-editor-radio>
 
-          <survey-check-box-object
+          <survey-question-editor-checkbox
             :name="name + '-checkbox-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'checkbox'"
-          ></survey-check-box-object>
+          ></survey-question-editor-checkbox>
 
-          <survey-pulldown-object
+          <survey-question-editor-pulldown
             :name="name + '-pulldown-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'pulldown'"
-          ></survey-pulldown-object>
+          ></survey-question-editor-pulldown>
 
-          <survey-file-object
-            :name="name + '-file-' + index"
+          <survey-question-editor-image
+            :name="name + '-image-' + index"
             :content="object.content"
             @input="object.content = $event"
-            v-else-if="object.type === 'file'"
-          ></survey-file-object>
+            v-else-if="object.type === 'image'"
+          ></survey-question-editor-image>
 
-          <survey-date-object
+          <survey-question-editor-pdf
+            :name="name + '-pdf-' + index"
+            :content="object.content"
+            @input="object.content = $event"
+            v-else-if="object.type === 'pdf'"
+          ></survey-question-editor-pdf>
+
+          <survey-question-editor-date
             :name="name + '-date-' + index"
             :content="object.content"
             @input="object.content = $event"
             v-else-if="object.type === 'date'"
-          ></survey-date-object>
+          ></survey-question-editor-date>
+
+          <survey-question-editor-datetime
+            :name="name + '-date-' + index"
+            :content="object.content"
+            @input="object.content = $event"
+            v-else-if="object.type === 'datetime'"
+          ></survey-question-editor-datetime>
+
+          <survey-question-editor-time
+            :name="name + '-date-' + index"
+            :content="object.content"
+            @input="object.content = $event"
+            v-else-if="object.type === 'time'"
+          ></survey-question-editor-time>
         </div>
       </div>
     </div>
@@ -142,7 +166,7 @@ export default {
       deep: true,
       handler(val) {
         this.objectLists.forEach((object, index) => {
-          const fieldText = val.items.find((item) => {
+          const fieldText = val.items.find(item => {
             return (
               item.field.includes(this.name + '-text-' + index) ||
               item.field.includes(this.name + '-textarea-' + index) ||
@@ -150,7 +174,8 @@ export default {
               item.field.includes(this.name + '-checkbox-' + index) ||
               item.field.includes(this.name + '-dropdown-' + index) ||
               item.field.includes(this.name + '-date-' + index) ||
-              item.field.includes(this.name + '-file-' + index)
+              item.field.includes(this.name + '-image-' + index) ||
+              item.field.includes(this.name + '-pdf-' + index)
             );
           });
           if (fieldText) {
