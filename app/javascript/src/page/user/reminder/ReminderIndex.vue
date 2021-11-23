@@ -31,7 +31,7 @@
               <tbody>
                 <tr v-for="(reminder, index) in curFolder.reminders" v-bind:key="reminder.id">
                   <td>
-                    <p class="vw-10 item-name">{{ reminder.name }}</p>
+                    <p class="vw-20 item-name">{{ reminder.name }}</p>
                   </td>
                   <td>
                     <div class="d-flex">

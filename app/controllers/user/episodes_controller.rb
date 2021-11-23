@@ -28,6 +28,14 @@ class User::EpisodesController < User::ApplicationController
     end
   end
 
+  # GET /user/reminders/:id/episodes/:episode_id/edit
+  def edit
+  end
+
+  # PATCH /user/reminders/:id/episodes/:episode_id
+  def update
+  end
+
   private
     def episode_params
       params.permit(

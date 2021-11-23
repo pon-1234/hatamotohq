@@ -21,8 +21,8 @@
               name="reminder_name"
               placeholder="リマインダ名を入力してください"
               v-model.trim="reminderData.name"
-              v-validate="'required|max:255'"
-              maxlength="256"
+              v-validate="'required|max:64'"
+              maxlength="65"
               data-vv-as="リマインダ名"
             />
             <error-message :message="errors.first('reminder_name')"></error-message>

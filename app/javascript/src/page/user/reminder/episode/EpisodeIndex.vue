@@ -41,7 +41,7 @@
                         <a
                           role="button"
                           class="dropdown-item"
-                          :href="`${this.rootPath}/user/reminders/${reminder_id}/episodes/${episode.id}/edit`"
+                          :href="`${rootPath}/user/reminders/${reminder_id}/episodes/${episode.id}/edit`"
                           >配信タイミングを編集する</a
                         >
                         <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modelDeleteEpisode"

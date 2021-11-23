@@ -7,7 +7,7 @@
         data-target="#modalSelectReminder"
         data-backdrop="static"
       >
-        {{ reminder.id ? reminder.name : "リマインダを選択する" }}
+        <span class="max-1-lines">{{ reminder.id ? reminder.name : "リマインダを選択する" }}</span>
       </div>
       <div>
         <input type="hidden" v-model="reminder.id" name="reminder_id" v-validate="'required'" data-vv-as="リマインダ" />

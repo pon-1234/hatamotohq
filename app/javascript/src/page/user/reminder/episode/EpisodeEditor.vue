@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: false,
       contentKey: 0,
       episodeData: {
@@ -108,6 +108,8 @@ export default {
   provide() {
     return { parentValidator: this.$validator };
   },
+
+  beforeMount() {},
 
   methods: {
     ...mapActions('template', ['getTemplate']),

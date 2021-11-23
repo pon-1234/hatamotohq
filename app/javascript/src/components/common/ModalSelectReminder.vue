@@ -42,14 +42,14 @@
                     data-dismiss="modal"
                   >
                     <td class="d-flex w-100">
-                      <div>{{ item.name }}</div>
-                      <div class="btn btn-info btn-sm ml-auto" @click="selectReminder(item)">選択</div>
+                      <div class="mr-1">{{ item.name }}</div>
+                      <div class="btn btn-info btn-sm ml-auto my-auto fw-80" @click="selectReminder(item)">選択</div>
                     </td>
                   </tr>
                 </tbody>
                 <tbody v-else>
                   <tr>
-                    <td class="text-center pt40">データーがありません</td>
+                    <td class="text-center my-5">データーがありません</td>
                   </tr>
                 </tbody>
               </table>
@@ -88,9 +88,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reminder', [
-      'getReminders'
-    ]),
+    ...mapActions('reminder', ['getReminders']),
 
     backToFolder() {
       this.isPc = false;
