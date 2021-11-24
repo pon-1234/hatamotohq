@@ -27,4 +27,8 @@ class Reminding < ApplicationRecord
 
   # Validations
   validates :goal, presence: true
+
+  after_create do
+    ReminderSchedulerJob.perform_later(self.id)
+  end
 end

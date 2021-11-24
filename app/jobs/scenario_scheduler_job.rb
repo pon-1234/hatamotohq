@@ -8,26 +8,26 @@ class ScenarioSchedulerJob < ApplicationJob
   def perform(channel_id, scenario_id)
     @channel = Channel.find(channel_id)
     @scenario = Scenario.find(scenario_id)
-    messages = @scenario.scenario_messages.enabled.ordered
-    return if messages.empty?
+    scenario_messages = @scenario.scenario_messages.enabled.ordered
+    return if scenario_messages.empty?
     save_scenario_started_log
-    messages.each do |message|
-      schedule(message)
+    scenario_messages.each do |scenario_message|
+      schedule(scenario_message)
     end
-    schedule_after_action(messages.last)
+    schedule_after_action(scenario_messages.last)
   end
 
   private
-    def schedule(message)
-      if message.is_initial?
-        deliver_now(message)
+    def schedule(scenario_message)
+      if scenario_message.is_initial?
+        deliver_now(scenario_message)
       else
-        create_message_event(message, deliver_time_for(message))
+        create_message_event(scenario_message, deliver_time_for(scenario_message))
       end
     end
 
-    def deliver_now(message)
-      normalized = Normalizer::MessageNormalizer.new(message.content).perform
+    def deliver_now(scenario_message)
+      normalized = Normalizer::MessageNormalizer.new(scenario_message.content).perform
       if contain_survey_action?(normalized)
         normalized = normalize_messages_with_survey_action(@channel, normalized)
       end
@@ -51,12 +51,12 @@ class ScenarioSchedulerJob < ApplicationJob
       end
     end
 
-    def deliver_time_for(message)
-      date = message.date
-      time = message.time.to_time
+    def deliver_time_for(scenario_message)
+      date = scenario_message.date
+      time = scenario_message.time.to_time
       case @scenario.mode
       when 'time'
-        (Time.zone.today + message.date).change({ hour: time.hour, minute: time.min, second: 0 })
+        (Time.zone.today + scenario_message.date).change({ hour: time.hour, minute: time.min, second: 0 })
       when 'elapsed_time'
         Time.zone.now.change({ second: 0 }) + date.day + time.hour.hour + time.min.minute
       end

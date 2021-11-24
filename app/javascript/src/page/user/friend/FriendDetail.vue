@@ -159,7 +159,7 @@
           </div>
 
           <div class="card mt-2">
-            <div class="card-header"><h5>リマインダ履歴</h5></div>
+            <div class="card-header"><h5>最新リマインダ</h5></div>
             <div class="card-body py-0">
               <table class="table">
                 <thead class="thead-light">
