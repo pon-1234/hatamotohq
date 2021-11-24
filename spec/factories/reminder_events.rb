@@ -7,6 +7,7 @@
 #  id           :bigint           not null, primary key
 #  reminding_id :bigint
 #  episode_id   :bigint
+#  status       :string(255)
 #  schedule_at  :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

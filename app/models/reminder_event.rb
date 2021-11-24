@@ -7,6 +7,7 @@
 #  id           :bigint           not null, primary key
 #  reminding_id :bigint
 #  episode_id   :bigint
+#  status       :string(255)
 #  schedule_at  :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -22,4 +23,36 @@
 #  fk_rails_...  (reminding_id => remindings.id)
 #
 class ReminderEvent < ApplicationRecord
+  include User::MessagesHelper
+  belongs_to :reminding
+  belongs_to :episode
+
+  # Scope
+  enum status: { queued: 'queued', sending: 'sending', done: 'done', error: 'error' }
+  scope :before, ->(time) { where('schedule_at <= ?', time) }
+
+  def invoke
+    deliver_messages
+    deliver_actions
+  end
+
+  private
+    def deliver_messages
+      nomalized_messages = []
+      self.episode.messages.each do |message|
+        nomalized_messages << Normalizer::MessageNormalizer.new(message.try(:content) || message['content']).perform
+      end
+      if contain_survey_action?(nomalized_messages)
+        nomalized_messages = normalize_messages_with_survey_action(self.reminding.channel, nomalized_messages)
+      end
+      payload = {
+        channel_id: self.reminding.channel_id,
+        messages: nomalized_messages
+      }
+      PushMessageToLineJob.perform_now(payload)
+    end
+
+    def deliver_actions
+      ActionHandlerJob.perform_now(self.reminding.channel.line_friend, self.episode.actions['data'])
+    end
 end

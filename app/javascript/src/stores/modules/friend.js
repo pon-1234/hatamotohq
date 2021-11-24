@@ -33,7 +33,7 @@ export const mutations = {
   },
 
   setReminder(state, reminder) {
-    state.reminders.push(reminder);
+    state.reminders.unshift(reminder);
   },
 
   setMeta(state, meta) {

@@ -28,6 +28,12 @@ staging:
     description: "This worker dispatch scenario event that was enqueued"
     enabled: true
 
+  DispatchReminderEventWorker:
+    cron: "0 * * * * *" # Runs every minute
+    include_metadata: true
+    description: "This worker dispatch reminder event that was enqueued"
+    enabled: true
+
   GetNumberOfMessageDeliveryWorker:
     cron: "0 0 5 * * *" # Runs every day
     include_metadata: true

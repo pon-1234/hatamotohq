@@ -38,8 +38,8 @@
                       <a
                         role="button"
                         :href="`${rootPath}/user/reminders/${reminder.id}/episodes`"
-                        class="btn btn-sm btn-light mr-1"
-                        >配信タイミング一覧</a
+                        class="btn btn-sm btn-light mr-1 text-nowrap"
+                        >配信タイミング一覧（{{ reminder.episodes_count }}）</a
                       >
                       <div class="btn-group">
                         <button

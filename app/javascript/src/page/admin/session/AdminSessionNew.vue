@@ -9,7 +9,7 @@
               <div class="card-header pt-4 pb-4 text-center bg-info">
                 <a href="#" class="text-white text-uppercase" style="font-size: 1.2rem">
                   <!-- <span><img src="assets/images/logo.png" alt="" height="18"></span> -->
-                  <span>LINE INSIGHT</span>
+                  <span>LINE CMS</span>
                 </a>
               </div>
               <!-- END: Logo -->

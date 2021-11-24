@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
     receivers = payload['emails']
     @body = payload['text']
     bind_variables
-    mail(to: receivers, subject: 'LINE INSIGHTシステム')
+    mail(to: receivers, subject: 'LINE CMSシステム')
   end
 
   private

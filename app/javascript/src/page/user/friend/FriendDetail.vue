@@ -151,8 +151,8 @@
           <div class="card">
             <div class="card-body">
               <div class="row">
-                <label class="col-xl-3">リマインダ</label>
-                <label class="col-xl-9">ゴール日時</label>
+                <label class="col-lg-3">リマインダ</label>
+                <label class="col-lg-9">ゴール日時</label>
               </div>
               <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
             </div>
