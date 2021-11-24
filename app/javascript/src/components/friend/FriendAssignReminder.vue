@@ -1,12 +1,7 @@
 <template>
   <div class="row">
     <div class="col-lg-3">
-      <div
-        class="btn btn-secondary ml-1 d-block"
-        data-toggle="modal"
-        data-target="#modalSelectReminder"
-        data-backdrop="static"
-      >
+      <div class="btn btn-secondary ml-1 d-block" data-toggle="modal" data-target="#modalSelectReminder">
         <span class="max-1-lines">{{ reminder.id ? reminder.name : "リマインダを選択する" }}</span>
       </div>
       <div>

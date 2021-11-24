@@ -22,4 +22,6 @@
 #  fk_rails_...  (reminding_id => remindings.id)
 #
 class ReminderEvent < ApplicationRecord
+  belongs_to :reminding
+  belongs_to :episode
 end

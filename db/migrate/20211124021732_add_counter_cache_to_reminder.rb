@@ -2,6 +2,6 @@
 
 class AddCounterCacheToReminder < ActiveRecord::Migration[6.0]
   def change
-    add_column :reminders, :episodes_count, :integer, after: :name
+    add_column :reminders, :episodes_count, :integer, after: :name, default: 0
   end
 end

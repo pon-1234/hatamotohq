@@ -21,7 +21,7 @@ class ReminderSchedulerJob < ApplicationJob
       if episode.is_initial?
         deliver_now(episode)
       else
-        # create_message_event(message, deliver_time_for(message))
+        create_reminder_event(episode, deliver_time_for(episode))
       end
     end
 
@@ -38,5 +38,23 @@ class ReminderSchedulerJob < ApplicationJob
         messages: nomalized_messages
       }
       PushMessageToLineJob.perform_now(payload)
+    end
+
+
+    def create_reminder_event(episode, schedule_at)
+      reminder_event = ReminderEvent.new(
+        reminding: @reminding,
+        episode_id: episode.id,
+        schedule_at: schedule_at
+      )
+      reminder_event.save!
+    end
+
+
+    def deliver_time_for(episode)
+      goal = @reminding.goal
+      date = episode.date
+      time = episode.time.to_time
+      (goal - date).change({ hour: time.hour, minute: time.min, second: 0 })
     end
 end
