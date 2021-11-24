@@ -75,7 +75,7 @@
                           data-target="#modalToggleSurvey"
                           @click="curSurveyIndex = index"
                           v-if="survey.status !== 'draft'"
-                          >{{ survey.status === "published" ? "未公開" : "公開" }}にする</a
+                          >{{ survey.status === "published" ? "非公開" : "公開" }}にする</a
                         >
                         <a
                           role="button"
@@ -152,8 +152,8 @@
       @confirm="submitToggleSurvey"
     >
       <template v-slot:content v-if="curSurvey">
-        状況変更：<b>{{ curSurvey.status === "published" ? "公開" : "未公開" }}</b>
-        <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curSurvey.status === "published" ? "未公開" : "公開" }}</b>
+        状況変更：<b>{{ curSurvey.status === "published" ? "公開" : "非公開" }}</b>
+        <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curSurvey.status === "published" ? "非公開" : "公開" }}</b>
       </template>
     </modal-confirm>
     <!-- END: modal delete richmenu -->

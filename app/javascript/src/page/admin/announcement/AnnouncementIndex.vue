@@ -54,7 +54,7 @@
                             @click="curAnnouncementIndex = index"
                           >
                             <span v-if="announcement.status === 'unpublished'">公開にする</span>
-                            <span v-else>未公開にする</span>
+                            <span v-else>非公開にする</span>
                           </a>
                           <a
                             role="button"
@@ -122,9 +122,9 @@
     >
       <template v-slot:content>
         <div v-if="curAnnouncement">
-          <b>{{ curAnnouncement.status === "published" ? "公開" : "未公開" }}</b>
+          <b>{{ curAnnouncement.status === "published" ? "公開" : "非公開" }}</b>
           <i class="mdi mdi-arrow-right-bold"></i>
-          <b>{{ curAnnouncement.status === "published" ? "未公開" : "公開" }}</b>
+          <b>{{ curAnnouncement.status === "published" ? "非公開" : "公開" }}</b>
         </div>
       </template>
     </modal-confirm>
