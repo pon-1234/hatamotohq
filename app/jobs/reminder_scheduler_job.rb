@@ -45,7 +45,8 @@ class ReminderSchedulerJob < ApplicationJob
       reminder_event = ReminderEvent.new(
         reminding: @reminding,
         episode_id: episode.id,
-        schedule_at: schedule_at
+        schedule_at: schedule_at,
+        status: :queued
       )
       reminder_event.save!
     end

@@ -66,7 +66,7 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/reminders
   def reminders
-    @remindings = @friend.channel.remindings.limit(10)
+    @remindings = @friend.channel.remindings.order("remindings.id desc").limit(10)
   end
 
   # POST /user/friends/:id/set_reminder
