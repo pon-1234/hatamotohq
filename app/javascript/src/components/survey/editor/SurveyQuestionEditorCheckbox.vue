@@ -92,28 +92,19 @@
                 placeholder="ラベルを入力してください"
               />
             </div>
-            <div v-show="item.editing" class="form-group d-flex mt-2">
+            <div class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
-                <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
-                  <option value="tag">タグ</option>
-                  <!--<option value="information">友達情報</option>-->
-                  <option value="postback">選択時のアクション</option>
-                </select>
+                <span class="fw-200">選択時のアクション</span>
               </div>
               <div style="width: calc(100% - 200px)" :key="contentKey">
-                <div class="fw-200 pr-2">
-                  <span class="fw-200">選択時のアクション</span>
-                </div>
-                <div style="width: calc(100% - 200px)" :key="contentKey">
-                  <div class="action-postback">
-                    <action-postback
-                      :showTitle="false"
-                      :value="item.action"
-                      :name="name + '-postback-' + index"
-                      :labelRequired="false"
-                      @input="item.action = $event"
-                    ></action-postback>
-                  </div>
+                <div class="action-postback">
+                  <action-postback
+                    :showTitle="false"
+                    :value="item.action"
+                    :name="name + '-postback-' + index"
+                    :labelRequired="false"
+                    @input="item.action = $event"
+                  ></action-postback>
                 </div>
               </div>
             </div>
@@ -144,13 +135,9 @@ export default {
         profile: null,
         options: [
           {
-            editing: true,
             value: null,
             action: {
-              type: 'tag',
-              content: {
-                tag_ids: null
-              }
+              type: 'none'
             }
           }
         ]
@@ -175,7 +162,6 @@ export default {
     },
     addItem() {
       this.questionContentData.options.push({
-        editing: true,
         value: null,
         action: {
           type: 'tag',

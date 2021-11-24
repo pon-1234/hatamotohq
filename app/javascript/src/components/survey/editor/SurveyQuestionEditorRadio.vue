@@ -84,7 +84,7 @@
                 placeholder="ラベルを入力してください"
               />
             </div>
-            <div v-show="item.is_editor" class="form-group d-flex mt-2">
+            <div class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
                 <span class="fw-200">選択時のアクション</span>
               </div>
@@ -130,7 +130,7 @@ export default {
         },
         options: [
           {
-            is_editor: true,
+            editing: true,
             value: null,
             action: {
               type: 'none'
@@ -158,7 +158,7 @@ export default {
           });
 
           if (fieldText) {
-            object.is_editor = true;
+            object.editing = true;
           }
         });
       }
@@ -183,7 +183,6 @@ export default {
     },
     addItem() {
       this.options.push({
-        is_editor: true,
         value: null,
         action: {
           type: 'none'

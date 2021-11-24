@@ -84,28 +84,19 @@
                 placeholder="ラベルを入力してください"
               />
             </div>
-            <div v-show="item.is_editor" class="form-group d-flex mt-2">
+            <div class="form-group d-flex mt-2">
               <div class="fw-200 pr-2">
-                <select class="form-control d-block" v-model="item.action.type" @change="item.action.content = null">
-                  <option value="tag">タグ</option>
-                  <!--<option value="information">友達情報</option>-->
-                  <option value="postback">選択時のアクション</option>
-                </select>
+                <span class="fw-200">選択時のアクション</span>
               </div>
               <div style="width: calc(100% - 200px)" :key="contentKey">
-                <div class="fw-200 pr-2">
-                  <span class="fw-200">選択時のアクション</span>
-                </div>
-                <div style="width: calc(100% - 200px)" :key="contentKey">
-                  <div class="action-postback">
-                    <action-postback
-                      :showTitle="false"
-                      :value="item.action"
-                      :name="name + '-postback-' + index"
-                      :labelRequired="false"
-                      @input="item.action = $event"
-                    ></action-postback>
-                  </div>
+                <div class="action-postback">
+                  <action-postback
+                    :showTitle="false"
+                    :value="item.action"
+                    :name="name + '-postback-' + index"
+                    :labelRequired="false"
+                    @input="item.action = $event"
+                  ></action-postback>
                 </div>
               </div>
             </div>
@@ -139,13 +130,9 @@ export default {
         },
         options: [
           {
-            is_editor: true,
             value: null,
             action: {
-              type: 'tag',
-              content: {
-                tag_ids: null
-              }
+              type: 'none'
             }
           }
         ]
@@ -177,7 +164,6 @@ export default {
     },
     addItem() {
       this.options.push({
-        is_editor: true,
         value: null,
         action: {
           type: 'tag',
@@ -209,29 +195,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  ::v-deep {
-    .survey {
-      border: 1px solid #dedede;
-      border-radius: 4px;
-      padding: 10px;
-    }
-    a:hover {
-      cursor: pointer;
-    }
-    .form-group {
-      padding: 5px 0;
-    }
-    .mt10 {
-      margin-top: 10px !important;
-    }
-    .mr10 {
-      margin-right: 10px !important;
-    }
-    .action-postback {
-      background: gray;
-      padding: 0 10px 10px 10px;
-      border-radius: 4px;
-    }
-  }
-</style>
