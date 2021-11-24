@@ -8,7 +8,7 @@
     aria-hidden="true"
     ref="modalSelectVariable"
   >
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-lg vh-90 modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">友達情報名を選択してください</h4>
