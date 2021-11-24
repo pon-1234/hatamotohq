@@ -33,9 +33,7 @@
         ></datetime>
         <error-message :message="errors.first('reminder_goal')"></error-message>
       </div>
-      <div class="btn btn-sm btn-light mr-1 mb-auto" data-toggle="modal" data-target="#modalReminderPreview">
-        プレビュー
-      </div>
+      <div class="btn btn-light mr-1 mb-auto" data-toggle="modal" data-target="#modalReminderPreview">プレビュー</div>
       <div class="btn btn-success fw-120 mb-auto" @click="submit()">開始</div>
     </div>
     <modal-select-reminder id="modalSelectReminder" @selectReminder="onSelectReminder($event)"></modal-select-reminder>

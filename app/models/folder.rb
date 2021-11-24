@@ -21,6 +21,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Folder < ApplicationRecord
+  default_scope { order(id: :asc) }
   include FolderType
   belongs_to :line_account
   has_many :tags, dependent: :destroy
