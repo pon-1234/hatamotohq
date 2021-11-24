@@ -26,6 +26,11 @@ class ReminderSchedulerJob < ApplicationJob
     end
 
     def deliver_now(episode)
+      deliver_messages(episode)
+      deliver_actions(episode)
+    end
+
+    def deliver_messages(episode)
       nomalized_messages = []
       episode.messages.each do |message|
         nomalized_messages << Normalizer::MessageNormalizer.new(message.try(:content) || message['content']).perform
@@ -40,6 +45,9 @@ class ReminderSchedulerJob < ApplicationJob
       PushMessageToLineJob.perform_now(payload)
     end
 
+    def deliver_actions(episode)
+      ActionHandlerJob.perform_now(@channel.line_friend, episode.actions['data'])
+    end
 
     def create_reminder_event(episode, schedule_at)
       reminder_event = ReminderEvent.new(
