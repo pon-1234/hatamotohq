@@ -66,6 +66,7 @@
                             data-toggle="modal"
                             data-target="#modalDeleteTemplate"
                             @click="curReminderIndex = index"
+                            v-if="reminder.destroyable"
                             >リマインダを削除</a
                           >
                         </div>
@@ -229,8 +230,9 @@ export default {
 
     async submitDeleteReminder() {
       const response = await this.deleteReminder(this.curReminder.id);
+      const url = `${this.rootPath}/user/reminders?folder_id=${this.curFolder.id}`;
       if (response) {
-        window.toastr.success('リマインダの削除は完了しました。');
+        Util.showSuccessThenRedirect('リマインダの削除は完了しました。', url);
       } else {
         window.toastr.error('リマインダの削除は失敗しました。');
       }
@@ -239,10 +241,11 @@ export default {
 
     async submitCopyTemplate() {
       const response = await this.copyReminder(this.curReminder.id);
+      const url = `${this.rootPath}/user/reminders?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('リマインダのコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('リマインダのコピーは完了しました。', url);
       } else {
-        Util.showSuccessThenRedirect('リマインダのコピーは失敗しました。', window.location.href);
+        Util.showErrorThenRedirect('リマインダのコピーは失敗しました。', url);
       }
       this.forceRerender();
     },

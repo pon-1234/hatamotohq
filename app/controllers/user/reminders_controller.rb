@@ -2,7 +2,7 @@
 
 class User::RemindersController < User::ApplicationController
   load_and_authorize_resource
-  before_action :find_reminder, only: [:update, :show]
+  before_action :find_reminder, only: [:update, :show, :copy, :destroy]
   include User::ReminderHelper
 
   # GET /user/reminders
@@ -42,6 +42,21 @@ class User::RemindersController < User::ApplicationController
     unless @reminder.update!(reminder_params)
       render_bad_request_with_message(@reminder.first_error_message)
     end
+  end
+
+  # DELETE /user/reminders/:id
+  def destroy
+    @reminder.destroy
+    render_success
+  end
+
+  # POST /user/reminders/:id/copy
+  def copy
+    new_reminder = @reminder.clone!
+    render_success
+  rescue => e
+    logger.error e.message
+    render_bad_request
   end
 
   private
