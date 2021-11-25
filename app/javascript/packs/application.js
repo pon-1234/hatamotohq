@@ -74,6 +74,10 @@ Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 Validator.localize('ja', ja);
+Validator.extend('email', value => {
+  var pattern = new RegExp('^\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$');
+  return !!pattern.test(value);
+});
 // END: vee-validation configuration
 
 // Automatically import components
