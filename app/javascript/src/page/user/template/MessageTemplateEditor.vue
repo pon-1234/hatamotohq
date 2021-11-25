@@ -40,7 +40,7 @@
               v-bind:index="index"
               v-bind:messagesCount="templateData.messages.length"
               @input="changeContent"
-              @remove="removeContent"
+              @remove="removeMessage"
               @moveUp="moveUp"
               @moveDown="moveDown"
             />
@@ -150,8 +150,9 @@ export default {
       });
     },
 
-    removeContent({ index }) {
+    removeMessage(index) {
       this.templateData.messages.splice(index, 1);
+      this.forceRerender();
     },
 
     moveUp(index) {

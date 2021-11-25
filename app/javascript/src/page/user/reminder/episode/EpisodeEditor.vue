@@ -153,6 +153,22 @@ export default {
       } else {
         window.toastr.error('リマインダ配信タイミングの作成は失敗しました。');
       }
+    },
+
+    removeMessage(index) {
+      this.episodeData.messages.splice(index, 1);
+      this.forceRerender();
+    },
+
+    moveMessageUp(index) {
+      const option = this.episodeData.messages[index];
+      this.episodeData.messages[index] = this.episodeData.messages.splice(index - 1, 1, option)[0];
+      this.forceRerender();
+    },
+    moveMessageDown(index) {
+      const option = this.episodeData.messages[index];
+      this.episodeData.messages[index] = this.episodeData.messages.splice(index + 1, 1, option)[0];
+      this.forceRerender();
     }
   }
 };

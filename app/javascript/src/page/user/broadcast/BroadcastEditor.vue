@@ -268,7 +268,7 @@ export default {
       this.broadcastData.messages.splice(index, 1, content);
     },
 
-    removeMessage({ index }) {
+    removeMessage(index) {
       this.broadcastData.messages.splice(index, 1);
       this.forceRerender();
     },

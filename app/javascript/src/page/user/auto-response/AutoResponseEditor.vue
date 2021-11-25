@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200">
+  <div class="mxw-1200" :key="contentKey">
     <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">基本設定</h3>
@@ -105,7 +105,7 @@
       </div>
       <div class="card-body">
         <div class="form-border">
-          <div class="form-group" :key="msgContentKey">
+          <div class="form-group">
             <label>メッセージ本文</label>
             <div>
               <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
@@ -160,7 +160,7 @@ export default {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       loading: true,
-      msgContentKey: 0,
+      contentKey: 0,
       error: null,
       autoResponseData: {
         folder_id: null,
@@ -217,7 +217,7 @@ export default {
     ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
-      this.msgContentKey++;
+      this.contentKey++;
     },
 
     tagValidator(tag) {
