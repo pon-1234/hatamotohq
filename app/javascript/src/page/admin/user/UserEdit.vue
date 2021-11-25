@@ -14,6 +14,7 @@
                   name="user[email]"
                   placeholder="入力してください"
                   v-model.trim="userFormData.email"
+                  maxlength="256"
                   disabled
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -29,6 +30,7 @@
                   class="form-control"
                   name="user[name]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.name"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -44,6 +46,7 @@
                   class="form-control"
                   name="user[address]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.address"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -59,6 +62,7 @@
                   class="form-control"
                   name="user[phone_number]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.phone_number"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -74,6 +78,7 @@
                   class="form-control"
                   name="user[company_name]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.company_name"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -122,6 +127,7 @@
                   class="form-control"
                   name="user[password]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.password"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -142,6 +148,7 @@
                   class="form-control"
                   name="user[password_confirmation]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="userFormData.password_confirmation"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
