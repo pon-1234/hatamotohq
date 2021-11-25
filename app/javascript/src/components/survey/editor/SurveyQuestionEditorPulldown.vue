@@ -166,10 +166,7 @@ export default {
       this.options.push({
         value: null,
         action: {
-          type: 'tag',
-          content: {
-            tag_ids: null
-          }
+          type: 'none'
         }
       });
       this.syncObj();

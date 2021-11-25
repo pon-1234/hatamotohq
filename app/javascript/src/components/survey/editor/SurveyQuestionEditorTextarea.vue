@@ -90,10 +90,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  ::v-deep {
-    .form-group {
-      padding: 5px 0;
-    }
-  }
-</style>

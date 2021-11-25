@@ -62,7 +62,7 @@
                   class="form-control"
                   name="user[phone_number]"
                   placeholder="入力してください"
-                  maxlength="256"
+                  maxlength="12"
                   v-model.trim="userFormData.phone_number"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
@@ -115,13 +115,7 @@
           <div class="form-group row">
             <label class="col-xl-3">パスワード<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider
-                name="パスワード"
-                rules="required|min:8|max:128"
-                type="password"
-                v-slot="{ errors }"
-                vid="password"
-              >
+              <ValidationProvider name="パスワード" rules="required|min:8|max:128" v-slot="{ errors }" vid="password">
                 <input
                   type="text"
                   class="form-control"
@@ -137,12 +131,7 @@
           <div class="form-group row">
             <label class="col-xl-3">パスワード（確認用）<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider
-                name="パスワード（確認用）"
-                rules="required|min:8|max:128|confirmed:password"
-                type="password"
-                v-slot="{ errors }"
-              >
+              <ValidationProvider name="パスワード（確認用）" rules="required|confirmed:password" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"

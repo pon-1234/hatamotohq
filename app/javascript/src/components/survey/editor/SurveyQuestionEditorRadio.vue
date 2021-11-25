@@ -211,24 +211,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  ::v-deep {
-    .survey {
-      border: 1px solid #dedede;
-      border-radius: 4px;
-      padding: 10px;
-    }
-    a:hover {
-      cursor: pointer;
-    }
-    .form-group {
-      padding: 5px 0;
-    }
-    .mt10 {
-      margin-top: 10px !important;
-    }
-    .mr10 {
-      margin-right: 10px !important;
-    }
-  }
-</style>

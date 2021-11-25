@@ -164,10 +164,7 @@ export default {
       this.questionContentData.options.push({
         value: null,
         action: {
-          type: 'tag',
-          content: {
-            tag_ids: null
-          }
+          type: 'none'
         }
       });
       this.syncObj();
