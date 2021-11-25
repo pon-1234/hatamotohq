@@ -13,10 +13,20 @@ export const state = {
   isLoadMoreMessage: false,
   unreadChannelId: null,
   allChannelLoaded: false,
-  allMessagesLoaded: false
+  allMessagesLoaded: false,
+  showChatBox: false,
+  showUserDetail: false
 };
 
 export const mutations = {
+  setShowChatBox(state, showChatBox) {
+    state.showChatBox = showChatBox;
+  },
+
+  setShowUserDetail(state, showUserDetail) {
+    state.showUserDetail = showUserDetail;
+  },
+
   setChannelParams(state, params) {
     Object.assign(state.channelParams, params);
   },

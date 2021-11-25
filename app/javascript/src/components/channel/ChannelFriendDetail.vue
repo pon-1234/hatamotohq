@@ -1,13 +1,12 @@
 <template>
   <div class="card chat-panel" v-if="activeChannel">
+    <div class="card-header d-block d-xl-none">
+      <a class="icon-fs" @click="hideUserDetail()"><i class="uil-multiply"></i></a>
+    </div>
     <div class="card-body">
       <div class="mt-3 text-center">
-        <img
-          v-lazy="genAvatarImgObj(friend.avatar_url)"
-          alt="shreyu"
-          class="img-thumbnail avatar-lg rounded-circle"
-        />
-        <h4>{{ truncate(friend.display_name || friend. line_name, 15) }}</h4>
+        <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
+        <h4>{{ truncate(friend.display_name || friend.line_name, 15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -39,7 +38,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -55,7 +54,8 @@ export default {
 
   computed: {
     ...mapState('channel', {
-      activeChannel: state => state.activeChannel
+      activeChannel: state => state.activeChannel,
+      showUserDetail: state => state.showUserDetail
     }),
     friend() {
       return this.activeChannel.line_friend;
@@ -67,8 +67,11 @@ export default {
       return `${this.rootPath}/user/friends/${this.friend.id}`;
     }
   },
-
   methods: {
+    ...mapMutations('channel', ['setShowUserDetail']),
+    hideUserDetail() {
+      if (this.showUserDetail) this.setShowUserDetail(false);
+    },
     truncate(name, length = 15) {
       return _.truncate(name, {
         length: length
@@ -85,3 +88,21 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .icon-fs {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 767px) {
+    .chat-panel {
+      height: calc(100vh - 50px);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .chat-panel {
+      height: calc(100vh - 25px);
+    }
+  }
+</style>
