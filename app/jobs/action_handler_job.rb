@@ -61,11 +61,25 @@ class ActionHandlerJob < ApplicationJob
 
     def setup_reminder(content)
       type = content['type']
+      set_reminder(content) if type == 'set'
+      unset_reminder(content) if type == 'unset'
+    end
+
+    def set_reminder(content)
       goal = content['goal']
       reminder_id = content['reminder']['id']
       reminder = Reminder.find(reminder_id)
       reminding = Reminding.new(channel: @friend.channel, reminder: reminder)
       reminding.save
+    end
+
+    def unset_reminder(content)
+      reminder_id = content['reminder']['id']
+      reminder = Reminder.find(reminder_id)
+      remindings = reminder.remindings.where('remindings.channel_id = ?', @friend.channel.id)
+      remindings.each do |reminding|
+        reminding.cancel
+      end
     end
 
     def handle_tag_action(tag_actions)

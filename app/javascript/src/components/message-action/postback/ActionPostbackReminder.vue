@@ -7,24 +7,24 @@
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="typeStart"
+              id="typeSet"
               name="type"
-              value="start"
-              v-model="value.type"
+              value="set"
+              v-model="actionData.type"
               class="custom-control-input"
             />
-            <label class="custom-control-label" for="typeStart">リマインダを開始</label>
+            <label class="custom-control-label" for="typeSet">リマインダを開始</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="typeCancel"
+              id="typeUnset"
               name="type"
-              value="cancel"
-              v-model="value.type"
+              value="unset"
+              v-model="actionData.type"
               class="custom-control-input"
             />
-            <label class="custom-control-label" for="typeCancel">リマインダをキャンセル</label>
+            <label class="custom-control-label" for="typeUnset">リマインダをキャンセル</label>
           </div>
         </div>
         <div class="mt-2 d-flex">
@@ -36,11 +36,13 @@
               data-target="#modalSelectReminder"
               data-backdrop="static"
             >
-              {{ value.reminder.id ? value.reminder.name : "リマインダを選択する" }}
+              <span class="max-1-lines">{{
+                actionData.reminder.id ? actionData.reminder.name : "リマインダを選択する"
+              }}</span>
             </div>
             <input
               type="hidden"
-              v-model="value.reminder.id"
+              v-model="actionData.reminder.id"
               :name="name + '_reminder_id'"
               v-validate="'required'"
               data-vv-as="リマインダ"
@@ -48,11 +50,11 @@
             <error-message class="w-100" :message="errors.first(name + '_reminder_id')"></error-message>
           </div>
         </div>
-        <div class="mt-2 d-flex">
+        <div class="mt-2 d-flex" v-if="actionData.type === 'set'">
           <label class="fw-150">ゴール日時</label>
           <div class="flex-grow-1">
             <datetime
-              v-model="value.goal"
+              v-model="actionData.goal"
               :name="name + '_reminder_goal'"
               input-class="form-control"
               type="datetime"
@@ -82,11 +84,11 @@ export default {
     Datetime
   },
   props: {
-    value: {
+    actionData: {
       type: Array,
       default: () => {
         return {
-          type: 'start', // or 'cancel'
+          type: 'set', // or 'unset'
           reminder: {
             id: null,
             name: null
@@ -115,8 +117,8 @@ export default {
 
   methods: {
     onSelectReminder(reminder) {
-      this.value.reminder = _.pick(reminder, ['id', 'name']);
-      this.$emit('input', this.value);
+      this.actionData.reminder = _.pick(reminder, ['id', 'name']);
+      this.$emit('input', this.actionData);
     }
   }
 };

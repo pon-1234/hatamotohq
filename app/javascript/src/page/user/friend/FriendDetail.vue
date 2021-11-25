@@ -167,6 +167,7 @@
                     <th>リマインダ名</th>
                     <th>登録日時</th>
                     <th>ゴール</th>
+                    <th>状況</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -174,6 +175,7 @@
                     <td>{{ reminder.name }}</td>
                     <td>{{ reminder.created_at | formatted_time }}</td>
                     <td>{{ reminder.goal | formatted_time }}</td>
+                    <td><reminding-status :status="reminder.status"></reminding-status></td>
                   </tr>
                 </tbody>
               </table>

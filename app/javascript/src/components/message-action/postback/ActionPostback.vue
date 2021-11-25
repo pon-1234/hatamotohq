@@ -66,7 +66,7 @@
 
       <action-postback-reminder
         v-if="curPostbackType === 'reminder'"
-        :value="content"
+        :actionData="content"
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>

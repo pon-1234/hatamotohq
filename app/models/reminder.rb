@@ -26,4 +26,5 @@ class Reminder < ApplicationRecord
   belongs_to :line_account
   belongs_to :folder
   has_many :episodes, dependent: :destroy
+  has_many :remindings
 end
