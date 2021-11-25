@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" :key="contentKey">
     <div class="col-lg-3">
       <div class="btn btn-secondary ml-1 d-block" data-toggle="modal" data-target="#modalSelectReminder">
         <span class="max-1-lines">{{ reminder.id ? reminder.name : "リマインダを選択する" }}</span>
@@ -58,6 +58,7 @@ export default {
   },
   data() {
     return {
+      contentKey: 0,
       goal: null,
       reminder: {
         id: null,
@@ -72,6 +73,10 @@ export default {
   methods: {
     ...mapActions('friend', ['setReminder']),
 
+    forceRerender() {
+      this.contentKey++;
+    },
+
     async submit() {
       const valid = await this.$validator.validateAll();
       if (!valid) {
@@ -85,9 +90,16 @@ export default {
       const response = await this.setReminder(payload);
       if (response) {
         window.toastr.success('リマインダの設定は完了しました。');
+        this.resetData();
       } else {
         window.toastr.error('リマインダの設定は失敗しました。');
       }
+    },
+
+    resetData() {
+      this.goal = null;
+      this.reminder = { id: null, name: null };
+      this.forceRerender();
     },
 
     onSelectReminder(reminder) {

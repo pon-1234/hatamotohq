@@ -8,6 +8,7 @@
 #  channel_id  :bigint
 #  reminder_id :bigint
 #  goal        :datetime
+#  status      :string(255)      default("active")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -29,7 +30,16 @@ class Reminding < ApplicationRecord
   # Validations
   validates :goal, presence: true
 
+  # Scope
+  enum status: { active: 'active', cancelled: 'cancelled' }
+
   after_create do
     ReminderSchedulerJob.perform_later(self.id)
+  end
+
+  def cancel
+    self.reminder_events.destroy_all
+    self.status = :cancelled
+    self.save
   end
 end
