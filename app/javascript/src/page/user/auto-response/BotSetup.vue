@@ -4,60 +4,92 @@
       <h3 class="card-title">LINE公式アカウント連携設定</h3>
     </div>
     <ValidationObserver v-slot="{ validate, invalid }">
-    <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="getAction()" method="post">
-      <input type="hidden" name="authenticity_token" :value="csrfToken">
-      <div class="card-body">
-        <div class="form-group row">
-          <label class="col-4">管理用の名前（自由に記載してください)<required-mark></required-mark></label>
-          <div class="col-8">
-            <ValidationProvider name="管理用の名前" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_name]" v-model="botForm.line_name">
-              <span class="error-explanation">{{ errors[0] }}</span>
-            </ValidationProvider>
+      <form ref="form" @submit.prevent="validate().then(onSubmit)" :action="getAction()" method="post">
+        <input type="hidden" name="authenticity_token" :value="csrfToken" />
+        <div class="card-body">
+          <div class="form-group row">
+            <label class="col-4">管理用の名前（自由に記載してください)<required-mark></required-mark></label>
+            <div class="col-8">
+              <ValidationProvider name="管理用の名前" rules="required" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[line_name]"
+                  maxlength="256"
+                  v-validate="'required|max:255'"
+                  v-model.trim="botForm.line_name"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mt-4">
-          <label class="col-4">LINE公式アカウントID<required-mark></required-mark></label>
-          <div class="col-8">
-            <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[line_user_id]" v-model="botForm.line_user_id">
-              <span class="error-explanation">{{ errors[0] }}</span>
-            </ValidationProvider>
+          <div class="form-group row mt-4">
+            <label class="col-4">LINE公式アカウントID<required-mark></required-mark></label>
+            <div class="col-8">
+              <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[line_user_id]"
+                  maxlength="256"
+                  v-validate="'required|max:255'"
+                  v-model="botForm.line_user_id"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mt-4">
-          <label class="col-4">チャネルID<required-mark></required-mark></label>
-          <div class="col-8">
-            <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[channel_id]" v-model="botForm.channel_id">
-              <span class="error-explanation">{{ errors[0] }}</span>
-            </ValidationProvider>
+          <div class="form-group row mt-4">
+            <label class="col-4">チャネルID<required-mark></required-mark></label>
+            <div class="col-8">
+              <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[channel_id]"
+                  maxlength="256"
+                  v-validate="'required|max:255'"
+                  v-model.trim="botForm.channel_id"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mt-4">
-          <label class="col-4">チャネルシークレット<required-mark></required-mark></label>
-          <div class="col-8">
-            <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
-              <input type="text" class="form-control" placeholder="入力してください" name="bot[channel_secret]" v-model="botForm.channel_secret">
-              <span class="error-explanation">{{ errors[0] }}</span>
-            </ValidationProvider>
+          <div class="form-group row mt-4">
+            <label class="col-4">チャネルシークレット<required-mark></required-mark></label>
+            <div class="col-8">
+              <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[channel_secret]"
+                  maxlength="256"
+                  v-validate="'required|max:255'"
+                  v-model.trim="botForm.channel_secret"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row mt-4">
-          <label class="col-4">Webhook URL</label>
-          <div class="col-8">
-            <input-with-copy :text="webhookUrl"></input-with-copy>
+          <div class="form-group row mt-4">
+            <label class="col-4">Webhook URL</label>
+            <div class="col-8">
+              <input-with-copy :text="webhookUrl"></input-with-copy>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card-footer text-center">
-        <submit-button object="ボット" action="設定" :submitted="submitted" :disabled="invalid"></submit-button>
-      </div>
-    </form>
+        <div class="card-footer text-center">
+          <submit-button object="ボット" action="設定" :submitted="submitted" :disabled="invalid"></submit-button>
+        </div>
+      </form>
     </ValidationObserver>
   </div>
 </template>
@@ -101,5 +133,4 @@ export default {
 </script>
 
 <style>
-
 </style>

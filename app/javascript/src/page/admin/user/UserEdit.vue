@@ -59,7 +59,7 @@
                   class="form-control"
                   name="user[phone_number]"
                   placeholder="入力してください"
-                  v-model="userFormData.phone_number"
+                  v-model.trim="userFormData.phone_number"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -122,7 +122,7 @@
                   class="form-control"
                   name="user[password]"
                   placeholder="入力してください"
-                  v-model="userFormData.password"
+                  v-model.trim="userFormData.password"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -142,7 +142,7 @@
                   class="form-control"
                   name="user[password_confirmation]"
                   placeholder="入力してください"
-                  v-model="userFormData.password_confirmation"
+                  v-model.trim="userFormData.password_confirmation"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
