@@ -36,7 +36,7 @@
                   name="bot[line_user_id]"
                   maxlength="256"
                   v-validate="'required|max:255'"
-                  v-model="botForm.line_user_id"
+                  v-model.trim="botForm.line_user_id"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>

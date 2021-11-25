@@ -28,7 +28,7 @@
                     class="form-control"
                     name="setting[line_user_id]"
                     placeholder="入力してください"
-                    v-model="settingFormData.line_user_id"
+                    v-model.trim="settingFormData.line_user_id"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
