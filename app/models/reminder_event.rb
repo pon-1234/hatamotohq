@@ -34,6 +34,7 @@ class ReminderEvent < ApplicationRecord
   def invoke
     deliver_messages
     deliver_actions
+    execute_after_deliver
   end
 
   private
@@ -54,5 +55,9 @@ class ReminderEvent < ApplicationRecord
 
     def deliver_actions
       ActionHandlerJob.perform_now(self.reminding.channel.line_friend, self.episode.actions['data'])
+    end
+
+    def execute_after_deliver
+      self.destroy
     end
 end

@@ -9,7 +9,6 @@
       <ul
         ref="chatPanel"
         class="flex-grow-1 conversation-list overflow-auto"
-        data-simplebar
         @scroll="handleScroll"
         @drop="onDropMessage"
         @dragover="allowDrop"
@@ -288,6 +287,10 @@ export default {
   .icon-fs {
     font-size: 1.5rem;
     cursor: pointer;
+  }
+
+  .chat-panel {
+    z-index: 0;
   }
 
   @media (max-width: 768px) {
