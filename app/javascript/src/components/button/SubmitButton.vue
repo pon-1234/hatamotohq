@@ -1,6 +1,11 @@
 <template>
   <div class="d-inline p-0 m-0">
-    <div :class="`btn btn-success ${classes}`" :disabled="submitted || disabled" @click="$emit('click')">
+    <button
+      type="submit"
+      :class="`btn btn-success ${classes}`"
+      :disabled="submitted || disabled"
+      @click="$emit('click')"
+    >
       <span v-if="submitted">
         <b-spinner small></b-spinner>
         <span v-if="object">{{ object }}を</span><span>{{ action }}中</span>
@@ -8,7 +13,7 @@
       <span v-else>
         <span v-if="object">{{ object }}を</span><span>{{ action }}</span>
       </span>
-    </div>
+    </button>
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="card chat-panel">
     <div class="card-header d-flex">
-      <a class="icon-fs icon-left" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
+      <a class="icon-fs d-sm-block d-md-none" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
       <a class="flex-grow-1"></a>
-      <a class="icon-fs" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
+      <a class="icon-fs d-sm-block d-xl-none" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
     </div>
     <div class="card-body d-flex flex-column">
       <ul
@@ -123,10 +123,7 @@ export default {
       'unreadMessage',
       'markMessagesRead'
     ]),
-    ...mapMutations('channel', [
-      'setShowChatBox',
-      'setShowUserDetail'
-    ]),
+    ...mapMutations('channel', ['setShowChatBox', 'setShowUserDetail']),
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
@@ -158,17 +155,11 @@ export default {
 
     async handleScroll(e) {
       this.setScrollParams();
-      if (
-        e.target.scrollTop < 100 &&
-        !this.isLoadingPrevious &&
-        !this.allMessagesLoaded
-      ) {
+      if (e.target.scrollTop < 100 && !this.isLoadingPrevious && !this.allMessagesLoaded) {
         this.isLoadingPrevious = true;
         await this.loadMoreMessages();
-        const heightDifference =
-              this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
-        this.$refs.chatPanel.scrollTop =
-              this.scrollTopBeforeLoad + heightDifference;
+        const heightDifference = this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
+        this.$refs.chatPanel.scrollTop = this.scrollTopBeforeLoad + heightDifference;
         this.isLoadingPrevious = false;
       }
     },
@@ -299,12 +290,6 @@ export default {
     cursor: pointer;
   }
 
-  @media (min-width: 1400px) {
-    .card-header {
-      display: none !important;
-    }
-  }
-
   @media (max-width: 768px) {
     .chat-panel {
       height: calc(100vh - 50px);
@@ -314,12 +299,6 @@ export default {
   @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 25px);
-    }
-  }
-
-  @media screen and (min-width: 770px) and (max-width: 1400px) {
-    .icon-left {
-      display: none;
     }
   }
 

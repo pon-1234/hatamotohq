@@ -1,16 +1,12 @@
 <template>
   <div class="card chat-panel" v-if="activeChannel">
-    <div class="card-header">
-      <a class="icon-fs" @click="hiddenUserDetailBox()"><i class="dripicons-arrow-thin-left"></i></a>
+    <div class="card-header d-block d-xl-none">
+      <a class="icon-fs" @click="hideUserDetail()"><i class="uil-multiply"></i></a>
     </div>
     <div class="card-body">
       <div class="mt-3 text-center">
-        <img
-          v-lazy="genAvatarImgObj(friend.avatar_url)"
-          alt="shreyu"
-          class="img-thumbnail avatar-lg rounded-circle"
-        />
-        <h4>{{ truncate(friend.display_name || friend. line_name, 15) }}</h4>
+        <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
+        <h4>{{ truncate(friend.display_name || friend.line_name, 15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -73,7 +69,7 @@ export default {
   },
   methods: {
     ...mapMutations('channel', ['setShowUserDetail']),
-    hiddenUserDetailBox() {
+    hideUserDetail() {
       if (this.showUserDetail) this.setShowUserDetail(false);
     },
     truncate(name, length = 15) {
@@ -98,13 +94,7 @@ export default {
     cursor: pointer;
   }
 
-  @media (min-width: 1400px) {
-    .card-header {
-      display: none !important;
-    }
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 50px);
     }
