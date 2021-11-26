@@ -289,6 +289,10 @@ export default {
     cursor: pointer;
   }
 
+  .conversation-list {
+    z-index: 1;
+  }
+
   @media (max-width: 768px) {
     .chat-panel {
       height: calc(100vh - 50px);
