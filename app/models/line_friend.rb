@@ -60,6 +60,7 @@ class LineFriend < ApplicationRecord
       type: 'friend',
       note: note,
       locked: locked,
+      created_at: created_at,
       tags: self.tags.select(:id, :name)
     }
   end
