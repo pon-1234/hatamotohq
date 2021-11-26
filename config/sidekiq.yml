@@ -40,6 +40,12 @@ staging:
     description: "This worker retrieve insight data using line api"
     enabled: true
 
+  DailySyncFriendsWorker:
+    cron: "0 0 3 * * *" # Runs every day
+    include_metadata: true
+    description: "This worker sync friends information for all account"
+    enabled: true
+
   MonthlyInsightAnalyzerWorker:
     cron: "0 0 6 * * *" # Runs every day
     include_metadata: true
