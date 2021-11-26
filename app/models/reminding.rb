@@ -35,6 +35,7 @@ class Reminding < ApplicationRecord
 
   after_create do
     ReminderSchedulerJob.perform_later(self.id)
+    distribute_system_log
   end
 
   def cancel
@@ -42,4 +43,9 @@ class Reminding < ApplicationRecord
     self.status = :cancelled
     self.save
   end
+
+  private
+    def distribute_system_log
+      Messages::SystemLogBuilder.new(self.channel).perform_reminder(self.reminder)
+    end
 end
