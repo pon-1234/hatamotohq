@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import moment from 'moment';
+import Util from '@/core/util';
+
 export default {
   props: {
     message: {
@@ -19,9 +20,7 @@ export default {
 
   computed: {
     readableTime() {
-      return moment(this.message.timestamp)
-        .tz('Asia/Tokyo')
-        .format('HH:mm');
+      return Util.formattedTime(this.message.timestamp);
     }
   }
 };

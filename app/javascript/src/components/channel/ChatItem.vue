@@ -12,11 +12,7 @@
     <template v-else>
       <div :class="alignBubble">
         <div class="chat-avatar">
-          <img
-            v-lazy="avatarImgObj"
-            class="rounded"
-            alt="友達"
-          />
+          <img v-lazy="avatarImgObj" class="rounded" alt="友達" />
           <i>{{ readableTime }}</i>
         </div>
         <div class="conversation-text d-flex flex-end">
@@ -36,6 +32,7 @@
 </template>
 <script>
 import moment from 'moment';
+import Util from '@/core/util';
 
 export default {
   props: {
@@ -79,16 +76,16 @@ export default {
       return this.message.sender || {};
     },
     readableTime() {
-      return moment(this.message.timestamp, 'DD/MMM/YYYY HH:mm').format('HH:mm');
+      return Util.formattedTime(this.message.timestamp);
     },
     readableDate() {
-      return moment(this.message.timestamp).format('YYYY/MM/DD');
+      return Util.formattedDate(this.message.timestamp);
     },
     shouldShowDate() {
       const ts1 = this.message.timestamp;
       const ts2 = this.prevMessage ? this.prevMessage.timestamp : null;
-      const date1 = moment(ts1).format('YYYY/MM/DD');
-      const date2 = ts2 ? moment(ts2).format('YYYY/MM/DD') : null;
+      const date1 = Util.formattedDate(ts1);
+      const date2 = ts2 ? Util.formattedDate(ts2) : null;
       return date1 !== date2;
     },
     shouldShowUnreadDiv() {

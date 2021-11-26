@@ -69,7 +69,7 @@ export default {
       handler(val) {
         const newestMessage = _.last(val);
         // Scroll to bottom if receive a new message
-        if (newestMessage.id > this.latestMessageId) {
+        if (newestMessage && newestMessage.id > this.latestMessageId) {
           setTimeout(() => {
             this.latestMessageId = newestMessage.id;
             this.scrollToBottom();

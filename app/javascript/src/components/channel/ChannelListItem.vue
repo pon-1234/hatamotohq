@@ -21,6 +21,7 @@
 </template>
 <script>
 import moment from 'moment';
+import Util from '@/core/util';
 
 export default {
   props: ['channel', 'active'],
@@ -43,16 +44,16 @@ export default {
       return this.channel.line_friend;
     },
     readableTime() {
-      const timeMessage = moment(moment(this.channel.last_activity_at).format('YYYY-MM-DD'));
-      const currentTime = moment(moment().format('YYYY-MM-DD'));
+      const timeMessage = Util.formattedDate(this.channel.last_activity_at);
+      const currentTime = moment();
       const dif = currentTime.diff(timeMessage, 'days');
       if (dif >= 1) {
-        return moment(this.channel.last_activity_at)
+        return moment(this.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
           .tz('Asia/Tokyo')
           .format('MM/DD');
       }
 
-      return moment(this.channel.last_activity_at)
+      return moment(this.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
         .tz('Asia/Tokyo')
         .format('HH:mm');
     },

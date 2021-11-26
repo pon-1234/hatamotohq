@@ -26,11 +26,15 @@ class Util {
   }
 
   static formattedDate(date) {
-    return moment(date).tz('Asia/Tokyo').format('YYYY年MM月DD日');
+    return moment(date, 'YYYY-MM-DD').tz('Asia/Tokyo').format('YYYY年MM月DD日');
+  }
+
+  static formattedTime(datetime) {
+    return moment(datetime, 'YYYY-MM-DD HH:mm:ss Z').tz('Asia/Tokyo').format('HH:mm');
   }
 
   static formattedDatetime(datetime) {
-    return moment(datetime).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH:mm');
+    return moment(datetime, 'YYYY-MM-DD HH:mm:ss Z').tz('Asia/Tokyo').format('YYYY年MM月DD日 HH:mm');
   }
 
   static getDuration(data) {
