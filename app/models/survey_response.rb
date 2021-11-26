@@ -25,4 +25,13 @@ class SurveyResponse < ApplicationRecord
   belongs_to :survey
   belongs_to :line_friend
   has_many :survey_answers
+
+  after_create do
+    distribute_system_log
+  end
+
+  private
+    def distribute_system_log
+      Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self)
+    end
 end

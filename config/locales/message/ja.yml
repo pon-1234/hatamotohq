@@ -16,3 +16,5 @@ ja:
       broadcast: "メッセージが配信されました：【%{title}】"
       scenario_start: "シナリオが開始されました：【%{title}】"
       scenario_end: "シナリオが終了しました：【%{title}】"
+      survey: "回答フォームに回答しました：【%{name}】"
+      reminder: "リマインドが配信されました：【%{title}】"
