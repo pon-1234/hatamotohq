@@ -54,11 +54,13 @@ class LineFriend < ApplicationRecord
   def push_event_data
     {
       id: id,
-      name: display_name,
+      name: name,
+      display_name: display_name,
       avatar_url: line_picture_url,
       type: 'friend',
       note: note,
-      locked: locked
+      locked: locked,
+      tags: self.tags.select(:id, :name)
     }
   end
 
