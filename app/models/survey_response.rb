@@ -32,6 +32,6 @@ class SurveyResponse < ApplicationRecord
 
   private
     def distribute_system_log
-      Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self)
+      Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self.survey)
     end
 end
