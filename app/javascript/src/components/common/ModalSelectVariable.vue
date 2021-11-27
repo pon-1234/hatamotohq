@@ -16,7 +16,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body overflow-hidden">
+        <div class="modal-body">
           <div class="d-flex">
             <folder-left
               type="variable"

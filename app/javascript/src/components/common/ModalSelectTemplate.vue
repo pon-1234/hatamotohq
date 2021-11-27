@@ -1,13 +1,13 @@
 <template>
   <div
-    class="modal fade modal-template modal-common01"
-    :id="id ? id : 'modal-template'"
+    class="modal fade modal-common01"
+    :id="id ? id : 'modalSelectTemplate'"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-lg vh-90 modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">テンプレートを選択してください</h4>
@@ -15,7 +15,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body overflow-hidden">
+        <div class="modal-body">
           <div class="d-flex" v-if="folders && folders.length">
             <folder-left
               type="template_message"
@@ -40,7 +40,11 @@
                       <div class="box-item-name">
                         <p class="m-0 vw-10 item-name">{{ item.name }}</p>
                       </div>
-                      <div class="btn btn-info btn-sm ml-auto" @click="selectTemplate(item)" data-dismiss="modal">
+                      <div
+                        class="btn btn-info btn-sm ml-auto my-auto"
+                        @click="selectTemplate(item)"
+                        data-dismiss="modal"
+                      >
                         選択
                       </div>
                     </td>
@@ -102,110 +106,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-  .modal-template {
-    .item-sm {
-      display: none;
-    }
-    .scroll-table {
-      overflow-y: scroll;
-      height: 75vh;
-    }
-
-    .box-item-name {
-      width: 85%;
-      .item-name {
-        width: 100%;
-        white-space: pre-wrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        display: -webkit-box;
-      }
-    }
-    @media (max-width: 991px) {
-      .item-pc {
-        display: none !important;
-      }
-
-      .item-sm {
-        display: inline-block !important;
-      }
-
-      .fa-arrow-left {
-        margin-right: 10px;
-        cursor: pointer;
-      }
-    }
-    .message-title {
-      width: 150px !important;
-    }
-
-    .modal-dialog {
-      max-width: 800px;
-      .table-tags-header {
-        margin-bottom: 0px !important;
-        max-width: none !important;
-      }
-
-      .template-list-content {
-        background-color: #f0f0f0;
-
-        .folder-item {
-          cursor: pointer;
-        }
-
-        .folder-item:hover {
-          background: #f0ad4e;
-        }
-
-        .list-content {
-          height: 100%;
-          max-height: 500px;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          .list-scroll {
-            height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin: 0 0;
-            display: flex;
-            flex-direction: column;
-          }
-        }
-      }
-    }
-  }
-
-  ::v-deep {
-    .carousel-content {
-      width: 130px !important;
-      .carousel-thumb {
-        height: 70px !important;
-        line-height: 70px !important;
-      }
-    }
-
-    .buttons-content,
-    .imagemap,
-    .location-content,
-    .chat-item-voice,
-    .thumbnail-item,
-    .confirm-content {
-      width: 150px;
-      max-width: 150px;
-    }
-
-    .thumbnail-item {
-      max-height: 100px;
-      height: 100px;
-    }
-
-    .sticker-static {
-      max-width: 110px !important;
-      max-height: 100px !important;
-    }
-  }
-</style>
