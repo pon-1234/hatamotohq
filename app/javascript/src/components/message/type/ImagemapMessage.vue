@@ -14,5 +14,6 @@ export default {
     height: 200px;
     background: white;
     object-fit: contain;
+    background-size: cover;
   }
 </style>

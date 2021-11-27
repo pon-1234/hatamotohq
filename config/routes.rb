@@ -32,6 +32,10 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
 
+  # medias
+  get 'medias/:id/content', to: 'medias#variant'
+  get 'medias/:id/content/:size', to: 'medias#variant'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -120,7 +124,6 @@ Rails.application.routes.draw do
         post :bulk_delete, on: :collection
         member do
           get '/content', to: 'medias#variant'
-          get '/content/:width', to: 'medias#variant'
         end
       end
       resources :setting, only: [:index] do

@@ -248,7 +248,7 @@ export default {
     },
 
     onSelectMedia(media) {
-      this.backgroundUrl = `${this.rootPath}/user/medias/${media.id}/content`;
+      this.backgroundUrl = `${this.rootPath}/medias/${media.id}/content`;
     },
 
     publish(actionObject) {
@@ -281,7 +281,7 @@ export default {
         file: this.b64toBlob(data)
       })
         .then(res => {
-          this.backgroundUrl = `${this.rootPath}/user/medias/${res.id}/content`;
+          this.backgroundUrl = `${this.rootPath}/medias/${res.id}/content`;
           this.publish(this.actionObjects);
         })
         .catch(err => {
