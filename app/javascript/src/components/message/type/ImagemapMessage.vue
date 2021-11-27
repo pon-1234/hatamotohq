@@ -10,8 +10,8 @@ export default {
 </script>
 <style lang="scss" scoped>
   .imagemap {
-    border-radius: 8px;
-    max-width: 200px;
+    width: 200px;
+    height: 200px;
     background: white;
     object-fit: contain;
   }
