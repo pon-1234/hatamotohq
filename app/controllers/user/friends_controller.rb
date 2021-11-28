@@ -12,7 +12,7 @@ class User::FriendsController < User::ApplicationController
       # Normalize add friend date condition
       @params[:created_at_gteq] = @params[:created_at_gteq]&.to_date.beginning_of_day if @params[:created_at_gteq].present?
       @params[:created_at_lteq] = @params[:created_at_lteq]&.to_date.end_of_day if @params[:created_at_lteq].present?
-      @q = LineFriend.accessible_by(current_ability).ransack(@params)
+      @q = LineFriend.accessible_by(current_ability).includes([:channel, :tags, :taggings]).ransack(@params)
       @friends = @q.result.page(params[:page])
     end
     respond_to do |format|
@@ -66,7 +66,7 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/reminders
   def reminders
-    @remindings = @friend.channel.remindings.order('remindings.id desc').limit(10)
+    @remindings = @friend.channel.remindings.includes([:reminder]).order('remindings.id desc').limit(10)
   end
 
   # POST /user/friends/:id/set_reminder
