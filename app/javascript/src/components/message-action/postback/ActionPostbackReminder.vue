@@ -57,7 +57,7 @@
               v-model="actionData.goal"
               :name="name + '_reminder_goal'"
               input-class="form-control"
-              type="datetime"
+              type="date"
               :phrases="{ ok: '確定', cancel: '閉じる' }"
               placeholder="日付を選択してください"
               :min-datetime="currentDate"
