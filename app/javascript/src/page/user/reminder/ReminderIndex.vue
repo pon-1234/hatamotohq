@@ -122,7 +122,7 @@
       title="このリマインダをコピーしてもよろしいですか？"
       id="modalCopyReminder"
       type="confirm"
-      @confirm="submitCopyTemplate"
+      @confirm="submitCopyReminder"
     >
       <template v-slot:content>
         <div v-if="curReminder">
@@ -239,7 +239,7 @@ export default {
       this.forceRerender();
     },
 
-    async submitCopyTemplate() {
+    async submitCopyReminder() {
       const response = await this.copyReminder(this.curReminder.id);
       const url = `${this.rootPath}/user/reminders?folder_id=${this.curFolder.id}`;
       if (response) {
