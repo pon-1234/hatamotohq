@@ -116,7 +116,7 @@
             :value="surveyData.after_action"
             :labelRequired="false"
             :showTitle="false"
-            :showLaunchMesasge="false"
+            :showLaunchMessage="false"
             @input="surveyData.after_action = $event"
           ></action-editor-custom>
         </div>

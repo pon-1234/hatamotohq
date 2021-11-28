@@ -60,7 +60,7 @@
           :labelRequired="false"
           :showTitle="false"
           :limit="10"
-          :showLaunchMesasge="false"
+          :showLaunchMessage="false"
           @input="updateAction"
         ></action-editor-custom>
       </div>

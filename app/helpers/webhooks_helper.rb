@@ -67,11 +67,6 @@ module WebhooksHelper
       key = @event[:postback][:data]
       action = PostbackMapper.where(key: key)&.first&.value
       return if action.blank?
-
-      if action[:displayText].present?
-        # TODO: send text message
-      end
-
       PostbackHandler.new(@line_account, @event, action).perform
     end
 
@@ -120,7 +115,6 @@ module WebhooksHelper
       end
 
       def create_message(channel, sender, body)
-        mb = Messages::MessageBuilder.new(sender, channel, body)
-        mb.perform
+        Messages::MessageBuilder.new(sender, channel, body).perform
       end
 end

@@ -9,31 +9,38 @@ class ActionHandlerJob < ApplicationJob
     @action = action
     @reply_token = reply_token
     # Handle multiple actions
-    return handle_message_action(@action['actions']) if @action['actions'].present?
+    handle_message_action(@action['actions']) if @action['actions'].present?
     # Handle single action
-    return handle_message_action([@action['action']]) if @action['action'].present?
+    handle_message_action([@action['action']]) if @action['action'].present?
+    # Create text message if friend select option contains displayText
+    handle_display_text(@action['displayText']) if @action['displayText'].present?
   end
 
-  def handle_message_action(actions)
-    actions.each do |action|
-      case action['type']
-      when 'text'
-        send_text_message(action['content'])
-      when 'email'
-        send_email(action['content'])
-      when 'scenario'
-        send_scenario(action['content'])
-      when 'template'
-        send_template(action['content'])
-      when 'tag'
-        handle_tag_action(action['content'])
-      when 'reminder'
-        setup_reminder(action['content'])
-      end
-    end
-  end
 
   private
+    def handle_message_action(actions)
+      actions.each do |action|
+        case action['type']
+        when 'text'
+          send_text_message(action['content'])
+        when 'email'
+          send_email(action['content'])
+        when 'scenario'
+          send_scenario(action['content'])
+        when 'template'
+          send_template(action['content'])
+        when 'tag'
+          handle_tag_action(action['content'])
+        when 'reminder'
+          setup_reminder(action['content'])
+        end
+      end
+    end
+
+    def handle_display_text(text)
+      Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+    end
+
     def send_text_message(content)
       messages = [{ type: 'text', text: content['text'] }]
       # Rebuild payload
