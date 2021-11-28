@@ -16,7 +16,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body overflow-hidden" :key="contentKey">
+        <div class="modal-body overflow-hidden" :key="contentKey" v-if="visible">
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
               <a href="#uploadMedia" data-toggle="tab" aria-expanded="true" class="nav-link active">
@@ -70,12 +70,14 @@ export default {
 
   data() {
     return {
-      contentKey: 0
+      contentKey: 0,
+      visible: false
     };
   },
 
   mounted() {
     $(this.$refs.modalSelectMedia).on('show.bs.modal', this.shownModal);
+    $(this.$refs.modalSelectMedia).on('hide.bs.modal', this.hideModal);
   },
 
   methods: {
@@ -91,8 +93,11 @@ export default {
     },
 
     shownModal() {
-      this.$refs.modalMediaIndex.resetData();
-      this.$refs.mediaUpload.deleteMedia();
+      this.visible = true;
+    },
+
+    hideModal() {
+      this.visible = false;
     }
   }
 };
