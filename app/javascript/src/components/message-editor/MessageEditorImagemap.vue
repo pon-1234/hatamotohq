@@ -190,6 +190,10 @@ export default {
       });
     },
 
+    altText(val) {
+      this.publish(this.actionObjects);
+    },
+
     actionObjects: {
       handler(val) {
         this.publish(val);
