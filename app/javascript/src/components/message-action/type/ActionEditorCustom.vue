@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="form-group mt-2" v-if="showLaunchMesasge">
+    <div class="form-group mt-2" v-if="showLaunchMessage">
       <label>選択時のメッセージ</label>
       <input
         type="text"
@@ -93,7 +93,7 @@ export default {
       default: 3
     },
 
-    showLaunchMesasge: {
+    showLaunchMessage: {
       default: true,
       type: Boolean
     }

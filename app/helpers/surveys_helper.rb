@@ -7,8 +7,9 @@ module SurveysHelper
     if old_response.present? && !survey.re_answer?
       return raise 'You are already responsed!'
     end
+    # Create a new response
     response = SurveyResponse.new(survey: survey, line_friend: friend)
-    response.answer_count += 1
+    response.answer_count = 1
     response.save!
 
     answer_params = params[:answers]
@@ -45,6 +46,7 @@ module SurveysHelper
         end
       end
       friend_variable.save!
+      # Reset variable's friends counter
       variable.refresh_friends_count
     end
 end
