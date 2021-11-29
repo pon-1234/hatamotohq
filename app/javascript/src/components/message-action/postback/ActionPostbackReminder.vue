@@ -11,6 +11,7 @@
               name="type"
               value="set"
               v-model="actionData.type"
+              @change="onDataChanged()"
               class="custom-control-input"
             />
             <label class="custom-control-label" for="typeSet">リマインダを開始</label>
@@ -22,6 +23,7 @@
               name="type"
               value="unset"
               v-model="actionData.type"
+              @change="onDataChanged()"
               class="custom-control-input"
             />
             <label class="custom-control-label" for="typeUnset">リマインダをキャンセル</label>
@@ -116,6 +118,10 @@ export default {
   methods: {
     onSelectReminder(reminder) {
       this.actionData.reminder = _.pick(reminder, ['id', 'name']);
+      this.onDataChanged();
+    },
+
+    onDataChanged() {
       this.$emit('input', this.actionData);
     }
   }

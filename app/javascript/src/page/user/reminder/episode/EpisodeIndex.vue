@@ -99,6 +99,7 @@ export default {
   },
 
   async beforeMount() {
+    this.loading = true;
     const episodes = await this.getEpisodes(this.reminder_id);
     if (episodes) {
       this.episodes = episodes;
