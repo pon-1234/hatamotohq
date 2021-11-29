@@ -1,7 +1,9 @@
 <template>
   <div>
     <select v-model="selected" class="form-control w-100" @change="changeSelected">
-      <option value="none" :disabled="!isNone">- 選択してください -</option>
+      <option value="none" :disabled="!isNone" v-if="actionTypes && actionTypes.length > 1">
+        - 選択してください -
+      </option>
       <option v-for="(item, index) in actionTypes" :key="index" :value="item.id">
         {{ item.title }}
       </option>
