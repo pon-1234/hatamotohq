@@ -51,7 +51,12 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                          <a role="button" class="dropdown-item" @click="openEdit(reminder)">リマインダを編集する</a>
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            :href="`${rootPath}/user/reminders/${reminder.id}/edit?folder_id=${curFolder.id}`"
+                            >リマインダを編集する</a
+                          >
                           <a
                             role="button"
                             class="dropdown-item"
@@ -252,10 +257,6 @@ export default {
 
     backToFolder() {
       this.isPc = false;
-    },
-
-    openEdit(reminder) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/reminders/${reminder.id}/edit`);
     },
 
     formattedDate(date) {

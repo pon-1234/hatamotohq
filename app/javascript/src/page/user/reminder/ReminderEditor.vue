@@ -119,7 +119,10 @@ export default {
     },
     onReceiveUpdateReminder(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect(
+          'リマインダの更新は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+        );
       } else {
         window.toastr.error('リマインダの更新は失敗しました。');
       }
