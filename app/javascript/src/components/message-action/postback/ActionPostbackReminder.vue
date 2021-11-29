@@ -7,26 +7,26 @@
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="typeSet"
+              :id="`${name}typeSet`"
               name="type"
               value="set"
               v-model="actionData.type"
               @change="onDataChanged()"
               class="custom-control-input"
             />
-            <label class="custom-control-label" for="typeSet">リマインダを開始</label>
+            <label class="custom-control-label" :for="`${name}typeSet`">リマインダを開始</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
-              id="typeUnset"
+              :id="`${name}typeUnset`"
               name="type"
               value="unset"
               v-model="actionData.type"
               @change="onDataChanged()"
               class="custom-control-input"
             />
-            <label class="custom-control-label" for="typeUnset">リマインダをキャンセル</label>
+            <label class="custom-control-label" :for="`${name}typeUnset`">リマインダをキャンセル</label>
           </div>
         </div>
         <div class="mt-2 d-flex">
