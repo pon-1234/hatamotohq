@@ -2,7 +2,7 @@
   <div>
     <select v-model="selected" class="form-control w-100" @change="changeSelected">
       <option value="none" :disabled="!isNone">- 選択してください -</option>
-      <option v-for="(item, index) in action_objects" :key="index" :value="item.id">
+      <option v-for="(item, index) in actionTypes" :key="index" :value="item.id">
         {{ item.title }}
       </option>
     </select>
@@ -35,7 +35,7 @@ export default {
     if (this.data.type === 'uri') {
       this.selected = this.data.id || (Util.validateUrl(this.data.uri) ? 1 : 2);
     } else {
-      const val = _.find(this.action_objects, item => {
+      const val = _.find(this.actionTypes, item => {
         return item.type === this.data.type;
       });
       this.selected = val ? val.id : 'none';
@@ -53,7 +53,7 @@ export default {
     },
 
     emitObj(value) {
-      let val = this.action_objects.find(item => item.id === value);
+      let val = this.actionTypes.find(item => item.id === value);
 
       if (!val) {
         val = { type: 'none' };
@@ -152,7 +152,7 @@ export default {
   },
 
   computed: {
-    action_objects() {
+    actionTypes() {
       const objects = this.$store.getters['global/actionObjects'];
       return objects != null
         ? objects.filter(

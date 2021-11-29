@@ -41,7 +41,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: {
     value: Object,
@@ -74,7 +73,6 @@ export default {
     const data = _.cloneDeep(this.value);
     this.label = data.label;
     this.uri = data.linkUri.replace('tel://', '');
-    this.linkUri = data.linkUri.replace('tel://', '');
   },
 
   methods: {
@@ -82,7 +80,6 @@ export default {
       const data = {
         id: this.value.id,
         label: this.label,
-        linkUri: `tel://${this.uri}`,
         uri: `tel://${this.uri}`,
         type: this.value.type
       };
