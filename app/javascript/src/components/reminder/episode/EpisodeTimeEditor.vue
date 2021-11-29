@@ -37,6 +37,8 @@
               autocomplete="off"
               name="step"
               type="number"
+              onblur="this.value = (this.value == 0 ? 1 : this.value);"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @change="$emit('update:date', date)"
             />
             <span>日前</span>
