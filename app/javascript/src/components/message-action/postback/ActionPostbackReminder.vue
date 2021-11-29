@@ -30,12 +30,7 @@
         <div class="mt-2 d-flex">
           <label class="fw-150">リマインダ選択</label>
           <div class="mw-200 mxw-400">
-            <div
-              class="btn btn-secondary w-100"
-              data-toggle="modal"
-              data-target="#modalSelectReminder"
-              data-backdrop="static"
-            >
+            <div class="btn btn-secondary w-100" data-toggle="modal" :data-target="`#${name}_selectReminderModal`">
               <span class="max-1-lines">{{
                 actionData.reminder.id ? actionData.reminder.name : "リマインダを選択する"
               }}</span>
@@ -71,7 +66,10 @@
         </div>
       </div>
     </div>
-    <modal-select-reminder id="modalSelectReminder" @selectReminder="onSelectReminder($event)"></modal-select-reminder>
+    <modal-select-reminder
+      :id="`${name}_selectReminderModal`"
+      @selectReminder="onSelectReminder($event)"
+    ></modal-select-reminder>
   </section>
 </template>
 
