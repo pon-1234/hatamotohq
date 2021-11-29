@@ -20,7 +20,6 @@
 </template>
 
 <script>
-
 export default {
   props: ['value', 'name', 'supports', 'labelRequired', 'isNone', 'showTitle'],
   data() {
