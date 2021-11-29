@@ -76,7 +76,7 @@ class ActionHandlerJob < ApplicationJob
       goal = content['goal']
       reminder_id = content['reminder']['id']
       reminder = Reminder.find(reminder_id)
-      reminding = Reminding.new(channel: @friend.channel, reminder: reminder, goal: goal)
+      reminding = Reminding.find_or_initialize_by(channel: @friend.channel, reminder: reminder, goal: goal)
       reminding.save
     end
 

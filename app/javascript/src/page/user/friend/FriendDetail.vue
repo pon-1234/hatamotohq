@@ -172,10 +172,10 @@
                 </thead>
                 <tbody>
                   <tr v-for="(reminder, index) in reminders" :key="index">
-                    <td>{{ reminder.name }}</td>
-                    <td>{{ reminder.created_at | formatted_time }}</td>
-                    <td>{{ reminder.goal | formatted_time }}</td>
-                    <td><reminding-status :status="reminder.status"></reminding-status></td>
+                    <td class="mw-200 max-2-lines">{{ reminder.name }}</td>
+                    <td class="mw-150">{{ reminder.created_at | formatted_time }}</td>
+                    <td class="mw-200">{{ reminder.goal | formatted_date }}</td>
+                    <td class="mw-150"><reminding-status :status="reminder.status"></reminding-status></td>
                   </tr>
                 </tbody>
               </table>

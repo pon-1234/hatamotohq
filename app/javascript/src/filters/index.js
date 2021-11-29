@@ -7,3 +7,9 @@ Vue.filter('formatted_time', (value) => {
   value = value.toString();
   return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日 HH:mm');
 });
+
+Vue.filter('formatted_date', (value) => {
+  if (!value) return '';
+  value = value.toString();
+  return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日');
+});
