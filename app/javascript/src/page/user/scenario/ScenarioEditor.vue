@@ -263,7 +263,6 @@ export default {
     },
 
     updateAction(data) {
-      console.log(data);
       this.scenarioData.after_action = data;
     },
 

@@ -31,8 +31,8 @@
               v-bind:messagesCount="episodeData.messages.length"
               @input="onMessageDataChanged"
               @remove="removeMessage"
-              @moveUp="moveUp"
-              @moveDown="moveDown"
+              @moveUp="moveMessageUp"
+              @moveDown="moveMessageDown"
             />
           </div>
 
@@ -51,11 +51,11 @@
     </div>
 
     <!-- アクション設定 -->
-    <div class="card">
+    <div class="card" :key="contentKey">
       <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
       <div class="card-body">
         <action-editor-custom
-          name="after_action"
+          name="actions"
           :value="episodeData.actions"
           :labelRequired="false"
           :showTitle="false"
@@ -64,6 +64,7 @@
           @input="updateAction"
         ></action-editor-custom>
       </div>
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <div>
@@ -76,6 +77,7 @@
 <script>
 import { mapActions } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: {
@@ -109,11 +111,19 @@ export default {
     return { parentValidator: this.$validator };
   },
 
-  beforeMount() {},
+  async beforeMount() {
+    if (this.episode_id) {
+      this.loading = true;
+      const episode = await this.getEpisode({ reminder_id: this.reminder_id, id: this.episode_id });
+      this.episodeData = episode;
+      this.loading = false;
+      this.forceRerender();
+    }
+  },
 
   methods: {
     ...mapActions('template', ['getTemplate']),
-    ...mapActions('reminder', ['createEpisode']),
+    ...mapActions('reminder', ['createEpisode', 'updateEpisode', 'getEpisode']),
 
     forceRerender() {
       this.contentKey++;
@@ -142,17 +152,38 @@ export default {
     async submit() {
       const valid = await this.$validator.validateAll();
       if (!valid) {
-        return;
+        return ViewHelper.scrollToRequiredField(false);
       }
+
+      this.episode_id ? this.submitUpdateEpisode() : this.submitCreateEpisode();
+    },
+
+    async submitCreateEpisode() {
       const response = await this.createEpisode(this.episodeData);
       if (response) {
         Util.showSuccessThenRedirect(
           'リマインダ配信タイミングの作成は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/reminders/${this.reminder_id}/episodes`
+          `${this.rootPath}/user/reminders/${this.reminder_id}/episodes`
         );
       } else {
         window.toastr.error('リマインダ配信タイミングの作成は失敗しました。');
       }
+    },
+
+    async submitUpdateEpisode() {
+      const response = await this.updateEpisode(this.episodeData);
+      if (response) {
+        Util.showSuccessThenRedirect(
+          'リマインダ配信タイミングの変更は完了しました。',
+          `${this.rootPath}/user/reminders/${this.reminder_id}/episodes`
+        );
+      } else {
+        window.toastr.error('リマインダ配信タイミングの変更は失敗しました。');
+      }
+    },
+
+    updateAction(data) {
+      this.episodeData.actions = data;
     },
 
     removeMessage(index) {

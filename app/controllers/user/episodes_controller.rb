@@ -3,7 +3,7 @@
 class User::EpisodesController < User::ApplicationController
   load_and_authorize_resource
   before_action :find_reminder
-  before_action :find_episode, only: [:destroy]
+  before_action :find_episode, only: [:show, :update, :destroy]
   include User::EpisodesHelper
 
   # GET /user/reminders/:reminder_id/episodes
@@ -15,6 +15,10 @@ class User::EpisodesController < User::ApplicationController
       format.html
       format.json
     end
+  end
+
+  # GET /user/reminders/:reminder_id/episodes/:id
+  def show
   end
 
   # GET /user/reminders/:reminder_id/episodes/new
@@ -35,6 +39,7 @@ class User::EpisodesController < User::ApplicationController
 
   # PATCH /user/reminders/:reminder_id/episodes/:id
   def update
+    @episode.update!(episode_params)
   end
 
   # DELETE /user/reminders/:reminder_id/episodes/:id
