@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-server '104.198.81.172', port: 22, roles: %i[web app db], primary: true
+server '18.176.164.49', port: 22, roles: %i[web app db], primary: true
 set :repo_url,        'git@github.com:Yopaz-Co-Ltd/line-insight.git'
-set :application,     'line-cms'
-set :user,            'dotops'
+set :application,     'line-insight'
+set :user,            'deploy'
 set :ssh_options, {
   keys: %w[/home/runner/.ssh/id_rsa ~/.ssh/yopaz],
   user: fetch(:user),
@@ -29,4 +29,4 @@ set :puma_init_active_record, true
 set :puma_preload_app, false
 
 set :stage, :production
-set :branch, 'staging'
+set :branch, 'develop'
