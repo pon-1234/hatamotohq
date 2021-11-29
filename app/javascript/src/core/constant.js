@@ -311,9 +311,12 @@ export const ActionMessage = {
 
 export const ActionMessageImageMap = {
   default: {
-    type: 'uri',
-    id: 1,
-    linkUri: ''
+    type: 'survey',
+    label: '',
+    content: {
+      name: '',
+      id: null
+    }
   }
 };
 
