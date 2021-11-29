@@ -152,5 +152,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async deleteEpisode(context, payload) {
+    try {
+      return await EpisodeAPI.delete(payload);
+    } catch (error) {
+      return null;
+    }
   }
 };

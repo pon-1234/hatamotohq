@@ -108,9 +108,9 @@ Rails.application.routes.draw do
       end
       resources :reminders do
         member do
-          resources :episodes
           post :copy
         end
+        resources :episodes
       end
       resources :variables do
         member do

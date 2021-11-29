@@ -63,9 +63,8 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # DELETE /user/scenarios/:scenario_id/messages/:id
   def destroy
-    if @message.destroy!
-      render_success
-    end
+    @message.destroy!
+    render_success
   end
 
   private

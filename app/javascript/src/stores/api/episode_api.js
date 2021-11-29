@@ -16,5 +16,12 @@ export default {
       data: JSON.stringify(payload),
       contentType: 'application/json'
     });
+  },
+
+  delete: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/reminders/${payload.reminder_id}/episodes/${payload.id}`,
+      method: 'DELETE'
+    });
   }
 };
