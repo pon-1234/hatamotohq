@@ -8,7 +8,7 @@
             <input
               type="radio"
               :id="`${name}typeSet`"
-              name="type"
+              :name="`${name}type`"
               value="set"
               v-model="actionData.type"
               @change="onDataChanged()"
@@ -20,7 +20,7 @@
             <input
               type="radio"
               :id="`${name}typeUnset`"
-              name="type"
+              :name="`${name}type`"
               value="unset"
               v-model="actionData.type"
               @change="onDataChanged()"
