@@ -104,6 +104,9 @@ class LineFriend < ApplicationRecord
   def set_reminder!(reminder_id, goal)
     reminding = Reminding.new(channel: self.channel, reminder_id: reminder_id, goal: goal)
     reminding.save!
+    # Cancel all active reminding
+    active_remindings = reminding.reminder.remindings.where('remindings.channel_id = ?', self.channel.id)
+    active_remindings.each { |_| _.cancel }
     reminding
   end
 
