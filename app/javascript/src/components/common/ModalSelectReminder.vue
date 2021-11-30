@@ -35,15 +35,16 @@
                   </tr>
                 </thead>
                 <tbody v-if="curFolder.reminders && curFolder.reminders.length">
-                  <tr
-                    v-for="(item, index) in curFolder.reminders"
-                    :key="index"
-                    class="folder-item"
-                    data-dismiss="modal"
-                  >
+                  <tr v-for="(item, index) in curFolder.reminders" :key="index" class="folder-item">
                     <td class="d-flex w-100">
                       <div class="mr-1">{{ item.name }}</div>
-                      <div class="btn btn-info btn-sm ml-auto my-auto fw-80" @click="selectReminder(item)">選択</div>
+                      <div
+                        class="btn btn-info btn-sm ml-auto my-auto fw-80"
+                        data-dismiss="modal"
+                        @click="selectReminder(item)"
+                      >
+                        選択
+                      </div>
                     </td>
                   </tr>
                 </tbody>
