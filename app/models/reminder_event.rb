@@ -58,6 +58,7 @@ class ReminderEvent < ApplicationRecord
     end
 
     def execute_after_deliver
-      self.destroy
+      self.status = :done
+      self.save!
     end
 end
