@@ -8,7 +8,6 @@
             role="presentation"
             v-for="(item, index) in messageData.columns"
             :key="index"
-            @click="changeSelected(index)"
           >
             <a
               aria-controls="text"
@@ -16,14 +15,15 @@
               data-toggle="tab"
               aria-expanded="true"
               :class="selected === index ? 'active' : ''"
+              @click="changeSelected(index)"
             >
               パネル{{ index + 1 }}
-              <span @click="removeColumn(index)" v-if="messageData.columns.length > 1">
-                <i class="fa fa-times"></i>
-              </span>
             </a>
+            <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
+              <i class="dripicons-trash"></i>
+            </span>
           </li>
-          <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+          <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>
           </li>
         </ul>
@@ -221,7 +221,7 @@ export default {
       this.messageData.columns.splice(index, 1);
 
       if (this.selected === this.messageData.columns.length) {
-        this.selected -= 1;
+        this.selected = index - 1;
       }
     },
 
