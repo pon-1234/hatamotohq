@@ -165,7 +165,7 @@
                   <div class="card-body">
                     <div class="col-sm-12">
                       <action-editor
-                        :name="index + '_template_carousel_' + indexColumn"
+                        :name="`template_carousel_${index}_column${indexColumn}`"
                         :value="item"
                         @input="changeActionColumn(indexColumn, index, ...arguments)"
                       />
