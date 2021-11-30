@@ -8,7 +8,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="true"
-            @change="$emit('update:is_initial', true)"
+            @change="onModeChanged(true)"
           />
           開始時に送信
         </label>
@@ -18,7 +18,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="false"
-            @change="$emit('update:is_initial', false)"
+            @change="onModeChanged(false)"
           />
           時刻指定
         </label>
@@ -117,7 +117,6 @@ export default {
 
   watch: {
     selectedTime: function(val) {
-      console.log('-------', val);
       const timeOnly = Util.formattedTime(val);
       this.$emit('update:time', timeOnly);
     },
@@ -128,6 +127,20 @@ export default {
 
     order: function(val) {
       this.$emit('update:order', this.order);
+    }
+  },
+
+  methods: {
+    onModeChanged(isInitial) {
+      if (isInitial) {
+        this.date = 0;
+        this.$emit('update:date', this.date);
+        this.time = '0:00';
+        this.$emit('update:time', this.time);
+      } else {
+        this.zeroday = true;
+      }
+      this.$emit('update:is_initial', isInitial);
     }
   }
 };

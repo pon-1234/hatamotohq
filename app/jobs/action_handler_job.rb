@@ -76,9 +76,14 @@ class ActionHandlerJob < ApplicationJob
       goal = content['goal']
       reminder_id = content['reminder']['id']
       reminder = Reminder.find(reminder_id)
-      reminding = Reminding.find_or_initialize_by(channel: @friend.channel, reminder: reminder, goal: goal)
-      reminding.status = 'active'
-      reminding.save
+      # Cancel all active reminding
+      active_remindings = reminder.remindings.where('remindings.channel_id = ?', @friend.channel.id)
+      active_remindings.each do |reminding|
+        reminding.cancel
+      end
+      # Start a new reminding
+      reminding = Reminding.new(channel: @friend.channel, reminder: reminder, goal: goal, status: 'active')
+      reminding.save!
     end
 
     def unset_reminder(content)
