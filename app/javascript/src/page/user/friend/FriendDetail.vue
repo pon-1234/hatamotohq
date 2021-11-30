@@ -142,6 +142,7 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="py-5" v-if="variables.length === 0">データはありません。</div>
             </div>
           </div>
         </div>

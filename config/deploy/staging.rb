@@ -2,7 +2,7 @@
 
 server '104.198.81.172', port: 22, roles: %i[web app db], primary: true
 set :repo_url,        'git@github.com:Yopaz-Co-Ltd/line-insight.git'
-set :application,     'line-cms'
+set :application,     'line-insight'
 set :user,            'dotops'
 set :ssh_options, {
   keys: %w[/home/runner/.ssh/id_rsa ~/.ssh/yopaz],

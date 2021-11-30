@@ -42,6 +42,12 @@ export default {
       searchPosition: 'bottom',
       pickerPosition: 'bottom',
       events: {
+        keyup(editor, event) {
+          _this.$emit('input', this.getText());
+        },
+        keydown(editor, event) {
+          _this.$emit('input', this.getText());
+        },
         keypress(editor, event) {
           _this.$emit('input', this.getText());
         },
