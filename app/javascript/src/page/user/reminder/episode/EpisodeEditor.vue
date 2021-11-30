@@ -1,5 +1,5 @@
 <template>
-  <div class="mxw-1200">
+  <div class="mxw-1200" :key="contentKey">
     <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">配信日時</h3>
@@ -16,7 +16,7 @@
     </div>
 
     <!-- メッセージ設定 -->
-    <div class="card" :key="contentKey">
+    <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">メッセージ設定</h3>
       </div>
@@ -51,7 +51,7 @@
     </div>
 
     <!-- アクション設定 -->
-    <div class="card" :key="contentKey">
+    <div class="card">
       <div class="card-header left-border"><h3 class="card-title">アクション設定</h3></div>
       <div class="card-body">
         <action-editor-custom

@@ -51,6 +51,8 @@
             type="time"
             class="theme-success"
             :phrases="{ ok: '確定', cancel: '閉じる' }"
+            value-zone="Asia/Tokyo"
+            zone="Asia/Tokyo"
           ></datetime>
           に送信
         </template>
@@ -74,8 +76,9 @@
 </template>
 
 <script>
-import moment from 'moment-timezone';
+import Util from '@/core/util';
 import { Datetime } from 'vue-datetime';
+import moment from 'moment-timezone';
 
 export default {
   components: {
@@ -107,14 +110,15 @@ export default {
     };
   },
 
-  created() {
+  beforeMount() {
     this.zeroday = this.date === 0;
-    this.selectedTime = this.time || '00:00';
+    this.selectedTime = moment.tz(this.time, 'HH:mm', 'Asia/Tokyo').format();
   },
 
   watch: {
     selectedTime: function(val) {
-      const timeOnly = moment(val).format('HH:mm');
+      console.log('-------', val);
+      const timeOnly = Util.formattedTime(val);
       this.$emit('update:time', timeOnly);
     },
 
