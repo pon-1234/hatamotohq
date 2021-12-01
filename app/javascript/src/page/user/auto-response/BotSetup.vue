@@ -10,7 +10,7 @@
           <div class="form-group row">
             <label class="col-4">管理用の名前（自由に記載してください)<required-mark></required-mark></label>
             <div class="col-8">
-              <ValidationProvider name="管理用の名前" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="管理用の名前" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -28,7 +28,7 @@
           <div class="form-group row mt-4">
             <label class="col-4">LINE公式アカウントID<required-mark></required-mark></label>
             <div class="col-8">
-              <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="LINE公式アカウントID" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -46,7 +46,7 @@
           <div class="form-group row mt-4">
             <label class="col-4">チャネルID<required-mark></required-mark></label>
             <div class="col-8">
-              <ValidationProvider name="チャネルID" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="チャネルID" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -64,7 +64,7 @@
           <div class="form-group row mt-4">
             <label class="col-4">チャネルシークレット<required-mark></required-mark></label>
             <div class="col-8">
-              <ValidationProvider name="チャネルシークレット" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="チャネルシークレット" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"

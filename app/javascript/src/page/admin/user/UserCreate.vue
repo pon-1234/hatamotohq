@@ -6,7 +6,7 @@
           <div class="form-group row">
             <label class="col-xl-3">メールアドレス<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
+              <ValidationProvider name="メールアドレス" rules="required|email|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -87,7 +87,7 @@
           <div class="form-group row">
             <label class="col-xl-3">パスワード<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="パスワード" rules="required|min:8|max:128" v-slot="{ errors }">
+              <ValidationProvider name="パスワード" rules="required|min:8|max:128" v-slot="{ errors }" vid="password">
                 <input
                   type="text"
                   class="form-control"

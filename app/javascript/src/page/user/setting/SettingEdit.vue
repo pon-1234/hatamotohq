@@ -22,12 +22,13 @@
             <div class="form-group d-flex">
               <label class="fw-350">LINE公式アカウントID<required-mark /></label>
               <div class="flex-grow-1">
-                <ValidationProvider name="LINE公式アカウントID" rules="required" v-slot="{ errors }">
+                <ValidationProvider name="LINE公式アカウントID" rules="required|max:255" v-slot="{ errors }">
                   <input
                     type="text"
                     class="form-control"
                     name="setting[line_user_id]"
                     placeholder="入力してください"
+                    maxlength="256"
                     v-model.trim="settingFormData.line_user_id"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
@@ -37,12 +38,13 @@
             <div class="form-group d-flex">
               <label class="fw-350">LINEアカウント名<required-mark /></label>
               <div class="flex-grow-1">
-                <ValidationProvider name="LINEアカウント名" rules="required" v-slot="{ errors }">
+                <ValidationProvider name="LINEアカウント名" rules="required|max:255" v-slot="{ errors }">
                   <input
                     type="text"
                     class="form-control"
                     name="setting[line_name]"
                     placeholder="入力してください"
+                    maxlength="256"
                     v-model="settingFormData.line_name"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
@@ -52,12 +54,13 @@
             <div class="form-group d-flex">
               <label class="fw-350">表示名<required-mark /></label>
               <div class="flex-grow-1">
-                <ValidationProvider name="表示名" rules="required" v-slot="{ errors }">
+                <ValidationProvider name="表示名" rules="required|max:255" v-slot="{ errors }">
                   <input
                     type="text"
                     class="form-control"
                     name="setting[display_name]"
                     placeholder="入力してください"
+                    maxlength="256"
                     v-model="settingFormData.display_name"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
@@ -72,6 +75,7 @@
                   class="form-control"
                   placeholder="入力してください"
                   v-model="settingFormData.channel_id"
+                  maxlength="256"
                   disabled
                 />
               </div>
@@ -84,6 +88,7 @@
                   class="form-control"
                   placeholder="入力してください"
                   v-model="settingFormData.channel_secret"
+                  maxlength="256"
                   disabled
                 />
               </div>
