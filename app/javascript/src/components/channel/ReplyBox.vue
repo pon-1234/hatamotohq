@@ -54,7 +54,7 @@
         </button>
       </div>
     </div>
-    <template v-if="activeChannel">
+    <!-- <template v-if="activeChannel">
       <modal-select-media
         id="modalSendMedia"
         :types="['image', 'audio', 'video', 'richmenu']"
@@ -67,7 +67,7 @@
         id="modalSelectSticker"
         @input="sendStickerMessage"
       ></modal-select-sticker>
-    </template>
+    </template> -->
   </div>
 </template>
 

@@ -1,24 +1,40 @@
 <template>
-  <div class="row">
-    <!-- start chat users-->
-    <div class="channel-list">
-      <channel-list :class="getLeftItem()" />
-      <!-- :class="getLeftItem()" -->
-    </div>
-    <!-- end chat users-->
-    <!-- {{ showChatBox }} -->
-    <!-- chat area -->
-    <div class="channel-chat main" :class="showChatBox ? 'main-visible' : ''">
-      <chat-box></chat-box>
-      <!-- :class="getRightItem()" -->
-    </div>
-    <!-- end chat area-->
+  <div>
+    <div class="row">
+      <!-- start chat users-->
+      <div class="channel-list">
+        <channel-list :class="getLeftItem()" />
+        <!-- :class="getLeftItem()" -->
+      </div>
+      <!-- end chat users-->
+      <!-- {{ showChatBox }} -->
+      <!-- chat area -->
+      <div class="channel-chat main" :class="showChatBox ? 'main-visible' : ''">
+        <chat-box></chat-box>
+        <!-- :class="getRightItem()" -->
+      </div>
+      <!-- end chat area-->
 
-    <!-- start user detail -->
-    <div class="channel-friend main-user" :class="showUserDetail ? 'main-user-visible' : ''">
-      <channel-friend-detail></channel-friend-detail>
+      <!-- start user detail -->
+      <div class="channel-friend main-user" :class="showUserDetail ? 'main-user-visible' : ''">
+        <channel-friend-detail></channel-friend-detail>
+      </div>
+      <!-- end user detail -->
     </div>
-    <!-- end user detail -->
+    <template v-if="activeChannel">
+      <modal-select-media
+        id="modalSendMedia"
+        :types="['image', 'audio', 'video', 'richmenu']"
+        @select="sendMediaMessage($event)"
+      ></modal-select-media>
+      <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
+      <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
+      <modal-select-sticker
+        ref="modalSticker"
+        id="modalSelectSticker"
+        @input="sendStickerMessage"
+      ></modal-select-sticker>
+    </template>
   </div>
 </template>
 <script>
@@ -174,12 +190,13 @@ export default {
 
     .main-user {
       position: fixed;
-      top: 160px;
-      right: 0;
+      top: 155px;
+      /* left: -35%; */
+      right: 0%;
       bottom: 0;
       height: 100%;
-      width: 100%;
-      z-index: 1020;
+      width: 65%;
+      z-index: 1030;
       visibility: hidden;
       transform: translateX(100%);
       transition: transform 0.3s ease, visibility 0.3s ease;
@@ -187,7 +204,7 @@ export default {
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     .item-pc {
       visibility: visible;
       transform: translateX(0);
@@ -220,15 +237,16 @@ export default {
     }
     .main-user {
       top: 2vh;
+      width: 35%;
     }
 
     .main {
       position: fixed;
       top: 2vh;
-      left: 0;
+      left: 25%;
       bottom: 0;
       height: 100%;
-      width: 100%;
+      width: 75%;
       z-index: 1020;
       visibility: hidden;
       transform: translateX(100%);
@@ -248,6 +266,29 @@ export default {
       position: relative;
       width: 100%;
       z-index: 0;
+    }
+  }
+
+  @media only screen and (max-width: 780px) {
+    .main {
+      top: 2vh;
+      left: 35%;
+      width: 65%;
+    }
+    .main-user {
+      top: 2vh;
+    }
+  }
+
+  @media only screen and (max-width: 760px) {
+    .main {
+      top: 2vh;
+      left: 0%;
+      width: 100%;
+    }
+    .main-user {
+      top: 2vh;
+      width: 65%;
     }
   }
 
