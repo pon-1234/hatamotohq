@@ -107,7 +107,8 @@ export default {
     canDelete() {
       return !(
         (this.type === 'survey' && this.data.surveys.length > 0) ||
-        (this.type === 'variable' && this.data.variables.length > 0)
+        (this.type === 'variable' && this.data.variables.length > 0) ||
+        (this.type === 'reminder' && this.data.reminders.length > 0)
       );
     },
 
