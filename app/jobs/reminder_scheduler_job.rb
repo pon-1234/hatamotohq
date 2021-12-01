@@ -28,6 +28,7 @@ class ReminderSchedulerJob < ApplicationJob
     def deliver_now(episode)
       deliver_messages(episode)
       deliver_actions(episode)
+      create_reminder_event(episode, Time.zone.now, :done)
     end
 
     def deliver_messages(episode)
@@ -49,12 +50,12 @@ class ReminderSchedulerJob < ApplicationJob
       ActionHandlerJob.perform_now(@channel.line_friend, episode.actions['data'])
     end
 
-    def create_reminder_event(episode, schedule_at)
+    def create_reminder_event(episode, schedule_at, status = :queued)
       reminder_event = ReminderEvent.new(
         reminding: @reminding,
         episode_id: episode.id,
         schedule_at: schedule_at,
-        status: :queued
+        status: status
       )
       reminder_event.save!
     end
