@@ -28,13 +28,17 @@ class ReminderEvent < ApplicationRecord
   belongs_to :episode
 
   # Scope
-  enum status: { queued: 'queued', sending: 'sending', done: 'done', error: 'error' }
+  enum status: { queued: 'queued', sending: 'sending', done: 'done', cancelled: 'cancelled', error: 'error' }
   scope :before, ->(time) { where('schedule_at <= ?', time) }
 
   def invoke
     deliver_messages
     deliver_actions
     execute_after_deliver
+  end
+
+  def cancel
+    self.update_columns(status: :cancelled)
   end
 
   private

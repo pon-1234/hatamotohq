@@ -39,9 +39,9 @@ class Reminding < ApplicationRecord
   end
 
   def cancel
-    self.reminder_events.destroy_all
+    self.reminder_events.each{|_| _.cancel }
     self.status = :cancelled
-    self.save
+    self.save!
   end
 
   private
