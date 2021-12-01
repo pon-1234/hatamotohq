@@ -28,5 +28,5 @@ set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 set :puma_preload_app, false
 
-set :stage, :production
+set :stage, :staging
 set :branch, 'staging'
