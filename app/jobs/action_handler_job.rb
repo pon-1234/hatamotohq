@@ -77,8 +77,8 @@ class ActionHandlerJob < ApplicationJob
       reminder_id = content['reminder']['id']
       reminder = Reminder.find(reminder_id)
       # Cancel all active reminding
-      active_remindings = reminder.remindings.where('remindings.channel_id = ?', @friend.channel.id)
-      active_remindings.includes([:channel, :reminder_events]).each {|_| _.cancel }
+      active_remindings = reminder.remindings.where("remindings.channel_id = ? AND remindings.status = 'active'", @friend.channel.id)
+      active_remindings.includes([:channel, :reminder_events]).each { |_| _.cancel }
       # Start a new reminding
       reminding = Reminding.new(channel: @friend.channel, reminder: reminder, goal: goal, status: 'active')
       reminding.save!

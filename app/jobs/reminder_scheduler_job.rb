@@ -11,24 +11,25 @@ class ReminderSchedulerJob < ApplicationJob
 
     reminder = @reminding.reminder
     episodes = reminder.episodes
-    episodes.each do |episode|
-      schedule(episode)
+    episodes.each_with_index do |episode, index|
+      schedule(episode, index == episodes.length - 1)
     end
   end
 
   private
-    def schedule(episode)
+    def schedule(episode, is_last)
       if episode.is_initial?
-        deliver_now(episode)
+        deliver_now(episode, is_last)
       else
-        create_reminder_event(episode, deliver_time_for(episode))
+        create_reminder_event(episode, deliver_time_for(episode), :queued, is_last)
       end
     end
 
-    def deliver_now(episode)
+    def deliver_now(episode, is_last)
       deliver_messages(episode)
       deliver_actions(episode)
-      create_reminder_event(episode, Time.zone.now, :done)
+      create_reminder_event(episode, Time.zone.now, :done, is_last)
+      @reminding.finish
     end
 
     def deliver_messages(episode)
@@ -50,12 +51,13 @@ class ReminderSchedulerJob < ApplicationJob
       ActionHandlerJob.perform_now(@channel.line_friend, episode.actions['data'])
     end
 
-    def create_reminder_event(episode, schedule_at, status = :queued)
+    def create_reminder_event(episode, schedule_at, status, is_last)
       reminder_event = ReminderEvent.new(
         reminding: @reminding,
         episode_id: episode.id,
         schedule_at: schedule_at,
-        status: status
+        status: status,
+        is_last: is_last
       )
       reminder_event.save!
     end

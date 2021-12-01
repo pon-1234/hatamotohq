@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_25_090145) do
+ActiveRecord::Schema.define(version: 2021_12_01_041252) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(version: 2021_11_25_090145) do
     t.bigint 'episode_id'
     t.string 'status'
     t.datetime 'schedule_at'
+    t.boolean 'is_last', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['episode_id'], name: 'index_reminder_events_on_episode_id'

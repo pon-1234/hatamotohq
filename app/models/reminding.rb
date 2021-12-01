@@ -31,17 +31,21 @@ class Reminding < ApplicationRecord
   validates :goal, presence: true
 
   # Scope
-  enum status: { active: 'active', cancelled: 'cancelled' }
+  enum status: { active: 'active', cancelled: 'cancelled', done: 'done' }
 
   after_create do
-    ReminderSchedulerJob.perform_later(self.id)
+    ReminderSchedulerJob.perform_now(self.id)
     distribute_system_log
   end
 
   def cancel
-    self.reminder_events.each{|_| _.cancel }
+    self.reminder_events.each { |_| _.cancel }
     self.status = :cancelled
     self.save!
+  end
+
+  def finish
+    self.update_columns(status: :done)
   end
 
   private
