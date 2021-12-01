@@ -35,7 +35,7 @@ class ReminderSchedulerJob < ApplicationJob
     def deliver_messages(episode)
       nomalized_messages = []
       episode.messages.each do |message|
-        nomalized_messages << Normalizer::MessageNormalizer.new(message.try(:content) || message['content']).perform
+        nomalized_messages <<message.try(:content) || message['content']
       end
       if contain_survey_action?(nomalized_messages)
         nomalized_messages = normalize_messages_with_survey_action(@channel, nomalized_messages)

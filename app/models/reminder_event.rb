@@ -46,8 +46,10 @@ class ReminderEvent < ApplicationRecord
     def deliver_messages
       nomalized_messages = []
       self.episode.messages.each do |message|
-        nomalized_messages << Normalizer::MessageNormalizer.new(message.try(:content) || message['content']).perform
+        nomalized_messages << message.try(:content) || message['content']
       end
+      # Remove nil value
+      nomalized_messages = nomalized_messages.compact
       if contain_survey_action?(nomalized_messages)
         nomalized_messages = normalize_messages_with_survey_action(self.reminding.channel, nomalized_messages)
       end
