@@ -220,7 +220,9 @@ export default {
     removeColumn(index) {
       this.messageData.columns.splice(index, 1);
 
-      if (this.selected === this.messageData.columns.length) {
+      if (index === 0) {
+        this.selected = index;
+      } else if (this.selected === this.messageData.columns.length) {
         this.selected = index - 1;
       }
     },
