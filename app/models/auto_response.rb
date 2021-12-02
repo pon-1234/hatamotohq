@@ -9,8 +9,6 @@
 #  folder_id       :bigint
 #  name            :string(255)
 #  status          :string(255)
-#  keyword         :string(255)
-#  keyword_status  :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
