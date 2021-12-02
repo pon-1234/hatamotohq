@@ -5,7 +5,7 @@
       <a class="flex-grow-1"></a>
       <a class="icon-fs d-sm-block d-xl-none" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
     </div>
-    <div class="card-body d-flex flex-column pb-on-mobile-safari">
+    <div class="card-body d-flex flex-column">
       <ul
         ref="chatPanel"
         class="flex-grow-1 conversation-list overflow-auto"
@@ -314,10 +314,12 @@ export default {
     }
   }
 
-  @media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0){
+  @media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
   @media (max-width: 767px) {
-    .pb-on-mobile-safari {
-      padding-bottom: 3.5rem;
+    .chat-panel {
+      .card-body {
+        padding-bottom: 3.5rem;
+      }
     }
   }
 }
