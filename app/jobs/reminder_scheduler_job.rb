@@ -8,7 +8,6 @@ class ReminderSchedulerJob < ApplicationJob
     @reminding = Reminding.find_by_id(reminding_id)
     return unless @reminding.present?
     @channel = @reminding.channel
-
     reminder = @reminding.reminder
     episodes = reminder.episodes
     episodes.each_with_index do |episode, index|
@@ -35,7 +34,7 @@ class ReminderSchedulerJob < ApplicationJob
     def deliver_messages(episode)
       nomalized_messages = []
       episode.messages.each do |message|
-        nomalized_messages <<message.try(:content) || message['content']
+        nomalized_messages << (message.try(:content) || message['content'])
       end
       if contain_survey_action?(nomalized_messages)
         nomalized_messages = normalize_messages_with_survey_action(@channel, nomalized_messages)

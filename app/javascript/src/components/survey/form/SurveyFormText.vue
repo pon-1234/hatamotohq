@@ -8,7 +8,6 @@
         class="form-control mt-2"
         placeholder="入力してください"
         v-model.trim="answer"
-        :disabled="preview"
       />
       <error-message :message="errors[0]"></error-message>
     </ValidationProvider>
@@ -17,7 +16,7 @@
 
 <script>
 export default {
-  props: ['question', 'qnum', 'preview'],
+  props: ['question', 'qnum'],
   data() {
     return {
       answer: undefined

@@ -33,7 +33,7 @@
         class="form-control"
         :name="name + '_postback_text_email'"
         rows="4"
-        v-model="form.text"
+        v-model.trim="form.text"
         placeholder="入力してください"
         v-validate="'required'"
         data-vv-as="本文"
