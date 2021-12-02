@@ -11,7 +11,7 @@
           placeholder="ラベルを入力してください"
           type="text"
           maxlength="12"
-          v-model="label"
+          v-model.trim="label"
           class="w-100 form-control"
           @keyup="onValueChanged"
           data-vv-as="ラベル"

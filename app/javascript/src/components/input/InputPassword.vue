@@ -1,11 +1,20 @@
 <template>
   <div class="input-group input-group-merge">
     <div class="input-group input-group-merge">
-      <input :type="inputType" v-validate="'required'" data-vv-as="パースワード" class="form-control" :name="name" placeholder="パスワードを入力してください" v-model="password" @input="onInput">
+      <input
+        :type="inputType"
+        v-validate="'required'"
+        data-vv-as="パースワード"
+        class="form-control"
+        :name="name"
+        placeholder="パスワードを入力してください"
+        v-model.trim="password"
+        @input="onInput"
+      />
       <div class="input-group-append" data-password="false" @click="toggle()">
-          <div class="input-group-text" :class="inputType === 'text'? 'show-password' : ''">
-              <span class="password-eye"></span>
-          </div>
+        <div class="input-group-text" :class="inputType === 'text' ? 'show-password' : ''">
+          <span class="password-eye"></span>
+        </div>
       </div>
     </div>
     <error-message :message="errors.first(name)"></error-message>

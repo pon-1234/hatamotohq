@@ -11,7 +11,7 @@
     ></textarea>
     <input
       type="hidden"
-      v-model="value"
+      v-model.trim="value"
       data-vv-as="本文"
       v-validate="'required|max:5000'"
       :name="'message-editor' + index"
