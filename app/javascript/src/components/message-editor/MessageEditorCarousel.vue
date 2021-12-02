@@ -6,25 +6,21 @@
           パネルタイトルの有無・画像の有無・ボタンの数は全てのパネルで同じ必要があります。
         </div>
         <!-- パネルメニュー -->
-        <ul class="nav nav-tabs nav-bordered" role="tablist">
-          <li
-            role="presentation"
-            v-for="(item, index) in messageData.columns"
-            :key="index"
-          >
+        <ul class="nav nav-tabs nav-bordered px-1" role="tablist">
+          <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
             <a
               aria-controls="text"
               role="tab"
               data-toggle="tab"
               aria-expanded="true"
+              class="d-flex align-items-center justify-content-center"
               :class="selected === index ? 'active' : ''"
-              @click="changeSelected(index)"
             >
-              パネル{{ index + 1 }}
-            </a>
-            <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
+              <div class="mt-1" @click="changeSelected(index)">パネル{{ index + 1 }}</div>
+              <span class="ml-2" @click="removeColumn(index)" v-if="messageData.columns.length > 1">
                 <i class="dripicons-trash"></i>
               </span>
+            </a>
           </li>
           <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>
