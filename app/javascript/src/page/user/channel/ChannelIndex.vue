@@ -9,14 +9,14 @@
       <!-- end chat users-->
       <!-- {{ showChatBox }} -->
       <!-- chat area -->
-      <div class="channel-chat main" :class="showChatBox ? 'main-visible' : ''">
+      <div class="channel-chat" :class="showChatBox ? 'channel-chat-visible' : ''">
         <chat-box></chat-box>
         <!-- :class="getRightItem()" -->
       </div>
       <!-- end chat area-->
 
       <!-- start user detail -->
-      <div class="channel-friend main-user" :class="showUserDetail ? 'main-user-visible' : ''">
+      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''">
         <channel-friend-detail></channel-friend-detail>
       </div>
       <!-- end user detail -->
@@ -183,12 +183,12 @@ export default {
       max-width: 30%;
     }
 
-    .main-user-visible {
+    .channel-friend-visible {
       visibility: visible !important;
       transform: translateX(0) !important;
     }
 
-    .main-user {
+    .channel-friend {
       position: fixed;
       top: 155px;
       /* left: -35%; */
@@ -231,16 +231,16 @@ export default {
       max-width: 100%;
     }
 
-    .main-visible {
+    .channel-chat-visible {
       visibility: visible !important;
       transform: translateX(0) !important;
     }
-    .main-user {
+    .channel-friend {
       top: 2vh;
       width: 35%;
     }
 
-    .main {
+    .channel-chat {
       position: fixed;
       top: 2vh;
       left: 25%;
@@ -270,23 +270,23 @@ export default {
   }
 
   @media only screen and (max-width: 780px) {
-    .main {
+    .channel-chat {
       top: 2vh;
       left: 35%;
       width: 65%;
     }
-    .main-user {
+    .channel-friend {
       top: 2vh;
     }
   }
 
   @media only screen and (max-width: 760px) {
-    .main {
+    .channel-chat {
       top: 2vh;
       left: 0%;
       width: 100%;
     }
-    .main-user {
+    .channel-friend {
       top: 2vh;
       width: 65%;
     }
