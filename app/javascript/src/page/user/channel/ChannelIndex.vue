@@ -1,40 +1,24 @@
 <template>
-  <div>
-    <div class="row">
-      <!-- start chat users-->
-      <div class="channel-list">
-        <channel-list :class="getLeftItem()" />
-        <!-- :class="getLeftItem()" -->
-      </div>
-      <!-- end chat users-->
-      <!-- {{ showChatBox }} -->
-      <!-- chat area -->
-      <div class="channel-chat" :class="showChatBox ? 'channel-chat-visible' : ''">
-        <chat-box></chat-box>
-        <!-- :class="getRightItem()" -->
-      </div>
-      <!-- end chat area-->
-
-      <!-- start user detail -->
-      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''">
-        <channel-friend-detail></channel-friend-detail>
-      </div>
-      <!-- end user detail -->
+  <div class="row">
+    <!-- start chat users-->
+    <div class="channel-list">
+      <channel-list :class="getLeftItem()" />
+      <!-- :class="getLeftItem()" -->
     </div>
-    <template v-if="activeChannel">
-      <modal-select-media
-        id="modalSendMedia"
-        :types="['image', 'audio', 'video', 'richmenu']"
-        @select="sendMediaMessage($event)"
-      ></modal-select-media>
-      <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
-      <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
-      <modal-select-sticker
-        ref="modalSticker"
-        id="modalSelectSticker"
-        @input="sendStickerMessage"
-      ></modal-select-sticker>
-    </template>
+    <!-- end chat users-->
+    <!-- {{ showChatBox }} -->
+    <!-- chat area -->
+    <div class="channel-chat main" :class="showChatBox ? 'main-visible' : ''">
+      <chat-box></chat-box>
+      <!-- :class="getRightItem()" -->
+    </div>
+    <!-- end chat area-->
+
+    <!-- start user detail -->
+    <div class="channel-friend main-user" :class="showUserDetail ? 'main-user-visible' : ''">
+      <channel-friend-detail></channel-friend-detail>
+    </div>
+    <!-- end user detail -->
   </div>
 </template>
 <script>
@@ -183,20 +167,19 @@ export default {
       max-width: 30%;
     }
 
-    .channel-friend-visible {
+    .main-user-visible {
       visibility: visible !important;
       transform: translateX(0) !important;
     }
 
-    .channel-friend {
+    .main-user {
       position: fixed;
-      top: 155px;
-      /* left: -35%; */
-      right: 0%;
+      top: 160px;
+      right: 0;
       bottom: 0;
       height: 100%;
-      width: 65%;
-      z-index: 1030;
+      width: 100%;
+      z-index: 1020;
       visibility: hidden;
       transform: translateX(100%);
       transition: transform 0.3s ease, visibility 0.3s ease;
@@ -204,7 +187,7 @@ export default {
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 768px) {
     .item-pc {
       visibility: visible;
       transform: translateX(0);
@@ -231,22 +214,21 @@ export default {
       max-width: 100%;
     }
 
-    .channel-chat-visible {
+    .main-visible {
       visibility: visible !important;
       transform: translateX(0) !important;
     }
-    .channel-friend {
+    .main-user {
       top: 2vh;
-      width: 35%;
     }
 
-    .channel-chat {
+    .main {
       position: fixed;
       top: 2vh;
-      left: 25%;
+      left: 0;
       bottom: 0;
       height: 100%;
-      width: 75%;
+      width: 100%;
       z-index: 1020;
       visibility: hidden;
       transform: translateX(100%);
@@ -266,29 +248,6 @@ export default {
       position: relative;
       width: 100%;
       z-index: 0;
-    }
-  }
-
-  @media only screen and (max-width: 780px) {
-    .channel-chat {
-      top: 2vh;
-      left: 35%;
-      width: 65%;
-    }
-    .channel-friend {
-      top: 2vh;
-    }
-  }
-
-  @media only screen and (max-width: 760px) {
-    .channel-chat {
-      top: 2vh;
-      left: 0%;
-      width: 100%;
-    }
-    .channel-friend {
-      top: 2vh;
-      width: 65%;
     }
   }
 

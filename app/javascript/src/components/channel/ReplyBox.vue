@@ -54,6 +54,20 @@
         </button>
       </div>
     </div>
+    <template v-if="activeChannel">
+      <modal-select-media
+        id="modalSendMedia"
+        :types="['image', 'audio', 'video', 'richmenu']"
+        @select="sendMediaMessage($event)"
+      ></modal-select-media>
+      <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
+      <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
+      <modal-select-sticker
+        ref="modalSticker"
+        id="modalSelectSticker"
+        @input="sendStickerMessage"
+      ></modal-select-sticker>
+    </template>
   </div>
 </template>
 
