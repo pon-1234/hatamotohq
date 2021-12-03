@@ -42,7 +42,7 @@
                       class="folder-item"
                     >
                       <td class="d-flex w-100">
-                        <div class="hidden-text">{{ item.name }}</div>
+                        <div class="item-name">{{ item.name }}</div>
                         <div class="btn btn-info btn-sm text-nowrap ml-auto" data-dismiss="modal" @click="selectTemplate(item)">
                           送信
                         </div>
@@ -107,7 +107,7 @@ export default {
 };
 </script>
 <style style="scss" scoped>
-  .hidden-text {
+  .item-name {
     width: 85%;
     white-space: nowrap;
     overflow: hidden;
