@@ -3,9 +3,10 @@
 class User::EpisodesController < User::ApplicationController
   load_and_authorize_resource
   before_action :find_reminder
+  before_action :find_episode, only: [:show, :update, :destroy]
   include User::EpisodesHelper
 
-  # GET /user/reminders/:id/episodes
+  # GET /user/reminders/:reminder_id/episodes
   def index
     if request.format.json?
       @episodes = @reminder.episodes.ordered
@@ -16,16 +17,35 @@ class User::EpisodesController < User::ApplicationController
     end
   end
 
-  # GET /user/reminders/:id/episodes/new
+  # GET /user/reminders/:reminder_id/episodes/:id
+  def show
+  end
+
+  # GET /user/reminders/:reminder_id/episodes/new
   def new
   end
 
-  # POST /user/reminders/:id/episodes
+  # POST /user/reminders/:reminder_id/episodes
   def create
     @episode = build_episode(episode_params)
     unless @episode.save
       render_bad_request_with_message(@episode.first_error_message)
     end
+  end
+
+  # GET /user/reminders/:reminder_id/episodes/:id/edit
+  def edit
+  end
+
+  # PATCH /user/reminders/:reminder_id/episodes/:id
+  def update
+    @episode.update!(episode_params)
+  end
+
+  # DELETE /user/reminders/:reminder_id/episodes/:id
+  def destroy
+    @episode.destroy!
+    render_success
   end
 
   private
@@ -44,6 +64,10 @@ class User::EpisodesController < User::ApplicationController
     end
 
     def find_reminder
-      @reminder = Reminder.find(params[:id])
+      @reminder = Reminder.find(params[:reminder_id])
+    end
+
+    def find_episode
+      @episode = Episode.find(params[:id])
     end
 end

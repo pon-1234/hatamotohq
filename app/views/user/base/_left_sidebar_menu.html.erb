@@ -2,9 +2,9 @@
 <div class="left-side-menu">
 
   <!-- LOGO -->
-  <a href="index.html" class="logo text-center logo-light">
-    <span class="text-white brand-text font-weight-bold">LINE INSIGHT</span>
-  </a>
+  <%= link_to user_root_path, class: "logo ml-4 logo-light" do %>
+    <span class="text-white brand-text font-weight-bold">LINE CMS</span>
+  <% end %>
 
   <div class="h-100" id="left-side-menu-container" data-simplebar>
 
@@ -21,7 +21,7 @@
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
       <li class="side-nav-item <%= controller?("user/channels") ? 'mm-active' : '' %>">
-        <%= link_to user_channels_path, "data-turbolinks": "false", class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
+        <%= link_to user_channels_path, class: "side-nav-link #{controller?("user/channels") ? 'active' : '' }" do %>
           <i class="uil-comments-alt"></i>
           <span> 個別トーク </span>
         <% end %>
@@ -93,11 +93,19 @@
       </li>
 
       <li class="side-nav-title side-nav-item">友だち属性</li>
-       <!-- リッチメニュー -->
+       <!-- タグ管理 -->
       <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">
         <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
           <i class="uil-tag-alt"></i>
           <span>タグ管理</span>
+        <% end %>
+      </li>
+
+       <!-- 友だち情報欄 -->
+      <li class="side-nav-item <%= controller?("user/variables") ? 'mm-active' : '' %>">
+        <%= link_to user_variables_path, class: "side-nav-link #{controller?("user/variables" ) ? 'active' : '' }" do %>
+          <i class="uil-book-reader"></i>
+          <span>友だち情報欄</span>
         <% end %>
       </li>
 

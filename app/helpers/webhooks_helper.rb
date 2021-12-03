@@ -67,11 +67,6 @@ module WebhooksHelper
       key = @event[:postback][:data]
       action = PostbackMapper.where(key: key)&.first&.value
       return if action.blank?
-
-      if action[:displayText].present?
-        # TODO: send text message
-      end
-
       PostbackHandler.new(@line_account, @event, action).perform
     end
 
@@ -120,7 +115,41 @@ module WebhooksHelper
       end
 
       def create_message(channel, sender, body)
-        mb = Messages::MessageBuilder.new(sender, channel, body)
-        mb.perform
+        if is_from_app?(body) && is_media_message?(body)
+          rebuild_media_message(body)
+        end
+        Messages::MessageBuilder.new(sender, channel, body).perform
+      end
+
+      def is_from_app?(body)
+        body['message']['contentProvider'].try(:[], 'type').eql?('line')
+      end
+
+      def is_media_message?(body)
+        ['image', 'video', 'audio'].include? body['message']['type']
+      end
+
+      def rebuild_media_message(body)
+        message_id = body['message']['id']
+        message_type = body['message']['type']
+        response = LineApi::GetContent.new(@line_account).perform(message_id)
+        case response
+        when Net::HTTPSuccess then
+          media = build_media(response.body, message_type)
+          body['message']['originalContentUrl'] = media.url
+          body['message']['previewImageUrl'] = media.url
+        end
+      end
+
+      def build_media(stream, message_type)
+        filename = 'tempfile'
+        tf = Tempfile.open(filename)
+        tf.binmode
+        tf.write(stream)
+        tf.rewind
+        media = Media.new(line_account: @line_account, type: message_type)
+        media.file.attach(io: tf, filename: filename)
+        media.save!
+        media
       end
 end

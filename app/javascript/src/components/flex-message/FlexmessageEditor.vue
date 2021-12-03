@@ -1,46 +1,58 @@
 <template>
   <div>
-      <div class="form-group">
-      <label>代替テキスト</label>
-      <input type="text" :name="`altText${index}`" class="form-control" placeholder="代替テキストを入力してください" v-model="altText" v-validate="'max:400'" data-vv-as="代替テキスト"/>
+    <div class="form-group">
+      <label>代替テキスト<required-mark></required-mark></label>
+      <input
+        type="text"
+        :name="`altText${index}`"
+        class="form-control"
+        placeholder="代替テキストを入力してください"
+        v-model="altText"
+        v-validate="'required|max:400'"
+        data-vv-as="代替テキスト"
+      />
       <error-message :message="errors.first(`altText${index}`)"></error-message>
     </div>
     <div class="d-flex flex-column" style="">
-      <div class="form-group " v-show="htmlPreview !== null">
+      <div class="form-group" v-show="htmlPreview !== null">
         <label>メッセージ通知文</label>
-        <input type="text" name="altText" class="form-control alt-text-input" placeholder="メッセージ通知文を入力してください"  v-validate="{required: isValidate}" v-model="altText"/>
+        <input
+          type="text"
+          name="altText"
+          class="form-control alt-text-input"
+          placeholder="メッセージ通知文を入力してください"
+          v-validate="{ required: isValidate }"
+          v-model="altText"
+        />
       </div>
-      <div  class="flex-container">
+      <div class="flex-container">
         <div class="form-group flex-message preview" v-show="htmlPreview !== null">
           <div v-html="data.html_template"></div>
         </div>
         <div class="col-sm-6 form-group controls">
-          <div  v-for="item in mapObject" :key="item.id" class="group-action-flex-message" :class="item.id" @click="changeActive(item.id)">
-            <flexmessage-text-action v-if="item.type === 'text'"
-              :data="item"
-              :name="item.id"
-              @input="editObject" />
+          <div
+            v-for="item in mapObject"
+            :key="item.id"
+            class="group-action-flex-message"
+            :class="item.id"
+            @click="changeActive(item.id)"
+          >
+            <flexmessage-text-action v-if="item.type === 'text'" :data="item" :name="item.id" @input="editObject" />
 
-            <flexmessage-button-action v-if="item.type === 'button'"
-              :data="item"
-              :name="item.id"
-              @input="editObject" />
+            <flexmessage-button-action v-if="item.type === 'button'" :data="item" :name="item.id" @input="editObject" />
 
-            <flexmessage-image-action v-if="item.type === 'image'"
+            <flexmessage-image-action
+              v-if="item.type === 'image'"
               :data="item"
               :name="item.id"
               :aspectMode="aspectMode"
-              @input="editObject" />
+              @input="editObject"
+            />
 
-            <flexmessage-box-action v-if="item.type === 'box'"
-              :data="item"
-              :name="item.id"
-              @input="editObject" />
-
+            <flexmessage-box-action v-if="item.type === 'box'" :data="item" :name="item.id" @input="editObject" />
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -48,8 +60,10 @@
 <script>
 import { omitDeep } from '@/core/omitDeep';
 import Util from '@/core/util';
+import RequiredMark from '../common/RequiredMark.vue';
 
 export default {
+  components: { RequiredMark },
   props: {
     data: Object,
     isValidate: Boolean
@@ -146,7 +160,7 @@ export default {
       for (const key of Object.keys(this.mapObject)) {
         const $div = $html.find('#' + key);
         $div.addClass('flex-editor');
-        $div.click((ev) => {
+        $div.click(ev => {
           that.chooseObject(key);
           ev.stopPropagation();
         });
@@ -157,7 +171,7 @@ export default {
       this.currentEditor = this.mapObject[id];
 
       this.$nextTick(async() => {
-        this.$validator.validateAll().then((passed) => {
+        this.$validator.validateAll().then(passed => {
           const isError = this.errors.items.find(item => item.field.includes(id));
           if (isError) {
             this.passedObject[id] = false;
@@ -171,17 +185,26 @@ export default {
       });
 
       this.htmlPreview.find('.flex-editor-active').removeClass('flex-editor-active');
-      $('.form-group').find('.active-flex-el').removeClass('active-flex-el');
+      $('.form-group')
+        .find('.active-flex-el')
+        .removeClass('active-flex-el');
 
       const className = '.' + id;
-      $('.card-container').parent().removeClass('active');
-      $(className + '-expand').parent().addClass('active');
+      $('.card-container')
+        .parent()
+        .removeClass('active');
+      $(className + '-expand')
+        .parent()
+        .addClass('active');
 
       $('html,body').animate({ scrollTop: $(className).offset().top - 100 }, 'slow');
       this.htmlPreview.find('div#' + id).addClass('flex-editor-active');
       $(className).addClass('active-flex-el');
 
-      const style = this.htmlPreview.find('div#' + id).find('span').css('background-size');
+      const style = this.htmlPreview
+        .find('div#' + id)
+        .find('span')
+        .css('background-size');
       this.aspectMode = style;
     },
 
@@ -190,7 +213,7 @@ export default {
 
       // view update
       if (value.type === 'text') {
-        this.FontSizeClass.forEach((item) => {
+        this.FontSizeClass.forEach(item => {
           this.htmlPreview.find('div#' + value.id).removeClass('Ex' + item);
         });
         this.htmlPreview.find('div#' + value.id).removeAttr('style');
@@ -198,8 +221,7 @@ export default {
           this.htmlPreview.find('div#' + value.id).css('font-size', value.size);
         } else if (value.size.match(Util.regexFontSizeUsingWord())) {
           const sizeClass =
-            value.size.slice(0, value.size.length - 1).toUpperCase() +
-            value.size.slice(-1).toLowerCase();
+            value.size.slice(0, value.size.length - 1).toUpperCase() + value.size.slice(-1).toLowerCase();
           this.htmlPreview.find('div#' + value.id).addClass('Ex' + sizeClass);
         }
         this.htmlPreview.find('div#' + value.id + ' p').text(value.text);
@@ -216,7 +238,7 @@ export default {
 
       // validate
       this.$nextTick(async() => {
-        this.$validator.validateAll().then((passed) => {
+        this.$validator.validateAll().then(passed => {
           const isError = this.errors.items.find(item => item.field.includes(value.id));
           if (isError) {
             this.passedObject[value.id] = false;
@@ -300,16 +322,20 @@ export default {
 
     changeActive(id) {
       this.htmlPreview.find('.flex-editor-active').removeClass('flex-editor-active');
-      $('.form-group').find('.active-flex-el').removeClass('active-flex-el');
+      $('.form-group')
+        .find('.active-flex-el')
+        .removeClass('active-flex-el');
 
       const className = '.' + id;
       this.htmlPreview.find('div#' + id).addClass('flex-editor-active');
       $(className).addClass('active-flex-el');
-      const style = this.htmlPreview.find('div#' + id).find('span').css('background-size');
+      const style = this.htmlPreview
+        .find('div#' + id)
+        .find('span')
+        .css('background-size');
       this.aspectMode = style;
     }
   }
-
 };
 </script>
 
@@ -319,8 +345,8 @@ export default {
       border: 1px solid red !important;
     }
     .flex-editor {
-        border: 1px solid transparent;
-      }
+      border: 1px solid transparent;
+    }
 
     .flex-editor:hover {
       border: 1px solid #0a90eb;
@@ -329,15 +355,15 @@ export default {
       border-color: #0a90eb;
     }
 
-    .preview *::-webkit-scrollbar{
+    .preview *::-webkit-scrollbar {
       display: inherit !important;
       color: inherit;
 
       height: 8px;
       margin-top: 2px;
-
     }
-    .preview ::-webkit-scrollbar-thumb { /* leave most bars alone */
+    .preview ::-webkit-scrollbar-thumb {
+      /* leave most bars alone */
       background-color: grey;
       border-radius: 6px;
     }
@@ -360,7 +386,6 @@ export default {
 
   .controls {
     max-width: 500px;
-
   }
 
   .flex-container {
@@ -378,25 +403,24 @@ export default {
     .controls {
       max-width: 100%;
       width: 100%;
-
     }
     .flex-container {
       flex-direction: column;
     }
   }
 
-.group-action-flex-message {
-  border: thin solid #ccd0d2;
-  padding: 10px;
-  margin-bottom: 20px;
-}
+  .group-action-flex-message {
+    border: thin solid #ccd0d2;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
 
-.active-flex-el {
-  border-color: 2px solid #5bc0de;
-  box-shadow: 0 0 2px 2px rgba(91, 192, 222, 0.6);
-}
+  .active-flex-el {
+    border-color: 2px solid #5bc0de;
+    box-shadow: 0 0 2px 2px rgba(91, 192, 222, 0.6);
+  }
 
-.alt-text-input {
-  max-width: 985px;
-}
+  .alt-text-input {
+    max-width: 985px;
+  }
 </style>

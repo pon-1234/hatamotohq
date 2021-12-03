@@ -1,11 +1,14 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <select class="form-control w-100" @change="onOptionChanged">
-      <option v-for="(option, index) in options" :key="index" :value="option.value">
-        {{ option.value }}
-      </option>
-    </select>
+    <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
+      <select class="form-control w-100" :name="`answers[${qnum}][answer]`" v-model="answer">
+        <option v-for="(option, index) in options" :key="index" :value="option.value">
+          {{ option.value }}
+        </option>
+      </select>
+      <error-message :message="errors[0]"></error-message>
+    </ValidationProvider>
   </div>
 </template>
 
@@ -13,9 +16,19 @@
 export default {
   props: ['question', 'qnum'],
 
+  data() {
+    return {
+      answer: null
+    };
+  },
+
+  created() {
+    this.answer = this.options && this.options.length > 0 ? this.options[0].value : null;
+  },
+
   computed: {
     isRequired() {
-      return this.question ? this.question.required : '';
+      return this.question ? this.question.required : false;
     },
 
     content() {
@@ -32,12 +45,6 @@ export default {
 
     options() {
       return this.content ? this.content.options : [];
-    }
-  },
-
-  methods: {
-    onOptionChanged() {
-      return 0;
     }
   }
 };

@@ -1,10 +1,21 @@
 <template>
-  <div class="fw-1200">
+  <div class="mxw-1200" :key="contentKey">
     <div class="card">
       <div class="card-header left-border">
         <h3 class="card-title">基本設定</h3>
       </div>
       <div class="card-body">
+        <div class="form-group d-flex align-items-center">
+          <label class="fw-200">フォルダー</label>
+          <div class="flex-grow-1">
+            <select v-model="autoResponseData.folder_id" class="form-control fw-300">
+              <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                {{ folder.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group d-flex">
           <label class="fw-200">自動応答名<required-mark /></label>
           <div class="flex-grow-1">
@@ -12,9 +23,10 @@
               type="text"
               name="name"
               class="form-control"
-              v-model="autoResponseData.name"
+              v-model.trim="autoResponseData.name"
               placeholder="自動応答名を入力してください"
-              v-validate="'required'"
+              v-validate="'required|max:64'"
+              maxlength="65"
               data-vv-as="自動応答名"
             />
             <error-message :message="errors.first('name')"></error-message>
@@ -22,7 +34,7 @@
         </div>
 
         <div class="form-group d-flex">
-          <label class="fw-200">設定</label>
+          <label class="fw-200">自動応答 ON/OFF</label>
           <div class="flex-grow-1 d-flex">
             <input
               type="checkbox"
@@ -45,7 +57,7 @@
         <h3>反応するキーワードを設定する</h3>
       </div>
       <div class="card-body">
-        <div class="form-group d-flex flex-column">
+        <div class="form-group d-flex flex-column m-0">
           <label class="mb10">キーワード<required-mark /></label>
           <b-form-tags
             size="md"
@@ -56,6 +68,10 @@
             :class="errors.first('bot-tag') ? 'invalid-box' : ''"
             placeholder="キーワードを入力してください"
             separator=" ,;"
+            :tag-validator="tagValidator"
+            invalid-tag-text="無効なタグ"
+            duplicateTagText="タグはすでに存在します"
+            limitTagsText="キーワード数が上限に達しました"
             add-on-change
             :add-button-text="'追加'"
           >
@@ -67,9 +83,10 @@
             v-model="autoResponseData.keywords"
             v-validate="'required'"
           />
-          <div>
-            <small
-              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03</small
+          <div class="mt-1">
+            <small class="text-muted font-12"
+              >キーワードはコンマ(半角)区切りで複数設定可能です。【例】キーワード01,キーワード02,キーワード03<br />
+              タグの長さは1〜20文字です</small
             >
           </div>
           <span class="invalid-box-label" v-if="error"
@@ -88,7 +105,7 @@
       </div>
       <div class="card-body">
         <div class="form-border">
-          <div class="form-group" :key="msgContentKey">
+          <div class="form-group">
             <label>メッセージ本文</label>
             <div>
               <div class="btn btn-primary" data-toggle="modal" data-target="#modal-template">テンプレートから作成</div>
@@ -120,7 +137,9 @@
         </div>
       </div>
       <div class="card-footer">
-        <button type="submit" class="btn btn-success fw-120" @click="submitCreate()">保存</button>
+        <div class="btn btn-success fw-120" @click="submitCreate()">
+          {{ !auto_response_id ? "登録" : "保存" }}
+        </div>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <message-preview />
@@ -128,8 +147,9 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: {
@@ -140,9 +160,10 @@ export default {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
       MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
       loading: true,
-      msgContentKey: 0,
+      contentKey: 0,
       error: null,
       autoResponseData: {
+        folder_id: null,
         name: '',
         status: 'enabled',
         keywords: [],
@@ -152,6 +173,11 @@ export default {
   },
   provide() {
     return { parentValidator: this.$validator };
+  },
+
+  async created() {
+    this.autoResponseData.folder_id = Util.getParamFromUrl('folder_id');
+    await this.getAutoResponses();
   },
 
   async beforeMount() {
@@ -173,58 +199,77 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState('autoResponse', {
+      folders: state => state.folders
+    })
+  },
+
   methods: {
     ...mapActions('autoResponse', [
       'getAutoResponse',
       'createAutoResponse',
       'updateAutoResponse',
-      'setPreviewContent'
+      'setPreviewContent',
+      'getAutoResponses'
     ]),
 
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
-      this.msgContentKey++;
+      this.contentKey++;
+    },
+
+    tagValidator(tag) {
+      // Restrict input %
+      if (tag.includes('%')) {
+        return false;
+      } else {
+        // Individual tag validator function
+        return tag === tag.toLowerCase() && tag.length <= 20;
+      }
     },
 
     async submitCreate() {
       const result = await this.$validator.validateAll();
-
       if (!result) {
-        $('input, textarea').each(
-          function(index) {
-            var input = $(this);
-            if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-              $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-              return false;
-            }
-          }
-        );
-        return;
-      };
+        return ViewHelper.scrollToRequiredField(false);
+      }
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
       };
       if (this.auto_response_id) {
-        await this.updateAutoResponse(data);
+        const response = await this.updateAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の変更は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+          );
+        } else {
+          window.toastr.error('自動応答の変更は失敗しました。');
+        }
       } else {
-        await this.createAutoResponse(data);
+        const response = await this.createAutoResponse(data);
+        if (response) {
+          Util.showSuccessThenRedirect(
+            '自動応答の作成は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+          );
+        } else {
+          window.toastr.error('自動応答の作成は失敗しました。');
+        }
       }
     },
 
     setDefaultMessage() {
-      this.autoResponseData.messages.push(
-        {
-          message_type_id: this.MessageTypeIds.Text,
-          content: {
-            type: this.MessageType.Text,
-            text: ''
-          }
+      this.autoResponseData.messages.push({
+        message_type_id: this.MessageTypeIds.Text,
+        content: {
+          type: this.MessageType.Text,
+          text: ''
         }
-      );
+      });
     },
 
     onMessageContentChanged({ index, content }) {

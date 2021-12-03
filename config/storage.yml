@@ -14,6 +14,12 @@ amazon:
   region: ap-northeast-1
   bucket: <%= ENV["S3_BUCKET_NAME"] %>
 # Remember not to checkin your GCS keyfile to a repository
+google:
+  service: GCS
+  project: insight-line-crm
+  credentials: <%= Rails.root.join("config/secrets/gcs-stg.json") %>
+  bucket: line-cms-stg
+  public: true
 # google:
 #   service: GCS
 #   project: your_project

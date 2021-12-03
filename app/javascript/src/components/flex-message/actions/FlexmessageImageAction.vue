@@ -38,7 +38,7 @@
         <h5 class="card-header">アクション設定</h5>
         <div class="card-body">
           <div class="form-group">
-            <message-action-editor
+            <action-editor
               :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
               :name="name"
               :value="action"

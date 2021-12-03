@@ -1,14 +1,18 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <textarea
-      rows="3"
-      name="survey-name"
-      class="form-control mt-2"
-      placeholder="入力してください"
-      v-validate="'required|max:255'"
-      data-vv-as="答え"
-    />
+    <ValidationProvider name="答え" :rules="{ required: isRequired, max: 2000 }" v-slot="{ errors }">
+      <textarea
+        rows="3"
+        :name="`answers[${qnum}][answer]`"
+        class="form-control mt-2"
+        placeholder="入力してください"
+        v-validate="'required|max:255'"
+        v-model.trim="answer"
+        data-vv-as="答え"
+      />
+      <error-message :message="errors[0]"></error-message>
+    </ValidationProvider>
   </div>
 </template>
 
@@ -18,7 +22,7 @@ export default {
 
   computed: {
     isRequired() {
-      return this.question ? this.question.required : '';
+      return this.question ? this.question.required : false;
     },
 
     content() {

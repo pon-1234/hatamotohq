@@ -5,7 +5,7 @@
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">メッセージ</li>
           <li class="breadcrumb-item"><%= link_to 'リマインダ一覧', user_reminders_path %></li>
-          <li class="breadcrumb-item active"><%= link_to '配信タイミング一覧', user_episodes_path(id: @reminder.id) %></li>
+          <li class="breadcrumb-item active"><%= link_to '配信タイミング一覧', user_reminder_episodes_path(id: @reminder.id) %></li>
           <li class="breadcrumb-item active">新規配信タイミング登録</li>
         </ol>
       </div>

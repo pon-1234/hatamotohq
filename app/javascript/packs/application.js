@@ -14,6 +14,7 @@ import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
+import 'bootstrap/js/dist/modal';
 
 import {
   BootstrapVue,
@@ -24,6 +25,7 @@ import {
 import * as constant from '@/core/constant';
 import 'vue-select/dist/vue-select.css';
 import store from '../src/stores';
+import '../src/filters';
 import Rails from '@rails/ujs';
 
 Rails.start();
@@ -39,7 +41,6 @@ Object.keys(constant).forEach((key) => {
   Vue.prototype[key] = constant[key];
 });
 
-require('turbolinks').start();
 require('@rails/activestorage').start();
 require('chart.js');
 
@@ -73,6 +74,10 @@ Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 Validator.localize('ja', ja);
+Validator.extend('email', value => {
+  var pattern = new RegExp('^\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$');
+  return !!pattern.test(value);
+});
 // END: vee-validation configuration
 
 // Automatically import components
@@ -86,7 +91,7 @@ files.keys().map((key) => {
 });
 
 // We have to re-create vue app when change the page url
-document.addEventListener('turbolinks:load', () => {
+jQuery(() => {
   new Vue({
     locale: 'ja',
     store

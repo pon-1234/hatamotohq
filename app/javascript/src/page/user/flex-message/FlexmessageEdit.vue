@@ -31,7 +31,7 @@
       />
 
       <div class="row-form-btn d-flex justify-content-center">
-        <button type="submit" class="btn btn-submit btn-block" @click="save">保存</button>
+        <div class="btn btn-submit btn-block" @click="save">保存</div>
       </div>
     </div>
     <div v-else>LOADING..</div>

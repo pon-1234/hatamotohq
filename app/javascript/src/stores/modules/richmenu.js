@@ -15,8 +15,10 @@ export const mutations = {
   },
 
   updateFolder(state, folder) {
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+    const item = state.folders.find(item => item.id === folder.id);
+    if (item) {
+      item.name = folder.name;
+    }
   },
 
   deleteFolder(state, id) {
@@ -42,6 +44,7 @@ export const actions = {
       const folder = await FolderAPI.create(payload);
       folder.rich_menus = [];
       context.commit('pushFolder', folder);
+      return folder;
     } catch (error) {
       return null;
     }
@@ -52,6 +55,7 @@ export const actions = {
       const folder = await FolderAPI.update(payload);
       folder.rich_menus = [];
       context.commit('updateFolder', folder);
+      return folder;
     } catch (error) {
       return null;
     }

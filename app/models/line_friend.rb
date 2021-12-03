@@ -32,6 +32,8 @@ class LineFriend < ApplicationRecord
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
   has_many :messages, as: :sender
+  has_many :survey_responses
+  has_many :friend_variables
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }
@@ -40,8 +42,8 @@ class LineFriend < ApplicationRecord
 
   # Scope
   enum status: { active: 'active', blocked: 'blocked' }
-  scope :created_at_gteq, ->(time) { where('created_at >= ?', time) }
-  scope :created_at_lteq, ->(time) { where('created_at <= ?', time) }
+  scope :created_at_gteq, ->(date_str) { where('line_friends.created_at >= ?', date_str&.to_date&.beginning_of_day) }
+  scope :created_at_lteq, ->(date_str) { where('line_friends.created_at <= ?', date_str&.to_date&.end_of_day) }
 
   after_create_commit :exec_after_create_commit
 
@@ -52,11 +54,14 @@ class LineFriend < ApplicationRecord
   def push_event_data
     {
       id: id,
-      name: display_name,
+      name: name,
+      display_name: display_name,
       avatar_url: line_picture_url,
       type: 'friend',
       note: note,
-      locked: locked
+      locked: locked,
+      created_at: created_at,
+      tags: self.tags.select(:id, :name)
     }
   end
 
@@ -97,8 +102,40 @@ class LineFriend < ApplicationRecord
   end
 
   def set_reminder!(reminder_id, goal)
+    reminder = Reminder.find(reminder_id)
+    # Cancel all active reminding
+    active_remindings = reminder.remindings.where("remindings.channel_id = ? AND remindings.status = 'active'", self.channel.id)
+    active_remindings.each { |_| _.cancel }
     reminding = Reminding.new(channel: self.channel, reminder_id: reminder_id, goal: goal)
     reminding.save!
+    reminding
+  end
+
+  def variables
+    FriendVariable.find_by_sql(['
+      WITH rfv AS (
+      SELECT
+        fv.*, ROW_NUMBER() OVER (PARTITION BY variable_id, line_friend_id
+      ORDER BY
+        id DESC) AS rn
+      FROM
+        friend_variables AS fv )
+      SELECT
+        variables.name AS name,
+        rfv.value AS value,
+        variables.type AS type
+      FROM
+        variables
+      LEFT JOIN rfv ON
+        variables .id = rfv.variable_id
+        AND rn = 1
+        AND rfv.line_friend_id = ?
+      WHERE variables.line_account_id = ?
+    ', self.id, self.line_account_id]).map { |_| _.attributes }
+  end
+
+  def responses_count_for(survey_id)
+    self.survey_responses.where(survey_id: survey_id).count
   end
 
   private

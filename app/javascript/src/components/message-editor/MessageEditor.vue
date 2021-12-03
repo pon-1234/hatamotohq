@@ -172,7 +172,7 @@ export default {
     },
 
     removeMessage() {
-      this.$emit('remove', { index: this.index });
+      this.$emit('remove', this.index);
     },
 
     moveUp() {

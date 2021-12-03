@@ -2,6 +2,7 @@
 
 class User::MediasController < User::ApplicationController
   load_and_authorize_resource
+  before_action :find_media, only: [:variant]
 
   # GET /user/medias
   def index
@@ -37,5 +38,9 @@ class User::MediasController < User::ApplicationController
         :file,
         :type
       )
+    end
+
+    def find_media
+      @media = Media.find(params[:id])
     end
 end

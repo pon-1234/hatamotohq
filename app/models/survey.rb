@@ -34,6 +34,7 @@ class Survey < ApplicationRecord
   default_scope { order(created_at: :desc) }
   belongs_to :line_account
   belongs_to :folder
+  has_many :survey_responses
   has_many :survey_questions, dependent: :destroy
   accepts_nested_attributes_for :survey_questions, allow_destroy: true
 
@@ -48,12 +49,48 @@ class Survey < ApplicationRecord
   before_create do
     self.code = generate_code
   end
-  after_create_commit :exec_after_create_commit
+
+  def destroyable?
+    self.survey_responses.count == 0
+  end
+
+  def responses_count
+    survey_responses.count
+  end
+
+  def users_count
+    survey_responses.pluck(:line_friend_id).uniq.size
+  end
+
+  def answered_users
+    LineFriend.distinct.joins(:survey_responses)
+      .references(:survey_responses)
+      .where('survey_responses.line_friend_id = line_friends.id AND survey_responses.survey_id = ?', self.id)
+  end
+
+  def responses
+    self.survey_responses.includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])
+  end
+
+  def responses_by(friend_id)
+    self.survey_responses.where('survey_responses.line_friend_id = ?', friend_id).includes([:line_friend, survey_answers: [:survey_question, file_attachment: [:blob]]])
+  end
+
+  def clone!
+    new_survey = self.dup
+    new_survey.name = self.name + '（コピー）'
+    new_survey.status = :draft
+    new_survey.save!
+    self.survey_questions&.each { |question| question.clone_to!(new_survey.id) }
+    new_survey
+  end
+
+  def toggle_status
+    self.status = self.published? ? 'unpublished' : 'published'
+    self.save
+  end
 
   private
-    def exec_after_create_commit
-    end
-
     def generate_code
       loop do
         code = Devise.friendly_token(10)

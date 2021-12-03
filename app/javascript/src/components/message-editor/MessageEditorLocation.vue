@@ -8,7 +8,7 @@
         name="location-title"
         class="form-control"
         maxlength="101"
-        v-model="defaults.title"
+        v-model.trim="defaults.title"
         v-validate="'required|max:100'"
         data-vv-as="タイトル"
       />
@@ -23,7 +23,7 @@
             rows="2"
             maxlength="101"
             placeholder="住所を入力してください"
-            v-model="defaults.address"
+            v-model.trim="defaults.address"
             v-validate="'required|max:100'"
             data-vv-as="住所"
             name="location-description"
@@ -134,7 +134,7 @@ export default {
       const _this = this;
       // eslint-disable-next-line no-undef
       return Promise.all(
-        _.map(theLocations, (addr) => {
+        _.map(theLocations, addr => {
           // eslint-disable-next-line no-undef
           var geocoder = new google.maps.Geocoder();
 
@@ -144,16 +144,10 @@ export default {
           };
 
           return new Promise(function(resolve, reject) {
-            geocoder.geocode({ location: locationss }, function(
-              results,
-              status
-            ) {
+            geocoder.geocode({ location: locationss }, function(results, status) {
               if (status === 'OK') {
                 if (results[0]) {
-                  _this.defaults.address = results[0].formatted_address.substring(
-                    0,
-                    89
-                  );
+                  _this.defaults.address = results[0].formatted_address.substring(0, 89);
                   return results[0].formatted_address;
                 } else {
                   console.log(status);
@@ -164,12 +158,12 @@ export default {
             });
           });
         })
-      ).then((data) => {
+      ).then(data => {
         console.log(data);
       });
     },
     geolocate() {
-      navigator.geolocation.getCurrentPosition((position) => {
+      navigator.geolocation.getCurrentPosition(position => {
         this.center = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -214,24 +208,19 @@ export default {
       secondChild.style.margin = '5px';
       secondChild.style.width = '18px';
       secondChild.style.height = '18px';
-      secondChild.style.backgroundImage =
-        'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
+      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
       secondChild.style.backgroundSize = '180px 18px';
       secondChild.style.backgroundPosition = '0px 0px';
       secondChild.style.backgroundRepeat = 'no-repeat';
       secondChild.id = 'you_location_img';
       firstChild.appendChild(secondChild);
-      window.google.maps.event.addListener(
-        this.$refs.map.$mapObject,
-        'center_changed',
-        function() {
-          secondChild.style['background-position'] = '0 0';
-        }
-      );
+      window.google.maps.event.addListener(this.$refs.map.$mapObject, 'center_changed', function() {
+        secondChild.style['background-position'] = '0 0';
+      });
       var ref = this;
       firstChild.addEventListener('click', function() {
         ref.rerender = false;
-        navigator.geolocation.getCurrentPosition((position) => {
+        navigator.geolocation.getCurrentPosition(position => {
           const marker = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -245,9 +234,7 @@ export default {
         });
       });
       controlDiv.index = 1;
-      this.$refs.map.$mapObject.controls[
-        window.google.maps.ControlPosition.RIGHT_BOTTOM
-      ].push(controlDiv);
+      this.$refs.map.$mapObject.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
     }
   }
 };

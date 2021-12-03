@@ -8,6 +8,7 @@
 #  folder_id       :bigint
 #  line_account_id :bigint
 #  name            :string(255)
+#  episodes_count  :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

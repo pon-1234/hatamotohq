@@ -1,16 +1,28 @@
 export default {
-  list: () => {
+  list: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
       method: 'GET',
+      data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
   get: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
+  },
+
+  getByCode: (code) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/surveys/${code}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -26,7 +38,7 @@ export default {
     });
   },
 
-  update(payload) {
+  update: (payload) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/surveys/${payload.id}`,
       method: 'PATCH',
@@ -34,68 +46,68 @@ export default {
       contentType: 'application/json'
     });
   },
-  delete(query) {
+
+  delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/delete'),
-      method: 'DELETE',
-      data: JSON.stringify(query),
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      method: 'DELETE'
+    });
+  },
+
+  postAnswer(payload) {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/surveys/${payload.code}/${payload.friend_id}`,
+      method: 'POST',
+      data: JSON.stringify(payload),
       contentType: 'application/json'
     });
   },
 
-  updateStatus(data) {
+  copy: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/status'),
-      method: 'PUT',
-      data: JSON.stringify(data),
-      contentType: 'application/json'
-    });
-  },
-  getCustomers(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/customers')
-    });
-  },
-
-  answersOfCustomer(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/answersOfCustomer')
-    });
-  },
-  copy(query) {
-    return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + query.id + '/copy'),
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/copy`,
       method: 'POST',
       contentType: 'application/json'
     });
   },
 
-  addSurveyProfile(data) {
+  toggleStatus: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/addProfileTemplate'),
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/toggle_status`,
       method: 'POST',
-      data: JSON.stringify(data),
       contentType: 'application/json'
     });
   },
 
-  getSurveyProfiles(query) {
-    query._pid = btoa('/surveys/getProfileTemplates');
-    return window.$.get(process.env.MIX_ROOT_PATH, query);
-  },
-
-  updateSurveyProfile(data) {
+  answeredUsers: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/' + data.id + '/updateSurveyProfile'),
-      method: 'PUT',
-      data: JSON.stringify(data),
-      contentType: 'application/json'
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.id}/answered_users`,
+      method: 'GET',
+      dataType: 'json',
+      data: query,
+      contentType: 'application/json',
+      cache: false
     });
   },
 
-  friendAnswers(query) {
+  responses: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/surveys/friendAnswers/' + query.id)
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.id}/responses`,
+      method: 'GET',
+      dataType: 'json',
+      data: query,
+      contentType: 'application/json',
+      cache: false
+    });
+  },
+
+  friendResponses: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.survey_id}/${query.friend_id}/responses`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
     });
   }
 };

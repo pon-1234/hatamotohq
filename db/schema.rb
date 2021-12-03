@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_043150) do
+ActiveRecord::Schema.define(version: 2021_12_02_094627) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -90,8 +90,6 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.bigint 'folder_id'
     t.string 'name'
     t.string 'status'
-    t.string 'keyword'
-    t.string 'keyword_status'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
@@ -122,6 +120,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.text 'logs'
     t.index ['line_account_id'], name: 'index_broadcasts_on_line_account_id'
   end
 
@@ -205,6 +204,37 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.index ['line_account_id'], name: 'index_folders_on_line_account_id'
   end
 
+  create_table 'friend_variables', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_friend_id'
+    t.bigint 'variable_id'
+    t.bigint 'survey_answer_id'
+    t.text 'value'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_friend_variables_on_line_friend_id'
+    t.index ['survey_answer_id'], name: 'index_friend_variables_on_survey_answer_id'
+    t.index ['variable_id'], name: 'index_friend_variables_on_variable_id'
+  end
+
+  create_table 'insights', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.string 'type', default: 'daily'
+    t.date 'date'
+    t.integer 'broadcast'
+    t.integer 'targeting'
+    t.integer 'auto_response'
+    t.integer 'welcome_response'
+    t.integer 'chat'
+    t.integer 'api_broadcast'
+    t.integer 'api_push'
+    t.integer 'api_multicast'
+    t.integer 'api_narrowcast'
+    t.integer 'api_reply'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_account_id'], name: 'index_insights_on_line_account_id'
+  end
+
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'owner_id'
     t.string 'line_user_id'
@@ -212,7 +242,6 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.string 'display_name'
     t.string 'channel_id'
     t.string 'channel_secret'
-    t.string 'line_channel_access_token'
     t.string 'invite_url'
     t.string 'webhook_url'
     t.string 'liff_id'
@@ -301,7 +330,9 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
   create_table 'reminder_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'reminding_id'
     t.bigint 'episode_id'
+    t.string 'status'
     t.datetime 'schedule_at'
+    t.boolean 'is_last', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['episode_id'], name: 'index_reminder_events_on_episode_id'
@@ -312,6 +343,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.bigint 'folder_id'
     t.bigint 'line_account_id'
     t.string 'name'
+    t.integer 'episodes_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['folder_id'], name: 'index_reminders_on_folder_id'
@@ -322,6 +354,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.bigint 'channel_id'
     t.bigint 'reminder_id'
     t.datetime 'goal'
+    t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['channel_id'], name: 'index_remindings_on_channel_id'
@@ -395,7 +428,7 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
     t.string 'title'
-    t.string 'description'
+    t.text 'description'
     t.string 'status', default: 'disabled'
     t.string 'mode', default: 'time'
     t.string 'type', default: 'manual'
@@ -408,51 +441,14 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.index ['line_account_id'], name: 'index_scenarios_on_line_account_id'
   end
 
-  create_table 'survey_customer_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'survey_id'
+  create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
-    t.bigint 'survey_customer_id'
-    t.text 'content', size: :long
+    t.json 'answer'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_customer_answers_on_line_account_id'
-    t.index ['survey_customer_id'], name: 'index_survey_customer_answers_on_survey_customer_id'
-    t.index ['survey_id'], name: 'index_survey_customer_answers_on_survey_id'
-    t.index ['survey_question_id'], name: 'index_survey_customer_answers_on_survey_question_id'
-  end
-
-  create_table 'survey_customers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'survey_id'
-    t.bigint 'line_account_id'
-    t.integer 'answer_num', default: 0
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_customers_on_line_account_id'
-    t.index ['survey_id'], name: 'index_survey_customers_on_survey_id'
-  end
-
-  create_table 'survey_profile_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'folder_id'
-    t.string 'field_name'
-    t.string 'description'
-    t.string 'type'
-    t.string 'status', default: 'enable'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['folder_id'], name: 'index_survey_profile_templates_on_folder_id'
-    t.index ['line_account_id'], name: 'index_survey_profile_templates_on_line_account_id'
-  end
-
-  create_table 'survey_profiles', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.bigint 'survey_profile_template_id'
-    t.text 'content', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_account_id'], name: 'index_survey_profiles_on_line_account_id'
-    t.index ['survey_profile_template_id'], name: 'index_survey_profiles_on_survey_profile_template_id'
+    t.index ['survey_question_id'], name: 'index_survey_answers_on_survey_question_id'
+    t.index ['survey_response_id'], name: 'index_survey_answers_on_survey_response_id'
   end
 
   create_table 'survey_questions', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -465,6 +461,16 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['survey_id'], name: 'index_survey_questions_on_survey_id'
+  end
+
+  create_table 'survey_responses', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'survey_id'
+    t.bigint 'line_friend_id'
+    t.integer 'answer_count', default: 0
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_survey_responses_on_line_friend_id'
+    t.index ['survey_id'], name: 'index_survey_responses_on_survey_id'
   end
 
   create_table 'surveys', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -556,6 +562,19 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
 
+  create_table 'variables', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.bigint 'folder_id'
+    t.string 'name'
+    t.string 'type'
+    t.string 'default'
+    t.integer 'friends_count', default: 0
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['folder_id'], name: 'index_variables_on_folder_id'
+    t.index ['line_account_id'], name: 'index_variables_on_line_account_id'
+  end
+
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'auto_response_keywords', 'auto_responses'
   add_foreign_key 'auto_response_messages', 'auto_responses'
@@ -571,6 +590,10 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
   add_foreign_key 'flex_message_sent_logs', 'line_accounts'
   add_foreign_key 'flex_messages', 'line_accounts'
   add_foreign_key 'folders', 'line_accounts'
+  add_foreign_key 'friend_variables', 'line_friends'
+  add_foreign_key 'friend_variables', 'survey_answers'
+  add_foreign_key 'friend_variables', 'variables'
+  add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
@@ -591,17 +614,11 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
   add_foreign_key 'scenario_messages', 'scenarios'
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'
-  add_foreign_key 'survey_customer_answers', 'line_accounts'
-  add_foreign_key 'survey_customer_answers', 'survey_customers'
-  add_foreign_key 'survey_customer_answers', 'survey_questions'
-  add_foreign_key 'survey_customer_answers', 'surveys'
-  add_foreign_key 'survey_customers', 'line_accounts'
-  add_foreign_key 'survey_customers', 'surveys'
-  add_foreign_key 'survey_profile_templates', 'folders'
-  add_foreign_key 'survey_profile_templates', 'line_accounts'
-  add_foreign_key 'survey_profiles', 'line_accounts'
-  add_foreign_key 'survey_profiles', 'survey_profile_templates'
+  add_foreign_key 'survey_answers', 'survey_questions'
+  add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_questions', 'surveys'
+  add_foreign_key 'survey_responses', 'line_friends'
+  add_foreign_key 'survey_responses', 'surveys'
   add_foreign_key 'surveys', 'folders'
   add_foreign_key 'surveys', 'line_accounts'
   add_foreign_key 'taggings', 'tags'
@@ -610,4 +627,6 @@ ActiveRecord::Schema.define(version: 2021_10_12_043150) do
   add_foreign_key 'template_messages', 'templates'
   add_foreign_key 'templates', 'folders'
   add_foreign_key 'templates', 'line_accounts'
+  add_foreign_key 'variables', 'folders'
+  add_foreign_key 'variables', 'line_accounts'
 end

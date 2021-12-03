@@ -10,7 +10,7 @@
         maxlength="241"
         autocomplete="off"
         type="text"
-        v-model="messageData.text"
+        v-model.trim="messageData.text"
         v-validate="'required|max:240'"
         data-vv-as="質問文"
       />
@@ -40,13 +40,13 @@
         :id="`messageAction${index}`"
       >
         <div>
-          <message-action-editor
+          <action-editor
             :index="index"
             :name="`message${indexParent}Confirm${index}`"
             :value="item"
             :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
             @input="changeAction(index, ...arguments)"
-          ></message-action-editor>
+          ></action-editor>
         </div>
       </div>
     </div>

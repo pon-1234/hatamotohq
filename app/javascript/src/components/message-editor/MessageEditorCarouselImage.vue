@@ -4,26 +4,22 @@
       <div class="panel panel-default pb20 mb-0">
         <!-- パネルメニュー -->
         <ul class="nav nav-tabs nav-bordered" role="tablist">
-          <li
-            role="presentation"
-            v-for="(item, index) in messageData.columns"
-            :key="index"
-            @click="changeSelected(index)"
-          >
+          <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
             <a
               aria-controls="text"
               role="tab"
               data-toggle="tab"
               aria-expanded="true"
               :class="selected === index ? 'active' : ''"
+              @click="changeSelected(index)"
             >
               パネル{{ index + 1 }}
-              <span @click="removeColumn(index)" v-if="messageData.columns.length > 1">
-                <i class="fa fa-times"></i>
-              </span>
             </a>
+            <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
+              <i class="dripicons-trash"></i>
+            </span>
           </li>
-          <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+          <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>
           </li>
         </ul>
@@ -96,7 +92,7 @@
             <div class="col-sm-8">
               <div class="form-group">
                 <label>選択後の挙動</label>
-                <message-action-editor
+                <action-editor
                   :name="'image_carousel' + indexColum"
                   :value="column.action"
                   @input="changeActionColumn(indexColum, $event)"
@@ -165,7 +161,6 @@
   </div>
 </template>
 <script>
-
 import { ActionMessage } from '../../core/constant';
 
 export default {
@@ -220,8 +215,10 @@ export default {
     removeColumn(index) {
       this.messageData.columns.splice(index, 1);
 
-      if (this.selected === this.messageData.columns.length) {
-        this.selected -= 1;
+      if (index === 0) {
+        this.selected = index;
+      } else if (this.selected === this.messageData.columns.length) {
+        this.selected = index - 1;
       }
     },
 
@@ -267,11 +264,15 @@ export default {
     },
 
     coppyAllThumb(index) {
-      this.messageData.columns.forEach(item => { item.imageUrl = this.messageData.columns[index].imageUrl; });
+      this.messageData.columns.forEach(item => {
+        item.imageUrl = this.messageData.columns[index].imageUrl;
+      });
     },
 
     removeAllThumb() {
-      this.messageData.columns.forEach(item => { item.imageUrl = ''; });
+      this.messageData.columns.forEach(item => {
+        item.imageUrl = '';
+      });
     },
 
     changeSelectedAction(value) {
@@ -282,9 +283,7 @@ export default {
       console.log('changeActionColumn', index);
       this.messageData.columns[index].action = data;
     }
-
   }
-
 };
 </script>
 

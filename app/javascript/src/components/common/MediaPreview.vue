@@ -58,7 +58,7 @@ export default {
     border-radius: 4px;
 
     .audio-player {
-      width: 200px;
+      width: 100%;
       height: -webkit-fill-available;
       background-color: #f1f3f4;
     }

@@ -12,7 +12,6 @@ gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 4.3'
 gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 4.0'
-gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 gem 'browser', require: 'browser/browser'
 gem 'httparty'
@@ -42,6 +41,7 @@ gem 'rack-cors', require: 'rack/cors'
 # Active Storage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3'
+gem 'google-cloud-storage', '~> 1.11', require: false
 gem 'image_processing'
 
 # csv,exel import/export, zip

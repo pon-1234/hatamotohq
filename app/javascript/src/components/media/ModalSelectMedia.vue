@@ -2,6 +2,7 @@
   <div
     class="modal fade"
     :id="id ? id : 'modalSelectMedia'"
+    ref="modalSelectMedia"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -15,7 +16,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body overflow-hidden" :key="contentKey">
+        <div class="modal-body overflow-hidden" :key="contentKey" v-if="visible">
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
               <a href="#uploadMedia" data-toggle="tab" aria-expanded="true" class="nav-link active">
@@ -31,11 +32,12 @@
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane show active" id="uploadMedia">
-              <media-upload :types="types" @upload="selectMedia($event)"></media-upload>
+            <div class="tab-pane fade show active" id="uploadMedia">
+              <media-upload ref="mediaUpload" :types="types" @upload="selectMedia($event)"></media-upload>
             </div>
-            <div class="tab-pane" id="selectMedia">
+            <div class="tab-pane fade" id="selectMedia">
               <media-index
+                ref="modalMediaIndex"
                 mode="read"
                 @select="selectMedia($event)"
                 :filterable="filterable"
@@ -68,16 +70,18 @@ export default {
 
   data() {
     return {
-      contentKey: 0
+      contentKey: 0,
+      visible: false
     };
   },
 
+  mounted() {
+    $(this.$refs.modalSelectMedia).on('show.bs.modal', this.shownModal);
+    $(this.$refs.modalSelectMedia).on('hide.bs.modal', this.hideModal);
+  },
+
   methods: {
-    ...mapActions('media', [
-      'uploadMedia',
-      'uploadRichMenu',
-      'uploadImageMap'
-    ]),
+    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
 
     forceRerender() {
       this.contentKey++;
@@ -86,6 +90,14 @@ export default {
     selectMedia(media) {
       this.$emit('select', media);
       this.$refs.close.click();
+    },
+
+    shownModal() {
+      this.visible = true;
+    },
+
+    hideModal() {
+      this.visible = false;
     }
   }
 };

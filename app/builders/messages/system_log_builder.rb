@@ -38,6 +38,18 @@ class Messages::SystemLogBuilder
     @message
   end
 
+  def perform_survey(survey)
+    @message.text = I18n.t('messages.logs.survey', { name: survey.name })
+    @message.save!
+    @message
+  end
+
+  def perform_reminder(reminder)
+    @message.text = I18n.t('messages.logs.reminder', { title: reminder.name })
+    @message.save!
+    @message
+  end
+
   private
     def init_message
       @message = Message.new(channel: @channel)

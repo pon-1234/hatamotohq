@@ -48,7 +48,6 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "toastr": "^2.1.4",
-    "turbolinks": "^5.2.0",
     "v-clipboard": "^2.2.3",
     "v-tooltip": "^2.0.3",
     "vee-validate": "^2.2.15",
@@ -63,7 +62,6 @@
     "vue-template-compiler": "^2.6.12",
     "vue2-daterange-picker": "^0.6.2",
     "vue2-google-maps": "^0.10.7",
-    "vue2-leaflet": "^2.6.0",
     "vuex": "^3.5.1",
     "vuex-persistedstate": "^3.1.0",
     "weekstart": "^1.0.1"

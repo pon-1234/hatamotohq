@@ -8,7 +8,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="true"
-            @change="$emit('update:is_initial', true)"
+            @change="onModeChanged(true)"
           />
           開始時に送信
         </label>
@@ -18,7 +18,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="false"
-            @change="$emit('update:is_initial', false)"
+            @change="onModeChanged(false)"
           />
           時刻指定
         </label>
@@ -37,6 +37,8 @@
               autocomplete="off"
               name="step"
               type="number"
+              onblur="this.value = (this.value == 0 ? 1 : this.value);"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @change="$emit('update:date', date)"
             />
             <span>日前</span>
@@ -49,6 +51,8 @@
             type="time"
             class="theme-success"
             :phrases="{ ok: '確定', cancel: '閉じる' }"
+            value-zone="Asia/Tokyo"
+            zone="Asia/Tokyo"
           ></datetime>
           に送信
         </template>
@@ -72,8 +76,9 @@
 </template>
 
 <script>
-import moment from 'moment-timezone';
+import Util from '@/core/util';
 import { Datetime } from 'vue-datetime';
+import moment from 'moment-timezone';
 
 export default {
   components: {
@@ -105,14 +110,14 @@ export default {
     };
   },
 
-  created() {
+  beforeMount() {
     this.zeroday = this.date === 0;
-    this.selectedTime = this.time || '00:00';
+    this.selectedTime = moment.tz(this.time, 'HH:mm', 'Asia/Tokyo').format();
   },
 
   watch: {
     selectedTime: function(val) {
-      const timeOnly = moment(val).format('HH:mm');
+      const timeOnly = Util.formattedTime(val);
       this.$emit('update:time', timeOnly);
     },
 
@@ -122,6 +127,20 @@ export default {
 
     order: function(val) {
       this.$emit('update:order', this.order);
+    }
+  },
+
+  methods: {
+    onModeChanged(isInitial) {
+      if (isInitial) {
+        this.date = 0;
+        this.$emit('update:date', this.date);
+        this.time = '0:00';
+        this.$emit('update:time', this.time);
+      } else {
+        this.zeroday = true;
+      }
+      this.$emit('update:is_initial', isInitial);
     }
   }
 };

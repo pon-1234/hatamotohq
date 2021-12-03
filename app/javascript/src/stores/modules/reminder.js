@@ -17,11 +17,11 @@ export const mutations = {
     state.folders = folders;
   },
 
-  updateFolder(state, folder) {
-    folder.reminders = [];
-    folder.reminders_count = 0;
-    const index = state.folders.findIndex(_ => _.id === folder.id);
-    state.folders.splice(index, 1, folder);
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
   },
 
   deleteFolder(state, id) {
@@ -146,9 +146,33 @@ export const actions = {
     }
   },
 
+  async getEpisode(context, params) {
+    try {
+      return await EpisodeAPI.get(params);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async createEpisode(context, payload) {
     try {
       return await EpisodeAPI.create(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateEpisode(context, payload) {
+    try {
+      return await EpisodeAPI.update(payload);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async deleteEpisode(context, payload) {
+    try {
+      return await EpisodeAPI.delete(payload);
     } catch (error) {
       return null;
     }

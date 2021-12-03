@@ -24,6 +24,18 @@ Rails.application.routes.draw do
   post 'webhooks/:key', to: 'webhooks#index'
   post 'webhooks/push', to: 'webhooks#push'
 
+  # surveys
+  get 'surveys/:code/:friend_id', to: 'surveys#form', as: 'new_survey_answer_form'
+  post 'surveys/:code/:friend_id', to: 'surveys#answer', as: 'survey_answer_form'
+  get 'surveys/:code', to: 'surveys#show'
+  get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
+  get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
+  get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
+
+  # medias
+  get 'medias/:id/content', to: 'medias#variant'
+  get 'medias/:id/content/:size', to: 'medias#variant'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -59,6 +71,7 @@ Rails.application.routes.draw do
           post :toggle_visible
           get :reminders
           post :set_reminder
+          get :variables
         end
       end
       resources :broadcasts do
@@ -84,10 +97,24 @@ Rails.application.routes.draw do
       resources :rich_menus do
         post :copy, on: :member
       end
-      resources :surveys
+      resources :surveys do
+        member do
+          get :answered_users
+          get :responses
+          post :copy
+          post :toggle_status
+          get '/:friend_id/responses', to: 'surveys#friend_responses'
+        end
+      end
       resources :reminders do
         member do
-          resources :episodes
+          post :copy
+        end
+        resources :episodes
+      end
+      resources :variables do
+        member do
+          post :copy
         end
       end
       resources :folders
@@ -96,6 +123,9 @@ Rails.application.routes.draw do
       get '/action_objects', to: 'action_objects#index'
       resources :medias do
         post :bulk_delete, on: :collection
+        member do
+          get '/content', to: 'medias#variant'
+        end
       end
       resources :setting, only: [:index] do
         get :edit, on: :collection

@@ -2,6 +2,7 @@
   <div v-if="messages.length > 0">
     <div v-for="(message, index) in messages" :key="index" class="text-left">
       <message-content :data="message.content"></message-content>
+      <divider v-if="index < messages.length - 1"></divider>
     </div>
   </div>
   <div v-else>メッセージなし</div>
@@ -23,6 +24,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

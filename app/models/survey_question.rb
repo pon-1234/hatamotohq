@@ -28,4 +28,18 @@ class SurveyQuestion < ApplicationRecord
 
   # validates :name, presence: true, length: { maximum: 255 }
   validates :content, presence: true
+
+  def file?
+    image? or pdf?
+  end
+
+  def selectable?
+    radio? or checkbox? or pulldown?
+  end
+
+  def clone_to!(survey_id)
+    new_question = self.dup
+    new_question.survey_id = survey_id
+    new_question.save!
+  end
 end

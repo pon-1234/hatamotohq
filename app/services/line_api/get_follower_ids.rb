@@ -7,7 +7,6 @@ class LineApi::GetFollowerIds < LineApi::BaseRequest
     friend_ids = []
     loop do
       response = client.get_follower_ids(cursor)
-      response = self.class.get('/bot/followers/ids', options)
       # Break if could not get follower list, cause account plan limitation or somehow
       break if response.code != HTTP_OK
       # If could get follower list

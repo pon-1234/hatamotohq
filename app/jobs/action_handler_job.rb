@@ -8,29 +8,39 @@ class ActionHandlerJob < ApplicationJob
     @friend = friend
     @action = action
     @reply_token = reply_token
+    # Handle multiple actions
     handle_message_action(@action['actions']) if @action['actions'].present?
+    # Handle single action
+    handle_message_action([@action['action']]) if @action['action'].present?
+    # Create text message if friend select option contains displayText
+    handle_display_text(@action['displayText']) if @action['displayText'].present?
   end
 
-  def handle_message_action(actions)
-    actions.each do |action|
-      case action['type']
-      when 'text'
-        send_text_message(action['content'])
-      when 'email'
-        send_email(action['content'])
-      when 'scenario'
-        send_scenario(action['content'])
-      when 'template'
-        send_template(action['content'])
-      when 'tag'
-        handle_tag_action(action['content'])
-      when 'reminder'
-        setup_reminder(action['content'])
-      end
-    end
-  end
 
   private
+    def handle_message_action(actions)
+      actions.each do |action|
+        case action['type']
+        when 'text'
+          send_text_message(action['content'])
+        when 'email'
+          send_email(action['content'])
+        when 'scenario'
+          send_scenario(action['content'])
+        when 'template'
+          send_template(action['content'])
+        when 'tag'
+          handle_tag_action(action['content'])
+        when 'reminder'
+          setup_reminder(action['content'])
+        end
+      end
+    end
+
+    def handle_display_text(text)
+      Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+    end
+
     def send_text_message(content)
       messages = [{ type: 'text', text: content['text'] }]
       # Rebuild payload
@@ -58,11 +68,29 @@ class ActionHandlerJob < ApplicationJob
 
     def setup_reminder(content)
       type = content['type']
+      set_reminder(content) if type == 'set'
+      unset_reminder(content) if type == 'unset'
+    end
+
+    def set_reminder(content)
       goal = content['goal']
       reminder_id = content['reminder']['id']
       reminder = Reminder.find(reminder_id)
-      reminding = Reminding.new(channel: @friend.channel, reminder: reminder)
-      reminding.save
+      # Cancel all active reminding
+      active_remindings = reminder.remindings.where("remindings.channel_id = ? AND remindings.status = 'active'", @friend.channel.id)
+      active_remindings.includes([:channel, :reminder_events]).each { |_| _.cancel }
+      # Start a new reminding
+      reminding = Reminding.new(channel: @friend.channel, reminder: reminder, goal: goal, status: 'active')
+      reminding.save!
+    end
+
+    def unset_reminder(content)
+      reminder_id = content['reminder']['id']
+      reminder = Reminder.find(reminder_id)
+      remindings = reminder.remindings.where('remindings.channel_id = ?', @friend.channel.id)
+      remindings.each do |reminding|
+        reminding.cancel
+      end
     end
 
     def handle_tag_action(tag_actions)

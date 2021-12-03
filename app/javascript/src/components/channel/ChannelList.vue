@@ -36,7 +36,8 @@ export default {
     ...mapState('channel', {
       channels: state => state.channels,
       allChannelLoaded: state => state.allChannelLoaded,
-      activeChannel: state => state.activeChannel
+      activeChannel: state => state.activeChannel,
+      showChatBox: state => state.showChatBox
     }),
 
     shouldShowSpinner() {
@@ -50,7 +51,8 @@ export default {
       'setChannelParams',
       'setChannelParam',
       'resetChannels',
-      'resetMessages'
+      'resetMessages',
+      'setShowChatBox'
     ]),
 
     resetSearch() {
@@ -77,6 +79,7 @@ export default {
     },
 
     async switchChannel(channel, index) {
+      if (!this.showChatBox) this.setShowChatBox(true);
       const notChanged = this.activeChannel.id === channel.id;
       // Do nothing if channel is not changed
       if (notChanged) return;

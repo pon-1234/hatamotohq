@@ -11,7 +11,8 @@
               name="name"
               class="form-control"
               placeholder="シナリオ名を入力してください"
-              v-model="scenarioData.title"
+              v-model.trim="scenarioData.title"
+              maxlength="256"
               v-validate="'required|max:255'"
               data-vv-as="シナリオ名"
             />
@@ -27,6 +28,7 @@
               rows="3"
               placeholder="シナリオ説明を入力してください"
               v-model="scenarioData.description"
+              maxlength="2001"
               v-validate="'max:2000'"
               data-vv-as="シナリオ説明"
             ></textarea>
@@ -39,7 +41,7 @@
       <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
       <div class="card-body">
         <div class="form-group d-flex">
-          <label class="fw-200">配信</label>
+          <label class="fw-200">配信 ON/OFF</label>
           <div class="flex-grow-1 d-flex">
             <input
               type="checkbox"
@@ -120,7 +122,7 @@
           <div class="d-flex flex-start">
             <div class="fw-200">
               <label class="w-100">配信タイミング</label>
-              <span class="text-sm text-muted">作成した後、変更不可</span>
+              <span class="text-sm text-muted font-12">作成した後、変更不可</span>
             </div>
 
             <div class="flex-grow-1">
@@ -154,26 +156,27 @@
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
       <div class="card-body">
-        <message-action-editor-custom
+        <action-editor-custom
           name="after_action"
           :value="scenarioData.after_action"
           :labelRequired="false"
           :showTitle="false"
-          :showLaunchMesasge="false"
+          :showLaunchMessage="false"
           @input="updateAction"
-        ></message-action-editor-custom>
+        ></action-editor-custom>
       </div>
     </div>
 
     <div class="d-flex">
-      <button type="submit" class="btn btn-success fw-120 mr-2" @click="saveScenario()">保存</button>
-      <button type="submit" class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</button>
+      <div class="btn btn-success fw-120 mr-2" @click="saveScenario()">保存</div>
+      <div class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</div>
     </div>
     <loading-indicator :loading="loading" />
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['scenario_id'],
@@ -209,11 +212,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('scenario', [
-      'getScenario',
-      'createScenario',
-      'updateScenario'
-    ]),
+    ...mapActions('scenario', ['getScenario', 'createScenario', 'updateScenario']),
 
     forceRerender() {
       this.componentKey += 1;
@@ -237,19 +236,7 @@ export default {
         this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              let input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                if (input.is(':hidden')) {
-                  input = input.parent();
-                }
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
+          return ViewHelper.scrollToRequiredField(true);
         }
       } else {
         this.scenarioData.status = status;
@@ -276,7 +263,6 @@ export default {
     },
 
     updateAction(data) {
-      console.log(data);
       this.scenarioData.after_action = data;
     },
 

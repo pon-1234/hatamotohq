@@ -1,5 +1,12 @@
 <template>
-  <div class="modal fade" id="modalSendScenario" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="modalSendScenario"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content mh-400">
         <div class="modal-header">
@@ -9,28 +16,34 @@
           </button>
         </div>
         <div class="modal-body text-sm">
-          <table class="table table-hover">
-            <thead class="thead-light">
-              <tr>
-                <th>#</th>
-                <th>配信方式</th>
-                <th>シナリオ名</th>
-                <th>メッセージ数</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(scenario, index) in scenarios" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>{{ scenario.mode === 'date' ? '時刻' : '経過時間' }}</td>
-                <td>{{ scenario.title }}</td>
-                <td>{{ scenario.scenario_messages_count || 0 }}</td>
-                <td class="text-right">
-                  <div role="button" class="btn btn-info btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">送信</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th class="mw-120">配信方式</th>
+                  <th class="mw-200">シナリオ名</th>
+                  <th class="mw-120">メッセージ数</th>
+                  <th class="mw-150"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(scenario, index) in scenarios" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ scenario.mode === "date" ? "時刻" : "経過時間" }}</td>
+                  <td>
+                    <p class="item-name mxw-400">{{ scenario.title }}</p>
+                  </td>
+                  <td>{{ scenario.scenario_messages_count || 0 }}</td>
+                  <td class="text-right">
+                    <div role="button" class="btn btn-info btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">
+                      送信
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div class="text-center mt-4" v-if="scenarios.length === 0">送信できるシナリオはありません。</div>
         </div>
       </div>

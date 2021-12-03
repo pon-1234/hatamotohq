@@ -1,4 +1,3 @@
-
 export const MessageTypeIds = {
   Text: 1,
   Sticker: 2,
@@ -57,6 +56,14 @@ export const VideoType = ['video/mp4'];
 export const AudioType = ['audio/m4a', 'audio/x-m4a'];
 
 export const PdfType = ['application/pdf', 'application/x-pdf'];
+
+export const ImageMimeBytes = ['89504e47', 'ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', 'ffd8ffdb', 'ffd8ffee'];
+
+export const VideoMimeBytes = ['66747970'];
+
+export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920'];
+
+export const PdfMimeBytes = ['255044462D'];
 
 export const UploadMaxSize = {
   Image: 10000000,
@@ -304,9 +311,12 @@ export const ActionMessage = {
 
 export const ActionMessageImageMap = {
   default: {
-    type: 'uri',
-    id: 1,
-    linkUri: ''
+    type: 'survey',
+    label: '',
+    content: {
+      name: '',
+      id: null
+    }
   }
 };
 
@@ -317,6 +327,10 @@ export const ImageRichMenuSize = [
   '1200x405',
   '800x540',
   '800x270'
+];
+
+export const ImageImageMapSize = [
+  '1040'
 ];
 
 export const ImageImagemapSize = '1040x1040';

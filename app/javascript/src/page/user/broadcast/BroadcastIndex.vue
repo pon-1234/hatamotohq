@@ -24,7 +24,7 @@
               />
               <span class="mdi mdi-magnify search-icon"></span>
               <div class="input-group-append">
-                <div class="btn btn-primary" @click="loadPage()">検索</div>
+                <div class="btn btn-primary" @click="search()">検索</div>
               </div>
             </div>
           </div>
@@ -38,9 +38,9 @@
                 <th>配信日時</th>
                 <th>タイトル</th>
                 <th>状況</th>
-                <th class="fw-300">配信先</th>
+                <th>配信先</th>
                 <th hidden>配信数</th>
-                <th class="fw-150">操作</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -56,11 +56,11 @@
                     </div>
                   </template>
                 </td>
-                <td>{{ broadcast.title }}</td>
-                <td><broadcast-status :status="broadcast.status"></broadcast-status></td>
-                <td><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
+                <td class="mxw-300">{{ broadcast.title }}</td>
+                <td class="fw-150"><broadcast-status :status="broadcast.status"></broadcast-status></td>
+                <td class="fw-300"><broadcast-deliver-target :broadcast="broadcast"></broadcast-deliver-target></td>
                 <td hidden></td>
-                <td>
+                <td class="fw-150">
                   <div class="btn-group">
                     <button
                       type="button"
@@ -71,7 +71,14 @@
                       操作 <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu">
-                      <a role="button" class="dropdown-item" @click="openEdit(broadcast)">一斉配信を編集する</a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        :href="`${rootPath}/user/broadcasts/${broadcast.id}/edit`"
+                        target="_blank"
+                        v-if="broadcast.editable"
+                        >一斉配信を編集する</a
+                      >
                       <a
                         role="button"
                         class="dropdown-item"
@@ -85,6 +92,7 @@
                         class="dropdown-item"
                         data-toggle="modal"
                         data-target="#modalDeleteBroadcast"
+                        v-if="broadcast.destroyable"
                         @click="curBroadcastIndex = index"
                         >一斉配信を削除</a
                       >
@@ -119,7 +127,7 @@
       @confirm="submitDeleteBroadcast"
     >
       <template v-slot:content>
-        <div v-if="curBroadcast">
+        <div v-if="curBroadcast" class="text-truncate mxw-400">
           一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>
@@ -134,7 +142,7 @@
       @confirm="submitcopyBroadcast"
     >
       <template v-slot:content>
-        <div v-if="curBroadcast">
+        <div v-if="curBroadcast" class="text-truncate mxw-400">
           一斉配信名：<b>{{ curBroadcast.title }}</b>
         </div>
       </template>
@@ -150,6 +158,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       contentKey: 0,
       curBroadcastIndex: 0,
@@ -167,13 +176,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters('user',
-      ['getQueryParams']
-    ),
+    ...mapGetters('user', ['getQueryParams']),
     ...mapState('broadcast', {
-      broadcasts: (state) => state.broadcasts,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      broadcasts: state => state.broadcasts,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curBroadcast() {
@@ -182,18 +189,16 @@ export default {
   },
 
   methods: {
-    ...mapMutations('broadcast', [
-      'setCurPage',
-      'setQueryParams'
-    ]),
-    ...mapActions('broadcast', [
-      'getBroadcasts',
-      'copyBroadcast',
-      'deleteBroadcast'
-    ]),
+    ...mapMutations('broadcast', ['setCurPage', 'setQueryParams']),
+    ...mapActions('broadcast', ['getBroadcasts', 'copyBroadcast', 'deleteBroadcast']),
 
     forceRerender() {
       this.contentKey++;
+    },
+
+    search() {
+      this.queryParams.page = 0;
+      this.loadPage();
     },
 
     async loadPage() {
@@ -202,7 +207,7 @@ export default {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getBroadcasts();
+        await this.getBroadcasts();
         this.forceRerender();
         this.loading = false;
       });
@@ -212,12 +217,8 @@ export default {
       window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
     },
 
-    openEdit(broadcast) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/edit`);
-    },
-
     openMessageIndex(broadcast) {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`;
+      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`);
     },
 
     formattedDatetime(time) {

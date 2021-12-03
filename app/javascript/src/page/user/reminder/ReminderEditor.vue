@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group d-flex align-items-center">
-          <label class="fw-300">フォルダ</label>
+          <label class="fw-300">フォルダー</label>
           <div class="flex-grow-1">
             <select v-model="reminderData.folder_id" class="form-control fw-300">
               <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
@@ -20,9 +20,9 @@
               class="form-control"
               name="reminder_name"
               placeholder="リマインダ名を入力してください"
-              v-model="reminderData.name"
-              v-validate="'required|max:255'"
-              maxlength="256"
+              v-model.trim="reminderData.name"
+              v-validate="'required|max:64'"
+              maxlength="65"
               data-vv-as="リマインダ名"
             />
             <error-message :message="errors.first('reminder_name')"></error-message>
@@ -31,7 +31,9 @@
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
       <div class="card-footer">
-        <button class="btn btn-success text-nowrap mr-1" @click="submit()" :disabled="invalid">リマインダ登録</button>
+        <button class="btn btn-success text-nowrap mr-1" @click="submit()" :disabled="invalid">
+          {{ reminder_id ? "リマインダ保存" : "リマインダ登録" }}
+        </button>
       </div>
     </div>
   </div>
@@ -39,6 +41,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['reminder_id'],
@@ -73,9 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('reminder', [
-      'createReminder', 'getReminder', 'getFolders'
-    ]),
+    ...mapActions('reminder', ['createReminder', 'getReminder', 'getFolders', 'updateReminder']),
 
     async fetchData() {
       await this.getFolders();
@@ -102,32 +103,26 @@ export default {
     },
 
     scrollToRequiredField() {
-      $('input, textarea').each(function(index) {
-        var input = $(this);
-        if (
-          input.attr('aria-invalid') &&
-          input.attr('aria-invalid') === 'true'
-        ) {
-          $('html,body').animate(
-            { scrollTop: input.offset().top - 200 },
-            'slow'
-          );
-          return false;
-        }
-      });
+      return ViewHelper.scrollToRequiredField(false);
     },
 
     // Handle broadcast creation response
     onReceiveCreateReminder(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect(
+          'リマインダの保存は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+        );
       } else {
         window.toastr.error('リマインダの保存は失敗しました。');
       }
     },
     onReceiveUpdateReminder(success) {
       if (success) {
-        Util.showSuccessThenRedirect('リマインダの更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/reminders`);
+        Util.showSuccessThenRedirect(
+          'リマインダの更新は完了しました。',
+          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+        );
       } else {
         window.toastr.error('リマインダの更新は失敗しました。');
       }

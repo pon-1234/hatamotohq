@@ -2,14 +2,17 @@
 
 class User::FriendsController < User::ApplicationController
   load_and_authorize_resource :line_friend
-  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders, :set_reminder]
+  before_action :find_friend, only: [:update, :toggle_locked, :toggle_visible, :reminders, :set_reminder, :variables]
   include User::FriendsHelper
 
   # GET /user/friends
   def index
     if request.format.json?
       @params = params[:q]
-      @q = LineFriend.accessible_by(current_ability).ransack(@params)
+      # Normalize add friend date condition
+      @params[:created_at_gteq] = @params[:created_at_gteq]&.to_date.beginning_of_day if @params[:created_at_gteq].present?
+      @params[:created_at_lteq] = @params[:created_at_lteq]&.to_date.end_of_day if @params[:created_at_lteq].present?
+      @q = LineFriend.accessible_by(current_ability).includes([:channel, :tags, :taggings]).ransack(@params)
       @friends = @q.result.page(params[:page])
     end
     respond_to do |format|
@@ -63,13 +66,17 @@ class User::FriendsController < User::ApplicationController
 
   # GET /user/friends/:id/reminders
   def reminders
-    @remindings = @friend.channel.remindings
+    @remindings = @friend.channel.remindings.includes([:reminder]).order('remindings.id desc').limit(10)
   end
 
   # POST /user/friends/:id/set_reminder
   def set_reminder
-    @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
-    render_success
+    @reminding = @friend.set_reminder!(reminder_params[:reminder_id], reminder_params[:goal])
+  end
+
+  # GET /user/friends/:id/variables
+  def variables
+    @variables = @friend.variables
   end
 
   private

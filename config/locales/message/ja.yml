@@ -6,13 +6,15 @@ ja:
       image: 画像を送信しました
       video: 動画を送信しました
       audio: 音声を送信しました
-      location: メッセージを送信しました
-      imagemap: メッセージを送信しました
-      template: メッセージを送信しました
-      flex: メッセージを送信しました
+      location: 位置情報メッセージを送信しました
+      imagemap: イメージマップメッセージを送信しました
+      template: テンプレートメッセージを送信しました
+      flex: Flexメッセージを送信しました
     logs:
       follow: 【フォローされました】
       unfollow: 【アンフォローされました】
       broadcast: "メッセージが配信されました：【%{title}】"
       scenario_start: "シナリオが開始されました：【%{title}】"
       scenario_end: "シナリオが終了しました：【%{title}】"
+      survey: "回答フォームに回答しました：【%{name}】"
+      reminder: "リマインドが配信されました：【%{title}】"

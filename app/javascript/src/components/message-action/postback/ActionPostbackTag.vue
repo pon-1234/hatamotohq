@@ -7,7 +7,7 @@
           <span>タグを追加</span>
           <div>
             <input-tag :allTags="true" :tags="value[0].tags" @input="onAssignTagsDataChanged"> </input-tag>
-            <input type="hidden" v-model="value" :name="name + '_assign_tag'" />
+            <input type="hidden" v-model.trim="value" :name="name + '_assign_tag'" />
           </div>
         </div>
 
@@ -15,7 +15,7 @@
           <span>タグをはずす</span>
           <div>
             <input-tag :allTags="true" :tags="value[1].tags" @input="onUnassignTagsDataChanged"> </input-tag>
-            <input type="hidden" v-model="value" :name="name + '_unassign_tag'" />
+            <input type="hidden" v-model.trim="value" :name="name + '_unassign_tag'" />
           </div>
         </div>
       </div>
@@ -44,10 +44,6 @@ export default {
       type: String,
       default: 'postback_action'
     }
-  },
-
-  created() {
-    console.log('value', this.value);
   },
 
   methods: {

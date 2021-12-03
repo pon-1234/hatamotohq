@@ -5,11 +5,7 @@
         <div class="card-body box-profile">
           <!-- profile image -->
           <div class="text-center">
-            <img
-              :src="friendData.line_picture_url ? friendData.line_picture_url : '/img/no-image-profile.png'"
-              class="rounded-circle avatar-lg img-thumbnail"
-              alt="profile-image"
-            />
+            <img v-lazy="avatarImgObj" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" />
           </div>
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
@@ -43,14 +39,14 @@
             <!-- go to chat -->
             <li class="list-group-item">
               <b>トーク</b
-              ><a class="float-right" :href="`/user/channels/${channel_id}`" data-turbolinks="false"
+              ><a class="float-right" :href="`/user/channels/${channel_id}`"
                 ><i class="uil-comment-alt-dots"></i> メッセージ</a
               >
             </li>
 
             <!-- friend addition time -->
             <li class="list-group-item">
-              <b>登録日</b><span class="float-right">{{ formatDateTime(friendData.created_at) }}</span>
+              <b>登録日</b><span class="float-right">{{ friendData.created_at | formatted_time }}</span>
             </li>
           </ul>
         </div>
@@ -71,7 +67,7 @@
               type="text"
               placeholder="表示名"
               class="form-control"
-              v-model="friendData.display_name"
+              v-model.trim="friendData.display_name"
               name="display_name"
               ref="displayName"
               :disabled="!editing"
@@ -87,7 +83,7 @@
             <textarea
               rows="2"
               class="form-control"
-              v-model="friendData.note"
+              v-model.trim="friendData.note"
               name="note"
               :disabled="!editing"
               v-validate="'max:2000'"
@@ -111,55 +107,83 @@
     </div>
 
     <div class="col-xl-12">
-      <ul class="nav nav-tabs mb-3">
+      <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link active">
+          <a href="#customInfo" data-toggle="tab" aria-expanded="true" class="nav-link active">
             <i class="mdi mdi-home-variant d-md-none d-block"></i>
-            <span class="d-none d-md-block">リマインダ</span>
+            <span class="d-none d-md-block">友達情報</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#scenario" data-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-            <span class="d-none d-md-block">シナリオ</span>
+          <a href="#reminder" data-toggle="tab" aria-expanded="true" class="nav-link">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">リマインダ</span>
           </a>
         </li>
       </ul>
 
       <div class="tab-content">
-        <div class="tab-pane show active" id="reminder">
-          <div>
-            <div class="row">
-              <label class="col-xl-3">リマインダ</label>
-              <label class="col-xl-9">ゴール日時</label>
+        <!-- 友達情報 -->
+        <div class="tab-pane show active border border-light" id="customInfo">
+          <div class="card m-0 p-0">
+            <div class="card-body p-0">
+              <table class="table table-striped table-centered">
+                <tbody>
+                  <tr v-for="(variable, index) in variables" :key="index">
+                    <th>{{ variable.name }}</th>
+                    <td v-if="variable.type === 'image' && variable.value">
+                      <div v-lazy:background-image="variable.value" class="fw-120 fh-81 background-cover"></div>
+                    </td>
+                    <td v-else-if="variable.type === 'pdf' && variable.value">
+                      <img :src="`${rootPath}/images/messages/pdf.png`" class="fw-120 fh-120 background-cover" />
+                      <a class="btn btn-sm btn-light" :href="variable.value" download="lineinsight.pdf">ダウンロード</a>
+                    </td>
+                    <td v-else>{{ variable.value || "未設定" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-center py-5 font-weight-bold" v-if="variables.length === 0">データはありません。</div>
             </div>
-            <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
+          </div>
+        </div>
+
+        <!-- リマインダー -->
+        <div class="tab-pane show border border-light" id="reminder">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <label class="col-lg-3">リマインダ</label>
+                <label class="col-lg-9">ゴール日時</label>
+              </div>
+              <friend-assign-reminder :friend_id="friend_id"></friend-assign-reminder>
+            </div>
           </div>
 
           <div class="card mt-2">
-            <div class="card-header"><h5>リマインダ履歴</h5></div>
-            <div class="card-body">
+            <div class="card-header"><h5>最新リマインダ</h5></div>
+            <div class="card-body py-0">
               <table class="table">
                 <thead class="thead-light">
                   <tr>
                     <th>リマインダ名</th>
                     <th>登録日時</th>
                     <th>ゴール</th>
+                    <th>状況</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(reminder, index) in reminders" :key="index">
-                    <td>{{ reminder.name }}</td>
-                    <td>{{ reminder.created_at }}</td>
-                    <td>{{ reminder.goal }}</td>
+                    <td class="mw-200 max-2-lines">{{ reminder.name }}</td>
+                    <td class="mw-150">{{ reminder.created_at | formatted_time }}</td>
+                    <td class="mw-200">{{ reminder.goal | formatted_date }}</td>
+                    <td class="mw-150"><reminding-status :status="reminder.status"></reminding-status></td>
                   </tr>
                 </tbody>
               </table>
+
+              <div v-if="reminders.length === 0" class="text-center my-3">リマインダがありません。</div>
             </div>
           </div>
-        </div>
-        <div class="tab-pane" id="scenario">
-          <p>...</p>
         </div>
       </div>
     </div>
@@ -167,8 +191,7 @@
 </template>
 
 <script>
-import moment from 'moment';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   props: {
@@ -177,6 +200,7 @@ export default {
   },
   data() {
     return {
+      rootPath: process.env.MIX_ROOT_PATH,
       friendData: {
         status: 'active',
         locked: null,
@@ -186,7 +210,12 @@ export default {
         display_name: '',
         note: ''
       },
-      reminders: [],
+      variables: [],
+      avatarImgObj: {
+        src: '',
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      },
       friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
       isShowDisplayName: false,
       field_index: null,
@@ -199,31 +228,23 @@ export default {
   async beforeMount() {
     const response = await this.getFriend(this.friend_id);
     this.friendData = _.cloneDeep(response);
-    this.reminders = await this.getReminders(this.friend_id);
+    this.variables = await this.getVariables(this.friend_id);
+    await this.getReminders(this.friend_id);
+    this.avatarImgObj.src = this.friendData.line_picture_url;
     this.loading = false;
   },
 
+  computed: {
+    ...mapState('friend', {
+      reminders: state => state.reminders
+    })
+  },
+
   methods: {
-    ...mapActions('friend', [
-      'getFriend',
-      'updateFriend',
-      'getReminders'
-    ]),
+    ...mapActions('friend', ['getFriend', 'updateFriend', 'getReminders', 'getVariables']),
 
     selectTags(tags) {
       this.friendData.tags = tags;
-    },
-
-    formatDateTime(time) {
-      return moment(time).format('YYYY.MM.DD HH:mm');
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
     },
 
     async onSave() {

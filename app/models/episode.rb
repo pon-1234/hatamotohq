@@ -23,8 +23,19 @@
 #  fk_rails_...  (reminder_id => reminders.id)
 #
 class Episode < ApplicationRecord
-  belongs_to :reminder
+  belongs_to :reminder, counter_cache: true
+  has_many :reminder_events
 
   # Scope
   scope :ordered, -> { order(is_initial: :desc, date: :desc, time: :desc) }
+
+  before_save do
+    self.is_initial = true if (self.date == 0) && self.time.eql?('00:00')
+  end
+
+  def clone_to!(reminder_id)
+    new_episode = self.dup
+    new_episode.reminder_id = reminder_id
+    new_episode.save!
+  end
 end

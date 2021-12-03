@@ -15,14 +15,8 @@
         v-validate="'max:5000'"
       >
       </textarea>
-      <error-message
-        :message="errors.first('message')"
-        class="ml-2"
-        v-if="errors.first('message')"
-      ></error-message>
-      <div
-        class="p-2 bg-light d-flex justify-content-between align-items-center"
-      >
+      <error-message :message="errors.first('message')" class="ml-2" v-if="errors.first('message')"></error-message>
+      <div class="p-2 bg-light d-flex justify-content-between align-items-center">
         <div>
           <a
             data-toggle="modal"
@@ -31,11 +25,8 @@
             class="btn btn-sm px-2 font-16 btn-light"
             ><i class="uil uil-smile"></i
           ></a>
-          <a
-            data-toggle="modal"
-            data-target="#modalSendMedia"
-            class="btn btn-sm px-2 font-16 btn-light"
-            ><i class="uil uil-scenery"></i
+          <a data-toggle="modal" data-target="#modalSendMedia" class="btn btn-sm px-2 font-16 btn-light"
+            ><i class="uil uil-file"></i
           ></a>
           <div class="btn-group dropup">
             <button
@@ -48,49 +39,21 @@
               <i class="uil-plus"></i>
             </button>
             <div class="dropdown-menu">
-              <div
-                role="button"
-                class="dropdown-item"
-                data-toggle="modal"
-                data-target="#modalSendTemplate"
-              >
+              <div role="button" class="dropdown-item" data-toggle="modal" data-target="#modalSendTemplate">
                 テンプレート配信
               </div>
               <div class="dropdown-divider"></div>
-              <div
-                role="button"
-                class="dropdown-item"
-                data-toggle="modal"
-                data-target="#modalSendScenario"
-              >
+              <div role="button" class="dropdown-item" data-toggle="modal" data-target="#modalSendScenario">
                 シナリオ配信
               </div>
             </div>
           </div>
         </div>
-        <button
-          class="btn btn-sm btn-success"
-          @click="sendTextMessage"
-          :disabled="!isEnabled || !message.trim()"
-        >
+        <button class="btn btn-sm btn-success" @click="sendTextMessage" :disabled="!isEnabled || !message.trim()">
           <i class="uil uil-message mr-1"></i>送信
         </button>
       </div>
     </div>
-    <template v-if="activeChannel">
-      <modal-select-media
-        id="modalSendMedia"
-        :types="['image', 'audio', 'video']"
-        @select="sendMediaMessage($event)"
-      ></modal-select-media>
-      <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
-      <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
-      <modal-select-sticker
-        ref="modalSticker"
-        id="modalSelectSticker"
-        @input="sendStickerMessage"
-      ></modal-select-sticker>
-    </template>
   </div>
 </template>
 

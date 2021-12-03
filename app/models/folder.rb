@@ -21,6 +21,7 @@
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
 class Folder < ApplicationRecord
+  default_scope { order(id: :asc) }
   include FolderType
   belongs_to :line_account
   has_many :tags, dependent: :destroy
@@ -29,6 +30,7 @@ class Folder < ApplicationRecord
   has_many :rich_menus, dependent: :destroy
   has_many :surveys, dependent: :destroy
   has_many :reminders, dependent: :destroy
+  has_many :variables, dependent: :destroy
 
   # Validation
   validates :name, presence: true, uniqueness: { scope: [:line_account_id, :type] }

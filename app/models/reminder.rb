@@ -8,6 +8,7 @@
 #  folder_id       :bigint
 #  line_account_id :bigint
 #  name            :string(255)
+#  episodes_count  :integer          default(0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -25,4 +26,18 @@ class Reminder < ApplicationRecord
   belongs_to :line_account
   belongs_to :folder
   has_many :episodes, dependent: :destroy
+  has_many :remindings
+
+  def destroyable?
+    self.remindings.count == 0
+  end
+
+  def clone!
+    new_reminder = self.dup
+    new_reminder.name = self.name + '（コピー）'
+    new_reminder.episodes_count = nil
+    new_reminder.save!
+    self.episodes&.each { |episode| episode.clone_to!(new_reminder.id) }
+    new_reminder
+  end
 end

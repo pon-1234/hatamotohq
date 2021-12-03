@@ -12,9 +12,9 @@
           @submitCreateFolder="submitCreateFolder"
         />
 
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 folder-right">
           <div v-if="curFolder">
-            <a :href="`${MIX_ROOT_PATH}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
+            <a :href="`${rootPath}/user/rich_menus/new?folder_id=${curFolder.id}`" class="btn btn-primary">
               <i class="uil-plus"></i> 新規作成
             </a>
           </div>
@@ -22,18 +22,20 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th>リッチメニュー名</th>
+                  <th class="mw-150">リッチメニュー名</th>
                   <th class="mw-120">状況</th>
-                  <th>メニュー初期状態</th>
+                  <th class="mw-150">メニュー初期状態</th>
                   <th class="mw-200">画像</th>
                   <!-- <th class="mw-120">メンバー数</th> -->
                   <th class="mw-80">操作</th>
-                  <th>フォルダ</th>
+                  <th class="mw-150">フォルダー</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(richmenu, index) in curFolder.rich_menus" v-bind:key="index">
-                  <td class="font-weight-bold">{{ richmenu.name }}</td>
+                  <td>
+                    <p class="item-name vw-10 font-weight-bold">{{ richmenu.name }}</p>
+                  </td>
                   <td>
                     <rich-menu-status :status="richmenu.status"></rich-menu-status>
                   </td>
@@ -56,7 +58,13 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item" @click="openEdit(richmenu)">リッチメニューを編集</a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
+                          target="_blank"
+                          >リッチメニューを編集</a
+                        >
                         <a
                           role="button"
                           class="dropdown-item"
@@ -91,7 +99,7 @@
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.rich_menus.length === 0">
+            <div class="text-center my-5" v-if="curFolder.rich_menus.length === 0">
               <b>リッチメニューはありません。</b>
             </div>
           </div>
@@ -102,12 +110,12 @@
     <loading-indicator :loading="loading"></loading-indicator>
     <!-- START: modal delete folder -->
     <modal-confirm
-      title="こちらのフォルダを削除してもよろしいですか？"
+      title="こちらのフォルダーを削除してもよろしいですか？"
       id="modalDeleteFolder"
       type="delete"
       @confirm="submitDeleteFolder"
     >
-      <template v-slot:content v-if="curFolder"> フォルダ名：{{ curFolder.name }} </template>
+      <template v-slot:content v-if="curFolder"> フォルダー名：{{ curFolder.name }} </template>
     </modal-confirm>
     <!-- END: modal delete folder -->
 
@@ -153,14 +161,12 @@
 import moment from 'moment';
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
-import RichMenuStatus from '../../../components/rich-menu/RichMenuStatus.vue';
 
 export default {
-  components: { RichMenuStatus },
   props: [],
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       loading: true,
       isPc: true,
       selectedFolderIndex: 0,
@@ -170,6 +176,15 @@ export default {
 
   async beforeMount() {
     await this.getRichMenus();
+    const folderId = Util.getParamFromUrl('folder_id');
+    setTimeout(() => {
+      if (folderId) {
+        const index = _.findIndex(this.folders, _ => _.id === Number.parseInt(folderId));
+        if (index >= 0) {
+          this.onFolderChanged(index);
+        }
+      }
+    }, 0);
     this.loading = false;
   },
 
@@ -206,16 +221,31 @@ export default {
 
     // TODO: should move it to folder component
     async submitCreateFolder(folder) {
-      await this.createFolder(folder);
+      const response = await this.createFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの作成は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの作成は失敗しました。');
+      }
     },
 
     async submitUpdateFolder(folder) {
-      await this.updateFolder(folder);
+      const response = await this.updateFolder(folder);
+      if (response) {
+        window.toastr.success('フォルダーの変更は完了しました。');
+      } else {
+        window.toastr.error('フォルダーの変更は失敗しました。');
+      }
     },
 
     async submitDeleteFolder() {
-      await this.deleteFolder(this.curFolder.id);
-      this.onFolderChanged(0);
+      const response = await this.deleteFolder(this.curFolder.id);
+      if (response) {
+        window.toastr.success('フォルダーの削除は完了しました。');
+        this.onSelectedFolderChanged(0);
+      } else {
+        window.toastr.error('フォルダーの削除は失敗しました。');
+      }
     },
 
     async submitCopyRichMenu() {
@@ -257,10 +287,6 @@ export default {
 
     backToFolder() {
       this.isPc = false;
-    },
-
-    openEdit(richmenu) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/rich_menus/${richmenu.id}/edit`);
     }
   }
 };

@@ -14,7 +14,7 @@
         :aria-invalid="errors.first(name + '_postback_email') ? true : false"
         class="form-control d-flex"
         input-id="tags-basic"
-        v-model="form.emails"
+        v-model.trim="form.emails"
         :tag-validator="tagValidator"
         :add-button-text="'追加'"
         :invalid-tag-text="null"
@@ -33,7 +33,7 @@
         class="form-control"
         :name="name + '_postback_text_email'"
         rows="4"
-        v-model="form.text"
+        v-model.trim="form.text"
         placeholder="入力してください"
         v-validate="'required'"
         data-vv-as="本文"
@@ -90,7 +90,9 @@ export default {
   methods: {
     tagValidator(tag) {
       // eslint-disable-next-line
-      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(tag);
+      return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        tag
+      );
     }
   }
 };

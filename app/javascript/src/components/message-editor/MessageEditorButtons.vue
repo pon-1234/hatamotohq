@@ -2,14 +2,14 @@
   <div>
     <div class="border template-buttons row">
       <div class="d-flex group-title col-12">
-        <label class="mt-2"> タイトル</label>
+        <label class="mt-2"> タイトル<required-mark /></label>
         <input
           class="form-control"
           placeholder="タイトルを入力してください"
           type="text"
           maxlength="41"
-          v-model="templateData.title"
-          v-validate="'max:40'"
+          v-model.trim="templateData.title"
+          v-validate="'required|max:40'"
           data-vv-as="タイトル"
           :name="'button-title' + indexParent"
         />
@@ -24,7 +24,7 @@
           :name="'button-text' + indexParent"
           type="text"
           maxlength="61"
-          v-model="templateData.text"
+          v-model.trim="templateData.text"
           v-validate="'required|max:60'"
           data-vv-as="テキスト"
         />
@@ -68,7 +68,7 @@
             </div>
             <div class="card-body">
               <div v-for="(item, index) in templateData.actions" :key="index" v-show="index === selected">
-                <message-action-editor
+                <action-editor
                   :name="'parent_' + indexParent + 'template_button_' + index"
                   :value="item"
                   @input="changeAction(index, $event)"
@@ -82,7 +82,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
@@ -95,9 +94,7 @@ export default {
         title: '',
         text: '',
         altText: '',
-        actions: [
-          this.ActionMessage.default
-        ]
+        actions: [this.ActionMessage.default]
       }
     };
   },

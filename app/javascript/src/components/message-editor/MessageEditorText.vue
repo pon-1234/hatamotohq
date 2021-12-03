@@ -2,15 +2,20 @@
   <div class="mt-2">
     <span class="title-editor ml-3">絵文字</span>
     <textarea
-      :name="'message-editor' + index"
       ref="textarea"
-      v-validate="'required|max:5000'"
-      data-vv-as="本文"
       class="form-control"
       rows="5"
       placeholder="本文を入力してください"
-      v-model="input_value"
+      maxlength="5001"
+      v-model="value"
     ></textarea>
+    <input
+      type="hidden"
+      v-model.trim="value"
+      data-vv-as="本文"
+      v-validate="'required|max:5000'"
+      :name="'message-editor' + index"
+    />
     <error-message :message="errors.first('message-editor' + index)"></error-message>
   </div>
 </template>
@@ -40,18 +45,20 @@ export default {
         keyup(editor, event) {
           _this.$emit('input', this.getText());
         },
+        keydown(editor, event) {
+          _this.$emit('input', this.getText());
+        },
+        keypress(editor, event) {
+          _this.$emit('input', this.getText());
+        },
+        change(editor, event) {
+          _this.$emit('input', this.getText());
+        },
         emojibtn_click(editor, event) {
           _this.$emit('input', this.getText());
         }
       }
     });
-  },
-  computed: {
-    input_value: {
-      get() {
-        return this.value;
-      }
-    }
   }
 };
 </script>

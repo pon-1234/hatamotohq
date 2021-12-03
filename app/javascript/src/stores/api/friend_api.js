@@ -5,7 +5,8 @@ export default {
       method: 'GET',
       data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
@@ -14,7 +15,8 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}`,
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
 
@@ -41,6 +43,7 @@ export default {
     });
   },
 
+  // Reminder
   getReminders: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/reminders`,
@@ -55,6 +58,15 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/friends/${payload.friend_id}/set_reminder`,
       method: 'POST',
       data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
+  },
+
+  // Custom info
+  getVariables: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/variables`,
+      method: 'GET',
       contentType: 'application/json'
     });
   }

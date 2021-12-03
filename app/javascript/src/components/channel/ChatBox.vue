@@ -1,10 +1,14 @@
 <template>
   <div class="card chat-panel">
+    <div class="card-header d-flex">
+      <a class="icon-fs d-sm-block d-lg-none" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
+      <a class="flex-grow-1"></a>
+      <a class="icon-fs d-sm-block d-xl-none" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
+    </div>
     <div class="card-body d-flex flex-column">
       <ul
         ref="chatPanel"
         class="flex-grow-1 conversation-list overflow-auto"
-        data-simplebar
         @scroll="handleScroll"
         @drop="onDropMessage"
         @dragover="allowDrop"
@@ -37,7 +41,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -65,7 +69,7 @@ export default {
       handler(val) {
         const newestMessage = _.last(val);
         // Scroll to bottom if receive a new message
-        if (newestMessage.id > this.latestMessageId) {
+        if (newestMessage && newestMessage.id > this.latestMessageId) {
           setTimeout(() => {
             this.latestMessageId = newestMessage.id;
             this.scrollToBottom();
@@ -89,7 +93,9 @@ export default {
       activeChannel: state => state.activeChannel,
       messages: state => state.messages,
       allMessagesLoaded: state => state.allMessagesLoaded,
-      isLoadMoreMessage: state => state.isLoadMoreMessage
+      isLoadMoreMessage: state => state.isLoadMoreMessage,
+      showChatBox: state => state.showChatBox,
+      showUserDetail: state => state.showUserDetail
     }),
 
     latestMessage() {
@@ -116,7 +122,7 @@ export default {
       'unreadMessage',
       'markMessagesRead'
     ]),
-
+    ...mapMutations('channel', ['setShowChatBox', 'setShowUserDetail']),
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
@@ -138,19 +144,22 @@ export default {
       location.href = `#chatItem${id}`;
     },
 
+    hiddenChatBox() {
+      if (this.showChatBox) this.setShowChatBox(false);
+      if (this.showUserDetail) this.setShowUserDetail(false);
+    },
+
+    showUserDetailBox() {
+      if (!this.showUserDetail) this.setShowUserDetail(true);
+    },
+
     async handleScroll(e) {
       this.setScrollParams();
-      if (
-        e.target.scrollTop < 100 &&
-        !this.isLoadingPrevious &&
-        !this.allMessagesLoaded
-      ) {
+      if (e.target.scrollTop < 100 && !this.isLoadingPrevious && !this.allMessagesLoaded) {
         this.isLoadingPrevious = true;
         await this.loadMoreMessages();
-        const heightDifference =
-              this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
-        this.$refs.chatPanel.scrollTop =
-              this.scrollTopBeforeLoad + heightDifference;
+        const heightDifference = this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
+        this.$refs.chatPanel.scrollTop = this.scrollTopBeforeLoad + heightDifference;
         this.isLoadingPrevious = false;
       }
     },
@@ -276,6 +285,27 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .icon-fs {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .conversation-list {
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .chat-panel {
+      height: calc(100vh - 50px);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .chat-panel {
+      height: calc(100vh - 25px);
+    }
+  }
+
   @keyframes kf-flash-message {
     from {
       background-color: #ffe2d5;
@@ -284,4 +314,14 @@ export default {
       background-color: transparent;
     }
   }
+
+  @media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+  @media (max-width: 767px) {
+    .chat-panel {
+      .card-body {
+        padding-bottom: 3.5rem;
+      }
+    }
+  }
+}
 </style>

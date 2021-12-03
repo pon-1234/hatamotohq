@@ -4,18 +4,30 @@
       <div class="card-body">
         <div class="form-border">
           <div class="form-group">
+            <label class="fw-300">フォルダー</label>
+            <div class="flex-grow-1">
+              <select v-model="templateData.folder_id" class="form-control fw-300">
+                <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                  {{ folder.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-border">
+          <div class="form-group">
             <label>テンプレート名<required-mark /></label>
             <input
               type="text"
               class="form-control"
-              name="template-title"
+              name="template_name"
               placeholder="テンプレート名を入力してください"
-              v-model="templateData.name"
-              maxlength="256"
-              v-validate="'required|max:255'"
+              v-model.trim="templateData.name"
+              maxlength="65"
+              v-validate="'required|max:64'"
               data-vv-as="テンプレート名"
             />
-            <error-message :message="errors.first('template-title')"></error-message>
+            <error-message :message="errors.first('template_name')"></error-message>
           </div>
         </div>
         <div class="form-border">
@@ -28,7 +40,7 @@
               v-bind:index="index"
               v-bind:messagesCount="templateData.messages.length"
               @input="changeContent"
-              @remove="removeContent"
+              @remove="removeMessage"
               @moveUp="moveUp"
               @moveDown="moveDown"
             />
@@ -40,7 +52,9 @@
         </div>
       </div>
       <div class="card-footer d-flex">
-        <button type="submit" class="btn btn-success fw-120" @click="submitSaveTemplate">保存</button>
+        <div class="btn btn-success mw-120" @click="submitSaveTemplate" autofocus="false">
+          {{ template_id ? "保存" : "テンプレート登録" }}
+        </div>
       </div>
 
       <loading-indicator :loading="loading"></loading-indicator>
@@ -54,8 +68,9 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['template_id'],
@@ -66,13 +81,14 @@ export default {
     return {
       templateData: {
         name: '',
-        messages: []
+        messages: [],
+        folder_id: null
       },
       loading: true,
       componentKey: 0
     };
   },
-  created() {
+  async created() {
     if (this.template_id) {
       this.templateData.id = this.template_id;
     } else {
@@ -84,11 +100,19 @@ export default {
         }
       });
     }
+    this.templateData.folder_id = Util.getParamFromUrl('folder_id');
+    await this.getTemplates();
   },
 
   async beforeMount() {
     await this.fetchItem();
     this.loading = false;
+  },
+
+  computed: {
+    ...mapState('template', {
+      folders: state => state.folders
+    })
   },
 
   watch: {
@@ -106,12 +130,11 @@ export default {
       'createTemplate',
       'updateTemplate',
       'deleteTemplate',
-      'setMessagePreview'
+      'setMessagePreview',
+      'getTemplates'
     ]),
 
-    ...mapActions('system', [
-      'setIsSubmitChange'
-    ]),
+    ...mapActions('system', ['setIsSubmitChange']),
 
     forceRerender() {
       this.componentKey += 1;
@@ -127,8 +150,9 @@ export default {
       });
     },
 
-    removeContent({ index }) {
+    removeMessage(index) {
       this.templateData.messages.splice(index, 1);
+      this.forceRerender();
     },
 
     moveUp(index) {
@@ -166,19 +190,7 @@ export default {
       this.setIsSubmitChange();
 
       if (!result) {
-        $('input, textarea').each(
-          function(index) {
-            let input = $(this);
-            if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-              if (input.is(':hidden')) {
-                input = input.parent();
-              }
-              $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-              return false;
-            }
-          }
-        );
-        return;
+        return ViewHelper.scrollToRequiredField(true);
       }
 
       const orderedMessages = this.templateData.messages.map((message, index) => {
@@ -187,7 +199,7 @@ export default {
       });
       const payload = {
         id: this.template_id,
-        folder_id: Util.getParamFromUrl('folder_id'),
+        folder_id: this.templateData.folder_id,
         name: this.templateData.name,
         template_messages_attributes: orderedMessages
       };
@@ -195,14 +207,20 @@ export default {
       if (!this.template_id) {
         const response = await this.createTemplate(payload);
         if (response) {
-          Util.showSuccessThenRedirect('テンプレートの作成は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+          Util.showSuccessThenRedirect(
+            'テンプレートの作成は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
+          );
         } else {
           window.toastr.error('エラーを発生しました。');
         }
       } else {
         const response = await this.updateTemplate(payload);
         if (response) {
-          Util.showSuccessThenRedirect('テンプレートの変更は完了しました。', `${process.env.MIX_ROOT_PATH}/user/templates`);
+          Util.showSuccessThenRedirect(
+            'テンプレートの変更は完了しました。',
+            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
+          );
         } else {
           window.toastr.error('エラーを発生しました。');
         }

@@ -38,8 +38,18 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a role="button" class="dropdown-item">配信タイミングを編集する</a>
-                        <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modelDeleteEpisode"
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/reminders/${reminder_id}/episodes/${episode.id}/edit`"
+                          >配信タイミングを編集する</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteEpisode"
+                          @click="curEpisodeIndex = index"
                           >配信タイミングを削除</a
                         >
                       </div>
@@ -55,11 +65,26 @@
         <loading-indicator :loading="loading"></loading-indicator>
       </div>
     </div>
+    <!-- START: Delete episode -->
+    <modal-confirm
+      title="本当に削除してよろしですか?"
+      id="modalDeleteEpisode"
+      type="delete"
+      @confirm="submitDeleteEpisode"
+    >
+      <template v-slot:content>
+        <div v-if="curEpisode">
+          配信タインミングID：: <b>{{ curEpisode.id }}</b>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: Delete episode -->
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   props: ['reminder_id'],
@@ -68,11 +93,13 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       loading: false,
       contentKey: 0,
-      episodes: []
+      episodes: [],
+      curEpisodeIndex: 0
     };
   },
 
   async beforeMount() {
+    this.loading = true;
     const episodes = await this.getEpisodes(this.reminder_id);
     if (episodes) {
       this.episodes = episodes;
@@ -80,10 +107,28 @@ export default {
     this.loading = false;
   },
 
+  computed: {
+    curEpisode() {
+      return this.episodes ? this.episodes[this.curEpisodeIndex] : null;
+    }
+  },
+
   methods: {
-    ...mapActions('reminder', [
-      'getEpisodes'
-    ])
+    ...mapActions('reminder', ['getEpisodes', 'deleteEpisode']),
+
+    async submitDeleteEpisode() {
+      const params = {
+        reminder_id: this.reminder_id,
+        id: this.curEpisode.id
+      };
+      const response = await this.deleteEpisode(params);
+      if (response) {
+        Util.showSuccessThenRedirect(
+          '配信タインミングの削除は成功しました。',
+          `${this.rootPath}/user/reminders/${this.reminder_id}/episodes`
+        );
+      } else window.toastr.error('配信タインミングの削除は失敗しました。');
+    }
   }
 };
 </script>

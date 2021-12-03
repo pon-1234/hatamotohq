@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" id="modalAnnouncementDetail" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false">
+  <div class="modal fade" id="modalAnnouncementDetail" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">

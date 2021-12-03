@@ -55,7 +55,7 @@ export const actions = {
 
   async uploadMedia(_, payload) {
     try {
-      return await MediaApi.uploadMedia({ file: payload.file, duration: payload.duration });
+      return await MediaApi.uploadMedia({ file: payload.file, duration: payload.duration, type: payload.type });
     } catch (error) {
       return null;
     }
@@ -70,9 +70,9 @@ export const actions = {
     }
   },
 
-  async uploadImageMap(_, query) {
+  async uploadImageMap(_, file) {
     try {
-      return await MediaApi.uploadImageMap({ file: query.file });
+      return await MediaApi.uploadImageMap(file);
     } catch (error) {
       console.log(error);
       return null;

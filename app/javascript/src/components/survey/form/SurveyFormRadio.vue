@@ -1,17 +1,26 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-
-    <div class="mt-2">
-      <div
-        class="custom-control custom-radio custom-control-inline d-flex flex-start"
-        v-for="(option, index) in options"
-        :key="index"
-      >
-        <input type="radio" :id="`${prefix}Option${index}`" name="customRadio1" class="custom-control-input" />
-        <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
+    <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
+      <div class="mt-2">
+        <div
+          class="custom-control custom-radio custom-control-inline d-flex flex-start"
+          v-for="(option, index) in options"
+          :key="index"
+        >
+          <input
+            type="radio"
+            :id="`${prefix}Option${index}`"
+            :name="`answers[${qnum}][answer]`"
+            class="custom-control-input"
+            :value="option.value"
+            v-model="answer"
+          />
+          <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
+        </div>
       </div>
-    </div>
+      <error-message :message="errors[0]"></error-message>
+    </ValidationProvider>
   </div>
 </template>
 
@@ -19,13 +28,19 @@
 export default {
   props: ['question', 'qnum'],
 
+  data() {
+    return {
+      answer: null
+    };
+  },
+
   computed: {
     prefix() {
       return `surveyQuestion${this.qnum}`;
     },
 
     isRequired() {
-      return this.question ? this.question.required : '';
+      return this.question ? this.question.required : false;
     },
 
     content() {

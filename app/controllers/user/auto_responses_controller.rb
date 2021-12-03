@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::AutoResponsesController < User::ApplicationController
-  before_action :find_auto_response, only: [:show, :update, :copy]
+  before_action :find_auto_response, only: [:show, :update, :copy, :destroy]
 
   include User::AutoResponsesHelper
 
@@ -24,7 +24,6 @@ class User::AutoResponsesController < User::ApplicationController
     if @auto_response.save
       build_auto_response_keywords(@auto_response, auto_response_params[:keywords])
       build_auto_response_messages(@auto_response, messages_params)
-      redirect_to user_auto_responses_path, flash: { success: '自動応答の作成は完了しました。' }
     else
       render_bad_request_with_message(@auto_response.first_error_message)
     end
@@ -44,15 +43,9 @@ class User::AutoResponsesController < User::ApplicationController
       if params[:messages].present?
         build_auto_response_messages(@auto_response, messages_params)
       end
-      respond_to do |format|
-        format.html { redirect_to user_auto_responses_path, flash: { success: '自動応答の変更は完了しました。' } }
-        format.json { render_success }
-      end
+      render_success
     else
-      respond_to do |format|
-        format.html { redirect_to user_auto_responses_path, flash: { error: '自動応答の変更は失敗しました。' } }
-        format.json { render_bad_request_with_message(@auto_response.first_error_message) }
-      end
+      render_bad_request_with_message(@auto_response.first_error_message)
     end
   end
 
@@ -72,6 +65,12 @@ class User::AutoResponsesController < User::ApplicationController
     render_bad_request
   end
 
+  # DELETE /user/auto_responses/:id
+  def destroy
+    @auto_response.destroy!
+    render_success
+  end
+
   private
     def auto_response_params
       params.permit(
@@ -84,6 +83,7 @@ class User::AutoResponsesController < User::ApplicationController
 
     def update_auto_response_params
       params.permit(
+        :folder_id,
         :name,
         :status,
         keywords: []

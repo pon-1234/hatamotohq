@@ -1,13 +1,22 @@
 <template>
   <div>
     <div class="card mvh-50">
-      <div class="card-header text-md">
+      <div class="card-header border-bottom border-primary text-md">
         <b>お知らせ</b>
       </div>
       <div class="card-body" v-if="!loading">
-        <div v-for="announcement in announcements" :key="announcement.id" role="button" data-toggle="modal" data-target="#modalAnnouncementDetail" @click="curAnnouncement = announcement">
-          <h4 class="mt-0 mb-1 font-16">{{ announcement.title }}</h4>
-          <p class="text-muted"><small>{{ formattedDate(announcement.announced_at) }}</small></p>
+        <div
+          v-for="announcement in announcements"
+          :key="announcement.id"
+          role="button"
+          data-toggle="modal"
+          data-target="#modalAnnouncementDetail"
+          @click="curAnnouncement = announcement"
+        >
+          <h4 class="mt-0 mb-1 font-16 max-3-lines">{{ announcement.title }}</h4>
+          <p class="text-muted">
+            <small>{{ formattedDate(announcement.announced_at) }}</small>
+          </p>
         </div>
         <div class="d-flex justify-content-center mt-4" v-if="totalRows > perPage">
           <b-pagination
@@ -27,7 +36,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import Util from '@/core/util';
 
 export default {
@@ -35,7 +44,8 @@ export default {
     return {
       loading: true,
       currentPage: 1,
-      curAnnouncement: null
+      curAnnouncement: null,
+      contentKey: 0
     };
   },
 
@@ -47,16 +57,14 @@ export default {
   computed: {
     ...mapState('announcement', {
       announcements: state => state.announcements,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     })
   },
 
   methods: {
-    ...mapActions('announcement', [
-      'getPublishedAnnouncements',
-      'setCurPage'
-    ]),
+    ...mapMutations('announcement', ['setCurPage']),
+    ...mapActions('announcement', ['getPublishedAnnouncements']),
 
     async loadPage() {
       // bootstrap pagination return old value of current page,
@@ -68,6 +76,10 @@ export default {
         this.forceRerender();
         this.loading = false;
       });
+    },
+
+    forceRerender() {
+      this.contentKey++;
     },
 
     formattedDate(time) {

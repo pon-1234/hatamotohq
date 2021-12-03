@@ -110,7 +110,7 @@
             class="form-control"
             name="broadcast_title"
             placeholder="タイトルを入力してください"
-            v-model="broadcastData.title"
+            v-model.trim="broadcastData.title"
             v-validate="'required|max:255'"
             maxlength="256"
             data-vv-as="タイトル"
@@ -146,8 +146,8 @@
 
     <div>
       <div class="row-form-btn d-flex">
-        <button class="btn btn-success fw-120 mr-1" @click="submit('pending')" :disabled="invalid">配信登録</button>
-        <button type="submit" class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</button>
+        <div class="btn btn-success fw-120 mr-1" @click="submit('pending')">配信登録</div>
+        <div class="btn btn-outline-success fw-120" @click="submit('draft')">下書き保存</div>
       </div>
     </div>
     <message-preview></message-preview>
@@ -157,6 +157,7 @@
 import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
+import ViewHelper from '@/core/view_helper';
 
 export default {
   props: ['broadcast_id'],
@@ -186,14 +187,20 @@ export default {
         },
         tags: [],
         title: '',
-        schedule_at: moment().tz('Asia/Tokyo').format(),
-        created_at: moment().tz('Asia/Tokyo').format(),
+        schedule_at: moment()
+          .tz('Asia/Tokyo')
+          .format(),
+        created_at: moment()
+          .tz('Asia/Tokyo')
+          .format(),
         status: this.MessageDeliveriesStatus.Pending,
         messages: [],
         deliver_now: true,
         type: 'all'
       },
-      currentDate: moment().tz('Asia/Tokyo').format()
+      currentDate: moment()
+        .tz('Asia/Tokyo')
+        .format()
     };
   },
 
@@ -223,15 +230,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('broadcast', [
-      'createBroadcast',
-      'updateBroadcast',
-      'getBroadcast',
-      'setPreviewContent'
-    ]),
-    ...mapActions('template', [
-      'getTemplate'
-    ]),
+    ...mapActions('broadcast', ['createBroadcast', 'updateBroadcast', 'getBroadcast', 'setPreviewContent']),
+    ...mapActions('template', ['getTemplate']),
 
     forceRerender() {
       this.contentKey++;
@@ -268,7 +268,7 @@ export default {
       this.broadcastData.messages.splice(index, 1, content);
     },
 
-    removeMessage({ index }) {
+    removeMessage(index) {
       this.broadcastData.messages.splice(index, 1);
       this.forceRerender();
     },
@@ -311,17 +311,8 @@ export default {
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
-          $('input, textarea').each(
-            function(index) {
-              var input = $(this);
-              if (input.attr('aria-invalid') && input.attr('aria-invalid') === 'true') {
-                $('html,body').animate({ scrollTop: input.offset().top - 200 }, 'slow');
-                return false;
-              }
-            }
-          );
-          return;
-        };
+          return ViewHelper.scrollToRequiredField(false);
+        }
       }
 
       // Normalize data

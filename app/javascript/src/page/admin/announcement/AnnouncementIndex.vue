@@ -11,42 +11,75 @@
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-centered table-bordered mb-0">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>日時</th>
-                      <th>タイトル</th>
-                      <th>変更日時</th>
-                      <th>状況</th>
-                      <th class="fw-300">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody v-for="(announcement, index) in announcements" :key="announcement.id">
-                      <tr>
-                        <td>{{ formattedDatetime(announcement.announced_at) }}</td>
-                        <td>{{ announcement.title }}</td>
-                        <td>{{ formattedDatetime(announcement.updated_at) }}</td>
-                        <td>
-                          <announcement-status :announcement="announcement"></announcement-status>
-                        </td>
-                        <td>
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
-                            <div class="dropdown-menu">
-                              <a :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`" role="button" class="dropdown-item">お知らせを編集</a>
-                              <a v-if="announcement.status && announcement.status !== 'draft'" role="button" class="dropdown-item" data-toggle="modal" data-target="#modalToggleStatusAnnouncement" @click="curAnnouncementIndex = index">
-                                <span v-if="announcement.status === 'unpublished'">公開にする</span>
-                                <span v-else>未公開にする</span>
-                              </a>
-                              <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAnnouncement" @click="curAnnouncementIndex = index">お知らせを削除</a>
-                            </div>
-                          </div>
-                          <div class="btn btn-light btn-sm" data-toggle="modal" data-target="#modalAnnouncementDetail" @click="curAnnouncementIndex = index">プレビュー</div>
-                        </td>
-                      </tr>
-                  </tbody>
+                <thead class="thead-light">
+                  <tr>
+                    <th>日時</th>
+                    <th>タイトル</th>
+                    <th>変更日時</th>
+                    <th>状況</th>
+                    <th class="fw-300">操作</th>
+                  </tr>
+                </thead>
+                <tbody v-for="(announcement, index) in announcements" :key="announcement.id">
+                  <tr>
+                    <td class="mw-200">{{ formattedDatetime(announcement.announced_at) }}</td>
+                    <td>{{ announcement.title }}</td>
+                    <td>{{ formattedDatetime(announcement.updated_at) }}</td>
+                    <td class="mw-150">
+                      <announcement-status :announcement="announcement"></announcement-status>
+                    </td>
+                    <td>
+                      <div class="btn-group">
+                        <button
+                          type="button"
+                          class="btn btn-light btn-sm dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          操作 <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a
+                            :href="`${rootUrl}/admin/announcements/${announcement.id}/edit`"
+                            role="button"
+                            class="dropdown-item"
+                            >お知らせを編集</a
+                          >
+                          <a
+                            v-if="announcement.status && announcement.status !== 'draft'"
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalToggleStatusAnnouncement"
+                            @click="curAnnouncementIndex = index"
+                          >
+                            <span v-if="announcement.status === 'unpublished'">公開にする</span>
+                            <span v-else>非公開にする</span>
+                          </a>
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalDeleteAnnouncement"
+                            @click="curAnnouncementIndex = index"
+                            >お知らせを削除</a
+                          >
+                        </div>
+                      </div>
+                      <div
+                        class="btn btn-light btn-sm"
+                        data-toggle="modal"
+                        data-target="#modalAnnouncementDetail"
+                        @click="curAnnouncementIndex = index"
+                      >
+                        プレビュー
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
-            <div class="d-flex justify-content-end" v-if="totalRows && totalRows/10 > 1">
+            <div class="d-flex justify-content-end" v-if="totalRows && totalRows / 10 > 1">
               <b-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
@@ -66,20 +99,32 @@
     </div>
 
     <!-- START: Delete announcement modal -->
-    <modal-confirm title="このお知らせを削除もよろしいですか？" id='modalDeleteAnnouncement' type='delete' @confirm="submitDeleteAnnouncement">
+    <modal-confirm
+      title="このお知らせを削除もよろしいですか？"
+      id="modalDeleteAnnouncement"
+      type="delete"
+      @confirm="submitDeleteAnnouncement"
+    >
       <template v-slot:content>
         <div v-if="curAnnouncement">
-          お知らせタイトル：<b>{{curAnnouncement.title}}</b>
+          お知らせタイトル：<b>{{ curAnnouncement.title }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Delete announcement modal -->
 
     <!-- START: Toggle status (published/unpublished) -->
-    <modal-confirm title="このお知らせの状況を変更してもよろしいですか？" id='modalToggleStatusAnnouncement' type='confirm' @confirm="submitToggleStatus">
+    <modal-confirm
+      title="このお知らせの状況を変更してもよろしいですか？"
+      id="modalToggleStatusAnnouncement"
+      type="confirm"
+      @confirm="submitToggleStatus"
+    >
       <template v-slot:content>
         <div v-if="curAnnouncement">
-          <b>{{ curAnnouncement.status === 'published' ? '公開' : '未公開' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAnnouncement.status === 'published' ? '未公開' : '公開' }}</b>
+          <b>{{ curAnnouncement.status === "published" ? "公開" : "非公開" }}</b>
+          <i class="mdi mdi-arrow-right-bold"></i>
+          <b>{{ curAnnouncement.status === "published" ? "非公開" : "公開" }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -108,10 +153,10 @@ export default {
   },
   computed: {
     ...mapState('announcement', {
-      announcements: (state) => state.announcements,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage,
-      curPage: (state) => state.curPage
+      announcements: state => state.announcements,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage,
+      curPage: state => state.curPage
     }),
 
     curAnnouncement() {
@@ -119,14 +164,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('announcement', [
-      'setCurPage'
-    ]),
-    ...mapActions('announcement', [
-      'getAnnouncements',
-      'deleteAnnouncement',
-      'updateAnnouncement'
-    ]),
+    ...mapMutations('announcement', ['setCurPage']),
+    ...mapActions('announcement', ['getAnnouncements', 'deleteAnnouncement', 'updateAnnouncement']),
 
     forceRerender() {
       this.contentKey++;
@@ -158,11 +197,12 @@ export default {
     async submitToggleStatus() {
       const data = {
         id: this.curAnnouncement.id,
-        status: (this.curAnnouncement.status === 'unpublished') ? 'published' : 'unpublished'
+        status: this.curAnnouncement.status === 'unpublished' ? 'published' : 'unpublished'
       };
       const response = await this.updateAnnouncement(data);
-      if (response) Util.showSuccessThenRedirect('お知らせ状況の変更は完了しました。', `${this.rootUrl}/admin/announcements`);
-      else window.toastr.error('お知らせ状況の変更は失敗しました。');
+      if (response) {
+        Util.showSuccessThenRedirect('お知らせ状況の変更は完了しました。', `${this.rootUrl}/admin/announcements`);
+      } else window.toastr.error('お知らせ状況の変更は失敗しました。');
     }
   }
 };

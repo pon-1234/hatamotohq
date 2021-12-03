@@ -7,18 +7,16 @@
             <div class="card">
               <!-- START: Logo -->
               <div class="card-header pt-4 pb-4 text-center bg-success">
-                <a href="#" class="text-white text-uppercase" style="font-size:1.2rem;">
+                <a href="#" class="text-white text-uppercase" style="font-size: 1.2rem">
                   <!-- <span><img src="assets/images/logo.png" alt="" height="18"></span> -->
-                  <span>LINE INSIGHT</span>
+                  <span>LINE CMS</span>
                 </a>
               </div>
               <!-- END: Logo -->
               <!-- START: Form -->
               <div class="card-body p-4">
                 <div class="text-center w-75 m-auto">
-                  <h4 class="text-dark-50 text-center mt-0 font-weight-bold">
-                    ログイン
-                  </h4>
+                  <h4 class="text-dark-50 text-center mt-0 font-weight-bold">ログイン</h4>
                   <p class="text-muted mb-4">
                     管理パネルにアクセスするには、メールアドレスとパスワードを入力してください。
                   </p>
@@ -36,9 +34,7 @@
                       placeholder="メールを入力してください"
                       v-model="userData.email"
                     />
-                    <error-message
-                      :message="errors.first('user[email]')"
-                    ></error-message>
+                    <error-message :message="errors.first('user[email]')"></error-message>
                   </div>
 
                   <div class="form-group">
@@ -46,10 +42,7 @@
                       ><small>パスワードを忘れましたか?</small></a
                     >
                     <label for="password">パスワード</label>
-                    <input-password
-                      name="user[password]"
-                      :password.sync="userData.password"
-                    ></input-password>
+                    <input-password name="user[password]" :password.sync="userData.password"></input-password>
                   </div>
                   <div class="form-group mb-3">
                     <div class="custom-control custom-checkbox">
@@ -63,20 +56,12 @@
                         false-value="false"
                         checked
                       />
-                      <label class="custom-control-label" for="checkbox-signin"
-                        >ログインを記憶する</label
-                      >
+                      <label class="custom-control-label" for="checkbox-signin">ログインを記憶する</label>
                     </div>
                   </div>
 
                   <div class="form-group mb-0 text-center">
-                    <button
-                      class="btn btn-success"
-                      type="submit"
-                      :disabled="invalid"
-                    >
-                      ログイン
-                    </button>
+                    <button type="submit" class="btn btn-success" :disabled="invalid">ログイン</button>
                   </div>
                 </form>
               </div>

@@ -5,6 +5,7 @@ class SyncLineFriendJob < ApplicationJob
 
   def perform(line_account, friend_id)
     data = LineApi::GetProfile.new(line_account).perform(friend_id)
+    return unless data.present?
 
     # Create or update friend info
     line_friend = LineFriend.find_or_initialize_by(line_account: line_account, line_user_id: data['userId'])
@@ -20,7 +21,7 @@ class SyncLineFriendJob < ApplicationJob
     channel.save!
 
     # Create or update channel participant
-    participant = ChannelMember.find_or_initialize_by(line_friend: line_friend, channel: channel)
+    participant = ChannelMember.find_or_initialize_by(participant: line_friend, channel: channel)
     participant.save!
   end
 end

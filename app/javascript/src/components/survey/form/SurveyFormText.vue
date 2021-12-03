@@ -1,24 +1,30 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <input
-      type="text"
-      name="survey-name"
-      class="form-control mt-2"
-      placeholder="入力してください"
-      v-validate="'required|max:255'"
-      data-vv-as="答え"
-    />
+    <ValidationProvider name="答え" :rules="{ required: isRequired, max: 255 }" v-slot="{ errors }">
+      <input
+        type="text"
+        :name="`answers[${qnum}][answer]`"
+        class="form-control mt-2"
+        placeholder="入力してください"
+        v-model.trim="answer"
+      />
+      <error-message :message="errors[0]"></error-message>
+    </ValidationProvider>
   </div>
 </template>
 
 <script>
 export default {
   props: ['question', 'qnum'],
-
+  data() {
+    return {
+      answer: undefined
+    };
+  },
   computed: {
     isRequired() {
-      return this.question ? this.question.required : '';
+      return this.question ? this.question.required : false;
     },
 
     content() {

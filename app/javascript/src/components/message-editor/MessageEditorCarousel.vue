@@ -11,7 +11,6 @@
             role="presentation"
             v-for="(item, index) in messageData.columns"
             :key="index"
-            @click="changeSelected(index)"
           >
             <a
               aria-controls="text"
@@ -19,14 +18,15 @@
               data-toggle="tab"
               aria-expanded="true"
               :class="selected === index ? 'active' : ''"
+              @click="changeSelected(index)"
             >
               パネル{{ index + 1 }}
-              <span @click="removeColumn(index)" v-if="messageData.columns.length > 1">
-                <i class="fa fa-times"></i>
-              </span>
             </a>
+            <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
+                <i class="dripicons-trash"></i>
+              </span>
           </li>
-          <li class="d-flex justify-content-center p-1" @click="addMoreColumn">
+          <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>
           </li>
         </ul>
@@ -46,7 +46,7 @@
                   :name="'carousel-title' + indexColumn"
                   placeholder="タイトル"
                   class="form-control"
-                  v-model="column.title"
+                  v-model.trim="column.title"
                   maxlength="40"
                   v-validate="{ required: requiredTitle }"
                   data-vv-as="タイトル"
@@ -164,8 +164,8 @@
                   </div>
                   <div class="card-body">
                     <div class="col-sm-12">
-                      <message-action-editor
-                        :name="index + '_template_carousel_' + indexColumn"
+                      <action-editor
+                        :name="`template_carousel_${index}_column${indexColumn}`"
                         :value="item"
                         @input="changeActionColumn(indexColumn, index, ...arguments)"
                       />
@@ -209,9 +209,7 @@ export default {
             thumbnailImageUrl: '',
             title: '',
             text: '',
-            actions: [
-              this.ActionMessage.default
-            ]
+            actions: [this.ActionMessage.default]
           }
         ]
       }
@@ -264,8 +262,10 @@ export default {
     removeColumn(index) {
       this.messageData.columns.splice(index, 1);
 
-      if (this.selected === this.messageData.columns.length) {
-        this.selected -= 1;
+      if (index === 0) {
+        this.selected = index;
+      } else if (this.selected === this.messageData.columns.length) {
+        this.selected = index - 1;
       }
     },
 
@@ -314,11 +314,15 @@ export default {
     },
 
     coppyAllThumb() {
-      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl; });
+      this.messageData.columns.forEach(item => {
+        item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl;
+      });
     },
 
     removeAllThumb() {
-      this.messageData.columns.forEach(item => { item.thumbnailImageUrl = ''; });
+      this.messageData.columns.forEach(item => {
+        item.thumbnailImageUrl = '';
+      });
     },
 
     changeSelectedAction(index, value) {
@@ -332,7 +336,11 @@ export default {
     moveTopAction(index) {
       const option = this.messageData.columns[this.selected].actions[index];
       if (this.messageData.columns[this.selected].actions[index - 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index - 1, 1, option)[0];
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
+          index - 1,
+          1,
+          option
+        )[0];
 
         if (this.selectedAction === index) {
           this.selectedAction -= 1;
@@ -343,7 +351,11 @@ export default {
     moveBottomAction(index) {
       const option = this.messageData.columns[this.selected].actions[index];
       if (this.messageData.columns[this.selected].actions[index + 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(index + 1, 1, option)[0];
+        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
+          index + 1,
+          1,
+          option
+        )[0];
         if (this.selectedAction === index) {
           this.selectedAction += 1;
         }
@@ -352,7 +364,7 @@ export default {
 
     copyCurrentAction(index) {
       if (this.messageData.columns[this.selected].actions.length < 3) {
-        this.messageData.columns.forEach((item) => {
+        this.messageData.columns.forEach(item => {
           // eslint-disable-next-line no-undef
           item.actions.splice(index + 1, 0, _.cloneDeep(item.actions[index]));
         });
@@ -360,7 +372,7 @@ export default {
     },
 
     removeCurrentAction(index) {
-      this.messageData.columns.forEach((item) => {
+      this.messageData.columns.forEach(item => {
         item.actions.splice(index, 1);
       });
 
@@ -370,7 +382,7 @@ export default {
     },
 
     addMoreAction() {
-      this.messageData.columns.forEach((item) => {
+      this.messageData.columns.forEach(item => {
         item.actions.push(this.ActionMessage.default);
       });
     },

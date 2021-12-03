@@ -1,18 +1,18 @@
 <template>
-  <div class="mxw-1200" >
+  <div class="mxw-1200">
     <div class="card">
       <!-- <div class="card-header d-flex align-items-center"></div> -->
-      <ValidationObserver ref="observer" v-slot="{ validate }">
+      <ValidationObserver ref="observer">
         <div class="card-body">
           <div class="form-group row">
-            <label class="col-12">日時<required-mark/></label>
+            <label class="col-12">日時<required-mark /></label>
             <div class="col-12">
               <ValidationProvider name="日時" rules="required" v-slot="{ errors }">
                 <datetime
                   v-model="announcementData.announced_at"
                   input-class="form-control"
                   type="datetime"
-                  :phrases="{ok: '確定', cancel: '閉じる'}"
+                  :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="日付を選択してください"
                   :min-datetime="currentDate"
                   value-zone="Asia/Tokyo"
@@ -23,20 +23,26 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">タイトル<required-mark/></label>
+            <label class="col-12">タイトル<required-mark /></label>
             <div class="col-12">
               <ValidationProvider name="タイトル" rules="required|max:512" v-slot="{ errors }">
-                <input type="text" class="form-control" name="announcement[title]" placeholder="入力してください" v-model="announcementData.title">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="announcement[title]"
+                  placeholder="入力してください"
+                  v-model.trim="announcementData.title"
+                />
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-12">本文<required-mark/></label>
+            <label class="col-12">本文<required-mark /></label>
             <div class="col-12">
               <rich-text-input :value.sync="announcementData.body"></rich-text-input>
               <ValidationProvider name="本文" rules="required" v-slot="{ errors }">
-                <input type="hidden" v-model="announcementData.body" name="announcement[body]"/>
+                <input type="hidden" v-model="announcementData.body" name="announcement[body]" />
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
@@ -109,12 +115,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep {
-  .vdatetime-overlay {
-    z-index: 1049;
+  ::v-deep {
+    .vdatetime-overlay {
+      z-index: 1049;
+    }
+    .vdatetime-popup {
+      z-index: 1050;
+    }
   }
-  .vdatetime-popup {
-    z-index: 1050;
-  }
-}
 </style>
