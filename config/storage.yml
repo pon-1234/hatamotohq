@@ -19,7 +19,6 @@ google:
   project: insight-line-crm
   credentials: <%= Rails.root.join("config/secrets/gcs-stg.json") %>
   bucket: line-cms-stg
-  public: true
 # google:
 #   service: GCS
 #   project: your_project

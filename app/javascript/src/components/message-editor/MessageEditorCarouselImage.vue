@@ -3,21 +3,21 @@
     <div class="col-md-12">
       <div class="panel panel-default pb20 mb-0">
         <!-- パネルメニュー -->
-        <ul class="nav nav-tabs nav-bordered px-1" role="tablist">
+        <ul class="nav nav-tabs nav-bordered" role="tablist">
           <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
             <a
               aria-controls="text"
               role="tab"
               data-toggle="tab"
               aria-expanded="true"
-              class="d-flex align-items-center justify-content-center"
               :class="selected === index ? 'active' : ''"
+              @click="changeSelected(index)"
             >
-              <div class="mt-1" @click="changeSelected(index)">パネル{{ index + 1 }}</div>
-              <span class="ml-2" @click="removeColumn(index)" v-if="messageData.columns.length > 1">
-                <i class="dripicons-trash"></i>
-              </span>
+              パネル{{ index + 1 }}
             </a>
+            <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
+              <i class="dripicons-trash"></i>
+            </span>
           </li>
           <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>

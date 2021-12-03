@@ -9,7 +9,7 @@ class ReminderSchedulerJob < ApplicationJob
     return unless @reminding.present?
     @channel = @reminding.channel
     reminder = @reminding.reminder
-    episodes = reminder.episodes
+    episodes = reminder.episodes.ordered
     episodes.each_with_index do |episode, index|
       schedule(episode, index == episodes.length - 1)
     end
@@ -17,10 +17,11 @@ class ReminderSchedulerJob < ApplicationJob
 
   private
     def schedule(episode, is_last)
-      if episode.is_initial?
+      schedule_at = deliver_time_for(episode)
+      if episode.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(episode, is_last)
       else
-        create_reminder_event(episode, deliver_time_for(episode), :queued, is_last)
+        create_reminder_event(episode, schedule_at, :queued, is_last)
       end
     end
 
@@ -66,6 +67,6 @@ class ReminderSchedulerJob < ApplicationJob
       goal = @reminding.goal
       date = episode.date
       time = episode.time.to_time
-      (goal - date).change({ hour: time.hour, minute: time.min, second: 0 })
+      (goal - date).change({ hour: time.hour, min: time.min, sec: 0 })
     end
 end
