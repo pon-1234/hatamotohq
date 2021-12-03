@@ -9,7 +9,7 @@ class ReminderSchedulerJob < ApplicationJob
     return unless @reminding.present?
     @channel = @reminding.channel
     reminder = @reminding.reminder
-    episodes = reminder.episodes
+    episodes = reminder.episodes.ordered
     episodes.each_with_index do |episode, index|
       schedule(episode, index == episodes.length - 1)
     end

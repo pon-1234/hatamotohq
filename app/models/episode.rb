@@ -27,7 +27,7 @@ class Episode < ApplicationRecord
   has_many :reminder_events
 
   # Scope
-  scope :ordered, -> { order(is_initial: :desc, date: :desc, time: :desc) }
+  scope :ordered, -> { order(is_initial: :desc, date: :desc, time: :asc) }
 
   before_save do
     self.is_initial = true if (self.date == 0) && self.time.eql?('00:00')
