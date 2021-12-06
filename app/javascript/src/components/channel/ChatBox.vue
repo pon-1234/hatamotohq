@@ -30,10 +30,7 @@
 
       <reply-box
         @sendTextMessage="sendTextMessage"
-        @sendStickerMessage="sendStickerMessage"
-        @sendMediaMessage="sendMediaMessage"
-        @sendTemplate="sendTemplate"
-        @sendScenario="sendScenario"
+        @resetModalSticker='resetModalSticker'
       ></reply-box>
     </div>
     <loading-indicator></loading-indicator>
@@ -280,6 +277,10 @@ export default {
       };
 
       this.$emit('onSendMessage', message);
+    },
+
+    resetModalSticker(event) {
+      this.$emit('onResetModalSticker', event);
     }
   }
 };

@@ -10,7 +10,7 @@
       <!-- {{ showChatBox }} -->
       <!-- chat area -->
       <div class="channel-chat" :class="showChatBox ? 'channel-chat-visible' : ''">
-        <chat-box></chat-box>
+        <chat-box ref="chatBox" @onResetModalSticker='onResetModalSticker'></chat-box>
         <!-- :class="getRightItem()" -->
       </div>
       <!-- end chat area-->
@@ -129,6 +129,45 @@ export default {
       }
 
       return className;
+    },
+
+    sendMediaMessage(media) {
+      const payload = _.cloneDeep(media);
+      // convert media type if need
+      if (payload.type === 'richmenu') {
+        payload.type = 'image';
+      }
+      this.$refs.chatBox.sendMediaMessage(payload);
+      // this.$emit('sendMediaMessage', payload);
+    },
+
+    sendTemplate(template) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        template_id: template.id
+      };
+      this.$refs.chatBox.sendTemplate(payload);
+      // this.$emit('sendTemplate', payload);
+    },
+
+    sendScenario(scenario) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        scenario_id: scenario.id
+      };
+      this.$refs.chatBox.sendScenario(payload);
+      // this.$emit('sendScenario', payload);
+    },
+
+    sendStickerMessage(sticker) {
+      this.$refs.chatBox.sendStickerMessage(sticker);
+      // this.$emit('sendStickerMessage', sticker);
+    },
+
+    onResetModalSticker(e) {
+      if (e) {
+        this.$refs.modalSticker.reset();
+      }
     }
   }
 };
