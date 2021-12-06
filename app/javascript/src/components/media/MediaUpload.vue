@@ -41,7 +41,7 @@
           <label class="custom-file-label text-left">ファイルを選択</label>
         </div>
         <span v-if="errorMessage" class="w-100 error">{{ errorMessage }}</span>
-        <media-upload-hint class="m-4" :type="mediaData.type"></media-upload-hint>
+        <media-upload-hint class="m-4" :type="uploadRequiredType"></media-upload-hint>
       </div>
 
       <div class="text-right w-100 mt-auto">
@@ -84,6 +84,11 @@ export default {
   computed: {
     isChannel() {
       return this.types.length > 1;
+    },
+
+    uploadRequiredType() {
+      if (this.isChannel) return null;
+      return this.types[0];
     }
   },
 
