@@ -30,7 +30,7 @@ class ReminderEvent < ApplicationRecord
 
   # Scope
   enum status: { queued: 'queued', sending: 'sending', done: 'done', cancelled: 'cancelled', error: 'error' }
-  scope :before, ->(time) { where('schedule_at < ?', time) }
+  scope :before, ->(time) { where('schedule_at <= ?', time) }
 
   def invoke
     deliver_messages
