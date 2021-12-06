@@ -34,8 +34,8 @@ class Reminding < ApplicationRecord
   enum status: { active: 'active', cancelled: 'cancelled', done: 'done' }
 
   after_create do
-    ReminderSchedulerJob.perform_now(self.id)
     distribute_system_log
+    ReminderSchedulerJob.perform_now(self.id)
   end
 
   def cancel
