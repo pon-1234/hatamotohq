@@ -5,6 +5,7 @@ class LineApi::BaseRequest
   attr_reader :channel_token
 
   HTTP_OK = '200'
+  HTTP_ACCEPTED = '202'
 
   include HTTParty
   base_uri 'https://api.line.me/v2'

@@ -14,7 +14,7 @@ class DispatchBroadcastJob < ApplicationJob
     success = dispatch_to_all if @broadcast.broadcast_type_all?
     success = dispatch_with_condition if @broadcast.broadcast_type_condition?
     @broadcast.update_columns(status: success ? 'done' : 'error')
-  rescue => e
+  rescue
     @broadcast.update_columns(status: 'error')
   end
 

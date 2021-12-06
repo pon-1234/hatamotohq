@@ -22,13 +22,15 @@ class DispatchRichMenuJob < ApplicationJob
       success = create_rich_menu_content if success
       if success
         if @richmenu.target_all?
-          success = set_default_rich_menu
+          set_default_rich_menu
         else
-          success = bulk_link_rich_menus
+          bulk_link_rich_menus
         end
       end
     end
-    @richmenu.update_columns(status: 'error', member_count: 0) unless success
+
+    # Save rich menu (status, member_count)
+    @richmenu.save!
   rescue StandardError => e
     logger.error(e.message)
     @richmenu.update_columns(status: 'error', member_count: 0)
@@ -59,8 +61,11 @@ class DispatchRichMenuJob < ApplicationJob
       success = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
       # Disable other default richmenu belongs to this account
       if success
-        @richmenu.update_columns(member_count: @line_account.line_friends.active.count)
-        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled, member_count: 0)
+        @richmenu.status = :enabled
+        @richmenu.member_count = @line_account.line_friends.active.count
+        @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled)
+      else
+        @richmenu.status = :error
       end
     end
 
@@ -68,13 +73,18 @@ class DispatchRichMenuJob < ApplicationJob
       tag_condition = @richmenu.conditions.detect { |condition| condition['type'].eql?('tag') }
       return false if tag_condition.blank?
       tag_ids = tag_condition['data']['tags'].pluck('id')
+      # count friends will be applied this rich menu
+      friend_count = @line_account.line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids }).pluck(:id).uniq.count
+      @richmenu.member_count = friend_count
+      @richmenu.status = :enabled
+
       LineFriend.find_all_by_tags(@line_account.id, tag_ids).find_in_batches(batch_size: 500) do |friends|
         friend_ids = friends.pluck(:line_user_id)
         success = LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
-        if success
-          # Set the number of user was assigned the menu
-          count = @line_account.line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids }).pluck(:id).uniq.count
-          @richmenu.update_columns(member_count: count)
+        unless success
+          # Stop calling api if error occurred
+          @richmenu.status = :error
+          return
         end
       end
     end
