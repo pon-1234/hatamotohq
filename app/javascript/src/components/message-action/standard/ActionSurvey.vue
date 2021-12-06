@@ -8,7 +8,7 @@
           placeholder="ラベルを入力してください"
           type="text"
           maxlength="12"
-          v-model="actionData.label"
+          v-model.trim="actionData.label"
           class="w-100 form-control"
           @keyup="changeValue"
           v-validate="{ required: labelRequired && showTitle, max: 12 }"

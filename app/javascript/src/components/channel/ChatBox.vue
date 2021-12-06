@@ -314,4 +314,14 @@ export default {
       background-color: transparent;
     }
   }
+
+  @media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
+  @media (max-width: 767px) {
+    .chat-panel {
+      .card-body {
+        padding-bottom: 3.5rem;
+      }
+    }
+  }
+}
 </style>

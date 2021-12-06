@@ -25,7 +25,7 @@
 class Reminding < ApplicationRecord
   belongs_to :channel
   belongs_to :reminder
-  has_many :reminder_events
+  has_many :reminder_events, dependent: :destroy
 
   # Validations
   validates :goal, presence: true

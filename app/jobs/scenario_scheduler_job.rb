@@ -27,7 +27,7 @@ class ScenarioSchedulerJob < ApplicationJob
     end
 
     def deliver_now(scenario_message)
-      normalized = Normalizer::MessageNormalizer.new(scenario_message.content).perform
+      normalized = scenario_message.content
       if contain_survey_action?(normalized)
         normalized = normalize_messages_with_survey_action(@channel, normalized)
       end

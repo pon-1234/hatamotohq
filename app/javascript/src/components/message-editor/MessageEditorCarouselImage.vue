@@ -4,11 +4,7 @@
       <div class="panel panel-default pb20 mb-0">
         <!-- パネルメニュー -->
         <ul class="nav nav-tabs nav-bordered" role="tablist">
-          <li
-            role="presentation"
-            v-for="(item, index) in messageData.columns"
-            :key="index"
-          >
+          <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
             <a
               aria-controls="text"
               role="tab"
@@ -165,7 +161,6 @@
   </div>
 </template>
 <script>
-
 import { ActionMessage } from '../../core/constant';
 
 export default {
@@ -269,11 +264,15 @@ export default {
     },
 
     coppyAllThumb(index) {
-      this.messageData.columns.forEach(item => { item.imageUrl = this.messageData.columns[index].imageUrl; });
+      this.messageData.columns.forEach(item => {
+        item.imageUrl = this.messageData.columns[index].imageUrl;
+      });
     },
 
     removeAllThumb() {
-      this.messageData.columns.forEach(item => { item.imageUrl = ''; });
+      this.messageData.columns.forEach(item => {
+        item.imageUrl = '';
+      });
     },
 
     changeSelectedAction(value) {
@@ -284,9 +283,7 @@ export default {
       console.log('changeActionColumn', index);
       this.messageData.columns[index].action = data;
     }
-
   }
-
 };
 </script>
 

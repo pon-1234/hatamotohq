@@ -23,7 +23,7 @@
             rows="2"
             maxlength="101"
             placeholder="住所を入力してください"
-            v-model="defaults.address"
+            v-model.trim="defaults.address"
             v-validate="'required|max:100'"
             data-vv-as="住所"
             name="location-description"

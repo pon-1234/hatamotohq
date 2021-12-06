@@ -6,6 +6,7 @@ class Normalizer::MessageNormalizer
   end
 
   def perform
+    return if @message_content.nil?
     message_type = @message_content['type']
     if message_type == 'flex' && @message_content['id'].present?
       normalize_flex_message

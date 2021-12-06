@@ -45,7 +45,7 @@
                     name="setting[line_name]"
                     placeholder="入力してください"
                     maxlength="256"
-                    v-model="settingFormData.line_name"
+                    v-model.trim="settingFormData.line_name"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
@@ -61,7 +61,7 @@
                     name="setting[display_name]"
                     placeholder="入力してください"
                     maxlength="256"
-                    v-model="settingFormData.display_name"
+                    v-model.trim="settingFormData.display_name"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
@@ -74,7 +74,7 @@
                   type="text"
                   class="form-control"
                   placeholder="入力してください"
-                  v-model="settingFormData.channel_id"
+                  v-model.trim="settingFormData.channel_id"
                   maxlength="256"
                   disabled
                 />
@@ -87,7 +87,7 @@
                   type="text"
                   class="form-control"
                   placeholder="入力してください"
-                  v-model="settingFormData.channel_secret"
+                  v-model.trim="settingFormData.channel_secret"
                   maxlength="256"
                   disabled
                 />

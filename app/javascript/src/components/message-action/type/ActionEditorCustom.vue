@@ -10,10 +10,10 @@
           type="text"
           :name="name + '_label'"
           placeholder="ラベルを入力してください"
-          maxlength="21"
+          maxlength="13"
           v-model.trim="label"
           class="w-100 form-control"
-          v-validate="{ required: labelRequired && showTitle, max: 20 }"
+          v-validate="{ required: labelRequired && showTitle, max: 12 }"
           data-vv-as="ラベル"
           @keyup="changeLabel"
         />

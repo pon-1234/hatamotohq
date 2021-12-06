@@ -41,6 +41,7 @@ gem 'rack-cors', require: 'rack/cors'
 # Active Storage
 gem 'active_storage_validations'
 gem 'aws-sdk-s3'
+gem 'google-cloud-storage', '~> 1.11', require: false
 gem 'image_processing'
 
 # csv,exel import/export, zip

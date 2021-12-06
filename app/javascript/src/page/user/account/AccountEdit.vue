@@ -16,7 +16,7 @@
                 type="text"
                 class="form-control"
                 placeholder="LINEアカウント名を入力してください"
-                v-model="userInfo.accountName"
+                v-model.trim="userInfo.accountName"
               />
               <input type="text" :value="userInfo.email" autocomplete="username" class="hidden" />
             </dd>
@@ -63,7 +63,7 @@
                 id="password"
                 type="password"
                 class="form-control"
-                v-model="userInfo.currentPassword"
+                v-model.trim="userInfo.currentPassword"
                 autocomplete="off"
               />
             </dd>
@@ -78,7 +78,7 @@
                 id="password"
                 type="password"
                 class="form-control"
-                v-model="userInfo.newPassword"
+                v-model.trim="userInfo.newPassword"
                 autocomplete="new-password"
               />
             </dd>
@@ -93,7 +93,7 @@
                 id="password"
                 type="password"
                 class="form-control"
-                v-model="userInfo.passwordConfirm"
+                v-model.trim="userInfo.passwordConfirm"
                 autocomplete="new-password"
               />
             </dd>

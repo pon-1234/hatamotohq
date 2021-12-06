@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_01_041252) do
+ActiveRecord::Schema.define(version: 2021_12_02_094627) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -88,8 +88,6 @@ ActiveRecord::Schema.define(version: 2021_12_01_041252) do
     t.bigint 'folder_id'
     t.string 'name'
     t.string 'status'
-    t.string 'keyword'
-    t.string 'keyword_status'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
