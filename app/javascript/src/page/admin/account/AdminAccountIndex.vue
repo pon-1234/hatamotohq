@@ -8,21 +8,20 @@
               <i class="uil-plus"></i> 新規登録
             </a>
             <!-- START: Search form -->
-              <div class="ml-auto d-flex">
-                <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq">
-                  <option value="">すべて</option>
-                  <option value="active">有効</option>
-                  <option value="blocked">無効</option>
-                </select>
-
-                <div class="input-group app-search">
-                  <input type="text" class="form-control dropdown-toggle fw-250" placeholder="検索..." v-model="queryParams.name_or_email_cont">
-                  <span class="mdi mdi-magnify search-icon"></span>
-                  <div class="input-group-append">
-                    <div class="btn btn-info" @click="loadAccounts">検索</div>
-                  </div>
+            <div class="ml-auto d-flex">
+              <div class="input-group app-search">
+                <input
+                  type="text"
+                  class="form-control dropdown-toggle fw-250"
+                  placeholder="検索..."
+                  v-model="queryParams.name_or_email_cont"
+                />
+                <span class="mdi mdi-magnify search-icon"></span>
+                <div class="input-group-append">
+                  <div class="btn btn-info" @click="loadAccounts">検索</div>
                 </div>
               </div>
+            </div>
             <!-- End: Search form -->
           </div>
           <div class="card-body">
@@ -33,28 +32,45 @@
                     <tr>
                       <th>ID</th>
                       <th>氏名</th>
+                      <th>権限ラベル</th>
                       <th>メールアドレス</th>
                       <th>登録日時</th>
-                      <th>状況</th>
                       <th class="fw-200">操作</th>
                     </tr>
                   </thead>
                   <tbody v-for="(account, index) in accounts" :key="account.id">
                     <tr>
-                      <td><a :href="`${rootUrl}/admin/accounts/${account.id}`">{{ account.id }}</a></td>
+                      <td>
+                        <a :href="`${rootUrl}/admin/accounts/${account.id}`">{{ account.id }}</a>
+                      </td>
                       <td>{{ account.name }}</td>
+                      <td>{{ account.role === "superadmin" ? "スーパ管理者" : "管理者" }}</td>
                       <td>{{ account.email }}</td>
                       <td>{{ formattedDatetime(account.created_at) }}</td>
-                      <td><account-status :account="account"></account-status></td>
                       <td>
-                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" id="dropdownMenuAccount" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                        <button
+                          type="button"
+                          class="btn btn-light btn-sm dropdown-toggle"
+                          id="dropdownMenuAccount"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          操作 <span class="caret"></span>
+                        </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuAccount">
-                          <a :href="`${rootUrl}/admin/accounts/${account.id}/edit`" role="button" class="dropdown-item">クライアントを編集</a>
-                          <a class="dropdown-item" role="button" data-toggle="modal" data-target="#modalToggleStatusAccount" @click="curAccountIndex = index">
-                            <span v-if="account.status === 'active'">ブロックする</span>
-                            <span v-else>ブロック解除する</span>
-                          </a>
-                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteAccount" @click="curAccountIndex = index">クライアントを削除</a>
+                          <a :href="`${rootUrl}/admin/accounts/${account.id}/edit`" role="button" class="dropdown-item"
+                            >管理者を編集</a
+                          >
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalDeleteAccount"
+                            @click="curAccountIndex = index"
+                            v-if="account.role === 'admin'"
+                            >クライアントを削除</a
+                          >
                         </div>
                       </td>
                     </tr>
@@ -80,19 +96,30 @@
     </div>
 
     <!-- START: Toggle status (active/blocked) -->
-    <modal-confirm title="このユーザーの状況を変更してもよろしいですか？" id='modalToggleStatusAccount' type='confirm' @confirm="submitToggleStatus">
+    <modal-confirm
+      title="このユーザーの状況を変更してもよろしいですか？"
+      id="modalToggleStatusAccount"
+      type="confirm"
+      @confirm="submitToggleStatus"
+    >
       <template v-slot:content>
         <div v-if="curAccount">
-          <b>{{ curAccount.status === 'active' ? '有効' : 'ブロックした' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAccount.status === 'active' ? 'ブロックした' : '有効' }}</b>
+          <b>{{ curAccount.status === "active" ? "有効" : "ブロックした" }}</b>
+          <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAccount.status === "active" ? "ブロックした" : "有効" }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Toggle status (active/blocked) -->
     <!-- START: Delete user modal -->
-    <modal-confirm title="こちらのユーザーを削除してよろしいですが?" id='modalDeleteAccount' type='delete' @confirm="submitDeleteACcount">
+    <modal-confirm
+      title="こちらのユーザーを削除してよろしいですが?"
+      id="modalDeleteAccount"
+      type="delete"
+      @confirm="submitDeleteACcount"
+    >
       <template v-slot:content>
         <div v-if="curAccount">
-          メールアドレス: <b>{{curAccount.email}}</b>
+          メールアドレス: <b>{{ curAccount.email }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -125,13 +152,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters('account',
-      ['getQueryParams']
-    ),
+    ...mapGetters('account', ['getQueryParams']),
     ...mapState('account', {
-      accounts: (state) => state.accounts,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      accounts: state => state.accounts,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curAccount() {
@@ -139,15 +164,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('account', [
-      'setCurPage',
-      'setQueryParams'
-    ]),
-    ...mapActions('account', [
-      'getAccounts',
-      'deleteAccount',
-      'updateAccount'
-    ]),
+    ...mapMutations('account', ['setCurPage', 'setQueryParams']),
+    ...mapActions('account', ['getAccounts', 'deleteAccount', 'updateAccount']),
 
     forceRerender() {
       this.contentKey++;
@@ -176,7 +194,7 @@ export default {
     async submitToggleStatus() {
       const data = {
         id: this.curAccount.id,
-        status: (this.curAccount.status === 'blocked') ? 'active' : 'blocked'
+        status: this.curAccount.status === 'blocked' ? 'active' : 'blocked'
       };
       const response = await this.updateAccount(data);
       if (response) {

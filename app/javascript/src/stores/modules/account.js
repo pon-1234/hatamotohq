@@ -38,12 +38,12 @@ export const getters = {
 };
 
 export const actions = {
-  createAccount(_, query) {
-    return AccountApi.create(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async createAccount(_, query) {
+    try {
+      return await AccountApi.create(query);
+    } catch (error) {
+      return null;
+    }
   },
 
   updateAccount(_, query) {
