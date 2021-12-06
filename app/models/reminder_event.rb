@@ -46,7 +46,7 @@ class ReminderEvent < ApplicationRecord
     def deliver_messages
       nomalized_messages = []
       self.episode.messages.each do |message|
-        nomalized_messages << message.try(:content) || message['content']
+        nomalized_messages << (message.try(:content) || message['content'])
       end
       # Remove nil value
       nomalized_messages = nomalized_messages.compact
