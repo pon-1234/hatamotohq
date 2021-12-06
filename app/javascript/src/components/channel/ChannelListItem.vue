@@ -25,21 +25,16 @@ import Util from '@/core/util';
 
 export default {
   props: ['channel', 'active'],
-  data() {
-    return {
-      avatarImgObj: {
-        src: '',
-        error: '/img/no-image-profile.png',
-        loading: '/images/loading.gif'
-      }
-    };
-  },
-
-  created() {
-    this.avatarImgObj.src = this.friend.avatar_url;
-  },
 
   computed: {
+    avatarImgObj() {
+      return {
+        src: this.friend.avatar_url,
+        error: '/img/no-image-profile.png',
+        loading: '/images/loading.gif'
+      };
+    },
+
     friend() {
       return this.channel.line_friend;
     },
