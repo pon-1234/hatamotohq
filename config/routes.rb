@@ -135,24 +135,20 @@ Rails.application.routes.draw do
     end
   end
 
-  # # Admin
+  # Admin
   constraints Subdomain::AdminConstraint.new do
     devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
       sessions: 'admin/sessions',
       passwords: 'admin/passwords'
     }
     namespace :admin, path: Subdomain::AdminConstraint.path do
-      root to: 'users#index'
-      resources :users do
-        get :search, on: :collection
-        get :delete_confirm, on: :member
-        get :sso, on: :member
-      end
+      root to: 'accounts#index'
       resources :announcements do
         get :search, on: :collection
         post :upload_image,  on: :collection
       end
       resources :accounts
+      resources :agencies
     end
 
     require 'sidekiq/web'
@@ -161,5 +157,21 @@ Rails.application.routes.draw do
     #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
     # end
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Agency
+  constraints Subdomain::AgencyConstraint.new do
+    devise_for :agencies, path: Subdomain::AgencyConstraint.path, controllers: {
+      sessions: 'agency/sessions',
+      passwords: 'agency/passwords'
+    }
+    namespace :agency, path: Subdomain::AgencyConstraint.path do
+      root to: 'users#index'
+      resources :users do
+        get :search, on: :collection
+        get :delete_confirm, on: :member
+        get :sso, on: :member
+      end
+    end
   end
 end

@@ -44,7 +44,7 @@
                         <a :href="`${rootUrl}/admin/accounts/${account.id}`">{{ account.id }}</a>
                       </td>
                       <td>{{ account.name }}</td>
-                      <td>{{ account.role === "superadmin" ? "スーパ管理者" : "管理者" }}</td>
+                      <td>{{ account.role === "superadmin" ? "ルート管理者" : "システム管理者" }}</td>
                       <td>{{ account.email }}</td>
                       <td>{{ formattedDatetime(account.created_at) }}</td>
                       <td>
