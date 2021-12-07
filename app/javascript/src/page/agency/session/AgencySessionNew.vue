@@ -6,7 +6,7 @@
           <div class="col-lg-5">
             <div class="card">
               <!-- START: Logo -->
-              <div class="card-header pt-4 pb-4 text-center bg-info">
+              <div class="card-header pt-4 pb-4 text-center bg-primary">
                 <a href="#" class="text-white text-uppercase" style="font-size: 1.2rem">
                   <!-- <span><img src="assets/images/logo.png" alt="" height="18"></span> -->
                   <span>LINE CMS</span>
@@ -16,7 +16,7 @@
               <!-- START: Form -->
               <div class="card-body p-4">
                 <div class="text-center w-75 m-auto">
-                  <h4 class="text-dark-50 text-center mt-0 font-weight-bold">管理者ログイン</h4>
+                  <h4 class="text-dark-50 text-center mt-0 font-weight-bold">代理店ログイン</h4>
                   <p class="text-muted mb-4">
                     管理パネルにアクセスするには、メールアドレスとパスワードを入力してください。
                   </p>
@@ -32,7 +32,7 @@
                       class="form-control"
                       name="admin[email]"
                       placeholder="メールを入力してください"
-                      v-model="adminData.email"
+                      v-model="agencyData.email"
                     />
                     <error-message :message="errors.first('admin[email]')"></error-message>
                   </div>
@@ -40,7 +40,7 @@
                     <!-- <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a> -->
                     <label for="password">パスワード</label>
                     <!-- START: Input password component -->
-                    <input-password name="admin[password]" :password.sync="adminData.password"></input-password>
+                    <input-password name="admin[password]" :password.sync="agencyData.password"></input-password>
                     <!-- END: Input password component -->
                   </div>
                   <div class="form-group mb-3">
@@ -50,14 +50,14 @@
                         name="admin[remember_me]"
                         class="custom-control-input"
                         id="checkbox-signin"
-                        v-model="adminData.remember_me"
+                        v-model="agencyData.remember_me"
                         checked
                       />
                       <label class="custom-control-label" for="checkbox-signin">ログインを記憶する</label>
                     </div>
                   </div>
                   <div class="form-group mb-0 text-center">
-                    <button class="btn btn-info" type="submit" :disabled="invalid">ログイン</button>
+                    <button class="btn btn-primary" type="submit" :disabled="invalid">ログイン</button>
                   </div>
                 </form>
               </div>
@@ -78,7 +78,7 @@ export default {
     return {
       adminRootUrl: process.env.MIX_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
-      adminData: {
+      agencyData: {
         email: null,
         password: null,
         remember_me: false
