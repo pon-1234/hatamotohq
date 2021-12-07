@@ -19,6 +19,7 @@ class Agency::UsersController < Agency::ApplicationController
   # POST /admin/users
   def create
     @user = User.new(user_params)
+    @user.role = :admin
     if !@user.save
       render_bad_request_with_message(@user.first_error_message)
     end

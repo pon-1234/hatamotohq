@@ -18,6 +18,14 @@
         <% end %>
       </li>
 
+      <!-- スタッフ管理 -->
+      <li class="side-nav-item <%= controller?("user/staffs") ? 'mm-active' : '' %>">
+        <%= link_to user_staffs_path, class: "side-nav-link #{controller?("user/staffs") ? 'active' : '' }" do %>
+          <i class="uil-user-square"></i>
+          <span> 営業担当管理 </span>
+        <% end %>
+      </li>
+
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
       <li class="side-nav-item <%= controller?("user/channels") ? 'mm-active' : '' %>">

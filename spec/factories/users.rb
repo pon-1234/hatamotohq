@@ -5,26 +5,27 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
-#  address                :string(255)
-#  authentication_token   :string(255)
-#  company_name           :string(255)
-#  current_sign_in_at     :datetime
-#  current_sign_in_ip     :string(255)
 #  email                  :string(255)      default(""), not null
+#  role                   :string(255)
 #  encrypted_password     :string(255)      default(""), not null
-#  last_sign_in_at        :datetime
-#  last_sign_in_ip        :string(255)
 #  name                   :string(255)
-#  note                   :text(65535)
+#  company_name           :string(255)
 #  phone_number           :string(255)
-#  pubsub_token           :string(255)
-#  remember_created_at    :datetime
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string(255)
-#  sign_in_count          :integer          default(0), not null
+#  address                :string(255)
+#  note                   :text(65535)
 #  status                 :string(255)      default("active")
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  authentication_token   :string(255)
+#  pubsub_token           :string(255)
 #
 # Indexes
 #

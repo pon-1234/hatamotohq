@@ -26,4 +26,8 @@ class Admin < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :timeoutable
   include AdminRole
+
+  # Validations
+  validates :name, length: { maximum: 255 }, allow_nil: true
+  validates :email, uniqueness: true
 end

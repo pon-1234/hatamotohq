@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       resources :home, only: [:index] do
         get :announcements, on: :collection
       end
+      resources :staffs do
+      end
       resources :channels do
         member do
           get :scenarios
@@ -148,7 +150,11 @@ Rails.application.routes.draw do
         post :upload_image,  on: :collection
       end
       resources :accounts
-      resources :agencies
+      resources :agencies do
+        collection do
+          get :search
+        end
+      end
     end
 
     require 'sidekiq/web'
