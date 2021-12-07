@@ -12,7 +12,16 @@
       <div class="mt-3">
         <div class="d-flex align-items-center justify-content-center">
           <a :href="detailPath" class="btn btn-primary btn-sm mr-1 ml-auto fw-80">詳細</a>
-          <friend-toggle-locked :id="friend.id" :locked="friend.locked" :is_channel="true" class="mr-auto"></friend-toggle-locked>
+          <template v-if="friend.locked">
+            <div class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalConfirmToggleLocked">
+              アンブロック
+            </div>
+          </template>
+          <template v-else>
+            <div class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalConfirmToggleLocked">
+              ブロック
+            </div>
+          </template>
         </div>
         <hr class="" />
 
