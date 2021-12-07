@@ -6,12 +6,19 @@
     <template v-else>
       <div class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalConfirmToggleLocked">ブロック</div>
     </template>
-
-    <modal-confirm id="modalConfirmToggleLocked" title="友達状況の変更してもよろしいですか？" type="confirm" @confirm="toggle()">
-      <template v-slot:content>
-        <b>{{ locked ? 'ブロックした' : '有効' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ locked ? '有効' : 'ブロックした' }}</b>
-      </template>
-    </modal-confirm>
+    <template>
+      <modal-confirm
+        id="modalConfirmToggleLocked"
+        title="友達状況の変更してもよろしいですか？"
+        type="confirm"
+        @confirm="toggle()"
+      >
+        <template v-slot:content>
+          <b>{{ locked ? "ブロックした" : "有効" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
+          <b>{{ locked ? "有効" : "ブロックした" }}</b>
+        </template>
+      </modal-confirm>
+    </template>
   </div>
 </template>
 
@@ -28,9 +35,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('friend', [
-      'toggleLocked'
-    ]),
+    ...mapActions('friend', ['toggleLocked']),
 
     async toggle() {
       await this.toggleLocked(this.id);
