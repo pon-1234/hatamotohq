@@ -10,80 +10,64 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="user[email]"
+                  name="agency[email]"
                   placeholder="入力してください"
-                  v-model.trim="userFormData.email"
+                  v-model.trim="agencyFormData.email"
                   maxlength="256"
-                  v-validate=""
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">氏名<required-mark /></label>
+            <label class="col-xl-3">代理店名<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="氏名" rules="required|max:255" v-slot="{ errors }">
+              <ValidationProvider name="代理店名" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
-                  name="user[name]"
+                  name="agency[name]"
                   placeholder="入力してください"
                   maxlength="256"
-                  v-model.trim="userFormData.name"
+                  v-model.trim="agencyFormData.name"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">住所<required-mark /></label>
+            <label class="col-xl-3">住所</label>
             <div class="col-xl-9">
-              <ValidationProvider name="住所" rules="required|max:255" v-slot="{ errors }">
+              <ValidationProvider name="住所" rules="max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
-                  name="user[address]"
+                  name="agency[address]"
                   placeholder="入力してください"
                   maxlength="256"
-                  v-model.trim="userFormData.address"
+                  v-model.trim="agencyFormData.address"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">電話番号<required-mark /></label>
+            <label class="col-xl-3">電話番号</label>
             <div class="col-xl-9">
-              <ValidationProvider name="電話番号" rules="required|numeric|min:10|max:11" v-slot="{ errors }">
+              <ValidationProvider name="電話番号" rules="numeric|min:10|max:11" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
-                  name="user[phone_number]"
+                  name="agency[phone_number]"
                   placeholder="入力してください"
                   maxlength="12"
-                  v-model.trim="userFormData.phone_number"
+                  v-model.trim="agencyFormData.phone_number"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
-          <div class="form-group row">
-            <label class="col-xl-3">会社名</label>
-            <div class="col-xl-9">
-              <ValidationProvider name="会社名" rules="max:255" v-slot="{ errors }">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="user[company_name]"
-                  placeholder="入力してください"
-                  maxlength="256"
-                  v-model.trim="userFormData.company_name"
-                />
-                <span class="error-explanation">{{ errors[0] }}</span>
-              </ValidationProvider>
-            </div>
-          </div>
+
           <div class="form-group row">
             <label class="col-xl-3">パスワード<required-mark /></label>
             <div class="col-xl-9">
@@ -91,10 +75,10 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="user[password]"
+                  name="agency[password]"
                   placeholder="入力してください"
                   maxlength="256"
-                  v-model.trim="userFormData.password"
+                  v-model.trim="agencyFormData.password"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -107,29 +91,13 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="user[password_confirmation]"
+                  name="agency[password_confirmation]"
                   placeholder="入力してください"
                   maxlength="256"
-                  v-model.trim="userFormData.password_confirmation"
+                  v-model.trim="agencyFormData.password_confirmation"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-xl-3">有効化</label>
-            <div class="col-xl-9">
-              <input
-                type="checkbox"
-                id="enabledCheck"
-                checked
-                data-switch="info"
-                v-model="userFormData.status"
-                name="user[status]"
-                true-value="active"
-                false-value="blocked"
-              />
-              <label for="enabledCheck" data-on-label="有" data-off-label="無"></label>
             </div>
           </div>
         </div>
@@ -142,17 +110,17 @@
 </template>
 <script>
 import { mapActions } from 'vuex';
+import Util from '@/core/util';
 
 export default {
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       submitted: false,
-      userFormData: {
+      agencyFormData: {
         email: null,
         password: null,
         password_confirmation: null,
-        status: 'active',
         name: null,
         company_name: null,
         address: null,
@@ -161,27 +129,17 @@ export default {
     };
   },
   methods: {
-    ...mapActions('user', ['createUser']),
+    ...mapActions('agency', ['createAgency']),
 
     onSubmit(e) {
       this.submitted = true;
-      this.createUser(this.userFormData)
-        .then(response => {
-          this.onReceiveCreateUserResponse(response.id, null);
+      this.createAgency(this.agencyFormData)
+        .then(_ => {
+          Util.showSuccessThenRedirect('代理店の登録は完了しました。', `${this.rootPath}/admin/agencies`);
         })
         .catch(error => {
-          this.onReceiveCreateUserResponse(null, error.responseJSON.message);
+          window.toastr.error(error.responseJSON.message);
         });
-    },
-    onReceiveCreateUserResponse(id, errorMessage) {
-      if (id) {
-        window.toastr.success('ユーザー登録は完了しました。');
-        setTimeout(() => {
-          window.location.href = `${this.userRootUrl}/admin/users/${id}`;
-        }, 750);
-      } else {
-        window.toastr.error(errorMessage);
-      }
     }
   }
 };

@@ -7,6 +7,8 @@ class DeviseCreateAgencies < ActiveRecord::Migration[6.0]
       t.string :email,              null: false, default: ''
       t.string :encrypted_password, null: false, default: ''
       t.string :name, null: false
+      t.string :address
+      t.string :phone_number
 
       ## Recoverable
       t.string   :reset_password_token

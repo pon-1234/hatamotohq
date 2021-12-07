@@ -21,7 +21,7 @@ export default {
 
   create(query) {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/agencies/`,
+      url: `${process.env.MIX_ROOT_PATH}/admin/agencies`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json',

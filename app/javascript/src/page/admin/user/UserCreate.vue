@@ -14,7 +14,6 @@
                   placeholder="入力してください"
                   v-model.trim="userFormData.email"
                   maxlength="256"
-                  v-validate=""
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
