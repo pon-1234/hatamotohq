@@ -78,6 +78,10 @@ sudo ldconfig /usr/local/lib
 apt install webp
 ```
 
+# Install ffmpeg
+
+https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-18-04/
+
 # Deployment
 
 `cap {env} deploy`

@@ -13,7 +13,6 @@ class DispatchRichMenuJob < ApplicationJob
     @line_account = @richmenu.line_account
     success = true
     friend_ids = @line_account.line_friends.pluck(:line_user_id)
-    Normalizer::PostbackNormalizer.new(@richmenu.areas).perform
     if @richmenu.disabled?
       delete_rich_menu_if_needed if @richmenu.line_menu_id.present?
     elsif @richmenu.enabled?
@@ -107,7 +106,7 @@ class DispatchRichMenuJob < ApplicationJob
         selected: @richmenu.selected,
         name: @richmenu.name,
         chatBarText: @richmenu.chat_bar_text,
-        areas: @richmenu.areas
+        areas: Normalizer::PostbackNormalizer.new(@richmenu.areas.deep_dup).perform
       }
     end
 end
