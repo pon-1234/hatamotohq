@@ -1,7 +1,7 @@
 <template>
   <div class="card chat-panel">
     <div class="card-header d-flex">
-      <a class="icon-fs d-sm-block d-md-none" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
+      <a class="icon-fs d-sm-block d-lg-none" @click="hiddenChatBox()"><i class="dripicons-arrow-thin-left"></i></a>
       <a class="flex-grow-1"></a>
       <a class="icon-fs d-sm-block d-xl-none" @click="showUserDetailBox()"><i class="mdi mdi-account-details"></i></a>
     </div>
@@ -30,10 +30,7 @@
 
       <reply-box
         @sendTextMessage="sendTextMessage"
-        @sendStickerMessage="sendStickerMessage"
-        @sendMediaMessage="sendMediaMessage"
-        @sendTemplate="sendTemplate"
-        @sendScenario="sendScenario"
+        @resetModalSticker='resetModalSticker'
       ></reply-box>
     </div>
     <loading-indicator></loading-indicator>
@@ -146,6 +143,7 @@ export default {
 
     hiddenChatBox() {
       if (this.showChatBox) this.setShowChatBox(false);
+      if (this.showUserDetail) this.setShowUserDetail(false);
     },
 
     showUserDetailBox() {
@@ -279,6 +277,10 @@ export default {
       };
 
       this.$emit('onSendMessage', message);
+    },
+
+    resetModalSticker(event) {
+      this.$emit('onResetModalSticker', event);
     }
   }
 };

@@ -54,20 +54,6 @@
         </button>
       </div>
     </div>
-    <template v-if="activeChannel">
-      <modal-select-media
-        id="modalSendMedia"
-        :types="['image', 'audio', 'video', 'richmenu']"
-        @select="sendMediaMessage($event)"
-      ></modal-select-media>
-      <modal-send-template @sendTemplate="sendTemplate"></modal-send-template>
-      <modal-send-scenario @selectScenario="sendScenario"></modal-send-scenario>
-      <modal-select-sticker
-        ref="modalSticker"
-        id="modalSelectSticker"
-        @input="sendStickerMessage"
-      ></modal-select-sticker>
-    </template>
   </div>
 </template>
 
@@ -102,38 +88,9 @@ export default {
       this.clearInput();
     },
 
-    sendStickerMessage(sticker) {
-      this.$emit('sendStickerMessage', sticker);
-    },
-
-    sendMediaMessage(media) {
-      const payload = _.cloneDeep(media);
-      // convert media type if need
-      if (payload.type === 'richmenu') {
-        payload.type = 'image';
-      }
-      this.$emit('sendMediaMessage', payload);
-    },
-
-    sendTemplate(template) {
-      const payload = {
-        channel_id: this.activeChannel.id,
-        template_id: template.id
-      };
-      this.$emit('sendTemplate', payload);
-    },
-
-    sendScenario(scenario) {
-      const payload = {
-        channel_id: this.activeChannel.id,
-        scenario_id: scenario.id
-      };
-      this.$emit('sendScenario', payload);
-    },
-
     showStickerModal() {
       if (this.isEnabled) {
-        this.$refs.modalSticker.reset();
+        this.$emit('resetModalSticker', true);
       }
     }
   }

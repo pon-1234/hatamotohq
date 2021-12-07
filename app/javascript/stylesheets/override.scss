@@ -125,6 +125,18 @@ label {
   align-items: center;
 }
 
-.left-side-menu { 
-  z-index: 1021!important;
+.button-menu-mobile {
+  line-height: 0;
+}
+
+@media (max-width: 1024px) {
+  .navbar-custom {
+    left: 260px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .navbar-custom {
+    left: 0;
+  }
 }

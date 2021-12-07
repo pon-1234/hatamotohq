@@ -93,5 +93,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .app-search {
+    z-index: 9;
+  }
 </style>
