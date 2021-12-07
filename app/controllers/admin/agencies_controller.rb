@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::AgenciesController < Admin::ApplicationController
-  before_action :find_agency, only: [:edit, :update, :destroy]
+  before_action :find_agency, only: [:edit, :update, :destroy, :sso]
 
   # GET /admin/agencies
   def index
@@ -39,6 +39,12 @@ class Admin::AgenciesController < Admin::ApplicationController
   def destroy
     @agency.destroy!
     render_success
+  end
+
+  # GET /admin/agencies/:id/sso
+  def sso
+    sign_in @agency
+    redirect_to agency_root_path
   end
 
   private

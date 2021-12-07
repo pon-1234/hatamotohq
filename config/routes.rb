@@ -154,6 +154,9 @@ Rails.application.routes.draw do
         collection do
           get :search
         end
+        member do
+          get :sso
+        end
       end
     end
 
