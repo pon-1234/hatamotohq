@@ -20,10 +20,10 @@ class Agency::ApplicationController < ActionController::Base
   def authenticate_agency!
     super
     # For authenticating websocket connection
-    cookies.signed[:agency_id] = current_agency.id
+    cookies.signed[:agency_id] = current_agency.try(:id) || current_agency['id']
   end
 
   def current_ability
-    @current_ability ||= Agencybility.new(current_agency)
+    @current_ability ||= AgencyAbility.new(current_agency)
   end
 end
