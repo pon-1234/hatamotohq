@@ -13,12 +13,12 @@
         <div class="d-flex align-items-center justify-content-center">
           <a :href="detailPath" class="btn btn-primary btn-sm mr-1 ml-auto fw-80">詳細</a>
           <template v-if="friend.locked">
-            <div class="btn btn-sm btn-info" data-toggle="modal" data-target="#modalConfirmToggleLocked">
+            <div class="btn btn-sm btn-info mr-auto" data-toggle="modal" data-target="#modalConfirmToggleLocked">
               アンブロック
             </div>
           </template>
           <template v-else>
-            <div class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modalConfirmToggleLocked">
+            <div class="btn btn-sm btn-danger mr-auto" data-toggle="modal" data-target="#modalConfirmToggleLocked">
               ブロック
             </div>
           </template>
