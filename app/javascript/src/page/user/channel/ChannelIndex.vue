@@ -34,6 +34,11 @@
         id="modalSelectSticker"
         @input="sendStickerMessage"
       ></modal-select-sticker>
+      <modal-confirm id="modalConfirmToggleLocked" title="友達状況の変更してもよろしいですか？" type="confirm" @confirm="toggle()">
+        <template v-slot:content>
+          <b>{{ friendActive.locked ? 'ブロックした' : '有効' }}</b> <i class="mdi mdi-arrow-right-bold"></i> <b>{{ friendActive.locked ? '有効' : 'ブロックした' }}</b>
+        </template>
+      </modal-confirm>
     </template>
   </div>
 </template>
@@ -80,13 +85,21 @@ export default {
     }),
     ...mapState('friend', {
       friend: state => state.friend
-    })
+    }),
+
+    friendActive() {
+      return this.activeChannel.line_friend;
+    }
   },
 
   methods: {
     ...mapActions('channel', ['getChannels', 'onReceiveWebsocketEvent', 'pushMessage', 'setActiveChannel']),
 
     ...mapMutations('channel', ['setShowChatBox']),
+
+    ...mapActions('friend', [
+      'toggleLocked'
+    ]),
     connectToWebsocket() {
       const _this = this;
       consumer.subscriptions.create(
@@ -168,6 +181,13 @@ export default {
       if (e) {
         this.$refs.modalSticker.reset();
       }
+    },
+
+    async toggle() {
+      await this.toggleLocked(this.friendActive.id);
+      setTimeout(() => {
+        location.reload();
+      }, 300);
     }
   }
 };
