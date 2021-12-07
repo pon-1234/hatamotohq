@@ -59,7 +59,11 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/agencies/${agency.id}/edit`" role="button" class="dropdown-item"
+                          <a
+                            :href="`${rootUrl}/admin/agencies/${agency.id}/edit`"
+                            target="_blank"
+                            role="button"
+                            class="dropdown-item"
                             >代理店を編集</a
                           >
                           <a
@@ -94,20 +98,20 @@
         </div>
       </div>
     </div>
-    <!-- START: Delete user modal -->
+    <!-- START: Delete agency modal -->
     <modal-confirm
-      title="こちらのユーザーを削除してよろしいですが?"
+      title="こちらの代理店を削除してよろしいですが?"
       id="modalDeleteAgency"
       type="delete"
       @confirm="submitDeleteAgency"
     >
       <template v-slot:content>
         <div v-if="curAgency">
-          メールアドレス: <b>{{ curAgency.email }}</b>
+          代理店名: <b>{{ curAgency.name }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Delete user modal -->
+    <!-- END: Delete agency modal -->
   </div>
 </template>
 <script>

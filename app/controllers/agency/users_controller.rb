@@ -27,7 +27,7 @@ class Agency::UsersController < Agency::ApplicationController
 
   # PATCH /admin/users/:id
   def update
-    if !@user.update(user_params)
+    if !@user.update(user_params.except([:email]))
       render_bad_request_with_message(@user.first_error_message)
     end
   end

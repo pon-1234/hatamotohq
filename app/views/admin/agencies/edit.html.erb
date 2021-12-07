@@ -5,12 +5,13 @@
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">代理店</li>
           <li class="breadcrumb-item"><%= link_to '代理店一覧',  admin_agencies_path %></li>
-          <li class="breadcrumb-item active">新規代理店登録</li>
+          <li class="breadcrumb-item"><%= @agency.id %></li>
+          <li class="breadcrumb-item">代理店編集</li>
         </ol>
       </div>
-      <h4 class="page-title">新規代理店登録</h4>
+      <h4 class="page-title">代理店編集</h4>
     </div>
   </div>
 </div>
 
-<agency-new></agency-new>
+<agency-edit :agency="<%= @agency.to_json %>"></agency-edit>

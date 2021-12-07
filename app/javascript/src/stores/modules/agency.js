@@ -46,7 +46,7 @@ export const actions = {
     });
   },
 
-  updateUser(_, query) {
+  updateAgency(_, query) {
     return AgencyAPI.update(query).done((res) => {
       return Promise.resolve(res);
     }).fail((err) => {
