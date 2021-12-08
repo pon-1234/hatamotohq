@@ -5,7 +5,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # GET /admin/accounts
   def index
-    authorize! :manage, Admin
+    redirect_to admin_agencies_path unless current_admin.superadmin?
     if request.format.json?
       @q = Admin.ransack(params[:q])
       @accounts = @q.result.page(params[:page])
@@ -18,6 +18,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # POST /admin/accounts
   def create
+    authorize! :manage, Admin
     @account = Admin.new(account_params)
     @account.role = :admin
     if !@account.save
@@ -27,6 +28,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # PATCJ /admin/accounts/:id
   def update
+    authorize! :manage, Admin
     if !@account.update(account_params)
       render_bad_request_with_message(@account.first_error_message)
     end
@@ -34,6 +36,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # DELETE /admin/accounts/:id
   def destroy
+    authorize! :manage, Admin
     @account.destroy!
     render_success
   end

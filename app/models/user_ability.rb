@@ -4,6 +4,9 @@ class UserAbility
   include CanCan::Ability
 
   def initialize(user)
+    can :read, LineFriend
+    can :manage, Channel
+    return unless user.admin?
     # Friend
     can [:manage], LineFriend, line_account: user.line_account
 
