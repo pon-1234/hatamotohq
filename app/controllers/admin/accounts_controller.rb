@@ -5,6 +5,7 @@ class Admin::AccountsController < Admin::ApplicationController
 
   # GET /admin/accounts
   def index
+    authorize! :manage, Admin
     if request.format.json?
       @q = Admin.ransack(params[:q])
       @accounts = @q.result.page(params[:page])

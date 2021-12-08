@@ -173,9 +173,6 @@ Rails.application.routes.draw do
     namespace :agency, path: Subdomain::AgencyConstraint.path do
       root to: 'clients#index'
       resources :clients do
-        get :sso, on: :member
-      end
-      resources :users do
         get :search, on: :collection
         get :delete_confirm, on: :member
         get :sso, on: :member

@@ -41,7 +41,7 @@
                 <tbody v-for="(agency, index) in agencies" :key="agency.id">
                   <tr>
                     <td>
-                      <a :href="`${rootUrl}/admin/agencies/${agency.id}`">{{ agency.id }}</a>
+                      <span>{{ agency.id }}</span>
                     </td>
                     <td>{{ agency.name }}</td>
                     <td>{{ agency.email }}</td>

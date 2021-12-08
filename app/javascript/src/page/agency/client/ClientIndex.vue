@@ -78,14 +78,14 @@
                             <span v-if="client.status === 'active'">ブロックする</span>
                             <span v-else>ブロック解除する</span>
                           </a>
-                          <a
+                          <!-- <a
                             role="button"
                             class="dropdown-item"
                             data-toggle="modal"
                             data-target="#modalDeleteUser"
                             @click="curClientIndex = index"
                             >クライアントを削除</a
-                          >
+                          > -->
                         </div>
                       </div>
                       <a :href="`${rootUrl}/agency/clients/${client.id}/sso`" class="btn btn-sm btn-info">ログイン</a>

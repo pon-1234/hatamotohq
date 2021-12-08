@@ -73,43 +73,6 @@
         </div>
       </div>
 
-      <!-- 管理者情報 -->
-      <div class="card">
-        <div class="card-header left-border">
-          <h3 class="card-title">管理者情報</h3>
-        </div>
-        <div class="card-body">
-          <div class="form-group row">
-            <label class="col-xl-3">メールアドレス</label>
-            <div class="col-xl-9">
-              <input
-                type="text"
-                class="form-control"
-                name="client[admin][email]"
-                placeholder="入力してください"
-                v-model.trim="clientFormData.admin.email"
-                maxlength="256"
-                disabled
-              />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-xl-3">管理者名</label>
-            <div class="col-xl-9">
-              <input
-                type="text"
-                class="form-control"
-                name="client[admin][name]"
-                placeholder="入力してください"
-                maxlength="256"
-                v-model.trim="clientFormData.admin.name"
-                disabled
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="d-flex">
         <div class="btn btn-info fw-120" :disabled="invalid" @click="validate().then(onSubmit)">保存</div>
       </div>
