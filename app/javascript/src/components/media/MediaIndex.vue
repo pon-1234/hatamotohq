@@ -66,11 +66,9 @@
               <div class="text-center overflow-hidden">
                 <div class="media-preview" role="button">
                   <template v-if="isImage(media)">
-                    <expandable-image
+                    <media-preview
                       v-if="mode === 'manage'"
-                      class="image bg-position-center"
-                      :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'"
-                      :src="media.url"
+                      :src="media.preview_url || media.url"
                     />
                     <div
                       v-else
