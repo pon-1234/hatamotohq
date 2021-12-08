@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_07_042752) do
+ActiveRecord::Schema.define(version: 2021_12_08_040642) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -166,6 +166,14 @@ ActiveRecord::Schema.define(version: 2021_12_07_042752) do
     t.datetime 'deleted_at'
     t.index ['line_account_id'], name: 'index_channels_on_line_account_id'
     t.index ['line_friend_id'], name: 'index_channels_on_line_friend_id'
+  end
+
+  create_table 'clients', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.string 'name'
+    t.string 'phone_number'
+    t.string 'address'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
   end
 
   create_table 'emojis', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -552,6 +560,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_042752) do
   end
 
   create_table 'users', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'client_id'
     t.string 'email', default: '', null: false
     t.string 'role'
     t.string 'encrypted_password', default: '', null: false
@@ -574,6 +583,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_042752) do
     t.string 'authentication_token'
     t.string 'pubsub_token'
     t.index ['authentication_token'], name: 'index_users_on_authentication_token', unique: true
+    t.index ['client_id'], name: 'index_users_on_client_id'
     t.index ['email'], name: 'index_users_on_email', unique: true
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
@@ -643,6 +653,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_042752) do
   add_foreign_key 'template_messages', 'templates'
   add_foreign_key 'templates', 'folders'
   add_foreign_key 'templates', 'line_accounts'
+  add_foreign_key 'users', 'clients'
   add_foreign_key 'variables', 'folders'
   add_foreign_key 'variables', 'line_accounts'
 end

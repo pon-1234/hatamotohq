@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header d-flex align-items-center">
-            <a :href="`${rootUrl}/agency/users/new`" class="btn btn-info fw-120 mr-2">
+            <a :href="`${rootUrl}/agency/clients/new`" class="btn btn-info fw-120 mr-2">
               <i class="uil-plus"></i> 新規登録
             </a>
             <!-- START: Search form -->
@@ -21,11 +21,11 @@
                   type="text"
                   class="form-control dropdown-toggle fw-250"
                   placeholder="検索..."
-                  v-model="queryParams.name_or_company_name_or_email_cont"
+                  v-model="queryParams.name_cont"
                 />
                 <span class="mdi mdi-magnify search-icon"></span>
                 <div class="input-group-append">
-                  <div class="btn btn-info" @click="loadUsers">検索</div>
+                  <div class="btn btn-info" @click="loadClients">検索</div>
                 </div>
               </div>
             </div>
@@ -38,24 +38,20 @@
                 <thead class="thead-light">
                   <tr>
                     <th>ID</th>
-                    <th>氏名</th>
-                    <th>メールアドレス</th>
-                    <th>会社名</th>
+                    <th>クライアント名</th>
                     <th>登録日時</th>
                     <th>状況</th>
                     <th class="fw-200">操作</th>
                   </tr>
                 </thead>
-                <tbody v-for="(user, index) in users" :key="user.id">
+                <tbody v-for="(client, index) in clients" :key="client.id">
                   <tr>
                     <td>
-                      <a :href="`${rootUrl}/admin/users/${user.id}`">{{ user.id }}</a>
+                      <a :href="`${rootUrl}/admin/clients/${client.id}`">{{ client.id }}</a>
                     </td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.company_name }}</td>
-                    <td>{{ formattedDatetime(user.created_at) }}</td>
-                    <td><user-status :user="user"></user-status></td>
+                    <td>{{ client.name }}</td>
+                    <td>{{ client.created_at | formatted_time }}</td>
+                    <td><client-status></client-status></td>
                     <td>
                       <div class="btn-group">
                         <button
@@ -69,7 +65,7 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item"
+                          <a :href="`${rootUrl}/admin/clients/${client.id}/edit`" role="button" class="dropdown-item"
                             >クライアントを編集</a
                           >
                           <a
@@ -77,9 +73,9 @@
                             role="button"
                             data-toggle="modal"
                             data-target="#modalToggleStatusUser"
-                            @click="curUserIndex = index"
+                            @click="curClientIndex = index"
                           >
-                            <span v-if="user.status === 'active'">ブロックする</span>
+                            <span v-if="client.status === 'active'">ブロックする</span>
                             <span v-else>ブロック解除する</span>
                           </a>
                           <a
@@ -87,12 +83,12 @@
                             class="dropdown-item"
                             data-toggle="modal"
                             data-target="#modalDeleteUser"
-                            @click="curUserIndex = index"
+                            @click="curClientIndex = index"
                             >クライアントを削除</a
                           >
                         </div>
                       </div>
-                      <a :href="`${rootUrl}/admin/users/${user.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
+                      <a :href="`${rootUrl}/admin/clients/${client.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
                     </td>
                   </tr>
                 </tbody>
@@ -104,10 +100,12 @@
                 v-model="queryParams.page"
                 :total-rows="totalRows"
                 :per-page="perPage"
-                @change="loadUsers"
+                @change="loadClients"
                 aria-controls="my-table"
               ></b-pagination>
-              <b v-if="!loading && totalRows === 0">データはありません。</b>
+              <div class="my-5 font-weight-bold text-center" v-if="!loading && totalRows === 0">
+                データはありません。
+              </div>
             </div>
           </div>
           <loading-indicator :loading="loading"></loading-indicator>
@@ -122,27 +120,27 @@
       @confirm="submitToggleStatus"
     >
       <template v-slot:content>
-        <div v-if="curUser">
-          <b>{{ curUser.status === "active" ? "有効" : "ブロックした" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
-          <b>{{ curUser.status === "active" ? "ブロックした" : "有効" }}</b>
+        <div v-if="curClient">
+          <b>{{ curClient.status === "active" ? "有効" : "ブロックした" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
+          <b>{{ curClient.status === "active" ? "ブロックした" : "有効" }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Toggle status (active/blocked) -->
-    <!-- START: Delete user modal -->
+    <!-- START: Delete client modal -->
     <modal-confirm
       title="こちらのユーザーを削除してよろしいですが?"
       id="modalDeleteUser"
       type="delete"
-      @confirm="submitDeleteUser"
+      @confirm="submitDeleteClient"
     >
       <template v-slot:content>
-        <div v-if="curUser">
-          メールアドレス: <b>{{ curUser.email }}</b>
+        <div v-if="curClient">
+          メールアドレス: <b>{{ curClient.email }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Delete user modal -->
+    <!-- END: Delete client modal -->
   </div>
 </template>
 <script>
@@ -156,7 +154,7 @@ export default {
       currentPage: 1,
       contentKey: 0,
       loading: true,
-      curUserIndex: 0,
+      curClientIndex: 0,
       isSearch: false,
       queryParams: null
     };
@@ -165,60 +163,57 @@ export default {
     this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
-    await this.getUsers();
+    await this.getClients();
     this.loading = false;
   },
 
   computed: {
-    ...mapGetters('user', ['getQueryParams']),
-    ...mapState('user', {
-      users: state => state.users,
+    ...mapGetters('client', ['getQueryParams']),
+    ...mapState('client', {
+      clients: state => state.clients,
       totalRows: state => state.totalRows,
       perPage: state => state.perPage
     }),
 
-    curUser() {
-      return this.users[this.curUserIndex];
+    curClient() {
+      return this.users[this.curClientIndex];
     }
   },
   methods: {
-    ...mapMutations('user', ['setCurPage', 'setQueryParams']),
-    ...mapActions('user', ['getUsers', 'deleteUser', 'updateUser', 'searchUsers']),
+    ...mapMutations('client', ['setCurPage', 'setQueryParams']),
+    ...mapActions('client', ['getClients', 'deleteClient', 'updateClient', 'searchUsers']),
 
     forceRerender() {
       this.contentKey++;
     },
 
-    async loadUsers() {
+    async loadClients() {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getUsers();
+        this.getClients();
         this.forceRerender();
         this.loading = false;
       });
     },
 
-    formattedDatetime(time) {
-      return Util.formattedDatetime(time);
-    },
-
-    async submitDeleteUser() {
-      const response = await this.deleteUser(this.curUser.id);
-      if (response) Util.showSuccessThenRedirect('ユーザー削除は完了しました。', `${this.rootUrl}/admin/users`);
-      else window.toastr.error('ユーザーの削除は失敗しました。');
+    async submitDeleteClient() {
+      const response = await this.deleteClient(this.curClient.id);
+      if (response) {
+        Util.showSuccessThenRedirect('クライアントの削除は完了しました。', `${this.rootUrl}/agency/clients`);
+      } else window.toastr.error('クライアントの削除は失敗しました。');
     },
 
     async submitToggleStatus() {
       const data = {
-        id: this.curUser.id,
-        status: this.curUser.status === 'blocked' ? 'active' : 'blocked'
+        id: this.curClient.id,
+        status: this.curClient.status === 'blocked' ? 'active' : 'blocked'
       };
-      const response = await this.updateUser(data);
+      const response = await this.updateClient(data);
       if (response) {
-        Util.showSuccessThenRedirect('ユーザー状況の変更は完了しました。', `${this.rootUrl}/admin/users`);
+        Util.showSuccessThenRedirect('クライアント状況の変更は完了しました。', `${this.rootUrl}/agency/clients`);
       } else {
-        window.toastr.error('ユーザー状況の変更は失敗しました。');
+        window.toastr.error('クライアント状況の変更は失敗しました。');
       }
     }
   }

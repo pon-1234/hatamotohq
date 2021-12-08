@@ -8,8 +8,8 @@
   <div class="h-100" id="left-side-menu-container" data-simplebar>
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
-      <li class="side-nav-item <%= controller?("agency/users") ? 'mm-active' : '' %>">
-        <%= link_to agency_users_path, class: "side-nav-link #{controller?("agency/users") ? 'active' : '' }" do %>
+      <li class="side-nav-item <%= controller?("agency/clients") ? 'mm-active' : '' %>">
+        <%= link_to agency_clients_path, class: "side-nav-link #{controller?("agency/clients") ? 'active' : '' }" do %>
           <i class="uil-users-alt"></i>
           <span> クライアント一覧 </span>
         <% end %>

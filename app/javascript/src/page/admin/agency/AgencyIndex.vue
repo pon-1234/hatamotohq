@@ -64,7 +64,7 @@
                             target="_blank"
                             role="button"
                             class="dropdown-item"
-                            >代理店を編集</a
+                            >契約者を編集</a
                           >
                           <a
                             role="button"
@@ -72,7 +72,7 @@
                             data-toggle="modal"
                             data-target="#modalDeleteAgency"
                             @click="curAgencyIndex = index"
-                            >代理店を削除</a
+                            >契約者を削除</a
                           >
                         </div>
                       </div>
@@ -100,14 +100,14 @@
     </div>
     <!-- START: Delete agency modal -->
     <modal-confirm
-      title="こちらの代理店を削除してよろしいですが?"
+      title="こちらの契約者を削除してよろしいですが?"
       id="modalDeleteAgency"
       type="delete"
       @confirm="submitDeleteAgency"
     >
       <template v-slot:content>
         <div v-if="curAgency">
-          代理店名: <b>{{ curAgency.name }}</b>
+          契約者名: <b>{{ curAgency.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -174,8 +174,8 @@ export default {
 
     async submitDeleteAgency() {
       const response = await this.deleteAgency(this.curAgency.id);
-      if (response) Util.showSuccessThenRedirect('代理店の削除は完了しました。', `${this.rootUrl}/admin/agencies`);
-      else window.toastr.error('代理店の削除は失敗しました。');
+      if (response) Util.showSuccessThenRedirect('契約者の削除は完了しました。', `${this.rootUrl}/admin/agencies`);
+      else window.toastr.error('契約者の削除は失敗しました。');
     }
   }
 };

@@ -20,9 +20,9 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">代理店名<required-mark /></label>
+            <label class="col-xl-3">契約者名<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="代理店名" rules="required|max:255" v-slot="{ errors }">
+              <ValidationProvider name="契約者名" rules="required|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -135,7 +135,7 @@ export default {
       this.submitted = true;
       this.createAgency(this.agencyFormData)
         .then(_ => {
-          Util.showSuccessThenRedirect('代理店の登録は完了しました。', `${this.rootPath}/admin/agencies`);
+          Util.showSuccessThenRedirect('契約者の登録は完了しました。', `${this.rootPath}/admin/agencies`);
         })
         .catch(error => {
           window.toastr.error(error.responseJSON.message);

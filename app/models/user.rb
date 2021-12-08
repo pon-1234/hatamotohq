@@ -5,6 +5,7 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  client_id              :bigint
 #  email                  :string(255)      default(""), not null
 #  role                   :string(255)
 #  encrypted_password     :string(255)      default(""), not null
@@ -30,13 +31,16 @@
 # Indexes
 #
 #  index_users_on_authentication_token  (authentication_token) UNIQUE
+#  index_users_on_client_id             (client_id)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
+# Foreign Keys
+#
+#  fk_rails_...  (client_id => clients.id)
+#
 class User < ApplicationRecord
-  before_create :execute_before_create
-  after_create :execute_after_create
-
+  belongs_to :client
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
@@ -54,6 +58,9 @@ class User < ApplicationRecord
   validates :company_name, length: { maximum: 255 }, allow_nil: true
   validates :note, length: { maximum: 2000 }, allow_nil: true
   validates :email, uniqueness: true
+
+  before_create :execute_before_create
+  after_create :execute_after_create
 
   # Scope
   enum status: { active: 'active', blocked: 'blocked' }

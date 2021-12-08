@@ -16,7 +16,9 @@ ja:
         phone_number: 電話番号
       agency:
         email: メール
-        name: 代理店名
+        name: 契約者名
+      client:
+        name: クライアント名
       tag:
         name: タグ名
       folder:

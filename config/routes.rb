@@ -175,7 +175,8 @@ Rails.application.routes.draw do
       passwords: 'agency/passwords'
     }
     namespace :agency, path: Subdomain::AgencyConstraint.path do
-      root to: 'users#index'
+      root to: 'clients#index'
+      resources :clients
       resources :users do
         get :search, on: :collection
         get :delete_confirm, on: :member
