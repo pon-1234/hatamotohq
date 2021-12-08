@@ -39,7 +39,7 @@ class Agency::ClientsController < Agency::ApplicationController
 
   # PATCH /agency/clients/:id
   def update
-    @client.update!(params.permit(:name, :address, :phone_number))
+    @client.update!(params.permit(:name, :address, :phone_number, :status))
   rescue => e
     render_bad_request_with_message(e.message)
   end

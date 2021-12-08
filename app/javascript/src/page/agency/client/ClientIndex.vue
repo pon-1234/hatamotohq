@@ -47,7 +47,7 @@
                 <tbody v-for="(client, index) in clients" :key="client.id">
                   <tr>
                     <td>
-                      <a :href="`${rootUrl}/admin/clients/${client.id}`">{{ client.id }}</a>
+                      <span>{{ client.id }}</span>
                     </td>
                     <td>{{ client.name }}</td>
                     <td>{{ client.created_at | formatted_time }}</td>
@@ -114,7 +114,7 @@
     </div>
     <!-- START: Toggle status (active/blocked) -->
     <modal-confirm
-      title="このユーザーの状況を変更してもよろしいですか？"
+      title="このクライアントの状況を変更してもよろしいですか？"
       id="modalToggleStatusUser"
       type="confirm"
       @confirm="submitToggleStatus"
@@ -129,7 +129,7 @@
     <!-- END: Toggle status (active/blocked) -->
     <!-- START: Delete client modal -->
     <modal-confirm
-      title="こちらのユーザーを削除してよろしいですが?"
+      title="こちらのクライアントを削除してよろしいですが?"
       id="modalDeleteUser"
       type="delete"
       @confirm="submitDeleteClient"
