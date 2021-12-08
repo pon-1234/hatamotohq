@@ -88,7 +88,7 @@
                           >
                         </div>
                       </div>
-                      <a :href="`${rootUrl}/admin/clients/${client.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
+                      <a :href="`${rootUrl}/agency/clients/${client.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
                     </td>
                   </tr>
                 </tbody>

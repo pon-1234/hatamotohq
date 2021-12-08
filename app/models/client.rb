@@ -17,9 +17,13 @@ class Client < ApplicationRecord
   has_one :line_account
 
   # Validations
-  validates :name, uniqueness: true
+  # validates :name, uniqueness: true
 
   enum status: { active: 'active', blocked: 'blocked' }
+
+  def admin
+    self.users.first
+  end
 
   def create_line_account
     line_account = LineAccount.new(client: self)

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Agency::ClientsController < Agency::ApplicationController
+  before_action :find_client, only: [:sso]
+
   # GET /agency/clients
   def index
     if request.format.json?
@@ -41,5 +43,16 @@ class Agency::ClientsController < Agency::ApplicationController
 
   # GET /agency/clients/:id/sso
   def sso
+    if @client.active?
+      sign_in @client.admin
+      redirect_to user_root_path
+    else
+      redirect_to agency_clients_path, flash: { warning: 'クライアントはブロック中ですので、ログインできませんでした。' }
+    end
   end
+
+  private
+    def find_client
+      @client = Client.find(params[:id])
+    end
 end
