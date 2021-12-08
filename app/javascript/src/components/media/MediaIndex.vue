@@ -66,11 +66,15 @@
               <div class="text-center overflow-hidden">
                 <div class="media-preview" role="button">
                   <template v-if="isImage(media)">
-                    <expandable-image
+                    <!-- <expandable-image
                       v-if="mode === 'manage'"
                       class="image bg-position-center"
                       :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'"
                       :src="media.url"
+                    /> -->
+                    <media-preview
+                      v-if="mode === 'manage'"
+                      :src="media.preview_url || media.url"
                     />
                     <div
                       v-else
@@ -370,6 +374,7 @@ export default {
   .bg-position-center {
     background-position: center;
     background-size: cover;
+    object-fit: cover;
   }
 
   .download-icon {

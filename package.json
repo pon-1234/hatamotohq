@@ -50,6 +50,7 @@
     "toastr": "^2.1.4",
     "v-clipboard": "^2.2.3",
     "v-tooltip": "^2.0.3",
+    "v-viewer": "^1.6.4",
     "vee-validate": "^2.2.15",
     "vee-validate-locale-ja": "^1.0.5",
     "vue": "^2.6.12",
