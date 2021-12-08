@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
     t.string 'name'
     t.string 'phone_number'
     t.string 'address'
+    t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
   end
@@ -259,6 +260,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
   end
 
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'client_id'
     t.bigint 'owner_id'
     t.string 'line_user_id'
     t.string 'line_name'
@@ -274,6 +276,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.index ['client_id'], name: 'index_line_accounts_on_client_id'
     t.index ['owner_id'], name: 'index_line_accounts_on_owner_id'
   end
 
@@ -620,6 +623,7 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
   add_foreign_key 'friend_variables', 'survey_answers'
   add_foreign_key 'friend_variables', 'variables'
   add_foreign_key 'insights', 'line_accounts'
+  add_foreign_key 'line_accounts', 'clients'
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'

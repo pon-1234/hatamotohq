@@ -190,7 +190,7 @@ export default {
     },
     onReceiveCreateClientResponse(id, errorMessage) {
       if (id) {
-        Util.showSuccessThenRedirect('クライアントの登録は完了しました。', `${this.rootPath}/agency/clients/${id}`);
+        Util.showSuccessThenRedirect('クライアントの登録は完了しました。', `${this.rootPath}/agency/clients`);
       } else {
         window.toastr.error(errorMessage);
       }

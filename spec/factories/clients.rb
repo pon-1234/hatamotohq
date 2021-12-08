@@ -8,6 +8,7 @@
 #  name         :string(255)
 #  phone_number :string(255)
 #  address      :string(255)
+#  status       :string(255)      default("active")
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

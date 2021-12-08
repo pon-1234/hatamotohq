@@ -49,8 +49,6 @@ class User < ApplicationRecord
   include UserRole
   include Avatarable
 
-  has_one :line_account, class_name: 'LineAccount', foreign_key: 'owner_id', dependent: :destroy
-
   # Validations
   validates :name, length: { maximum: 255 }, allow_nil: true
   validates :phone_number, numericality: true, length: 10..11, allow_nil: true
@@ -60,7 +58,6 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   before_create :execute_before_create
-  after_create :execute_after_create
 
   # Scope
   enum status: { active: 'active', blocked: 'blocked' }
@@ -85,8 +82,8 @@ class User < ApplicationRecord
     generate_pubsub_token
   end
 
-  def execute_after_create
-    create_line_account if admin?
+  def line_account
+    self.client.line_account
   end
 
   def display_name
@@ -99,11 +96,6 @@ class User < ApplicationRecord
         token = Devise.friendly_token(64)
         break token unless User.where(authentication_token: token).first
       end
-    end
-
-    def create_line_account
-      line_account = LineAccount.new(owner: self)
-      line_account.save!
     end
 
     def generate_pubsub_token

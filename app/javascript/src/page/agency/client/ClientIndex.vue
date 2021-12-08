@@ -51,7 +51,7 @@
                     </td>
                     <td>{{ client.name }}</td>
                     <td>{{ client.created_at | formatted_time }}</td>
-                    <td><client-status></client-status></td>
+                    <td><client-status :client="client"></client-status></td>
                     <td>
                       <div class="btn-group">
                         <button

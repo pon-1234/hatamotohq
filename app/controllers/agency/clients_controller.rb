@@ -21,11 +21,10 @@ class Agency::ClientsController < Agency::ApplicationController
   # POST /agency/clients
   def create
     # Create a new client
-    client = Client.new
-    client.name = params[:name]
-    client.address = params[:address]
-    client.phone_number = params[:phone_number]
+    client = Client.new(params.permit(:name, :address, :phone_number))
+    client.status = :active
     client.save!
+    client.create_line_account
     # Create client admin
     user = User.new(params.require(:admin).permit(:name, :email, :password, :password_confirmation))
     user.client = client
@@ -38,6 +37,9 @@ class Agency::ClientsController < Agency::ApplicationController
 
   # PATCH /agency/clients/:id
   def update
-    
+  end
+
+  # GET /agency/clients/:id/sso
+  def sso
   end
 end
