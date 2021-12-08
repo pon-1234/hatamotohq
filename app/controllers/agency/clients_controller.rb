@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Agency::ClientsController < Agency::ApplicationController
-  before_action :find_client, only: [:sso]
+  before_action :find_client, only: [:edit, :update, :sso]
 
   # GET /agency/clients
   def index
@@ -39,6 +39,9 @@ class Agency::ClientsController < Agency::ApplicationController
 
   # PATCH /agency/clients/:id
   def update
+    @client.update!(params.permit(:name, :address, :phone_number))
+  rescue => e
+    render_bad_request_with_message(e.message)
   end
 
   # GET /agency/clients/:id/sso

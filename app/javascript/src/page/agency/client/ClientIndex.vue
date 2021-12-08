@@ -65,7 +65,7 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/clients/${client.id}/edit`" role="button" class="dropdown-item"
+                          <a :href="`${rootUrl}/agency/clients/${client.id}/edit`" role="button" class="dropdown-item"
                             >クライアントを編集</a
                           >
                           <a
@@ -176,7 +176,7 @@ export default {
     }),
 
     curClient() {
-      return this.users[this.curClientIndex];
+      return this.clients[this.curClientIndex];
     }
   },
   methods: {
