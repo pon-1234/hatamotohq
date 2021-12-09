@@ -8,7 +8,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="false"
-            @change="$emit('update:is_initial', false)"
+            @change="onModeChanged(false)"
           />
           {{ mode === "date" ? "時刻指定" : "経過時間指定" }}
         </label>
@@ -20,7 +20,7 @@
             name="is_initial"
             type="radio"
             v-bind:value="true"
-            @change="$emit('update:is_initial', true)"
+            @change="onModeChanged(true)"
           />
           購読開始直後
         </label>
@@ -51,6 +51,8 @@
             type="time"
             class="theme-success mr-4"
             :phrases="{ ok: '確定', cancel: '閉じる' }"
+            value-zone="Asia/Tokyo"
+            zone="Asia/Tokyo"
           ></datetime>
         </template>
 
@@ -77,6 +79,8 @@
             type="time"
             class="theme-success"
             :phrases="{ ok: '確定', cancel: '閉じる' }"
+            value-zone="Asia/Tokyo"
+            zone="Asia/Tokyo"
           ></datetime>
           <span class="mr-4">時間後</span>
         </template>
@@ -115,6 +119,7 @@
 <script>
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
+import Util from '@/core/util';
 
 export default {
   components: {
@@ -152,12 +157,12 @@ export default {
 
   created() {
     this.zeroday = this.date === 0;
-    this.selectedTime = this.time || '00:00';
+    this.selectedTime = moment.tz(this.time, 'HH:mm', 'Asia/Tokyo').format();
   },
 
   watch: {
     selectedTime: function(val) {
-      const timeOnly = moment(val).format('HH:mm');
+      const timeOnly = Util.formattedTime(val);
       this.$emit('update:time', timeOnly);
     },
 
@@ -167,6 +172,21 @@ export default {
 
     order: function(val) {
       this.$emit('update:order', this.order);
+    }
+  },
+
+  methods: {
+    onModeChanged(isInitial) {
+      this.is_initial = isInitial;
+      if (isInitial) {
+        this.date = 0;
+        this.$emit('update:date', this.date);
+        this.time = '00:00';
+        this.$emit('update:time', this.time);
+      } else {
+        this.zeroday = true;
+      }
+      this.$emit('update:is_initial', isInitial);
     }
   }
 };

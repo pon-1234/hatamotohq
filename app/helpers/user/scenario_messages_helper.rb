@@ -8,7 +8,7 @@ module User::ScenarioMessagesHelper
       scenario_message.name = nil
       scenario_message.is_initial = true
       scenario_message.date = 0
-      scenario_message.time = '0:00'
+      scenario_message.time = '00:00'
       scenario_message.order = 1
       scenario_message.message_type_id = message.message_type_id
       scenario_message.content = message.content
