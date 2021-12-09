@@ -1,98 +1,84 @@
 <template>
-  <div class="card">
-    <div class="card-header left-border">
-      <h3 class="card-title">本文設定</h3>
-    </div>
-    <div class="card-body">
-      <div class="d-flex" style="justify-content: center">
-        <div class="fw-260">
-          <input
-            type="text"
-            v-model="background"
-            :name="'image-url'"
-            v-validate="'required'"
-            class="d-none"
-            data-vv-as="背景画像"
-          />
-          <rich-menu-preview
-            :background="background"
-            :template-id="templateId"
-            :typeTemplate="typeTemplate"
-            :class="errors.first('image-url') ? 'invalid-box' : ''"
-            @click="expandAction"
+  <div>
+    <div class="d-flex" style="justify-content: center">
+      <div class="fw-260">
+        <input
+          type="text"
+          v-model="background"
+          :name="'image-url'"
+          v-validate="'required'"
+          class="d-none"
+          data-vv-as="背景画像"
+        />
+        <rich-menu-preview
+          :background="background"
+          :template-id="templateId"
+          :typeTemplate="typeTemplate"
+          :class="errors.first('image-url') ? 'invalid-box' : ''"
+          @click="expandAction"
+        >
+        </rich-menu-preview>
+        <error-message :message="errors.first('image-url')"></error-message>
+        <div class="my-2">
+          <button
+            type="button"
+            class="btn-block btn btn-secondary"
+            data-toggle="modal"
+            data-target="#modalRichMenuTemplateSelection"
           >
-          </rich-menu-preview>
-          <error-message :message="errors.first('image-url')"></error-message>
-          <div class="my-2">
-            <button
-              type="button"
-              class="btn-block btn btn-secondary"
-              data-toggle="modal"
-              data-target="#modalRichMenuTemplateSelection"
-            >
-              テンプレートを選択
-            </button>
-          </div>
-          <div class="my-2">
-            <button
-              type="button"
-              class="btn-block btn btn-secondary"
-              data-toggle="modal"
-              data-target="#modalSelectMedia"
-            >
-              背景画像をアップロード
-            </button>
-          </div>
-          <div class="my-2">
-            <button type="button" class="btn-block btn btn-secondary" @click="isShowingEditor = true">
-              一式の個別画像を編集
-            </button>
-          </div>
-          <span class="invalid-feedback d-block" style="display: none"></span>
+            テンプレートを選択
+          </button>
         </div>
-        <div class="flex-grow-1 ml-4 mxw-800">
-          <h5>アクション設定</h5>
-          <div>
-            <div class="invalid-feedback d-block" style="display: none"></div>
-            <div id="accordion">
-              <div v-for="(item, index) in actionObjects" v-bind:key="index">
-                <div
-                  class="card mb-2"
-                  :class="
-                    errors.items.find((item) => item.field.includes('richmenu_type_' + index)) ? 'invalid-box' : ''
-                  "
-                >
-                  <div class="p-2" @click="expandAction(item.key, false, index)">
-                    <h5 class="m-0">
-                      <button type="button" class="btn-block btn-link text-left btn btn-outline-block">
-                        <i
-                          class="fas mr-2 mdi mdi-chevron-right"
-                          style="width: 20px"
-                          v-if="
-                            !item.expand && !errors.items.find((item) => item.field.includes('richmenu_type_' + index))
-                          "
-                        ></i>
-                        <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{ item.key }}
-                      </button>
-                    </h5>
-                  </div>
-                  <div
-                    v-show="item.expand || errors.items.find((item) => item.field.includes('richmenu_type_' + index))"
-                  >
-                    <div>
-                      <div class="card-body pt-0 accordion-0 center">
-                        <div>
-                          <action-editor
-                            class="form-group"
-                            :name="'richmenu_type_' + index"
-                            :value="item.action"
-                            :supports="['', 'postback', 'uri', 'message', 'datetimepicker']"
-                            :labelRequired="false"
-                            :showTitle="false"
-                            @input="item.action = $event"
-                          >
-                          </action-editor>
-                        </div>
+        <div class="my-2">
+          <button type="button" class="btn-block btn btn-secondary" data-toggle="modal" data-target="#modalSelectMedia">
+            背景画像をアップロード
+          </button>
+        </div>
+        <div class="my-2">
+          <button type="button" class="btn-block btn btn-secondary" @click="isShowingEditor = true">
+            一式の個別画像を編集
+          </button>
+        </div>
+        <span class="invalid-feedback d-block" style="display: none"></span>
+      </div>
+      <div class="flex-grow-1 ml-4 mxw-800">
+        <h5>アクション設定</h5>
+        <div>
+          <div class="invalid-feedback d-block" style="display: none"></div>
+          <div id="accordion">
+            <div v-for="(item, index) in actionObjects" v-bind:key="index">
+              <div
+                class="card mb-2"
+                :class="errors.items.find((item) => item.field.includes('richmenu_type_' + index)) ? 'invalid-box' : ''"
+              >
+                <div class="p-2" @click="expandAction(item.key, false, index)">
+                  <h5 class="m-0">
+                    <button type="button" class="btn-block btn-link text-left btn btn-outline-block">
+                      <i
+                        class="fas mr-2 mdi mdi-chevron-right"
+                        style="width: 20px"
+                        v-if="
+                          !item.expand && !errors.items.find((item) => item.field.includes('richmenu_type_' + index))
+                        "
+                      ></i>
+                      <i class="fas mr-2 mdi mdi-chevron-down" style="width: 20px" v-else></i>{{ item.key }}
+                    </button>
+                  </h5>
+                </div>
+                <div v-show="item.expand || errors.items.find((item) => item.field.includes('richmenu_type_' + index))">
+                  <div>
+                    <div class="card-body pt-0 accordion-0 center">
+                      <div>
+                        <action-editor
+                          class="form-group"
+                          :name="'richmenu_type_' + index"
+                          :value="item.action"
+                          :supports="['', 'postback', 'uri', 'message', 'datetimepicker']"
+                          :labelRequired="false"
+                          :showTitle="false"
+                          @input="item.action = $event"
+                        >
+                        </action-editor>
                       </div>
                     </div>
                   </div>

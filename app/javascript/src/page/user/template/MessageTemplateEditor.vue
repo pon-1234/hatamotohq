@@ -186,10 +186,13 @@ export default {
     },
 
     async submitSaveTemplate() {
+      if (this.loading) return;
+      this.loading = true;
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
 
       if (!result) {
+        this.loading = false;
         return ViewHelper.scrollToRequiredField(true);
       }
 
@@ -213,6 +216,7 @@ export default {
           );
         } else {
           window.toastr.error('エラーを発生しました。');
+          this.loading = false;
         }
       } else {
         const response = await this.updateTemplate(payload);
@@ -223,6 +227,7 @@ export default {
           );
         } else {
           window.toastr.error('エラーを発生しました。');
+          this.loading = false;
         }
       }
     },
