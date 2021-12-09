@@ -4,7 +4,9 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header d-flex align-items-center">
-            <a :href="`${rootUrl}/user/scenarios/${scenario.id}/messages/new`" class="btn btn-success mr-2"><i class="uil-plus"></i> メッセージを追加</a>
+            <a :href="`${rootUrl}/user/scenarios/${scenario.id}/messages/new`" class="btn btn-success mr-2"
+              ><i class="uil-plus"></i> メッセージを追加</a
+            >
             <scenario-select-template :scenario_id="scenario.id"></scenario-select-template>
           </div>
           <div class="card-body">
@@ -31,19 +33,37 @@
                       {{ scheduleTimeFor(message) }}
                     </td>
                     <td>
-                      <span>{{ message.name ? message.name : '未設定' }}</span>
+                      <span>{{ message.name ? message.name : "未設定" }}</span>
                     </td>
-                    <td><message-type-label :data="message.content"/></td>
+                    <td><message-type-label :data="message.content" /></td>
                     <td><message-content :data="message.content"></message-content></td>
                     <td>
                       <scenario-message-status :status="message.status"></scenario-message-status>
                     </td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 操作 <span class="caret"></span> </button>
+                        <button
+                          type="button"
+                          class="btn btn-light btn-sm dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          操作 <span class="caret"></span>
+                        </button>
                         <div class="dropdown-menu">
-                          <a :href="`${rootUrl}/user/scenarios/${scenario.id}/messages/${message.id}/edit`" class="dropdown-item">メッセージを編集</a>
-                          <a role="button" class="dropdown-item" data-toggle="modal" data-target="#modalDeleteScenarioMessage" @click="curMessageIndex = index">メッセージを削除</a>
+                          <a
+                            :href="`${rootUrl}/user/scenarios/${scenario.id}/messages/${message.id}/edit`"
+                            class="dropdown-item"
+                            >メッセージを編集</a
+                          >
+                          <a
+                            role="button"
+                            class="dropdown-item"
+                            data-toggle="modal"
+                            data-target="#modalDeleteScenarioMessage"
+                            @click="curMessageIndex = index"
+                            >メッセージを削除</a
+                          >
                         </div>
                       </div>
                     </td>
@@ -68,10 +88,15 @@
       </div>
     </div>
     <!-- START: Delete user modal -->
-    <modal-confirm title="本当に削除してよろしですか?" id='modalDeleteScenarioMessage' type='delete' @confirm="submitDeleteMessage">
+    <modal-confirm
+      title="本当に削除してよろしですか?"
+      id="modalDeleteScenarioMessage"
+      type="delete"
+      @confirm="submitDeleteMessage"
+    >
       <template v-slot:content>
         <div v-if="curMessage">
-          メッセージ名：: <b>{{curMessage.name}}</b>
+          メッセージ名：: <b>{{ curMessage.name }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -93,18 +118,16 @@ export default {
       currentPage: 1
     };
   },
-  created() {
-
-  },
+  created() {},
   async beforeMount() {
     await this.getMessages(this.scenario.id);
     this.loading = false;
   },
   computed: {
     ...mapState('scenarioMessage', {
-      messages: (state) => state.messages,
-      totalRows: (state) => state.totalRows,
-      perPage: (state) => state.perPage
+      messages: state => state.messages,
+      totalRows: state => state.totalRows,
+      perPage: state => state.perPage
     }),
 
     curMessage() {
@@ -112,13 +135,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('scenarioMessage', [
-      'setCurPage'
-    ]),
-    ...mapActions('scenarioMessage', [
-      'getMessages',
-      'deleteMessage'
-    ]),
+    ...mapMutations('scenarioMessage', ['setCurPage']),
+    ...mapActions('scenarioMessage', ['getMessages', 'deleteMessage']),
 
     scheduleTimeFor(message) {
       if (message.status === 'disabled') return '';
@@ -131,7 +149,11 @@ export default {
           return `${sb}${time}後`;
         }
       } else if (this.scenario.mode === 'time') {
-        return message.is_initial ? `開始当日 ${message.time}` : `${message.date}日後 ${message.time}`;
+        if (message.is_initial) {
+          return '開始直後';
+        } else {
+          return message.date === 0 ? `開始当日 ${message.time}` : `${message.date}日後 ${message.time}`;
+        }
       }
     },
 
@@ -157,8 +179,12 @@ export default {
         id: this.curMessage.id
       };
       const response = await this.deleteMessage(params);
-      if (response) Util.showSuccessThenRedirect('シナリオメッセージの削除は成功しました。', `${this.rootUrl}/user/scenarios/${this.scenario.id}/messages`);
-      else window.toastr.error('シナリオメッセージの削除は失敗しました。');
+      if (response) {
+        Util.showSuccessThenRedirect(
+          'シナリオメッセージの削除は成功しました。',
+          `${this.rootUrl}/user/scenarios/${this.scenario.id}/messages`
+        );
+      } else window.toastr.error('シナリオメッセージの削除は失敗しました。');
       this.forceRerender();
     }
   }

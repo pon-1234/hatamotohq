@@ -23,7 +23,7 @@ class ScenarioSchedulerJob < ApplicationJob
       if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
       else
-        create_message_event(scenario_message, deliver_time_for(scenario_message))
+        create_message_event(scenario_message, schedule_at)
       end
     end
 
@@ -47,7 +47,7 @@ class ScenarioSchedulerJob < ApplicationJob
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
         save_scenario_ended_log
       else
-        schedule_at = deliver_time_for(last_message) + 1.second
+        schedule_at = schedule_at + 1.second
         step = last_message.step + 1
         create_after_action_event(schedule_at, step)
       end
@@ -60,7 +60,7 @@ class ScenarioSchedulerJob < ApplicationJob
       when 'time'
         (Time.zone.today + scenario_message.date).change({ hour: time.hour, min: time.min, sec: 0 })
       when 'elapsed_time'
-        Time.zone.now.change({ sec: 0 }) + date.day + time.hour + time.min
+        Time.zone.now.change({ sec: 0 }) + date.day + time.hour.hour + time.min.minute
       end
     end
 

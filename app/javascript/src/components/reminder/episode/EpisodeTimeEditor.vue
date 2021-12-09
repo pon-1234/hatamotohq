@@ -135,7 +135,7 @@ export default {
       if (isInitial) {
         this.date = 0;
         this.$emit('update:date', this.date);
-        this.time = '0:00';
+        this.time = '00:00';
         this.$emit('update:time', this.time);
       } else {
         this.zeroday = true;
