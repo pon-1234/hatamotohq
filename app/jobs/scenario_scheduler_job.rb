@@ -58,7 +58,7 @@ class ScenarioSchedulerJob < ApplicationJob
       time = scenario_message.time.to_time
       case @scenario.mode
       when 'time'
-        (Time.zone.today + scenario_message.date).change({ hour: time.hour, min: time.min, sec: 0 })
+        (Time.zone.today + scenario_message.date).in_time_zone.change({ hour: time.hour, min: time.min, sec: 0 })
       when 'elapsed_time'
         Time.zone.now.change({ sec: 0 }) + date.day + time.hour.hour + time.min.minute
       end

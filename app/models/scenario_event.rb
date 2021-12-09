@@ -37,7 +37,7 @@ class ScenarioEvent < ApplicationRecord
 
   belongs_to :line_account
   belongs_to :scenario
-  belongs_to :scenario_message, required: false # root message can be deleted
+  belongs_to :scenario_message, optional: true # root message can be deleted
   belongs_to :channel
 
   # Scope
