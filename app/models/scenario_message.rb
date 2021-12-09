@@ -35,7 +35,7 @@ class ScenarioMessage < ApplicationRecord
   validates_presence_of :content, :message_type_id
 
   # Scope
-  scope :ordered, -> { order(status: :desc, is_initial: :desc, date: :asc, time: :asc, order: :asc) }
+  scope :ordered, -> { order(status: :desc, is_initial: :desc, date: :asc, time: :desc, order: :asc) }
   enum status: { enabled: 'enabled', disabled: 'disabled' }
 
   before_save :execute_before_save

@@ -71,7 +71,7 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def deliver_after_action
-      ActionHandlerJob.perform_now(self.channel.line_friend, normalize_message)
+      ActionHandlerJob.perform_now(self.channel.line_friend, self.content)
     end
 
     def execute_after_deliver
