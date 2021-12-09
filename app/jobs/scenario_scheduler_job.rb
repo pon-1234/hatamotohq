@@ -47,7 +47,7 @@ class ScenarioSchedulerJob < ApplicationJob
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
         save_scenario_ended_log
       else
-        schedule_at = schedule_at + 1.second
+        schedule_at = schedule_at
         step = last_message.step + 1
         create_after_action_event(schedule_at, step)
       end
