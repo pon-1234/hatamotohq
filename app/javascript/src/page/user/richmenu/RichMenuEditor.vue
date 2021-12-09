@@ -81,17 +81,25 @@
     </div>
 
     <!--Editor-->
-    <rich-menu-content-editor
-      v-if="!loading"
-      @input="richMenu"
-      :background="backgroundUrl"
-      :templateId="richMenuData.template_id"
-      :piecesCount="templateValue"
-      :templateType="templateType"
-      :areas="richMenuData.areas"
-      @onMediaChanged="onMediaChanged($event)"
-    >
-    </rich-menu-content-editor>
+    <div class="card">
+      <div class="card-header left-border">
+        <h3 class="card-title">本文設定</h3>
+      </div>
+      <div class="card-body">
+        <rich-menu-content-editor
+          :key="contentKey"
+          @input="richMenu"
+          :background="backgroundUrl"
+          :templateId="richMenuData.template_id"
+          :piecesCount="templateValue"
+          :templateType="templateType"
+          :areas="richMenuData.areas"
+          @onMediaChanged="onMediaChanged($event)"
+        >
+        </rich-menu-content-editor>
+      </div>
+      <loading-indicator :loading="loading"></loading-indicator>
+    </div>
 
     <div class="card">
       <div class="card-header left-border">
@@ -222,6 +230,8 @@ export default {
     },
 
     async submit() {
+      if (this.loading) return;
+      this.loading = true;
       let isError = !(await this.$validator.validateAll());
       // validate areas
       for (const area of this.richMenuData.areas) {
@@ -234,6 +244,7 @@ export default {
       }
 
       if (isError) {
+        this.loading = false;
         return ViewHelper.scrollToRequiredField(false);
       }
 
@@ -265,6 +276,7 @@ export default {
           `${process.env.MIX_ROOT_PATH}/user/rich_menus?folder_id=${this.richMenuData.folder_id}`
         );
       } else {
+        this.loading = false;
         window.toastr.error('リッチメニューの保存は失敗しました。');
       }
     },

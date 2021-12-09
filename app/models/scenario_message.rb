@@ -40,6 +40,9 @@ class ScenarioMessage < ApplicationRecord
   enum status: { enabled: 'enabled', disabled: 'disabled' }
 
   before_save :execute_before_save
+  after_destroy do
+    self.scenario.reorder_messages
+  end
 
   def clone_to!(scenario_id)
     new_message = self.dup
