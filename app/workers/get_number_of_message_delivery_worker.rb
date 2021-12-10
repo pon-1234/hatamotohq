@@ -4,7 +4,7 @@ class GetNumberOfMessageDeliveryWorker
   include Sidekiq::Worker
 
   def perform(*args)
-    LineAccount.active.each do |line_account|
+    LineAccount.all.each do |line_account|
       next if line_account.channel_id.nil?
       response = LineApi::GetNumberOfMessageDeliveries.new(line_account).perform(Time.zone.yesterday)
       next unless response.code == '200'

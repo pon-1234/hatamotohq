@@ -16,14 +16,12 @@
 #  liff_id         :string(255)
 #  note            :text(65535)
 #  bot_initialized :boolean          default(FALSE)
-#  status          :string(255)      default("inactive")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
 #
 # Indexes
 #
-#  index_line_accounts_on_owner_id  (owner_id)
 #
 # Foreign Keys
 #
