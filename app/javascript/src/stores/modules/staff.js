@@ -12,7 +12,7 @@ export const state = {
 };
 
 export const mutations = {
-  setUsers(state, staffs) {
+  setStaffs(state, staffs) {
     state.staffs = staffs;
   },
 
@@ -61,7 +61,7 @@ export const actions = {
         q: _.omit(state.queryParams, 'page')
       };
       const response = await StaffAPI.list(params);
-      context.commit('setUsers', response.data);
+      context.commit('setStaffs', response.data);
       context.commit('setMeta', response.meta);
       return response;
     } catch (error) {

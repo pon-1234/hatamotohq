@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::StaffsController < User::ApplicationController
-  before_action :find_user, only: [:show, :edit, :update, :destroy, :delete_confirm, :sso]
+  before_action :find_staff, only: [:show, :edit, :update, :destroy, :delete_confirm, :sso]
 
   # GET /user/staffs
   def index
@@ -16,34 +16,44 @@ class User::StaffsController < User::ApplicationController
     end
   end
 
-  # POST /admin/users
+  # GET /user/staffs/new
+  def new
+  end
+
+  # POST /user/staffs
   def create
-    @user = User.new(user_params)
-    if !@user.save
-      render_bad_request_with_message(@user.first_error_message)
-    end
+    @staff = User.new(user_params)
+    @staff.client = Current.user.client
+    @staff.role = :staff
+    @staff.save!
+  rescue => e
+    render_bad_request_with_message(e.message)
   end
 
-  # PATCH /admin/users/:id
+  # GET /user/staffs/:id/edit
+  def edit
+  end
+
+  # PATCH /user/staffs/:id
   def update
-    if !@user.update(user_params)
-      render_bad_request_with_message(@user.first_error_message)
-    end
+    @staff.update!(user_params)
+  rescue => e
+    render_bad_request_with_message(e.message)
   end
 
-  # DELETE /admin/users/:id
+  # DELETE /user/staffs/:id
   def destroy
-    @user.destroy!
+    @staff.destroy!
     render_success
   end
 
-  # GET /admin/users/:id/sso
+  # GET /user/staffs/:id/sso
   def sso
-    if @user.active?
-      sign_in @user
+    if @staff.active?
+      sign_in @staff
       redirect_to user_root_path
     else
-      redirect_to admin_users_path, flash: { warning: 'ユーザーはブロック中ですので、ログインできませんでした。' }
+      redirect_to admin_users_path, flash: { warning: 'スタッフはブロック中ですので、ログインできませんでした。' }
     end
   end
 
@@ -61,7 +71,7 @@ class User::StaffsController < User::ApplicationController
       )
     end
 
-    def find_user
-      @user = User.find(params[:id])
+    def find_staff
+      @staff = User.find(params[:id])
     end
 end

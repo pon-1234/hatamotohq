@@ -4,7 +4,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header d-flex align-items-center">
-            <a :href="`${rootUrl}/agency/users/new`" class="btn btn-info fw-120 mr-2">
+            <a :href="`${rootUrl}/user/staffs/new`" class="btn btn-success fw-120 mr-2">
               <i class="uil-plus"></i> 新規登録
             </a>
             <!-- START: Search form -->
@@ -25,7 +25,7 @@
                 />
                 <span class="mdi mdi-magnify search-icon"></span>
                 <div class="input-group-append">
-                  <div class="btn btn-info" @click="loadUsers">検索</div>
+                  <div class="btn btn-primary" @click="loadStaffs">検索</div>
                 </div>
               </div>
             </div>
@@ -37,58 +37,53 @@
               <table class="table table-centered mb-0">
                 <thead class="thead-light">
                   <tr>
-                    <th>ID</th>
                     <th>氏名</th>
                     <th>メールアドレス</th>
                     <th>状況</th>
                     <th class="fw-200">操作</th>
                   </tr>
                 </thead>
-                <tbody v-for="(user, index) in users" :key="user.id">
+                <tbody v-for="(staff, index) in staffs" :key="staff.id">
                   <tr>
-                    <td>
-                      <a :href="`${rootUrl}/admin/users/${user.id}`">{{ user.id }}</a>
-                    </td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td><user-status :user="user"></user-status></td>
+                    <td>{{ staff.name }}</td>
+                    <td>{{ staff.email }}</td>
+                    <td><staff-status :staff="staff"></staff-status></td>
                     <td>
                       <div class="btn-group">
                         <button
                           type="button"
                           class="btn btn-light btn-sm dropdown-toggle"
-                          id="dropdownMenuUser"
+                          id="dropdownMenuStaff"
                           data-toggle="dropdown"
                           aria-haspopup="true"
                           aria-expanded="false"
                         >
                           操作 <span class="caret"></span>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/user/staffs/${user.id}/edit`" role="button" class="dropdown-item"
-                            >クライアントを編集</a
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuStaff">
+                          <a :href="`${rootUrl}/user/staffs/${staff.id}/edit`" role="button" class="dropdown-item"
+                            >スタッフを編集</a
                           >
                           <a
                             class="dropdown-item"
                             role="button"
                             data-toggle="modal"
                             data-target="#modalToggleStatusUser"
-                            @click="curUserIndex = index"
+                            @click="curStaffIndex = index"
                           >
-                            <span v-if="user.status === 'active'">ブロックする</span>
+                            <span v-if="staff.status === 'active'">ブロックする</span>
                             <span v-else>ブロック解除する</span>
                           </a>
                           <a
                             role="button"
                             class="dropdown-item"
                             data-toggle="modal"
-                            data-target="#modalDeleteUser"
-                            @click="curUserIndex = index"
-                            >クライアントを削除</a
+                            data-target="#modalDeleteStaff"
+                            @click="curStaffIndex = index"
+                            >スタッフを削除</a
                           >
                         </div>
                       </div>
-                      <a :href="`${rootUrl}/admin/users/${user.id}/sso`" class="btn btn-sm btn-info">ログイン</a>
                     </td>
                   </tr>
                 </tbody>
@@ -100,7 +95,7 @@
                 v-model="queryParams.page"
                 :total-rows="totalRows"
                 :per-page="perPage"
-                @change="loadUsers"
+                @change="loadStaffs"
                 aria-controls="my-table"
               ></b-pagination>
             </div>
@@ -114,29 +109,29 @@
     </div>
     <!-- START: Toggle status (active/blocked) -->
     <modal-confirm
-      title="このユーザーの状況を変更してもよろしいですか？"
+      title="このスタッフの状況を変更してもよろしいですか？"
       id="modalToggleStatusUser"
       type="confirm"
       @confirm="submitToggleStatus"
     >
       <template v-slot:content>
-        <div v-if="curUser">
-          <b>{{ curUser.status === "active" ? "有効" : "ブロックした" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
-          <b>{{ curUser.status === "active" ? "ブロックした" : "有効" }}</b>
+        <div v-if="curStaff">
+          <b>{{ curStaff.status === "active" ? "有効" : "ブロックした" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
+          <b>{{ curStaff.status === "active" ? "ブロックした" : "有効" }}</b>
         </div>
       </template>
     </modal-confirm>
     <!-- END: Toggle status (active/blocked) -->
     <!-- START: Delete user modal -->
     <modal-confirm
-      title="こちらのユーザーを削除してよろしいですが?"
-      id="modalDeleteUser"
+      title="こちらのスタッフを削除してよろしいですが?"
+      id="modalDeleteStaff"
       type="delete"
-      @confirm="submitDeleteUser"
+      @confirm="submitDeleteStaff"
     >
       <template v-slot:content>
-        <div v-if="curUser">
-          メールアドレス: <b>{{ curUser.email }}</b>
+        <div v-if="curStaff">
+          メールアドレス: <b>{{ curStaff.email }}</b>
         </div>
       </template>
     </modal-confirm>
@@ -154,7 +149,7 @@ export default {
       currentPage: 1,
       contentKey: 0,
       loading: true,
-      curUserIndex: 0,
+      curStaffIndex: 0,
       isSearch: false,
       queryParams: null
     };
@@ -163,7 +158,7 @@ export default {
     this.queryParams = _.cloneDeep(this.getQueryParams);
   },
   async beforeMount() {
-    await this.getUsers();
+    await this.getStaffs();
     this.loading = false;
   },
 
@@ -175,23 +170,23 @@ export default {
       perPage: state => state.perPage
     }),
 
-    curUser() {
-      return this.users[this.curUserIndex];
+    curStaff() {
+      return this.staffs[this.curStaffIndex];
     }
   },
   methods: {
-    ...mapMutations('user', ['setCurPage', 'setQueryParams']),
-    ...mapActions('user', ['getUsers', 'deleteUser', 'updateUser', 'searchUsers']),
+    ...mapMutations('staff', ['setCurPage', 'setQueryParams']),
+    ...mapActions('staff', ['getStaffs', 'deleteStaff', 'updateStaff', 'searchStaffs']),
 
     forceRerender() {
       this.contentKey++;
     },
 
-    async loadUsers() {
+    async loadStaffs() {
       this.$nextTick(async() => {
         this.setQueryParams(this.queryParams);
         this.loading = true;
-        this.getUsers();
+        this.getStaffs();
         this.forceRerender();
         this.loading = false;
       });
@@ -201,20 +196,20 @@ export default {
       return Util.formattedDatetime(time);
     },
 
-    async submitDeleteUser() {
-      const response = await this.deleteUser(this.curUser.id);
-      if (response) Util.showSuccessThenRedirect('ユーザー削除は完了しました。', `${this.rootUrl}/admin/users`);
-      else window.toastr.error('ユーザーの削除は失敗しました。');
+    async submitDeleteStaff() {
+      const response = await this.deleteStaff(this.curStaff.id);
+      if (response) Util.showSuccessThenRedirect('スタッフの削除は完了しました。', `${this.rootUrl}/user/staffs`);
+      else window.toastr.error('スタッフの削除は失敗しました。');
     },
 
     async submitToggleStatus() {
       const data = {
-        id: this.curUser.id,
-        status: this.curUser.status === 'blocked' ? 'active' : 'blocked'
+        id: this.curStaff.id,
+        status: this.curStaff.status === 'blocked' ? 'active' : 'blocked'
       };
-      const response = await this.updateUser(data);
+      const response = await this.updateStaff(data);
       if (response) {
-        Util.showSuccessThenRedirect('ユーザー状況の変更は完了しました。', `${this.rootUrl}/admin/users`);
+        Util.showSuccessThenRedirect('ユーザー状況の変更は完了しました。', `${this.rootUrl}/user/staffs`);
       } else {
         window.toastr.error('ユーザー状況の変更は失敗しました。');
       }
