@@ -8,6 +8,8 @@
 #  line_account_id  :bigint
 #  type             :string(255)      default("daily")
 #  date             :date
+#  quota            :integer          default(0)
+#  total_usage      :integer          default(0)
 #  broadcast        :integer
 #  targeting        :integer
 #  auto_response    :integer
