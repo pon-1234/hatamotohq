@@ -51,3 +51,15 @@ staging:
     include_metadata: true
     description: "This worker analyze quota consumption"
     enabled: true
+
+  GetQuotaWorker:
+    cron: "0 0 2 * * *" # Runs every day
+    include_metadata: true
+    description: "This worker get quota of accounts every day"
+    enabled: true
+
+  GetQuotaConsumptionWorker:
+    cron: "0 * * * * *" # Runs every minute
+    include_metadata: true
+    description: "This worker get quota consumption of accounts"
+    enabled: true
