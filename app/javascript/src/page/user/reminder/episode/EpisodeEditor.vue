@@ -150,8 +150,11 @@ export default {
     },
 
     async submit() {
+      if (this.loading) return;
+      this.loading = true;
       const valid = await this.$validator.validateAll();
       if (!valid) {
+        this.loading = false;
         return ViewHelper.scrollToRequiredField(false);
       }
 
@@ -166,6 +169,7 @@ export default {
           `${this.rootPath}/user/reminders/${this.reminder_id}/episodes`
         );
       } else {
+        this.loading = false;
         window.toastr.error('リマインダ配信タイミングの作成は失敗しました。');
       }
     },
@@ -178,6 +182,7 @@ export default {
           `${this.rootPath}/user/reminders/${this.reminder_id}/episodes`
         );
       } else {
+        this.loading = false;
         window.toastr.error('リマインダ配信タイミングの変更は失敗しました。');
       }
     },
