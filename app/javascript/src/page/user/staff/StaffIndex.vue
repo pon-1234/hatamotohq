@@ -39,6 +39,7 @@
                   <tr>
                     <th>氏名</th>
                     <th>メールアドレス</th>
+                    <th>電話番号</th>
                     <th>状況</th>
                     <th class="fw-200">操作</th>
                   </tr>
@@ -47,6 +48,7 @@
                   <tr>
                     <td>{{ staff.name }}</td>
                     <td>{{ staff.email }}</td>
+                    <td>{{ staff.phone_number }}</td>
                     <td><staff-status :staff="staff"></staff-status></td>
                     <td>
                       <div class="btn-group">
