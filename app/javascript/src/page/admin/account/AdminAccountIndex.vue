@@ -69,7 +69,7 @@
                             data-target="#modalDeleteAccount"
                             @click="curAccountIndex = index"
                             v-if="account.role === 'admin'"
-                            >クライアントを削除</a
+                            >管理者を削除</a
                           >
                         </div>
                       </td>
@@ -87,8 +87,8 @@
                 @change="loadAccounts"
                 aria-controls="my-table"
               ></b-pagination>
-              <b v-if="!loading && totalRows === 0">データはありません。</b>
             </div>
+            <div class="my-5 text-center font-weight-bold" v-if="!loading && totalRows === 0">データはありません。</div>
           </div>
           <loading-indicator :loading="loading"></loading-indicator>
         </div>

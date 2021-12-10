@@ -4,22 +4,6 @@
       <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
         <div class="card-body">
           <div class="form-group row">
-            <label class="col-xl-3">メールアドレス<required-mark /></label>
-            <div class="col-xl-9">
-              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="account[email]"
-                  placeholder="入力してください"
-                  maxlength="256"
-                  v-model.trim="accountFormData.email"
-                />
-                <span class="error-explanation">{{ errors[0] }}</span>
-              </ValidationProvider>
-            </div>
-          </div>
-          <div class="form-group row">
             <label class="col-xl-3">氏名<required-mark /></label>
             <div class="col-xl-9">
               <ValidationProvider name="氏名" rules="required|max:255" v-slot="{ errors }">
@@ -30,6 +14,22 @@
                   placeholder="入力してください"
                   maxlength="256"
                   v-model.trim="accountFormData.name"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-xl-3">メールアドレス<required-mark /></label>
+            <div class="col-xl-9">
+              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="account[email]"
+                  placeholder="入力してください"
+                  maxlength="256"
+                  v-model.trim="accountFormData.email"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
