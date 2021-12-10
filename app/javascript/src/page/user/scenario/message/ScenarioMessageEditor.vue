@@ -38,6 +38,7 @@
             </div>
           </div>
         </div>
+        <loading-indicator :loading="loading"></loading-indicator>
       </div>
 
       <div class="card">
@@ -46,7 +47,6 @@
         </div>
         <div class="card-body">
           <scenario-message-time-editor
-            v-if="!loading"
             :mode="scenario.mode"
             :is_initial.sync="scenarioMessageData.is_initial"
             :date.sync="scenarioMessageData.date"
@@ -55,6 +55,7 @@
           >
           </scenario-message-time-editor>
         </div>
+        <loading-indicator :loading="loading"></loading-indicator>
       </div>
 
       <div class="card">
@@ -181,10 +182,14 @@ export default {
       this.scenarioMessageData.messages[index] = content;
       this.setPreviewContent(this.scenarioMessageData.messages);
     },
+
     async submit() {
+      if (this.loading) return;
+      this.loading = true;
       const result = await this.$validator.validateAll();
       this.setIsSubmitChange();
       if (!result) {
+        this.loading = false;
         return ViewHelper.scrollToRequiredField(false);
       }
 
@@ -206,10 +211,8 @@ export default {
           `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
         );
       } else {
-        Util.showErrorThenRedirect(
-          'シナリオにメッセージの保存は失敗しました。',
-          `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
-        );
+        window.toastr.error('シナリオにメッセージの保存は失敗しました。');
+        this.loading = false;
       }
     }
   }

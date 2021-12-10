@@ -30,6 +30,7 @@
 #
 class ScenarioMessage < ApplicationRecord
   belongs_to :scenario, counter_cache: true
+  has_many :scenario_events, dependent: :destroy
 
   # Validation
   validates_presence_of :content, :message_type_id
@@ -39,6 +40,9 @@ class ScenarioMessage < ApplicationRecord
   enum status: { enabled: 'enabled', disabled: 'disabled' }
 
   before_save :execute_before_save
+  after_destroy do
+    self.scenario.reorder_messages
+  end
 
   def clone_to!(scenario_id)
     new_message = self.dup
@@ -50,8 +54,10 @@ class ScenarioMessage < ApplicationRecord
   private
     def execute_before_save
       self.order = 1 if order.blank? || (order == 0)
-      if date == 0 && time.to_time&.seconds_since_midnight == 0
-        self.is_initial = true
+      if (date == 0) && !self.is_initial
+        if self.scenario.elapsed_time_mode? && (time.to_time&.seconds_since_midnight == 0)
+          self.is_initial = true
+        end
       end
     rescue StandardError => e
       logger.error e.message

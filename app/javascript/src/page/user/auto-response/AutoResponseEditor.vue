@@ -50,6 +50,7 @@
           </div>
         </div>
       </div>
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <div class="card">
@@ -97,6 +98,7 @@
           <error-message class="w-100" :message="errors.first('keywords')"></error-message>
         </div>
       </div>
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <div class="card">
@@ -231,8 +233,11 @@ export default {
     },
 
     async submitCreate() {
+      if (this.loading) return;
+      this.loading = true;
       const result = await this.$validator.validateAll();
       if (!result) {
+        this.loading = false;
         return ViewHelper.scrollToRequiredField(false);
       }
       const data = {
@@ -248,6 +253,7 @@ export default {
           );
         } else {
           window.toastr.error('自動応答の変更は失敗しました。');
+          this.loading = false;
         }
       } else {
         const response = await this.createAutoResponse(data);
@@ -258,6 +264,7 @@ export default {
           );
         } else {
           window.toastr.error('自動応答の作成は失敗しました。');
+          this.loading = false;
         }
       }
     },

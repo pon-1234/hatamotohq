@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default pb20 mb-0">
+      <div class="panel panel-default pb20 mb-0" :key="contentKey">
         <!-- パネルメニュー -->
         <ul class="nav nav-tabs nav-bordered" role="tablist">
           <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
@@ -168,6 +168,7 @@ export default {
   inject: ['parentValidator'],
   data() {
     return {
+      contentKey: 0,
       selected: 0,
       errorMessageUploadFile: '',
       messageData: {
@@ -201,6 +202,10 @@ export default {
     }
   },
   methods: {
+    forceRerender() {
+      this.contentKey++;
+    },
+
     addMoreColumn(index) {
       if (this.messageData.columns.length > 9) return;
       const option = {

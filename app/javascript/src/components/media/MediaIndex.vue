@@ -59,39 +59,41 @@
           v-for="(media, index) in medias"
           :key="index"
           @click="selectMedia(media)"
-          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden' : 'col-xl-4 col-md-6 overflow-hidden'"
+          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden' : 'col-xl-4 col-md-6 col-sm-4 w-50 overflow-hidden'"
         >
-          <div class="card fw-200 mx-auto">
+          <div class="card mx-auto" :class="isMobile ? 'fw-140' : 'fw-200'">
             <div class="card-body p-0 d-flex align-items-center justify-content-center">
               <div class="text-center overflow-hidden">
                 <div class="media-preview" role="button">
                   <template v-if="isImage(media)">
-                    <expandable-image
+                    <media-preview
                       v-if="mode === 'manage'"
-                      class="image fw-200 fh-150 bg-position-center"
-                      :src="media.url"
+                      :src="media.preview_url || media.url"
                     />
                     <div
                       v-else
                       v-lazy:background-image="media.preview_url || media.url"
-                      class="fw-200 fh-150 bg-position-center"
+                      class="bg-position-center"
+                      :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'"
                     ></div>
                   </template>
 
                   <template v-if="isVideo(media)">
-                    <video :width="200" :height="150" controls>
+                    <video :width="isMobile ? 140 : 200" :height="isMobile ? 100 : 150" controls>
                       <source :src="media.url" />
                     </video>
                   </template>
 
                   <template v-else-if="isPdf(media)">
-                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center"
+                        :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'">
                       <img src="/images/messages/pdf.png" width="100" />
                     </div>
                   </template>
 
                   <template v-else-if="isAudio(media)">
-                    <div class="fw-200 fh-150 d-flex align-items-center justify-content-center">
+                    <div class="d-flex align-items-center justify-content-center"
+                        :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'">
                       <audio controls class="audio-player mx-2 mx-safari">
                         <source :src="media.url"/>
                       </audio>
@@ -201,15 +203,24 @@ export default {
       currentPage: 1,
       selectedMedias: [],
       checkedAll: false,
-      curUploadType: 'image'
+      curUploadType: 'image',
+      window: {
+        width: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
   },
   async beforeMount() {
     this.setFilter(this.types);
     await this.getMedias();
     this.loading = false;
   },
-
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   computed: {
     ...mapState('media', {
       medias: state => state.medias,
@@ -219,6 +230,10 @@ export default {
 
     isManageMode() {
       return this.mode === 'manage';
+    },
+
+    isMobile: function() {
+      return this.window.width < 760;
     }
   },
 
@@ -302,6 +317,10 @@ export default {
     resetData() {
       this.currentPage = 1;
       this.loadPage();
+    },
+
+    handleResize() {
+      this.window.width = window.innerWidth;
     }
   }
 };

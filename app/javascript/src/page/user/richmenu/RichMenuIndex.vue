@@ -26,7 +26,7 @@
                   <th class="mw-120">状況</th>
                   <th class="mw-150">メニュー初期状態</th>
                   <th class="mw-200">画像</th>
-                  <!-- <th class="mw-120">メンバー数</th> -->
+                  <th class="mw-120">配信先</th>
                   <th class="mw-80">操作</th>
                   <th class="mw-150">フォルダー</th>
                 </tr>
@@ -46,7 +46,11 @@
                   <td>
                     <div v-lazy:background-image="richmenu.image_url" class="fw-120 fh-81 thumbnail"></div>
                   </td>
-                  <!-- <td>{{ richmenu.member_count }}</td> -->
+                  <td>
+                    <rich-menu-target :rich_menu="richmenu"></rich-menu-target>
+                    <divider></divider>
+                    <div class="font-13 mt-1">メンバー数：{{ richmenu.member_count }}</div>
+                  </td>
                   <td>
                     <div class="btn-group">
                       <button

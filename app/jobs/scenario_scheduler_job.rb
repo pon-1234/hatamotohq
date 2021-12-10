@@ -19,10 +19,11 @@ class ScenarioSchedulerJob < ApplicationJob
 
   private
     def schedule(scenario_message)
-      if scenario_message.is_initial?
+      schedule_at = deliver_time_for(scenario_message)
+      if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
       else
-        create_message_event(scenario_message, deliver_time_for(scenario_message))
+        create_message_event(scenario_message, schedule_at)
       end
     end
 
@@ -41,11 +42,12 @@ class ScenarioSchedulerJob < ApplicationJob
     # If last message is initial message then perform after action immediately
     # Otherwise, create a new scenario event
     def schedule_after_action(last_message)
-      if last_message.is_initial?
+      schedule_at = deliver_time_for(last_message)
+      if last_message.is_initial? || (schedule_at < Time.zone.now)
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
         save_scenario_ended_log
       else
-        schedule_at = deliver_time_for(last_message) + 1.second
+        schedule_at = schedule_at
         step = last_message.step + 1
         create_after_action_event(schedule_at, step)
       end
@@ -56,9 +58,9 @@ class ScenarioSchedulerJob < ApplicationJob
       time = scenario_message.time.to_time
       case @scenario.mode
       when 'time'
-        (Time.zone.today + scenario_message.date).change({ hour: time.hour, minute: time.min, second: 0 })
+        (Time.zone.today + scenario_message.date).in_time_zone.change({ hour: time.hour, min: time.min, sec: 0 })
       when 'elapsed_time'
-        Time.zone.now.change({ second: 0 }) + date.day + time.hour.hour + time.min.minute
+        Time.zone.now.change({ sec: 0 }) + date.day + time.hour.hour + time.min.minute
       end
     end
 

@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      <loading-indicator :loading="loading" />
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
     <div class="card">
       <div class="card-header left-border">
@@ -94,7 +94,7 @@
           zone="Asia/Tokyo"
         ></datetime>
       </div>
-      <loading-indicator :loading="loading" />
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <!-- 本文設定 -->
@@ -141,7 +141,7 @@
           </div>
         </div>
       </div>
-      <loading-indicator :loading="loading" />
+      <loading-indicator :loading="loading"></loading-indicator>
     </div>
 
     <div>
@@ -158,6 +158,7 @@ import { mapActions } from 'vuex';
 import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
 import ViewHelper from '@/core/view_helper';
+import Util from '@/core/util';
 
 export default {
   props: ['broadcast_id'],
@@ -303,6 +304,8 @@ export default {
     },
 
     async submit(status) {
+      if (this.loading) return;
+      this.loading = true;
       this.broadcastData.status = status;
       if (this.broadcastData.deliver_now) {
         this.changeStartDateForNow();
@@ -311,6 +314,7 @@ export default {
       if (status !== 'draft') {
         const result = await this.$validator.validateAll();
         if (!result) {
+          this.loading = false;
           return ViewHelper.scrollToRequiredField(false);
         }
       }
@@ -331,27 +335,18 @@ export default {
     onReceiveCreateBroadcastResponse(success) {
       if (success) {
         window.toastr.success('一斉配信の保存は完了しました。');
-        setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
-        }, 500);
+        Util.showSuccessThenRedirect('一斉配信の保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/broadcasts`);
       } else {
         window.toastr.error('一斉配信の保存は失敗しました。');
-        setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
-        }, 500);
+        this.loading = false;
       }
     },
     onReceiveUpdateBroadcastResponse(success) {
       if (success) {
-        window.toastr.success('一斉配信の更新は完了しました。');
-        setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
-        }, 500);
+        Util.showSuccessThenRedirect('一斉配信の更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/broadcasts`);
       } else {
         window.toastr.error('一斉配信の更新は失敗しました。');
-        setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
-        }, 500);
+        this.loading = false;
       }
     },
 

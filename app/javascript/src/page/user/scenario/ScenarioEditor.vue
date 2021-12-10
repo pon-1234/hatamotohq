@@ -36,6 +36,7 @@
           </div>
         </div>
       </div>
+      <loading-indicator :loading="loading" />
     </div>
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">配信設定</h3></div>
@@ -152,6 +153,7 @@
           </div>
         </div>
       </div>
+      <loading-indicator :loading="loading" />
     </div>
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">配信終了アクション設定</h3></div>
@@ -165,13 +167,13 @@
           @input="updateAction"
         ></action-editor-custom>
       </div>
+      <loading-indicator :loading="loading" />
     </div>
 
     <div class="d-flex">
       <div class="btn btn-success fw-120 mr-2" @click="saveScenario()">保存</div>
       <div class="btn btn-outline-success fw-120" @click="saveScenario('draft')">下書き保存</div>
     </div>
-    <loading-indicator :loading="loading" />
   </div>
 </template>
 <script>
@@ -232,10 +234,13 @@ export default {
     },
 
     async saveScenario(status) {
+      if (this.loading) return;
+      this.loading = true;
       if (status !== 'draft') {
         this.scenarioData.status = this.$refs.status.checked ? 'enabled' : 'disabled';
         const result = await this.$validator.validateAll();
         if (!result) {
+          this.loading = false;
           return ViewHelper.scrollToRequiredField(true);
         }
       } else {
@@ -277,6 +282,7 @@ export default {
         window.toastr.error('シナリオの作成は失敗しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
+          this.loading = false;
         }, 500);
       }
     },
@@ -290,6 +296,7 @@ export default {
         window.toastr.error('シナリオの更新は失敗しました。');
         setTimeout(() => {
           window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+          this.loading = false;
         }, 500);
       }
     }

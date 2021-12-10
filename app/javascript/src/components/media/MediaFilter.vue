@@ -1,18 +1,20 @@
 <template>
-  <div class="filter-list">
-    <div class="checkbox-inline" v-for="option in options" :key="option.type">
-      <div class="custom-control custom-checkbox mr-4">
-        <input
-          type="checkbox"
-          :value="option.type"
-          v-model="selectedTypes"
-          class="custom-control-input"
-          :id="option.type"
-        />
-        <label class="custom-control-label" :for="option.type">{{ option.text }}</label>
+  <div class="d-flex align-items-center">
+    <div class="filter-list">
+      <div class="checkbox-inline" v-for="option in options" :key="option.type">
+        <div class="custom-control custom-checkbox mr-4">
+          <input
+            type="checkbox"
+            :value="option.type"
+            v-model="selectedTypes"
+            class="custom-control-input"
+            :id="option.type"
+          />
+          <label class="custom-control-label text-nowrap" :for="option.type">{{ option.text }}</label>
+        </div>
       </div>
     </div>
-    <div class="btn btn-primary" @click="applyFilter">表示変更</div>
+    <div class="btn btn-primary text-nowrap" @click="applyFilter">表示変更</div>
   </div>
 </template>
 <script>
@@ -55,10 +57,22 @@ export default {
     margin-left: 10px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 1000px) {
     .filter-list {
-      flex-direction: column;
-      align-items: flex-start;
+      width: 75%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-inline {
+      width: 50%;
     }
   }
+
+  @media (max-width: 677px) {
+    .checkbox-inline {
+      width: 100%;
+    }
+  }
+
 </style>

@@ -3,15 +3,13 @@
     <div class="row">
       <!-- start chat users-->
       <div class="channel-list">
-        <channel-list :class="getLeftItem()" />
-        <!-- :class="getLeftItem()" -->
+        <channel-list></channel-list>
       </div>
       <!-- end chat users-->
-      <!-- {{ showChatBox }} -->
+
       <!-- chat area -->
       <div class="channel-chat" :class="showChatBox ? 'channel-chat-visible' : ''">
-        <chat-box></chat-box>
-        <!-- :class="getRightItem()" -->
+        <chat-box ref="chatBox" @onResetModalSticker="onResetModalSticker"></chat-box>
       </div>
       <!-- end chat area-->
 
@@ -34,6 +32,17 @@
         id="modalSelectSticker"
         @input="sendStickerMessage"
       ></modal-select-sticker>
+      <modal-confirm
+        id="modalConfirmToggleLocked"
+        title="友達状況の変更してもよろしいですか？"
+        type="confirm"
+        @confirm="toggle()"
+      >
+        <template v-slot:content>
+          <b>{{ curFriend.locked ? "ブロックした" : "有効" }}</b> <i class="mdi mdi-arrow-right-bold"></i>
+          <b>{{ curFriend.locked ? "有効" : "ブロックした" }}</b>
+        </template>
+      </modal-confirm>
     </template>
   </div>
 </template>
@@ -57,8 +66,6 @@ export default {
   data() {
     return {
       ws: null,
-      isPc: true,
-      isShowTalkChannel: false,
       rerender: true
     };
   },
@@ -78,15 +85,18 @@ export default {
       showChatBox: state => state.showChatBox,
       showUserDetail: state => state.showUserDetail
     }),
-    ...mapState('friend', {
-      friend: state => state.friend
-    })
+
+    curFriend() {
+      return this.activeChannel.line_friend;
+    }
   },
 
   methods: {
     ...mapActions('channel', ['getChannels', 'onReceiveWebsocketEvent', 'pushMessage', 'setActiveChannel']),
 
     ...mapMutations('channel', ['setShowChatBox']),
+
+    ...mapActions('friend', ['toggleLocked']),
     connectToWebsocket() {
       const _this = this;
       consumer.subscriptions.create(
@@ -105,30 +115,46 @@ export default {
       this.setActiveChannel(channel || this.channels[0]);
     },
 
-    showChannels() {
-      this.isPc = true;
-      this.isShowTalkChannel = false;
+    sendMediaMessage(media) {
+      const payload = _.cloneDeep(media);
+      // convert media type if need
+      if (payload.type === 'richmenu') {
+        payload.type = 'image';
+      }
+      this.$refs.chatBox.sendMediaMessage(payload);
     },
 
-    getLeftItem() {
-      let className = '';
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-      if (this.isShowTalkChannel) {
-        className += ' item-hidden';
-      }
-
-      return className;
+    sendTemplate(template) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        template_id: template.id
+      };
+      this.$refs.chatBox.sendTemplate(payload);
     },
 
-    getRightItem() {
-      let className = '';
-      if (this.isPc) {
-        className += ' item-pc';
-      }
+    sendScenario(scenario) {
+      const payload = {
+        channel_id: this.activeChannel.id,
+        scenario_id: scenario.id
+      };
+      this.$refs.chatBox.sendScenario(payload);
+    },
 
-      return className;
+    sendStickerMessage(sticker) {
+      this.$refs.chatBox.sendStickerMessage(sticker);
+    },
+
+    onResetModalSticker(e) {
+      if (e) {
+        this.$refs.modalSticker.reset();
+      }
+    },
+
+    async toggle() {
+      await this.toggleLocked(this.curFriend.id);
+      setTimeout(() => {
+        location.reload();
+      }, 300);
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="border template-buttons row">
+    <div class="border template-buttons row" :key="contentKey">
       <div class="d-flex group-title col-12">
         <label class="mt-2"> タイトル<required-mark /></label>
         <input
@@ -89,6 +89,7 @@ export default {
     return {
       selected: 0,
       action_type: 'message',
+      contentKey: 0,
       templateData: {
         type: this.TemplateMessageType.Buttons,
         title: '',
@@ -114,6 +115,10 @@ export default {
     }
   },
   methods: {
+    forceRerender() {
+      this.contentKey++;
+    },
+
     addMoreAction() {
       this.selected = this.templateData.actions.length;
       this.templateData.actions.push(this.ActionMessage.default);
@@ -127,6 +132,7 @@ export default {
     removeAction(index) {
       this.templateData.actions.splice(index, 1);
       this.selected = 0;
+      this.forceRerender();
     },
 
     changeAction(index, data) {

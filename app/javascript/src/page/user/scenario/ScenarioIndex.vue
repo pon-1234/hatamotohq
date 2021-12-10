@@ -99,9 +99,11 @@
       @confirm="submitDeleteScenario"
     >
       <template v-slot:content>
-        <div v-if="curScenario">
-          シナリオ名：<b>{{ curScenario.title }}</b>
-        </div>
+        <p v-if="curScenario">
+          シナリオ名：<b>{{ curScenario.title }}</b
+          ><br />
+        </p>
+        <div class="alert alert-warning">こちらのシナリオの配信予約したメッセージは停止されます。</div>
       </template>
     </modal-confirm>
     <!-- END: Delete scenario modal -->

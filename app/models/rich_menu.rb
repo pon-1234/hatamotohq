@@ -63,6 +63,7 @@ class RichMenu < ApplicationRecord
     new_richmenu = self.dup
     new_richmenu.status = :disabled
     new_richmenu.name = self.name + '（コピー）'
+    new_richmenu.member_count = 0
     new_richmenu.save!
     new_richmenu
   end

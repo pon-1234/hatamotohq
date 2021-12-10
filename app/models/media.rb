@@ -28,7 +28,7 @@ class Media < ApplicationRecord
   has_one_attached :file
   has_one :rich_menu, dependent: :nullify
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], if: :type_image?
-  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'video/quicktime'], if: :type_audio?
+  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'audio/mp4', 'video/mp4', 'video/quicktime'], if: :type_audio?
   validates :file, content_type: ['video/mp4', 'video/quicktime'], if: :type_video?
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040 }, if: :type_imagemap?
   validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
