@@ -59,17 +59,18 @@
           v-for="(media, index) in medias"
           :key="index"
           @click="selectMedia(media)"
-          :class="isManageMode ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden' : 'col-xl-4 col-md-6 col-sm-4 w-50 overflow-hidden'"
+          :class="
+            isManageMode
+              ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden'
+              : 'col-xl-4 col-md-6 col-sm-4 w-50 overflow-hidden'
+          "
         >
           <div class="card mx-auto" :class="isMobile ? 'fw-140' : 'fw-200'">
             <div class="card-body p-0 d-flex align-items-center justify-content-center">
               <div class="text-center overflow-hidden">
                 <div class="media-preview" role="button">
                   <template v-if="isImage(media)">
-                    <media-preview
-                      v-if="mode === 'manage'"
-                      :src="media.preview_url || media.url"
-                    />
+                    <expandable-image v-if="mode === 'manage'" :src="media.preview_url || media.url"></expandable-image>
                     <div
                       v-else
                       v-lazy:background-image="media.preview_url || media.url"
@@ -85,17 +86,21 @@
                   </template>
 
                   <template v-else-if="isPdf(media)">
-                    <div class="d-flex align-items-center justify-content-center"
-                        :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'">
+                    <div
+                      class="d-flex align-items-center justify-content-center"
+                      :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'"
+                    >
                       <img src="/images/messages/pdf.png" width="100" />
                     </div>
                   </template>
 
                   <template v-else-if="isAudio(media)">
-                    <div class="d-flex align-items-center justify-content-center"
-                        :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'">
+                    <div
+                      class="d-flex align-items-center justify-content-center"
+                      :class="isMobile ? 'fw-140 fh-100' : 'fw-200 fh-150'"
+                    >
                       <audio controls class="audio-player mx-2 mx-safari">
-                        <source :src="media.url"/>
+                        <source :src="media.url" />
                       </audio>
                     </div>
                   </template>
@@ -378,9 +383,9 @@ export default {
     width: 100%;
   }
 
-@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0){
-  .mx-safari {
-    margin: 0 1px !important;
+  @media screen and (min-color-index: 0) and(-webkit-min-device-pixel-ratio:0) {
+    .mx-safari {
+      margin: 0 1px !important;
+    }
   }
-}
 </style>
