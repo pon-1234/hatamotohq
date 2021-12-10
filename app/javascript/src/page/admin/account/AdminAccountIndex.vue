@@ -41,7 +41,7 @@
                   <tbody v-for="(account, index) in accounts" :key="account.id">
                     <tr>
                       <td>
-                        <a :href="`${rootUrl}/admin/accounts/${account.id}`">{{ account.id }}</a>
+                        <span>{{ account.id }}</span>
                       </td>
                       <td>{{ account.name }}</td>
                       <td>{{ account.role === "superadmin" ? "ルート管理者" : "システム管理者" }}</td>
