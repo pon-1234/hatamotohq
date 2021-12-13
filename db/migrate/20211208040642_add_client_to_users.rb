@@ -12,7 +12,8 @@ class AddClientToUsers < ActiveRecord::Migration[6.0]
       client.address = user.address
       client.phone_number = user.phone_number
       client.save!
-      user.client = client
+      client.reload
+      user.client_id = client.id
       user.save!
       line_account = LineAccount.find_by(owner_id: user.id)
       if line_account.present?
