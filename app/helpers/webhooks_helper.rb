@@ -81,6 +81,7 @@ module WebhooksHelper
         return false unless params.present?
         data = params[:date] || params[:datetime] || params[:time]
         return false if data.blank?
+        data = data.gsub(/T/, ' ')
         friend = LineFriend.find_by(line_account: @line_account, line_user_id: @friend_id)
         message = Messages::MessageBuilder.new(
           nil,
