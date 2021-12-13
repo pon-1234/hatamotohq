@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_10_090454) do
+ActiveRecord::Schema.define(version: 2021_12_13_091305) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -169,12 +169,14 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   end
 
   create_table 'clients', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'agency_id'
     t.string 'name'
     t.string 'phone_number'
     t.string 'address'
     t.string 'status', default: 'active'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.index ['agency_id'], name: 'index_clients_on_agency_id'
   end
 
   create_table 'emojis', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -615,6 +617,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   add_foreign_key 'channel_members', 'channels'
   add_foreign_key 'channels', 'line_accounts'
   add_foreign_key 'channels', 'line_friends'
+  add_foreign_key 'clients', 'agencies'
   add_foreign_key 'episodes', 'reminders'
   add_foreign_key 'flex_message_sent_logs', 'flex_messages'
   add_foreign_key 'flex_message_sent_logs', 'line_accounts'
