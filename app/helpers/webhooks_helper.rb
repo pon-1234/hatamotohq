@@ -78,6 +78,7 @@ module WebhooksHelper
       # The datetime picker action does not support time zones.
       def handle_postback_datetime_selection
         params = @event[:postback][:params]
+        return false unless params.present?
         data = params[:date] || params[:datetime] || params[:time]
         return false if data.blank?
         friend = LineFriend.find_by(line_account: @line_account, line_user_id: @friend_id)
