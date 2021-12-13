@@ -22,6 +22,7 @@
 #  fk_rails_...  (agency_id => agencies.id)
 #
 class Client < ApplicationRecord
+  belongs_to :agency
   has_many :users, dependent: :destroy
   has_one :line_account
 

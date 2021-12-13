@@ -7,7 +7,7 @@ class Agency::ClientsController < Agency::ApplicationController
   def index
     if request.format.json?
       @params = params[:q]
-      @q = Client.ransack(@params)
+      @q = current_agency.clients.ransack(@params)
       @clients = @q.result.page(params[:page])
     end
     respond_to do |format|
