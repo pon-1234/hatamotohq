@@ -82,7 +82,7 @@
                           class="dropdown-item"
                           data-toggle="modal"
                           data-target="#modalCopyRichMenu"
-                          @click="curTemplateIndex = index"
+                          @click="curRichMenuIndex = index"
                           >リッチメニューをコピー</a
                         >
                         <a
@@ -90,7 +90,7 @@
                           class="dropdown-item"
                           data-toggle="modal"
                           data-target="#modalDeleteRichMenu"
-                          @click="curTemplateIndex = index"
+                          @click="curRichMenuIndex = index"
                           >リッチメニューを削除</a
                         >
                       </div>
@@ -263,8 +263,9 @@ export default {
 
     async submitDeleteRichMenu() {
       const response = await this.deleteRichMenu(this.curRichMenu.id);
+      const url = `${this.rootPath}/user/rich_menus?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('リッチメニュの削除は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('リッチメニュの削除は完了しました。', url);
       } else {
         window.$toastr.error('リッチメニュの削除は失敗しました。');
       }
@@ -276,8 +277,9 @@ export default {
         status: this.curRichMenu.status === 'enabled' ? 'disabled' : 'enabled'
       };
       const response = await this.updateRichMenu(payload);
+      const url = `${this.rootPath}/user/rich_menus?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('リッチメニュ状況の変更は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('リッチメニュ状況の変更は完了しました。', url);
       } else {
         window.$toastr.error('リッチメニュ状況の変更は失敗しました。');
       }

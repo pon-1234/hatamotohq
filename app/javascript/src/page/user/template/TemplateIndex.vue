@@ -227,8 +227,9 @@ export default {
 
     async submitDeleteTemplate() {
       const response = await this.deleteTemplate(this.curTemplate.id);
+      const url = `${this.rootPath}/user/templates?folder_id=${this.curFolder.id}`;
       if (response) {
-        window.toastr.success('テンプレートの削除は完了しました。');
+        Util.showSuccessThenRedirect('テンプレートの削除は完了しました。', url);
       } else {
         window.toastr.error('テンプレートの削除は失敗しました。');
       }
