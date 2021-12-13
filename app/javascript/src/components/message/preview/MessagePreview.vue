@@ -1,11 +1,15 @@
 <template>
   <div class="message-preview-el">
     <div class="card card-sliding" :style="isHidden ? 'margin-bottom: -50vh;' : 'margin-bottom: 0px;'">
-      <div class="card-header bg-dark d-flex justify-content-between align-items-center">
-        <div role="button" class="text-white" @click="toggleVisible">
+      <div
+        class="card-header bg-dark d-flex justify-content-between align-items-center"
+        role="button"
+        @click="toggleVisible"
+      >
+        <div role="button" class="text-white">
           <i :class="isHidden ? 'fas mr-2 fa-caret-up' : 'fas mr-2 fa-caret-down'"></i>プレビュー
         </div>
-        <i id="gijvq97" class="lar la-question-circle text-white"></i>
+        <i id="gijvq97" class="dripicons-chevron-down text-white font-weight-bold"></i>
       </div>
       <div
         class="card-body bg-white overflow-x-hidden p-0 cursor-not-allowed no-select"
