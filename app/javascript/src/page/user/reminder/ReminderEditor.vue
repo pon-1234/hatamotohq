@@ -87,8 +87,11 @@ export default {
     },
 
     async submit() {
+      if (this.loading) return;
+      this.loading = true;
       const result = await this.$validator.validateAll();
       if (!result) {
+        this.loading = false;
         return this.scrollToRequiredField();
       }
 
@@ -114,6 +117,7 @@ export default {
           `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
         );
       } else {
+        this.loading = false;
         window.toastr.error('リマインダの保存は失敗しました。');
       }
     },
@@ -124,6 +128,7 @@ export default {
           `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
         );
       } else {
+        this.loading = false;
         window.toastr.error('リマインダの更新は失敗しました。');
       }
     }

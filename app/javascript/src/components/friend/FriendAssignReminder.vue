@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       contentKey: 0,
+      loading: false,
       goal: null,
       reminder: {
         id: null,
@@ -78,6 +79,8 @@ export default {
     },
 
     async submit() {
+      if (this.loading) return;
+      this.loading = true;
       const valid = await this.$validator.validateAll();
       if (!valid) {
         return;
@@ -94,6 +97,7 @@ export default {
       } else {
         window.toastr.error('リマインダの設定は失敗しました。');
       }
+      this.loading = false;
     },
 
     resetData() {

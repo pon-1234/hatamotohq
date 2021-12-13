@@ -14,7 +14,6 @@ class User::BotController < User::ApplicationController
     if valid_bot?(bot_params[:channel_id], bot_params[:channel_secret])
       line_account = current_user.line_account
       line_account.bot_initialized = true
-      line_account.status = :active
       line_account.update!(bot_params)
       redirect_to user_root_path, flash: { success: 'ボットの設定は完了しました。' }
     else

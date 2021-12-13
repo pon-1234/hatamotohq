@@ -63,6 +63,7 @@ module WebhooksHelper
     end
 
     def handle_postback
+      return if handle_postback_datetime_selection
       # Get mapper key
       key = @event[:postback][:data]
       action = PostbackMapper.where(key: key)&.first&.value
@@ -71,6 +72,26 @@ module WebhooksHelper
     end
 
     private
+      # When a control associated with this action is tapped,
+      # a postback event is returned via webhook with the date and time
+      # selected by the user from the date and time selection dialog.
+      # The datetime picker action does not support time zones.
+      def handle_postback_datetime_selection
+        params = @event[:postback][:params]
+        return false unless params.present?
+        data = params[:date] || params[:datetime] || params[:time]
+        return false if data.blank?
+        data = data.gsub(/T/, ' ')
+        friend = LineFriend.find_by(line_account: @line_account, line_user_id: @friend_id)
+        message = Messages::MessageBuilder.new(
+          nil,
+          friend.channel,
+          { message: { type: 'text', text: data } }.try(:with_indifferent_access)
+        ).perform
+        LineApi::PushMessage.new(@line_account).perform([message.content], friend.channel.line_friend.line_user_id)
+        true
+      end
+
       # Store new friend data when adding new friend, or unblocking friend
       # The existing friend in LINE system may not exists in this system, so when sending
       # a message from LINE we need to check and store friend if needs

@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_08_040642) do
+ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -244,6 +244,8 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
     t.bigint 'line_account_id'
     t.string 'type', default: 'daily'
     t.date 'date'
+    t.integer 'quota', default: 0
+    t.integer 'total_usage', default: 0
     t.integer 'broadcast'
     t.integer 'targeting'
     t.integer 'auto_response'
@@ -272,7 +274,6 @@ ActiveRecord::Schema.define(version: 2021_12_08_040642) do
     t.string 'liff_id'
     t.text 'note'
     t.boolean 'bot_initialized', default: false
-    t.string 'status', default: 'inactive'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

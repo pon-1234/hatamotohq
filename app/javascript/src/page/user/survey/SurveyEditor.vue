@@ -209,9 +209,14 @@ export default {
     },
 
     async submit(published = true) {
+      if (this.loading) return;
+      this.loading = true;
       if (published) {
-        const valid = await this.validateForm();
-        if (!valid) return;
+        const valid = await this.$validator.validateAll();
+        if (!valid) {
+          this.loading = false;
+          return ViewHelper.scrollToRequiredField(false);
+        }
       }
       const payload = _.pick(this.surveyData, [
         'id',
@@ -237,6 +242,7 @@ export default {
           `${this.rootPath}/user/surveys?folder_id=${this.surveyData.folder_id}`
         );
       } else {
+        this.loading;
         window.toastr.error('回答フォームの保存は失敗しました。');
       }
     },
