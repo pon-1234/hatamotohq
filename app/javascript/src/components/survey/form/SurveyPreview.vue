@@ -6,10 +6,9 @@
         role="button"
         @click="changePreview"
       >
-        <div role="button" class="text-white">
-          <i :class="isHidden ? 'fas mr-2 fa-caret-up' : 'fas mr-2 fa-caret-down'"></i>プレビュー
-        </div>
-        <i id="gijvq97" class="dripicons-chevron-down text-white font-weight-bold"></i>
+        <div role="button" class="text-white">プレビュー</div>
+        <i v-if="!isHidden" id="gijvq97" class="dripicons-chevron-down text-white font-weight-bold"></i>
+        <i v-else id="gijvq97" class="dripicons-chevron-up text-white font-weight-bold"></i>
       </div>
       <div class="card-body bg-white overflow-x-hidden p-0 cursor-not-allowed no-select preview-container">
         <div class="bg-white preview-content">
