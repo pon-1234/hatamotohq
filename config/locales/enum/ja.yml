@@ -38,7 +38,7 @@ ja:
     admin:
       status:
         active: 有効
-        blocked: 無効
+        blocked: ブロックした
     prefecture:
       hokkaido: 北海道
       aomori: 青森県
