@@ -7,11 +7,7 @@
         </div>
         <!-- パネルメニュー -->
         <ul class="nav nav-tabs nav-bordered" role="tablist">
-          <li
-            role="presentation"
-            v-for="(item, index) in messageData.columns"
-            :key="index"
-          >
+          <li role="presentation" v-for="(item, index) in messageData.columns" :key="index">
             <a
               aria-controls="text"
               role="tab"
@@ -23,8 +19,8 @@
               パネル{{ index + 1 }}
             </a>
             <span @click="removeColumn(index)" v-if="messageData.columns.length > 1" class="pl-1">
-                <i class="dripicons-trash"></i>
-              </span>
+              <i class="dripicons-trash"></i>
+            </span>
           </li>
           <li class="d-flex justify-content-center p-1 pl-2" @click="addMoreColumn">
             <span> <i class="uil-plus"></i>追加 </span>
@@ -95,7 +91,7 @@
                       >
                         このパネルの画像を削除
                       </div>
-                      <div class="btn btn-secondary btn-sm" @click="coppyAllThumb" v-if="column.thumbnailImageUrl">
+                      <div class="btn btn-secondary btn-sm" @click="cloneToAll" v-if="column.thumbnailImageUrl">
                         全パネルにこの画像をコピー
                       </div>
                       <div
@@ -313,7 +309,7 @@ export default {
       this.$emit('input', this.messageData);
     },
 
-    coppyAllThumb() {
+    cloneToAll() {
       this.messageData.columns.forEach(item => {
         item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl;
       });

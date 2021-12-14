@@ -44,7 +44,7 @@
             :index="index"
             :name="`message${indexParent}Confirm${index}`"
             :value="item"
-            :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+            :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
             @input="changeAction(index, ...arguments)"
           ></action-editor>
         </div>
@@ -53,7 +53,6 @@
   </div>
 </template>
 <script>
-
 export default {
   props: ['data', 'indexParent'],
   inject: ['parentValidator'],
