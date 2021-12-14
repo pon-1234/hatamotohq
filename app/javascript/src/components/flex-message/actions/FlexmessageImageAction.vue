@@ -39,7 +39,7 @@
         <div class="card-body">
           <div class="form-group">
             <action-editor
-              :supports="['', 'postback', 'uri', 'message', 'datetimepicker', 'survey']"
+              :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
               :name="name"
               :value="action"
               :showTitle="false"
@@ -88,7 +88,6 @@ export default {
       },
       deep: true
     }
-
   },
 
   methods: {
@@ -107,9 +106,13 @@ export default {
 
     expand() {
       if ($('div.' + this.name + '-expand').is(':visible')) {
-        $('div.' + this.name + '-expand').parent().removeClass('active');
+        $('div.' + this.name + '-expand')
+          .parent()
+          .removeClass('active');
       } else {
-        $('div.' + this.name + '-expand').parent().addClass('active');
+        $('div.' + this.name + '-expand')
+          .parent()
+          .addClass('active');
       }
     },
 

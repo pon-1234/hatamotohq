@@ -96,6 +96,7 @@
                   :name="'image_carousel' + indexColum"
                   :value="column.action"
                   @input="changeActionColumn(indexColum, $event)"
+                  :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
                   :labelRequired="false"
                 />
               </div>
@@ -122,7 +123,7 @@
                 >
                   このパネルの画像を削除
                 </div>
-                <div class="btn btn-secondary btn-sm" @click="coppyAllThumb(indexColum)" v-if="column.imageUrl">
+                <div class="btn btn-secondary btn-sm" @click="cloneToAll(indexColum)" v-if="column.imageUrl">
                   全パネルにこの画像をコピー
                 </div>
                 <div class="btn btn-outline-danger btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
@@ -268,7 +269,7 @@ export default {
       this.$emit('input', this.messageData);
     },
 
-    coppyAllThumb(index) {
+    cloneToAll(index) {
       this.messageData.columns.forEach(item => {
         item.imageUrl = this.messageData.columns[index].imageUrl;
       });
