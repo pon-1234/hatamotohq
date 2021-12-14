@@ -93,7 +93,7 @@
               <div class="form-group">
                 <label>選択後の挙動</label>
                 <action-editor
-                  :name="'image_carousel' + indexColum"
+                  :name="`template_image_carousel_${indexParent}_column${indexColumn}_action${index}`"
                   :value="column.action"
                   @input="changeActionColumn(indexColum, $event)"
                   :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
