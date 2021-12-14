@@ -119,6 +119,7 @@
         <div class="card-footer row-form-btn d-flex">
           <div class="btn btn-success fw-120" :disabled="invalid" @click="validate().then(onSubmit)">登録</div>
         </div>
+        <loading-indicator :loading="loading"></loading-indicator>
       </ValidationObserver>
     </div>
   </div>
@@ -131,7 +132,7 @@ export default {
   data() {
     return {
       userRootUrl: process.env.MIX_ROOT_PATH,
-      loading: true,
+      loading: false,
       staffFormData: {
         email: null,
         password: null,
