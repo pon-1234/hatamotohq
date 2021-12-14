@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="card">
-      <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
+    <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
+      <div class="card">
         <div class="card-body">
           <div class="form-group row">
             <label class="col-xl-3">氏名<required-mark /></label>
@@ -120,8 +120,8 @@
           <div class="btn btn-success fw-120" :disabled="invalid" @click="validate().then(onSubmit)">登録</div>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
-      </ValidationObserver>
-    </div>
+      </div>
+    </ValidationObserver>
   </div>
 </template>
 <script>
@@ -155,6 +155,7 @@ export default {
           Util.showSuccessThenRedirect('スタッフの登録は完了しました。', `${this.userRootUrl}/user/staffs`);
         })
         .catch(error => {
+          this.loading = false;
           window.toastr.error(error.responseJSON.message);
         });
     }
