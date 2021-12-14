@@ -11,7 +11,7 @@
       <% if can? :manage, Admin %>
         <li class="side-nav-item <%= controller?("admin/accounts") ? 'mm-active' : '' %>">
           <%= link_to admin_accounts_path, class: "side-nav-link #{controller?("admin/accounts") ? 'active' : '' }" do %>
-            <i class="uil-users-alt"></i>
+            <i class="uil-user-square"></i>
             <span> 管理者管理 </span>
           <% end %>
         </li>
