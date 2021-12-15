@@ -7,7 +7,7 @@ class Agency::ClientsController < Agency::ApplicationController
   def index
     if request.format.json?
       @params = params[:q]
-      @q = current_agency.clients.ransack(@params)
+      @q = current_agency.clients.includes([:line_account]).ransack(@params)
       @clients = @q.result.page(params[:page])
     end
     respond_to do |format|
@@ -24,6 +24,7 @@ class Agency::ClientsController < Agency::ApplicationController
   def create
     # Create a new client
     client = Client.new(params.permit(:name, :address, :phone_number))
+    client.agency = current_agency
     client.status = :active
     client.save!
     client.create_line_account

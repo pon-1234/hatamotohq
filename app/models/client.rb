@@ -32,7 +32,7 @@ class Client < ApplicationRecord
   enum status: { active: 'active', blocked: 'blocked' }
 
   def admin
-    self.users.first
+    self.users.admin.first
   end
 
   def create_line_account

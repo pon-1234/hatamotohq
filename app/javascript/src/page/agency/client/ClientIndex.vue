@@ -39,7 +39,8 @@
                   <tr>
                     <th>ID</th>
                     <th>クライアント名</th>
-                    <th>登録日時</th>
+                    <th>公式アカウント名</th>
+                    <th>管理者メール</th>
                     <th>状況</th>
                     <th class="fw-200">操作</th>
                   </tr>
@@ -50,7 +51,8 @@
                       <span>{{ client.id }}</span>
                     </td>
                     <td>{{ client.name }}</td>
-                    <td>{{ client.created_at | formatted_time }}</td>
+                    <td>{{ client.line_name }}</td>
+                    <td>{{ client.admin_email }}</td>
                     <td><client-status :client="client"></client-status></td>
                     <td>
                       <div class="btn-group">
