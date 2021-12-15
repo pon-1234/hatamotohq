@@ -56,6 +56,8 @@ Rails.application.routes.draw do
         member do
           get :scenarios
           post :update_last_seen
+          post :assign
+          post :unassign
         end
         resources :messages do
           collection do

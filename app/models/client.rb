@@ -35,6 +35,10 @@ class Client < ApplicationRecord
     self.users.admin.first
   end
 
+  def staffs
+    self.users.staff
+  end
+
   def create_line_account
     line_account = LineAccount.new(client: self)
     line_account.save!

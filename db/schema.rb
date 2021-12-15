@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_13_091305) do
+ActiveRecord::Schema.define(version: 2021_12_14_041246) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_091305) do
   create_table 'channels', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'line_friend_id'
+    t.bigint 'assignee_id'
     t.string 'title'
     t.string 'avatar'
     t.string 'last_message'
@@ -164,6 +165,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_091305) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.index ['assignee_id'], name: 'index_channels_on_assignee_id'
     t.index ['line_account_id'], name: 'index_channels_on_line_account_id'
     t.index ['line_friend_id'], name: 'index_channels_on_line_friend_id'
   end
@@ -617,6 +619,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_091305) do
   add_foreign_key 'channel_members', 'channels'
   add_foreign_key 'channels', 'line_accounts'
   add_foreign_key 'channels', 'line_friends'
+  add_foreign_key 'channels', 'users', column: 'assignee_id'
   add_foreign_key 'clients', 'agencies'
   add_foreign_key 'episodes', 'reminders'
   add_foreign_key 'flex_message_sent_logs', 'flex_messages'

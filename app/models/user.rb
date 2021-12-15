@@ -41,6 +41,8 @@
 #
 class User < ApplicationRecord
   belongs_to :client
+  has_many :assigned_channels, foreign_key: 'assignee_id', class_name: 'Channel', dependent: :nullify
+  alias_attribute :channels, :assigned_channels
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,

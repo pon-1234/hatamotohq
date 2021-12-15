@@ -84,5 +84,14 @@ export default {
       url: `${process.env.MIX_ROOT_PATH}/user/channels/${id}/update_last_seen`,
       method: 'POST'
     });
+  },
+
+  assign: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/assign`,
+      method: 'POST',
+      data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
   }
 };

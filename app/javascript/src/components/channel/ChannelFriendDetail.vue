@@ -25,6 +25,13 @@
         </div>
         <hr class="" />
 
+        <!-- START: 担当者 -->
+        <p class="mt-3 mb-1 font-12">
+          <strong><i class="uil uil-user"></i> 担当者:</strong>
+        </p>
+        <p><channel-assignment :channel="friend.channel"></channel-assignment></p>
+        <!-- END: 担当者 -->
+
         <p class="mt-3 mb-1 font-12">
           <strong><i class="uil uil-notes"></i> メモ欄:</strong>
         </p>

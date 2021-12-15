@@ -187,6 +187,15 @@ export const actions = {
     }
   },
 
+  async sendMedia(context, query) {
+    try {
+      const response = await ChannelAPI.sendMedia(query);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   // Send a scenario to the active channel
   async sendScenario(_, payload) {
     try {
@@ -227,12 +236,11 @@ export const actions = {
     }
   },
 
-  async sendMedia(context, query) {
+  async assign(context, payload) {
     try {
-      const response = await ChannelAPI.sendMedia(query);
-      return response;
+      return await ChannelAPI.assign(payload);
     } catch (error) {
-      console.log(error);
+      return null;
     }
   }
 };
