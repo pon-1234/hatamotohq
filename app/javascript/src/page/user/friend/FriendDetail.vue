@@ -10,7 +10,7 @@
           <!-- line user name -->
           <h3 class="profile-username text-center">{{ friendData.line_name }}</h3>
 
-          <span class="d-flex flex-row w-100">
+          <span class="d-flex flex-row w-100" v-if="isAdmin">
             <friend-toggle-visible
               :id="friendData.id"
               :visible="friendData.visible"
@@ -99,7 +99,7 @@
             <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" v-if="editing" />
           </p>
           <hr />
-          <div v-if="!editing" @click="editing = true" class="btn btn-success fw-120">編集</div>
+          <div v-if="isAdmin && !editing" @click="editing = true" class="btn btn-success fw-120">編集</div>
           <div class="btn btn-success fw-120" @click="onSave()" v-show="editing">更新</div>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
@@ -149,7 +149,7 @@
 
         <!-- リマインダー -->
         <div class="tab-pane show border border-light" id="reminder">
-          <div class="card">
+          <div class="card" v-if="isAdmin">
             <div class="card-body">
               <div class="row">
                 <label class="col-lg-3">リマインダ</label>
@@ -196,7 +196,8 @@ import { mapActions, mapState } from 'vuex';
 export default {
   props: {
     friend_id: Number,
-    channel_id: Number
+    channel_id: Number,
+    role: String
   },
   data() {
     return {
@@ -237,7 +238,15 @@ export default {
   computed: {
     ...mapState('friend', {
       reminders: state => state.reminders
-    })
+    }),
+
+    isAdmin: function() {
+      return this.role === 'admin';
+    },
+
+    isStaff: function() {
+      return this.role === 'staff';
+    }
   },
 
   methods: {

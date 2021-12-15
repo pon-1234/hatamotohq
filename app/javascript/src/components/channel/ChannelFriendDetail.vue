@@ -10,7 +10,7 @@
       </div>
 
       <div class="mt-3">
-        <div class="d-flex align-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center" v-if="isAdmin">
           <a :href="detailPath" class="btn btn-primary btn-sm mr-1 ml-auto fw-80">詳細</a>
           <template v-if="friend.locked">
             <div class="btn btn-sm btn-info mr-auto" data-toggle="modal" data-target="#modalConfirmToggleLocked">
@@ -25,12 +25,14 @@
         </div>
         <hr class="" />
 
-        <!-- START: 担当者 -->
-        <p class="mt-3 mb-1 font-12">
-          <strong><i class="uil uil-user"></i> 担当者:</strong>
-        </p>
-        <p><channel-assignment :channel="friend.channel"></channel-assignment></p>
-        <!-- END: 担当者 -->
+        <template v-if="isAdmin">
+          <!-- START: 担当者 -->
+          <p class="mt-3 mb-1 font-12">
+            <strong><i class="uil uil-user"></i> 担当者:</strong>
+          </p>
+          <p><channel-assignment :channel="friend.channel"></channel-assignment></p>
+          <!-- END: 担当者 -->
+        </template>
 
         <p class="mt-3 mb-1 font-12">
           <strong><i class="uil uil-notes"></i> メモ欄:</strong>
@@ -58,6 +60,10 @@ import { mapState, mapMutations } from 'vuex';
 import Util from '@/core/util';
 
 export default {
+  props: {
+    role: String
+  },
+
   data() {
     return {
       rootPath: process.env.MIX_ROOT_PATH

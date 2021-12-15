@@ -15,7 +15,7 @@
 
       <!-- start user detail -->
       <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''">
-        <channel-friend-detail></channel-friend-detail>
+        <channel-friend-detail :role="role"></channel-friend-detail>
       </div>
       <!-- end user detail -->
     </div>
@@ -54,7 +54,8 @@ ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    channel_id: Number
+    channel_id: Number,
+    role: String
   },
 
   async beforeMount() {

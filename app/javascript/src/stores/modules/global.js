@@ -44,20 +44,11 @@ export const mutations = {
 
   setActionObjects(state, actionObjects) {
     state.action_objects = actionObjects;
-  },
-
-  setActionObjects_EXPIRED(state, actionObjects) {
-    state.action_objects_expired = actionObjects;
-  },
-
-  setBadge(state, val) {
-    state.badge = val;
   }
 };
 
 export const getters = {
-  actionObjects: state => state.action_objects,
-  badge: state => state.badge
+  actionObjects: state => state.action_objects
 };
 
 export const actions = {
@@ -112,15 +103,6 @@ export const actions = {
       console.log(error);
     }
     context.commit('setActionObjects', data);
-  },
-
-  getBadge(context) {
-    Global.getBadge().then((res) => {
-      // save
-      context.commit('setBadge', res.badge);
-    }).catch(() => {
-      context.commit('setBadge', false);
-    });
   },
 
   async uploadImageMap(_, payload) {
