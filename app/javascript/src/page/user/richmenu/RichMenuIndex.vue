@@ -62,11 +62,7 @@
                         操作 <span class="caret"></span>
                       </button>
                       <div class="dropdown-menu">
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
-                          target="_blank"
+                        <a role="button" class="dropdown-item" :href="`${rootPath}/user/rich_menus/${richmenu.id}/edit`"
                           >リッチメニューを編集</a
                         >
                         <a
@@ -223,7 +219,6 @@ export default {
       this.foldersContent = this.folders[this.selectedFolderIndex].richmenus;
     },
 
-    // TODO: should move it to folder component
     async submitCreateFolder(folder) {
       const response = await this.createFolder(folder);
       if (response) {

@@ -15,8 +15,20 @@ class DispatchRichMenuJob < ApplicationJob
     success = true
     friend_ids = @line_account.line_friends.pluck(:line_user_id)
     if @richmenu.disabled?
-      delete_rich_menu_if_needed if @richmenu.line_menu_id.present?
+      disable_rich_menu
     elsif @richmenu.enabled?
+      enable_rich_menu
+    end
+  rescue => e
+    @richmenu.logs = e.message
+    @richmenu.status = :error
+    @richmenu.member_count = 0
+  ensure
+    @richmenu.save!
+  end
+
+  private
+    def enable_rich_menu
       delete_rich_menu_if_needed
       success = create_rich_menu
       success = create_rich_menu_content if success
@@ -28,15 +40,11 @@ class DispatchRichMenuJob < ApplicationJob
         end
       end
     end
-  rescue => e
-    @richmenu.logs = e.message
-    @richmenu.status = :error
-    @richmenu.member_count = 0
-  ensure
-    @richmenu.save!
-  end
 
-  private
+    def disable_rich_menu
+      delete_rich_menu_if_needed if @richmenu.line_menu_id.present?
+    end
+
     # Send request to line api to create a new richmenu
     def create_rich_menu
       response = LineApi::CreateRichMenu.new(@line_account).perform(richmenu_payload)
