@@ -4,6 +4,7 @@ require 'digest'
 
 module WebhooksHelper
   def handle_event(event, key)
+    byebug
     @event = event
     @line_account = LineAccount.find_by(webhook_url: key)
     return if @line_account.nil?
@@ -63,6 +64,8 @@ module WebhooksHelper
     end
 
     def handle_postback
+      byebug
+      # Handle special case
       return if handle_postback_datetime_selection
       # Get mapper key
       key = @event[:postback][:data]

@@ -2,58 +2,42 @@
   <div>
     <label>アクション</label>
     <div>
-      <select
-        type="text"
-        maxlength="12"
-        v-model="curPostbackType"
-        class="w-100 form-control"
-        @change="changeActionType"
-      >
+      <select type="text" maxlength="12" v-model="postbackType" class="w-100 form-control" @change="changeActionType">
         <option v-for="(val, key) of types" :key="key" :value="key">{{ val }}</option>
       </select>
     </div>
     <div class="mt-2">
-      <action-postback-text v-if="curPostbackType === 'text'" :value="content" :name="name" @input="updateContent">
+      <action-postback-text v-if="postbackType === 'text'" :value="content" :name="name" @input="updateContent">
       </action-postback-text>
 
-      <action-postback-template
-        v-if="curPostbackType === 'template'"
-        :value="content"
-        @input="updateContent"
-        :name="name"
-      >
+      <action-postback-template v-if="postbackType === 'template'" :value="content" @input="updateContent" :name="name">
       </action-postback-template>
 
-      <action-postback-scenario
-        v-if="curPostbackType === 'scenario'"
-        :value="content"
-        :name="name"
-        @input="updateContent"
-      >
+      <action-postback-scenario v-if="postbackType === 'scenario'" :value="content" :name="name" @input="updateContent">
       </action-postback-scenario>
 
       <action-post-back-type-flex-message
-        v-if="curPostbackType === 'flexMessage'"
+        v-if="postbackType === 'flexMessage'"
         :value="content"
         :name="name"
         @input="updateContent"
       />
 
-      <action-postback-email v-if="curPostbackType === 'email'" :value="content" :name="name" @input="updateContent">
+      <action-postback-email v-if="postbackType === 'email'" :value="content" :name="name" @input="updateContent">
       </action-postback-email>
 
-      <action-postback-tag v-if="curPostbackType === 'tag'" :value="content" :name="name" @input="updateContent">
+      <action-postback-tag v-if="postbackType === 'tag'" :value="content" :name="name" @input="updateContent">
       </action-postback-tag>
 
       <action-postback-reminder
-        v-if="curPostbackType === 'reminder'"
+        v-if="postbackType === 'reminder'"
         :action-data="content"
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>
 
       <action-post-back-reservation
-        v-if="curPostbackType === 'reservation'"
+        v-if="postbackType === 'reservation'"
         :value="content"
         :name="name"
         @input="updateContent"
@@ -84,7 +68,7 @@ export default {
   data() {
     return {
       types: this.PostbackTypes,
-      curPostbackType: null,
+      postbackType: null,
       content: null
     };
   },
@@ -106,28 +90,33 @@ export default {
   methods: {
     updateContent(content) {
       this.content = content;
-      this.emitData();
+      this.notifyDataChanged();
     },
 
-    emitData() {
+    notifyDataChanged() {
       this.$emit('input', {
-        type: this.curPostbackType,
+        type: this.postbackType,
         content: this.content
       });
     },
 
     changeActionType() {
-      this.content = undefined;
-      this.emitData();
+      if (this.postbackType === 'reservation') {
+        this.content = {};
+      } else {
+        // The content of action will be emitted from component
+        this.content = undefined;
+      }
+      this.notifyDataChanged();
     },
 
     setupData() {
       if (this.value) {
         const data = this.value;
         this.content = data.content;
-        this.curPostbackType = data.type || 'none';
+        this.postbackType = data.type || 'none';
       } else {
-        this.curPostbackType = 'none';
+        this.postbackType = 'none';
       }
     }
   }

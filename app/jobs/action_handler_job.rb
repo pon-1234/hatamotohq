@@ -33,6 +33,8 @@ class ActionHandlerJob < ApplicationJob
           handle_tag_action(action['content'])
         when 'reminder'
           setup_reminder(action['content'])
+        when 'reservation'
+          send_reservation_confirm_message
         end
       end
     end
@@ -70,6 +72,10 @@ class ActionHandlerJob < ApplicationJob
       type = content['type']
       set_reminder(content) if type == 'set'
       unset_reminder(content) if type == 'unset'
+    end
+
+    def send_reservation_confirm_message
+      byebug
     end
 
     def set_reminder(content)
