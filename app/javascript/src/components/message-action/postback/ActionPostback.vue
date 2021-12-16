@@ -101,12 +101,7 @@ export default {
     },
 
     changeActionType() {
-      if (this.postbackType === 'reservation') {
-        this.content = {};
-      } else {
-        // The content of action will be emitted from component
-        this.content = undefined;
-      }
+      this.content = undefined;
       this.notifyDataChanged();
     },
 

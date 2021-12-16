@@ -34,7 +34,7 @@ class ActionHandlerJob < ApplicationJob
         when 'reminder'
           setup_reminder(action['content'])
         when 'reservation'
-          send_reservation_confirm_message
+          send_reservation_introduction
         end
       end
     end
@@ -74,8 +74,12 @@ class ActionHandlerJob < ApplicationJob
       unset_reminder(content) if type == 'unset'
     end
 
-    def send_reservation_confirm_message
-      byebug
+    def send_reservation_introduction
+      routes = Rails.application.routes.url_helpers
+      form_url = routes.inquiry_form_user_reservations_url(friend_id: @friend.line_user_id)
+      text =  "Please access this url to continue booking #{form_url}"
+      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
     end
 
     def set_reminder(content)

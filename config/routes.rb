@@ -121,6 +121,12 @@ Rails.application.routes.draw do
           post :copy
         end
       end
+      resources :reservations do
+        collection do
+          get '/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'inquiry_form'
+          post '/inquire/:friend_id',  to: 'reservations#inquire', as: 'inquire'
+        end
+      end
       resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
