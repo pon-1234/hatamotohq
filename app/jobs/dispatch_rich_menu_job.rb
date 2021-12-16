@@ -57,6 +57,8 @@ class DispatchRichMenuJob < ApplicationJob
     end
 
     def set_default_rich_menu
+      # unset default rich menu before set new one
+      LineApi::UnsetDefaultRichMenu.new(@line_account).perform
       success = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
       # Disable other default richmenu belongs to this account
       if success
