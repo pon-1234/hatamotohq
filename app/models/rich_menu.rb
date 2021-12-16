@@ -18,13 +18,12 @@
 #  target                   :string(255)      default("all")
 #  conditions               :json
 #  enabled                  :boolean
-#  start_at                 :datetime
-#  end_at                   :datetime
 #  media_id                 :bigint
 #  member_count             :integer          default(0)
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #  deleted_at               :datetime
+#  logs                     :text(65535)
 #
 # Indexes
 #
@@ -66,6 +65,10 @@ class RichMenu < ApplicationRecord
     new_richmenu.member_count = 0
     new_richmenu.save!
     new_richmenu
+  end
+
+  def clear_logs
+    self.logs = nil
   end
 
   private

@@ -10,6 +10,7 @@ class DispatchRichMenuJob < ApplicationJob
 
   def perform(richmenu_id)
     @richmenu = RichMenu.find(richmenu_id)
+    @richmenu.clear_logs
     @line_account = @richmenu.line_account
     success = true
     friend_ids = @line_account.line_friends.pluck(:line_user_id)
@@ -27,12 +28,12 @@ class DispatchRichMenuJob < ApplicationJob
         end
       end
     end
-
-    # Save rich menu (status, member_count)
+  rescue => e
+    @richmenu.logs = e.message
+    @richmenu.status = :error
+    @richmenu.member_count = 0
+  ensure
     @richmenu.save!
-  rescue StandardError => e
-    logger.error(e.message)
-    @richmenu.update_columns(status: 'error', member_count: 0)
   end
 
   private
@@ -59,13 +60,13 @@ class DispatchRichMenuJob < ApplicationJob
     def set_default_rich_menu
       # unset default rich menu before set new one
       LineApi::UnsetDefaultRichMenu.new(@line_account).perform
-      success = LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
       # Disable other default richmenu belongs to this account
-      if success
+      if LineApi::SetDefaultRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
         @richmenu.status = :enabled
         @richmenu.member_count = @line_account.line_friends.active.count
         @line_account.rich_menus.target_all.where.not(id: @richmenu.id).update_all(status: :disabled)
       else
+        @richmenu.logs = 'Could not set default richmenu'
         @richmenu.status = :error
       end
     end
@@ -81,9 +82,9 @@ class DispatchRichMenuJob < ApplicationJob
 
       LineFriend.find_all_by_tags(@line_account.id, tag_ids).find_in_batches(batch_size: 500) do |friends|
         friend_ids = friends.pluck(:line_user_id)
-        success = LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
-        unless success
+        unless LineApi::BulkLinkRichMenus.new(@line_account).perform(friend_ids, @richmenu.line_menu_id)
           # Stop calling api if error occurred
+          @richmenu.logs = 'Could not bulk link rich menu'
           @richmenu.status = :error
           return
         end
@@ -91,9 +92,8 @@ class DispatchRichMenuJob < ApplicationJob
     end
 
     def delete_rich_menu_if_needed
-      needed = @richmenu.line_menu_id.present?
       # No need to delete if the rich menu was not registered in Line System
-      return unless needed
+      return unless @richmenu.line_menu_id.present?
       # If rich menu is registered in Line System, need to cancel it before set a new one
       LineApi::DeleteRichMenu.new(@line_account).perform(@richmenu.line_menu_id)
     end
