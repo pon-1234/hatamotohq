@@ -63,18 +63,8 @@ export default {
     ...mapActions('survey', ['getSurveyByCode', 'postAnswer']),
 
     async onSubmit(e) {
-      console.log('=========');
       this.$refs.form.submit();
     }
-    // async submit() {
-    //   const valid = await this.$validator.validateAll();
-    //   if (!valid) return;
-    //   const payload = _.pick(this.survey, ['questions']);
-    //   payload.code = this.code;
-    //   payload.friend_id = this.friend_id;
-    //   const response = await this.postAnswer(payload);
-    //   console.log('------response------', response);
-    // }
   }
 };
 </script>

@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
+  get 'reservations/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
+  post 'reservations/inquire/:friend_id',  to: 'reservations#inquire', as: 'reservation_inquire'
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
@@ -119,12 +121,6 @@ Rails.application.routes.draw do
       resources :variables do
         member do
           post :copy
-        end
-      end
-      resources :reservations do
-        collection do
-          get '/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'inquiry_form'
-          post '/inquire/:friend_id',  to: 'reservations#inquire', as: 'inquire'
         end
       end
       resources :folders

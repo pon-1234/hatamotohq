@@ -76,7 +76,7 @@ class ActionHandlerJob < ApplicationJob
 
     def send_reservation_introduction
       routes = Rails.application.routes.url_helpers
-      form_url = routes.inquiry_form_user_reservations_url(friend_id: @friend.line_user_id)
+      form_url = routes.reservation_inquiry_form_url(friend_id: @friend.line_user_id)
       text =  "Please access this url to continue booking #{form_url}"
       message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
       LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
