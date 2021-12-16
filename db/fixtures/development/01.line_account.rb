@@ -8,5 +8,4 @@ LineAccount.seed do |s|
   s.channel_secret = '94c3950c2fe706b9e507821237737974'
   s.webhook_url = '1kVhS4vKis'
   s.bot_initialized = true
-  s.status = 'active'
 end
