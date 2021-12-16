@@ -7,6 +7,8 @@ class UserAbility
     if user.staff?
       can :read, LineFriend, { line_account: user.line_account, channel: { assignee_id: user.id } }
       can :manage, Channel, { line_account: user.line_account, assignee_id: user.id }
+      can :read, Scenario, line_account: user.line_account
+      can :read, Template, line_account: user.line_account
     elsif user.admin?
       # Friend
       can [:manage], LineFriend, line_account: user.line_account
@@ -17,6 +19,10 @@ class UserAbility
       # Broadcast
       can [:manage], Broadcast, line_account: user.line_account
       can [:create], Broadcast
+
+      # Template
+      can [:manage], Template, line_account: user.line_account
+      can [:create], Template
 
       # Scenario
       can [:manage], Scenario, line_account: user.line_account

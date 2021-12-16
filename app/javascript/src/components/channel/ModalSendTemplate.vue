@@ -43,7 +43,11 @@
                     >
                       <td class="d-flex w-100">
                         <div class="item-name">{{ item.name }}</div>
-                        <div class="btn btn-info btn-sm text-nowrap ml-auto" data-dismiss="modal" @click="selectTemplate(item)">
+                        <div
+                          class="btn btn-info btn-sm text-nowrap ml-auto"
+                          data-dismiss="modal"
+                          @click="selectTemplate(item)"
+                        >
                           送信
                         </div>
                       </td>
@@ -60,6 +64,7 @@
               </div>
             </div>
           </div>
+          <div v-else class="my-5 text-center font-weight-bold">登録したテンプレートはありません。</div>
         </div>
       </div>
     </div>
