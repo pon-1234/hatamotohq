@@ -1,24 +1,5 @@
 <template>
   <div>
-    <!-- <div v-if="showTitle">
-      <label class="w-100 mt10">
-        ラベル
-        <required-mark v-if="labelRequired"/>
-
-      </label>
-      <div class="w-100">
-        <input type="text"
-          :name="name+'_label'"
-          placeholder="ラベルを入力してください"
-          :maxlength="type == 'image_carousel'?12:20"
-          v-model="label" class="w-100 form-control"
-          v-validate="{required: labelRequired && showTitle}"
-          @keyup="changeLabel"
-          />
-        <span  v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
-      </div>
-    </div> -->
-
     <label>アクション</label>
     <div>
       <select
@@ -66,18 +47,18 @@
 
       <action-postback-reminder
         v-if="curPostbackType === 'reminder'"
-        :actionData="content"
+        :action-data="content"
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>
 
-      <action-post-back-type-survey
-        v-if="curPostbackType === 'survey'"
+      <action-post-back-reservation
+        v-if="curPostbackType === 'reservation'"
         :value="content"
         :name="name"
         @input="updateContent"
       >
-      </action-post-back-type-survey>
+      </action-post-back-reservation>
     </div>
   </div>
 </template>
