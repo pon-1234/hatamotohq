@@ -406,13 +406,12 @@ ActiveRecord::Schema.define(version: 2021_12_14_041246) do
     t.string 'target', default: 'all'
     t.json 'conditions'
     t.boolean 'enabled'
-    t.datetime 'start_at'
-    t.datetime 'end_at'
     t.bigint 'media_id'
     t.integer 'member_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.text 'logs'
     t.index ['folder_id'], name: 'index_rich_menus_on_folder_id'
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
     t.index ['media_id'], name: 'index_rich_menus_on_media_id'
