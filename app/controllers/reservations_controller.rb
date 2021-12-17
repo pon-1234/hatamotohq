@@ -7,7 +7,11 @@ class ReservationsController < ApplicationController
 
   # POST /reservations/inquire/:friend_id
   def inquire
-    # TODO
+    ReservationInquiryJob.perform_later(inquiry_params)
+    redirect_to reservation_inquiry_success_path
+  end
+
+  def inquiry_success
   end
 
   private

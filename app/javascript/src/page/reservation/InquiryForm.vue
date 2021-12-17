@@ -9,7 +9,7 @@
     >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
       <div class="card">
-        <div class="card-header"><h4>予約フォーム</h4></div>
+        <div class="card-header border-bottom border-success"><h4>予約フォーム</h4></div>
         <div class="card-body">
           <!-- 氏名 -->
           <div class="form-group row">
@@ -60,14 +60,14 @@
                   name="inquiry[date]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
-                  v-model.trim="inquiryFormData.date"
+                  v-model="inquiryFormData.date"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
             </div>
           </div>
         </div>
-        <div class="card-footer text-center py-2">
+        <div class="card-footer border-top border-success text-center py-3">
           <button type="submit" class="btn btn-success fw-120">送信</button>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
@@ -100,13 +100,17 @@ export default {
       inquiryFormData: {
         name: null,
         phone_number: null,
-        date: this.currentDate
+        date: null
       }
     };
   },
 
   async beforeMount() {
     this.loading = false;
+  },
+
+  mounted() {
+    this.inquiryFormData.date = this.currentDate;
   },
 
   computed: {
