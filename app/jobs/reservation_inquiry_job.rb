@@ -3,7 +3,9 @@
 class ReservationInquiryJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
-    # Do something later
+  def perform(params)
+    name = params[:name]
+    phone_number = params[:phone_number]
+    date = params[:date]
   end
 end

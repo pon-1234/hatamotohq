@@ -16,10 +16,12 @@ class ReservationsController < ApplicationController
 
   private
     def inquiry_params
-      params.permit(
-        :name,
-        :phone_number,
-        :date
-      )
+      params
+        .require(:inquiry)
+        .permit(
+          :name,
+          :phone_number,
+          :date
+        )
     end
 end
