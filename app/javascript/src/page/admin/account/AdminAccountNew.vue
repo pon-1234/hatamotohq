@@ -22,7 +22,7 @@
           <div class="form-group row">
             <label class="col-xl-3">メールアドレス<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
+              <ValidationProvider name="メールアドレス" rules="required|email|max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"

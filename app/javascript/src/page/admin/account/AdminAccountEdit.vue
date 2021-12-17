@@ -7,17 +7,14 @@
           <div class="form-group row">
             <label class="col-xl-3">メールアドレス<required-mark /></label>
             <div class="col-xl-9">
-              <ValidationProvider name="メールアドレス" rules="required|email" v-slot="{ errors }">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="account[email]"
-                  placeholder="入力してください"
-                  v-model.trim="accountFormData.email"
-                  disabled
-                />
-                <span class="error-explanation">{{ errors[0] }}</span>
-              </ValidationProvider>
+              <input
+                type="text"
+                class="form-control"
+                name="account[email]"
+                placeholder="入力してください"
+                v-model.trim="accountFormData.email"
+                disabled
+              />
             </div>
           </div>
           <div class="form-group row">
