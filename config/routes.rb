@@ -31,6 +31,10 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
+  # reservations
+  get 'reservations/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
+  get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
+  post 'reservations/inquire/:friend_id',  to: 'reservations#inquire', as: 'reservation_inquire'
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
