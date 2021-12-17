@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_14_041246) do
+ActiveRecord::Schema.define(version: 2021_12_16_112042) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -198,28 +198,6 @@ ActiveRecord::Schema.define(version: 2021_12_14_041246) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['reminder_id'], name: 'index_episodes_on_reminder_id'
-  end
-
-  create_table 'flex_message_sent_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'flex_message_id'
-    t.bigint 'line_account_id'
-    t.text 'html_template', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['flex_message_id'], name: 'index_flex_message_sent_logs_on_flex_message_id'
-    t.index ['line_account_id'], name: 'index_flex_message_sent_logs_on_line_account_id'
-  end
-
-  create_table 'flex_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.string 'name'
-    t.json 'json_message'
-    t.json 'json_template'
-    t.text 'html_template', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.datetime 'deleted_at'
-    t.index ['line_account_id'], name: 'index_flex_messages_on_line_account_id'
   end
 
   create_table 'folders', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -621,9 +599,6 @@ ActiveRecord::Schema.define(version: 2021_12_14_041246) do
   add_foreign_key 'channels', 'users', column: 'assignee_id'
   add_foreign_key 'clients', 'agencies'
   add_foreign_key 'episodes', 'reminders'
-  add_foreign_key 'flex_message_sent_logs', 'flex_messages'
-  add_foreign_key 'flex_message_sent_logs', 'line_accounts'
-  add_foreign_key 'flex_messages', 'line_accounts'
   add_foreign_key 'folders', 'line_accounts'
   add_foreign_key 'friend_variables', 'line_friends'
   add_foreign_key 'friend_variables', 'survey_answers'
