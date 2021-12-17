@@ -46,12 +46,12 @@ export const actions = {
     }
   },
 
-  updateAccount(_, query) {
-    return AccountApi.update(query).done((res) => {
-      return Promise.resolve(res);
-    }).fail((err) => {
-      return Promise.reject(err);
-    });
+  async updateAccount(_, query) {
+    try {
+      return await AccountApi.update(query);
+    } catch (error) {
+      return null;
+    }
   },
 
   async getAccounts(context) {

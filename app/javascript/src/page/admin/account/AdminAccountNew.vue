@@ -109,9 +109,9 @@ export default {
   methods: {
     ...mapActions('account', ['createAccount']),
 
-    onSubmit(e) {
+    async onSubmit(e) {
       this.submitted = true;
-      const response = this.createAccount(this.accountFormData);
+      const response = await this.createAccount(this.accountFormData);
       if (response) {
         Util.showSuccessThenRedirect('管理者の作成は完了しました。', `${this.rootPath}/admin/accounts`);
       } else {

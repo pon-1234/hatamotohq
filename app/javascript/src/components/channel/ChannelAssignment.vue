@@ -10,6 +10,7 @@
       label="name"
       track-by="id"
       :multiple="false"
+      :showNoResults="false"
       @select="assignAgent"
       @remove="assignAgent(null)"
     >

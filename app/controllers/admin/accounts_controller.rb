@@ -21,15 +21,18 @@ class Admin::AccountsController < Admin::ApplicationController
     authorize! :manage, Admin
     @account = Admin.new(account_params)
     @account.role = :admin
-    if !@account.save
-      render_bad_request_with_message(@account.first_error_message)
-    end
+    @account.save!
+    render_success
+  rescue => e
+    render_bad_request_with_message(e.message)
   end
 
   # PATCJ /admin/accounts/:id
   def update
     authorize! :manage, Admin
-    if !@account.update(account_params)
+    if @account.update(account_params)
+      render_success
+    else
       render_bad_request_with_message(@account.first_error_message)
     end
   end
