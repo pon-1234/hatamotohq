@@ -35,14 +35,6 @@
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>
-
-      <action-post-back-reservation
-        v-if="postbackType === 'reservation'"
-        :value="content"
-        :name="name"
-        @input="updateContent"
-      >
-      </action-post-back-reservation>
     </div>
   </div>
 </template>
