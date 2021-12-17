@@ -14,7 +14,7 @@
       <!-- end chat area-->
 
       <!-- start user detail -->
-      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''">
+      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''" :key="contentKey">
         <channel-friend-detail :role="role"></channel-friend-detail>
       </div>
       <!-- end user detail -->
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       ws: null,
-      rerender: true
+      contentKey: 0
     };
   },
 
@@ -110,10 +110,15 @@ export default {
       );
     },
 
+    forceRerender() {
+      this.contentKey++;
+    },
+
     // Activate the first channel if no channel was specified. Otherwise, activate the specified one
     async activateChannel() {
       const channel = this.channels.find(_ => _.id === this.channel_id);
       this.setActiveChannel(channel || this.channels[0]);
+      this.forceRerender();
     },
 
     sendMediaMessage(media) {

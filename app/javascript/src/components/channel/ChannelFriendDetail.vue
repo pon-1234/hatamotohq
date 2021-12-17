@@ -6,7 +6,7 @@
     <div class="card-body">
       <div class="mt-3 text-center">
         <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>{{ truncate(friend.display_name || friend.line_name, 15) }}</h4>
+        <h4>{{ (friend.display_name || friend.line_name) | truncate(15) }}</h4>
       </div>
 
       <div class="mt-3">
@@ -30,7 +30,7 @@
           <p class="mt-3 mb-1 font-12">
             <strong><i class="uil uil-user"></i> 担当者:</strong>
           </p>
-          <p><channel-assignment :channel="friend.channel"></channel-assignment></p>
+          <p><channel-assignment :key="contentKey" :channel="activeChannel"></channel-assignment></p>
           <!-- END: 担当者 -->
         </template>
 
@@ -67,12 +67,21 @@ export default {
 
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH
+      rootPath: process.env.MIX_ROOT_PATH,
+      contentKey: 0
     };
   },
 
   provide() {
     return { parentValidator: this.$validator };
+  },
+
+  watch: {
+    activeChannel: {
+      handler(val) {
+        this.forceRerender();
+      }
+    }
   },
 
   computed: {
@@ -95,14 +104,15 @@ export default {
   },
   methods: {
     ...mapMutations('channel', ['setShowUserDetail']),
+
+    forceRerender() {
+      this.contentKey++;
+    },
+
     hideUserDetail() {
       if (this.showUserDetail) this.setShowUserDetail(false);
     },
-    truncate(name, length = 15) {
-      return _.truncate(name, {
-        length: length
-      });
-    },
+
     genAvatarImgObj(url) {
       const avatarImgObj = {
         src: url,

@@ -166,7 +166,7 @@ export const actions = {
       context.commit('updateChannels', { event: event, channel: event.channel });
       break;
 
-    case 'line_follow':
+    case 'follow':
       context.commit('updateChannels', { event: event, channel: event.channel });
       break;
     default:

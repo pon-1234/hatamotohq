@@ -61,6 +61,7 @@ class Channel < ApplicationRecord
       last_activity_at: last_activity_at,
       last_seen_at: last_seen_at,
       unread_count: unread_messages.count,
+      assignee_id: assignee_id,
       line_friend: line_friend.push_event_data
     }
   end
