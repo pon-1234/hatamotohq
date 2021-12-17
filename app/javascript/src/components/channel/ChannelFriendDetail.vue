@@ -61,6 +61,7 @@ import Util from '@/core/util';
 
 export default {
   props: {
+    // TODO: using a state to store user profile, do not passing prop
     role: String
   },
 
@@ -87,6 +88,9 @@ export default {
     },
     detailPath() {
       return `${this.rootPath}/user/friends/${this.friend.id}`;
+    },
+    isAdmin() {
+      return this.role === 'admin';
     }
   },
   methods: {
