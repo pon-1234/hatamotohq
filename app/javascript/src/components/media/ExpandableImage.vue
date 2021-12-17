@@ -21,6 +21,9 @@ export default {
   data() {
     return {
       options: {
+        navbar: false,
+        movable: false,
+        zoomable: false,
         toolbar: {
           zoomIn: 1,
           zoomOut: 1,
