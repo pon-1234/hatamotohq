@@ -30,12 +30,12 @@
                 <table class="table table-centered mb-0">
                   <thead class="thead-light">
                     <tr>
-                      <th>ID</th>
-                      <th>氏名</th>
-                      <th>権限ラベル</th>
-                      <th>メールアドレス</th>
-                      <th>登録日時</th>
-                      <th class="fw-200">操作</th>
+                      <th class="fw-80">ID</th>
+                      <th class="fw-200">氏名</th>
+                      <th class="fw-150">権限ラベル</th>
+                      <th class="fw-300">メールアドレス</th>
+                      <th class="fw-200">登録日時</th>
+                      <th class="fw-100">操作</th>
                     </tr>
                   </thead>
                   <tbody v-for="(account, index) in accounts" :key="account.id">
@@ -45,7 +45,7 @@
                       </td>
                       <td>{{ account.name }}</td>
                       <td>{{ account.role === "superadmin" ? "ルート管理者" : "システム管理者" }}</td>
-                      <td>{{ account.email }}</td>
+                      <td class="fw-300">{{ account.email }}</td>
                       <td>{{ formattedDatetime(account.created_at) }}</td>
                       <td>
                         <button
