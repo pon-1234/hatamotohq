@@ -73,8 +73,8 @@
                             data-target="#modalToggleStatusUser"
                             @click="curStaffIndex = index"
                           >
-                            <span v-if="staff.status === 'active'">ブロックする</span>
-                            <span v-else>ブロック解除する</span>
+                            <span v-if="staff.status === 'active'">無効にする</span>
+                            <span v-else>有効にする</span>
                           </a>
                           <a
                             role="button"
