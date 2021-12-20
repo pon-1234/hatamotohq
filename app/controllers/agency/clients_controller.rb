@@ -23,9 +23,8 @@ class Agency::ClientsController < Agency::ApplicationController
   # POST /agency/clients
   def create
     # Create a new client
-    client = Client.new(params.permit(:name, :address, :phone_number))
+    client = Client.new(params.permit(:name, :address, :phone_number, :status))
     client.agency = current_agency
-    client.status = :active
     client.save!
     client.create_line_account
     # Create client admin
