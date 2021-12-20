@@ -63,7 +63,11 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuStaff">
-                          <a :href="`${rootUrl}/user/staffs/${staff.id}/edit`" role="button" class="dropdown-item"
+                          <a
+                            :href="`${rootUrl}/user/staffs/${staff.id}/edit`"
+                            target="_blank"
+                            role="button"
+                            class="dropdown-item"
                             >スタッフを編集</a
                           >
                           <a

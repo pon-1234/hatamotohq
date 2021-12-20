@@ -69,7 +69,11 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuUser">
-                          <a :href="`${rootUrl}/admin/users/${user.id}/edit`" role="button" class="dropdown-item"
+                          <a
+                            :href="`${rootUrl}/admin/users/${user.id}/edit`"
+                            target="_blank"
+                            role="button"
+                            class="dropdown-item"
                             >クライアントを編集</a
                           >
                           <a
