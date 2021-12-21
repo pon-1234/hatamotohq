@@ -108,8 +108,8 @@
     >
       <template v-slot:content>
         <div v-if="curAccount">
-          <b>{{ curAccount.status === "active" ? "有効" : "ブロックした" }}</b>
-          <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAccount.status === "active" ? "ブロックした" : "有効" }}</b>
+          <b>{{ curAccount.status === "active" ? "有効" : "無効" }}</b>
+          <i class="mdi mdi-arrow-right-bold"></i> <b>{{ curAccount.status === "active" ? "無効" : "有効" }}</b>
         </div>
       </template>
     </modal-confirm>
