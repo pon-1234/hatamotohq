@@ -59,7 +59,11 @@
                           操作 <span class="caret"></span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuAccount">
-                          <a :href="`${rootUrl}/admin/accounts/${account.id}/edit`" role="button" class="dropdown-item"
+                          <a
+                            :href="`${rootUrl}/admin/accounts/${account.id}/edit`"
+                            target="_blank"
+                            role="button"
+                            class="dropdown-item"
                             >管理者を編集</a
                           >
                           <a
