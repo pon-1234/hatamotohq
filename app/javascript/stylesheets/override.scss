@@ -125,6 +125,10 @@ label {
   align-items: center;
 }
 
+.simplebar-content-wrapper {
+  overflow-y: scroll !important;
+}
+
 .button-menu-mobile {
   line-height: 0;
 }
