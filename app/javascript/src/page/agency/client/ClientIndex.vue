@@ -47,14 +47,14 @@
                 </thead>
                 <tbody v-for="(client, index) in clients" :key="client.id">
                   <tr>
-                    <td>
+                    <td class="fw-100">
                       <span>{{ client.id }}</span>
                     </td>
-                    <td>{{ client.name }}</td>
-                    <td>{{ client.line_name }}</td>
-                    <td>{{ client.admin_email }}</td>
-                    <td><client-status :client="client"></client-status></td>
-                    <td>
+                    <td class="mxw-200">{{ client.name }}</td>
+                    <td class="mxw-200">{{ client.line_name }}</td>
+                    <td class="mxw-300">{{ client.admin_email }}</td>
+                    <td class="fw-100"><client-status :client="client"></client-status></td>
+                    <td class="fw-200">
                       <div class="btn-group">
                         <button
                           type="button"
