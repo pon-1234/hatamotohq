@@ -54,6 +54,14 @@ export const actions = {
     }
   },
 
+  async updateAdminProfile(_, query) {
+    try {
+      return await AccountApi.updateProfile(query);
+    } catch (error) {
+      return null;
+    }
+  },
+
   async getAccounts(context) {
     try {
       const params = {

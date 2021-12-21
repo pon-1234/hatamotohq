@@ -54,6 +54,14 @@ export const actions = {
     });
   },
 
+  updateAgencyProfile(_, query) {
+    return AgencyAPI.updateProfile(query).done((res) => {
+      return Promise.resolve(res);
+    }).fail((err) => {
+      return Promise.reject(err);
+    });
+  },
+
   async getAgencies(context) {
     try {
       const params = {

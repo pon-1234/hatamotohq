@@ -26,6 +26,15 @@ export default {
       dataType: 'json'
     });
   },
+  updateProfile: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/admin/profile`,
+      method: 'PATCH',
+      data: JSON.stringify(query),
+      contentType: 'application/json',
+      dataType: 'json'
+    });
+  },  
   delete: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/admin/accounts/${id}`,
