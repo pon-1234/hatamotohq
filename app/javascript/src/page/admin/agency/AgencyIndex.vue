@@ -35,18 +35,18 @@
                     <th>氏名</th>
                     <th>メールアドレス</th>
                     <th>登録日時</th>
-                    <th class="fw-200">操作</th>
+                    <th>操作</th>
                   </tr>
                 </thead>
                 <tbody v-for="(agency, index) in agencies" :key="agency.id">
                   <tr>
-                    <td>
+                    <td class="fw-100">
                       <span>{{ agency.id }}</span>
                     </td>
-                    <td>{{ agency.name }}</td>
-                    <td>{{ agency.email }}</td>
-                    <td>{{ agency.created_at | formatted_time }}</td>
-                    <td>
+                    <td class="mxw-400">{{ agency.name }}</td>
+                    <td class="mxw-300">{{ agency.email }}</td>
+                    <td class="fw-200">{{ agency.created_at | formatted_time }}</td>
+                    <td class="fw-200">
                       <div class="btn-group">
                         <button
                           type="button"
@@ -107,7 +107,7 @@
     >
       <template v-slot:content>
         <div v-if="curAgency">
-          契約者名: <b>{{ curAgency.name }}</b>
+          契約者名: <b>{{ curAgency.name | truncate(64) }}</b>
         </div>
       </template>
     </modal-confirm>

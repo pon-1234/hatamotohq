@@ -26,6 +26,7 @@
                   class="form-control"
                   name="account[name]"
                   placeholder="入力してください"
+                  maxlength="256"
                   v-model.trim="accountFormData.name"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>

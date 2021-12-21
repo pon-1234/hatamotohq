@@ -137,7 +137,7 @@
     >
       <template v-slot:content>
         <div v-if="curStaff">
-          メールアドレス: <b>{{ curStaff.email }}</b>
+          メールアドレス: <b>{{ curStaff.name | truncate(64) }}</b>
         </div>
       </template>
     </modal-confirm>
