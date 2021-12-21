@@ -22,17 +22,19 @@ class Agency::ClientsController < Agency::ApplicationController
 
   # POST /agency/clients
   def create
-    # Create a new client
-    client = Client.new(params.permit(:name, :address, :phone_number, :status))
-    client.agency = current_agency
-    client.save!
-    client.create_line_account
-    # Create client admin
-    user = User.new(params.require(:admin).permit(:name, :email, :password, :password_confirmation))
-    user.client = client
-    user.role = :admin
-    user.save!
-    @client = client
+    ApplicationRecord.transaction do
+      # Create a new client
+      client = Client.new(params.permit(:name, :address, :phone_number, :status))
+      client.agency = current_agency
+      client.save!
+      client.create_line_account
+      # Create client admin
+      user = User.new(params.require(:admin).permit(:name, :email, :password, :password_confirmation))
+      user.client = client
+      user.role = :admin
+      user.save!
+      @client = client
+    end
   rescue => e
     render_bad_request_with_message(e.message)
   end
