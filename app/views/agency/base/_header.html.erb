@@ -15,10 +15,10 @@
         </div>
 
         <!-- item-->
-        <a href="javascript:void(0);" class="dropdown-item notify-item">
+        <%= link_to edit_agency_profile_path, class: "dropdown-item notify-item" do %>
           <i class="mdi mdi-account-edit mr-1"></i>
           <span>アカウント設定</span>
-        </a>
+        <% end %>
 
         <!-- item-->
         <%= link_to destroy_admin_session_path, method: :delete, class: "dropdown-item notify-item" do %>

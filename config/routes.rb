@@ -160,6 +160,7 @@ Rails.application.routes.draw do
         get :search, on: :collection
         get :sso, on: :member
       end
+      resource :profile, only: %i(edit update)
     end
 
     require 'sidekiq/web'
@@ -183,6 +184,7 @@ Rails.application.routes.draw do
         get :delete_confirm, on: :member
         get :sso, on: :member
       end
+      resource :profile, only: %i(edit update)
     end
   end
 end

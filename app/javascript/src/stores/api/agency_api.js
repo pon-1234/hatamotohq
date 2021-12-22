@@ -45,5 +45,15 @@ export default {
       method: 'DELETE',
       contentType: 'application/json'
     });
-  }
+  },
+
+  updateProfile: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/agency/profile`,
+      method: 'PATCH',
+      data: JSON.stringify(query),
+      contentType: 'application/json',
+      dataType: 'json'
+    });
+  },
 };
