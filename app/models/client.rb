@@ -32,11 +32,11 @@ class Client < ApplicationRecord
   enum status: { active: 'active', blocked: 'blocked' }
 
   def admin
-    self.users.admin.first
+    @admin ||= self.users.admin.first
   end
 
   def staffs
-    self.users.staff
+    @staffs ||= self.users.staff
   end
 
   def create_line_account
