@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HOTEL INSIGHT CRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_pack_tag 'application' %>
+    <link href="/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
+    <script src="/js/vendor.min.js"></script>
+    <script src="/js/app.min.js"></script>
+    <%= javascript_pack_tag 'application' %>
+  </head>
+
+  <body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed text-sm" style="height: auto;">
+    <div class="wrapper" id="application">
+      <%= render "agency/base/left_sidebar_menu"%>
+      <div class="content-page">
+        <div class="content">
+          <%= render "agency/base/header" %>
+          <div class="container-fluid p-2">
+            <%= custom_flash_message %>
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    <div>
+  </body>
+</html>

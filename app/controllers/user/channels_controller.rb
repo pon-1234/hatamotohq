@@ -38,11 +38,16 @@ class User::ChannelsController < User::ApplicationController
     render_success
   end
 
-  private
-    def find_channel
-      @channel = Channel.find(params[:id])
-    end
+  # POST /user/channels/:id/assign
+  def assign
+    # if params[:assignee_id] is not a valid id, it will set to nil, hence unassigning the channel
+    assignee = Current.user.client.staffs.find_by(id: params[:assignee_id])
+    @channel.update_assignee(assignee)
+    render_success
+  end
 
+
+  private
     def channel_finder
       @channel_finder ||= ChannelFinder.new(current_ability, params)
     end

@@ -10,14 +10,14 @@ class Util {
     window.toastr.success(message);
     setTimeout(() => {
       window.location.href = redirectTo;
-    }, 500);
+    }, 1500);
   }
 
   static showErrorThenRedirect(message, redirectTo) {
     window.toastr.error(message);
     setTimeout(() => {
       window.location.href = redirectTo;
-    }, 500);
+    }, 1500);
   }
 
   static getCsrfToken() {

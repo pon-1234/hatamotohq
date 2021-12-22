@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_10_090454) do
+ActiveRecord::Schema.define(version: 2021_12_16_112042) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
 
   create_table 'admins', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'email', default: '', null: false
+    t.string 'role'
+    t.string 'name'
     t.string 'encrypted_password', default: '', null: false
     t.string 'reset_password_token'
     t.datetime 'reset_password_sent_at'
@@ -54,6 +56,21 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['email'], name: 'index_admins_on_email', unique: true
     t.index ['reset_password_token'], name: 'index_admins_on_reset_password_token', unique: true
+  end
+
+  create_table 'agencies', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.string 'email', default: '', null: false
+    t.string 'encrypted_password', default: '', null: false
+    t.string 'name', null: false
+    t.string 'address'
+    t.string 'phone_number'
+    t.string 'reset_password_token'
+    t.datetime 'reset_password_sent_at'
+    t.datetime 'remember_created_at'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['email'], name: 'index_agencies_on_email', unique: true
+    t.index ['reset_password_token'], name: 'index_agencies_on_reset_password_token', unique: true
   end
 
   create_table 'announcements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -136,6 +153,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   create_table 'channels', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'line_friend_id'
+    t.bigint 'assignee_id'
     t.string 'title'
     t.string 'avatar'
     t.string 'last_message'
@@ -147,8 +165,20 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.index ['assignee_id'], name: 'index_channels_on_assignee_id'
     t.index ['line_account_id'], name: 'index_channels_on_line_account_id'
     t.index ['line_friend_id'], name: 'index_channels_on_line_friend_id'
+  end
+
+  create_table 'clients', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'agency_id'
+    t.string 'name'
+    t.string 'phone_number'
+    t.string 'address'
+    t.string 'status', default: 'active'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['agency_id'], name: 'index_clients_on_agency_id'
   end
 
   create_table 'emojis', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -168,28 +198,6 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['reminder_id'], name: 'index_episodes_on_reminder_id'
-  end
-
-  create_table 'flex_message_sent_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'flex_message_id'
-    t.bigint 'line_account_id'
-    t.text 'html_template', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['flex_message_id'], name: 'index_flex_message_sent_logs_on_flex_message_id'
-    t.index ['line_account_id'], name: 'index_flex_message_sent_logs_on_line_account_id'
-  end
-
-  create_table 'flex_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_account_id'
-    t.string 'name'
-    t.json 'json_message'
-    t.json 'json_template'
-    t.text 'html_template', size: :long
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.datetime 'deleted_at'
-    t.index ['line_account_id'], name: 'index_flex_messages_on_line_account_id'
   end
 
   create_table 'folders', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -236,6 +244,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   end
 
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'client_id'
     t.bigint 'owner_id'
     t.string 'line_user_id'
     t.string 'line_name'
@@ -250,6 +259,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.index ['client_id'], name: 'index_line_accounts_on_client_id'
     t.index ['owner_id'], name: 'index_line_accounts_on_owner_id'
   end
 
@@ -535,7 +545,9 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   end
 
   create_table 'users', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'client_id'
     t.string 'email', default: '', null: false
+    t.string 'role'
     t.string 'encrypted_password', default: '', null: false
     t.string 'name'
     t.string 'company_name'
@@ -556,6 +568,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
     t.string 'authentication_token'
     t.string 'pubsub_token'
     t.index ['authentication_token'], name: 'index_users_on_authentication_token', unique: true
+    t.index ['client_id'], name: 'index_users_on_client_id'
     t.index ['email'], name: 'index_users_on_email', unique: true
     t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
@@ -583,15 +596,15 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   add_foreign_key 'channel_members', 'channels'
   add_foreign_key 'channels', 'line_accounts'
   add_foreign_key 'channels', 'line_friends'
+  add_foreign_key 'channels', 'users', column: 'assignee_id'
+  add_foreign_key 'clients', 'agencies'
   add_foreign_key 'episodes', 'reminders'
-  add_foreign_key 'flex_message_sent_logs', 'flex_messages'
-  add_foreign_key 'flex_message_sent_logs', 'line_accounts'
-  add_foreign_key 'flex_messages', 'line_accounts'
   add_foreign_key 'folders', 'line_accounts'
   add_foreign_key 'friend_variables', 'line_friends'
   add_foreign_key 'friend_variables', 'survey_answers'
   add_foreign_key 'friend_variables', 'variables'
   add_foreign_key 'insights', 'line_accounts'
+  add_foreign_key 'line_accounts', 'clients'
   add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
@@ -625,6 +638,7 @@ ActiveRecord::Schema.define(version: 2021_12_10_090454) do
   add_foreign_key 'template_messages', 'templates'
   add_foreign_key 'templates', 'folders'
   add_foreign_key 'templates', 'line_accounts'
+  add_foreign_key 'users', 'clients'
   add_foreign_key 'variables', 'folders'
   add_foreign_key 'variables', 'line_accounts'
 end

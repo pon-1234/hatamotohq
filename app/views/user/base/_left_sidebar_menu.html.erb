@@ -3,20 +3,29 @@
 
   <!-- LOGO -->
   <%= link_to user_root_path, class: "logo ml-4 logo-light" do %>
-    <span class="text-white brand-text font-weight-bold">LINE CMS</span>
+    <span class="text-white brand-text font-weight-bold">HOTEL INSIGHT CRM</span>
   <% end %>
 
   <div class="h-100" id="left-side-menu-container" data-simplebar>
 
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
+      <% if can? :manage, User %>
+        <li class="side-nav-item <%= controller?("user/home") ? 'mm-active' : '' %>">
+          <%= link_to user_root_path, class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
+            <i class="uil-home-alt"></i>
+            <span> ホーム </span>
+          <% end %>
+        </li>
 
-      <li class="side-nav-item <%= controller?("user/home") ? 'mm-active' : '' %>">
-        <%= link_to user_root_path, class: "side-nav-link #{controller?("user/home") ? 'active' : '' }" do %>
-          <i class="uil-home-alt"></i>
-          <span> ホーム </span>
-        <% end %>
-      </li>
+        <!-- スタッフ管理 -->
+        <li class="side-nav-item <%= controller?("user/staffs") ? 'mm-active' : '' %>">
+          <%= link_to user_staffs_path, class: "side-nav-link #{controller?("user/staffs") ? 'active' : '' }" do %>
+            <i class="uil-user-square"></i>
+            <span> 営業担当管理 </span>
+          <% end %>
+        </li>
+      <% end %>
 
       <li class="side-nav-title side-nav-item">1対1トーク</li>
       <!-- トーク -->
@@ -35,97 +44,99 @@
         <% end %>
       </li>
 
-      <li class="side-nav-title side-nav-item">メッセージ</li>
-      <!-- シナリオ -->
-      <li class="side-nav-item <%= controller?("user/scenarios", "user/scenario_messages") ? 'mm-active' : '' %>">
-        <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : '' }" do %>
-          <i class="uil-sort-amount-down"></i>
-          <span>シナリオ配信</span>
-        <% end %>
-      </li>
+      <% if can? :manage, User %>
+        <li class="side-nav-title side-nav-item">メッセージ</li>
+        <!-- シナリオ -->
+        <li class="side-nav-item <%= controller?("user/scenarios", "user/scenario_messages") ? 'mm-active' : '' %>">
+          <%= link_to user_scenarios_path, class: "side-nav-link #{controller?("user/scenarios", "user/scenario_messages") ? 'active' : '' }" do %>
+            <i class="uil-sort-amount-down"></i>
+            <span>シナリオ配信</span>
+          <% end %>
+        </li>
 
-      <!-- 一斉配信 -->
-      <li class="side-nav-item <%= controller?("user/broadcasts") ? 'mm-active' : '' %>">
-        <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/broadcasts" ) ? 'active' : '' }" do %>
-          <i class="uil-message"></i>
-          <span>一斉配信</span>
-        <% end %>
-      </li>
+        <!-- 一斉配信 -->
+        <li class="side-nav-item <%= controller?("user/broadcasts") ? 'mm-active' : '' %>">
+          <%= link_to user_broadcasts_path, class: "side-nav-link #{controller?("user/broadcasts" ) ? 'active' : '' }" do %>
+            <i class="uil-message"></i>
+            <span>一斉配信</span>
+          <% end %>
+        </li>
 
-      <!-- 自動応答 -->
-      <li class="side-nav-item <%= controller?("user/auto_responses") ? 'mm-active' : '' %>">
-        <%= link_to user_auto_responses_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
-          <i class="uil-robot"></i>
-          <span>自動応答</span>
-        <% end %>
-      </li>
+        <!-- 自動応答 -->
+        <li class="side-nav-item <%= controller?("user/auto_responses") ? 'mm-active' : '' %>">
+          <%= link_to user_auto_responses_path, class: "side-nav-link #{controller?("user/auto_responses" ) ? 'active' : '' }" do %>
+            <i class="uil-robot"></i>
+            <span>自動応答</span>
+          <% end %>
+        </li>
 
-      <!-- テンプレート -->
-      <li class="side-nav-item <%= controller?("user/templates") ? 'mm-active' : '' %>">
-        <%= link_to user_templates_path, class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
-          <i class="uil-box"></i>
-          <span> テンプレート</span>
-        <% end %>
-      </li>
+        <!-- テンプレート -->
+        <li class="side-nav-item <%= controller?("user/templates") ? 'mm-active' : '' %>">
+          <%= link_to user_templates_path, class: "side-nav-link #{controller?("user/templates" ) ? 'active' : '' }" do %>
+            <i class="uil-box"></i>
+            <span> テンプレート</span>
+          <% end %>
+        </li>
 
-      <!-- リッチメニュー -->
-      <li class="side-nav-item <%= controller?("user/rich_menus") ? 'mm-active' : '' %>">
-        <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?("user/rich_menus" ) ? 'active' : '' }" do %>
-          <i class="uil-th-large"></i>
-          <span>リッチメニュー</span>
-        <% end %>
-      </li>
+        <!-- リッチメニュー -->
+        <li class="side-nav-item <%= controller?("user/rich_menus") ? 'mm-active' : '' %>">
+          <%= link_to user_rich_menus_path, class: "side-nav-link #{controller?("user/rich_menus" ) ? 'active' : '' }" do %>
+            <i class="uil-th-large"></i>
+            <span>リッチメニュー</span>
+          <% end %>
+        </li>
 
-      <!-- 回答フォーム -->
-      <li class="side-nav-item <%= controller?("user/surveys") ? 'mm-active' : '' %>">
-        <%= link_to user_surveys_path, class: "side-nav-link #{controller?("user/surveys" ) ? 'active' : '' }" do %>
-          <i class="uil-file-question-alt"></i>
-          <span>回答フォーム</span>
-        <% end %>
-      </li>
+        <!-- 回答フォーム -->
+        <li class="side-nav-item <%= controller?("user/surveys") ? 'mm-active' : '' %>">
+          <%= link_to user_surveys_path, class: "side-nav-link #{controller?("user/surveys" ) ? 'active' : '' }" do %>
+            <i class="uil-file-question-alt"></i>
+            <span>回答フォーム</span>
+          <% end %>
+        </li>
 
-    <!--  -->
-      <li class="side-nav-item <%= controller?("user/reminders") ? 'mm-active' : '' %>">
-        <%= link_to user_reminders_path, class: "side-nav-link #{controller?("user/reminders" ) ? 'active' : '' }" do %>
-          <i class="uil-stopwatch"></i>
-          <span>リマインダ配信</span>
-        <% end %>
-      </li>
+      <!--  -->
+        <li class="side-nav-item <%= controller?("user/reminders") ? 'mm-active' : '' %>">
+          <%= link_to user_reminders_path, class: "side-nav-link #{controller?("user/reminders" ) ? 'active' : '' }" do %>
+            <i class="uil-stopwatch"></i>
+            <span>リマインダ配信</span>
+          <% end %>
+        </li>
 
-      <li class="side-nav-title side-nav-item">友だち属性</li>
-       <!-- タグ管理 -->
-      <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">
-        <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
-          <i class="uil-tag-alt"></i>
-          <span>タグ管理</span>
-        <% end %>
-      </li>
+        <li class="side-nav-title side-nav-item">友だち属性</li>
+        <!-- タグ管理 -->
+        <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">
+          <%= link_to user_tags_path, class: "side-nav-link #{controller?("user/tags" ) ? 'active' : '' }" do %>
+            <i class="uil-tag-alt"></i>
+            <span>タグ管理</span>
+          <% end %>
+        </li>
 
-       <!-- 友だち情報欄 -->
-      <li class="side-nav-item <%= controller?("user/variables") ? 'mm-active' : '' %>">
-        <%= link_to user_variables_path, class: "side-nav-link #{controller?("user/variables" ) ? 'active' : '' }" do %>
-          <i class="uil-book-reader"></i>
-          <span>友だち情報欄</span>
-        <% end %>
-      </li>
+        <!-- 友だち情報欄 -->
+        <li class="side-nav-item <%= controller?("user/variables") ? 'mm-active' : '' %>">
+          <%= link_to user_variables_path, class: "side-nav-link #{controller?("user/variables" ) ? 'active' : '' }" do %>
+            <i class="uil-book-reader"></i>
+            <span>友だち情報欄</span>
+          <% end %>
+        </li>
 
-      <li class="side-nav-title side-nav-item">コンテンツ</li>
-      <!-- 登録メディア一覧 -->
-      <li class="side-nav-item <%= controller?("user/medias") ? 'mm-active' : '' %>">
-        <%= link_to user_medias_path, class: "side-nav-link #{controller?("user/medias" ) ? 'active' : '' }" do %>
-          <i class="uil-scenery"></i>
-          <span>登録メディア一覧</span>
-        <% end %>
-      </li>
+        <li class="side-nav-title side-nav-item">コンテンツ</li>
+        <!-- 登録メディア一覧 -->
+        <li class="side-nav-item <%= controller?("user/medias") ? 'mm-active' : '' %>">
+          <%= link_to user_medias_path, class: "side-nav-link #{controller?("user/medias" ) ? 'active' : '' }" do %>
+            <i class="uil-scenery"></i>
+            <span>登録メディア一覧</span>
+          <% end %>
+        </li>
 
-      <li class="side-nav-title side-nav-item">設定</li>
-      <li class="side-nav-item <%= controller?("user/setting") ? 'mm-active' : '' %>">
-        <%= link_to user_setting_index_path, class: "side-nav-link #{controller?("user/setting" ) ? 'active' : '' }" do %>
-          <i class="uil-cog"></i>
-          <span>アカウント設定</span>
-        <% end %>
-      </li>
-    </ul>
+        <li class="side-nav-title side-nav-item">設定</li>
+        <li class="side-nav-item <%= controller?("user/setting") ? 'mm-active' : '' %>">
+          <%= link_to user_setting_index_path, class: "side-nav-link #{controller?("user/setting" ) ? 'active' : '' }" do %>
+            <i class="uil-cog"></i>
+            <span>アカウント設定</span>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
     <div class="clearfix"></div>
   </div>
   <!-- Sidebar -left -->
