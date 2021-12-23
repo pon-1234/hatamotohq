@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
-      resources :home, only: [:index] do
+      resource :home, only: [:index] do
         get :announcements, on: :collection
       end
       resources :staffs do
@@ -164,9 +164,9 @@ Rails.application.routes.draw do
 
     require 'sidekiq/web'
     require 'sidekiq-scheduler/web'
-    # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
-    # end
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
+    end
     mount Sidekiq::Web => '/sidekiq'
   end
 

@@ -5,6 +5,7 @@ class CreateFlexTemplates < ActiveRecord::Migration[6.0]
     create_table :flex_templates do |t|
       t.string :type
       t.json :content
+      t.text :html_content
       t.timestamps
     end
   end

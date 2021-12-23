@@ -16,7 +16,6 @@ class ActionHandlerJob < ApplicationJob
     handle_display_text(@action['displayText']) if @action['displayText'].present?
   end
 
-
   private
     def handle_message_action(actions)
       actions.each do |action|
