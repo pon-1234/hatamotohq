@@ -12,8 +12,8 @@
           <% end %>
         </span>
         <span>
+          <span class="account-position"><%= current_user&.role_i18n %></span>
           <span class="account-user-name"><%= current_user&.name %></span>
-          <span class="account-position">管理者</span>
         </span>
       </a>
       <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
@@ -34,7 +34,7 @@
   </ul>
   <div class="float-left d-sm-block d-md-none ml-3">
     <%= link_to user_root_path, class: "logo ml-4 logo-light" do %>
-      <span class="text-dark brand-text font-weight-bold">LINE CMS</span>
+      <span class="text-dark brand-text font-weight-bold">HOTEL INSIGHT CRM</span>
     <% end %>
   </div>
   <button class="button-menu-mobile open-left disable-btn">

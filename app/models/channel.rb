@@ -50,7 +50,7 @@ class Channel < ApplicationRecord
     # Make friend to be a participant
     ChannelMember.create(channel: self, participant: line_friend)
     # Make owner of official account to be a participant
-    ChannelMember.create(channel: self, participant: line_account.owner)
+    ChannelMember.create(channel: self, participant: line_account.client.admin)
   end
 
   def push_event_data
@@ -76,6 +76,7 @@ class Channel < ApplicationRecord
 
   def update_assignee(agent = nil)
     update!(assignee: agent)
+    send_email_notification_to_assignee if agent.present?
   end
 
   def unread_messages
@@ -86,4 +87,11 @@ class Channel < ApplicationRecord
   def cancel_scenarios
     ScenarioEvent.queued.where(channel_id: id).destroy_all
   end
+
+  private
+    def send_email_notification_to_assignee
+      admin = self.line_account.client.admin
+      assignee = self.assignee
+      SystemMailer.notify_assignee(admin, assignee, self).deliver_later
+    end
 end

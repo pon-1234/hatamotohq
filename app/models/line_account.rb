@@ -6,7 +6,6 @@
 #
 #  id              :bigint           not null, primary key
 #  client_id       :bigint
-#  owner_id        :bigint
 #  line_user_id    :string(255)
 #  line_name       :string(255)
 #  display_name    :string(255)
@@ -24,12 +23,10 @@
 # Indexes
 #
 #  index_line_accounts_on_client_id  (client_id)
-#  index_line_accounts_on_owner_id   (owner_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (client_id => clients.id)
-#  fk_rails_...  (owner_id => users.id)
 #
 require 'securerandom'
 class LineAccount < ApplicationRecord

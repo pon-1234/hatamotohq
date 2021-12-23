@@ -46,7 +46,6 @@ class User::ChannelsController < User::ApplicationController
     render_success
   end
 
-
   private
     def channel_finder
       @channel_finder ||= ChannelFinder.new(current_ability, params)
