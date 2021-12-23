@@ -70,6 +70,14 @@ export const actions = {
     }
   },
 
+  async getAllStaffs(context) {
+    try {
+      return await StaffAPI.all();
+    } catch (error) {
+      return null;
+    }
+  },
+
   async deleteStaff(context, id) {
     try {
       return await StaffAPI.delete(id);
