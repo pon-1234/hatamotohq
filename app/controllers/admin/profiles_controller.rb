@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ProfilesController < Admin::ApplicationController
   # GET /admin/profile/edit
   def edit; end
@@ -12,12 +14,12 @@ class Admin::ProfilesController < Admin::ApplicationController
   end
 
   private
-  def account_params
-    params.permit(
-      :email,
-      :name,
-      :password,
-      :password_confirmation
-    )
-  end
+    def account_params
+      params.permit(
+        :email,
+        :name,
+        :password,
+        :password_confirmation
+      )
+    end
 end

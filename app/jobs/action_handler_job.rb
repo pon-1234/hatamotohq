@@ -55,7 +55,7 @@ class ActionHandlerJob < ApplicationJob
     end
 
     def send_email(content)
-      UserMailer.postback_email(@friend.id, content).deliver_later
+      SystemMailer.postback_email(@friend.id, content).deliver_later
     end
 
     def send_scenario(content)
