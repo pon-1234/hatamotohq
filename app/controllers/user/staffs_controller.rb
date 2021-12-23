@@ -16,6 +16,7 @@ class User::StaffsController < User::ApplicationController
     end
   end
 
+  # GET /user/staffs/all
   def all
     @staffs = Current.user.client.users.staff.active
   end

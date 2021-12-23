@@ -27,7 +27,7 @@ class Admin::AccountsController < Admin::ApplicationController
     render_bad_request_with_message(e.message)
   end
 
-  # PATCJ /admin/accounts/:id
+  # PATCH /admin/accounts/:id
   def update
     authorize! :manage, Admin
     if @account.update(account_params)
