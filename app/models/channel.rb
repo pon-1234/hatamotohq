@@ -50,7 +50,7 @@ class Channel < ApplicationRecord
     # Make friend to be a participant
     ChannelMember.create(channel: self, participant: line_friend)
     # Make owner of official account to be a participant
-    ChannelMember.create(channel: self, participant: line_account.owner)
+    ChannelMember.create(channel: self, participant: line_account.client.admin)
   end
 
   def push_event_data

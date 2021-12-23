@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_16_112042) do
+ActiveRecord::Schema.define(version: 2021_12_23_044707) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -200,6 +200,14 @@ ActiveRecord::Schema.define(version: 2021_12_16_112042) do
     t.index ['reminder_id'], name: 'index_episodes_on_reminder_id'
   end
 
+  create_table 'flex_templates', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.string 'type'
+    t.json 'content'
+    t.text 'html_content'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+  end
+
   create_table 'folders', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.string 'name'
@@ -245,7 +253,6 @@ ActiveRecord::Schema.define(version: 2021_12_16_112042) do
 
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'client_id'
-    t.bigint 'owner_id'
     t.string 'line_user_id'
     t.string 'line_name'
     t.string 'display_name'
@@ -260,7 +267,6 @@ ActiveRecord::Schema.define(version: 2021_12_16_112042) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.index ['client_id'], name: 'index_line_accounts_on_client_id'
-    t.index ['owner_id'], name: 'index_line_accounts_on_owner_id'
   end
 
   create_table 'line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -605,7 +611,6 @@ ActiveRecord::Schema.define(version: 2021_12_16_112042) do
   add_foreign_key 'friend_variables', 'variables'
   add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'clients'
-  add_foreign_key 'line_accounts', 'users', column: 'owner_id'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
