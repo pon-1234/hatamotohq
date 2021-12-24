@@ -11,7 +11,7 @@ json_arr = [
         "size": 'full',
         "aspectRatio": '20:13',
         "aspectMode": 'cover',
-        "url": 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg'
+        "url": '{roomImageUrl}'
       },
       "body": {
         "type": 'box',
@@ -69,7 +69,7 @@ json_arr = [
         "size": 'full',
         "aspectRatio": '20:13',
         "aspectMode": 'cover',
-        "url": 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg'
+        "url": '{roomImageUrl}'
       },
       "body": {
         "type": 'box',
