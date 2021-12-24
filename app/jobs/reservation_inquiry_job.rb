@@ -72,6 +72,24 @@ class ReservationInquiryJob < ApplicationJob
       content = content.gsub(/{roomName}/, room[:name].to_s)
       content = content.gsub(/{roomImageUrl}/, room[:image_url].to_s)
       content = content.gsub(/{roomPrice}/, room[:price].to_s)
+      if room[:vacant]
+        content = bind_room_ota_url(content)
+      else
+        content = bind_postback_data(content)
+      end
+
       JSON.parse(content)
+    end
+
+    def bind_postback_data(content)
+      postback_data = {
+        type: 'postback'
+      }
+      # byebug
+      content.gsub(/{postbackData}/, postback_data)
+    end
+
+    def bind_room_ota_url(content)
+      content.gsub(/{roomOTAUrl}/, 'https://google.com')
     end
 end

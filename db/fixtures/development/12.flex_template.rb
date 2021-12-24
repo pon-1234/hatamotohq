@@ -52,7 +52,7 @@ json_arr = [
             "action": {
               "type": 'uri',
               "label": '予約する',
-              "uri": 'https://linecorp.com'
+              "uri": '{roomOTAUrl}'
             }
           }
         ]
@@ -120,9 +120,9 @@ json_arr = [
             "style": 'primary',
             "color": '#aaaaaa',
             "action": {
-              "type": 'uri',
+              "type": 'postback',
               "label": '人気になる',
-              "uri": 'https://linecorp.com'
+              "data": '{postbackData}'
             }
           }
         ]
