@@ -4,20 +4,20 @@
 #
 # Table name: messages
 #
-#  id              :bigint           not null, primary key
-#  channel_id      :bigint
-#  sender_type     :string(255)
-#  sender_id       :bigint
-#  type            :string(255)
-#  from            :string(255)
-#  text            :text(65535)
-#  line_message_id :string(255)
-#  content         :json
-#  timestamp       :string(255)
-#  reply_token     :string(255)
-#  status          :string(255)      default("sent")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id           :bigint           not null, primary key
+#  channel_id   :bigint
+#  sender_type  :string(255)
+#  sender_id    :bigint
+#  type         :string(255)
+#  from         :string(255)
+#  text         :text(65535)
+#  content      :json
+#  html_content :text(65535)
+#  timestamp    :string(255)
+#  reply_token  :string(255)
+#  status       :string(255)      default("sent")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 # Indexes
 #
