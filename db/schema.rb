@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_23_044707) do
+ActiveRecord::Schema.define(version: 2021_12_24_033136) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -71,6 +71,16 @@ ActiveRecord::Schema.define(version: 2021_12_23_044707) do
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['email'], name: 'index_agencies_on_email', unique: true
     t.index ['reset_password_token'], name: 'index_agencies_on_reset_password_token', unique: true
+  end
+
+  create_table "allowlisted_jwts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.string "jti"
+    t.datetime "exp"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
+    t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
   create_table 'announcements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|

@@ -188,4 +188,16 @@ Rails.application.routes.draw do
       resource :profile, only: %i(edit update)
     end
   end
+
+  #API
+  namespace :api do
+    namespace :v1 do
+      resource :staff, only: [], defaults: {format: :json} do
+        collection do
+          post :login
+          delete :logout
+        end
+      end
+    end
+  end
 end

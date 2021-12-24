@@ -37,6 +37,8 @@ gem 'devise_token_auth'
 gem 'devise-async'
 gem 'authtrail'
 gem 'rack-cors', require: 'rack/cors'
+# Json web token for authentication apis
+gem 'jwt'
 
 # Active Storage
 gem 'active_storage_validations'
@@ -72,6 +74,9 @@ gem 'sentry-ruby'
 gem 'sentry-rails'
 # gem 'ddtrace'
 gem 'logster'
+
+# support for format JSON
+gem 'active_model_serializers', '~> 0.10.0'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
