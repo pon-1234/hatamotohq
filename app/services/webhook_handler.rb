@@ -2,7 +2,7 @@
 
 require 'digest'
 
-module WebhooksHelper
+class WebhookHandler
   def handle_event(event, key)
     @event = event
     @line_account = LineAccount.find_by(webhook_url: key)

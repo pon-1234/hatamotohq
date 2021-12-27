@@ -31,7 +31,7 @@ json_arr = [
             "contents": [
               {
                 "type": 'text',
-                "text": '{roomPrice} 円',
+                "text": '{roomPrice}',
                 "wrap": true,
                 "weight": 'bold',
                 "size": 'xl',

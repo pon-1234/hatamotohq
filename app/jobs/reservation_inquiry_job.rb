@@ -45,6 +45,7 @@ class ReservationInquiryJob < ApplicationJob
           name: 'KING',
           price: 20000,
           image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
+          ota_url: 'https://www.agoda.com/apartments/',
           vacant: false
         },
         {
@@ -52,6 +53,7 @@ class ReservationInquiryJob < ApplicationJob
           name: 'VIP',
           price: 10000,
           image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
+          ota_url: 'https://www.agoda.com/apartments/',
           vacant: true
         }
       ]
@@ -60,7 +62,6 @@ class ReservationInquiryJob < ApplicationJob
       rooms.each do |room|
         contents << build_room_content(room)
       end
-
       {
         type: 'carousel',
         contents: contents
@@ -68,28 +69,38 @@ class ReservationInquiryJob < ApplicationJob
     end
 
     def build_room_content(room)
-      content = (room[:vacant] ? FlexTemplate.rsv_available_content : FlexTemplate.rsv_unavailable_content).to_json
-      content = content.gsub(/{roomName}/, room[:name].to_s)
-      content = content.gsub(/{roomImageUrl}/, room[:image_url].to_s)
-      content = content.gsub(/{roomPrice}/, room[:price].to_s)
+      content = (room[:vacant] ? FlexTemplate.rsv_available_content : FlexTemplate.rsv_unavailable_content)
+      content.extend Hashie::Extensions::DeepLocate
+      # set room name
+      rname_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomName}') }).first
+      rname_obj['text'] = room[:name].to_s if rname_obj.present?
+      # set room image
+      rimage_obj = (content.deep_locate -> (key, value, object) { key.eql?('url') && value.eql?('{roomImageUrl}') }).first
+      rimage_obj['url'] = room[:image_url].to_s if rimage_obj.present?
+      # set room price
+      rprice_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomPrice}') }).first
+      rprice_obj['text'] = room[:price].to_s + ' 円' if rprice_obj.present?
+
       if room[:vacant]
-        content = bind_room_ota_url(content)
+        # set room OTA
+        rota_obj = (content.deep_locate -> (key, value, object) { key.eql?('url') && value.eql?('{roomOTAUrl}') }).first
+        rota_obj['url'] = room[:ota_url].to_s if rota_obj.present?
       else
         content = bind_postback_data(content)
       end
-
-      JSON.parse(content)
     end
 
     def bind_postback_data(content)
       postback_data = {
-        type: 'postback'
+        actions: [{
+          type: 'rsv_bookmarked',
+          content: {
+            id: 1 # TODO roomId
+          }
+        }]
       }
-      # byebug
-      content.gsub(/{postbackData}/, postback_data)
-    end
-
-    def bind_room_ota_url(content)
-      content.gsub(/{roomOTAUrl}/, 'https://google.com')
+      postback_action = (content.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('postback') }).first
+      postback_action['data'] = postback_data
+      content
     end
 end
