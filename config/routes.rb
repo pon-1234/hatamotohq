@@ -188,4 +188,14 @@ Rails.application.routes.draw do
       resource :profile, only: %i(edit update)
     end
   end
+
+  #API
+  namespace :api do
+    namespace :v1 do
+      namespace :staff do
+        post :login, to: 'auth#login'
+        delete :logout, to: 'auth#logout'
+      end
+    end
+  end
 end

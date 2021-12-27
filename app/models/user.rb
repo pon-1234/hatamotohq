@@ -42,6 +42,7 @@
 class User < ApplicationRecord
   belongs_to :client
   has_many :assigned_channels, foreign_key: 'assignee_id', class_name: 'Channel', dependent: :nullify
+  has_many :allowlisted_jwts, dependent: :destroy
   alias_attribute :channels, :assigned_channels
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
@@ -90,6 +91,16 @@ class User < ApplicationRecord
 
   def display_name
     name
+  end
+
+  def available_access_token? json_token_indentifier
+    self.allowlisted_jwts.exists? jti: json_token_indentifier
+  end
+
+  # make access_token unavailable after logout
+  def revocate_access_token json_token_indentifier
+    raise Common::AlreadyLogedOut.new unless self.allowlisted_jwts.exists?(jti: json_token_indentifier)
+    self.allowlisted_jwts.find_by_jti(json_token_indentifier)&.destroy
   end
 
   private
