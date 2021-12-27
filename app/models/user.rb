@@ -97,9 +97,9 @@ class User < ApplicationRecord
     self.allowlisted_jwts.exists? jti: json_token_indentifier
   end
 
-  # make access_token inavailable when do logout
+  # make access_token unavailable after logout
   def revocate_access_token json_token_indentifier
-    raise Yopaz::AlreadyLogedOut.new unless self.allowlisted_jwts.exists?(jti: json_token_indentifier)
+    raise Common::AlreadyLogedOut.new unless self.allowlisted_jwts.exists?(jti: json_token_indentifier)
     self.allowlisted_jwts.find_by_jti(json_token_indentifier)&.destroy
   end
 

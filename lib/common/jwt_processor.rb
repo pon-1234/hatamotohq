@@ -1,4 +1,4 @@
-module Yopaz
+module Common
   class JwtProcessor
     class << self
       HMAC_SECRET = Rails.application.secrets.secret_key_base.to_s
@@ -14,7 +14,7 @@ module Yopaz
         decoded = JWT.decode(token, HMAC_SECRET, true, {verify_jti: true, algorithm: 'HS256'}).first
         HashWithIndifferentAccess.new decoded
       rescue JWT::ExpiredSignature, JWT::InvalidJtiError, JWT::VerificationError, JWT::DecodeError => e
-        raise Yopaz::AccessTokenInvalid.new
+        raise Common::AccessTokenInvalid.new
       end
 
       # generate one unique identifier for the JWT, and use jti claim

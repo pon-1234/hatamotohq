@@ -1,13 +1,14 @@
-module Yopaz
+module Common
   class ErrorHandle < StandardError
     extend ActiveModel::Naming
     include ActiveModel::Serialization
 
-    attr_reader :status, :message
+    attr_reader :status, :message, :status_code
 
     def initialize
       @status = 'error'
       @message = 'メールアドレスまたはパスワードが違います。'
+      @status_code = 401
     end
   end
 
@@ -23,6 +24,7 @@ module Yopaz
     def initialize
       super
       @message = 'アクセストークンが違います。'  
+      @status_code = 403
     end
   end
 
@@ -30,13 +32,15 @@ module Yopaz
     def initialize
       super
       @message = 'アクセストークンが違います。'
+      @status_code = 403
     end
   end
 
   class AlreadyLogedOut < ErrorHandle
     def initialize
       super
-      @message = 'すでにログアウトしています。'  
+      @message = 'すでにログアウトしています。'
+      @status_code = 422
     end
   end
 end

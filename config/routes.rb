@@ -192,11 +192,9 @@ Rails.application.routes.draw do
   #API
   namespace :api do
     namespace :v1 do
-      resource :staff, only: [], defaults: {format: :json} do
-        collection do
-          post :login
-          delete :logout
-        end
+      namespace :staff do
+        post :login, to: 'auth#login'
+        delete :logout, to: 'auth#logout'
       end
     end
   end
