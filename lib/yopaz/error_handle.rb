@@ -29,7 +29,7 @@ module Yopaz
   class AccessTokenInvalid < ErrorHandle
     def initialize
       super
-      @message = 'アクセストークンが違います。'  
+      @message = 'アクセストークンが違います。'
     end
   end
 

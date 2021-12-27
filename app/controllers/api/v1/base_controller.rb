@@ -14,7 +14,8 @@ class Api::V1::BaseController < ActionController::Base
   def authenticate_token!
     raise Yopaz::AccessTokenNil.new if params[:access_token].blank?
     @token_payload = Yopaz::JwtProcessor.decode(params[:access_token])
-    @staff = User.staff.find_by_id(@token_payload['user_id'])
-    raise Yopaz::AccessTokenInvalid.new unless (@staff && @staff.available_access_token?(@token_payload['jti']))    
+    @staff = User.staff.find_by_id(@token_payload['staff_id'])
+    raise Yopaz::AccessTokenInvalid.new unless @staff
+    raise Yopaz::AlreadyLogedOut.new unless @staff.available_access_token?(@token_payload['jti'])
   end
 end

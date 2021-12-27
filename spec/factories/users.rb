@@ -40,10 +40,15 @@
 #  fk_rails_...  (client_id => clients.id)
 #
 FactoryBot.define do
-  sequence(:user_email) { |n| "example#{n}@example.com" }
   factory :user do
-    email { FactoryBot.generate :user_email }
-    password { 'password' }
-    password_confirmation { 'password' }
+    transient do
+      is_admin {true}
+    end
+    sequence(:email) {|n| "staff#{n}@example.com"}
+    password {'admin1234'}
+    password_confirmation {'admin1234'}
+    phone_number {1234567890}
+    address {'sample address'}
+    role {is_admin ? 'admin' : 'staff'}
   end
 end
