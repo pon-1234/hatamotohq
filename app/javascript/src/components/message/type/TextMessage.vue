@@ -2,6 +2,10 @@
 export default {
   props: ['data'],
   render: function(h) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const text = this.data.replace(urlRegex, function(url) {
+      return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    });
     return h(
       'div',
       {
@@ -18,7 +22,7 @@ export default {
               class: 'view preview-text-content text-prewrap',
               domProps: {
                 // eslint-disable-next-line no-undef
-                innerHTML: emojione.toImage(this.data)
+                innerHTML: emojione.toImage(text)
               }
             })
           ]
