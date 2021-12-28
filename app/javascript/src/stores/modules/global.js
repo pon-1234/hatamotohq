@@ -44,6 +44,10 @@ export const mutations = {
 
   setActionObjects(state, actionObjects) {
     state.action_objects = actionObjects;
+  },
+
+  setBadge(state, val) {
+    state.badge = val;
   }
 };
 

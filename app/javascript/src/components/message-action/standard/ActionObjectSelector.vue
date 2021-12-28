@@ -45,8 +45,8 @@ export default {
     }
   },
 
-  beforeMount() {
-    this.$store.dispatch('global/getActionObjectConfigs');
+  async beforeMount() {
+    await this.$store.dispatch('global/getActionObjectConfigs');
   },
 
   methods: {
@@ -161,7 +161,7 @@ export default {
           item =>
             (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
         )
-        : null;
+        : [];
     }
   }
 };
