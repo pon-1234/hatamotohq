@@ -4,7 +4,6 @@ import MediaAPI from '../api/media_api';
 export const state = {
   stickers: [],
   logs: [],
-  user: null,
   mediaUrl: null,
   mediaPreviewUrl: null,
   key: '',
@@ -14,10 +13,6 @@ export const state = {
 };
 
 export const mutations = {
-  setUser(state, user) {
-    state.user = user;
-  },
-
   setStickers(state, stickers) {
     state.stickers = stickers;
   },
@@ -38,43 +33,16 @@ export const mutations = {
     state.mediaPreviewUrl = url;
   },
 
-  SET_KEY(state, key) {
-    state.key = key;
-  },
-
   setActionObjects(state, actionObjects) {
     state.action_objects = actionObjects;
-  },
-
-  setBadge(state, val) {
-    state.badge = val;
   }
 };
 
 export const getters = {
-  actionObjects: state => state.action_objects,
-  badge: state => state.badge
+  actionObjects: state => state.action_objects
 };
 
 export const actions = {
-  async fetchUserData(context, query) {
-    if (context.state.user) {
-      return;
-    }
-
-    let userData = null;
-    context.dispatch('system/setLoading', true, { root: true });
-
-    try {
-      userData = await Global.getUserDetails(query);
-    } catch (error) {
-      console.log(error);
-    }
-
-    context.dispatch('system/setLoading', false, { root: true });
-    context.commit('setUser', userData);
-  },
-
   async sendMedia(_, query) {
     try {
       return await Global.sendMedia({ file: query.file, duration: query.duration });
@@ -108,15 +76,6 @@ export const actions = {
       console.log(error);
     }
     context.commit('setActionObjects', data);
-  },
-
-  getBadge(context) {
-    Global.getBadge().then((res) => {
-      // save
-      context.commit('setBadge', res.badge);
-    }).catch(() => {
-      context.commit('setBadge', false);
-    });
   },
 
   async uploadImageMap(_, payload) {

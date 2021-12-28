@@ -33,7 +33,9 @@ export default {
     };
   },
 
-  created() {
+  async beforeMount() {
+    await this.$store.dispatch('global/getActionObjectConfigs');
+    // TODO this is bad smelling code :3 need refactoring
     if (this.data.type === 'uri') {
       this.selected = this.data.id || (Util.validateUrl(this.data.uri) ? 1 : 2);
     } else {
@@ -45,16 +47,13 @@ export default {
     }
   },
 
-  async beforeMount() {
-    await this.$store.dispatch('global/getActionObjectConfigs');
-  },
-
   methods: {
     changeSelected() {
       this.emitObj(this.selected);
     },
 
     emitObj(value) {
+      // TODO this is bad smelling code :3 need refactoring
       let val = this.actionTypes.find(item => item.id === value);
 
       if (!val) {
