@@ -46,10 +46,6 @@ export const mutations = {
     state.action_objects = actionObjects;
   },
 
-  setActionObjects_EXPIRED(state, actionObjects) {
-    state.action_objects_expired = actionObjects;
-  },
-
   setBadge(state, val) {
     state.badge = val;
   }
