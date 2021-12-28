@@ -19,23 +19,24 @@ class ActionHandlerJob < ApplicationJob
   private
     def handle_message_action(actions)
       actions.each do |action|
+        action_content = action['content']
         case action['type']
         when 'text'
-          send_text_message(action['content'])
+          send_text_message(action_content)
         when 'email'
-          send_email(action['content'])
+          send_email(action_content)
         when 'scenario'
-          send_scenario(action['content'])
+          send_scenario(action_content)
         when 'template'
-          send_template(action['content'])
+          send_template(action_content)
         when 'tag'
-          handle_tag_action(action['content'])
+          handle_tag_action(action_content)
         when 'reminder'
-          setup_reminder(action['content'])
+          setup_reminder(action_content)
         when 'reservation'
           send_reservation_introduction
         when 'rsv_bookmarked'
-          handle_rsv_bookmarked_action
+          handle_rsv_bookmarked_action(action_content)
         end
       end
     end
@@ -123,5 +124,9 @@ class ActionHandlerJob < ApplicationJob
       unassign_ids = action['tags'].pluck('id')
       @friend.tag_ids = @friend.tag_ids - unassign_ids
       @friend.save!
+    end
+
+    def handle_rsv_bookmarked_action(content)
+      room_id = content['roomId']
     end
 end

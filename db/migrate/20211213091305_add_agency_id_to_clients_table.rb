@@ -5,6 +5,7 @@ class AddAgencyIdToClientsTable < ActiveRecord::Migration[6.0]
     add_reference :clients, :agency, foreign_key: { to_table: :agencies }, after: :id
     # Set default agency
     agency = Agency.first
+    return if agency.nil?
     User.all.each do |user|
       next if user.client.present?
       client = Client.new

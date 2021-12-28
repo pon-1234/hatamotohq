@@ -83,11 +83,12 @@ class ReservationInquiryJob < ApplicationJob
 
       if room[:vacant]
         # set room OTA
-        rota_obj = (content.deep_locate -> (key, value, object) { key.eql?('url') && value.eql?('{roomOTAUrl}') }).first
-        rota_obj['url'] = room[:ota_url].to_s if rota_obj.present?
+        rota_obj = (content.deep_locate -> (key, value, object) { key.eql?('uri') && value.eql?('{roomOTAUrl}') }).first
+        rota_obj['uri'] = room[:ota_url].to_s if rota_obj.present?
       else
         content = bind_postback_data(content)
       end
+      content
     end
 
     def bind_postback_data(content)
@@ -95,12 +96,12 @@ class ReservationInquiryJob < ApplicationJob
         actions: [{
           type: 'rsv_bookmarked',
           content: {
-            id: 1 # TODO roomId
+            roomId: 1 # TODO roomId
           }
         }]
       }
       postback_action = (content.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('postback') }).first
-      postback_action['data'] = postback_data
+      postback_action['data'] = postback_data if postback_action.present?
       content
     end
 end

@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
       post '/bot/register', to: 'bot#register'
-      resource :home, only: [:index] do
+      resources :home, only: [:index] do
         get :announcements, on: :collection
       end
       resources :staffs do
