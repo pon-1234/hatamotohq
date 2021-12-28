@@ -76,7 +76,7 @@ import Util from '@/core/util.js';
 export default {
   data() {
     return {
-      adminRootUrl: process.env.MIX_ROOT_PATH,
+      rootPath: process.env.MIX_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       agencyData: {
         email: null,
@@ -91,7 +91,7 @@ export default {
       this.$refs.form.submit();
     },
     getAction() {
-      return `${this.adminRootUrl}/admin/sign_in`;
+      return `${this.rootPath}/agency/sign_in`;
     }
   }
 };
