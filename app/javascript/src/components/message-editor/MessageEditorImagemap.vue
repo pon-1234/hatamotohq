@@ -77,7 +77,7 @@
                       <action-editor
                         :index="index"
                         :value="item.action"
-                        :supports="['message', 'survey']"
+                        :supports="['', 'message', 'survey']"
                         :labelRequired="false"
                         :showTitle="false"
                         :name="'imagemap_action_' + index"

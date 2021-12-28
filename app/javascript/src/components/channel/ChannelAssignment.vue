@@ -44,16 +44,16 @@ export default {
   },
 
   async beforeMount() {
-    const response = await this.getStaffs();
+    const response = await this.getAllStaffs();
     if (!response) return;
-    this.agents = response.data;
+    this.agents = response;
     if (this.channel.assignee_id) {
       this.assignee = this.agents.find(_ => _.id === this.channel.assignee_id);
     }
   },
 
   methods: {
-    ...mapActions('staff', ['getStaffs']),
+    ...mapActions('staff', ['getAllStaffs']),
     ...mapActions('channel', ['assign', 'unassign']),
 
     async assignAgent(agent) {

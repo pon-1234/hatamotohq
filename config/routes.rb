@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         get :announcements, on: :collection
       end
       resources :staffs do
+        get :all, on: :collection
       end
       resources :channels do
         member do

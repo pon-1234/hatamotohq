@@ -6,6 +6,15 @@ export default {
       data: query,
       dataType: 'json',
       contentType: 'application/json',
+      cache: false
+    });
+  },
+  all: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/staffs/all`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
       cache: true
     });
   },

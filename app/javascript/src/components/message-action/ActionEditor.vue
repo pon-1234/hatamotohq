@@ -52,7 +52,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     index: {
@@ -104,13 +103,15 @@ export default {
     this.$validator = this.parentValidator;
     this.tempData.default = this.ActionMessage.default;
 
-    this.tempData.basic = this.isNone ? { type: 'none' } : {
-      id: 1,
-      type: this.ActionObjectsType.Uri,
-      label: '',
-      uri: '',
-      linkUri: ''
-    };
+    this.tempData.basic = this.isNone
+      ? { type: 'none' }
+      : {
+        id: 1,
+        type: this.ActionObjectsType.Uri,
+        label: '',
+        uri: '',
+        linkUri: ''
+      };
     if (!this.value) {
       return;
     }
@@ -147,7 +148,7 @@ export default {
     },
 
     setupData() {
-    // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-undef
       this.data = _.cloneDeep(this.value);
       if (this.data.type === 'postback') {
         this.type = 'default';
