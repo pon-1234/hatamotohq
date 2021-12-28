@@ -29,7 +29,8 @@ export default {
       url: process.env.MIX_ROOT_PATH + '/user/action_objects',
       method: 'GET',
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: true
     });
   }
 };
