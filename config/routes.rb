@@ -31,6 +31,10 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
+  # reservations
+  get 'reservations/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
+  get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
+  post 'reservations/inquire/:friend_id',  to: 'reservations#inquire', as: 'reservation_inquire'
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
@@ -50,10 +54,15 @@ Rails.application.routes.draw do
       resources :home, only: [:index] do
         get :announcements, on: :collection
       end
+      resources :staffs do
+        get :all, on: :collection
+      end
       resources :channels do
         member do
           get :scenarios
           post :update_last_seen
+          post :assign
+          post :unassign
         end
         resources :messages do
           collection do
@@ -135,23 +144,24 @@ Rails.application.routes.draw do
     end
   end
 
-  # # Admin
+  # Admin
   constraints Subdomain::AdminConstraint.new do
     devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
       sessions: 'admin/sessions',
       passwords: 'admin/passwords'
     }
     namespace :admin, path: Subdomain::AdminConstraint.path do
-      root to: 'users#index'
-      resources :users do
-        get :search, on: :collection
-        get :delete_confirm, on: :member
-        get :sso, on: :member
-      end
+      root to: 'accounts#index'
       resources :announcements do
         get :search, on: :collection
         post :upload_image,  on: :collection
       end
+      resources :accounts
+      resources :agencies do
+        get :search, on: :collection
+        get :sso, on: :member
+      end
+      resource :profile, only: %i(edit update)
     end
 
     require 'sidekiq/web'
@@ -160,5 +170,22 @@ Rails.application.routes.draw do
     #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
     # end
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Agency
+  constraints Subdomain::AgencyConstraint.new do
+    devise_for :agencies, path: Subdomain::AgencyConstraint.path, controllers: {
+      sessions: 'agency/sessions',
+      passwords: 'agency/passwords'
+    }
+    namespace :agency, path: Subdomain::AgencyConstraint.path do
+      root to: 'clients#index'
+      resources :clients do
+        get :search, on: :collection
+        get :delete_confirm, on: :member
+        get :sso, on: :member
+      end
+      resource :profile, only: %i(edit update)
+    end
   end
 end

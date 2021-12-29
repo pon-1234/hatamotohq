@@ -31,7 +31,7 @@
       </div>
       <div class="card-body">
         <friend-search-status></friend-search-status>
-        <div class="table-responsive">
+        <div>
           <table class="table table-centered mt-2 pc">
             <thead class="thead-light">
               <tr>
@@ -39,6 +39,7 @@
                 <th class="d-none d-lg-table-cell">登録日時</th>
                 <th class="d-none d-lg-table-cell">タグ</th>
                 <th>状況</th>
+                <th v-if="isAdmin" class="d-none d-lg-table-cell">担当者</th>
                 <th class="d-none d-lg-table-cell">操作</th>
               </tr>
             </thead>
@@ -58,6 +59,9 @@
                     :locked="friend.locked"
                     :visible="friend.visible"
                   ></friend-status>
+                </td>
+                <td v-if="isAdmin" class="d-none d-lg-table-cell fw-250">
+                  <channel-assignment :channel="friend.channel"></channel-assignment>
                 </td>
                 <td class="d-none d-lg-table-cell">
                   <a :href="`${rootUrl}/user/friends/${friend.id}`" class="btn btn-sm btn-light">詳細</a>
@@ -88,6 +92,10 @@ import { mapActions, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
+  props: {
+    role: String
+  },
+
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
@@ -97,17 +105,21 @@ export default {
       }
     };
   },
+
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
+
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
+
   async beforeMount() {
     await this.getFriends();
     this.loading = false;
   },
+
   computed: {
     ...mapState('friend', {
       queryParams: state => state.queryParams,
@@ -147,6 +159,14 @@ export default {
 
     isMobile: function() {
       return this.window.width < 760;
+    },
+
+    isAdmin: function() {
+      return this.role === 'admin';
+    },
+
+    isStaff: function() {
+      return this.role === 'staff';
     }
   },
   methods: {

@@ -1,83 +1,40 @@
 <template>
   <div>
-    <!-- <div v-if="showTitle">
-      <label class="w-100 mt10">
-        ラベル
-        <required-mark v-if="labelRequired"/>
-
-      </label>
-      <div class="w-100">
-        <input type="text"
-          :name="name+'_label'"
-          placeholder="ラベルを入力してください"
-          :maxlength="type == 'image_carousel'?12:20"
-          v-model="label" class="w-100 form-control"
-          v-validate="{required: labelRequired && showTitle}"
-          @keyup="changeLabel"
-          />
-        <span  v-if="errors.first(name+'_label')" class="invalid-box-label">ラベルは必須です</span>
-      </div>
-    </div> -->
-
     <label>アクション</label>
     <div>
-      <select
-        type="text"
-        maxlength="12"
-        v-model="curPostbackType"
-        class="w-100 form-control"
-        @change="changeActionType"
-      >
+      <select type="text" maxlength="12" v-model="postbackType" class="w-100 form-control" @change="changeActionType">
         <option v-for="(val, key) of types" :key="key" :value="key">{{ val }}</option>
       </select>
     </div>
     <div class="mt-2">
-      <action-postback-text v-if="curPostbackType === 'text'" :value="content" :name="name" @input="updateContent">
+      <action-postback-text v-if="postbackType === 'text'" :value="content" :name="name" @input="updateContent">
       </action-postback-text>
 
-      <action-postback-template
-        v-if="curPostbackType === 'template'"
-        :value="content"
-        @input="updateContent"
-        :name="name"
-      >
+      <action-postback-template v-if="postbackType === 'template'" :value="content" @input="updateContent" :name="name">
       </action-postback-template>
 
-      <action-postback-scenario
-        v-if="curPostbackType === 'scenario'"
-        :value="content"
-        :name="name"
-        @input="updateContent"
-      >
+      <action-postback-scenario v-if="postbackType === 'scenario'" :value="content" :name="name" @input="updateContent">
       </action-postback-scenario>
 
       <action-post-back-type-flex-message
-        v-if="curPostbackType === 'flexMessage'"
+        v-if="postbackType === 'flexMessage'"
         :value="content"
         :name="name"
         @input="updateContent"
       />
 
-      <action-postback-email v-if="curPostbackType === 'email'" :value="content" :name="name" @input="updateContent">
+      <action-postback-email v-if="postbackType === 'email'" :value="content" :name="name" @input="updateContent">
       </action-postback-email>
 
-      <action-postback-tag v-if="curPostbackType === 'tag'" :value="content" :name="name" @input="updateContent">
+      <action-postback-tag v-if="postbackType === 'tag'" :value="content" :name="name" @input="updateContent">
       </action-postback-tag>
 
       <action-postback-reminder
-        v-if="curPostbackType === 'reminder'"
-        :actionData="content"
+        v-if="postbackType === 'reminder'"
+        :action-data="content"
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>
-
-      <action-post-back-type-survey
-        v-if="curPostbackType === 'survey'"
-        :value="content"
-        :name="name"
-        @input="updateContent"
-      >
-      </action-post-back-type-survey>
     </div>
   </div>
 </template>
@@ -103,7 +60,7 @@ export default {
   data() {
     return {
       types: this.PostbackTypes,
-      curPostbackType: null,
+      postbackType: null,
       content: null
     };
   },
@@ -125,28 +82,28 @@ export default {
   methods: {
     updateContent(content) {
       this.content = content;
-      this.emitData();
+      this.notifyDataChanged();
     },
 
-    emitData() {
+    notifyDataChanged() {
       this.$emit('input', {
-        type: this.curPostbackType,
+        type: this.postbackType,
         content: this.content
       });
     },
 
     changeActionType() {
       this.content = undefined;
-      this.emitData();
+      this.notifyDataChanged();
     },
 
     setupData() {
       if (this.value) {
         const data = this.value;
         this.content = data.content;
-        this.curPostbackType = data.type || 'none';
+        this.postbackType = data.type || 'none';
       } else {
-        this.curPostbackType = 'none';
+        this.postbackType = 'none';
       }
     }
   }
