@@ -134,8 +134,6 @@ export default {
       'getTemplates'
     ]),
 
-    ...mapActions('system', ['setIsSubmitChange']),
-
     forceRerender() {
       this.componentKey += 1;
     },
@@ -189,7 +187,6 @@ export default {
       if (this.loading) return;
       this.loading = true;
       const result = await this.$validator.validateAll();
-      this.setIsSubmitChange();
 
       if (!result) {
         this.loading = false;
