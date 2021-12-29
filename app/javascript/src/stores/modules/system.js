@@ -28,9 +28,5 @@ export const actions = {
 
   setSuccess(context, success) {
     context.commit('SET_SUCCESS', success);
-  },
-
-  setIsSubmitChange(context) {
-    context.commit('SET_IS_SUBMIT_CHANGE');
   }
 };

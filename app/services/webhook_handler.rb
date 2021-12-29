@@ -169,7 +169,7 @@ class WebhookHandler
         tf.binmode
         tf.write(stream)
         tf.rewind
-        media = Media.new(line_account: @line_account, type: message_type)
+        media = Media.new(line_account: @line_account, type: message_type, provider: 'line')
         media.file.attach(io: tf, filename: filename)
         media.save!
         media

@@ -6,7 +6,7 @@ class User::MediasController < User::ApplicationController
 
   # GET /user/medias
   def index
-    @q = Media.accessible_by(current_ability).with_attached_file.ransack(params[:q])
+    @q = Media.accessible_by(current_ability).with_attached_file.provider_system.ransack(params[:q])
     @medias = @q.result.page(params[:page]).per(12)
     respond_to do |format|
       format.html
