@@ -7,11 +7,11 @@ json_arr = [
     "content": {
       "type": 'bubble',
       "hero": {
-        "type": 'image',
+        "url": '{roomImageUrl}',
         "size": 'full',
-        "aspectRatio": '20:13',
+        "type": 'image',
         "aspectMode": 'cover',
-        "url": '{roomImageUrl}'
+        "aspectRatio": '20:13'
       },
       "body": {
         "type": 'box',
@@ -19,11 +19,34 @@ json_arr = [
         "spacing": 'sm',
         "contents": [
           {
-            "type": 'text',
-            "text": '{roomName}',
-            "wrap": true,
-            "weight": 'bold',
-            "size": 'xl'
+            "type": 'box',
+            "layout": 'baseline',
+            "contents": [
+              {
+                "flex": 0,
+                "size": 'xl',
+                "text": '{roomPrice}',
+                "type": 'text',
+                "wrap": true,
+                "weight": 'bold',
+                "color": '#FF0000'
+              }
+            ]
+          },
+          {
+            "type": 'box',
+            "layout": 'baseline',
+            "contents": [
+              {
+                "size": 'lg',
+                "text": '{roomName}',
+                "type": 'text',
+                "wrap": true,
+                "weight": 'bold',
+                "flex": 2
+              }
+            ],
+            "margin": 'md'
           },
           {
             "type": 'box',
@@ -31,13 +54,21 @@ json_arr = [
             "contents": [
               {
                 "type": 'text',
-                "text": '{roomPrice} 円',
-                "wrap": true,
-                "weight": 'bold',
-                "size": 'xl',
-                "flex": 0
+                "text": '{roomArea}',
+                "flex": 1
+              },
+              {
+                "type": 'text',
+                "text": '{roomCapacity}',
+                "flex": 1
+              },
+              {
+                "type": 'text',
+                "text": '{roomSmoking}',
+                "flex": 1
               }
-            ]
+            ],
+            "margin": 'md'
           }
         ]
       },
@@ -50,9 +81,9 @@ json_arr = [
             "type": 'button',
             "style": 'primary',
             "action": {
+              "uri": '{roomOTAUrl}',
               "type": 'uri',
-              "label": '予約する',
-              "uri": '{roomOTAUrl}'
+              "label": '予約する'
             }
           }
         ]
@@ -65,11 +96,11 @@ json_arr = [
     "content": {
       "type": 'bubble',
       "hero": {
-        "type": 'image',
+        "url": '{roomImageUrl}',
         "size": 'full',
-        "aspectRatio": '20:13',
+        "type": 'image',
         "aspectMode": 'cover',
-        "url": '{roomImageUrl}'
+        "aspectRatio": '20:13'
       },
       "body": {
         "type": 'box',
@@ -77,35 +108,56 @@ json_arr = [
         "spacing": 'sm',
         "contents": [
           {
-            "type": 'text',
-            "text": '{roomName}',
-            "wrap": true,
-            "weight": 'bold',
-            "size": 'xl'
-          },
-          {
             "type": 'box',
             "layout": 'baseline',
-            "flex": 1,
             "contents": [
               {
+                "flex": 0,
+                "size": 'xl',
+                "text": '{roomPrice}',
                 "type": 'text',
-                "text": '{roomPrice} 円',
                 "wrap": true,
                 "weight": 'bold',
-                "size": 'xl',
-                "flex": 0
+                "color": '#FF0000'
               }
             ]
           },
           {
-            "type": 'text',
-            "text": 'Temporarily out of stock',
-            "wrap": true,
-            "size": 'xxs',
-            "margin": 'md',
-            "color": '#ff5551',
-            "flex": 0
+            "type": 'box',
+            "layout": 'baseline',
+            "contents": [
+              {
+                "size": 'lg',
+                "text": '{roomName}',
+                "type": 'text',
+                "wrap": true,
+                "weight": 'bold',
+                "flex": 2
+              }
+            ],
+            "margin": 'md'
+          },
+          {
+            "type": 'box',
+            "layout": 'baseline',
+            "contents": [
+              {
+                "type": 'text',
+                "text": '{roomArea}',
+                "flex": 1
+              },
+              {
+                "type": 'text',
+                "text": '{roomCapacity}',
+                "flex": 1
+              },
+              {
+                "type": 'text',
+                "text": '{roomSmoking}',
+                "flex": 1
+              }
+            ],
+            "margin": 'md'
           }
         ]
       },

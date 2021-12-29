@@ -46,6 +46,9 @@ class ReservationInquiryJob < ApplicationJob
           price: 20000,
           image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
           ota_url: 'https://www.agoda.com/apartments/',
+          area: 25,
+          capacity: 2,
+          smoking: false,
           vacant: false
         },
         {
@@ -54,6 +57,9 @@ class ReservationInquiryJob < ApplicationJob
           price: 10000,
           image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
           ota_url: 'https://www.agoda.com/apartments/',
+          area: 25,
+          capacity: 1,
+          smoking: true,
           vacant: true
         }
       ]
@@ -80,6 +86,15 @@ class ReservationInquiryJob < ApplicationJob
       # set room price
       rprice_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomPrice}') }).first
       rprice_obj['text'] = room[:price].to_s + ' 円' if rprice_obj.present?
+      # set room area
+      rarea_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomArea}') }).first
+      rarea_obj['text'] = room[:area].to_s + 'm²' if rarea_obj.present?
+      # set room capacity
+      rcap_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomCapacity}') }).first
+      rcap_obj['text'] = room[:capacity].to_s + '人' if rcap_obj.present?
+      # set room smoking allowance
+      rsmoking_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomSmoking}') }).first
+      rsmoking_obj['text'] = room[:smoking] ? '喫煙' : '禁煙'
 
       if room[:vacant]
         # set room OTA

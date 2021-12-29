@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  namespace :user do
+    get 'rsv_bookmarks/index'
+  end
   direct :rails_public_blob do |blob|
     # Preserve the behaviour of `rails_blob_url` inside these environments
     # where S3 or the CDN might not be configured
@@ -121,6 +124,7 @@ Rails.application.routes.draw do
         end
         resources :episodes
       end
+      resources :rsv_bookmarks
       resources :variables do
         member do
           post :copy

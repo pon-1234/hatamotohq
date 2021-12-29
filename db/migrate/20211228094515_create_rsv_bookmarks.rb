@@ -5,6 +5,7 @@ class CreateRsvBookmarks < ActiveRecord::Migration[6.0]
     create_table :rsv_bookmarks do |t|
       t.references :line_friend, foreign_key: true
       t.string :room_id
+      t.string :status
       t.timestamps
     end
   end

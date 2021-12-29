@@ -128,5 +128,6 @@ class ActionHandlerJob < ApplicationJob
 
     def handle_rsv_bookmarked_action(content)
       room_id = content['roomId']
+      bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend)
     end
 end
