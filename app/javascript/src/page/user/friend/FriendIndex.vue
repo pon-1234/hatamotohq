@@ -45,12 +45,8 @@
             <tbody v-for="(friend, index) in friends" :key="index">
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
-                  <img
-                    v-lazy="genAvatarImgObj(friend.line_picture_url)"
-                    alt="table-user"
-                    class="mr-2 rounded-circle"
-                  />
-                  <p class="m-0">{{ truncate(friend.display_name || friend. line_name, 15) }}</p>
+                  <img v-lazy="genAvatarImgObj(friend.line_picture_url)" alt="table-user" class="mr-2 rounded-circle" />
+                  <p class="m-0">{{ truncate(friend.display_name || friend.line_name, 15) }}</p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">
@@ -79,8 +75,8 @@
             @change="loadFriend"
             aria-controls="my-table"
           ></b-pagination>
-          <b v-if="!loading && totalRows === 0">データはありません。</b>
         </div>
+        <div class="text-center my-5 font-weight-bold" v-if="!loading && totalRows === 0">データはありません。</div>
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
     </div>

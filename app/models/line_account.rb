@@ -22,6 +22,7 @@
 #
 # Indexes
 #
+#  index_line_accounts_on_owner_id  (owner_id)
 #
 # Foreign Keys
 #

@@ -152,7 +152,6 @@ export default {
       'updateMessage',
       'setPreviewContent'
     ]),
-    ...mapActions('system', ['setIsSubmitChange']),
 
     forceRerender() {
       this.componentKey++;
@@ -187,7 +186,6 @@ export default {
       if (this.loading) return;
       this.loading = true;
       const result = await this.$validator.validateAll();
-      this.setIsSubmitChange();
       if (!result) {
         this.loading = false;
         return ViewHelper.scrollToRequiredField(false);

@@ -79,7 +79,9 @@
                   @change="loadPage"
                   aria-controls="my-table"
                 ></b-pagination>
-                <b v-if="!loading && totalRows === 0">シナリオメッセージはありません。</b>
+              </div>
+              <div class="text-center my-5 font-weight-bold" v-if="!loading && totalRows === 0">
+                シナリオメッセージはありません。
               </div>
             </div>
             <loading-indicator :loading="loading"></loading-indicator>
