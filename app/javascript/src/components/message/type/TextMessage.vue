@@ -2,7 +2,8 @@
 export default {
   props: ['data'],
   render: function(h) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    // eslint-disable-next-line no-useless-escape
+    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gmi;
     const text = this.data.replace(urlRegex, function(url) {
       return '<a href="' + url + '" target="_blank">' + url + '</a>';
     });
