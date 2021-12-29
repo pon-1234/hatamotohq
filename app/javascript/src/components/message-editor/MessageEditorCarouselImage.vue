@@ -85,9 +85,9 @@
           </div>
           <div
             class="carousel-group-action row"
-            v-for="(column, indexColum) in messageData.columns"
-            v-show="selected === indexColum"
-            :key="indexColum"
+            v-for="(column, indexColumn) in messageData.columns"
+            v-show="selected === indexColumn"
+            :key="indexColumn"
           >
             <div class="col-sm-8">
               <div class="form-group">
@@ -95,7 +95,7 @@
                 <action-editor
                   :name="`template_image_carousel_${indexParent}_column${indexColumn}_action${index}`"
                   :value="column.action"
-                  @input="changeActionColumn(indexColum, $event)"
+                  @input="changeActionColumn(indexColumn, $event)"
                   :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
                   :labelRequired="false"
                 />
@@ -118,12 +118,12 @@
                 </div>
                 <div
                   class="btn btn-outline-danger btn-sm"
-                  @click="removeCurrentThumb(indexColum)"
+                  @click="removeCurrentThumb(indexColumn)"
                   v-if="column.imageUrl"
                 >
                   このパネルの画像を削除
                 </div>
-                <div class="btn btn-secondary btn-sm" @click="cloneToAll(indexColum)" v-if="column.imageUrl">
+                <div class="btn btn-secondary btn-sm" @click="cloneToAll(indexColumn)" v-if="column.imageUrl">
                   全パネルにこの画像をコピー
                 </div>
                 <div class="btn btn-outline-danger btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
@@ -133,11 +133,11 @@
                 <input
                   type="hidden"
                   v-model="column.imageUrl"
-                  :name="'image-url-' + indexColum"
+                  :name="'image-url-' + indexColumn"
                   v-validate="'required'"
                   data-vv-as="パネル画像"
                 />
-                <template v-if="errors.first('image-url-' + indexColum)">
+                <template v-if="errors.first('image-url-' + indexColumn)">
                   <error-message message="パネルの画像は必須項目です"></error-message>
                 </template>
                 <!-- image preview -->
