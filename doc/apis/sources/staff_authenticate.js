@@ -2,7 +2,7 @@
  * @api {post} /api/v1/staff/login Staff Login
  * @apiPermission none
  * @apiName Login
- * @apiGroup Staff
+ * @apiGroup Authenticate
  *
  * @apiParam {String} email Staff email.
  * @apiParam {String} password Staff password.
@@ -36,9 +36,11 @@
  * @api {delete} /api/v1/staff/logout Staff Logout
  * @apiPermission yes
  * @apiName Logout
- * @apiGroup Staff
+ * @apiGroup Authenticate
  *
- * @apiParam {String} accessToken Access token got after login.
+ * @apiHeader {String} Authorization store access_token value
+ * @apiHeaderExample {Header} Header-Example
+ *     "Authorization": "Bearer leohssnxnxksjwaioiwcmchs1223ksshdkkslslscncnxjssk"
  *
  * @apiSuccess {String} status api response status.
  *

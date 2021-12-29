@@ -9,7 +9,20 @@
   ],
   "order": [
     "Login",
-    "Logout"
+    "Logout",
+    "SendTextMessage",
+    "GetEmojisIconList",
+    "SendEmojiMessage",
+    "GetMediaList",
+    "UploadFile",
+    "SendMediaMessage",
+    "GetTemplateList",
+    "SendTemplate",
+    "GetScenarioList",
+    "SendCenario",
+    "GetChannelList",
+    "GetMessageList",
+    "UpdateLastSeenAt"
   ],  
   "template": {
     "withCompare": false,
