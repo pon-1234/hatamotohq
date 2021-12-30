@@ -63,7 +63,7 @@
           </div>
 
           <div class="row form-group">
-            <div class="col-lg-4">label search</div>
+            <div class="col-lg-4">担当者</div>
             <div class="col-lg-8">
               <staff-selection
                 :mode="'filter'"
