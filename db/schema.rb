@@ -324,8 +324,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_063149) do
     t.string 'type'
     t.string 'from'
     t.text 'text'
-    t.string 'line_message_id'
     t.json 'content'
+    t.text 'html_content'
     t.string 'timestamp'
     t.string 'reply_token'
     t.string 'status', default: 'sent'
@@ -400,6 +400,15 @@ ActiveRecord::Schema.define(version: 2021_12_29_063149) do
     t.index ['folder_id'], name: 'index_rich_menus_on_folder_id'
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
     t.index ['media_id'], name: 'index_rich_menus_on_media_id'
+  end
+
+  create_table 'rsv_bookmarks', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_friend_id'
+    t.string 'room_id'
+    t.string 'status'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_rsv_bookmarks_on_line_friend_id'
   end
 
   create_table 'scenario_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -624,6 +633,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_063149) do
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
   add_foreign_key 'rich_menus', 'media', column: 'media_id'
+  add_foreign_key 'rsv_bookmarks', 'line_friends'
   add_foreign_key 'scenario_events', 'channels'
   add_foreign_key 'scenario_events', 'line_accounts'
   add_foreign_key 'scenario_events', 'scenario_messages'

@@ -36,7 +36,6 @@ class Messages::MessageBuilder
         sender: @sender,
         from: from,
         type: @body[:message][:type],
-        line_message_id: @body[:message][:id],
         content: @body[:message],
         timestamp: Time.zone.now,
         reply_token: @body[:replyToken],

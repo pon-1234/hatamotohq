@@ -102,6 +102,15 @@
           <% end %>
         </li>
 
+        <li class="side-nav-title side-nav-item">予約管理</li>
+         <!-- 空室待ち履歴 -->
+        <li class="side-nav-item <%= controller?("user/rsv_bookmarks") ? 'mm-active' : '' %>">
+          <%= link_to user_rsv_bookmarks_path, class: "side-nav-link #{controller?("user/rsv_bookmarks" ) ? 'active' : '' }" do %>
+            <i class="uil-tag-alt"></i>
+            <span>空室待ち履歴</span>
+          <% end %>
+        </li>
+
         <li class="side-nav-title side-nav-item">友だち属性</li>
         <!-- タグ管理 -->
         <li class="side-nav-item <%= controller?("user/tags") ? 'mm-active' : '' %>">

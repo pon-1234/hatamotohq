@@ -14,7 +14,7 @@ class Normalizer::PostbackNormalizer
       # we have to cache the postback data in database and restore it
       # when receiving postback event
       hash = Digest::MD5.hexdigest action['data'].to_json
-      PostbackMapper.create(key: hash, value: action['data'])
+      PostbackMapper.find_or_create_by(key: hash, value: action['data'])
       action['data'] = hash
     end
     @content

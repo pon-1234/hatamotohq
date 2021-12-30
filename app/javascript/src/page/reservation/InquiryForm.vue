@@ -8,6 +8,7 @@
       enctype="multipart/form-data"
     >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
+      <input type="hidden" name="inquiry[friend_line_id]" :value="friendLineId" />
       <div class="card">
         <div class="card-header border-bottom border-success"><h4>予約フォーム</h4></div>
         <div class="card-body">
@@ -83,7 +84,7 @@ import { Datetime } from 'vue-datetime';
 
 export default {
   props: {
-    friend_id: {
+    friendLineId: {
       type: String
     }
   },
@@ -98,6 +99,7 @@ export default {
       csrfToken: Util.getCsrfToken(),
       loading: true,
       inquiryFormData: {
+        friend_line_id: null,
         name: null,
         phone_number: null,
         date: null
@@ -115,7 +117,7 @@ export default {
 
   computed: {
     formAction() {
-      return `${this.rootPath}/reservations/inquire/${this.friend_id}`;
+      return `${this.rootPath}/reservations/inquire/${this.friendLineId}`;
     },
 
     currentDate() {

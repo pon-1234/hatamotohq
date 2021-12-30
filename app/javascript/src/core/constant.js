@@ -295,7 +295,7 @@ export const PostbackTypes = {
   email: 'メール通知',
   tag: 'タグ操作',
   reminder: 'リマインダ操作',
-  reservation: '予約',
+  reservation: '予約紹介送信',
   none: '何もしない'
 };
 

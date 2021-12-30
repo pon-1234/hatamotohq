@@ -111,8 +111,8 @@
               @change="loadPage()"
               aria-controls="my-table"
             ></b-pagination>
-            <b v-if="!loading && totalRows === 0">一斉配信はありません。</b>
           </div>
+          <div class="text-center my-5 font-weight-bold" v-if="!loading && totalRows === 0">一斉配信はありません。</div>
         </div>
 
         <loading-indicator :loading="loading"></loading-indicator>

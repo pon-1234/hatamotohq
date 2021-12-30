@@ -2,5 +2,5 @@
 
 require 'rails_helper'
 
-RSpec.describe 'User::Homes', type: :request do
+RSpec.describe 'User::Home', type: :request do
 end
