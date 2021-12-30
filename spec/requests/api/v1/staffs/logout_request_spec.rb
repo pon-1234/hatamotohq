@@ -9,55 +9,11 @@ RSpec.describe 'DELETE /api/v1/staff/logout', type: :request do
   let(:user){FactoryBot.create(:user, client: client, is_admin: false)}
   let(:access_token){Common::JwtProcessor.encode({staff_id: user.id})}
 
-  context 'access_token is not present' do
-    before do
-      delete endpoint_url
-    end
-
-    it{expect(response.status).to eq(403)}
-    it{expect(JSON.parse(response.body)['status']).to eq 'error'}
-    it{expect(JSON.parse(response.body)['message']).to eq 'アクセストークンが違います。'}
-  end
-
-  context 'access_token is invalid' do
-    before do
-      delete endpoint_url, params: {access_token: 'abcdef'}
-    end
-
-    it{expect(response.status).to eq(403)}
-    it{expect(JSON.parse(response.body)['status']).to eq 'error'}
-    it{expect(JSON.parse(response.body)['message']).to eq 'アクセストークンが違います。'}
-  end
-
-  context 'Staff is not found' do
-    before do
-      user2 = FactoryBot.create(:user, email: 'user2@example.com', client: client, is_admin: false)
-      not_exist_user_access_token = Common::JwtProcessor.encode({staff_id: user2.id})
-      user2.destroy
-      delete endpoint_url, params: {access_token: not_exist_user_access_token}
-    end
-
-    it{expect(response.status).to eq(403)}
-    it{expect(JSON.parse(response.body)['status']).to eq 'error'}
-    it{expect(JSON.parse(response.body)['message']).to eq 'アクセストークンが違います。'}
-  end
-
-  context 'already logedout' do
-    before do
-      user
-      access_token
-      user.allowlisted_jwts.last.destroy
-      delete endpoint_url, params: {access_token: access_token}
-    end
-
-    it{expect(response.status).to eq(422)}
-    it{expect(JSON.parse(response.body)['status']).to eq 'error'}
-    it{expect(JSON.parse(response.body)['message']).to eq 'すでにログアウトしています。'}
-  end
+  include_examples 'check authorization'
 
   context 'Logout successfully' do
     before do
-      delete endpoint_url, params: {access_token: access_token}
+      delete endpoint_url, headers: {"Authorization" => access_token}
     end
 
     it{expect(response.status).to eq(200)}

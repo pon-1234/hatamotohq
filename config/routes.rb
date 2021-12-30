@@ -195,6 +195,9 @@ Rails.application.routes.draw do
       namespace :staff do
         post :login, to: 'auth#login'
         delete :logout, to: 'auth#logout'
+        resources :channels, only: [] do
+          resources :messages, only: :create
+        end
       end
     end
   end

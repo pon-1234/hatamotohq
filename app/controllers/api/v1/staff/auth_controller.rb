@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Staff::AuthController < Api::V1::Staff::ApplicationController
-  before_action :authenticate_token!, only: :logout
+  before_action :authenticate_staff!, only: :logout
 
   def login
     raise Common::EmailNotPresent.new if params[:email].blank?
