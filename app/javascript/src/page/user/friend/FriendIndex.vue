@@ -1,9 +1,16 @@
 <template>
   <div>
     <div class="card mvh-50">
-      <div class="card-header d-flex align-items-center">
+      <div class="card-header d-flex justify-content-end">
         <!-- START: Search form -->
-        <div class="ml-auto d-flex text-nowrap">
+        <div class="w-200 h-5 mr-1">
+          <staff-selection
+            ref="channelAssignment"
+            :selected="queryParams.channel_assignee_id_eq"
+            @select="setAssigneeParam"
+          ></staff-selection>
+        </div>
+        <div class="d-flex text-nowrap">
           <div class="input-group app-search">
             <input
               type="text"
@@ -18,7 +25,7 @@
             </div>
           </div>
           <div
-            class="btn btn-primary text-nowrap ml-1"
+            class="btn btn-primary text-nowrap ml-1 mr-1"
             data-backdrop="static"
             data-toggle="modal"
             data-target="#modalFriendSearch"
@@ -47,7 +54,7 @@
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
                   <img v-lazy="genAvatarImgObj(friend.line_picture_url)" alt="table-user" class="mr-2 rounded-circle" />
-                  <p class="m-0">{{ truncate(friend.display_name || friend.line_name, 15) }}</p>
+                  <p class="m-0">{{ (friend.display_name || friend.line_name) | truncate(10) }}</p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">
@@ -102,13 +109,27 @@ export default {
       loading: true,
       window: {
         width: 0
-      }
+      },
+      oldStaffId: null
     };
+  },
+
+  watch: {
+    queryParams: {
+      handler(val) {
+        if (val.channel_assignee_id_eq !== this.oldStaffId) {
+          this.oldStaffId = val.channel_assignee_id_eq;
+          this.$refs.channelAssignment.findStaff(this.queryParams.channel_assignee_id_eq);
+        }
+      },
+      deep: true
+    }
   },
 
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+    this.oldStaffId = this.queryParams.channel_assignee_id_eq;
   },
 
   destroyed() {
@@ -212,10 +233,8 @@ export default {
       this.$refs.modalFriendSearch.showModal();
     },
 
-    truncate(name, length = 15) {
-      return _.truncate(name, {
-        length: length
-      });
+    setAssigneeParam(id) {
+      this.setQueryParam({ channel_assignee_id_eq: id });
     }
   }
 };

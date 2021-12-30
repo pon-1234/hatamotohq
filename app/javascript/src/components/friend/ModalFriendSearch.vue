@@ -33,7 +33,13 @@
           <div class="row form-group">
             <div class="col-lg-4">タグ</div>
             <div class="col-lg-8">
-              <input-tag ref="inputTag" :tags="selectedTags" :tagIds="queryParams.tags_id_in" @input="onSelectTags" :allTags="true" />
+              <input-tag
+                ref="inputTag"
+                :tags="selectedTags"
+                :tagIds="queryParams.tags_id_in"
+                @input="onSelectTags"
+                :allTags="true"
+              />
             </div>
           </div>
           <!-- 登録日時 -->
@@ -45,7 +51,7 @@
             </div>
           </div>
 
-          <div class="row from-group">
+          <div class="row form-group">
             <div class="col-lg-4">状況</div>
             <div class="col-lg-8">
               <select class="form-control" v-model="status_eq">
@@ -55,6 +61,18 @@
               </select>
             </div>
           </div>
+
+          <div class="row form-group">
+            <div class="col-lg-4">label search</div>
+            <div class="col-lg-8">
+              <staff-selection
+                :mode="'filter'"
+                :selected="queryParams.channel_assignee_id_eq"
+                @select="setAssigneeParam"
+              ></staff-selection>
+            </div>
+          </div>
+
           <!-- ブロック、非表示した友達 -->
           <div class="mt-2 d-flex">
             <div class="flex-1 custom-control custom-checkbox mr-2">
@@ -84,7 +102,9 @@
         </div>
         <div class="modal-footer d-flex">
           <button type="button" class="btn btn-sm btn-light" @click="resetSearch()">リセット</button>
-          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal" @click="closeModal()">キャンセル</button>
+          <button type="button" class="btn btn-sm btn-light ml-auto" data-dismiss="modal" @click="closeModal()">
+            キャンセル
+          </button>
           <button type="button" class="btn btn-sm btn-info" data-dismiss="modal" @click="search">検索</button>
         </div>
       </div>
@@ -202,7 +222,8 @@ export default {
         created_at_gteq: null,
         created_at_lteq: null,
         visible_eq: true,
-        locked_eq: false
+        locked_eq: false,
+        channel_assignee_id_eq: null
       };
       Object.assign(this.params, resetParams);
     },
@@ -220,6 +241,10 @@ export default {
       if (this.params.tags_id_in) {
         this.$refs.inputTag.initData();
       }
+    },
+
+    setAssigneeParam(staffId) {
+      this.params.channel_assignee_id_eq = staffId;
     }
   }
 };

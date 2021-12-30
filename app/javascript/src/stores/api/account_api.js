@@ -34,7 +34,7 @@ export default {
       contentType: 'application/json',
       dataType: 'json'
     });
-  },  
+  },
   delete: (id) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/admin/accounts/${id}`,

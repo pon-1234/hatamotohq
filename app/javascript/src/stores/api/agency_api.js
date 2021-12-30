@@ -55,5 +55,5 @@ export default {
       contentType: 'application/json',
       dataType: 'json'
     });
-  },
+  }
 };
