@@ -12,7 +12,7 @@
         <div class="card-body">
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
-        <div class="card-footer border-top border-success">
+        <div class="card-footer">
           <button type="submit" class="btn btn-success fw-120">送信</button>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
@@ -63,8 +63,18 @@ export default {
     ...mapActions('survey', ['getSurveyByCode', 'postAnswer']),
 
     async onSubmit(e) {
+      console.log('=========');
       this.$refs.form.submit();
     }
+    // async submit() {
+    //   const valid = await this.$validator.validateAll();
+    //   if (!valid) return;
+    //   const payload = _.pick(this.survey, ['questions']);
+    //   payload.code = this.code;
+    //   payload.friend_id = this.friend_id;
+    //   const response = await this.postAnswer(payload);
+    //   console.log('------response------', response);
+    // }
   }
 };
 </script>

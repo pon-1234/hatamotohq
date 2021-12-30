@@ -14,6 +14,7 @@ class User::SettingController < User::ApplicationController
 
   # PATCH /user/setting
   def update
+    # TODO: can edit: line_user_id, line_name, display_name
     @line_account = LineAccount.find(setting_params[:id])
     if @line_account.update(setting_params)
       redirect_to user_setting_index_path, flash: { success: '設定の変更は完了しました。' }

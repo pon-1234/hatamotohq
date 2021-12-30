@@ -63,7 +63,6 @@ module WebhooksHelper
     end
 
     def handle_postback
-      # Handle special case
       return if handle_postback_datetime_selection
       # Get mapper key
       key = @event[:postback][:data]

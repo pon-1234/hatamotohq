@@ -5,7 +5,7 @@ json.name friend.name
 json.avatar_url friend.avatar_url
 json.created_at friend.created_at
 if friend.channel.present?
-  json.channel friend.channel, :id, :title, :assignee_id
+  json.channel friend.channel, :id, :title
 end
 json.tags do
   json.array! friend.tags do |tag|

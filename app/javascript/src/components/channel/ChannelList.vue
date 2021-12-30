@@ -3,14 +3,7 @@
     <!-- start search box -->
     <div class="app-search sticky-top fh-55 w-100">
       <div class="form-group position-relative">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="LINE登録名、表示名から検索、タグ名"
-          v-model="keyword"
-          maxlength="64"
-          @keyup="debouncedSearch"
-        />
+        <input type="text" class="form-control" placeholder="LINE登録名、表示名から検索、タグ名" v-model="keyword" maxlength="64" @keyup="debouncedSearch"/>
         <span class="mdi mdi-magnify search-icon"></span>
         <div class="mdi mdi-close clear-icon" role="button" @click="resetSearch()" v-show="keyword"></div>
       </div>
@@ -18,17 +11,13 @@
     <!-- users -->
     <div class="flex-grow-1 overflow-auto w-100">
       <channel-list-item
-        v-for="(channel, index) in channels"
-        :key="index"
+        v-for="(channel, index) in channels" :key="index"
         :channel="channel"
         :active="activeChannel && channel.id === activeChannel.id"
-        @click.native="switchChannel(channel, index)"
-      >
+        @click.native="switchChannel(channel, index)">
       </channel-list-item>
       <infinity-scroll @intersect="loadMore" v-if="shouldShowSpinner"></infinity-scroll>
-      <div v-if="channels.length === 0 && !shouldShowSpinner" class="w-100 mt-4 text-center text-sm">
-        チャンネルはありません。
-      </div>
+      <div v-if="channels.length === 0 && !shouldShowSpinner" class="w-100 mt-4 text-center text-sm">チャンネルはありません。</div>
     </div>
   </div>
 </template>
@@ -72,7 +61,7 @@ export default {
     },
 
     loadMore() {
-      const before = !_.isEmpty(this.channels) ? _.last(this.channels).last_activity_at : null;
+      const before = !_.isEmpty(this.channels) ? (_.last(this.channels)).last_activity_at : null;
       this.setChannelParam({ before: before });
       this.getChannels();
     },

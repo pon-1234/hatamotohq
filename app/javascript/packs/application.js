@@ -15,7 +15,6 @@ import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
 import 'bootstrap/js/dist/modal';
-import Multiselect from 'vue-multiselect';
 
 import {
   BootstrapVue,
@@ -63,7 +62,6 @@ Vue.use(TabsPlugin);
 Vue.use(Clipboard);
 Vue.use(VTooltip);
 Vue.use(CKEditor);
-Vue.component('multiselect', Multiselect);
 // Lazy loading image
 Vue.use(VueLazyload, {
   preLoad: 1.3,

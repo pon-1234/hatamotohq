@@ -13,10 +13,3 @@ Vue.filter('formatted_date', (value) => {
   value = value.toString();
   return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日');
 });
-
-Vue.filter('truncate', (value, length) => {
-  if (!value) return '';
-  return _.truncate(value, {
-    length: length
-  });
-});

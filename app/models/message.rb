@@ -85,12 +85,9 @@ class Message < ApplicationRecord
     end
 
     def dispatch_create_events
-      # Broadcast message via websocket to admin and the staff whom is assigned
-      admin_channel = "channel_user_#{channel.line_account.client.admin.id}"
-      Ws::ChannelWs.new(admin_channel).send_message(self)
-
-      staff_channel = "channel_user_#{channel.assignee_id}"
-      Ws::ChannelWs.new(staff_channel).send_message(self)
+      # Broadcast message via websocket
+      ws_channel = "channel_user_#{channel.line_account.owner_id}"
+      Ws::ChannelWs.new(ws_channel).send_message(self)
     end
 
     def send_reply

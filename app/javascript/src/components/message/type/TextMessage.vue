@@ -2,11 +2,6 @@
 export default {
   props: ['data'],
   render: function(h) {
-    // eslint-disable-next-line no-useless-escape
-    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gmi;
-    const text = this.data.replace(urlRegex, function(url) {
-      return '<a href="' + url + '" target="_blank">' + url + '</a>';
-    });
     return h(
       'div',
       {
@@ -23,7 +18,7 @@ export default {
               class: 'view preview-text-content text-prewrap',
               domProps: {
                 // eslint-disable-next-line no-undef
-                innerHTML: emojione.toImage(text)
+                innerHTML: emojione.toImage(this.data)
               }
             })
           ]

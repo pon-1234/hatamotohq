@@ -5,51 +5,45 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
-#  client_id              :bigint
-#  email                  :string(255)      default(""), not null
-#  role                   :string(255)
-#  encrypted_password     :string(255)      default(""), not null
-#  name                   :string(255)
-#  company_name           :string(255)
-#  phone_number           :string(255)
 #  address                :string(255)
-#  note                   :text(65535)
-#  status                 :string(255)      default("active")
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0), not null
+#  authentication_token   :string(255)
+#  company_name           :string(255)
 #  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string(255)
+#  email                  :string(255)      default(""), not null
+#  encrypted_password     :string(255)      default(""), not null
+#  last_sign_in_at        :datetime
 #  last_sign_in_ip        :string(255)
+#  name                   :string(255)
+#  note                   :text(65535)
+#  phone_number           :string(255)
+#  pubsub_token           :string(255)
+#  remember_created_at    :datetime
+#  reset_password_sent_at :datetime
+#  reset_password_token   :string(255)
+#  sign_in_count          :integer          default(0), not null
+#  status                 :string(255)      default("active")
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  authentication_token   :string(255)
-#  pubsub_token           :string(255)
 #
 # Indexes
 #
 #  index_users_on_authentication_token  (authentication_token) UNIQUE
-#  index_users_on_client_id             (client_id)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-# Foreign Keys
-#
-#  fk_rails_...  (client_id => clients.id)
-#
 class User < ApplicationRecord
-  belongs_to :client
-  has_many :assigned_channels, foreign_key: 'assignee_id', class_name: 'Channel', dependent: :nullify
-  alias_attribute :channels, :assigned_channels
+  before_create :execute_before_create
+  after_create :execute_after_create
+
   # Include default devise modules. Others available are:
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :trackable
 
-  include UserRole
   include Avatarable
+
+  has_one :line_account, class_name: 'LineAccount', foreign_key: 'owner_id', dependent: :destroy
 
   # Validations
   validates :name, length: { maximum: 255 }, allow_nil: true
@@ -58,8 +52,6 @@ class User < ApplicationRecord
   validates :company_name, length: { maximum: 255 }, allow_nil: true
   validates :note, length: { maximum: 2000 }, allow_nil: true
   validates :email, uniqueness: true
-
-  before_create :execute_before_create
 
   # Scope
   enum status: { active: 'active', blocked: 'blocked' }
@@ -84,8 +76,8 @@ class User < ApplicationRecord
     generate_pubsub_token
   end
 
-  def line_account
-    self.client.line_account
+  def execute_after_create
+    create_line_account
   end
 
   def display_name
@@ -98,6 +90,11 @@ class User < ApplicationRecord
         token = Devise.friendly_token(64)
         break token unless User.where(authentication_token: token).first
       end
+    end
+
+    def create_line_account
+      line_account = LineAccount.new(owner: self)
+      line_account.save!
     end
 
     def generate_pubsub_token

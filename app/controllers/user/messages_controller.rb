@@ -12,7 +12,8 @@ class User::MessagesController < User::ApplicationController
   def create
     authorize! :create_message, @channel
     user = Current.user
-    @message = Messages::MessageBuilder.new(user, @channel, message_params).perform
+    mb = Messages::MessageBuilder.new(user, @channel, message_params)
+    @message = mb.perform
     success = push_message_to_line
     @message.update_columns(status: success ? :sent : :error)
   rescue StandardError => e

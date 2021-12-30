@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::ScenarioMessagesController < User::ApplicationController
-  before_action :find_scenario, only: [:index, :create, :update, :import]
+  before_action :find_scenario, only: [:index, :new, :create, :update, :import]
   before_action :find_message, only: [:show, :update, :destroy, :delete_confirm]
 
   include User::ScenarioMessagesHelper
