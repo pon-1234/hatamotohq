@@ -405,7 +405,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_063149) do
   create_table 'rsv_bookmarks', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_friend_id'
     t.string 'room_id'
-    t.string 'status'
+    t.string 'status', default: 'wait'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['line_friend_id'], name: 'index_rsv_bookmarks_on_line_friend_id'

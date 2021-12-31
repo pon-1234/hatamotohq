@@ -35,8 +35,10 @@ class ActionHandlerJob < ApplicationJob
           setup_reminder(action_content)
         when 'reservation'
           send_reservation_introduction
-        when 'rsv_bookmarked'
-          handle_rsv_bookmarked_action(action_content)
+        when 'rsv_bookmark'
+          handle_rsv_bookmark_action(action_content)
+        when 'rsv_cancel'
+          handle_rsv_cancel_action
         end
       end
     end
@@ -79,7 +81,7 @@ class ActionHandlerJob < ApplicationJob
     def send_reservation_introduction
       routes = Rails.application.routes.url_helpers
       form_url = routes.reservation_inquiry_form_url(friend_line_id: @friend.line_user_id)
-      text =  "Please access this url to continue booking #{form_url}"
+      text =  "こちらのリンクにアクセスして、引き続き予約しましょう〜  #{form_url}"
       message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
       LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
     end
@@ -126,8 +128,17 @@ class ActionHandlerJob < ApplicationJob
       @friend.save!
     end
 
-    def handle_rsv_bookmarked_action(content)
+    def handle_rsv_bookmark_action(content)
       room_id = content['roomId']
-      bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend)
+      bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend, status: :wait)
+      # Send message inform user that the room is bookmarked
+      text =  '人気になりました。空室が空いたらお知らせします。'
+      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+    end
+
+    def handle_rsv_cancel_action
+      # Send messages to confirm cancellation
+      rsvs = @friend.rsv_bookmarks.wait
     end
 end

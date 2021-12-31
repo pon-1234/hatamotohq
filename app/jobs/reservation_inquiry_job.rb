@@ -109,7 +109,7 @@ class ReservationInquiryJob < ApplicationJob
     def bind_postback_data(content)
       postback_data = {
         actions: [{
-          type: 'rsv_bookmarked',
+          type: 'rsv_bookmark',
           content: {
             roomId: 1 # TODO roomId
           }

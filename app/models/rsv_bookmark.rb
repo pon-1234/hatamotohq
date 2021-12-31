@@ -7,7 +7,7 @@
 #  id             :bigint           not null, primary key
 #  line_friend_id :bigint
 #  room_id        :string(255)
-#  status         :string(255)
+#  status         :string(255)      default("wait")
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #

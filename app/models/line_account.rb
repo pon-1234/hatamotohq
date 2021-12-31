@@ -50,6 +50,14 @@ class LineAccount < ApplicationRecord
     Message.joins(:channel).references(:channel).where(channels: { line_account_id: self.id }).from_friend.limit(8)
   end
 
+  def get_messages_quota
+    return if self.channel_id.nil?
+    insight = Insight.find_or_initialize_by(line_account: self, type: :monthly, date: Time.zone.today.beginning_of_month)
+    quota = LineApi::GetQuota.new(self).perform
+    insight.quota = quota
+    insight.save
+  end
+
   private
     def generate_webhook_url
       loop do
