@@ -50,7 +50,7 @@ export default {
       type: Boolean,
       default: true
     },
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     }

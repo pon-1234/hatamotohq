@@ -94,7 +94,7 @@
                     :showTitle="false"
                     :value="item.action"
                     :name="name + '-postback-' + index"
-                    :labelRequired="false"
+                    :requiredLabel="false"
                     @input="item.action = $event"
                   ></action-postback>
                 </div>
