@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
-  before_action :authenticate_staff!, :find_channel, only: :create
+  before_action :find_channel
 
   # POST /api/v1/staff/channels/:channel_id/messages
   def create

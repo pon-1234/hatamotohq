@@ -7,6 +7,8 @@ class Api::V1::Staff::ApplicationController < ActionController::Base
   
   protect_from_forgery with: :null_session
 
+  before_action :authenticate_staff!
+
   rescue_from Common::ErrorHandle, with: :render_error_response
   rescue_from CanCan::AccessDenied, with: :render_permission_denied
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::Staff::AuthController < Api::V1::Staff::ApplicationController
-  before_action :authenticate_staff!, only: :logout
+  skip_before_action :authenticate_staff!, only: :login
 
   def login
     raise Common::EmailNotPresent.new if params[:email].blank?
