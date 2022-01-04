@@ -37,6 +37,7 @@ class Messages::MessageBuilder
         from: from,
         type: @body[:message][:type],
         content: @body[:message],
+        html_content: @body[:html_content], # use for flex message
         timestamp: Time.zone.now,
         reply_token: @body[:replyToken],
         text: text

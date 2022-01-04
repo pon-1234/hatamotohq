@@ -54,7 +54,7 @@
                     </td>
                     <td>
                       <div v-for="(item, index) in autoResponse.messages" v-bind:key="index" class="text-left">
-                        <message-content :data="item.content"></message-content>
+                        <message-content :data="item"></message-content>
                       </div>
                     </td>
 

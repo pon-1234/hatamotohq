@@ -34,7 +34,8 @@ class ReservationInquiryJob < ApplicationJob
       {
         type: 'flex',
         altText: 'this is a flex message for reservation',
-        contents: build_content
+        contents: build_content,
+        html_content: build_html_content
       }
     end
 
@@ -74,8 +75,12 @@ class ReservationInquiryJob < ApplicationJob
       }
     end
 
+    def build_html_content
+      FlexTemplate.rsv_available_template&.html_content
+    end
+
     def build_room_content(room)
-      content = (room[:vacant] ? FlexTemplate.rsv_available_content : FlexTemplate.rsv_unavailable_content)
+      content = (room[:vacant] ? FlexTemplate.rsv_available_template&.content : FlexTemplate.rsv_unavailable_template&.content)
       content.extend Hashie::Extensions::DeepLocate
       # set room name
       rname_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomName}') }).first

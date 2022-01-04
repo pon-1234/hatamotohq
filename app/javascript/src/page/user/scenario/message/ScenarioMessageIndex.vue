@@ -36,7 +36,7 @@
                       <span>{{ message.name ? message.name : "未設定" }}</span>
                     </td>
                     <td><message-type-label :data="message.content" /></td>
-                    <td><message-content :data="message.content"></message-content></td>
+                    <td><message-content :data="message"></message-content></td>
                     <td>
                       <scenario-message-status :status="message.status"></scenario-message-status>
                     </td>

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.(message, :id, :timestamp, :text, :content, :from, :status)
+json.(message, :id, :timestamp, :text, :content,:html_content, :from, :status)
 if message.sender.present?
   json.sender do
     json.id message.sender.id

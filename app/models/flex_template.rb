@@ -15,13 +15,13 @@ class FlexTemplate < ApplicationRecord
   # Scope
   enum type: { rsv_available: 'rsv_available', rsv_unavailable: 'rsv_unavailable' }
 
-  def self.rsv_available_content
+  def self.rsv_available_template
     # In future, multiple template can be applied for clients
-    @rsv_available_content ||= FlexTemplate.rsv_available.first&.content
+    @rsv_available_template ||= FlexTemplate.rsv_available.first
   end
 
-  def self.rsv_unavailable_content
+  def self.rsv_unavailable_template
     # In future, multiple template can be applied for clients
-    @rsv_unavailable_content ||= FlexTemplate.rsv_unavailable.first&.content
+    @rsv_unavailable_template ||= FlexTemplate.rsv_unavailable.first
   end
 end
