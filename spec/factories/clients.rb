@@ -23,5 +23,9 @@
 #
 FactoryBot.define do
   factory :client do
+    name {'sample name'}
+    phone_number {1234567890}
+    address {'sample address'}
+    status {'active'}    
   end
 end

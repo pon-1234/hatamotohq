@@ -44,3 +44,4 @@ yarn-debug.log*
 /config/secrets/*
 /theme/dist
 /theme/node_modules
+/coverage

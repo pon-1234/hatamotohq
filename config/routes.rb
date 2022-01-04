@@ -188,4 +188,19 @@ Rails.application.routes.draw do
       resource :profile, only: %i(edit update)
     end
   end
+
+  #API
+  namespace :api do
+    namespace :v1 do
+      namespace :staff do
+        post :login, to: 'auth#login'
+        delete :logout, to: 'auth#logout'
+        resources :channels, only: [] do
+          resources :messages, only: :create
+        end
+        get 'emojis/:pack_id', to: 'emojis#show', as: :emojis
+        resources :medias, only: [:index, :create]
+      end
+    end
+  end
 end
