@@ -12,14 +12,15 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
       assignee_id: staff.id)
   end  
   let(:endpoint_url){"/api/v1/staff/channels/%s/messages" % channel.id}
+  let(:request_params){{message: {type: 'image', originalContentUrl: 'test.png', 
+    previewImageUrl: 'test.png'}, format: :json}}
 
   include_examples 'check authorization'
 
-  context "don't have permission for sending text message" do
+  context "don't have permission for sending media message" do
     before do
       channel.update assignee_id: nil
-      post endpoint_url, headers: {"Authorization" => access_token}, 
-        params: {message: {type: 'text', text: 'sample text'}}
+      post endpoint_url, headers: {"Authorization" => access_token}, params: request_params
     end
     
     it{expect(response.status).to eq(403)}
@@ -31,8 +32,7 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     before do
       allow_any_instance_of(Api::V1::Staff::MessagesController).to(receive(:push_message_to_line)
         .and_raise(ActiveRecord::StaleObjectError))
-      post endpoint_url, headers: {"Authorization" => access_token}, 
-        params: {message: {type: 'text', text: 'sample text'}}
+      post endpoint_url, headers: {"Authorization" => access_token}, params: request_params
     end
     
     it{expect(response.status).to eq(422)}
@@ -43,8 +43,7 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     before do
       allow_any_instance_of(LineApi::PushMessage).to(receive(:perform)
         .with([an_instance_of(Hash)], an_instance_of(String)).and_return('sent'))
-      post endpoint_url, headers: {"Authorization" => access_token}, 
-        params: {message: {type: 'text', text: 'sample text'}, format: :json}
+      post endpoint_url, headers: {"Authorization" => access_token}, params: request_params
     end
     
     it{expect(response.status).to eq(200)}

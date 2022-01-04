@@ -9,6 +9,8 @@ class UserAbility
       can :manage, Channel, { line_account: user.line_account, assignee_id: user.id }
       can :read, Scenario, line_account: user.line_account
       can :read, Template, line_account: user.line_account
+      can :create, Media
+      can :read, Media, line_account: user.line_account
     elsif user.admin?
       # Friend
       can [:manage], LineFriend, line_account: user.line_account

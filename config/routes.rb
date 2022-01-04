@@ -199,6 +199,7 @@ Rails.application.routes.draw do
           resources :messages, only: :create
         end
         get 'emojis/:pack_id', to: 'emojis#show', as: :emojis
+        resources :medias, only: [:index, :create]
       end
     end
   end

@@ -3,17 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :request do  
-  let(:agency){FactoryBot.create(:agency)}
-  let(:client){FactoryBot.create(:client, agency: agency)}
-  let!(:admin){FactoryBot.create(:user, client: client, is_admin: true)}
-  let(:staff){FactoryBot.create(:user, client: client, is_admin: false)}
+  include_examples 'create common data' # follow data has been created: agency, client, admin, staff, access_token
+  
   let(:line_account){FactoryBot.create(:line_account, client: client)}
   let(:line_friend){FactoryBot.create(:line_friend, line_account: line_account)}
   let :channel do
     FactoryBot.create(:channel, line_account: line_account, line_friend: line_friend, 
       assignee_id: staff.id)
   end
-  let(:access_token){Common::JwtProcessor.encode({staff_id: staff.id})}
   let(:endpoint_url){api_v1_staff_channel_messages_path(channel_id: channel.id)}
 
   let :message_content do
