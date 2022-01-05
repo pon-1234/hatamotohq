@@ -76,7 +76,49 @@ class ReservationInquiryJob < ApplicationJob
     end
 
     def build_html_content
-      FlexTemplate.rsv_available_template&.html_content
+      rooms = [
+        {
+          id: 1,
+          name: 'KING',
+          price: 20000,
+          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
+          ota_url: 'https://www.agoda.com/apartments/',
+          area: 25,
+          capacity: 2,
+          smoking: false,
+          vacant: false
+        },
+        {
+          id: 1,
+          name: 'VIP',
+          price: 10000,
+          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
+          ota_url: 'https://www.agoda.com/apartments/',
+          area: 25,
+          capacity: 1,
+          smoking: true,
+          vacant: true
+        }
+      ]
+      contents = []
+      rooms.each do |room|
+        content = (room[:vacant] ? FlexTemplate.rsv_available_template&.html_content : FlexTemplate.rsv_unavailable_template&.html_content)
+        content = content.gsub(/{roomName}/, room[:name])
+        content = content.gsub(/{roomImageUrl}/, room[:image_url].html_safe )
+        content = content.gsub(/{roomPrice}/, room[:price].to_s + ' 円')
+        content = content.gsub(/{roomArea}/, room[:area].to_s + 'm²')
+        content = content.gsub(/{roomCapacity}/, room[:capacity].to_s + '人')
+        content = content.gsub(/{roomSmoking}/, room[:smoking] ? '喫煙' : '禁煙')
+        content = content.gsub(/{roomOTAUrl}/, room[:ota_url])
+        contents << content
+      end
+
+      html_sb = '<div class="d-flex">'
+      contents.each do |content|
+        html_sb += "<div class='reservation-item'>#{content}</div>"
+      end
+      html_sb += '</div>'
+      html_sb
     end
 
     def build_room_content(room)
@@ -99,7 +141,7 @@ class ReservationInquiryJob < ApplicationJob
       rcap_obj['text'] = room[:capacity].to_s + '人' if rcap_obj.present?
       # set room smoking allowance
       rsmoking_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomSmoking}') }).first
-      rsmoking_obj['text'] = room[:smoking] ? '喫煙' : '禁煙'
+      rsmoking_obj['text'] = room[:smoking] ? '喫煙' : '禁煙' if rsmoking_obj.present?
 
       if room[:vacant]
         # set room OTA

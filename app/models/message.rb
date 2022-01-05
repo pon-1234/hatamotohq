@@ -56,6 +56,7 @@ class Message < ApplicationRecord
       created_at: created_at.to_i,
       text: text,
       content: content,
+      html_content: html_content,
       timestamp: timestamp,
       status: status
     }

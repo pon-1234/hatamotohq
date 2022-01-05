@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: auto" class="flex-message-el">
+  <div class="overflow-auto">
     <div class="preview"><div v-html="html"></div></div>
   </div>
 </template>
@@ -24,6 +24,15 @@ export default {
 
 <style scoped lang="scss">
   ::v-deep {
+    .reservation-item {
+      -webkit-box-flex: 0;
+      flex: none;
+      display: inherit;
+      width: 80%;
+      max-width: 300px;
+      margin-left: 7px;
+    }
+
     .preview {
       display: flex;
       zoom: 0.6;
@@ -53,21 +62,6 @@ export default {
     }
     .preview > div {
       display: contents;
-    }
-  }
-  .chat.chat-reverse .preview {
-    direction: rtl;
-  }
-
-  .flex-message-el {
-    min-height: 290px;
-    display: flex;
-    flex-direction: row;
-    overflow: scroll;
-    &::before,
-    &::after {
-      content: "";
-      flex: 1;
     }
   }
 </style>
