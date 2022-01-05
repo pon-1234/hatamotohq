@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100">
         ラベル
-        <required-mark v-if="labelRequired" />
+        <required-mark v-if="requiredLabel" />
       </label>
       <div class="w-100">
         <input
@@ -13,7 +13,7 @@
           maxlength="13"
           v-model.trim="label"
           class="w-100 form-control"
-          v-validate="{ required: labelRequired && showTitle, max: 12 }"
+          v-validate="{ required: requiredLabel && showTitle, max: 12 }"
           data-vv-as="ラベル"
           @keyup="changeLabel"
         />
@@ -67,7 +67,7 @@
             :showTitle="false"
             :value="action"
             :name="name + '_postback_' + index"
-            :labelRequired="false"
+            :requiredLabel="false"
             @input="changeActionType(index, $event)"
           >
           </action-postback>
@@ -85,7 +85,7 @@
 export default {
   props: {
     value: Object,
-    labelRequired: Boolean,
+    requiredLabel: Boolean,
     showTitle: Boolean,
     name: String,
     limit: {

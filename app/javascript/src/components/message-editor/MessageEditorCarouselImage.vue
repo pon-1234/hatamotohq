@@ -97,7 +97,7 @@
                   :value="column.action"
                   @input="changeActionColumn(indexColumn, $event)"
                   :supports="['postback', 'uri', 'message', 'datetimepicker', 'survey']"
-                  :labelRequired="false"
+                  :requiredLabel="false"
                 />
               </div>
             </div>

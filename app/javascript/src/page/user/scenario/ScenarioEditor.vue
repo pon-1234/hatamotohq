@@ -161,7 +161,7 @@
         <action-editor-custom
           name="after_action"
           :value="scenarioData.after_action"
-          :labelRequired="false"
+          :requiredLabel="false"
           :showTitle="false"
           :showLaunchMessage="false"
           @input="updateAction"

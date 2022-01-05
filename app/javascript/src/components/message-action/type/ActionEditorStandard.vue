@@ -12,7 +12,7 @@
     <action-object-value
       :data="action"
       :name="'message_action_' + name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
       :showTitle="showTitle"
       @input="changeAction"
     />
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  props: ['value', 'name', 'supports', 'labelRequired', 'isNone', 'showTitle'],
+  props: ['value', 'name', 'supports', 'requiredLabel', 'isNone', 'showTitle'],
   data() {
     return {
       type: 'basic',

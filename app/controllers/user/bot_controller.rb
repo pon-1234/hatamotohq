@@ -15,6 +15,7 @@ class User::BotController < User::ApplicationController
       line_account = current_user.line_account
       line_account.bot_initialized = true
       line_account.update!(bot_params)
+      line_account.get_messages_quota
       redirect_to user_root_path, flash: { success: 'ボットの設定は完了しました。' }
     else
       redirect_to user_bot_setup_path, flash: { error: 'ボット設定は失敗しました。' }

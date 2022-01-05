@@ -16,25 +16,29 @@ class ActionHandlerJob < ApplicationJob
     handle_display_text(@action['displayText']) if @action['displayText'].present?
   end
 
-
   private
     def handle_message_action(actions)
       actions.each do |action|
+        action_content = action['content']
         case action['type']
         when 'text'
-          send_text_message(action['content'])
+          send_text_message(action_content)
         when 'email'
-          send_email(action['content'])
+          send_email(action_content)
         when 'scenario'
-          send_scenario(action['content'])
+          send_scenario(action_content)
         when 'template'
-          send_template(action['content'])
+          send_template(action_content)
         when 'tag'
-          handle_tag_action(action['content'])
+          handle_tag_action(action_content)
         when 'reminder'
-          setup_reminder(action['content'])
+          setup_reminder(action_content)
         when 'reservation'
           send_reservation_introduction
+        when 'rsv_bookmark'
+          handle_rsv_bookmark_action(action_content)
+        when 'rsv_cancel'
+          handle_rsv_cancel_action
         end
       end
     end
@@ -76,8 +80,8 @@ class ActionHandlerJob < ApplicationJob
 
     def send_reservation_introduction
       routes = Rails.application.routes.url_helpers
-      form_url = routes.reservation_inquiry_form_url(friend_id: @friend.line_user_id)
-      text =  "Please access this url to continue booking #{form_url}"
+      form_url = routes.reservation_inquiry_form_url(friend_line_id: @friend.line_user_id)
+      text =  "こちらのリンクにアクセスして、引き続き予約しましょう〜  #{form_url}"
       message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
       LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
     end
@@ -122,5 +126,19 @@ class ActionHandlerJob < ApplicationJob
       unassign_ids = action['tags'].pluck('id')
       @friend.tag_ids = @friend.tag_ids - unassign_ids
       @friend.save!
+    end
+
+    def handle_rsv_bookmark_action(content)
+      room_id = content['roomId']
+      bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend, status: :wait)
+      # Send message inform user that the room is bookmarked
+      text =  '人気になりました。空室が空いたらお知らせします。'
+      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+    end
+
+    def handle_rsv_cancel_action
+      # Send messages to confirm cancellation
+      rsvs = @friend.rsv_bookmarks.wait
     end
 end

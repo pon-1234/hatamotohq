@@ -1,7 +1,7 @@
 <template>
   <section>
     <div v-if="showTitle" style="display: contents">
-      <label class="mt-2">ラベル<required-mark v-if="labelRequired" /></label>
+      <label class="mt-2">ラベル<required-mark v-if="requiredLabel" /></label>
       <div>
         <input
           :name="name + '_label'"
@@ -11,7 +11,7 @@
           v-model.trim="actionData.label"
           class="w-100 form-control"
           @keyup="changeValue"
-          v-validate="{ required: labelRequired && showTitle, max: 12 }"
+          v-validate="{ required: requiredLabel && showTitle, max: 12 }"
           data-vv-as="ラベル"
         />
         <error-message :message="errors.first(name + '_label')"></error-message>
@@ -53,7 +53,7 @@ export default {
       type: String,
       default: 'action'
     },
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     }

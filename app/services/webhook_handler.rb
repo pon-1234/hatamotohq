@@ -2,7 +2,7 @@
 
 require 'digest'
 
-module WebhooksHelper
+class WebhookHandler
   def handle_event(event, key)
     @event = event
     @line_account = LineAccount.find_by(webhook_url: key)
@@ -58,8 +58,8 @@ module WebhooksHelper
       return if channel.locked
       # Create a message
       message = create_message(channel, line_friend, @event)
-    rescue => e
-      logger.error(e)
+      # rescue => e
+      #   p e
     end
 
     def handle_postback

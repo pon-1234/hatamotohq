@@ -74,7 +74,7 @@
                           :name="'richmenu_type_' + index"
                           :value="item.action"
                           :supports="['', 'postback', 'uri', 'message', 'datetimepicker']"
-                          :labelRequired="false"
+                          :requiredLabel="false"
                           :showTitle="false"
                           @input="item.action = $event"
                         >

@@ -32,7 +32,7 @@
         v-if="type === 'default' && isSupportPostback"
         :name="name"
         :value="data"
-        :labelRequired="labelRequired"
+        :requiredLabel="requiredLabel"
         :showTitle="showTitle"
         @input="updateAction"
       />
@@ -44,7 +44,7 @@
         :supports="supports"
         :isNone="isNone"
         :showTitle="showTitle"
-        :labelRequired="labelRequired"
+        :requiredLabel="requiredLabel"
         @input="updateAction"
       />
     </div>
@@ -60,7 +60,7 @@ export default {
     },
     name: String,
     supports: Array,
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     },

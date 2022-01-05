@@ -291,11 +291,11 @@ export const PostbackTypes = {
   text: 'テキスト送信',
   template: 'テンプレート送信',
   scenario: 'シナリオ送信',
-  // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
   tag: 'タグ操作',
   reminder: 'リマインダ操作',
-  reservation: '予約',
+  reservation: '予約紹介送信',
+  rsv_cancel: '空室待ちキャンセル',
   none: '何もしない'
 };
 

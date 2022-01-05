@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  namespace :user do
+    get 'rsv_bookmarks/index'
+  end
   direct :rails_public_blob do |blob|
     # Preserve the behaviour of `rails_blob_url` inside these environments
     # where S3 or the CDN might not be configured
@@ -32,9 +35,9 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
   # reservations
-  get 'reservations/inquiry_form/:friend_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
+  get 'reservations/inquiry_form/:friend_line_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
   get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
-  post 'reservations/inquire/:friend_id',  to: 'reservations#inquire', as: 'reservation_inquire'
+  post 'reservations/inquire/:friend_line_id',  to: 'reservations#inquire', as: 'reservation_inquire'
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
@@ -121,6 +124,7 @@ Rails.application.routes.draw do
         end
         resources :episodes
       end
+      resources :rsv_bookmarks
       resources :variables do
         member do
           post :copy
@@ -166,9 +170,9 @@ Rails.application.routes.draw do
 
     require 'sidekiq/web'
     require 'sidekiq-scheduler/web'
-    # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
-    # end
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
+    end
     mount Sidekiq::Web => '/sidekiq'
   end
 

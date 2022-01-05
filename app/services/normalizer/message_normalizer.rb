@@ -11,7 +11,6 @@ class Normalizer::MessageNormalizer
     if message_type == 'flex' && @message_content['id'].present?
       normalize_flex_message
     end
-
     Normalizer::PostbackNormalizer.new(@message_content).perform
 
     # Return normalized content

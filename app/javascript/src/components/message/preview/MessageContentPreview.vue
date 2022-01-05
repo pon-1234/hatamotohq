@@ -12,7 +12,7 @@
         <div class="chat-content w-min-0">
           <div class="chat-body">
             <div class="chat-main w-min-0">
-              <message-content :data="item.content"></message-content>
+              <message-content :data="item"></message-content>
             </div>
           </div>
         </div>

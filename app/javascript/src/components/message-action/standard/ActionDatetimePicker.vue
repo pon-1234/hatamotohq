@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100">
         ラベル
-        <required-mark v-if="labelRequired" />
+        <required-mark v-if="requiredLabel" />
       </label>
       <div class="w-100">
         <input
@@ -14,7 +14,7 @@
           v-model="data.label"
           class="w-100 form-control"
           @keyup="changeValue"
-          v-validate="{ required: labelRequired && showTitle }"
+          v-validate="{ required: requiredLabel && showTitle }"
           data-vv-as="ラベル"
         />
         <error-message :message="errors.first('datetime-label')"></error-message>
@@ -40,7 +40,7 @@ export default {
       type: Boolean,
       default: true
     },
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     }

@@ -43,7 +43,7 @@
               :name="name"
               :value="action"
               :showTitle="false"
-              :labelRequired="false"
+              :requiredLabel="false"
               @input="action = $event"
             />
           </div>
