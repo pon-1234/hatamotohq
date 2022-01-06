@@ -12,7 +12,15 @@ class ReservationsController < ApplicationController
     redirect_to reservation_inquiry_success_path
   end
 
+  # GET /reservations/inquiry_success
   def inquiry_success
+  end
+
+  # POST /reservations/callback/:uid
+  # When a bookmarked room becomes available, hotel management system
+  # will send a notification via this URL with room information.
+  def callback
+    # TODO handle this
   end
 
   private

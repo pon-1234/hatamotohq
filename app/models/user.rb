@@ -93,12 +93,12 @@ class User < ApplicationRecord
     name
   end
 
-  def available_access_token? json_token_indentifier
+  def available_access_token?(json_token_indentifier)
     self.allowlisted_jwts.exists? jti: json_token_indentifier
   end
 
   # make access_token unavailable after logout
-  def revocate_access_token json_token_indentifier
+  def revocate_access_token(json_token_indentifier)
     raise Common::AlreadyLogedOut.new unless self.allowlisted_jwts.exists?(jti: json_token_indentifier)
     self.allowlisted_jwts.find_by_jti(json_token_indentifier)&.destroy
   end

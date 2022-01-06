@@ -23,11 +23,11 @@
 #
 FactoryBot.define do
   factory :agency do
-    sequence(:email) {|n| "agencytest#{n}@example.com"}
-    password {'admin1234'}
-    password_confirmation {'admin1234'}
-    name {'sample name'}
-    address {'sample address'}
-    phone_number {1234567890}    
+    sequence(:email) { |n| "agencytest#{n}@example.com" }
+    password { 'admin1234' }
+    password_confirmation { 'admin1234' }
+    name { 'sample name' }
+    address { 'sample address' }
+    phone_number { 1234567890 }
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: allowlisted_jwts
@@ -20,8 +22,8 @@
 #
 FactoryBot.define do
   factory :allowlisted_jwt do
-    jti { "MyString" }
-    ext { "2021-12-24 10:31:36" }
+    jti { 'MyString' }
+    ext { '2021-12-24 10:31:36' }
     user { nil }
   end
 end

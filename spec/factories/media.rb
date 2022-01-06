@@ -21,7 +21,7 @@
 #
 FactoryBot.define do
   factory :media do
-    type {'image'}
+    type { 'image' }
     after(:build) do |m|
       m.file.attach(
         io: File.open(Rails.root.join('spec', 'sample_files', 'sample_image.png')),

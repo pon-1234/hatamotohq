@@ -104,7 +104,7 @@ class ReservationInquiryJob < ApplicationJob
       rooms.each do |room|
         content = (room[:vacant] ? FlexTemplate.rsv_available_template&.html_content : FlexTemplate.rsv_unavailable_template&.html_content)
         content = content.gsub(/{roomName}/, room[:name])
-        content = content.gsub(/{roomImageUrl}/, room[:image_url].html_safe )
+        content = content.gsub(/{roomImageUrl}/, room[:image_url].html_safe)
         content = content.gsub(/{roomPrice}/, room[:price].to_s + ' 円')
         content = content.gsub(/{roomArea}/, room[:area].to_s + 'm²')
         content = content.gsub(/{roomCapacity}/, room[:capacity].to_s + '人')
