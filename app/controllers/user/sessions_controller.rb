@@ -5,6 +5,6 @@ class User::SessionsController <  Devise::SessionsController
 
   protected
     def after_sign_in_path_for(user)
-      user.admin? ? user_home_path : user_channels_path
+      user.admin? ? user_root_path : user_channels_path
     end
 end
