@@ -58,7 +58,7 @@
         <div
           v-for="(media, index) in medias"
           :key="index"
-          @click="selectMedia(media)"
+          @click="selectMedia(media, $event)"
           :class="
             isManageMode
               ? 'col-xl-2 col-lg-4 col-sm-6 overflow-hidden'
@@ -269,7 +269,9 @@ export default {
     },
 
     // Select media for sending new message
-    selectMedia(media) {
+    selectMedia(media, event) {
+      event.preventDefault();
+      event.target.pause();
       this.$emit('select', media);
     },
 
