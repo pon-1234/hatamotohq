@@ -11,7 +11,7 @@ require 'rspec/rails'
 require 'simplecov'
 SimpleCov.start 'rails'
 
-Dir[Rails.root.join("spec/requests/api/v1/shared_examples/*.rb")].each {|f| require f}
+Dir[Rails.root.join('spec/requests/api/v1/shared_examples/*.rb')].each { |f| require f }
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

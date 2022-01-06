@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-group mt-2" v-if="showLaunchMessage">
-      <label>選択時のメッセージ</label>
+      <label>選択時のメッセージ<required-mark v-if="requiredLabel" /></label>
       <input
         type="text"
         placeholder="選択時のメッセージを入力してください"
@@ -31,7 +31,7 @@
         class="w-100 form-control"
         :name="name + '_display_text'"
         maxlength="301"
-        v-validate="'max:300'"
+        v-validate="'required|max:300'"
         data-vv-as="選択時のメッセージ"
         @keyup="changeDisplayText($event)"
       />

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Common
   class ErrorHandle < StandardError
     extend ActiveModel::Naming
@@ -23,7 +25,7 @@ module Common
   class AccessTokenNil < ErrorHandle
     def initialize
       super
-      @message = 'アクセストークンが違います。'  
+      @message = 'アクセストークンが違います。'
       @status_code = 403
     end
   end
@@ -44,4 +46,3 @@ module Common
     end
   end
 end
-

@@ -57,9 +57,7 @@ class WebhookHandler
       # Ignore webhook if the channel is locked
       return if channel.locked
       # Create a message
-      message = create_message(channel, line_friend, @event)
-      # rescue => e
-      #   p e
+      create_message(channel, line_friend, @event)
     end
 
     def handle_postback

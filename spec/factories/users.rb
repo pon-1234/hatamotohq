@@ -42,13 +42,13 @@
 FactoryBot.define do
   factory :user do
     transient do
-      is_admin {true}
+      is_admin { true }
     end
-    sequence(:email) {|n| "staff#{n}@example.com"}
-    password {'admin1234'}
-    password_confirmation {'admin1234'}
-    phone_number {1234567890}
-    address {'sample address'}
-    role {is_admin ? 'admin' : 'staff'}
+    sequence(:email) { |n| "staff#{n}@example.com" }
+    password { 'admin1234' }
+    password_confirmation { 'admin1234' }
+    phone_number { 1234567890 }
+    address { 'sample address' }
+    role { is_admin ? 'admin' : 'staff' }
   end
 end

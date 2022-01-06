@@ -21,7 +21,7 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
   end
 
   private
-  def media_params
-    params.permit :file, :type
-  end
+    def media_params
+      params.permit :file, :type
+    end
 end

@@ -16,28 +16,28 @@ class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
   end
 
   private
-  def find_channel
-    @channel = Channel.find params[:channel_id]
-  end
+    def find_channel
+      @channel = Channel.find params[:channel_id]
+    end
 
-  def message_params
-    params.permit(:channel_id, :timestamp,
-      message: [
-        :type,
-        :text,
-        :packageId,
-        :stickerId,
-        :stickerResourceType,
-        :originalContentUrl,
-        :previewImageUrl,
-        :duration
-      ]
-    )
-  end
+    def message_params
+      params.permit(:channel_id, :timestamp,
+        message: [
+          :type,
+          :text,
+          :packageId,
+          :stickerId,
+          :stickerResourceType,
+          :originalContentUrl,
+          :previewImageUrl,
+          :duration
+        ]
+      )
+    end
 
-  # Call line api to send the message to friend
-  def push_message_to_line
-    line_account = current_staff.line_account
-    LineApi::PushMessage.new(line_account).perform [@message.content], @channel.line_friend.line_user_id
-  end
+    # Call line api to send the message to friend
+    def push_message_to_line
+      line_account = current_staff.line_account
+      LineApi::PushMessage.new(line_account).perform [@message.content], @channel.line_friend.line_user_id
+    end
 end

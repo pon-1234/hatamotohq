@@ -17,6 +17,7 @@ class ActionHandlerJob < ApplicationJob
   end
 
   private
+    # TODO seperate handler for each postback action
     def handle_message_action(actions)
       actions.each do |action|
         action_content = action['content']
@@ -39,6 +40,8 @@ class ActionHandlerJob < ApplicationJob
           handle_rsv_bookmark_action(action_content)
         when 'rsv_cancel'
           handle_rsv_cancel_action
+        when 'rm_bookmark'
+          handle_rm_bookmark(action_content)
         end
       end
     end
@@ -81,9 +84,7 @@ class ActionHandlerJob < ApplicationJob
     def send_reservation_introduction
       routes = Rails.application.routes.url_helpers
       form_url = routes.reservation_inquiry_form_url(friend_line_id: @friend.line_user_id)
-      text =  "こちらのリンクにアクセスして、引き続き予約しましょう〜  #{form_url}"
-      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
-      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+      send_text_message("こちらのリンクにアクセスして、引き続き予約しましょう〜  #{form_url}")
     end
 
     def set_reminder(content)
@@ -132,13 +133,60 @@ class ActionHandlerJob < ApplicationJob
       room_id = content['roomId']
       bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend, status: :wait)
       # Send message inform user that the room is bookmarked
-      text =  '人気になりました。空室が空いたらお知らせします。'
-      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
-      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+      send_text_message('お気に入りました。空室が空いたらお知らせします。')
     end
 
     def handle_rsv_cancel_action
       # Send messages to confirm cancellation
-      rsvs = @friend.rsv_bookmarks.wait
+      bookmarks = @friend.rsv_bookmarks.wait
+      bookmarks.each do |bookmark|
+        msg_content = {
+          type: 'template',
+          altText: '空室待ちキャンセルの確認',
+          template: {
+            type: 'confirm',
+            text: '本当に空室待ちをキャンセルしてもよろしいですか？空室名：{roomName}',
+            actions: [
+              {
+                type: 'postback',
+                label: 'いいえ',
+                displayText: 'いいえ',
+                data: {
+                  actions: [
+                    { type: 'none' }
+                  ]
+                }
+              },
+              {
+                type: 'postback',
+                label: 'はい',
+                displayText: 'はい',
+                data: {
+                  actions: [
+                    { type: 'rm_bookmark', content: { bookmark_id: bookmark.id } }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+        msg_content = msg_content.try(:with_indifferent_access)
+        Normalizer::MessageNormalizer.new(msg_content).perform
+        message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: msg_content }.try(:with_indifferent_access)).perform
+        LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+      end
+    end
+
+    def handle_rm_bookmark(content)
+      bookmark_id = content['bookmark_id']
+      return if bookmark_id.nil?
+      if RsvBookmark.find(bookmark_id)&.cancel
+        send_text_message('空室待ちをキャンセルしました。')
+      end
+    end
+
+    def send_text_message(text)
+      message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
     end
 end
