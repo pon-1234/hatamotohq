@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     services:
       # How to use MySQL
       mysql:
@@ -43,7 +43,7 @@ jobs:
 
       - name: Verify MySQL connection from host
         run: |
-          sudo apt-get install -y mysql-client-8.0 libmysqlclient-dev
+          sudo apt-get install -y mysql-client libmysqlclient-dev
           mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "SHOW GRANTS FOR 'root'@'localhost'"
       - name: Bundle Install and Create DB
         env:
@@ -70,7 +70,7 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby 2.6
