@@ -200,11 +200,17 @@ Rails.application.routes.draw do
       namespace :staff do
         post :login, to: 'auth#login'
         delete :logout, to: 'auth#logout'
-        resources :channels, only: [] do
-          resources :messages, only: :create
+        resources :channels, only: [:index] do
+          resources :messages, only: :create do
+            post :send_template, on: :collection
+            post :send_scenario, on: :collection
+          end
+          get 'scenarios', on: :member
+          post 'update_last_seen', on: :member
         end
         get 'emojis/:pack_id', to: 'emojis#show', as: :emojis
         resources :medias, only: [:index, :create]
+        resources :templates, only: :index
       end
     end
   end

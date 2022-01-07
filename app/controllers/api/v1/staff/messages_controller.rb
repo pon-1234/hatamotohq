@@ -15,6 +15,21 @@ class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
     render_could_not_create_error e.message
   end
 
+  # POST /api/v1/staff/channels/:channel_id/messages/send_template
+  def send_template
+    authorize! :create_message, @channel
+    template = Template.find template_params[:template_id]
+    SendTemplateJob.perform_later @channel.id, template.id
+    render_success
+  end
+
+  def send_scenario
+    authorize! :create_message, @channel
+    scenario = Scenario.find scenario_params[:scenario_id]
+    ScenarioSchedulerJob.perform_later @channel.id, scenario.id
+    render_success
+  end
+
   private
     def find_channel
       @channel = Channel.find params[:channel_id]
@@ -33,6 +48,14 @@ class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
           :duration
         ]
       )
+    end
+
+    def template_params
+      params.permit :channel_id, :template_id
+    end
+
+    def scenario_params
+      params.permit :channel_id, :scenario_id
     end
 
     # Call line api to send the message to friend
