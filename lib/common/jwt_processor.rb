@@ -15,6 +15,7 @@ class Common::JwtProcessor
       decoded = JWT.decode(token, HMAC_SECRET, true, { verify_jti: true, algorithm: 'HS256' }).first
       HashWithIndifferentAccess.new decoded
     rescue JWT::ExpiredSignature, JWT::InvalidJtiError, JWT::VerificationError, JWT::DecodeError => e
+      p e.message
       raise Common::AccessTokenInvalid.new
     end
 

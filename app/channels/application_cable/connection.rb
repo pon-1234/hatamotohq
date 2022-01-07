@@ -4,7 +4,6 @@ class ApplicationCable::Connection < ActionCable::Connection::Base
   identified_by :current_user
 
   def connect
-    params = request.query_parameters()
     if verified_user = User.find_by(id: cookies.signed[:user_id])
       self.current_user = verified_user
       logger.add_tags 'ActionCable', current_user.email

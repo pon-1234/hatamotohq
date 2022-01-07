@@ -132,8 +132,9 @@ class ActionHandlerJob < ApplicationJob
     def handle_rsv_bookmark_action(content)
       room_id = content['roomId']
       bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend, status: :wait)
+
       # Send message inform user that the room is bookmarked
-      send_text_message('お気に入りました。空室が空いたらお知らせします。')
+      send_text_message('お気に入りました。空室が空いたらお知らせします。') if bookmark.present?
     end
 
     def handle_rsv_cancel_action

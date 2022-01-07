@@ -5,9 +5,9 @@ class ReservationInquiryJob < ApplicationJob
 
   def perform(params)
     friend_line_id = params[:friend_line_id]
-    name = params[:name]
-    phone_number = params[:phone_number]
-    date = params[:date]
+    # name = params[:name]
+    # phone_number = params[:phone_number]
+    # date = params[:date]
     return if friend_line_id.blank?
     find_channel(friend_line_id)
     # TODO call api to hotel insight pms
