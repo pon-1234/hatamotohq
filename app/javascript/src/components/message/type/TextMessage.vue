@@ -3,8 +3,7 @@ export default {
   props: ['data'],
   render: function(h) {
     // eslint-disable-next-line no-useless-escape
-    // make urls in message as links when display out
-    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gmi;
+    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gim;
     const text = this.data.replace(urlRegex, function(url, protocol) {
       let actualUrl = url;
       if (protocol === undefined) actualUrl = '//' + actualUrl;
