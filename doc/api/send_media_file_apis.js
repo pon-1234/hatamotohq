@@ -89,7 +89,7 @@
  * @apiHeaderExample {Header} Header-Example
  *     "Authorization": "Bearer 5f048fe321sadbggdj234642412daszvbhhZzxz"
  * @apiParam {File} file file
- * @apiParam {String} type One of follow types: image, audio, video
+ * @apiParam {String} type One of follow types: image, audio, video, richmenu, imagemap
  * @apiParam {Number} [duration] Duration of audio (audio file only)
  * 
  * @apiParamExample {json} param example:
@@ -139,7 +139,7 @@
  *     HTTP/1.1 400 BadRequest
  *     {
  *       "status": "error",
- *       "message": "画像の高さは1200以下にしてください。"
+ *       "message": "ファイル画像の幅はちょうど1040にしてください。"
  *     }
  * 
  * @apiError [NotAuthorized] You don't have permission to do this action (403).
@@ -163,7 +163,7 @@
  *     "Authorization": "Bearer 5f048fe321sadbggdj234642412daszvbhhZzxz"
  * @apiParam {Number} channel_id Id of channel
  * @apiParam {Object} message Messsage data
- * @apiParam {String} message[type] of media file (one of follow types: image, audio, video)
+ * @apiParam {String} message[type] of media file (one of follow types: video, richmenu, imagemap)
  * @apiParam {String} message[originalContentUrl] url of recent uploaded media file
  * @apiParam {String} [message[previewImageUrl]] preview image url (image file only)
  * @apiParam {String} [message[duration]] duration of audio (audio file only)
@@ -211,13 +211,12 @@
  *       "status": "error",
  *       "message": "Already logedout before"
  *     }
- * @apiError [BadRequest] Bad request.
+ * @apiError [UnprocessableEntity] Unprocessable Entity.
  *
- * @apiErrorExample BadRequest Error-Response:
- *     HTTP/1.1 400 BadRequest
+ * @apiErrorExample UnprocessableEntity Error-Response:
+ *     HTTP/1.1 422 UnprocessableEntity
  *     {
- *       "status": "error",
- *       "message": "Bad request"
+ *       "error": "バリデーションに失敗しました: Typeを入力してください"
  *     }
  * 
  * @apiError [NotAuthorized] You don't have permission to do this action (403).

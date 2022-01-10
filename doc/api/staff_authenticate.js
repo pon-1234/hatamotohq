@@ -6,6 +6,12 @@
  *
  * @apiParam {String} email Staff email.
  * @apiParam {String} password Staff password.
+ * 
+ * @apiParamExample {json} param example:
+ * {
+ *   "email": "staff1@example.com", 
+ *   "password": "Staff12345@"
+ * }
  *
  * @apiSuccess {String} status api response status.
  * @apiSuccess {Object} data return data.

@@ -28,7 +28,14 @@ define({ "api": [
             "description": "<p>Staff password.</p>"
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "param example:",
+          "content": "{\n  \"email\": \"staff1@example.com\", \n  \"password\": \"Staff12345@\"\n}",
+          "type": "json"
+        }
+      ]
     },
     "success": {
       "fields": {
@@ -955,7 +962,7 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "message[stickerResourceType]",
             "defaultValue": "STATIC",
             "description": "<p>emojis resource type.</p>"
@@ -997,8 +1004,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": true,
-            "field": "BadRequest",
-            "description": "<p>Bad request.</p>"
+            "field": "UnprocessableEntity",
+            "description": "<p>Unprocessable Entity.</p>"
           },
           {
             "group": "Error 4xx",
@@ -1020,8 +1027,8 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "BadRequest Error-Response:",
-          "content": "HTTP/1.1 400 BadRequest\n{\n  \"status\": \"error\",\n  \"message\": \"Bad request\"\n}",
+          "title": "UnprocessableEntity Error-Response:",
+          "content": "HTTP/1.1 422 UnprocessableEntity\n{\n  \"error\": \"バリデーションに失敗しました: Typeを入力してください\"\n}",
           "type": "json"
         },
         {
@@ -1088,7 +1095,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "message[type]",
-            "description": "<p>of media file (one of follow types: image, audio, video)</p>"
+            "description": "<p>of media file (one of follow types: video, richmenu, imagemap)</p>"
           },
           {
             "group": "Parameter",
@@ -1148,8 +1155,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": true,
-            "field": "BadRequest",
-            "description": "<p>Bad request.</p>"
+            "field": "UnprocessableEntity",
+            "description": "<p>Unprocessable Entity.</p>"
           },
           {
             "group": "Error 4xx",
@@ -1171,8 +1178,8 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "BadRequest Error-Response:",
-          "content": "HTTP/1.1 400 BadRequest\n{\n  \"status\": \"error\",\n  \"message\": \"Bad request\"\n}",
+          "title": "UnprocessableEntity Error-Response:",
+          "content": "HTTP/1.1 422 UnprocessableEntity\n{\n  \"error\": \"バリデーションに失敗しました: Typeを入力してください\"\n}",
           "type": "json"
         },
         {
@@ -1398,8 +1405,8 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": true,
-            "field": "BadRequest",
-            "description": "<p>Bad request.</p>"
+            "field": "UnprocessableEntity",
+            "description": "<p>Unprocessable Entity.</p>"
           },
           {
             "group": "Error 4xx",
@@ -1421,8 +1428,8 @@ define({ "api": [
           "type": "json"
         },
         {
-          "title": "BadRequest Error-Response:",
-          "content": "HTTP/1.1 400 BadRequest\n{\n  \"status\": \"error\",\n  \"message\": \"Bad request\"\n}",
+          "title": "UnprocessableEntity Error-Response:",
+          "content": "HTTP/1.1 422 UnprocessableEntity\n{\n  \"error\": \"バリデーションに失敗しました: Typeを入力してください\"\n}",
           "type": "json"
         },
         {
@@ -1587,7 +1594,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "type",
-            "description": "<p>One of follow types: image, audio, video</p>"
+            "description": "<p>One of follow types: image, audio, video, richmenu, imagemap</p>"
           },
           {
             "group": "Parameter",
@@ -1657,7 +1664,7 @@ define({ "api": [
         },
         {
           "title": "BadRequest Error-Response:",
-          "content": "HTTP/1.1 400 BadRequest\n{\n  \"status\": \"error\",\n  \"message\": \"画像の高さは1200以下にしてください。\"\n}",
+          "content": "HTTP/1.1 400 BadRequest\n{\n  \"status\": \"error\",\n  \"message\": \"ファイル画像の幅はちょうど1040にしてください。\"\n}",
           "type": "json"
         },
         {

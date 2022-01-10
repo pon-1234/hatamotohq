@@ -55,7 +55,7 @@
  * @apiParam {String} message[type]=sticker type of message.
  * @apiParam {Number} message[packageId] id of emojis icons package (from list: 11537, 11538, 11539).
  * @apiParam {Number} message[stickerId] id of emoji icon
- * @apiParam {String} message[stickerResourceType]=STATIC emojis resource type.
+ * @apiParam {String} [message[stickerResourceType]=STATIC] emojis resource type.
  * 
  * @apiParamExample {json} param example:
  * {
@@ -97,13 +97,12 @@
  *       "message": "Already logedout before"
  *     }
  * 
- * @apiError [BadRequest] Bad request.
+ * @apiError [UnprocessableEntity] Unprocessable Entity.
  *
- * @apiErrorExample BadRequest Error-Response:
- *     HTTP/1.1 400 BadRequest
+ * @apiErrorExample UnprocessableEntity Error-Response:
+ *     HTTP/1.1 422 UnprocessableEntity
  *     {
- *       "status": "error",
- *       "message": "Bad request"
+ *       "error": "バリデーションに失敗しました: Typeを入力してください"
  *     }
  * 
  * @apiError [NotAuthorized] You don't have permission to do this action (403).
