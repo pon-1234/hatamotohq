@@ -43,7 +43,7 @@ export default {
     return {
       animation: false,
       currentScrollTop: 0,
-      isLoadingPrevious: false,
+      isLoadingPrevious: true,
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
       latestMessageId: null
@@ -120,6 +120,7 @@ export default {
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
+      this.isLoadingPrevious = false;
     },
 
     setScrollParams() {
