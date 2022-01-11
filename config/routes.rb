@@ -213,7 +213,7 @@ Rails.application.routes.draw do
         post :login, to: 'auth#login'
         delete :logout, to: 'auth#logout'
         resources :channels, only: [:index] do
-          resources :messages, only: :create do
+          resources :messages, only: [:index, :create] do
             post :send_template, on: :collection
             post :send_scenario, on: :collection
           end

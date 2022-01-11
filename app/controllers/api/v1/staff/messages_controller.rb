@@ -3,6 +3,11 @@
 class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
   before_action :find_channel
 
+  # GET /api/v1/staff/channels/:channel_id/messages
+  def index
+    @messages = message_finder.perform
+  end
+
   # POST /api/v1/staff/channels/:channel_id/messages
   def create
     authorize! :create_message, @channel
@@ -33,6 +38,10 @@ class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
   private
     def find_channel
       @channel = Channel.find params[:channel_id]
+    end
+
+    def message_finder
+      @message_finder ||= MessageFinder.new(@channel, params)
     end
 
     def message_params
