@@ -148,7 +148,7 @@ export default {
 
     async handleScroll(e) {
       this.setScrollParams();
-      if (e.target.scrollTop < 100 && !this.isLoadingPrevious && !this.allMessagesLoaded) {
+      if (e.target.scrollTop < 100 && !this.isLoadingPrevious && !this.allMessagesLoaded && !_.isEmpty(this.messages)) {
         this.isLoadingPrevious = true;
         await this.loadMoreMessages();
         const heightDifference = this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
