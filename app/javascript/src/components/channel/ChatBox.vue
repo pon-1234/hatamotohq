@@ -28,10 +28,7 @@
         </span>
       </ul>
 
-      <reply-box
-        @sendTextMessage="sendTextMessage"
-        @resetModalSticker='resetModalSticker'
-      ></reply-box>
+      <reply-box @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
     </div>
     <loading-indicator></loading-indicator>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
@@ -46,7 +43,7 @@ export default {
     return {
       animation: false,
       currentScrollTop: 0,
-      isLoadingPrevious: true,
+      isLoadingPrevious: false,
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
       latestMessageId: null
@@ -315,13 +312,13 @@ export default {
     }
   }
 
-  @media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) {
-  @media (max-width: 767px) {
-    .chat-panel {
-      .card-body {
-        padding-bottom: 3.5rem;
+  @media screen and (min-color-index: 0) and(-webkit-min-device-pixel-ratio:0) {
+    @media (max-width: 767px) {
+      .chat-panel {
+        .card-body {
+          padding-bottom: 3.5rem;
+        }
       }
     }
   }
-}
 </style>
