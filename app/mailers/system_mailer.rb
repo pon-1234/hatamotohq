@@ -8,7 +8,7 @@ class SystemMailer < ApplicationMailer
     receivers = payload['emails']
     @body = payload['text']
     bind_variables
-    mail(to: receivers, subject: 'HOTEL INSIGHT CRMシステム')
+    mail(to: receivers, subject: 'LINE CRMシステム')
   end
 
   def notify_assignee(admin, assignee, channel)
