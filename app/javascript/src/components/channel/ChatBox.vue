@@ -123,7 +123,6 @@ export default {
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
-      this.isLoadingPrevious = false;
     },
 
     setScrollParams() {
