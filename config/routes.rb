@@ -51,6 +51,10 @@ Rails.application.routes.draw do
       sessions: 'user/sessions',
       passwords: 'user/passwords'
     }
+    devise_scope :admin do
+      get 'user/password/sent', to: 'user/passwords#sent', as: :new_user_password_sent
+      get 'user/password/expired', to: 'user/passwords#expired', as: :new_user_password_expired
+    end
     namespace :user, path: Subdomain::UserConstraint.path do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
@@ -155,6 +159,10 @@ Rails.application.routes.draw do
       sessions: 'admin/sessions',
       passwords: 'admin/passwords'
     }
+    devise_scope :admin do
+      get 'admin/password/sent', to: 'admin/passwords#sent', as: :new_admin_password_sent
+      get 'admin/password/expired', to: 'admin/passwords#expired', as: :new_admin_password_expired
+    end
     namespace :admin, path: Subdomain::AdminConstraint.path do
       root to: 'accounts#index'
       resources :announcements do
@@ -183,6 +191,10 @@ Rails.application.routes.draw do
       sessions: 'agency/sessions',
       passwords: 'agency/passwords'
     }
+    devise_scope :agency do
+      get 'agency/password/sent', to: 'agency/passwords#sent', as: :new_agency_password_sent
+      get 'agency/password/expired', to: 'agency/passwords#expired', as: :new_agency_password_expired
+    end
     namespace :agency, path: Subdomain::AgencyConstraint.path do
       root to: 'clients#index'
       resources :clients do

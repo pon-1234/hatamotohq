@@ -37,7 +37,7 @@
                     <error-message :message="errors.first('admin[email]')"></error-message>
                   </div>
                   <div class="form-group">
-                    <!-- <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a> -->
+                    <a :href="`${adminRootUrl}/admin/password/new`" class="text-muted float-right"><small>パスワードを忘れましたか?</small></a>
                     <label for="password">パスワード</label>
                     <!-- START: Input password component -->
                     <input-password name="admin[password]" :password.sync="adminData.password"></input-password>

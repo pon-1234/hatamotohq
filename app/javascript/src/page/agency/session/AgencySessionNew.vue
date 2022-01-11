@@ -30,24 +30,25 @@
                       v-validate="'required|email'"
                       data-vv-as="メール"
                       class="form-control"
-                      name="admin[email]"
+                      name="agency[email]"
                       placeholder="メールを入力してください"
                       v-model="agencyData.email"
                     />
-                    <error-message :message="errors.first('admin[email]')"></error-message>
+                    <error-message :message="errors.first('agency[email]')"></error-message>
                   </div>
                   <div class="form-group">
                     <!-- <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a> -->
+                    <a :href="`${rootPath}/agency/password/new`" class="text-muted float-right"><small>パスワードを忘れましたか?</small></a>
                     <label for="password">パスワード</label>
                     <!-- START: Input password component -->
-                    <input-password name="admin[password]" :password.sync="agencyData.password"></input-password>
+                    <input-password name="agency[password]" :password.sync="agencyData.password"></input-password>
                     <!-- END: Input password component -->
                   </div>
                   <div class="form-group mb-3">
                     <div class="custom-control custom-checkbox">
                       <input
                         type="checkbox"
-                        name="admin[remember_me]"
+                        name="agency[remember_me]"
                         class="custom-control-input"
                         id="checkbox-signin"
                         v-model="agencyData.remember_me"
