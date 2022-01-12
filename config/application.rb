@@ -33,6 +33,8 @@ module Api
           methods: [:get, :post, :options, :delete, :put, :patch]
       end
     end
+    # Allow all of client types connect to ActionCable
+    config.action_cable.disable_request_forgery_protection = true
     ActiveStorage::Engine.config
       .active_storage
       .content_types_to_serve_as_binary
