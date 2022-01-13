@@ -5,12 +5,11 @@ class ReservationInquiryJob < ApplicationJob
 
   def perform(params)
     friend_line_id = params[:friend_line_id]
-    # name = params[:name]
-    # phone_number = params[:phone_number]
+    # room_capacity = params[:room_capacity]
     # date = params[:date]
     return if friend_line_id.blank?
     find_channel(friend_line_id)
-    # TODO call api to hotel insight pms
+    @rooms = parse_rooms_data(Pms::GetRoom.new.perform({}))
     # Send carousel message to show hotels info
     send_message
   end
@@ -19,6 +18,14 @@ class ReservationInquiryJob < ApplicationJob
     def find_channel(line_id)
       friend = LineFriend.find_by(line_user_id: line_id)
       @channel = friend.channel
+    end
+
+    def parse_rooms_data(rooms_data)
+      rooms = []
+      rooms_data.each do |room_data|
+        rooms << Room.new(room_data)
+      end
+      rooms
     end
 
     def send_message
@@ -33,41 +40,16 @@ class ReservationInquiryJob < ApplicationJob
     def build_message
       {
         type: 'flex',
-        altText: 'this is a flex message for reservation',
+        altText: '予約用のメッセージ',
         contents: build_content,
         html_content: build_html_content
       }
     end
 
     def build_content
-      rooms = [
-        {
-          id: 1,
-          name: 'KING',
-          price: 20000,
-          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
-          ota_url: 'https://www.agoda.com/apartments/',
-          area: 25,
-          capacity: 2,
-          smoking: false,
-          vacant: false
-        },
-        {
-          id: 1,
-          name: 'VIP',
-          price: 10000,
-          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
-          ota_url: 'https://www.agoda.com/apartments/',
-          area: 25,
-          capacity: 1,
-          smoking: true,
-          vacant: true
-        }
-      ]
-
       contents = []
-      rooms.each do |room|
-        contents << build_room_content(room)
+      @rooms.each do |room|
+        contents << room.normalized_json
       end
       {
         type: 'carousel',
@@ -76,41 +58,9 @@ class ReservationInquiryJob < ApplicationJob
     end
 
     def build_html_content
-      rooms = [
-        {
-          id: 1,
-          name: 'KING',
-          price: 20000,
-          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
-          ota_url: 'https://www.agoda.com/apartments/',
-          area: 25,
-          capacity: 2,
-          smoking: false,
-          vacant: false
-        },
-        {
-          id: 1,
-          name: 'VIP',
-          price: 10000,
-          image_url: 'https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip3.jpg',
-          ota_url: 'https://www.agoda.com/apartments/',
-          area: 25,
-          capacity: 1,
-          smoking: true,
-          vacant: true
-        }
-      ]
       contents = []
-      rooms.each do |room|
-        content = (room[:vacant] ? FlexTemplate.rsv_available_template&.html_content : FlexTemplate.rsv_unavailable_template&.html_content)
-        content = content.gsub(/{roomName}/, room[:name])
-        content = content.gsub(/{roomImageUrl}/, room[:image_url].html_safe)
-        content = content.gsub(/{roomPrice}/, room[:price].to_s + ' 円')
-        content = content.gsub(/{roomArea}/, room[:area].to_s + 'm²')
-        content = content.gsub(/{roomCapacity}/, room[:capacity].to_s + '人')
-        content = content.gsub(/{roomSmoking}/, room[:smoking] ? '喫煙' : '禁煙')
-        content = content.gsub(/{roomOTAUrl}/, room[:ota_url])
-        contents << content
+      @rooms.each do |room|
+        contents << room.to_html
       end
 
       html_sb = '<div class="d-flex">'
@@ -119,51 +69,5 @@ class ReservationInquiryJob < ApplicationJob
       end
       html_sb += '</div>'
       html_sb
-    end
-
-    def build_room_content(room)
-      content = (room[:vacant] ? FlexTemplate.rsv_available_template&.content : FlexTemplate.rsv_unavailable_template&.content)
-      content.extend Hashie::Extensions::DeepLocate
-      # set room name
-      rname_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomName}') }).first
-      rname_obj['text'] = room[:name].to_s if rname_obj.present?
-      # set room image
-      rimage_obj = (content.deep_locate -> (key, value, object) { key.eql?('url') && value.eql?('{roomImageUrl}') }).first
-      rimage_obj['url'] = room[:image_url].to_s if rimage_obj.present?
-      # set room price
-      rprice_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomPrice}') }).first
-      rprice_obj['text'] = room[:price].to_s + ' 円' if rprice_obj.present?
-      # set room area
-      rarea_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomArea}') }).first
-      rarea_obj['text'] = room[:area].to_s + 'm²' if rarea_obj.present?
-      # set room capacity
-      rcap_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomCapacity}') }).first
-      rcap_obj['text'] = room[:capacity].to_s + '人' if rcap_obj.present?
-      # set room smoking allowance
-      rsmoking_obj = (content.deep_locate -> (key, value, object) { key.eql?('text') && value.eql?('{roomSmoking}') }).first
-      rsmoking_obj['text'] = room[:smoking] ? '喫煙' : '禁煙' if rsmoking_obj.present?
-
-      if room[:vacant]
-        # set room OTA
-        rota_obj = (content.deep_locate -> (key, value, object) { key.eql?('uri') && value.eql?('{roomOTAUrl}') }).first
-        rota_obj['uri'] = room[:ota_url].to_s if rota_obj.present?
-      else
-        content = bind_postback_data(content)
-      end
-      content
-    end
-
-    def bind_postback_data(content)
-      postback_data = {
-        actions: [{
-          type: 'rsv_bookmark',
-          content: {
-            roomId: 1 # TODO roomId
-          }
-        }]
-      }
-      postback_action = (content.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('postback') }).first
-      postback_action['data'] = postback_data if postback_action.present?
-      content
     end
 end

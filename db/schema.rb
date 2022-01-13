@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_06_033952) do
+ActiveRecord::Schema.define(version: 2022_01_12_041357) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -387,6 +387,18 @@ ActiveRecord::Schema.define(version: 2022_01_06_033952) do
     t.index ['reminder_id'], name: 'index_remindings_on_reminder_id'
   end
 
+  create_table 'reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_friend_id'
+    t.string 'room_id'
+    t.string 'callback_url'
+    t.string 'status', default: 'wait'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'line_account_id'
+    t.index ['line_account_id'], name: 'index_reservations_on_line_account_id'
+    t.index ['line_friend_id'], name: 'index_reservations_on_line_friend_id'
+  end
+
   create_table 'rich_menus', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
@@ -410,16 +422,6 @@ ActiveRecord::Schema.define(version: 2022_01_06_033952) do
     t.index ['folder_id'], name: 'index_rich_menus_on_folder_id'
     t.index ['line_account_id'], name: 'index_rich_menus_on_line_account_id'
     t.index ['media_id'], name: 'index_rich_menus_on_media_id'
-  end
-
-  create_table 'rsv_bookmarks', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_friend_id'
-    t.string 'room_id'
-    t.string 'callback_url'
-    t.string 'status', default: 'wait'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_friend_id'], name: 'index_rsv_bookmarks_on_line_friend_id'
   end
 
   create_table 'scenario_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -642,10 +644,11 @@ ActiveRecord::Schema.define(version: 2022_01_06_033952) do
   add_foreign_key 'reminders', 'line_accounts'
   add_foreign_key 'remindings', 'channels'
   add_foreign_key 'remindings', 'reminders'
+  add_foreign_key 'reservations', 'line_accounts'
+  add_foreign_key 'reservations', 'line_friends'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
   add_foreign_key 'rich_menus', 'media', column: 'media_id'
-  add_foreign_key 'rsv_bookmarks', 'line_friends'
   add_foreign_key 'scenario_events', 'channels'
   add_foreign_key 'scenario_events', 'line_accounts'
   add_foreign_key 'scenario_events', 'scenario_messages'

@@ -12,56 +12,59 @@
       <div class="card">
         <div class="card-header border-bottom border-success"><h4>予約フォーム</h4></div>
         <div class="card-body">
-          <!-- 氏名 -->
+          <!-- 人数 -->
           <div class="form-group row">
-            <label class="col-lg-4">氏名<required-mark></required-mark></label>
+            <label class="col-lg-4">人数<required-mark></required-mark></label>
             <div class="col-lg-8">
-              <ValidationProvider name="氏名" :rules="'required|max:255'" v-slot="{ errors }">
+              <ValidationProvider name="人数" rules="required|numeric|min_value:1|max_value:1000" v-slot="{ errors }">
                 <input
-                  type="text"
-                  name="inquiry[name]"
-                  class="form-control mt-2"
-                  placeholder="氏名を入力してください"
-                  v-model.trim="inquiryFormData.name"
-                />
-                <error-message :message="errors[0]"></error-message>
-              </ValidationProvider>
-            </div>
-          </div>
-
-          <!-- 電話番号 -->
-          <div class="form-group row">
-            <label class="col-lg-4">電話番号<required-mark></required-mark></label>
-            <div class="col-lg-8">
-              <ValidationProvider name="電話番号" rules="required|numeric|min:10|max:11" v-slot="{ errors }">
-                <input
-                  type="text"
+                  type="number"
                   class="form-control"
-                  name="inquiry[phone_number]"
-                  placeholder="携帯電話を入力してください"
-                  maxlength="12"
-                  v-model.trim="inquiryFormData.phone_number"
+                  name="inquiry[people_count]"
+                  placeholder="人数を入力してください"
+                  v-model.trim="inquiryFormData.people_count"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
           </div>
 
-          <!-- 予約日時 -->
+          <!-- チェックイン日付 -->
           <div class="form-group row">
-            <label class="col-lg-4">予約日時<required-mark /></label>
+            <label class="col-lg-4">チェックイン日付<required-mark /></label>
             <div class="col-lg-8">
-              <ValidationProvider name="予約日時" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="チェックイン日付" rules="required" v-slot="{ errors }">
                 <datetime
                   input-class="form-control"
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
-                  placeholder="予約日時を選択してください"
+                  placeholder="チェックイン日付を選択してください"
                   :min-datetime="currentDate"
                   name="inquiry[date]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
-                  v-model="inquiryFormData.date"
+                  v-model="inquiryFormData.start_date"
+                ></datetime>
+                <error-message :message="errors[0]"></error-message>
+              </ValidationProvider>
+            </div>
+          </div>
+
+          <!-- 終了日付 -->
+          <div class="form-group row" hidden>
+            <label class="col-lg-4">終了日付<required-mark /></label>
+            <div class="col-lg-8">
+              <ValidationProvider name="終了日付" rules="required" v-slot="{ errors }">
+                <datetime
+                  input-class="form-control"
+                  type="date"
+                  :phrases="{ ok: '確定', cancel: '閉じる' }"
+                  placeholder="終了日付を選択してください"
+                  :min-datetime="currentDate"
+                  name="inquiry[date]"
+                  value-zone="Asia/Tokyo"
+                  zone="Asia/Tokyo"
+                  v-model="inquiryFormData.end_date"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -100,9 +103,9 @@ export default {
       loading: true,
       inquiryFormData: {
         friend_line_id: null,
-        name: null,
-        phone_number: null,
-        date: null
+        people_count: null,
+        start_date: null,
+        end_date: null
       }
     };
   },
@@ -112,7 +115,8 @@ export default {
   },
 
   mounted() {
-    this.inquiryFormData.date = this.currentDate;
+    this.inquiryFormData.start_date = this.currentDate;
+    this.inquiryFormData.end_date = this.currentDate;
   },
 
   computed: {

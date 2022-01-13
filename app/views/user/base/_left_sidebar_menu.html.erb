@@ -104,8 +104,8 @@
 
         <li class="side-nav-title side-nav-item">予約管理</li>
          <!-- 空室待ち履歴 -->
-        <li class="side-nav-item <%= controller?("user/rsv_bookmarks") ? 'mm-active' : '' %>">
-          <%= link_to user_rsv_bookmarks_path, class: "side-nav-link #{controller?("user/rsv_bookmarks" ) ? 'active' : '' }" do %>
+        <li class="side-nav-item <%= controller?("user/reservations") ? 'mm-active' : '' %>">
+          <%= link_to user_reservations_path, class: "side-nav-link #{controller?("user/reservations" ) ? 'active' : '' }" do %>
             <i class="uil-history"></i>
             <span>空室待ち履歴</span>
           <% end %>

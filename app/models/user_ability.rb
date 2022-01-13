@@ -63,6 +63,9 @@ class UserAbility
       can [:create], Reminder
       can [:manage], Episode, reminder: { line_account: user.line_account }
       can [:create], Episode
+
+      # Reservations
+      can :manage, Reservation, line_account: user.line_account
     end
   end
 end

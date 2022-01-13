@@ -40,8 +40,8 @@ class ActionHandlerJob < ApplicationJob
           handle_rsv_bookmark_action(action_content)
         when 'rsv_cancel'
           handle_rsv_cancel_action
-        when 'rm_bookmark'
-          handle_rm_bookmark(action_content)
+        when 'rsv_rm_bookmark'
+          handle_rsv_rm_bookmark(action_content)
         end
       end
     end
@@ -131,7 +131,7 @@ class ActionHandlerJob < ApplicationJob
 
     def handle_rsv_bookmark_action(content)
       room_id = content['roomId']
-      bookmark = RsvBookmark.find_or_create_by(room_id: room_id, line_friend: @friend, status: :wait)
+      bookmark = Reservation.find_or_create_by(line_account: @friend.line_account, room_id: room_id, line_friend: @friend, status: :wait)
 
       # Send message inform user that the room is bookmarked
       send_text_message('お気に入りました。空室が空いたらお知らせします。') if bookmark.present?
@@ -164,7 +164,7 @@ class ActionHandlerJob < ApplicationJob
                 displayText: 'はい',
                 data: {
                   actions: [
-                    { type: 'rm_bookmark', content: { bookmark_id: bookmark.id } }
+                    { type: 'rsv_rm_bookmark', content: { bookmark_id: bookmark.id } }
                   ]
                 }
               }
@@ -178,10 +178,10 @@ class ActionHandlerJob < ApplicationJob
       end
     end
 
-    def handle_rm_bookmark(content)
+    def handle_rsv_rm_bookmark(content)
       bookmark_id = content['bookmark_id']
       return if bookmark_id.nil?
-      if RsvBookmark.find(bookmark_id)&.cancel
+      if Reservation.find(bookmark_id)&.cancel
         send_text_message('空室待ちをキャンセルしました。')
       end
     end
