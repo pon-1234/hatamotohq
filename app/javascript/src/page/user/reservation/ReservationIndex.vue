@@ -64,7 +64,6 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
-import Util from '@/core/util';
 
 export default {
   props: {
