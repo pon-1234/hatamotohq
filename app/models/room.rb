@@ -32,7 +32,7 @@ class Room
     content = content.gsub(/{roomArea}/, self.area)
     content = content.gsub(/{roomCapacity}/, "#{self.capacity}人")
     content = content.gsub(/{roomSmoking}/, self.non_smoking ? '禁煙' : '喫煙')
-    content = content.gsub(/{roomOTAUrl}/, self.ota_url)
+    content.gsub(/{roomOTAUrl}/, self.ota_url)
   end
 
   def normalized_json
