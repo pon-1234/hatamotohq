@@ -9,10 +9,9 @@ class Api::V1::UploadMediaValidator
   validate :file_attribute_must_be_a_file
 
   private
-
-  def file_attribute_must_be_a_file
-    unless file.is_a?(ActionDispatch::Http::UploadedFile)
-      errors.add :file, :content_type_invalid
+    def file_attribute_must_be_a_file
+      unless file.is_a?(ActionDispatch::Http::UploadedFile)
+        errors.add :file, :content_type_invalid
+      end
     end
-  end
 end

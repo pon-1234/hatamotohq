@@ -8,10 +8,9 @@ class Api::V1::SendScenarioValidator
   validate :scenario_valid
 
   private
-
-  def scenario_valid
-    unless current_staff.line_account.scenarios.exists?(scenario_id)
-      errors.add :scenario_id, :invalid
+    def scenario_valid
+      unless current_staff.line_account.scenarios.exists?(scenario_id)
+        errors.add :scenario_id, :invalid
+      end
     end
-  end
 end

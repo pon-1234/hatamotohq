@@ -4,7 +4,7 @@ class Api::V1::SendMessageValidator
   include ActiveModel::Model
 
   ATTRIBUTES = %i(type packageId stickerId originalContentUrl previewImageUrl duration text)
-  attr_accessor *[*ATTRIBUTES, :current_staff] # trick: add an element to array
+  attr_accessor(*[*ATTRIBUTES, :current_staff]) # trick: add an element to array
 
   validates :type, presence: true, inclusion: { in: Message.types.keys }
 
@@ -24,28 +24,27 @@ class Api::V1::SendMessageValidator
   end
 
   private
-
-  def package_valid
-    unless Emoji.exists?(package_id: packageId)
-      errors.add :packageId, :invalid
+    def package_valid
+      unless Emoji.exists?(package_id: packageId)
+        errors.add :packageId, :invalid
+      end
     end
-  end
 
-  def sticker_valid
-    unless Emoji.exists?(package_id: packageId, line_emoji_id: stickerId)
-      errors.add :stickerId, :invalid
+    def sticker_valid
+      unless Emoji.exists?(package_id: packageId, line_emoji_id: stickerId)
+        errors.add :stickerId, :invalid
+      end
     end
-  end
 
-  def originalContentUrl_valid
-    unless current_staff.line_account.medias.map(&:url).include?(originalContentUrl)
-      errors.add :originalContentUrl, :invalid
+    def originalContentUrl_valid
+      unless current_staff.line_account.medias.map(&:url).include?(originalContentUrl)
+        errors.add :originalContentUrl, :invalid
+      end
     end
-  end
 
-  def previewImageUrl_valid
-    if previewImageUrl.present? && current_staff.line_account.medias.map(&:preview_url).exclude?(previewImageUrl)
-      errors.add :previewImageUrl, :invalid
+    def previewImageUrl_valid
+      if previewImageUrl.present? && current_staff.line_account.medias.map(&:preview_url).exclude?(previewImageUrl)
+        errors.add :previewImageUrl, :invalid
+      end
     end
-  end
 end

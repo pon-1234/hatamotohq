@@ -8,10 +8,9 @@ class Api::V1::SendTemplateValidator
   validate :template_valid
 
   private
-
-  def template_valid
-    unless current_staff.line_account.templates.exists?(template_id)
-      errors.add :template_id, :invalid
+    def template_valid
+      unless current_staff.line_account.templates.exists?(template_id)
+        errors.add :template_id, :invalid
+      end
     end
-  end
 end

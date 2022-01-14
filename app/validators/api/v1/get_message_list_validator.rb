@@ -8,11 +8,10 @@ class Api::V1::GetMessageListValidator
   validate :before_valid
 
   private
-
-  def before_valid
-    @channel = Channel.find channel_id
-    if before.present? && !@channel.messages.exists?(before)
-      errors.add :before, :invalid
+    def before_valid
+      @channel = Channel.find channel_id
+      if before.present? && !@channel.messages.exists?(before)
+        errors.add :before, :invalid
+      end
     end
-  end
 end
