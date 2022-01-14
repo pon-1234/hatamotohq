@@ -19,11 +19,11 @@ RSpec.describe 'POST /api/v1/staff/medias', type: :request do
     before do
       post endpoint_url, headers: { 'Authorization' => access_token },
         params: { file: fixture_file_upload(Rails.root.join('spec', 'sample_files',
-        'sample_image.png'), 'image/png'), type: 'imagemap', format: :json }
+        'sample_image.png'), 'image/png'), type: 'invalidtype', format: :json }
     end
 
     it { expect(response.status).to eq(400) }
-    it { expect(JSON.parse(response.body)['message']).to eq 'ファイル画像の幅はちょうど1040にしてください。' }
+    it { expect(JSON.parse(response.body)['message']).to eq 'タイプは一覧にありません' }
   end
 
   context 'upload media file successfully' do

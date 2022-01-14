@@ -27,7 +27,7 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     it { expect(JSON.parse(response.body)['message']).to eq 'Permission denied' }
   end
 
-  context 'unprocessable entity error has been happend' do
+  context 'server error has been happend' do
     before do
       allow_any_instance_of(Api::V1::Staff::MessagesController).to(receive(:push_message_to_line)
         .and_raise(ActiveRecord::StaleObjectError))
@@ -35,8 +35,8 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
         params: { message: { type: 'text', text: 'sample text' } }
     end
 
-    it { expect(response.status).to eq(422) }
-    it { expect(JSON.parse(response.body)['error']).to eq 'Stale object error.' }
+    it { expect(response.status).to eq(400) }
+    it { expect(JSON.parse(response.body)['message']).to eq 'Stale object error.' }
   end
 
   context 'send text message successfully' do

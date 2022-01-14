@@ -14,9 +14,11 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
   let(:endpoint_url) { api_v1_staff_channel_messages_path(channel_id: channel.id) }
 
   let :message_content do
-    { message: { type: 'sticker', packageId: '11537', stickerId: 52002741, stickerResourceType: 'STATIC' },
+    { message: { type: 'sticker', packageId: emoji.package_id, stickerId: emoji.line_emoji_id, stickerResourceType: 'STATIC' },
       format: :json }
   end
+
+  let!(:emoji) { FactoryBot.create(:emoji) }
 
   include_examples 'check authorization'
 
@@ -31,15 +33,15 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     it { expect(JSON.parse(response.body)['message']).to eq 'Permission denied' }
   end
 
-  context 'unprocessable entity error has been happend' do
+  context 'server error has been happend' do
     before do
       allow_any_instance_of(Api::V1::Staff::MessagesController).to(receive(:push_message_to_line)
         .and_raise(ActiveRecord::StaleObjectError))
       post endpoint_url, headers: { 'Authorization' => access_token }, params: message_content
     end
 
-    it { expect(response.status).to eq(422) }
-    it { expect(JSON.parse(response.body)['error']).to eq 'Stale object error.' }
+    it { expect(response.status).to eq(400) }
+    it { expect(JSON.parse(response.body)['message']).to eq 'Stale object error.' }
   end
 
   context 'send an emoji message successfully' do

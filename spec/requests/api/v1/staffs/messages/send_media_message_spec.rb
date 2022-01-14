@@ -11,9 +11,10 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     FactoryBot.create(:channel, line_account: line_account, line_friend: line_friend,
       assignee_id: staff.id)
   end
+  let!(:media) { FactoryBot.create(:media, line_account: line_account) }
   let(:endpoint_url) { '/api/v1/staff/channels/%s/messages' % channel.id }
-  let(:request_params) { { message: { type: 'image', originalContentUrl: 'test.png',
-    previewImageUrl: 'test.png' }, format: :json }}
+  let(:request_params) { { message: { type: 'image', originalContentUrl: media.url,
+    previewImageUrl: media.preview_url }, format: :json }}
 
   include_examples 'check authorization'
 
@@ -28,15 +29,15 @@ RSpec.describe 'POST /api/v1/staff/channels/:channel_id/messages', type: :reques
     it { expect(JSON.parse(response.body)['message']).to eq 'Permission denied' }
   end
 
-  context 'unprocessable entity error has been happend' do
+  context 'server error has been happend' do
     before do
       allow_any_instance_of(Api::V1::Staff::MessagesController).to(receive(:push_message_to_line)
         .and_raise(ActiveRecord::StaleObjectError))
       post endpoint_url, headers: { 'Authorization' => access_token }, params: request_params
     end
 
-    it { expect(response.status).to eq(422) }
-    it { expect(JSON.parse(response.body)['error']).to eq 'Stale object error.' }
+    it { expect(response.status).to eq(400) }
+    it { expect(JSON.parse(response.body)['message']).to eq 'Stale object error.' }
   end
 
   context 'send text message successfully' do
