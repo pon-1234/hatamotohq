@@ -29,9 +29,9 @@ class ReservationsController < ApplicationController
         .require(:inquiry)
         .permit(
           :friend_line_id,
-          :people_count,
-          :start_date
-          # :end_date
+          :pax_num,
+          :date_begin
+          # :date_end
         )
     end
 end

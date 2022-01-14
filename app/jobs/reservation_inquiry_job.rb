@@ -5,11 +5,11 @@ class ReservationInquiryJob < ApplicationJob
 
   def perform(params)
     friend_line_id = params[:friend_line_id]
-    # room_capacity = params[:room_capacity]
-    # date = params[:date]
+    room_capacity = params[:pax_num]
+    date_begin = params[:date_begin]
     return if friend_line_id.blank?
     find_channel(friend_line_id)
-    @rooms = parse_rooms_data(Pms::GetRoom.new.perform({}))
+    @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax_num: room_capacity, date_begin: date_begin }))
     # Send carousel message to show hotels info
     send_message
   end
