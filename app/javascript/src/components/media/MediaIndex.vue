@@ -270,8 +270,10 @@ export default {
 
     // Select media for sending new message
     selectMedia(media, event) {
-      event.preventDefault();
-      event.target.pause();
+      if (this.isVideo(media)) {
+        event.preventDefault();
+        event.target.pause();
+      }
       this.$emit('select', media);
     },
 
