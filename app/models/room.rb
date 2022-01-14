@@ -19,9 +19,9 @@ class Room
     @area = "#{json['room_area']['value']}#{json['room_area']['unit']}"
     @price = json['price_calendar']&.first['price']&.to_s
     @non_smoking = json['non_smoking']
-    @capacity = 2 # TODO correct this
-    @vacant = true # TODO correct this
-    @ota_url = 'https://google.com' # TODO correct this
+    @capacity = "#{json['pax_min']}〜#{json['pax_max']}"
+    @vacant = json['stock_calendar']&.first['stock'].to_i > 0
+    @ota_url = json['ota_url']
   end
 
   def to_html
