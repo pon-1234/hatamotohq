@@ -32,3 +32,24 @@ ja:
       user: ユーザー
       group: グループ
       device: デバイス
+  activemodel:
+    attributes:
+      api/v1/upload_media_validator:
+        file: ファイル
+        type: タイプ
+      api/v1/send_message_validator:
+        packageId: パッケージID
+        stickerId: スタンプID
+        type: タイプ
+        originalContentUrl: オリジナルコンテンツURL
+        previewImageUrl: プレビュー画像URL
+        duration: デュレイション
+        text: テキスト
+      api/v1/send_template_validator:
+        channel_id: チャネルID
+        template_id: テンプレートID
+      api/v1/send_scenario_validator:
+        channel_id: チャネルID
+        scenario_id: シナリオID
+      api/v1/get_message_list_validator:
+        before: 前パラメータ

@@ -35,6 +35,9 @@ class LineAccount < ApplicationRecord
   has_many :line_friends, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :rich_menus, dependent: :destroy
+  has_many :medias, dependent: :destroy
+  has_many :templates, dependent: :destroy
+  has_many :scenarios, dependent: :destroy
 
   enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
 

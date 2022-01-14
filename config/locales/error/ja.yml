@@ -29,3 +29,4 @@ ja:
       missing_exchange_items: "物品を選択してください。"
       invalid_header: 項目名が正しくありません。CSVのテンプレートを再度ご確認下さい。
       invalid_file_format: CSVファイルは有効なファイル形式ではありません。
+      channel_not_found: 'チャネルは見つかりませんでした。'

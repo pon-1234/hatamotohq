@@ -544,13 +544,20 @@ define({ "api": [
             "optional": false,
             "field": "channel_id",
             "description": "<p>Id of channel</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "before",
+            "description": "<p>Id of current first message</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "param example:",
-          "content": "{\n \"channel_id\": \"1\"\n}",
+          "content": "{\n \"channel_id\": \"1\",\n \"before\": 100\n}",
           "type": "json"
         }
       ]
@@ -1594,7 +1601,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "type",
-            "description": "<p>One of follow types: image, audio, video, richmenu, imagemap</p>"
+            "description": "<p>One of follow types: image, audio, video</p>"
           },
           {
             "group": "Parameter",

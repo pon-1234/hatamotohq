@@ -153,10 +153,12 @@
  * @apiHeaderExample {Header} Header-Example
  *     "Authorization": "Bearer 5f048fe321sadbggdj234642412daszvbhhZzxz"
  * @apiParam {Number} channel_id Id of channel
+ * @apiParam {Number} [before] Id of current first message
  * 
  * @apiParamExample {json} param example:
  * {
- *  "channel_id": "1"
+ *  "channel_id": "1",
+ *  "before": 100
  * }
  *
  * @apiSuccessExample Success-Response:

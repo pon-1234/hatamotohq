@@ -89,7 +89,7 @@
  * @apiHeaderExample {Header} Header-Example
  *     "Authorization": "Bearer 5f048fe321sadbggdj234642412daszvbhhZzxz"
  * @apiParam {File} file file
- * @apiParam {String} type One of follow types: image, audio, video, richmenu, imagemap
+ * @apiParam {String} type One of follow types: image, audio, video
  * @apiParam {Number} [duration] Duration of audio (audio file only)
  * 
  * @apiParamExample {json} param example:
