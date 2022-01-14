@@ -139,7 +139,7 @@ class ActionHandlerJob < ApplicationJob
 
     def handle_rsv_cancel_action
       # Send messages to confirm cancellation
-      bookmarks = @friend.rsv_bookmarks.wait
+      bookmarks = @friend.reservations.wait
       bookmarks.each do |bookmark|
         msg_content = {
           type: 'template',

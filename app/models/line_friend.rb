@@ -34,7 +34,7 @@ class LineFriend < ApplicationRecord
   has_many :messages, as: :sender
   has_many :survey_responses
   has_many :friend_variables
-  has_many :rsv_bookmarks
+  has_many :reservations
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }
