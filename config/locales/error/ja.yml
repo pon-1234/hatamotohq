@@ -30,3 +30,11 @@ ja:
       invalid_header: 項目名が正しくありません。CSVのテンプレートを再度ご確認下さい。
       invalid_file_format: CSVファイルは有効なファイル形式ではありません。
       channel_not_found: 'チャネルは見つかりませんでした。'
+
+  activemodel:
+    errors:
+      models:
+        send_available_room_notification_validator:
+          attributes:
+            crm_api_key:
+              invalid: が違います

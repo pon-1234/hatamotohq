@@ -53,3 +53,7 @@ ja:
         scenario_id: シナリオID
       api/v1/get_message_list_validator:
         before: 前パラメータ
+      send_available_room_notification_validator:
+        uid: UID
+        type_id: タイプID
+        crm_api_key: APIキー

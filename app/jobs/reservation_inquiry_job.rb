@@ -1,49 +1,19 @@
 # frozen_string_literal: true
 
-class ReservationInquiryJob < ApplicationJob
-  queue_as :default
-
+class ReservationInquiryJob < ReservationDispatcherJob
   def perform(params)
-    friend_line_id = params[:friend_line_id]
-    room_capacity = params[:pax_num]
-    date_begin = params[:date_begin]
-    return if friend_line_id.blank?
-    find_channel(friend_line_id)
-    @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax_num: room_capacity, date_begin: date_begin }))
-    # Send carousel message to show hotels info
-    send_message
+    return if params[:friend_line_id].blank?
+    super(params)
   end
 
   private
-    def find_channel(line_id)
-      friend = LineFriend.find_by(line_user_id: line_id)
+    def find_channel
+      friend = LineFriend.find_by line_user_id: @params[:friend_line_id]
       @channel = friend.channel
     end
 
-    def parse_rooms_data(rooms_data)
-      rooms = []
-      rooms_data.each do |room_data|
-        rooms << Room.new(room_data)
-      end
-      rooms
-    end
-
-    def send_message
-      message = build_message
-      payload = {
-        channel_id: @channel.id,
-        messages: [ message ]
-      }
-      PushMessageToLineJob.perform_now(payload)
-    end
-
-    def build_message
-      {
-        type: 'flex',
-        altText: '予約用のメッセージ',
-        contents: build_content,
-        html_content: build_html_content
-      }
+    def get_rooms
+      @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax_num: @params[:pax_num], date_begin: @params[:date_begin] }))
     end
 
     def build_content
