@@ -25,7 +25,7 @@ class ReservationsController < ApplicationController
   # will send a notification via this URL with room information.
   def callback
     validator = SendAvailableRoomNotificationValidator.new(type_id: available_room_params[:type_id],
-      stock_calendar: available_room_params.to_h[:stock_calendar], uid: params[:uid],
+      available_room_number: available_room_params.to_h[:stock_calendar]&.first.try(:[], 'stock'), uid: params[:uid],
       crm_api_key: request.headers['Authorization'].to_s.split(' ').last)
     unless validator.valid?
       render_bad_request_with_message(validator.errors.full_messages.first)
