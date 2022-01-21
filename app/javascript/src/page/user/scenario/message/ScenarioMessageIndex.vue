@@ -8,6 +8,8 @@
               ><i class="uil-plus"></i> メッセージを追加</a
             >
             <scenario-select-template :scenario_id="scenario.id"></scenario-select-template>
+            <a class="btn btn-info text-white ml-2" role="button" data-toggle="modal" data-target="#modalSendScenarioToTesters"
+              >テスト配信</a>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -103,6 +105,32 @@
       </template>
     </modal-confirm>
     <!-- END: Delete user modal -->
+
+    <!-- START: send scenario to testers modal -->
+    <modal-confirm
+      title="テストアカウントを選んでください。"
+      id="modalSendScenarioToTesters"
+      type="confirm"
+      @confirm="submitSendScenarioToTesters"
+      :confirmButtonDisabled="selectedTesterIds.length === 0"
+      confirmButtonLabel="テスト配信"
+    >
+      <template v-slot:content>
+        <div v-if="testers && testers.length" class="d-flex">
+          <div class="flex-1 custom-control custom-checkbox mr-2" v-for="tester in testers" :key="`tester_${tester.id}`">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              :id="`tester_${tester.id}`"
+              v-model="selectedTesterIds"
+              :value="tester.id"
+            />
+            <label class="custom-control-label" :for="`tester_${tester.id}`">{{tester.display_name}}</label>
+          </div>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: send scenario to testers modal -->
   </div>
 </template>
 <script>
@@ -111,13 +139,14 @@ import Util from '@/core/util';
 import moment from 'moment';
 
 export default {
-  props: ['scenario'],
+  props: ['scenario', 'testers'],
   data() {
     return {
       rootUrl: process.env.MIX_ROOT_PATH,
       loading: true,
       curMessageIndex: 0,
-      currentPage: 1
+      currentPage: 1,
+      selectedTesterIds: []
     };
   },
   created() {},
@@ -138,7 +167,7 @@ export default {
   },
   methods: {
     ...mapMutations('scenarioMessage', ['setCurPage']),
-    ...mapActions('scenarioMessage', ['getMessages', 'deleteMessage']),
+    ...mapActions('scenarioMessage', ['getMessages', 'deleteMessage', 'sendScenarioToTesters']),
 
     scheduleTimeFor(message) {
       if (message.status === 'disabled') return '';
@@ -188,6 +217,15 @@ export default {
         );
       } else window.toastr.error('シナリオメッセージの削除は失敗しました。');
       this.forceRerender();
+    },
+
+    async submitSendScenarioToTesters() {
+      const response = await this.sendScenarioToTesters({ scenario_id: this.scenario.id, line_friend_ids: this.selectedTesterIds });
+      if (response) {
+        window.toastr.success('シナリオのテスト配信は完了しました。');
+      } else {
+        window.toastr.error('シナリオのテスト配信は失敗しました。');
+      }
     }
   }
 };

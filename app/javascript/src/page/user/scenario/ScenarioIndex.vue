@@ -63,6 +63,13 @@
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
+                          data-target="#modalSendScenarioToTesters"
+                          @click="curScenarioIndex = index"
+                          >テスト配信</a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
                           data-target="#modalDeleteScenario"
                           @click="curScenarioIndex = index"
                           >シナリオを削除</a
@@ -122,6 +129,33 @@
       </template>
     </modal-confirm>
     <!-- END: Copy scenario modal -->
+    <!-- START: send scenario to testers modal -->
+    <modal-confirm
+      title="テストアカウントを選んでください。"
+      id="modalSendScenarioToTesters"
+      type="confirm"
+      @confirm="submitSendScenarioToTesters"
+      :confirmButtonDisabled="selectedTesterIds.length === 0"
+      confirmButtonLabel="テスト配信"
+    >
+      <template v-slot:content>
+        <div v-if="curScenario">
+          <div v-if="testers && testers.length" class="d-flex">
+            <div class="flex-1 custom-control custom-checkbox mr-2" v-for="tester in testers" :key="`tester_${tester.id}`">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                :id="`tester_${tester.id}`"
+                v-model="selectedTesterIds"
+                :value="tester.id"
+              />
+              <label class="custom-control-label" :for="`tester_${tester.id}`">{{tester.display_name}}</label>
+            </div>
+          </div>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: send scenario to testers modal -->
   </div>
 </template>
 
@@ -137,9 +171,12 @@ export default {
       contentKey: 0,
       currentPage: 1,
       queryParams: null,
-      curScenarioIndex: 0
+      curScenarioIndex: 0,
+      selectedTesterIds: []
     };
   },
+
+  props: ['testers'],
 
   created() {
     this.queryParams = _.cloneDeep(this.getQueryParams);
@@ -165,7 +202,7 @@ export default {
 
   methods: {
     ...mapMutations('scenario', ['setQueryParams']),
-    ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario']),
+    ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario', 'sendScenarioToTesters']),
 
     forceRerender() {
       this.contentKey++;
@@ -216,6 +253,15 @@ export default {
         Util.showSuccessThenRedirect('シナリオのコピーは完了しました。', location.href);
       } else {
         window.toastr.error('シナリオのコピーは失敗しました。');
+      }
+    },
+
+    async submitSendScenarioToTesters() {
+      const response = await this.sendScenarioToTesters({ scenario_id: this.curScenario.id, line_friend_ids: this.selectedTesterIds });
+      if (response) {
+        window.toastr.success('シナリオのテスト配信は完了しました。');
+      } else {
+        window.toastr.error('シナリオのテスト配信は失敗しました。');
       }
     }
   }

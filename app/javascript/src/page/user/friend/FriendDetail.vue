@@ -99,6 +99,19 @@
             <input-tag :tags="friendData.tags" @input="selectTags" :allTags="true" v-if="editing" />
           </p>
           <hr />
+          <div class="flex-1 custom-control custom-checkbox mr-2">
+            <input
+                type="checkbox"
+                class="custom-control-input"
+                v-model="friendData.tester"
+                value="1"
+                name="tester"
+                id="is_tester_account"
+                :disabled="!editing"
+              />
+            <label class="custom-control-label" for="is_tester_account">テストアカウント</label>
+          </div>
+          <hr />
           <div v-if="isAdmin && !editing" @click="editing = true" class="btn btn-success fw-120">編集</div>
           <div class="btn btn-success fw-120" @click="onSave()" v-show="editing">更新</div>
         </div>
@@ -209,7 +222,8 @@ export default {
         line_name: '',
         line_picture_url: '',
         display_name: '',
-        note: ''
+        note: '',
+        tester: false
       },
       variables: [],
       avatarImgObj: {
@@ -264,7 +278,8 @@ export default {
         id: this.friendData.id,
         display_name: this.friendData.display_name,
         note: this.friendData.note,
-        tag_ids: this.friendData.tags ? this.friendData.tags.map(_ => _.id) : []
+        tag_ids: this.friendData.tags ? this.friendData.tags.map(_ => _.id) : [],
+        tester: this.friendData.tester
       };
       const response = await this.updateFriend(formData);
       if (response) {

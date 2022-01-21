@@ -24,8 +24,9 @@
             data-dismiss="modal"
             @click="confirm"
             v-if="type === 'confirm'"
+            :disabled="confirmButtonDisabled"
           >
-            確認
+            {{confirmButtonLabel || '確認'}}
           </button>
           <button
             type="button"
@@ -59,6 +60,16 @@ export default {
       type: String,
       required: false,
       default: 'delete'
+    },
+    confirmButtonDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    confirmButtonLabel: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   methods: {

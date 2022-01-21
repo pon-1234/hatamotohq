@@ -101,6 +101,7 @@ Rails.application.routes.draw do
           post :import, on: :collection
         end
         post :copy, on: :member
+        post :send_to_testers, on: :member
       end
       resources :auto_responses do
         post :copy, on: :member

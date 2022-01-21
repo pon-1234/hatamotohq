@@ -17,10 +17,12 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
+#  tester           :boolean          default(FALSE)
 #
 # Indexes
 #
 #  index_line_friends_on_line_account_id  (line_account_id)
+#  index_line_friends_on_tester           (tester)
 #
 # Foreign Keys
 #

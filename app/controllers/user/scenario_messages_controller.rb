@@ -12,7 +12,10 @@ class User::ScenarioMessagesController < User::ApplicationController
       @messages = @scenario.scenario_messages.order(step: :asc).page(params[:page])
     end
     respond_to do |format|
-      format.html
+      format.html do
+        @testers = current_user.line_account.line_friends.is_tester
+          .to_json(only: %i(id display_name))
+      end
       format.json
     end
   end

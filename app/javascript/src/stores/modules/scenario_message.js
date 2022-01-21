@@ -1,4 +1,5 @@
 import ScenarioMessageApi from '../api/scenario_message_api';
+import ScenarioApi from '../api/scenario_api';
 
 export const state = {
   totalRows: 0,
@@ -45,6 +46,14 @@ export const actions = {
   async deleteMessage(_, query) {
     try {
       return await ScenarioMessageApi.delete(query);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async sendScenarioToTesters(_, payload) {
+    try {
+      return await ScenarioApi.sendScenarioToTesters(payload);
     } catch (error) {
       return null;
     }

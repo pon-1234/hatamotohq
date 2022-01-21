@@ -95,5 +95,14 @@ export default {
       dataType: 'json',
       contentType: 'application/json'
     });
+  },
+
+  sendScenarioToTesters: (payload) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${payload.scenario_id}/send_to_testers`,
+      method: 'POST',
+      data: JSON.stringify(payload),
+      contentType: 'application/json'
+    });
   }
 };
