@@ -65,7 +65,8 @@
                           data-toggle="modal"
                           data-target="#modalSendScenarioToTesters"
                           @click="curScenarioIndex = index"
-                          >テスト配信</a>
+                          >テスト配信</a
+                        >
                         <a
                           role="button"
                           class="dropdown-item"
@@ -131,7 +132,7 @@
     <!-- END: Copy scenario modal -->
     <!-- START: send scenario to testers modal -->
     <modal-confirm
-      title="テストアカウントを選んでください。"
+      title="シナリオのテスト配信のため、テスターを選択してください。"
       id="modalSendScenarioToTesters"
       type="confirm"
       @confirm="submitSendScenarioToTesters"
@@ -141,7 +142,11 @@
       <template v-slot:content>
         <div v-if="curScenario">
           <div v-if="testers && testers.length" class="d-flex">
-            <div class="flex-1 custom-control custom-checkbox mr-2" v-for="tester in testers" :key="`tester_${tester.id}`">
+            <div
+              class="flex-1 custom-control custom-checkbox mr-2"
+              v-for="tester in testers"
+              :key="`tester_${tester.id}`"
+            >
               <input
                 type="checkbox"
                 class="custom-control-input"
@@ -149,7 +154,7 @@
                 v-model="selectedTesterIds"
                 :value="tester.id"
               />
-              <label class="custom-control-label" :for="`tester_${tester.id}`">{{tester.display_name}}</label>
+              <label class="custom-control-label" :for="`tester_${tester.id}`">{{ tester.display_name }}</label>
             </div>
           </div>
         </div>
@@ -257,7 +262,10 @@ export default {
     },
 
     async submitSendScenarioToTesters() {
-      const response = await this.sendScenarioToTesters({ scenario_id: this.curScenario.id, line_friend_ids: this.selectedTesterIds });
+      const response = await this.sendScenarioToTesters({
+        scenario_id: this.curScenario.id,
+        line_friend_ids: this.selectedTesterIds
+      });
       if (response) {
         window.toastr.success('シナリオのテスト配信は完了しました。');
       } else {

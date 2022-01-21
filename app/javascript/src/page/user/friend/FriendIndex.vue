@@ -43,7 +43,6 @@
             <thead class="thead-light">
               <tr>
                 <th>名前</th>
-                <th>テストアカウント</th>
                 <th class="d-none d-lg-table-cell">登録日時</th>
                 <th class="d-none d-lg-table-cell">タグ</th>
                 <th>状況</th>
@@ -55,18 +54,10 @@
               <tr @click="isMobile ? redirectToFriendDetail(friend) : ''">
                 <td class="table-user d-flex align-items-center">
                   <img v-lazy="genAvatarImgObj(friend.line_picture_url)" alt="table-user" class="mr-2 rounded-circle" />
-                  <p class="m-0">{{ (friend.display_name || friend.line_name) | truncate(10) }}</p>
-                </td>
-                <td>
-                  <div class="flex-1 custom-control custom-checkbox mr-2">
-                    <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        disabled
-                        :checked="friend.tester"
-                      />
-                    <label class="custom-control-label" for="is_tester_account"></label>
-                  </div>
+                  <p class="m-0">
+                    {{ (friend.display_name || friend.line_name) | truncate(10)
+                    }}<span class="badge badge-warning ml-1 pt-1" v-if="friend.tester">テスター</span>
+                  </p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
                 <td class="d-none d-lg-table-cell">

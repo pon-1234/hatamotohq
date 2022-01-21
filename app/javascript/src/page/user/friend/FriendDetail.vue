@@ -101,15 +101,15 @@
           <hr />
           <div class="flex-1 custom-control custom-checkbox mr-2">
             <input
-                type="checkbox"
-                class="custom-control-input"
-                v-model="friendData.tester"
-                value="1"
-                name="tester"
-                id="is_tester_account"
-                :disabled="!editing"
-              />
-            <label class="custom-control-label" for="is_tester_account">テストアカウント</label>
+              type="checkbox"
+              class="custom-control-input"
+              v-model="friendData.tester"
+              value="1"
+              name="tester"
+              id="is_tester_account"
+              :disabled="!editing"
+            />
+            <label class="custom-control-label" for="is_tester_account">テスター</label>
           </div>
           <hr />
           <div v-if="isAdmin && !editing" @click="editing = true" class="btn btn-success fw-120">編集</div>
