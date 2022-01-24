@@ -2,6 +2,11 @@
   <div>
     <div class="card mvh-50">
       <div class="card-header d-flex justify-content-end">
+        <div class="filter-tester-accounts custom-control custom-checkbox mr-3 d-flex align-items-center">
+          <input type="checkbox" :value="true" name="tester" id="search_tester_account" class="custom-control-input" v-model="selectOnlyTester">
+          <label for="search_tester_account" class="custom-control-label">テスターのみ</label>
+        </div>
+
         <!-- START: Search form -->
         <div class="w-200 h-5 mr-1">
           <staff-selection
@@ -94,7 +99,7 @@
       </div>
       <loading-indicator :loading="loading"></loading-indicator>
     </div>
-    <modal-friend-search ref="modalFriendSearch"></modal-friend-search>
+    <modal-friend-search :selectOnlyTester="selectOnlyTester" ref="modalFriendSearch" @changeSelectOnlyTester="changeSelectOnlyTester"></modal-friend-search>
   </div>
 </template>
 <script>
@@ -113,7 +118,8 @@ export default {
       window: {
         width: 0
       },
-      oldStaffId: null
+      oldStaffId: null,
+      selectOnlyTester: false
     };
   },
 
@@ -126,6 +132,13 @@ export default {
         }
       },
       deep: true
+    },
+    selectOnlyTester: function(newVal) {
+      if (newVal) {
+        this.setQueryParam({ tester_eq: true });
+      } else {
+        this.setQueryParam({ tester_eq: null });
+      }
     }
   },
 
@@ -238,7 +251,11 @@ export default {
 
     setAssigneeParam(id) {
       this.setQueryParam({ channel_assignee_id_eq: id });
+    },
+    changeSelectOnlyTester: function(newVal) {
+      this.selectOnlyTester = newVal;
     }
+
   }
 };
 </script>

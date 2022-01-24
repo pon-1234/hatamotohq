@@ -98,6 +98,18 @@
               />
               <label class="custom-control-label" for="hiddenFriendCheck">非表示した人を表示</label>
             </div>
+
+          </div>
+          <div class="custom-control custom-checkbox mt-2">
+            <input
+                type="checkbox"
+                class="custom-control-input"
+                v-model="selectOnlyTester"
+                value="true"
+                name="tester"
+                id="selectOnlyTesterCb"
+              />
+            <label class="custom-control-label" for="selectOnlyTesterCb">テスターのみ</label>
           </div>
         </div>
         <div class="modal-footer d-flex">
@@ -124,6 +136,7 @@ export default {
       params: {}
     };
   },
+  props: ['selectOnlyTester'],
 
   computed: {
     ...mapState('friend', {
@@ -245,6 +258,16 @@ export default {
 
     setAssigneeParam(staffId) {
       this.params.channel_assignee_id_eq = staffId;
+    }
+  },
+  watch: {
+    selectOnlyTester: function(newVal) {
+      this.$emit('changeSelectOnlyTester', newVal);
+      if (newVal) {
+        this.params.tester_eq = true;
+      } else {
+        this.params.tester_eq = null;
+      }
     }
   }
 };
