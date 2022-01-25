@@ -84,7 +84,7 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
 
     it { expect(response.status).to eq(400) }
     it { expect(JSON.parse(response.body)['status']).to eq 'error' }
-    it { expect(JSON.parse(response.body)['message']).to eq '空室の数は0より大きい値にしてください' }
+    it { expect(JSON.parse(response.body)['message']).to eq '在庫中数は0より大きい値にしてください' }
   end
 
   context 'when has no room bookmark' do

@@ -20,9 +20,9 @@
                 <input
                   type="number"
                   class="form-control"
-                  name="inquiry[pax_num]"
+                  name="inquiry[capacity]"
                   placeholder="人数を入力してください"
-                  v-model.trim="inquiryFormData.pax_num"
+                  v-model.trim="inquiryFormData.capacity"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -43,7 +43,7 @@
                   name="inquiry[date]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
-                  v-model="inquiryFormData.date_begin"
+                  v-model="inquiryFormData.date_start"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -103,8 +103,8 @@ export default {
       loading: true,
       inquiryFormData: {
         friend_line_id: null,
-        pax_num: null,
-        date_begin: null,
+        capacity: null,
+        date_start: null,
         date_end: null
       }
     };
@@ -115,7 +115,7 @@ export default {
   },
 
   mounted() {
-    this.inquiryFormData.date_begin = this.currentDate;
+    this.inquiryFormData.date_start = this.currentDate;
     this.inquiryFormData.date_end = this.currentDate;
   },
 

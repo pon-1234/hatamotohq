@@ -13,15 +13,15 @@ class Room
 
   def initialize(json)
     return if json.blank?
-    @type_id = json['type_id']
-    @type_name = json['type_name']
-    @image_url = json['room_photos']&.first.to_s
-    @area = "#{json['room_area']['value']}#{json['room_area']['unit']}"
-    @price = json['price_calendar']&.first['price']&.to_s
-    @non_smoking = json['non_smoking']
-    @capacity = "#{json['pax_min']}〜#{json['pax_max']}"
-    @vacant = json['stock_calendar']&.first['stock'].to_i > 0
-    @ota_url = json['ota_url']
+    @type_id = json['typeId']
+    @type_name = json['typeName']
+    @image_url = json['roomPhotos']&.first.to_s
+    @area = "#{json['roomArea']['value']}#{json['roomArea']['unit']}"
+    @price = json['plans']&.first['planCalendar']&.first['price']&.to_s
+    @non_smoking = json['nonSmoking']
+    @capacity = "#{json['paxMin']}〜#{json['paxMax']}"
+    @vacant = json['plans']&.first['planCalendar']&.first['stock'].to_i > 0
+    @ota_url = json['otaUrl']
   end
 
   def to_html

@@ -57,4 +57,4 @@ ja:
         uid: UID
         type_id: タイプID
         crm_api_key: APIキー
-        available_room_number: 空室の数
+        available_room_count: 在庫中数

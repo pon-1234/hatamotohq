@@ -13,7 +13,7 @@ class ReservationInquiryJob < ReservationDispatcherJob
     end
 
     def get_rooms
-      @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax_num: @params[:pax_num], date_begin: @params[:date_begin] }))
+      @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax: @params[:capacity], dateStart: @params[:date_begin], dateEnd: @params[:date_begin] })) # TODO: please correct this
     end
 
     def build_content
