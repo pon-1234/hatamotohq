@@ -6,7 +6,10 @@
     <div class="card-body">
       <div class="mt-3 text-center">
         <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>{{ (friend.display_name || friend.line_name) | truncate(15) }}</h4>
+        <h4>
+          {{ (friend.display_name || friend.line_name) | truncate(15)
+          }}<span v-if="friend.tester" class="ml-1 pt-1 badge badge-warning badge-sm">テスター</span>
+        </h4>
       </div>
 
       <div class="mt-3">
