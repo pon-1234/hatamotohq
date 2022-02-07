@@ -130,23 +130,27 @@ class ActionHandlerJob < ApplicationJob
     end
 
     def handle_rsv_bookmark_action(content)
-      room_id = content['roomId']
-      bookmark = Reservation.find_or_create_by(line_account: @friend.line_account, room_id: room_id, line_friend: @friend, status: :wait)
-
+      reservation = Reservation.find_or_create_by(
+        line_account: @friend.line_account,
+        room_id: content['roomId'],
+        room_name: content['roomName'],
+        line_friend: @friend,
+        status: :wait
+      )
       # Send message inform user that the room is bookmarked
-      send_text_message('お気に入りました。空室が空いたらお知らせします。') if bookmark.present?
+      send_text_message('お気に入りました。空室が空いたらお知らせします。') if reservation.present?
     end
 
     def handle_rsv_cancel_action
       # Send messages to confirm cancellation
-      bookmarks = @friend.reservations.wait
-      bookmarks.each do |bookmark|
+      reservations = @friend.reservations.wait
+      reservations.each do |reservation|
         msg_content = {
           type: 'template',
           altText: '空室待ちキャンセルの確認',
           template: {
             type: 'confirm',
-            text: '本当に空室待ちをキャンセルしてもよろしいですか？空室名：{roomName}',
+            text: "本当に空室待ちをキャンセルしてもよろしいですか？空室名：#{reservation.room_name}",
             actions: [
               {
                 type: 'postback',
@@ -164,7 +168,7 @@ class ActionHandlerJob < ApplicationJob
                 displayText: 'はい',
                 data: {
                   actions: [
-                    { type: 'rsv_rm_bookmark', content: { bookmark_id: bookmark.id } }
+                    { type: 'rsv_rm_bookmark', content: { reservation_id: reservation.id } }
                   ]
                 }
               }
@@ -179,9 +183,9 @@ class ActionHandlerJob < ApplicationJob
     end
 
     def handle_rsv_rm_bookmark(content)
-      bookmark_id = content['bookmark_id']
-      return if bookmark_id.nil?
-      if Reservation.find(bookmark_id)&.cancel
+      reservation_id = content['reservation_id']
+      return if reservation_id.nil?
+      if Reservation.find(reservation_id)&.cancel
         send_text_message('空室待ちをキャンセルしました。')
       end
     end

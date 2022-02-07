@@ -73,7 +73,8 @@ class Room
         actions: [{
           type: 'rsv_bookmark',
           content: {
-            roomId: self.type_id
+            roomId: self.type_id,
+            roomName: self.type_name
           }
         }]
       }

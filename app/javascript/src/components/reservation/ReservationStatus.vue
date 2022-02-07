@@ -1,8 +1,8 @@
 <template>
   <div>
-    <span v-if="status === 'active'"><i class="mdi mdi-circle text-success"></i> 有効 </span>
-    <span v-else-if="status === 'blocked'"><i class="mdi mdi-circle text-warning"></i> ブロックされた </span>
-    <span v-else> <i class="mdi mdi-circle"></i> 非表示</span>
+    <span v-if="status === 'wait'"><i class="mdi mdi-circle text-info"></i> 空室待ち </span>
+    <span v-else-if="status === 'cancelled'"><i class="mdi mdi-circle"></i> キャンセル済 </span>
+    <span v-else> <i class="mdi mdi-circle text-success"></i> 完了</span>
   </div>
 </template>
 

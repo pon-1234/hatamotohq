@@ -392,6 +392,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_042256) do
   create_table 'reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_friend_id'
     t.string 'room_id'
+    t.string 'room_name'
     t.string 'callback_url'
     t.string 'status', default: 'wait'
     t.datetime 'created_at', precision: 6, null: false
