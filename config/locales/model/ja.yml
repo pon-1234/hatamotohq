@@ -37,6 +37,7 @@ ja:
       api/v1/upload_media_validator:
         file: ファイル
         type: タイプ
+        duration: デュレイション
       api/v1/send_message_validator:
         packageId: パッケージID
         stickerId: スタンプID
