@@ -11,7 +11,7 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
 
   # POST /api/v1/staff/medias
   def create
-    upload_media_validator = Api::V1::UploadMediaValidator.new(media_params)
+    upload_media_validator = Api::V1::UploadMediaValidator.new(media_params.merge(duration: params[:duration]))
     unless upload_media_validator.valid?
       render_bad_request_with_message(upload_media_validator.errors.full_messages.first)
       return

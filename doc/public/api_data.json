@@ -1116,14 +1116,14 @@
             "type": "String",
             "optional": true,
             "field": "message[previewImageUrl]",
-            "description": "<p>preview image url (image file only)</p>"
+            "description": "<p>preview image url (required for image and video files only)</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": true,
             "field": "message[duration]",
-            "description": "<p>duration of audio (audio file only)</p>"
+            "description": "<p>duration of audio (required for audio files only)</p>"
           }
         ]
       },
