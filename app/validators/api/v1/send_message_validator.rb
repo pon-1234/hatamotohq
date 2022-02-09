@@ -19,7 +19,8 @@ class Api::V1::SendMessageValidator
 
   with_options if: -> { type.in?(%w(image audio video richmenu)) } do |message|
     message.validates :originalContentUrl, presence: true
-    message.validates :duration, presence: true, if: -> { type == 'audio' }
+    message.validates :duration, presence: true, numericality: {greater_than_or_equal_to: 0}, if: -> { type == 'audio' }
+    message.validates :previewImageUrl, presence: true, if: -> { type.in?(%w(image video)) }
     message.validate :originalContentUrl_valid, :previewImageUrl_valid
   end
 

@@ -165,8 +165,8 @@
  * @apiParam {Object} message Messsage data
  * @apiParam {String} message[type] of media file (one of follow types: video, richmenu, imagemap)
  * @apiParam {String} message[originalContentUrl] url of recent uploaded media file
- * @apiParam {String} [message[previewImageUrl]] preview image url (image file only)
- * @apiParam {String} [message[duration]] duration of audio (audio file only)
+ * @apiParam {String} [message[previewImageUrl]] preview image url (required for image and video files only)
+ * @apiParam {Number} [message[duration]] duration of audio (required for audio files only)
  * 
  * @apiParamExample {json} param example:
  * {
