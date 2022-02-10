@@ -7,7 +7,7 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
   let(:client) { FactoryBot.create(:client, agency: agency) }
   let(:line_account) { FactoryBot.create(:line_account, client: client) }
   let(:line_friend) { FactoryBot.create(:line_friend, line_account: line_account) }
-  let!(:uid) { SecureRandom.alphanumeric(32) }
+  let!(:notifier_id) { SecureRandom.alphanumeric(32) }
   let!(:params) {
     {
       "non_smoking": true,
@@ -26,10 +26,16 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
       "room_photos": [
         'https://samplephoto.jpg'
       ],
-      "stock_calendar": [
+      "plans": [
         {
-          "date": '2022-01-01',
-          "stock": 1
+          "plan_name": 'Plan 1',
+          "plan_calendar": [
+            {
+              "date": '2022-01-01',
+              "price": 26000,
+              "stock": 1
+            }
+          ]
         }
       ],
       "type_id": 20,
@@ -39,15 +45,14 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
   }
   let! :reservation do
     FactoryBot.create :reservation, line_friend_id: line_friend.id, room_id: params[:type_id],
-      callback_url: uid, line_account_id: line_account.id
+      notifier_id: notifier_id, line_account_id: line_account.id
   end
-  let(:access_token) { "Bearer #{ENV['CRM_API_KEY']}" }
-  let(:endpoint_url) { "/reservations/callback/#{uid}" }
+  let(:endpoint_url) { "/reservations/callback/?notifierId=#{notifier_id}" }
 
   context 'when type_id is blank' do
     before do
-      params['type_id'] = nil
-      post endpoint_url, params: params, headers: { 'Authorization' => access_token }
+      params[:type_id] = nil
+      post endpoint_url, params: params
     end
 
     it { expect(response.status).to eq(400) }
@@ -55,9 +60,9 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
     it { expect(JSON.parse(response.body)['message']).to end_with 'を入力してください' }
   end
 
-  context 'when access_token is blank' do
+  context 'when notifier_id is blank' do
     before do
-      post endpoint_url, params: params, headers: { 'Authorization' => nil }
+      post '/reservations/callback', params: params
     end
 
     it { expect(response.status).to eq(400) }
@@ -65,21 +70,32 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
     it { expect(JSON.parse(response.body)['message']).to end_with 'を入力してください' }
   end
 
-  context 'access_token is incorrect' do
+  context 'when available_room_count is blank' do
     before do
-      access_token = 'incorrect_token'
-      post endpoint_url, params: params, headers: { 'Authorization' => access_token }
+      params[:plans][0][:plan_calendar][0][:stock] = nil
+      post endpoint_url, params: params
     end
 
     it { expect(response.status).to eq(400) }
     it { expect(JSON.parse(response.body)['status']).to eq 'error' }
-    it { expect(JSON.parse(response.body)['message']).to eq 'APIキーが違います' }
+    it { expect(JSON.parse(response.body)['message']).to end_with 'を入力してください' }
+  end
+
+  context 'when available_room_count is not valid' do
+    before do
+      params[:plans][0][:plan_calendar][0][:stock] = -1
+      post endpoint_url, params: params
+    end
+
+    it { expect(response.status).to eq(400) }
+    it { expect(JSON.parse(response.body)['status']).to eq 'error' }
+    it { expect(JSON.parse(response.body)['message']).to eq '在庫中数は0より大きい値にしてください' }
   end
 
   context 'when has no available room' do
     before do
-      params[:stock_calendar][0][:stock] = 0
-      post endpoint_url, params: params, headers: { 'Authorization' => access_token }
+      params[:plans][0][:plan_calendar][0][:stock] = 0
+      post endpoint_url, params: params
     end
 
     it { expect(response.status).to eq(400) }
@@ -90,17 +106,17 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
   context 'when has no room bookmark' do
     before do
       params[:type_id] = 2000
-      post endpoint_url, params: params, headers: { 'Authorization' => access_token }
+      post endpoint_url, params: params
     end
 
     it { expect(response.status).to eq(400) }
     it { expect(JSON.parse(response.body)['status']).to eq 'error' }
-    it { expect(JSON.parse(response.body)['message']).to eq 'ルームブックマークがありません' }
+    it { expect(JSON.parse(response.body)['message']).to eq 'お気に入りた部屋で見つかりませんでした。' }
   end
 
   context 'when send available room notification successfully' do
     before do
-      post endpoint_url, params: params, headers: { 'Authorization' => access_token }
+      post endpoint_url, params: params
     end
 
     it { expect(response.status).to eq(200) }

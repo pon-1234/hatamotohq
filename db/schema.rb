@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_042256) do
+ActiveRecord::Schema.define(version: 2022_02_10_082919) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -389,11 +389,19 @@ ActiveRecord::Schema.define(version: 2022_01_20_042256) do
     t.index ['reminder_id'], name: 'index_remindings_on_reminder_id'
   end
 
+  create_table 'reservation_inquiries', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.integer 'capacity'
+    t.date 'start_date'
+    t.date 'end_date'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+  end
+
   create_table 'reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_friend_id'
     t.string 'room_id'
     t.string 'room_name'
-    t.string 'callback_url'
+    t.string 'notifier_id'
     t.string 'status', default: 'wait'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false

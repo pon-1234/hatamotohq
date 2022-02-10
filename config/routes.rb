@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get 'reservations/inquiry_form/:friend_line_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
   get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
   post 'reservations/inquire/:friend_line_id',  to: 'reservations#inquire', as: 'reservation_inquire'
-  post 'reservations/callback/:uid', to: 'reservations#callback', as: 'reservation_callback'
+  post 'reservations/callback', to: 'reservations#callback', as: 'reservation_callback'
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
