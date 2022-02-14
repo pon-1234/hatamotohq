@@ -146,7 +146,7 @@ export default {
     }
   }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1400px) and (min-width: 1000px) {
     .channel-info {
       height: 250px;
       overflow-y: scroll;
