@@ -17,7 +17,7 @@ RSpec.describe 'GET /api/v1/staff/channels/:channel_id/scenarios', type: :reques
   let(:endpoint_url) { scenarios_api_v1_staff_channel_path(channel.id) }
   let(:expectation_scenario_list) { [
     scenario.as_json(only: [:id, :title, :description, :mode, :status, :type, :scenario_messages_count,
-      :after_action]).merge('tags' => [])
+      :after_action], methods: [:running_count, :finished_count]).merge('tags' => [])
   ]}
 
   context "don't have permission for get scenario list" do

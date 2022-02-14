@@ -20,6 +20,7 @@
                 <tr>
                   <th class="mw-120">配信方式</th>
                   <th>シナリオ名</th>
+                  <th colspan="2" class="text-center mw-200">統計</th>
                   <th class="mw-120">状況</th>
                   <th class="mw-200">メッセージ</th>
                   <th>操作</th>
@@ -31,6 +32,8 @@
                   <td>
                     <p class="scenario_title">{{ scenario.title }}</p>
                   </td>
+                  <td class="text-center">{{ scenario.running_count }} 処理中</td>
+                  <td class="text-center">{{ scenario.finished_count }} 完了</td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">
@@ -267,7 +270,7 @@ export default {
         line_friend_ids: this.selectedTesterIds
       });
       if (response) {
-        window.toastr.success('シナリオのテスト配信は完了しました。');
+        Util.showSuccessThenRedirect('シナリオのテスト配信は完了しました。', location.href);
       } else {
         window.toastr.error('シナリオのテスト配信は失敗しました。');
       }
@@ -277,7 +280,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .scenario_title {
-    width: 40vw;
+    width: 36vw;
     margin: 0;
     white-space: pre-wrap;
     -webkit-box-orient: vertical;
