@@ -9,6 +9,7 @@
 #  folder_id       :bigint
 #  name            :string(255)
 #  status          :string(255)
+#  biz_hours       :json
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
@@ -45,5 +46,23 @@ class AutoResponse < ApplicationRecord
     self.auto_response_messages&.each { |message| message.clone_to!(new_auto_response.id) }
     self.auto_response_keywords&.each { |keyword| keyword.clone_to!(new_auto_response.id) }
     new_auto_response
+  end
+
+  def is_in_biz_hours?
+    return true if !self.biz_hours['enabled']
+    return self.is_opened_now? if self.is_opened_today?
+    false
+  end
+
+  def is_opened_today?
+    biz_weekdays = self.biz_hours['weekdays']
+    return false if biz_weekdays.empty?
+    biz_weekdays.include? Date.today.strftime('%a').downcase
+  end
+
+  def is_opened_now?
+    start_at = self.biz_hours['time']['start']
+    end_at = self.biz_hours['time']['end']
+    Time.now.between?(start_at, end_at)
   end
 end
