@@ -63,6 +63,6 @@ class AutoResponse < ApplicationRecord
   def is_opened_now?
     start_at = self.biz_hours['time']['start']
     end_at = self.biz_hours['time']['end']
-    Time.now.between?(start_at, end_at)
+    Time.now.to_s(:time).between?(start_at, end_at)
   end
 end
