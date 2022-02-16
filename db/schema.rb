@@ -411,6 +411,35 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
     t.index ['line_friend_id'], name: 'index_reservations_on_line_friend_id'
   end
 
+  create_table 'review_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'review_id'
+    t.bigint 'review_question_id'
+    t.text 'answer'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['review_id'], name: 'index_review_answers_on_review_id'
+    t.index ['review_question_id'], name: 'index_review_answers_on_review_question_id'
+  end
+
+  create_table 'review_questions', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.string 'type'
+    t.string 'title'
+    t.text 'description'
+    t.json 'config'
+    t.integer 'sort_order'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+  end
+
+  create_table 'reviews', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'client_id'
+    t.bigint 'line_friend_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['client_id'], name: 'index_reviews_on_client_id'
+    t.index ['line_friend_id'], name: 'index_reviews_on_line_friend_id'
+  end
+
   create_table 'rich_menus', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'line_account_id'
     t.bigint 'folder_id'
@@ -684,6 +713,10 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   add_foreign_key 'remindings', 'reminders'
   add_foreign_key 'reservations', 'line_accounts'
   add_foreign_key 'reservations', 'line_friends'
+  add_foreign_key 'review_answers', 'review_questions'
+  add_foreign_key 'review_answers', 'reviews'
+  add_foreign_key 'reviews', 'clients'
+  add_foreign_key 'reviews', 'line_friends'
   add_foreign_key 'rich_menus', 'folders'
   add_foreign_key 'rich_menus', 'line_accounts'
   add_foreign_key 'rich_menus', 'media', column: 'media_id'
