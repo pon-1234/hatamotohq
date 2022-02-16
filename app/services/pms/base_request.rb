@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# Fix issue Net::OpenTimeout when use httpParty
-# reference https://stackoverflow.com/questions/40552387/rails-netopentimeout-execution-expired-with-httparty
-require 'resolv-replace'
-
 class Pms::BaseRequest
   HTTP_OK = '200'
   HTTP_ACCEPTED = '202'

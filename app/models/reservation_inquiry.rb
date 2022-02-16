@@ -6,8 +6,8 @@
 #
 #  id         :bigint           not null, primary key
 #  capacity   :integer
-#  start_date :date
-#  end_date   :date
+#  date_start :date
+#  date_end   :date
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

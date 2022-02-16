@@ -39,19 +39,13 @@ class ReservationsController < ApplicationController
 
   private
     def inquiry_params
-      if params[:inquiry][:dateStart]
-        params[:inquiry][:dateStart] = I18n.l(Date.strptime(params[:inquiry][:dateStart], '%Y年%m月%d日'), format: :hyphen)
-      end
-      if params[:inquiry][:dateEnd]
-        params[:inquiry][:dateEnd] = I18n.l(Date.strptime(params[:inquiry][:dateEnd], '%Y年%m月%d日'), format: :hyphen)
-      end
       params
         .require(:inquiry)
         .permit(
           :friend_line_id,
           :capacity,
-          :dateStart,
-          :dateEnd
+          :date_start,
+          :date_end
         )
     end
 

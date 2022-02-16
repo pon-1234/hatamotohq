@@ -50,8 +50,8 @@ class Reservation < ApplicationRecord
     api_result = Pms::CreateRoomNotifier.new.perform({
       typeId: room_id.to_i,
       conditions: {
-        dateStart: I18n.l(inquiry.start_date, format: :hyphen),
-        dateEnd: I18n.l(inquiry.end_date, format: :hyphen),
+        dateStart: I18n.l(inquiry.date_start, format: :hyphen),
+        dateEnd: I18n.l(inquiry.date_end, format: :hyphen),
         onStockGt: 0,
         onPriceLt: 0
       },

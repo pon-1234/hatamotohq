@@ -8,7 +8,7 @@
 #  line_friend_id  :bigint
 #  room_id         :string(255)
 #  room_name       :string(255)
-#  callback_url    :string(255)
+#  notifier_id     :string(255)
 #  status          :string(255)      default("wait")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

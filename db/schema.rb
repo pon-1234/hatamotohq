@@ -391,8 +391,8 @@ ActiveRecord::Schema.define(version: 2022_02_10_082919) do
 
   create_table 'reservation_inquiries', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.integer 'capacity'
-    t.date 'start_date'
-    t.date 'end_date'
+    t.date 'date_start'
+    t.date 'date_end'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
   end

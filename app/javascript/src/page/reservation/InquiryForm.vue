@@ -39,10 +39,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="チェックイン日付を選択してください"
-                  name="inquiry[dateStart]"
+                  name="inquiry[date_start]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                   v-model="inquiryFormData.date_start"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -59,10 +60,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="終了日付を選択してください"
-                  name="inquiry[dateEnd]"
+                  name="inquiry[date_end]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                   v-model="inquiryFormData.date_end"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
