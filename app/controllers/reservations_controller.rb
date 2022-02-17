@@ -20,20 +20,20 @@ class ReservationsController < ApplicationController
   def inquiry_success
   end
 
-  # POST /reservations/callback/:uid
+  # POST /reservations/callback/?notifierId=abc12-123acwab
   # When a bookmarked room becomes available, hotel management system
   # will send a notification via this URL with room information.
   def callback
-    validator = SendAvailableRoomNotificationValidator.new(type_id: available_room_params[:typeId],
-      available_room_count: available_room_params.to_h[:plans]&.first.try(:[], 'planCalendar')&.first.try(:[], 'stock'), uid: params[:uid],
-      crm_api_key: request.headers['Authorization'].to_s.split(' ').last)
+    validator = SendAvailableRoomNotificationValidator.new(type_id: available_room_params['typeId'],
+      available_room_count: available_room_params['plans']&.first.try(:[], 'planCalendar')&.first.try(:[], 'stock'),
+      notifier_id: params['notifierId'])
     unless validator.valid?
       render_bad_request_with_message(validator.errors.full_messages.first)
       return
     end
 
-    reservation = Reservation.wait.find_by(room_id: params[:typeId], callback_url: params[:uid])
-    AvailableRoomNotificationJob.perform_later available_room_params.to_h, reservation
+    reservation = Reservation.wait.find_by(room_id: params[:type_id], notifier_id: params[:notifierId])
+    AvailableRoomNotificationJob.perform_later available_room_params, reservation
     render_success
   end
 
@@ -44,13 +44,14 @@ class ReservationsController < ApplicationController
         .permit(
           :friend_line_id,
           :capacity,
-          :date_start
-          # :date_end
+          :date_start,
+          :date_end
         )
     end
 
     def available_room_params
-      params.permit(:uid, :nonSmoking, :paxMax, :paxMin, :typeId, :typeName, :otaUrl,
-        roomArea: [:value, :unit], roomPhotos: [], plans: [planCalendar: [:date, :price, :stock]])
+      @available_room_params ||= params.permit(:notifierId, :non_smoking, :pax_max, :pax_min, :type_id, :type_name, :ota_url,
+        room_area: [:value, :unit], room_photos: [], plans: [:plan_name, plan_calendar: [:date, :price, :stock]])
+      @available_room_params.to_h.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
     end
 end

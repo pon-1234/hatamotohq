@@ -39,11 +39,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="チェックイン日付を選択してください"
-                  :min-datetime="currentDate"
-                  name="inquiry[date]"
+                  name="inquiry[date_start]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                   v-model="inquiryFormData.date_start"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -51,7 +51,7 @@
           </div>
 
           <!-- 終了日付 -->
-          <div class="form-group row" hidden>
+          <div class="form-group row">
             <label class="col-lg-4">終了日付<required-mark /></label>
             <div class="col-lg-8">
               <ValidationProvider name="終了日付" rules="required" v-slot="{ errors }">
@@ -60,11 +60,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="終了日付を選択してください"
-                  :min-datetime="currentDate"
-                  name="inquiry[date]"
+                  name="inquiry[date_end]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                   v-model="inquiryFormData.date_end"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>

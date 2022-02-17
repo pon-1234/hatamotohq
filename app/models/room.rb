@@ -10,8 +10,9 @@ class Room
   attr_reader :capacity
   attr_reader :vacant
   attr_reader :ota_url
+  attr_reader :reservation_inquiry
 
-  def initialize(json)
+  def initialize(json, reservation_inquiry = nil)
     return if json.blank?
     @type_id = json['typeId']
     @type_name = json['typeName']
@@ -22,6 +23,7 @@ class Room
     @capacity = "#{json['paxMin']}〜#{json['paxMax']}"
     @vacant = json['plans']&.first['planCalendar']&.first['stock'].to_i > 0
     @ota_url = json['otaUrl']
+    @reservation_inquiry = reservation_inquiry
   end
 
   def to_html
@@ -74,7 +76,8 @@ class Room
           type: 'rsv_bookmark',
           content: {
             roomId: self.type_id,
-            roomName: self.type_name
+            roomName: self.type_name,
+            reservation_inquiry_id: self.reservation_inquiry&.id
           }
         }]
       }

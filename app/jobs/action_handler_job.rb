@@ -137,6 +137,7 @@ class ActionHandlerJob < ApplicationJob
         line_friend: @friend,
         status: :wait
       )
+      reservation.update_notifier_id_from_pms(content['reservation_inquiry_id'])
       # Send message inform user that the room is bookmarked
       send_text_message('お気に入りました。空室が空いたらお知らせします。') if reservation.present?
     end

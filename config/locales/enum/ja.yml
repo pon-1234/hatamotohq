@@ -107,3 +107,6 @@ ja:
     fri: 金曜日
     sat: 土曜日
     sun: 日曜日
+  date:
+    formats:
+      hyphen: '%Y-%m-%d'
