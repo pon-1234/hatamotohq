@@ -20,7 +20,7 @@
                 <tr>
                   <th class="mw-120">配信方式</th>
                   <th>シナリオ名</th>
-                  <th colspan="2" class="text-center mw-200">統計</th>
+                  <th colspan="2" class="text-center mw-230">統計</th>
                   <th class="mw-120">状況</th>
                   <th class="mw-200">メッセージ</th>
                   <th>操作</th>
@@ -32,8 +32,8 @@
                   <td>
                     <p class="scenario_title">{{ scenario.title }}</p>
                   </td>
-                  <td class="text-center">{{ scenario.running_count }} 処理中</td>
-                  <td class="text-center">{{ scenario.finished_count }} 完了</td>
+                  <td class="text-center">{{ scenario.sending_friend_count }}人 (送信中)</td>
+                  <td class="text-center">{{ scenario.sent_friend_count }}人 (送信済)</td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">

@@ -4,16 +4,14 @@ class ScenarioSchedulerJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
   include User::MessagesHelper
+  include SendScenarioStatistic
 
   def perform(channel_id, scenario_id)
     @channel = Channel.find(channel_id)
     @scenario = Scenario.find(scenario_id)
     scenario_messages = @scenario.scenario_messages.enabled.ordered
     return if scenario_messages.empty?
-    @scenario_log = ScenarioLog.create!(scenario: @scenario, line_friend: @channel.line_friend,
-      status: 'running', start_at: Time.zone.now)
-    @total_scenario_message_number = @scenario.after_action.try(:[], 'data') ? (scenario_messages.count + 1) : (scenario_messages.count)
-    @sent_scenario_message_count = 0
+    begin_sending_scenario_statistic(scenario_messages)
     save_scenario_started_log
     scenario_messages.each do |scenario_message|
       schedule(scenario_message)
@@ -26,7 +24,7 @@ class ScenarioSchedulerJob < ApplicationJob
       schedule_at = deliver_time_for(scenario_message)
       if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
-        scenario_log_status_will_be_updated_to_finished
+        after_sending_scenario_statistic
       else
         create_message_event(scenario_message, schedule_at)
       end
@@ -51,7 +49,7 @@ class ScenarioSchedulerJob < ApplicationJob
       if last_message.is_initial? || (schedule_at < Time.zone.now)
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
         save_scenario_ended_log
-        scenario_log_status_will_be_updated_to_finished
+        after_sending_scenario_statistic
       else
         schedule_at = schedule_at
         step = last_message.step + 1
@@ -108,12 +106,5 @@ class ScenarioSchedulerJob < ApplicationJob
 
     def save_scenario_ended_log
       Messages::SystemLogBuilder.new(@channel).perform_scenario_end(@scenario)
-    end
-
-    def scenario_log_status_will_be_updated_to_finished
-      @sent_scenario_message_count += 1
-      if @sent_scenario_message_count == @total_scenario_message_number
-        @scenario_log.update(status: 'finished', end_at: Time.zone.now)
-      end
     end
 end

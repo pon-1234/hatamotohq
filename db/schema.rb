@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_15_064920) do
+ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -356,6 +356,16 @@ ActiveRecord::Schema.define(version: 2022_02_15_064920) do
     t.index ['key'], name: 'index_postback_mappers_on_key'
   end
 
+  create_table 'receive_scenario_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'scenario_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.string 'status'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_receive_scenario_friends_on_line_friend_id'
+    t.index ['scenario_id'], name: 'index_receive_scenario_friends_on_scenario_id'
+  end
+
   create_table 'reminder_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'reminding_id'
     t.bigint 'episode_id'
@@ -500,6 +510,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_064920) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.integer 'sending_friend_count', default: 0
+    t.integer 'sent_friend_count', default: 0
     t.index ['folder_id'], name: 'index_scenarios_on_folder_id'
     t.index ['line_account_id'], name: 'index_scenarios_on_line_account_id'
   end
@@ -664,6 +676,8 @@ ActiveRecord::Schema.define(version: 2022_02_15_064920) do
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
+  add_foreign_key 'receive_scenario_friends', 'line_friends'
+  add_foreign_key 'receive_scenario_friends', 'scenarios'
   add_foreign_key 'reminder_events', 'episodes'
   add_foreign_key 'reminder_events', 'remindings'
   add_foreign_key 'reminders', 'folders'

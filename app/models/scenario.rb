@@ -17,6 +17,8 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  deleted_at              :datetime
+#  sending_friend_count    :integer          default(0)
+#  sent_friend_count       :integer          default(0)
 #
 # Indexes
 #
@@ -35,7 +37,6 @@ class Scenario < ApplicationRecord
   has_many :scenario_messages, dependent: :destroy
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
-  has_many :scenario_logs, dependent: :destroy
 
   validates_presence_of :status
   validates :title, presence: { unless: :draft? }, length: { maximum: 255 }
@@ -64,13 +65,5 @@ class Scenario < ApplicationRecord
       message.step = index + 1
       message.save
     end
-  end
-
-  def running_count
-    scenario_logs.running.count
-  end
-
-  def finished_count
-    scenario_logs.finished.count
   end
 end

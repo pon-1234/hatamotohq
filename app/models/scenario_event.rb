@@ -79,8 +79,18 @@ class ScenarioEvent < ApplicationRecord
 
     def execute_after_deliver
       # If this event is the last
-      Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario) if self.is_last
-      scenario_log.update(status: 'finished', end_at: Time.zone.now) if scenario_log && self.is_last
+      if self.is_last
+        Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario)
+        scenario_log.update(status: 'finished', end_at: Time.zone.now) if scenario_log
+        update_friend_count_for_scenario
+      end
       self.destroy
+    end
+
+    def update_friend_count_for_scenario
+      if receive_scenario_friend = ReceiveScenarioFriend.running.find_by(scenario: scenario, line_friend: channel.line_friend)
+        receive_scenario_friend.finished!
+        scenario.update! sending_friend_count: scenario.sending_friend_count.pred, sent_friend_count: scenario.sent_friend_count.next
+      end
     end
 end

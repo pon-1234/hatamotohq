@@ -17,6 +17,8 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  deleted_at              :datetime
+#  sending_friend_count    :integer          default(0)
+#  sent_friend_count       :integer          default(0)
 #
 # Indexes
 #
