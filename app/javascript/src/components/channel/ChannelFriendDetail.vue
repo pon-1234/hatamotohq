@@ -6,7 +6,10 @@
     <div class="card-body">
       <div class="mt-3 text-center">
         <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
-        <h4>{{ (friend.display_name || friend.line_name) | truncate(15) }}</h4>
+        <h4>
+          {{ (friend.display_name || friend.line_name) | truncate(15)
+          }}<span v-if="friend.tester" class="ml-1 pt-1 badge badge-warning badge-sm">テスター</span>
+        </h4>
       </div>
 
       <div class="mt-3">
@@ -24,30 +27,31 @@
           </template>
         </div>
         <hr class="" />
+        <div class="channel-info">
+          <template v-if="isAdmin">
+            <!-- START: 担当者 -->
+            <p class="mt-3 mb-1 font-12">
+              <strong><i class="uil uil-user"></i> 担当者:</strong>
+            </p>
+            <p><channel-assignment :key="contentKey" :channel="activeChannel"></channel-assignment></p>
+            <!-- END: 担当者 -->
+          </template>
 
-        <template v-if="isAdmin">
-          <!-- START: 担当者 -->
           <p class="mt-3 mb-1 font-12">
-            <strong><i class="uil uil-user"></i> 担当者:</strong>
+            <strong><i class="uil uil-notes"></i> メモ欄:</strong>
           </p>
-          <p><channel-assignment :key="contentKey" :channel="activeChannel"></channel-assignment></p>
-          <!-- END: 担当者 -->
-        </template>
+          <p class="text-prewrap max-3-lines">{{ friend.note || "なし" }}</p>
 
-        <p class="mt-3 mb-1 font-12">
-          <strong><i class="uil uil-notes"></i> メモ欄:</strong>
-        </p>
-        <p class="text-prewrap max-3-lines">{{ friend.note || "なし" }}</p>
+          <p class="mt-3 mb-1 font-12">
+            <strong><i class="uil uil-tag"></i> タグ:</strong>
+          </p>
+          <p><friend-tag :tags="friend.tags"></friend-tag></p>
 
-        <p class="mt-3 mb-1 font-12">
-          <strong><i class="uil uil-tag"></i> タグ:</strong>
-        </p>
-        <p><friend-tag :tags="friend.tags"></friend-tag></p>
-
-        <p class="mt-4 mb-1 font-12">
-          <strong><i class="uil uil-clock"></i> 登録日時:</strong>
-        </p>
-        <p>{{ friendAddedAt }}</p>
+          <p class="mt-4 mb-1 font-12">
+            <strong><i class="uil uil-clock"></i> 登録日時:</strong>
+          </p>
+          <p>{{ friendAddedAt }}</p>
+        </div>
       </div>
     </div>
     <!-- end card-body -->
@@ -139,6 +143,13 @@ export default {
   @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 25px);
+    }
+  }
+
+  @media (max-width: 1400px) and (min-width: 1000px) {
+    .channel-info {
+      height: 250px;
+      overflow-y: scroll;
     }
   }
 </style>

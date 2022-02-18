@@ -239,6 +239,7 @@ export default {
         channel_assignee_id_eq: null
       };
       Object.assign(this.params, resetParams);
+      this.$emit('changeSelectOnlyTester', null);
     },
     closeModal() {
       this.selectedTags = [];

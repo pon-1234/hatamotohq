@@ -14,6 +14,7 @@ class AutoResponseJob < ApplicationJob
     auto_responses = AutoResponse.where(id: auto_response_ids).enabled
     reply_messages = []
     auto_responses.each do |auto_response|
+      next unless auto_response.is_in_biz_hours?
       auto_response.increase_hit_count
       reply_messages += auto_response.auto_response_messages.pluck(:content)
     end

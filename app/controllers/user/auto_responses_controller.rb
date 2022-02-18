@@ -77,7 +77,8 @@ class User::AutoResponsesController < User::ApplicationController
         :folder_id,
         :name,
         :status,
-        keywords: []
+        keywords: [],
+        biz_hours: {}
       )
     end
 
@@ -86,7 +87,8 @@ class User::AutoResponsesController < User::ApplicationController
         :folder_id,
         :name,
         :status,
-        keywords: []
+        keywords: [],
+        biz_hours: {}
       )
     end
 

@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2022_02_10_082919) do
     t.bigint 'folder_id'
     t.string 'name'
     t.string 'status'
+    t.json 'biz_hours'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'

@@ -103,6 +103,145 @@
 
     <div class="card">
       <div class="card-header left-border">
+        <h3>反応する時間帯を設定する</h3>
+      </div>
+      <div class="card-body">
+        <div class="mt-2">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input
+              type="radio"
+              id="bizHourEnabledOn"
+              name="bizHourEnabled"
+              value="default"
+              :checked="autoResponseData.biz_hours.enabled"
+              @change="autoResponseData.biz_hours.enabled = true"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="bizHourEnabledOn">指定する</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input
+              type="radio"
+              id="bizHourEnabledOff"
+              name="bizHourEnabled"
+              value="basic"
+              :checked="!autoResponseData.biz_hours.enabled"
+              @change="autoResponseData.biz_hours.enabled = false"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="bizHourEnabledOff">設定なし</label>
+          </div>
+        </div>
+
+        <divider></divider>
+
+        <div class="d-flex flex-column">
+          <div class="ml-2 d-flex">
+            <label>曜日</label>
+            <div class="ml-4 checkbox-inline">
+              <label>
+                <input
+                  type="checkbox"
+                  value="1"
+                  class="week_checkbox"
+                  autocomplete="off"
+                  :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
+                  v-model="isCheckedAllWeekday"
+                  @change="selectAllWeekdays"
+                />
+                <span class="ml-1">全選択</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="d-flex">
+            <template v-for="(weekday, index) in weekdays">
+              <div class="ml-2 checkbox-inline" :key="index">
+                <label>
+                  <input
+                    type="checkbox"
+                    name="bizHourWeekday"
+                    :value="weekday.value"
+                    class="week_checkbox"
+                    autocomplete="off"
+                    :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
+                    v-model="autoResponseData.biz_hours.weekdays"
+                  />
+                  <span class="ml-1">{{ weekday.name }}</span>
+                </label>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <divider></divider>
+        <div class="d-flex flex-column">
+          <label>時間帯</label>
+
+          <div class="d-flex mb-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="bizHourFullTimeOn"
+                name="bizHourFullTime"
+                value="default"
+                :checked="autoResponseData.biz_hours.is_all_day"
+                @change="selectAllDay(true)"
+                :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="bizHourFullTimeOn">全ての時間</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                id="bizHourFullTimeOff"
+                name="bizHourFullTime"
+                value="basic"
+                :checked="!autoResponseData.biz_hours.is_all_day"
+                @change="selectAllDay(false)"
+                :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
+                class="custom-control-input"
+              />
+              <label class="custom-control-label" for="bizHourFullTimeOff">時間帯を指定</label>
+            </div>
+          </div>
+          <div class="d-flex">
+            <datetime
+              v-model="autoResponseData.biz_hours.time.start"
+              name="bizHourFullTimeStart"
+              input-class="form-control"
+              type="time"
+              :phrases="{ ok: '確定', cancel: '閉じる' }"
+              placeholder="日付を選択してください"
+              value-zone="Asia/Tokyo"
+              v-validate="'required'"
+              data-vv-as="開始日時"
+              @input="onBizHoursStartTimeChanged()"
+              :disabled="showInputDateTime ? 'disabled' : false"
+            ></datetime>
+            <div class="mx-2 my-auto">から</div>
+            <datetime
+              v-model="autoResponseData.biz_hours.time.end"
+              name="bizHourFullTimeEnd"
+              input-class="form-control"
+              type="time"
+              :phrases="{ ok: '確定', cancel: '閉じる' }"
+              placeholder="日付を選択してください"
+              value-zone="Asia/Tokyo"
+              v-validate="'required'"
+              :min-datetime="autoResponseData.biz_hours.time.start"
+              data-vv-as="終了日時"
+              @input="onBizHoursEndTimeChanged()"
+              :disabled="showInputDateTime ? 'disabled' : false"
+            ></datetime>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header left-border">
         <h3>反応時のアクションを設定する</h3>
       </div>
       <div class="card-body">
@@ -152,8 +291,12 @@
 import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
 import ViewHelper from '@/core/view_helper';
+import Divider from '../../../components/common/Divider.vue';
+import { Datetime } from 'vue-datetime';
+import moment from 'moment';
 
 export default {
+  components: { Divider, Datetime },
   props: {
     auto_response_id: Number
   },
@@ -164,12 +307,22 @@ export default {
       loading: true,
       contentKey: 0,
       error: null,
+      weekdays: this.Weekday,
       autoResponseData: {
         folder_id: null,
         name: '',
         status: 'enabled',
         keywords: [],
-        messages: []
+        messages: [],
+        biz_hours: {
+          enabled: false,
+          weekdays: [],
+          is_all_day: false,
+          time: {
+            start: '00:00',
+            end: '23:59'
+          }
+        }
       }
     };
   },
@@ -204,7 +357,15 @@ export default {
   computed: {
     ...mapState('autoResponse', {
       folders: state => state.folders
-    })
+    }),
+
+    isCheckedAllWeekday() {
+      return this.autoResponseData.biz_hours.weekdays.length === 7;
+    },
+
+    showInputDateTime() {
+      return !this.autoResponseData.biz_hours.enabled || this.autoResponseData.biz_hours.is_all_day;
+    }
   },
 
   methods: {
@@ -232,6 +393,18 @@ export default {
       }
     },
 
+    onBizHoursStartTimeChanged() {
+      this.autoResponseData.biz_hours.time.start = moment(this.autoResponseData.biz_hours.time.start)
+        .format('HH:mm')
+        .toString();
+    },
+
+    onBizHoursEndTimeChanged() {
+      this.autoResponseData.biz_hours.time.end = moment(this.autoResponseData.biz_hours.time.end)
+        .format('HH:mm')
+        .toString();
+    },
+
     async submitCreate() {
       if (this.loading) return;
       this.loading = true;
@@ -240,10 +413,12 @@ export default {
         this.loading = false;
         return ViewHelper.scrollToRequiredField(false);
       }
+
       const data = {
         folder_id: Util.getParamFromUrl('folder_id'),
         ...this.autoResponseData
       };
+
       if (this.auto_response_id) {
         const response = await this.updateAutoResponse(data);
         if (response) {
@@ -299,6 +474,10 @@ export default {
       this.forceRerender();
     },
 
+    selectAllWeekdays() {
+      this.autoResponseData.biz_hours.weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    },
+
     removeContent(index) {
       this.autoResponseData.messages.splice(index, 1);
       this.forceRerender();
@@ -313,6 +492,10 @@ export default {
       const option = this.autoResponseData.messages[index];
       this.autoResponseData.messages[index] = this.autoResponseData.messages.splice(index + 1, 1, option)[0];
       this.forceRerender();
+    },
+    selectAllDay(isAllDay) {
+      this.autoResponseData.biz_hours.is_all_day = isAllDay;
+      if (isAllDay) this.autoResponseData.biz_hours.time = { start: '00:00', end: '23:59' };
     }
   }
 };
