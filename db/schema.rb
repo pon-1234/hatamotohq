@@ -356,16 +356,6 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
     t.index ['key'], name: 'index_postback_mappers_on_key'
   end
 
-  create_table 'receive_scenario_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'scenario_id', null: false
-    t.bigint 'line_friend_id', null: false
-    t.string 'status'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.index ['line_friend_id'], name: 'index_receive_scenario_friends_on_line_friend_id'
-    t.index ['scenario_id'], name: 'index_receive_scenario_friends_on_scenario_id'
-  end
-
   create_table 'reminder_events', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'reminding_id'
     t.bigint 'episode_id'
@@ -459,12 +449,22 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
     t.boolean 'is_last', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.integer 'scenario_log_id'
+    t.bigint 'scenario_log_id'
     t.index ['channel_id'], name: 'index_scenario_events_on_channel_id'
     t.index ['line_account_id'], name: 'index_scenario_events_on_line_account_id'
     t.index ['scenario_id'], name: 'index_scenario_events_on_scenario_id'
     t.index ['scenario_log_id'], name: 'index_scenario_events_on_scenario_log_id'
     t.index ['scenario_message_id'], name: 'index_scenario_events_on_scenario_message_id'
+  end
+
+  create_table 'scenario_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'scenario_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.string 'status'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_scenario_friends_on_line_friend_id'
+    t.index ['scenario_id'], name: 'index_scenario_friends_on_scenario_id'
   end
 
   create_table 'scenario_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -676,8 +676,6 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
-  add_foreign_key 'receive_scenario_friends', 'line_friends'
-  add_foreign_key 'receive_scenario_friends', 'scenarios'
   add_foreign_key 'reminder_events', 'episodes'
   add_foreign_key 'reminder_events', 'remindings'
   add_foreign_key 'reminders', 'folders'
@@ -691,8 +689,11 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   add_foreign_key 'rich_menus', 'media', column: 'media_id'
   add_foreign_key 'scenario_events', 'channels'
   add_foreign_key 'scenario_events', 'line_accounts'
+  add_foreign_key 'scenario_events', 'scenario_logs'
   add_foreign_key 'scenario_events', 'scenario_messages'
   add_foreign_key 'scenario_events', 'scenarios'
+  add_foreign_key 'scenario_friends', 'line_friends'
+  add_foreign_key 'scenario_friends', 'scenarios'
   add_foreign_key 'scenario_logs', 'line_friends'
   add_foreign_key 'scenario_logs', 'scenarios'
   add_foreign_key 'scenario_messages', 'scenarios'

@@ -27,5 +27,5 @@ class ScenarioLog < ApplicationRecord
   belongs_to :scenario
   belongs_to :line_friend
 
-  enum status: { running: 'running', finished: 'finished' }
+  enum status: { running: 'running', done: 'done' }
 end

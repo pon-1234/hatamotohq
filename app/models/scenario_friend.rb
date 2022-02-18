@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: receive_scenario_friends
+# Table name: scenario_friends
 #
 #  id             :bigint           not null, primary key
 #  scenario_id    :bigint           not null
@@ -13,17 +13,17 @@
 #
 # Indexes
 #
-#  index_receive_scenario_friends_on_line_friend_id  (line_friend_id)
-#  index_receive_scenario_friends_on_scenario_id     (scenario_id)
+#  index_scenario_friends_on_line_friend_id  (line_friend_id)
+#  index_scenario_friends_on_scenario_id     (scenario_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #  fk_rails_...  (scenario_id => scenarios.id)
 #
-class ReceiveScenarioFriend < ApplicationRecord
+class ScenarioFriend < ApplicationRecord
   belongs_to :scenario
   belongs_to :line_friend
 
-  enum status: { running: 'running', finished: 'finished' }
+  enum status: { running: 'running', done: 'done' }
 end

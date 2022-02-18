@@ -17,7 +17,7 @@
 #  is_last             :boolean          default(FALSE)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  scenario_log_id     :integer
+#  scenario_log_id     :bigint
 #
 # Indexes
 #
@@ -32,10 +32,12 @@
 #  fk_rails_...  (channel_id => channels.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #  fk_rails_...  (scenario_id => scenarios.id)
+#  fk_rails_...  (scenario_log_id => scenario_logs.id)
 #  fk_rails_...  (scenario_message_id => scenario_messages.id)
 #
 class ScenarioEvent < ApplicationRecord
   include User::MessagesHelper
+  include SendScenarioStatistic
 
   belongs_to :line_account
   belongs_to :scenario
@@ -81,16 +83,9 @@ class ScenarioEvent < ApplicationRecord
       # If this event is the last
       if self.is_last
         Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario)
-        scenario_log.update(status: 'finished', end_at: Time.zone.now) if scenario_log
-        update_friend_count_for_scenario
+        scenario_log.update(status: 'done', end_at: Time.zone.now) if scenario_log
+        update_scenario_statistics(scenario, channel.line_friend)
       end
       self.destroy
-    end
-
-    def update_friend_count_for_scenario
-      if receive_scenario_friend = ReceiveScenarioFriend.running.find_by(scenario: scenario, line_friend: channel.line_friend)
-        receive_scenario_friend.finished!
-        scenario.update! sending_friend_count: scenario.sending_friend_count.pred, sent_friend_count: scenario.sent_friend_count.next
-      end
     end
 end

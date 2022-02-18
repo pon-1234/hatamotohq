@@ -17,7 +17,7 @@
 #  is_last             :boolean          default(FALSE)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  scenario_log_id     :integer
+#  scenario_log_id     :bigint
 #
 # Indexes
 #
@@ -32,6 +32,7 @@
 #  fk_rails_...  (channel_id => channels.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #  fk_rails_...  (scenario_id => scenarios.id)
+#  fk_rails_...  (scenario_log_id => scenario_logs.id)
 #  fk_rails_...  (scenario_message_id => scenario_messages.id)
 #
 require 'rails_helper'
