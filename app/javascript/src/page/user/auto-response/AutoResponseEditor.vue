@@ -129,7 +129,7 @@
               @change="autoResponseData.biz_hours.enabled = false"
               class="custom-control-input"
             />
-            <label class="custom-control-label" for="bizHourEnabledOff">設定なし</label>
+            <label class="custom-control-label" for="bizHourEnabledOff">指定しない</label>
           </div>
         </div>
 
