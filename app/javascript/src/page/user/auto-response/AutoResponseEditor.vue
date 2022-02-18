@@ -106,7 +106,7 @@
         <h3>反応する時間帯を設定する</h3>
       </div>
       <div class="card-body">
-        <div class="mt-2">
+        <div>
           <div class="custom-control custom-radio custom-control-inline">
             <input
               type="radio"
@@ -136,9 +136,9 @@
         <divider></divider>
 
         <div class="d-flex flex-column">
-          <div class="ml-2 d-flex">
-            <label>曜日</label>
-            <div class="ml-4 checkbox-inline">
+          <label>曜日</label>
+          <div>
+            <div class="checkbox-inline">
               <label>
                 <input
                   type="checkbox"
@@ -152,25 +152,24 @@
                 <span class="ml-1">全選択</span>
               </label>
             </div>
-          </div>
-
-          <div class="d-flex">
-            <template v-for="(weekday, index) in weekdays">
-              <div class="ml-2 checkbox-inline" :key="index">
-                <label>
-                  <input
-                    type="checkbox"
-                    name="bizHourWeekday"
-                    :value="weekday.value"
-                    class="week_checkbox"
-                    autocomplete="off"
-                    :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
-                    v-model="autoResponseData.biz_hours.weekdays"
-                  />
-                  <span class="ml-1">{{ weekday.name }}</span>
-                </label>
-              </div>
-            </template>
+            <div class="d-flex">
+              <template v-for="(weekday, index) in weekdays">
+                <div class="mr-2 checkbox-inline" :key="index">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="bizHourWeekday"
+                      :value="weekday.value"
+                      class="week_checkbox"
+                      autocomplete="off"
+                      :disabled="!autoResponseData.biz_hours.enabled ? 'disabled' : false"
+                      v-model="autoResponseData.biz_hours.weekdays"
+                    />
+                    <span class="ml-1">{{ weekday.name }}</span>
+                  </label>
+                </div>
+              </template>
+            </div>
           </div>
         </div>
 
