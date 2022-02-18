@@ -11,7 +11,7 @@ class ScenarioSchedulerJob < ApplicationJob
     @scenario = Scenario.find(scenario_id)
     scenario_messages = @scenario.scenario_messages.enabled.ordered
     return if scenario_messages.empty?
-    begin_sending_scenario_statistic(scenario_messages)
+    begin_sending_scenario_statistic(@scenario, @channel.line_friend, scenario_messages)
     save_scenario_started_log
     scenario_messages.each do |scenario_message|
       schedule(scenario_message)
@@ -24,7 +24,7 @@ class ScenarioSchedulerJob < ApplicationJob
       schedule_at = deliver_time_for(scenario_message)
       if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
-        after_sending_scenario_statistic
+        after_sending_scenario_statistic(@scenario, @channel.line_friend)
       else
         create_message_event(scenario_message, schedule_at)
       end
@@ -49,7 +49,7 @@ class ScenarioSchedulerJob < ApplicationJob
       if last_message.is_initial? || (schedule_at < Time.zone.now)
         ActionHandlerJob.perform_now(@channel.line_friend, @scenario.after_action['data'])
         save_scenario_ended_log
-        after_sending_scenario_statistic
+        after_sending_scenario_statistic(@scenario, @channel.line_friend)
       else
         schedule_at = schedule_at
         step = last_message.step + 1
