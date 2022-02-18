@@ -4,7 +4,9 @@ class User::ReservationsController < User::ApplicationController
   # GET /user/reservations
   def index
     if request.format.json?
-      @reservations = Reservation.accessible_by(current_ability)
+      @params = params[:q]
+      @q = Reservation.accessible_by(current_ability).order(created_at: :desc).ransack(params[:q])
+      @reservations = @q.result.page(params[:page])
     end
     respond_to do |format|
       format.html

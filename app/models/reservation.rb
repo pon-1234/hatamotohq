@@ -7,7 +7,8 @@
 #  id              :bigint           not null, primary key
 #  line_friend_id  :bigint
 #  room_id         :string(255)
-#  callback_url    :string(255)
+#  room_name       :string(255)
+#  notifier_id     :string(255)
 #  status          :string(255)      default("wait")
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
@@ -30,10 +31,6 @@ class Reservation < ApplicationRecord
   # Scopes
   enum status: { wait: 'wait', cancelled: 'cancelled', done: 'done' }
 
-  before_create do
-    self.callback_url = generate_callback_url if self.callback_url.nil?
-  end
-
   def customer_name
     line_friend.name
   end
@@ -48,11 +45,21 @@ class Reservation < ApplicationRecord
     self.save
   end
 
-  private
-    def generate_callback_url
-      loop do
-        uid = SecureRandom.alphanumeric(32)
-        break uid unless Reservation.where(callback_url: uid).first
-      end
+  def update_notifier_id_from_pms(inquiry_id)
+    return unless inquiry_id && inquiry = ReservationInquiry.find_by_id(inquiry_id)
+    api_result = Pms::CreateRoomNotifier.new.perform({
+      typeId: room_id.to_i,
+      conditions: {
+        dateStart: I18n.l(inquiry.date_start, format: :hyphen),
+        dateEnd: I18n.l(inquiry.date_end, format: :hyphen),
+        onStockGt: 0,
+        onPriceLt: 0
+      },
+      callbackUrl: "#{ENV['DOMAIN']}/reservations/callback"
+    })
+    if api_result
+      self.notifier_id = api_result
+      self.save
     end
+  end
 end

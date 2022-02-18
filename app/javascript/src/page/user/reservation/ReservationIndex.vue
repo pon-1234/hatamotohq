@@ -3,6 +3,12 @@
     <div class="card mvh-50">
       <div class="card-header d-flex justify-content-end">
         <div class="d-flex text-nowrap">
+          <select class="form-control fw-150 mr-1" v-model="queryParams.status_eq">
+            <option value="">状況：すべて</option>
+            <option value="done">完了</option>
+            <option value="wait">空室待ち</option>
+            <option value="cancelled">キャンセル済</option>
+          </select>
           <div class="input-group app-search">
             <input
               type="text"
@@ -13,7 +19,7 @@
             />
             <span class="mdi mdi-magnify search-icon"></span>
             <div class="input-group-append">
-              <div class="btn btn-primary">検索</div>
+              <div class="btn btn-primary" @click="loadReservations">検索</div>
             </div>
           </div>
         </div>
@@ -24,23 +30,23 @@
           <table class="table table-centered mt-2 pc">
             <thead class="thead-light">
               <tr>
-                <th>#</th>
                 <th class="d-none d-lg-table-cell">予約日時</th>
+                <th>お客様名</th>
+                <th>ルーム名</th>
                 <th>状況</th>
-                <th class="d-none d-lg-table-cell">操作</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(reservation, index) in reservations" :key="index">
-                <td>{{ curPage * perPage + index + 1 }}</td>
+                <td class="fw-200">{{ reservation.created_at | formatted_date }}</td>
                 <td class="table-user d-flex align-items-center">
                   <img v-lazy="genAvatarImgObj(reservation)" alt="table-user" class="mr-2 rounded-circle" />
                   <p class="m-0">{{ reservation.customer_name }}</p>
                 </td>
-                <td class="d-none d-lg-table-cell">
+                <td>{{ reservation.room_name }}</td>
+                <td class="d-none d-lg-table-cell fw-200">
                   <reservation-status :status="reservation.status"></reservation-status>
                 </td>
-                <td class="d-none d-lg-table-cell">xxx</td>
               </tr>
             </tbody>
           </table>
@@ -101,11 +107,11 @@ export default {
 
     keyword: {
       get() {
-        return this.queryParams.line_name_or_display_name_cont;
+        return this.queryParams.line_friend_line_name_or_line_friend_display_name_cont;
       },
 
       set(value) {
-        this.setQueryParam({ line_name_or_display_name_cont: value });
+        this.setQueryParam({ line_friend_line_name_or_line_friend_display_name_cont: value });
       }
     },
 

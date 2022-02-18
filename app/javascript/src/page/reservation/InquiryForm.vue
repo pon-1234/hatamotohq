@@ -20,9 +20,9 @@
                 <input
                   type="number"
                   class="form-control"
-                  name="inquiry[pax_num]"
+                  name="inquiry[capacity]"
                   placeholder="人数を入力してください"
-                  v-model.trim="inquiryFormData.pax_num"
+                  v-model.trim="inquiryFormData.capacity"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -39,11 +39,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="チェックイン日付を選択してください"
-                  :min-datetime="currentDate"
-                  name="inquiry[date]"
+                  name="inquiry[date_start]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
-                  v-model="inquiryFormData.date_begin"
+                  v-model="inquiryFormData.date_start"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -51,7 +51,7 @@
           </div>
 
           <!-- 終了日付 -->
-          <div class="form-group row" hidden>
+          <div class="form-group row">
             <label class="col-lg-4">終了日付<required-mark /></label>
             <div class="col-lg-8">
               <ValidationProvider name="終了日付" rules="required" v-slot="{ errors }">
@@ -60,11 +60,11 @@
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   placeholder="終了日付を選択してください"
-                  :min-datetime="currentDate"
-                  name="inquiry[date]"
+                  name="inquiry[date_end]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
                   v-model="inquiryFormData.date_end"
+                  format="yyyy-MM-dd"
                 ></datetime>
                 <error-message :message="errors[0]"></error-message>
               </ValidationProvider>
@@ -103,8 +103,8 @@ export default {
       loading: true,
       inquiryFormData: {
         friend_line_id: null,
-        pax_num: null,
-        date_begin: null,
+        capacity: null,
+        date_start: null,
         date_end: null
       }
     };
@@ -115,7 +115,7 @@ export default {
   },
 
   mounted() {
-    this.inquiryFormData.date_begin = this.currentDate;
+    this.inquiryFormData.date_start = this.currentDate;
     this.inquiryFormData.date_end = this.currentDate;
   },
 
