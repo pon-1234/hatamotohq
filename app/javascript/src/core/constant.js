@@ -344,11 +344,11 @@ export const aspectModes = [
 export const FontSizeClass = ['XXs', 'Xs', 'Sm', 'Md', 'Lg', 'Xl', 'XXl', '3Xl', '4Xl', '5Xl'];
 
 export const Weekday = [
+  { name: '日', value: 'sun' },
   { name: '月', value: 'mon' },
   { name: '火', value: 'tue' },
   { name: '水', value: 'wed' },
   { name: '木', value: 'thu' },
   { name: '金', value: 'fri' },
-  { name: '土', value: 'sat' },
-  { name: '日', value: 'sun' }
+  { name: '土', value: 'sat' }
 ];
