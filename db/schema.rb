@@ -427,6 +427,7 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
     t.text 'description'
     t.json 'config'
     t.integer 'sort_order'
+    t.boolean 'required', default: true
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
   end

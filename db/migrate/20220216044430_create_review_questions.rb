@@ -8,6 +8,7 @@ class CreateReviewQuestions < ActiveRecord::Migration[6.0]
       t.text :description
       t.json :config
       t.integer :sort_order
+      t.boolean :required, default: true
       t.timestamps
     end
   end

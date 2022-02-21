@@ -1,0 +1,12 @@
+
+<%= custom_flash_message %>
+<%= flash[:danger] %>
+<div class="card mb-3 review-container">
+  <div class="review-image">
+    <%= image_tag 'company_avatar_2x.png', class: "card-img-top" %>
+    <p class=review-image-caption>LINE INSIGHT 満足度アンケート</p>
+  </div>
+  <div class="card-body review-form">
+    <review-form friend-line-id="<%= @friend_line_id %>"></review-form>
+  </div>
+</div>

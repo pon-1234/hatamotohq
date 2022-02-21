@@ -21,4 +21,6 @@
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
 class Review < ApplicationRecord
+  has_many :review_answers, dependent: :destroy
+  accepts_nested_attributes_for :review_answers, reject_if: ->(attributes) { attributes['answer'].blank? }, allow_destroy: true
 end

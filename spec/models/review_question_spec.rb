@@ -10,6 +10,7 @@
 #  description :text(65535)
 #  config      :json
 #  sort_order  :integer
+#  required    :boolean          default(TRUE)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

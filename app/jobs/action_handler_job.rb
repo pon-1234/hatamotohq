@@ -43,11 +43,19 @@ class ActionHandlerJob < ApplicationJob
           Postback::RemoveRsvBookmarkHandler.new(@friend, action_content).perform
         when 'rsv_contact'
           Postback::ContactRsvHandler.new(@friend, action_content).perform
+        when 'review_service'
+          send_review_service_questions
         end
       end
     end
 
     def handle_display_text(text)
       Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+    end
+
+    def send_review_service_questions
+      routes = Rails.application.routes.url_helpers
+      form_url = routes.review_new_url(friend_line_id: @friend.line_user_id)
+      send_text_message("こちらのリンクにアクセスして、LINE INSIGHT 満足度アンケートを答えましょう〜  #{form_url}")
     end
 end

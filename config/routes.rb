@@ -36,6 +36,11 @@ Rails.application.routes.draw do
   get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
   post 'reservations/inquire/:friend_line_id',  to: 'reservations#inquire', as: 'reservation_inquire'
   post 'reservations/callback', to: 'reservations#callback', as: 'reservation_callback'
+  # service_reviews
+  get 'reviews/new/:friend_line_id', to: 'reviews#new', as: 'review_new'
+  post 'reviews/:friend_line_id', to: 'reviews#create', as: 'review_create'
+  get 'reviews/result', to: 'reviews#result', as: 'review_result'
+  resources :review_questions, only: :index
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
