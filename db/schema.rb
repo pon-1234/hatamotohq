@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_10_082919) do
+ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -449,10 +449,34 @@ ActiveRecord::Schema.define(version: 2022_02_10_082919) do
     t.boolean 'is_last', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'scenario_log_id'
     t.index ['channel_id'], name: 'index_scenario_events_on_channel_id'
     t.index ['line_account_id'], name: 'index_scenario_events_on_line_account_id'
     t.index ['scenario_id'], name: 'index_scenario_events_on_scenario_id'
+    t.index ['scenario_log_id'], name: 'index_scenario_events_on_scenario_log_id'
     t.index ['scenario_message_id'], name: 'index_scenario_events_on_scenario_message_id'
+  end
+
+  create_table 'scenario_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'scenario_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.string 'status'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_scenario_friends_on_line_friend_id'
+    t.index ['scenario_id'], name: 'index_scenario_friends_on_scenario_id'
+  end
+
+  create_table 'scenario_logs', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'scenario_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.string 'status'
+    t.datetime 'start_at'
+    t.datetime 'end_at'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_scenario_logs_on_line_friend_id'
+    t.index ['scenario_id'], name: 'index_scenario_logs_on_scenario_id'
   end
 
   create_table 'scenario_messages', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -486,6 +510,8 @@ ActiveRecord::Schema.define(version: 2022_02_10_082919) do
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
+    t.integer 'sending_friend_count', default: 0
+    t.integer 'sent_friend_count', default: 0
     t.index ['folder_id'], name: 'index_scenarios_on_folder_id'
     t.index ['line_account_id'], name: 'index_scenarios_on_line_account_id'
   end
@@ -663,8 +689,13 @@ ActiveRecord::Schema.define(version: 2022_02_10_082919) do
   add_foreign_key 'rich_menus', 'media', column: 'media_id'
   add_foreign_key 'scenario_events', 'channels'
   add_foreign_key 'scenario_events', 'line_accounts'
+  add_foreign_key 'scenario_events', 'scenario_logs'
   add_foreign_key 'scenario_events', 'scenario_messages'
   add_foreign_key 'scenario_events', 'scenarios'
+  add_foreign_key 'scenario_friends', 'line_friends'
+  add_foreign_key 'scenario_friends', 'scenarios'
+  add_foreign_key 'scenario_logs', 'line_friends'
+  add_foreign_key 'scenario_logs', 'scenarios'
   add_foreign_key 'scenario_messages', 'scenarios'
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'

@@ -17,7 +17,7 @@ RSpec.describe 'GET /api/v1/staff/medias', type: :request do
         'limit_value' => 12
       },
       'data' => [
-          media.as_json(only: [:id, :type, :duration], methods: [:url, :preview_url, :download_url, :file_name])
+          media.as_json(only: [:created_at, :id, :type, :duration], methods: [:url, :preview_url, :download_url, :file_name])
             .merge('duration' => media.file.blob.duration)
         ]
       }}

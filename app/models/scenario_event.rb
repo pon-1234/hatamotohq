@@ -17,12 +17,14 @@
 #  is_last             :boolean          default(FALSE)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  scenario_log_id     :bigint
 #
 # Indexes
 #
 #  index_scenario_events_on_channel_id           (channel_id)
 #  index_scenario_events_on_line_account_id      (line_account_id)
 #  index_scenario_events_on_scenario_id          (scenario_id)
+#  index_scenario_events_on_scenario_log_id      (scenario_log_id)
 #  index_scenario_events_on_scenario_message_id  (scenario_message_id)
 #
 # Foreign Keys
@@ -30,15 +32,18 @@
 #  fk_rails_...  (channel_id => channels.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #  fk_rails_...  (scenario_id => scenarios.id)
+#  fk_rails_...  (scenario_log_id => scenario_logs.id)
 #  fk_rails_...  (scenario_message_id => scenario_messages.id)
 #
 class ScenarioEvent < ApplicationRecord
   include User::MessagesHelper
+  include SendScenarioStatistic
 
   belongs_to :line_account
   belongs_to :scenario
   belongs_to :scenario_message, optional: true # root message can be deleted
   belongs_to :channel
+  belongs_to :scenario_log, optional: true
 
   # Scope
   enum status: { queued: 'queued', sending: 'sending', done: 'done', error: 'error' }
@@ -76,7 +81,11 @@ class ScenarioEvent < ApplicationRecord
 
     def execute_after_deliver
       # If this event is the last
-      Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario) if self.is_last
+      if self.is_last
+        Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario)
+        scenario_log.update(status: 'done', end_at: Time.zone.now) if scenario_log
+        update_scenario_statistics(scenario, channel.line_friend)
+      end
       self.destroy
     end
 end
