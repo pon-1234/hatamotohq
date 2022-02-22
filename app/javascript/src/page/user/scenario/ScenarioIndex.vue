@@ -32,8 +32,12 @@
                   <td>
                     <p class="scenario_title">{{ scenario.title }}</p>
                   </td>
-                  <td class="text-center">{{ scenario.sending_friend_count }}人 (購読中)</td>
-                  <td class="text-center">{{ scenario.sent_friend_count }}人 (購読済み)</td>
+                  <td class="text-center">
+                    {{ scenario.sending_friend_count }}人 <span class="font-13">(購読中)</span>
+                  </td>
+                  <td class="text-center">
+                    {{ scenario.sent_friend_count }}人 <span class="font-13">(購読済み)</span>
+                  </td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
                     <div class="btn btn-light" @click="openMessageIndex(scenario)">
