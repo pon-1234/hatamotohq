@@ -22,4 +22,5 @@
 #  fk_rails_...  (review_question_id => review_questions.id)
 #
 class ReviewAnswer < ApplicationRecord
+  belongs_to :review_question
 end

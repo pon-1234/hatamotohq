@@ -7,5 +7,15 @@ export default {
       contentType: 'application/json',
       cache: false
     });
+  },
+  review_list: (params) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/reviews`,
+      method: 'GET',
+      dataType: 'json',
+      data: params,
+      contentType: 'application/json',
+      cache: false
+    });
   }
 };

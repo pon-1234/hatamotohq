@@ -133,6 +133,7 @@ Rails.application.routes.draw do
         resources :episodes
       end
       resources :reservations
+      resources :reviews, only: :index
       resources :variables do
         member do
           post :copy
