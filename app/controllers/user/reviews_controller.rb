@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::ReviewsController < User::ApplicationController
-  # GET /user/reservations
+  # GET /user/reviews
   def index
     if request.format.json?
       @q = Review.order(created_at: :desc).ransack(params[:q])

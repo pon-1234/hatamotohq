@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 json.meta do
   json.total_pages @reviews.total_pages
   json.current_page @reviews.current_page

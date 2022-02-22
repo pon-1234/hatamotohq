@@ -2,6 +2,6 @@
 
 json.data do
   json.array! @review_questions do |question|
-    json.(question, :id, :type, :title, :description, :config)
+    json.(question, :id, :type, :title, :description, :config, :required)
   end
 end

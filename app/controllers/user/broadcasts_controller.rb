@@ -41,7 +41,6 @@ class User::BroadcastsController < User::ApplicationController
   # POST /user/broadcasts
   def create
     @broadcast = build_broadcast(broadcast_params)
-    binding.pry
     if @broadcast.save
       build_broadcast_messages(@broadcast, messages_params)
       DispatchBroadcastJob.perform_later(@broadcast.id) if @broadcast.deliver_now? && !@broadcast.draft?

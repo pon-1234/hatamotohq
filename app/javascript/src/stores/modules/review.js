@@ -39,10 +39,8 @@ export const actions = {
     try {
       const response = await ReviewAPI.question_list();
       context.commit('setQuestions', response.data);
-      return response;
     } catch (error) {
       console.log(error);
-      return null;
     }
   },
 

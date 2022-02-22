@@ -68,7 +68,7 @@ class UserAbility
       can :manage, Reservation, line_account: user.line_account
 
       # Reviews
-      # can :manage, Review, client: user.client
+      can :manage, Review, client: user.client
     end
   end
 end

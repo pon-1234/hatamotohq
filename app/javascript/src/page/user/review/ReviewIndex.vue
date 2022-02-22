@@ -25,9 +25,9 @@
             <thead class="thead-light">
               <tr>
                 <th>#</th>
-                <th class="d-none d-lg-table-cell">友達の名前</th>
+                <th class="d-lg-table-cell">友達の名前</th>
                 <th>クライアントの名前</th>
-                <th v-for="question in questions" :key="question.id" class="d-none d-lg-table-cell">{{question.title}}</th>
+                <th v-for="question in questions" :key="question.id" class="d-lg-table-cell">{{question.title}}</th>
                 <th>作成日時</th>
               </tr>
             </thead>
@@ -37,9 +37,9 @@
                 <td class="table-user d-flex align-items-center">
                   <p class="m-0">{{ review.line_name }}</p>
                 </td>
-                <td class="d-none d-lg-table-cell">{{review.client_name}}</td>
-                <td class="d-none d-lg-table-cell" v-for="answer_index in questions.length" :key="answer_index">
-                  {{review['answer_of_question' + answer_index]}}
+                <td class="d-lg-table-cell">{{review.client_name}}</td>
+                <td class="d-lg-table-cell" v-for="answerIndex in questions.length" :key="answerIndex">
+                  {{review['answer_of_question' + answerIndex]}}
                 </td>
                 <td>{{review.created_at | formatted_time}}</td>
               </tr>
@@ -105,16 +105,6 @@ export default {
 
       set(value) {
         this.setQueryParam({ line_friend_line_name_cont: value });
-      }
-    },
-
-    status_eq: {
-      get() {
-        return this.queryParams.status_eq;
-      },
-
-      set(value) {
-        this.setQueryParam({ status_eq: value });
       }
     }
   },

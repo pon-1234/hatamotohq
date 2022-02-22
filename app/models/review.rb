@@ -29,5 +29,4 @@ class Review < ApplicationRecord
   scope :last_reviews_of_friends, -> do
     group(:line_friend_id, :client_id).select('max(reviews.id) as id, line_friend_id, client_id, max(reviews.created_at) as created_at')
   end
-  # paginates_per 1
 end
