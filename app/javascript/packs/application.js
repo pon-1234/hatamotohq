@@ -16,6 +16,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
 import 'bootstrap/js/dist/modal';
 import Multiselect from 'vue-multiselect';
+import moment from 'moment';
 
 import {
   BootstrapVue,
@@ -80,6 +81,13 @@ Validator.extend('email', value => {
   var pattern = new RegExp('^\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$');
   return !!pattern.test(value);
 });
+
+Validator.extend('dateGreaterThanOrEqualTo', {
+  getMessage: () => 'チェックイン日付以上の終了日付を入力してください',
+  validate: (currentDate, [comparedDate]) => {
+    return moment(currentDate).tz('Asia/Tokyo').startOf('day').toDate() >= moment(comparedDate).tz('Asia/Tokyo').startOf('day').toDate();
+  }
+}, {hasTarget: true});
 // END: vee-validation configuration
 
 // Automatically import components

@@ -33,7 +33,7 @@
           <div class="form-group row">
             <label class="col-lg-4">チェックイン日付<required-mark /></label>
             <div class="col-lg-8">
-              <ValidationProvider name="チェックイン日付" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="チェックイン日付" rules="required" v-slot="{ errors }" vid="date_start">
                 <datetime
                   input-class="form-control"
                   type="date"
@@ -54,7 +54,7 @@
           <div class="form-group row">
             <label class="col-lg-4">終了日付<required-mark /></label>
             <div class="col-lg-8">
-              <ValidationProvider name="終了日付" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="終了日付" rules="required|dateGreaterThanOrEqualTo:date_start" v-slot="{ errors }">
                 <datetime
                   input-class="form-control"
                   type="date"
