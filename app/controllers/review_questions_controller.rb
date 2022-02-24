@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReviewQuestionsController < User::ApplicationController
+class ReviewQuestionsController < ApplicationController
   # GET /user/review_questions
   def index
     @review_questions = ReviewQuestion.all.order(:sort_order)

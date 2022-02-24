@@ -4,7 +4,7 @@ class User::ReviewsController < User::ApplicationController
   # GET /user/reviews
   def index
     if request.format.json?
-      @q = Review.order(created_at: :desc).ransack(params[:q])
+      @q = Review.ransack(params[:q])
       @reviews = @q.result.last_reviews_of_friends.page(params[:page])
         .includes(:review_answers, :line_friend, :client)
     end
