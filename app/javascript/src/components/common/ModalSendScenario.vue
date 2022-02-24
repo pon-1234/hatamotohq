@@ -75,6 +75,12 @@ export default {
     sendScenario(scenario) {
       this.$emit('selectScenario', scenario);
     }
+  },
+  watch: {
+    // scenario list need to be reloaded every time the active channel be changed
+    activeChannel: async function(newChannel) {
+      this.scenarios = await this.getAvailableScenarios(newChannel.id);
+    }
   }
 };
 </script>

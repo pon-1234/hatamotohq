@@ -95,7 +95,7 @@ class LineFriend < ApplicationRecord
     all = Scenario.manual.includes([:tags, :taggings]).enabled.not_empty.where(line_account_id: self.line_account_id)
     without_tag = all.select { |_| _.tags.blank? }
     with_tag = all.joins(:tags).references(:tags).where(tags: { id: self.tag_ids })
-    without_tag + with_tag
+    (without_tag + with_tag).sort_by { |scenario| -scenario.id }
   end
 
   # Available scenarios that will be sent after making friend
