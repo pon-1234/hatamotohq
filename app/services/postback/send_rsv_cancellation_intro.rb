@@ -39,5 +39,6 @@ class Postback::SendRsvCancellationIntro < Postback::BaseHandler
       Normalizer::MessageNormalizer.new(msg_content).perform
       message = Messages::MessageBuilder.new(@friend, @friend.channel, { message: msg_content }.try(:with_indifferent_access)).perform
       LineApi::PushMessage.new(@friend.line_account).perform([message.content], @friend.line_user_id)
+    end
   end
 end
