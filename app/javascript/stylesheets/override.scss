@@ -149,7 +149,13 @@ label {
 }
 
 .review-container {
+  max-width: 680px;
+  padding: 0 20px;
+  margin: 0 auto;
   background-color: rgba(73, 95, 126, 0.04) !important;
+  .review-form {
+    padding: 0 !important;
+  }
   .review-image {
     margin-bottom: 40px;
     .review-image-caption {
@@ -168,9 +174,15 @@ label {
   .new-review-page {
     .container, .container-fluid, .container-fluid.p-2 {
       padding: 0 !important;
+      margin: 0 auto !important;
+    }
+    .container {
+      width: 100%;
+      max-width: unset !important;
     }
     .review-container {
       .review-image {
+        margin-top: 10px;
         .review-image-caption {
           width: 100%;
           text-align: center;
