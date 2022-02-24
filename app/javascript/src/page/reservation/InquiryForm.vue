@@ -59,6 +59,7 @@
                   input-class="form-control"
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
+                  :min-datetime="inquiryFormData.date_start"
                   placeholder="終了日付を選択してください"
                   name="inquiry[date_end]"
                   value-zone="Asia/Tokyo"
