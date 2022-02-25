@@ -15,10 +15,10 @@ class ReviewsController < ApplicationController
     if review.save
       redirect_to review_result_path
     else
-      redirect_to review_new_path, alert: '満足度アンケートの答え送信が失敗しました。'
+      redirect_to review_new_path, alert: 'サービス評価の送信が失敗しました。'
     end
   rescue
-    redirect_to review_new_path, alert: '満足度アンケートの答え送信が失敗しました。'
+    redirect_to review_new_path, alert: 'サービス評価の送信が失敗しました。'
   end
 
   # GET /reviews/result

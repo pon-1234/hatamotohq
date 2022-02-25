@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Postback::SendRsvCancellationIntro < Postback::BaseHandler
+class Postback::SendRsvCancellationIntroHandler < Postback::BaseHandler
   def perform
     # Send messages to confirm cancellation
     reservations = @friend.reservations.wait

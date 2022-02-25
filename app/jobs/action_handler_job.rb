@@ -38,12 +38,12 @@ class ActionHandlerJob < ApplicationJob
         when 'rsv_bookmark'
           Postback::CreateRsvBookmarkHandler.new(@friend, action_content).perform
         when 'rsv_cancel_intro'
-          Postback::SendRsvCancellationIntro.new(@friend, action_content).perform
+          Postback::SendRsvCancellationIntroHandler.new(@friend, action_content).perform
         when 'rsv_rm_bookmark'
           Postback::RemoveRsvBookmarkHandler.new(@friend, action_content).perform
         when 'rsv_contact'
           Postback::ContactRsvHandler.new(@friend, action_content).perform
-        when 'review_service'
+        when 'service_review'
           Postback::SendReviewServiceFormHandler.new(@friend, action_content).perform
         end
       end
