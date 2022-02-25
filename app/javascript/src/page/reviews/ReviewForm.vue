@@ -26,7 +26,11 @@
         />
 
         <div class="review-answer-options-container" v-if="question.type == 'rating'">
-          <ValidationProvider :name="question.title" :rules="question.required ? 'required' : ''" v-slot="{ errors }">
+          <ValidationProvider
+            :name="`${question.title}の評価`"
+            :rules="question.required ? 'required' : ''"
+            v-slot="{ errors }"
+          >
             <div class="review-answer-options d-flex justify-content-around">
               <template v-for="answerIndex in 10">
                 <div
