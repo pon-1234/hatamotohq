@@ -10,21 +10,51 @@
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
       <input type="hidden" name="review[friend_line_id]" :value="friendLineId" />
 
-      <div class="form-group review-question" v-for="(question, questionIndex) in questions" :key="`question_${question.id}`">
-        <h3 class="review-question-title mt-0">{{question.title}} <span class="text-danger" v-if="question.required">*</span></h3>
+      <div
+        class="form-group review-question"
+        v-for="(question, questionIndex) in questions"
+        :key="`question_${question.id}`"
+      >
+        <h3 class="review-question-title mt-0">
+          {{ question.title }} <span class="text-danger" v-if="question.required">*</span>
+        </h3>
         <!-- input's name  suitable with nested attributes in rails -->
-        <input type="hidden" :value="question.id" :name="`review[review_answers_attributes][${questionIndex}][review_question_id]`" />
+        <input
+          type="hidden"
+          :value="question.id"
+          :name="`review[review_answers_attributes][${questionIndex}][review_question_id]`"
+        />
 
         <div class="review-answer-options-container" v-if="question.type == 'rating'">
           <ValidationProvider :name="question.title" :rules="question.required ? 'required' : ''" v-slot="{ errors }">
             <div class="review-answer-options d-flex justify-content-around">
-              <div class="review-answer-option form-check form-check-inline d-flex flex-column mr-0" v-for="answerIndex in 10" :key="`review_answer_${answerIndex}`" v-if="answerIndex >= question.config.min_value && answerIndex <= question.config.max_value">
-                <label class="form-check-label justify-content-center mb-2" :for="`question_${question.id}_answer_${answerIndex}`">{{answerIndex}}</label>
-                <input v-model="reviewFormData[`answerOfQuestion${question.id}`]" class="form-check-input mr-0" type="radio" :name="`review[review_answers_attributes][${questionIndex}][answer]`"
-                  :id="`question_${question.id}_answer_${answerIndex}`" :value="answerIndex">
-                <span class="mt-2" v-if="answerIndex === question.config.min_value">{{question.config.min_label}}</span>
-                <span class="mt-2" v-if="answerIndex === question.config.max_value">{{question.config.max_label}}</span>
-              </div>
+              <template v-for="answerIndex in 10">
+                <div
+                  class="review-answer-option form-check form-check-inline d-flex flex-column mr-0"
+                  :key="`review_answer_${answerIndex}`"
+                  v-if="answerIndex >= question.config.min_value && answerIndex <= question.config.max_value"
+                >
+                  <label
+                    class="form-check-label justify-content-center mb-2"
+                    :for="`question_${question.id}_answer_${answerIndex}`"
+                    >{{ answerIndex }}</label
+                  >
+                  <input
+                    v-model="reviewFormData[`answerOfQuestion${question.id}`]"
+                    class="form-check-input mr-0"
+                    type="radio"
+                    :name="`review[review_answers_attributes][${questionIndex}][answer]`"
+                    :id="`question_${question.id}_answer_${answerIndex}`"
+                    :value="answerIndex"
+                  />
+                  <span class="mt-2" v-if="answerIndex === question.config.min_value">{{
+                    question.config.min_label
+                  }}</span>
+                  <span class="mt-2" v-if="answerIndex === question.config.max_value">{{
+                    question.config.max_label
+                  }}</span>
+                </div>
+              </template>
             </div>
             <span class="error-explanation">{{ errors[0] }}</span>
           </ValidationProvider>
@@ -32,12 +62,18 @@
 
         <div class="review-answer-text mt-3" v-if="question.type == 'text'">
           <ValidationProvider :name="question.title" :rules="question.required ? 'required' : ''" v-slot="{ errors }">
-            <input type="text" v-model="reviewFormData[`answerOfQuestion${question.id}`]" :name="`review[review_answers_attributes][${questionIndex}][answer]`" class="form-control" placeholder="回答を入力">
+            <textarea
+              v-model="reviewFormData[`answerOfQuestion${question.id}`]"
+              :name="`review[review_answers_attributes][${questionIndex}][answer]`"
+              class="form-control"
+              placeholder="回答を入力"
+              rows="4"
+            />
             <span class="error-explanation">{{ errors[0] }}</span>
           </ValidationProvider>
         </div>
       </div>
-      
+
       <div class="card-footer border-0 text-center py-3">
         <button type="submit" class="btn fw-80 send-review text-white"><strong>送信</strong></button>
       </div>
@@ -62,12 +98,12 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       loading: true,
-      reviewFormData: {   
+      reviewFormData: {
         answerOfQuestion1: null,
         answerOfQuestion2: null,
         answerOfQuestion3: null,
-        answerOfQuestion4: null,
-      },
+        answerOfQuestion4: null
+      }
     };
   },
 
@@ -81,8 +117,8 @@ export default {
       return `${this.rootPath}/reviews/${this.friendLineId}`;
     },
     ...mapState('review', {
-      questions: state => state.questions,
-    }),
+      questions: state => state.questions
+    })
   },
 
   methods: {
@@ -100,7 +136,7 @@ export default {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    color: #5B5B5B;
+    color: #5b5b5b;
     &-title {
       font-size: 14px;
       font-weight: 800;
@@ -112,13 +148,13 @@ export default {
       padding-right: 1.5rem;
     }
     .review-answer-option {
-      input[type='radio'] {
+      input[type="radio"] {
         width: 18px;
         height: 18px;
       }
     }
     &.border {
-      border-color: #BCBCBC !important;
+      border-color: #bcbcbc !important;
     }
     .error-explanation {
       display: block;
@@ -128,7 +164,7 @@ export default {
   .card-footer {
     background-color: unset;
     button.send-review {
-      background-color: #495F7E;
+      background-color: #495f7e;
       &:hover {
         background-color: #5a759b;
       }

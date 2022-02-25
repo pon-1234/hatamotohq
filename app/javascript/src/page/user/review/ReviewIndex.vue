@@ -25,10 +25,9 @@
             <thead class="thead-light">
               <tr>
                 <th>#</th>
-                <th class="d-lg-table-cell">友達の名前</th>
-                <th>クライアントの名前</th>
-                <th v-for="question in questions" :key="question.id" class="d-lg-table-cell">{{question.title}}</th>
-                <th>作成日時</th>
+                <th class="d-lg-table-cell">お客様名</th>
+                <th v-for="question in questions" :key="question.id" class="d-lg-table-cell">{{ question.title }}</th>
+                <th>評価日時</th>
               </tr>
             </thead>
             <tbody>
@@ -37,11 +36,10 @@
                 <td class="table-user d-flex align-items-center">
                   <p class="m-0">{{ review.line_name }}</p>
                 </td>
-                <td class="d-lg-table-cell">{{review.client_name}}</td>
-                <td class="d-lg-table-cell" v-for="answerIndex in questions.length" :key="answerIndex">
-                  {{review['answer_of_question' + answerIndex]}}
+                <td class="d-lg-table-cell fw-200" v-for="answerIndex in questions.length" :key="answerIndex">
+                  {{ review["answer_of_question" + answerIndex] }}
                 </td>
-                <td>{{review.created_at | formatted_time}}</td>
+                <td class="fw-200">{{ review.created_at | formatted_time }}</td>
               </tr>
             </tbody>
           </table>
@@ -86,7 +84,7 @@ export default {
       reviews: state => state.reviews,
       totalRows: state => state.totalRows,
       perPage: state => state.perPage,
-      queryParams: state => state.queryParams,
+      queryParams: state => state.queryParams
     }),
 
     curPage: {
@@ -119,7 +117,7 @@ export default {
         this.getReviews();
         this.loading = false;
       });
-    },
+    }
   }
 };
 </script>
