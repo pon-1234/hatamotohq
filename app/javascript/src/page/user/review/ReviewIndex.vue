@@ -37,7 +37,8 @@
                   <p class="m-0">{{ review.line_name }}</p>
                 </td>
                 <td class="d-lg-table-cell fw-200" v-for="answerIndex in questions.length" :key="answerIndex">
-                  {{ review["answer_of_question" + answerIndex] }}
+                  <span>{{ review["answer_of_question" + answerIndex] }}</span>
+                  <span v-if="questions[answerIndex - 1].type == 'rating'"> / {{questions[answerIndex - 1].config.max_value}}</span>
                 </td>
                 <td class="fw-200">{{ review.created_at | formatted_time }}</td>
               </tr>
