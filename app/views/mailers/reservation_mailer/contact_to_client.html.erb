@@ -1,0 +1,7 @@
+<%# TODO %>
+<%# Below content is only temporary, it'll be replace soon %>
+<h1>Latest reservation of <%= @line_friend.display_name %></h1>
+<p>Agency Name: <%= @latest_reservation['agencyName'] %></p>
+<p>Agency code: <%= @latest_reservation['agencyCode'] %></p>
+<p>Room: <%= @latest_reservation['roomList']&.first.try(:[], 'roomName') %></p>
+<p>Booking at: <%= @latest_reservation['bookingDate'] %> <%= @latest_reservation['bookingTime'] %></p>

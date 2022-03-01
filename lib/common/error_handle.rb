@@ -7,7 +7,7 @@ module Common
 
     attr_reader :status, :message, :status_code
 
-    def initialize
+    def initialize(message = nil)
       @status = 'error'
       @message = 'メールアドレスまたはパスワードが違います。'
       @status_code = 401
@@ -43,6 +43,13 @@ module Common
       super
       @message = 'すでにログアウトしています。'
       @status_code = 422
+    end
+  end
+
+  class PmsApiError < ErrorHandle
+    def initialize(message)
+      super
+      @message = message
     end
   end
 end
