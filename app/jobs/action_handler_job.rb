@@ -50,6 +50,6 @@ class ActionHandlerJob < ApplicationJob
     end
 
     def handle_display_text(text)
-      Messages::MessageBuilder.new(nil, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      Messages::MessageBuilder.new(@friend, @friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
     end
 end
