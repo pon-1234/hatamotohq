@@ -27,20 +27,21 @@
                 <th>#</th>
                 <th class="d-lg-table-cell">お客様名</th>
                 <th v-for="question in questions" :key="question.id" class="d-lg-table-cell">{{ question.title }}</th>
-                <th>評価日時</th>
+                <th class="d-none d-lg-table-cell">評価日時</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(review, index) in reviews" :key="index">
                 <td>{{ (curPage - 1) * perPage + index + 1 }}</td>
-                <td class="table-user d-flex align-items-center">
+                <td class="d-lg-table-cell">
                   <p class="m-0">{{ review.line_name }}</p>
                 </td>
-                <td class="d-lg-table-cell fw-200" v-for="answerIndex in questions.length" :key="answerIndex">
+                <td v-for="answerIndex in questions.length" :key="answerIndex"
+                  :class="`d-lg-table-cell ${questions[answerIndex - 1].type == 'text' ? 'other-question' : ''}`">
                   <span>{{ review["answer_of_question" + answerIndex] }}</span>
                   <span v-if="questions[answerIndex - 1].type == 'rating'"> / {{questions[answerIndex - 1].config.max_value}}</span>
                 </td>
-                <td class="fw-200">{{ review.created_at | formatted_time }}</td>
+                <td class="d-none d-lg-table-cell fw-200">{{ review.created_at | formatted_time }}</td>
               </tr>
             </tbody>
           </table>
@@ -122,3 +123,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .other-question {
+    max-width: 230px;
+  }
+</style>
