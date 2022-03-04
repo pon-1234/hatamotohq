@@ -53,8 +53,8 @@ export const ImageType = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export const VideoType = ['video/mp4'];
 
-export const AudioType = ['audio/m4a', 'audio/x-m4a', 'audio/wav', 'audio/x-wav', 'audio/wav', 'audio/x-wav',
-  'audio/mpeg3', 'audio/x-mpeg-3', 'audio/mpeg', 'audio/mp4', 'audio/wav', 'video/x-ms-wma', 'audio/3gpp',
+export const AudioType = ['audio/m4a', 'audio/x-m4a', 'audio/wav', 'audio/x-wav',
+  'audio/mpeg3', 'audio/x-mpeg-3', 'audio/mpeg', 'audio/mp4', 'video/x-ms-wma', 'audio/3gpp',
   'audio/ogg', 'audio/webm'];
 
 export const PdfType = ['application/pdf', 'application/x-pdf'];
