@@ -6,7 +6,7 @@
       ファイルサイズ：200MB以下
     </span>
     <span v-else-if="type === 'audio'" class="text-sm">
-      ファイル形式：M4A<br />
+      ファイル形式：M4A、MP3、MP4、WAV、WMA、3GP、Ogg、WebM<br />
       ファイルサイズ：200MB以下
     </span>
     <span class="text-sm" v-else-if="type === 'richmenu'">
@@ -23,7 +23,7 @@
       ファイルサイズ：10MB以下<br />
       画像の幅: 1040px
     </span>
-    <span v-else> ファイル形式：JPG、JPEG、PNG、M4A、MP4<br /> </span>
+    <span v-else> ファイル形式：JPG、JPEG、PNG、M4A、MP3、MP4、WAV、WMA、3GP、Ogg、WebM<br /> </span>
   </div>
 </template>
 
