@@ -253,6 +253,7 @@ export default {
 
     onSelectMedia(media) {
       this.backgroundUrl = `${this.rootPath}/medias/${media.id}/content`;
+      this.publish(this.actionObjects);
     },
 
     publish(actionObject) {
