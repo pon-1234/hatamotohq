@@ -62,7 +62,7 @@ class Media {
     }
 
     if (types.includes(MessageType.Audio)) {
-      mineTypes.push('audio/m4a,audio/x-m4a');
+      mineTypes.push('audio/m4a,audio/x-m4a,audio/mpeg3,audio/x-mpeg-3,audio/mp4,audio/wav,video/x-ms-wma,audio/3gpp,audio/ogg,audio/webm');
     }
 
     if (types.includes('pdf')) {
