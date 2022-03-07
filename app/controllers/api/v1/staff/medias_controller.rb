@@ -21,6 +21,7 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
     @media.line_account = current_staff.line_account
     if @media.save
       @media.set_blob_duration(params[:duration]) if params[:duration].present?
+      MediaConverter::AudioConverter.new(@media).perform
     else
       render_bad_request_with_message @media.first_error_message
     end
