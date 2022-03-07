@@ -63,7 +63,7 @@ export const ImageMimeBytes = ['89504e47', 'ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', '
 
 export const VideoMimeBytes = ['66747970'];
 
-export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920', '4944333', '0001c', '3026b275'];
+export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920', '4944333', '0001c', '3026b275', '4f676753'];
 
 export const PdfMimeBytes = ['255044462D'];
 
