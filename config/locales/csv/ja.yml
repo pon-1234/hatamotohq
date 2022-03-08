@@ -4,6 +4,12 @@ ja:
       id: ID
       line_user_id: line_user_id
       line_name: line_name
+      display_name: display_name
+      line_picture_url: line_picture_url
+      tags: tag
+      status: status
+      note: note
+      created_at: created_at
     group:
       id: ID
       name: グループ名
