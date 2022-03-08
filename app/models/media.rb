@@ -31,8 +31,13 @@ class Media < ApplicationRecord
 
   # Validations
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], if: :type_image?
+<<<<<<< HEAD
   validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'audio/mp4', 'video/mp4', 'video/quicktime', 'audio/mpeg', 'audio/ogg',
                                   'audio/vnd.wave', 'audio/wave', 'audio/wav', 'audio/x-wav', 'audio/x-ms-wma', 'video/x-ms-asf', 'video/x-ms-wma'], if: :type_audio?
+=======
+  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'audio/mp4', 'video/mp4', 'video/quicktime',
+    'audio/mpeg', 'audio/vnd.wave', 'audio/wav', 'audio/wave', 'audio/x-wav', 'audio/x-ms-wma', 'video/x-ms-asf', 'audio/ogg'], if: :type_audio?
+>>>>>>> 2c54b6ef914efa0a387d0f9967adeecb373d3134
   validates :file, content_type: ['video/mp4', 'video/quicktime'], if: :type_video?
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040 }, if: :type_imagemap?
   validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
