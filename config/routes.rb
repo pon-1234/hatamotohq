@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       resources :friends do
         collection do
           get :search
+          get :export
         end
         member do
           post :toggle_locked

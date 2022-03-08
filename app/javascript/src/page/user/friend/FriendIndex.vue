@@ -1,42 +1,47 @@
 <template>
   <div>
     <div class="card mvh-50">
-      <div class="card-header d-flex justify-content-end">
-        <div class="filter-tester-accounts custom-control custom-checkbox mr-3 d-flex align-items-center">
-          <input type="checkbox" :value="true" name="tester" id="search_tester_account" class="custom-control-input" v-model="selectOnlyTester">
-          <label for="search_tester_account" class="custom-control-label">テスターのみ</label>
+      <div class="card-header d-flex justify-content-between flex-wrap">
+        <div class="w-lg-100 w-xl-25 mb-lg-3 mb-xl-0">
+          <a :href="`${rootUrl}/user/friends/export`" class="btn btn-primary text-nowrap"><i class="fas fa-download"></i> CSVダウンロード</a>
         </div>
-
-        <!-- START: Search form -->
-        <div class="w-200 h-5 mr-1">
-          <staff-selection
-            ref="channelAssignment"
-            :selected="queryParams.channel_assignee_id_eq"
-            @select="setAssigneeParam"
-          ></staff-selection>
-        </div>
-        <div class="d-flex text-nowrap">
-          <div class="input-group app-search">
-            <input
-              type="text"
-              class="form-control dropdown-toggle fw-250"
-              placeholder="検索..."
-              v-model="keyword"
-              maxlength="64"
-            />
-            <span class="mdi mdi-magnify search-icon"></span>
-            <div class="input-group-append">
-              <div class="btn btn-primary" @click="loadFriend">検索</div>
-            </div>
+        <div class="d-flex justify-content-end">
+          <div class="filter-tester-accounts custom-control custom-checkbox mr-3 d-flex align-items-center">
+            <input type="checkbox" :value="true" name="tester" id="search_tester_account" class="custom-control-input" v-model="selectOnlyTester">
+            <label for="search_tester_account" class="custom-control-label">テスターのみ</label>
           </div>
-          <div
-            class="btn btn-primary text-nowrap ml-1 mr-1"
-            data-backdrop="static"
-            data-toggle="modal"
-            data-target="#modalFriendSearch"
-            @click="openModal()"
-          >
-            詳細検索
+
+          <!-- START: Search form -->
+          <div class="w-200 h-5 mr-1">
+            <staff-selection
+              ref="channelAssignment"
+              :selected="queryParams.channel_assignee_id_eq"
+              @select="setAssigneeParam"
+            ></staff-selection>
+          </div>
+          <div class="d-flex text-nowrap">
+            <div class="input-group app-search">
+              <input
+                type="text"
+                class="form-control dropdown-toggle fw-250"
+                placeholder="検索..."
+                v-model="keyword"
+                maxlength="64"
+              />
+              <span class="mdi mdi-magnify search-icon"></span>
+              <div class="input-group-append">
+                <div class="btn btn-primary" @click="loadFriend">検索</div>
+              </div>
+            </div>
+            <div
+              class="btn btn-primary text-nowrap ml-1 mr-1"
+              data-backdrop="static"
+              data-toggle="modal"
+              data-target="#modalFriendSearch"
+              @click="openModal()"
+            >
+              詳細検索
+            </div>
           </div>
         </div>
         <!-- End: Search form -->

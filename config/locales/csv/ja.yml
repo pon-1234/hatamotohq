@@ -1,5 +1,9 @@
 ja:
   header_csv:
+    line_friend:
+      id: ID
+      line_user_id: line_user_id
+      line_name: line_name
     group:
       id: ID
       name: グループ名
