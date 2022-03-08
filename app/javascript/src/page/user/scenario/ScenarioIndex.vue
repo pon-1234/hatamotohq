@@ -164,6 +164,9 @@
               <label class="custom-control-label" :for="`tester_${tester.id}`">{{ tester.display_name }}</label>
             </div>
           </div>
+          <div v-else>
+            <span>テスターはありません。</span>
+          </div>
         </div>
       </template>
     </modal-confirm>
@@ -246,7 +249,7 @@ export default {
     },
 
     openMessageIndex(scenario) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`);
+      location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`;
     },
 
     async submitDeleteScenario() {

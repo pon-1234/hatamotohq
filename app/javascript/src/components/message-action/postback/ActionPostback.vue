@@ -2,12 +2,12 @@
   <div>
     <label>アクション</label>
     <div>
-      <select type="text" maxlength="12" v-model="postbackType" class="w-100 form-control" @change="changeActionType">
+      <select v-model="postbackType" class="w-100 form-control" @change="changeActionType">
         <option v-for="(val, key) of types" :key="key" :value="key">{{ val }}</option>
       </select>
     </div>
     <div class="mt-2">
-      <action-postback-text v-if="postbackType === 'text'" :value="content" :name="name" @input="updateContent">
+      <action-postback-text v-if="postbackType === 'text'" :action-data="content" :name="name" @input="updateContent">
       </action-postback-text>
 
       <action-postback-template v-if="postbackType === 'template'" :value="content" @input="updateContent" :name="name">
@@ -15,13 +15,6 @@
 
       <action-postback-scenario v-if="postbackType === 'scenario'" :value="content" :name="name" @input="updateContent">
       </action-postback-scenario>
-
-      <action-post-back-type-flex-message
-        v-if="postbackType === 'flexMessage'"
-        :value="content"
-        :name="name"
-        @input="updateContent"
-      />
 
       <action-postback-email v-if="postbackType === 'email'" :value="content" :name="name" @input="updateContent">
       </action-postback-email>
@@ -35,6 +28,12 @@
         :name="name"
         @input="updateContent"
       ></action-postback-reminder>
+
+      <action-postback-scoring
+        v-if="postbackType === 'scoring'"
+        :action-data="content"
+        @input="updateContent"
+      ></action-postback-scoring>
     </div>
   </div>
 </template>
