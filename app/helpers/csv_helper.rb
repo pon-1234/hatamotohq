@@ -17,4 +17,12 @@ module CsvHelper
         after.to_i(16).chr('UTF-8'))
     end
   end
+
+  def export_for_row_hash(headers, obj)
+    row = {}
+    headers.each do |header|
+      row[header] = obj[header]
+    end
+    row
+  end
 end

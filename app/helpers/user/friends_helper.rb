@@ -1,20 +1,15 @@
 # frozen_string_literal: true
 
 module User::FriendsHelper
+  include CsvHelper
+
   def line_friends_for_export(friends)
     rows = []
+    headers = %w(id line_user_id line_name display_name line_picture_url status note created_at)
     friends.each do |friend|
-      rows << {
-        'id' => friend.id,
-        'line_user_id' => friend.line_user_id,
-        'line_name' => friend.line_name,
-        'display_name' => friend.display_name,
-        'line_picture_url' => friend.line_picture_url,
-        'tags' => friend.tags.pluck(:name).join(','),
-        'status' => friend.status,
-        'note' => friend.note,
-        'created_at' => friend.created_at
-      }
+      row = export_for_row_hash(headers, friend)
+      row['tags'] = friend.tags.pluck(:name).join(',')
+      rows << row
     end
     rows
   end
