@@ -53,7 +53,8 @@ export const ImageType = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export const VideoType = ['video/mp4'];
 
-export const AudioType = ['audio/m4a', 'audio/x-m4a'];
+export const AudioType = ['audio/m4a', 'audio/x-m4a', 'audio/wav', 'audio/x-wav', 'audio/mpeg',
+  'audio/mpeg3', 'audio/x-mpeg-3', 'audio/mp4', 'video/x-ms-wma', 'audio/ogg'];
 
 export const PdfType = ['application/pdf', 'application/x-pdf'];
 
@@ -61,7 +62,7 @@ export const ImageMimeBytes = ['89504e47', 'ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', '
 
 export const VideoMimeBytes = ['66747970'];
 
-export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920'];
+export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920', '4944333', '0001c', '3026b275', '4f676753'];
 
 export const PdfMimeBytes = ['255044462D'];
 
