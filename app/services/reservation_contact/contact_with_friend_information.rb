@@ -10,7 +10,7 @@ class ReservationContact::ContactWithFriendInformation
       synchorize_result = Pms::Guest::UpdateGuest.new.perform will_update_guest['id'], { lineId: friend_line_id }
       if synchorize_result && (latest_reservation = synchorize_result['latest_reservation'])
         LatestPmsReservation.insert_record_from_pms_data latest_reservation, friend
-        ReservationMailer.contact_to_client(friend, latest_reservation).deliver_now
+        ReservationMailer.contact_to_client(friend, synchorize_result).deliver_now
       end
     else
       send_text_message friend, 'お客様は存在しません。別の方法で連絡してください。'
@@ -21,7 +21,7 @@ class ReservationContact::ContactWithFriendInformation
 
   private
     def send_text_message(friend, text)
-      message = Messages::MessageBuilder.new(friend, friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
+      message = Messages::MessageBuilder.new(nil, friend.channel, { message: { type: 'text', text: text } }.try(:with_indifferent_access)).perform
       LineApi::PushMessage.new(friend.line_account).perform [message.content], friend.line_user_id
     end
 end

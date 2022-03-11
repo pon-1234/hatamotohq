@@ -46,7 +46,7 @@ class ActionHandlerJob < ApplicationJob
         when 'rsv_contact'
           Postback::ContactRsvHandler.new(@friend, action_content).perform
         when 'service_review'
-          Postback::SendServiceReviewFormHandler.new(@friend).perform
+          Postback::SendServiceReviewFormHandler.new(@friend, action_content).perform
         end
       end
     end

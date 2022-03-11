@@ -3,13 +3,12 @@
 class ReservationMailer < ApplicationMailer
   default from: ENV.fetch('MAILER_SENDER', 'noreply@yopaz.vn')
 
-  #TODO
-  # This mailer action is only temporary, it'll be replace soon
-  def contact_to_client(line_friend, latest_reservation)
-    @line_friend = line_friend
-    @latest_reservation = latest_reservation
-    mail_entries_hash = { to: line_friend.line_account.client.admin.email, subject: "Latest reservation of #{line_friend.display_name}" }
-    mail_entries_hash[:cc] = line_friend.channel.assignee.email if line_friend.channel.assignee
+  def contact_to_client(from_crm_line_friend, from_pms_line_friend_information)
+    @from_crm_line_friend = from_crm_line_friend
+    @from_pms_line_friend_information = from_pms_line_friend_information
+    @latest_reservation = @from_pms_line_friend_information['latest_reservation']
+    mail_entries_hash = { to: @from_crm_line_friend.line_account.client.admin.email, subject: '「LINE CRM」顧客対応をアサインされました。' }
+    mail_entries_hash[:cc] = @from_crm_line_friend.channel.assignee.email if @from_crm_line_friend.channel.assignee
     mail mail_entries_hash
   end
 end
