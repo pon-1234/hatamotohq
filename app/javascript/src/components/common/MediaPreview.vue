@@ -38,6 +38,23 @@ export default {
     isAudio() {
       return this.type === 'audio';
     }
+  },
+
+  mounted() {
+    this.handlePlayOneMediaAtATime();
+  },
+
+  methods: {
+    handlePlayOneMediaAtATime() {
+      const medias = Array.prototype.slice.apply(document.querySelectorAll('video, audio'));
+      medias.forEach((media) => {
+        media.addEventListener('play', function(event) {
+          medias.forEach((media) => {
+            if (event.target !== media) media.pause();
+          });
+        });
+      });
+    }
   }
 };
 </script>
