@@ -322,7 +322,7 @@ class Util {
     return /^([Xx][Xx][Ss]|[Xx][Ss]|[Ss][Mm]|[Mm][Dd]|[Ll][Gg]|[Xx][Ll]|[Xx][Xx][Ll]|3[Xx][Ll]|4[Xx][Ll]|5[Xx][Ll])$/i;
   }
 
-  static handlePlayOneMediaAtATime() {
+  static addMediaPlayListeners() {
     const medias = Array.prototype.slice.apply(document.querySelectorAll('video, audio'));
     medias.forEach((media) => {
       media.addEventListener('play', function(event) {

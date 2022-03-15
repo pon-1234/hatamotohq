@@ -223,6 +223,9 @@ export default {
     await this.getMedias();
     this.loading = false;
   },
+  updated() {
+    Util.addMediaPlayListeners();
+  },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },

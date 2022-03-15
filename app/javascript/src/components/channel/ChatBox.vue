@@ -55,7 +55,7 @@ export default {
   },
 
   updated() {
-    Util.handlePlayOneMediaAtATime();
+    Util.addMediaPlayListeners();
   },
 
   unmounted() {
