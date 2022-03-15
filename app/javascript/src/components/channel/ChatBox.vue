@@ -52,6 +52,8 @@ export default {
 
   mounted() {
     this.addScrollListener();
+    // handle play one media at a time
+    Util.handlePlayOneMediaAtATime();
   },
 
   unmounted() {
