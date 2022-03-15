@@ -6,7 +6,7 @@
       ファイルサイズ：200MB以下
     </span>
     <span v-else-if="type === 'audio'" class="text-sm">
-      ファイル形式：M4A、MP3、MP4、WAV、WMA、Ogg<br />
+      ファイル形式：M4A、MP3、WAV、Ogg<br />
       ファイルサイズ：200MB以下
     </span>
     <span class="text-sm" v-else-if="type === 'richmenu'">
