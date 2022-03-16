@@ -7,7 +7,7 @@ class MediaValidator < ActiveModel::Validator
   IMAGE_MAXSIZE  = 10000000 # 10mb
   PDF_MAXSIZE    = 10000000 # 10mb
   VIDEO_MAXSIZE  = 200000000 # 200mb
-  AUDIO_MAXSIZE = 10000000 # 10mb
+  AUDIO_MAXSIZE = 200000000 # 200mb
   RICHMENU_MAXSIZE = 10000000 # 10mb
 
   def validate(record)
