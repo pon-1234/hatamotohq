@@ -7,8 +7,8 @@ class Postback::ContactRsvHandler < Postback::BaseHandler
     guests = Pms::Guest::SearchGuests.new.perform lineId: @friend.line_user_id
     if guests.present?
       return unless latest_reservation = guests.first.try(:[], 'latest_reservation')
-      LatestPmsReservation.insert_record_from_pms_data latest_reservation, @friend
-      ReservationMailer.contact_to_client(@friend, guests.first).deliver_now
+      last_pms_reservation = LatestPmsReservation.insert_record_from_pms_data latest_reservation, @friend
+      ReservationMailer.contact_to_client(@friend, guests.first).deliver_now if last_pms_reservation
     else
       routes = Rails.application.routes.url_helpers
       form_url = routes.contact_new_url friend_line_id: @friend.line_user_id
