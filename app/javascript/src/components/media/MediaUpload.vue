@@ -129,7 +129,6 @@ export default {
       }
       if (input.type === 'video/mp4' && mediaType !== this.oldType) this.mediaData.type = this.oldType;
       const validationResult = Media.validateFileSizeByType(this.mediaData.type, input.size);
-
       // set default type if file cannot be read error
       if (!this.mediaData.type || !validationResult.valid) this.mediaData.type = this.oldType;
 
@@ -148,9 +147,9 @@ export default {
         const validMimeBytes = await Media.validateFileByMimeBytes(
           e,
           mimetype,
-          (window.URL || window.webkitURL).createObjectURL(input)
+          (window.URL || window.webkitURL).createObjectURL(input),
+          input.type
         );
-
         // check the valid first 4 bytes of the header
         if (!validMimeBytes.valid) {
           _this.errorMessage = validMimeBytes.message;
