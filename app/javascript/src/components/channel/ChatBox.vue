@@ -54,6 +54,10 @@ export default {
     this.addScrollListener();
   },
 
+  updated() {
+    Util.addMediaPlayListeners();
+  },
+
   unmounted() {
     this.removeScrollListener();
   },
