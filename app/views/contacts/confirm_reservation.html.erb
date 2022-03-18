@@ -1,61 +1,25 @@
-<div class="ctext-wrap">
-  <div>
-    <div class="overflow-auto">
-      <div class="preview">
-        <div>
-          <div class="d-flex">
-            <div class="reservation-item">
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-              <meta name="format-detection" content="telephone=no">
-              <link rel="stylesheet" type="text/css" href="https://static.line-scdn.net/line_flexible_msg/172927b9b3c/css/sp/main.css?27354779">
-              <div class="LyMe">
-                <div class="T1 fxLTR">
-                  <div class="t1Hero">
-                    <div class="ExCover MdImg ExFull">
-                      <div>
-                        <%= image_tag @room_information[:room_photo_url], class: 'w-100' if @room_information[:room_photo_url] %>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ExHasFooter t1Body">
-                    <div class="spcSm MdBx vr">
-                      <div class="MdBx hr bl">
-                        <div class="MdTxt ExXl fl0 fxC0 ExWrap ExWB">
-                          <p><%= @latest_pms_reservation.charge_total %>円</p>
-                        </div>
-                      </div>
-                      <div class="MdBx hr bl ExMgnTMd">
-                        <div class="MdTxt fl2 ExWrap ExWB ExLg">
-                          <p><%= @latest_pms_reservation.room_list.first['room_name'] %></p>
-                        </div>
-                      </div>
-                      <div class="MdBx hr bl ExMgnTMd">
-                        <div class="MdTxt fl1">
-                          <p><%= @room_information.try(:[], :room_area) %></p>
-                        </div>
-                        <div class="MdTxt fl1">
-                          <p><%= @latest_pms_reservation.room_list.first['pax_count'] %></p>
-                        </div>
-                        <div class="MdTxt fl1">
-                          <p><%= @room_information && @room_information.try(:[], :not_smock) ? '禁煙' : '喫煙' %></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t1Footer">
-                    <div class="spcSm MdBx vr">
-                      <div class="ExBtn1 MdBtn">
-                        <%= button_to 'Cancel', cancel_reservation_contacts_path, params: {friend_line_id: @friend.id, last_pms_reservation_id: @latest_pms_reservation.id} %>
-                        <%= button_to 'Confirmed OK', confirmed_reservation_contacts_path, remote: true, params: {friend_line_id: @friend.id, last_pms_reservation_id: @latest_pms_reservation.id} %>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+<% content_for(:body_class, 'confirm-reservation') %>
+<div class="card mb-3 confirm-reservation-container">
+  <div class="room-image position-relative">
+    <%= image_tag @room_information[:room_photo_url], class: 'card-img-top' if @room_information[:room_photo_url] %>
+  </div>
+  <div class="card-body confirm-reservation-main pt-1">
+    <h2 class="confirm-reservation-price" style="color: red; font-size: 22px;"><%= @latest_pms_reservation.charge_total %>円</h2>
+    <h3 class="confirm-reservation-room-name" style="font-size: 19px;"><%= @latest_pms_reservation.room_list.first['room_name'] %></h3>
+
+    <div class="d-flex justify-content-between confirm-reservation-addition-infor mb-3">
+      <p><%= @room_information.try(:[], :room_area) %></p>
+      <p><%= @latest_pms_reservation.room_list.first['pax_count'] %>人</p>
+      <p><%= @room_information && @room_information.try(:[], :not_smock) ? '禁煙' : '喫煙' %></p>
+    </div>
+
+    <div class="actions row confirm-reservation-confirm-buttons">
+      <div class="col-12 col-md-6 mb-2 confirm-reservation-cancel-btn">
+        <%= button_to 'Cancel', cancel_reservation_contacts_path, params: {friend_line_id: @friend.id, last_pms_reservation_id: @latest_pms_reservation.id}, form_class: 'w-100', class: 'btn btn-secondary w-100' %>
+      </div>
+      <div class="col-12 col-md-6 confirm-reservation-accept-btn">
+        <%= button_to 'Confirmed OK', confirmed_reservation_contacts_path, remote: true, params: {friend_line_id: @friend.id, last_pms_reservation_id: @latest_pms_reservation.id}, form_class: 'w-100', class: 'btn btn-success w-100' %>
       </div>
     </div>
   </div>
