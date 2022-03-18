@@ -288,6 +288,9 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.json 'room_list'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.string 'status'
+    t.string 'guest_phone_number'
+    t.json 'tags'
     t.index ['line_friend_id'], name: 'index_latest_pms_reservations_on_line_friend_id'
     t.index ['pms_id'], name: 'index_latest_pms_reservations_on_pms_id'
   end

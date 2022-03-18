@@ -30,6 +30,9 @@
 #  room_list             :json
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  status                :string(255)
+#  guest_phone_number    :string(255)
+#  tags                  :json
 #
 # Indexes
 #

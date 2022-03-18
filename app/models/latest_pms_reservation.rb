@@ -30,6 +30,9 @@
 #  room_list             :json
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
+#  status                :string(255)
+#  guest_phone_number    :string(255)
+#  tags                  :json
 #
 # Indexes
 #
@@ -43,13 +46,16 @@
 class LatestPmsReservation < ApplicationRecord
   belongs_to :line_friend
 
-  validates :pms_id, presence: true, uniqueness: true
+  validates :pms_id, presence: true, uniqueness: true, unless: :draft?
+
+  enum status: { draft: 'draft', confirmed: 'confirmed' }
 
   class << self
     def insert_record_from_pms_data(reservation_raw_data, friend)
       processed_reservation_data = reservation_raw_data.deep_transform_keys { |key| key.to_s.underscore }
       # rename id key to pms_id
       processed_reservation_data['pms_id'] = processed_reservation_data.delete 'id'
+      processed_reservation_data['status'] = 'draft'
       friend.latest_pms_reservations.create!(processed_reservation_data) rescue nil
     end
   end
