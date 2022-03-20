@@ -3,7 +3,7 @@
     <div class="card mvh-50">
       <div class="card-header d-flex justify-content-between flex-wrap">
         <div class="w-lg-100 w-xl-25 mb-lg-3 mb-xl-0">
-          <a :href="`${rootUrl}/user/friends/export`" class="btn btn-primary text-nowrap"><i class="fas fa-download"></i> CSVダウンロード</a>
+          <a href="#" class="btn btn-primary text-nowrap" @click="exportCsv"><i class="fas fa-download"></i> CSVダウンロード</a>
         </div>
         <div class="d-flex justify-content-end">
           <div class="filter-tester-accounts custom-control custom-checkbox mr-3 d-flex align-items-center">
@@ -110,6 +110,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import Util from '@/core/util';
+import moment from 'moment-timezone';
 
 export default {
   props: {
@@ -213,7 +214,7 @@ export default {
   },
   methods: {
     ...mapMutations('friend', ['setQueryParams', 'setQueryParam']),
-    ...mapActions('friend', ['getFriends']),
+    ...mapActions('friend', ['getFriends', 'exportCsvFriends']),
 
     formattedDatetime(time) {
       return Util.formattedDatetime(time);
@@ -259,8 +260,23 @@ export default {
     },
     changeSelectOnlyTester: function(newVal) {
       this.selectOnlyTester = newVal;
+    },
+    async exportCsv() {
+      const res = await this.exportCsvFriends();
+      const dataExport = res;
+      const timeExport = moment.tz(new Date(), 'Asia/Tokyo').format();
+      if (dataExport.length > 0) {
+        let csvContent = 'data:text/csv;charset=Shift_JIS,';
+        csvContent += [dataExport].join('\n').replace(/(^\[)|(\]$)/gm, '');
+        const data = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', data);
+        link.setAttribute('download', `Line_Friends_${timeExport}_.csv`);
+        link.click();
+      } else {
+        alert('選択されたユーザーのデータがありません。');
+      }
     }
-
   }
 };
 </script>
