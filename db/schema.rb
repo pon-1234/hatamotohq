@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_17_032518) do
+ActiveRecord::Schema.define(version: 2022_03_18_090613) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -546,6 +546,17 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
     t.index ['line_account_id'], name: 'index_scenarios_on_line_account_id'
   end
 
+  create_table 'scorings', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'friend_variable_id'
+    t.string 'operation', default: 'set'
+    t.string 'value'
+    t.string 'old_value'
+    t.string 'new_value'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['friend_variable_id'], name: 'index_scorings_on_friend_variable_id'
+  end
+
   create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
@@ -733,6 +744,7 @@ ActiveRecord::Schema.define(version: 2022_02_17_032518) do
   add_foreign_key 'scenario_messages', 'scenarios'
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'
+  add_foreign_key 'scorings', 'friend_variables'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_questions', 'surveys'
