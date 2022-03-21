@@ -1,5 +1,5 @@
 <% if @error_message.present? %>
-  alert('<%= @error_message %>');
+  toastr.error('<%= @error_message %>');
 <% else %>
   window.location.href = '<%= confirm_reservation_result_contacts_path %>';
 <% end %>

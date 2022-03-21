@@ -147,7 +147,15 @@ label {
     left: 0;
   }
 }
-
+.confirm-reservation{
+  &-price {
+    color: red; 
+    font-size: 22px;
+  }
+  &-room-name {
+    font-size: 19px;
+  }
+}
 .review-container, .confirm-reservation-container {
   max-width: 680px;
   padding: 0 20px;

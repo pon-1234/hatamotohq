@@ -22,7 +22,7 @@ class ContactsController < ApplicationController
     if @latest_pms_reservation.save
       ReservationMailer.contact_to_client(@friend, @latest_pms_reservation).deliver_later
     else
-      @error_message = 'New reservation not exist'
+      @error_message = '新規予約はありません。'
     end
   end
 

@@ -14,7 +14,7 @@ class ReservationContact::ContactWithFriendInformation
         last_pms_reservation = LatestPmsReservation.insert_record_from_pms_data latest_reservation_hash, friend
         routes = Rails.application.routes.url_helpers
         confirm_url = "#{routes.confirm_reservation_contacts_url}?friend_line_id=#{@friend.line_user_id}&last_pms_reservation_id=#{last_pms_reservation.id}"
-        send_text_message "こちらのリンクにアクセスして、let confirm reservation  #{confirm_url}"
+        send_text_message "こちらのリンクにアクセスして、新規予約を確認してください #{confirm_url}"
       end
     else
       send_text_message friend, 'お客様は存在しません。別の方法で連絡してください。'
