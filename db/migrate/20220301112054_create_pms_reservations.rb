@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateLatestPmsReservations < ActiveRecord::Migration[6.0]
+class CreatePmsReservations < ActiveRecord::Migration[6.0]
   def change
-    create_table :latest_pms_reservations do |t|
+    create_table :pms_reservations do |t|
       t.references :line_friend, null: false, foreign_key: true
       t.string :agency_booking_number
       t.string :agency_code
@@ -29,6 +29,6 @@ class CreateLatestPmsReservations < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    add_index :latest_pms_reservations, :pms_id
+    add_index :pms_reservations, :pms_id
   end
 end

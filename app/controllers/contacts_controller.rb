@@ -43,7 +43,7 @@ class ContactsController < ApplicationController
 
     def load_friend_and_latest_pms_reservation
       @friend = LineFriend.find_by_line_user_id params[:friend_line_id]
-      @latest_pms_reservation = LatestPmsReservation.find_by_id params[:last_pms_reservation_id]
+      @latest_pms_reservation = PmsReservation.find_by_id params[:last_pms_reservation_id]
     end
 
     def load_room_information

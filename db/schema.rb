@@ -262,39 +262,6 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.index ['line_account_id'], name: 'index_insights_on_line_account_id'
   end
 
-  create_table 'latest_pms_reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.bigint 'line_friend_id', null: false
-    t.string 'agency_booking_number'
-    t.string 'agency_code'
-    t.string 'agency_name'
-    t.string 'agency_plan_code'
-    t.string 'agency_plan_name'
-    t.string 'booking_date'
-    t.string 'booking_time'
-    t.integer 'charge_claimed'
-    t.integer 'charge_total'
-    t.string 'charge_type'
-    t.string 'check_in_date'
-    t.string 'check_in_time'
-    t.string 'check_out_date'
-    t.string 'guest_name'
-    t.string 'guest_kana'
-    t.string 'pms_id'
-    t.text 'insight_memo'
-    t.integer 'nights'
-    t.text 'order_memo'
-    t.string 'payment'
-    t.string 'prop_id'
-    t.json 'room_list'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-    t.string 'status'
-    t.string 'guest_phone_number'
-    t.json 'tags'
-    t.index ['line_friend_id'], name: 'index_latest_pms_reservations_on_line_friend_id'
-    t.index ['pms_id'], name: 'index_latest_pms_reservations_on_pms_id'
-  end
-
   create_table 'line_accounts', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'client_id'
     t.string 'line_user_id'
@@ -379,6 +346,39 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['channel_id'], name: 'index_messages_on_channel_id'
     t.index ['sender_type', 'sender_id'], name: 'index_messages_on_sender_type_and_sender_id'
+  end
+
+  create_table 'pms_reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+    t.bigint 'line_friend_id', null: false
+    t.string 'agency_booking_number'
+    t.string 'agency_code'
+    t.string 'agency_name'
+    t.string 'agency_plan_code'
+    t.string 'agency_plan_name'
+    t.string 'booking_date'
+    t.string 'booking_time'
+    t.integer 'charge_claimed'
+    t.integer 'charge_total'
+    t.string 'charge_type'
+    t.string 'check_in_date'
+    t.string 'check_in_time'
+    t.string 'check_out_date'
+    t.string 'guest_name'
+    t.string 'guest_kana'
+    t.string 'pms_id'
+    t.text 'insight_memo'
+    t.integer 'nights'
+    t.text 'order_memo'
+    t.string 'payment'
+    t.string 'prop_id'
+    t.json 'room_list'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.string 'status'
+    t.string 'guest_phone_number'
+    t.json 'tags'
+    t.index ['line_friend_id'], name: 'index_pms_reservations_on_line_friend_id'
+    t.index ['pms_id'], name: 'index_pms_reservations_on_pms_id'
   end
 
   create_table 'postback_mappers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
@@ -746,11 +746,11 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
   add_foreign_key 'friend_variables', 'survey_answers'
   add_foreign_key 'friend_variables', 'variables'
   add_foreign_key 'insights', 'line_accounts'
-  add_foreign_key 'latest_pms_reservations', 'line_friends'
   add_foreign_key 'line_accounts', 'clients'
   add_foreign_key 'line_friends', 'line_accounts'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
+  add_foreign_key 'pms_reservations', 'line_friends'
   add_foreign_key 'reminder_events', 'episodes'
   add_foreign_key 'reminder_events', 'remindings'
   add_foreign_key 'reminders', 'folders'

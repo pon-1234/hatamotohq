@@ -42,7 +42,7 @@ class ReservationPreview < ActionMailer::Preview
     }
     latest_pms_reservation_hash = latest_pms_reservation_hash.deep_transform_keys { |key| key.to_s.underscore }
 
-    latest_pms_reservation = LatestPmsReservation.new latest_pms_reservation_hash
+    latest_pms_reservation = PmsReservation.new latest_pms_reservation_hash
 
     ReservationMailer.contact_to_client LineFriend.first, latest_pms_reservation
   end

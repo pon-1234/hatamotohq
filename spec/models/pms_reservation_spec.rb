@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: latest_pms_reservations
+# Table name: pms_reservations
 #
 #  id                    :bigint           not null, primary key
 #  line_friend_id        :bigint           not null
@@ -30,42 +30,18 @@
 #  room_list             :json
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  status                :string(255)
-#  guest_phone_number    :string(255)
-#  tags                  :json
 #
 # Indexes
 #
-#  index_latest_pms_reservations_on_line_friend_id  (line_friend_id)
-#  index_latest_pms_reservations_on_pms_id          (pms_id)
+#  index_pms_reservations_on_line_friend_id  (line_friend_id)
+#  index_pms_reservations_on_pms_id          (pms_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
-FactoryBot.define do
-  factory :latest_pms_reservation do
-    agency_booking_number { 'MyString' }
-    agency_code { 'MyString' }
-    agency_name { 'MyString' }
-    agency_plan_code { 'MyString' }
-    agency_plan_name { 'MyString' }
-    booking_date { 'MyString' }
-    booking_time { 'MyString' }
-    charge_claimed { 1 }
-    charge_total { 1 }
-    charge_type { 'MyString' }
-    check_in_date { 'MyString' }
-    check_in_time { 'MyString' }
-    check_out_date { 'MyString' }
-    guest_name { 'MyString' }
-    guest_kana { 'MyString' }
-    pms_id { 'MyString' }
-    insight_memo { 'MyText' }
-    nights { 1 }
-    order_memo { 'MyText' }
-    payment { 'MyString' }
-    prop_id { 'MyString' }
-    room_list { '' }
-  end
+require 'rails_helper'
+
+RSpec.describe PmsReservation, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end

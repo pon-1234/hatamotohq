@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: latest_pms_reservations
+# Table name: pms_reservations
 #
 #  id                    :bigint           not null, primary key
 #  line_friend_id        :bigint           not null
@@ -30,23 +30,21 @@
 #  room_list             :json
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  status                :string(255)
-#  guest_phone_number    :string(255)
-#  tags                  :json
 #
 # Indexes
 #
-#  index_latest_pms_reservations_on_line_friend_id  (line_friend_id)
-#  index_latest_pms_reservations_on_pms_id          (pms_id)
+#  index_pms_reservations_on_line_friend_id  (line_friend_id)
+#  index_pms_reservations_on_pms_id          (pms_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
-class LatestPmsReservation < ApplicationRecord
+class PmsReservation < ApplicationRecord
   belongs_to :line_friend
 
-  validates :pms_id, presence: true, uniqueness: true, unless: :draft?
+  validates_presence_of :pms_id, unless: :draft?
+  validates_uniqueness_of :pms_id, conditions: -> { where('status = ?', 'confirmed') }, unless: :draft?
 
   enum status: { draft: 'draft', confirmed: 'confirmed' }
 
@@ -56,7 +54,7 @@ class LatestPmsReservation < ApplicationRecord
       # rename id key to pms_id
       processed_reservation_data['pms_id'] = processed_reservation_data.delete 'id'
       processed_reservation_data['status'] = 'draft'
-      friend.latest_pms_reservations.create!(processed_reservation_data) rescue nil
+      friend.pms_reservations.create!(processed_reservation_data) rescue nil
     end
   end
 end

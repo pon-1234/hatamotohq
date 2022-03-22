@@ -11,10 +11,10 @@ class ReservationContact::ContactWithFriendInformation
       if latest_reservation_hash = will_update_guest['latest_reservation']
         latest_reservation_hash['guest_phone_number'] = will_update_guest['phone_number_primary']
         # Only save temporary to DB as a draft record
-        last_pms_reservation = LatestPmsReservation.insert_record_from_pms_data latest_reservation_hash, friend
+        last_pms_reservation = PmsReservation.insert_record_from_pms_data latest_reservation_hash, friend
         routes = Rails.application.routes.url_helpers
-        confirm_url = "#{routes.confirm_reservation_contacts_url}?friend_line_id=#{@friend.line_user_id}&last_pms_reservation_id=#{last_pms_reservation.id}"
-        send_text_message "こちらのリンクにアクセスして、新規予約を確認してください #{confirm_url}"
+        confirm_url = "#{routes.confirm_reservation_contacts_url}?friend_line_id=#{friend.line_user_id}&last_pms_reservation_id=#{last_pms_reservation.id}"
+        send_text_message friend, "こちらのリンクにアクセスして、新規予約を確認してください #{confirm_url}"
       end
     else
       send_text_message friend, 'お客様は存在しません。別の方法で連絡してください。'
