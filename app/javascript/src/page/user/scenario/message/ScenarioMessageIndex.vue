@@ -138,6 +138,9 @@
             <label class="custom-control-label" :for="`tester_${tester.id}`">{{ tester.display_name }}</label>
           </div>
         </div>
+        <div v-else>
+          <span>テスターはありません。</span>
+        </div>
       </template>
     </modal-confirm>
     <!-- END: send scenario to testers modal -->

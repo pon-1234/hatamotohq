@@ -4,7 +4,6 @@
     <textarea
       :name="name + '_postback_text'"
       placeholder="本文を入力してください"
-      type="text"
       rows="4"
       v-model="content.text"
       class="form-control"
@@ -19,7 +18,7 @@
 <script>
 export default {
   props: {
-    value: {
+    actionData: {
       type: Object,
       default: () => {
         return {
@@ -36,15 +35,15 @@ export default {
   data() {
     return {
       // eslint-disable-next-line no-undef
-      content: _.cloneDeep(this.value)
+      content: _.cloneDeep(this.actionData)
     };
   },
 
   watch: {
-    value: {
+    actionData: {
       handler(val) {
         // eslint-disable-next-line no-undef
-        this.content = _.cloneDeep(this.value);
+        this.content = _.cloneDeep(this.actionData);
       },
       deep: true
     }

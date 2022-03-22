@@ -27,5 +27,6 @@
 class FriendVariable < ApplicationRecord
   belongs_to :line_friend
   belongs_to :variable
-  belongs_to :survey_answer
+  belongs_to :survey_answer, optional: true
+  has_many :scorings, dependent: :destroy
 end

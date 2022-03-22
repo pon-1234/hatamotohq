@@ -33,6 +33,8 @@ class ActionHandlerJob < ApplicationJob
           Postback::AssignOrUnassignTagHandler.new(@friend, action_content).perform
         when 'reminder'
           Postback::SetupReminderHandler.new(@friend, action_content).perform
+        when 'scoring'
+          Postback::ScoringHandler.new(@friend, action_content).perform
         when 'rsv_intro'
           Postback::SendReservationInstructionHandler.new(@friend, action_content).perform
         when 'rsv_bookmark'
