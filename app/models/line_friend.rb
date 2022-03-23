@@ -37,6 +37,7 @@ class LineFriend < ApplicationRecord
   has_many :survey_responses
   has_many :friend_variables
   has_many :reservations
+  has_many :pms_reservations, dependent: :destroy
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }

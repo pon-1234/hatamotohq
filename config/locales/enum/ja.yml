@@ -110,3 +110,4 @@ ja:
   date:
     formats:
       hyphen: '%Y-%m-%d'
+      primary: '%Y年%m月%d日'

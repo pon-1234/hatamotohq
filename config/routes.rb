@@ -42,6 +42,18 @@ Rails.application.routes.draw do
   get 'reviews/result', to: 'reviews#result', as: 'review_result'
   resources :review_questions, only: :index
 
+  # contacts
+  get 'contacts/new/:friend_line_id', to: 'contacts#new', as: 'contact_new'
+  get 'contacts/result', to: 'contacts#result', as: 'contact_result'
+  resources :contacts, only: :create do
+    collection do
+      get :confirm_reservation
+      post :confirmed_reservation
+      post :cancel_reservation
+      get :confirm_reservation_result
+    end
+  end
+
   # medias
   get 'medias/:id/content', to: 'medias#variant'
   get 'medias/:id/content/:size', to: 'medias#variant'
