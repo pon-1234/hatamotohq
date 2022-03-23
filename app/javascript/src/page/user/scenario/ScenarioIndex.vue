@@ -20,6 +20,7 @@
                 <tr>
                   <th class="mw-120">配信方式</th>
                   <th>シナリオ名</th>
+                  <th colspan="2" class="text-center mw-230">統計</th>
                   <th class="mw-120">状況</th>
                   <th class="mw-200">メッセージ</th>
                   <th>操作</th>
@@ -30,6 +31,12 @@
                   <td>{{ scenario.mode === "elapsed_time" ? "経過時間" : "時刻" }}</td>
                   <td>
                     <p class="scenario_title">{{ scenario.title }}</p>
+                  </td>
+                  <td class="text-center">
+                    {{ scenario.sending_friend_count }}人 <span class="font-13">(購読中)</span>
+                  </td>
+                  <td class="text-center">
+                    {{ scenario.sent_friend_count }}人 <span class="font-13">(購読済み)</span>
                   </td>
                   <td><scenario-status :status="scenario.status"></scenario-status></td>
                   <td>
@@ -58,6 +65,14 @@
                           data-target="#modalCopyScenario"
                           @click="curScenarioIndex = index"
                           >シナリオをコピー</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalSendScenarioToTesters"
+                          @click="curScenarioIndex = index"
+                          >テスト配信</a
                         >
                         <a
                           role="button"
@@ -122,6 +137,40 @@
       </template>
     </modal-confirm>
     <!-- END: Copy scenario modal -->
+    <!-- START: send scenario to testers modal -->
+    <modal-confirm
+      title="シナリオのテスト配信のため、テスターを選択してください。"
+      id="modalSendScenarioToTesters"
+      type="confirm"
+      @confirm="submitSendScenarioToTesters"
+      :confirmButtonDisabled="selectedTesterIds.length === 0"
+      confirmButtonLabel="テスト配信"
+    >
+      <template v-slot:content>
+        <div v-if="curScenario">
+          <div v-if="testers && testers.length" class="d-flex">
+            <div
+              class="flex-1 custom-control custom-checkbox mr-2"
+              v-for="tester in testers"
+              :key="`tester_${tester.id}`"
+            >
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                :id="`tester_${tester.id}`"
+                v-model="selectedTesterIds"
+                :value="tester.id"
+              />
+              <label class="custom-control-label" :for="`tester_${tester.id}`">{{ tester.display_name }}</label>
+            </div>
+          </div>
+          <div v-else>
+            <span>テスターはありません。</span>
+          </div>
+        </div>
+      </template>
+    </modal-confirm>
+    <!-- END: send scenario to testers modal -->
   </div>
 </template>
 
@@ -137,9 +186,12 @@ export default {
       contentKey: 0,
       currentPage: 1,
       queryParams: null,
-      curScenarioIndex: 0
+      curScenarioIndex: 0,
+      selectedTesterIds: []
     };
   },
+
+  props: ['testers'],
 
   created() {
     this.queryParams = _.cloneDeep(this.getQueryParams);
@@ -165,7 +217,7 @@ export default {
 
   methods: {
     ...mapMutations('scenario', ['setQueryParams']),
-    ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario']),
+    ...mapActions('scenario', ['getScenarios', 'copyScenario', 'deleteScenario', 'sendScenarioToTesters']),
 
     forceRerender() {
       this.contentKey++;
@@ -197,7 +249,7 @@ export default {
     },
 
     openMessageIndex(scenario) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`);
+      location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/${scenario.id}/messages`;
     },
 
     async submitDeleteScenario() {
@@ -217,13 +269,25 @@ export default {
       } else {
         window.toastr.error('シナリオのコピーは失敗しました。');
       }
+    },
+
+    async submitSendScenarioToTesters() {
+      const response = await this.sendScenarioToTesters({
+        scenario_id: this.curScenario.id,
+        line_friend_ids: this.selectedTesterIds
+      });
+      if (response) {
+        Util.showSuccessThenRedirect('シナリオのテスト配信は完了しました。', location.href);
+      } else {
+        window.toastr.error('シナリオのテスト配信は失敗しました。');
+      }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
   .scenario_title {
-    width: 40vw;
+    width: 36vw;
     margin: 0;
     white-space: pre-wrap;
     -webkit-box-orient: vertical;

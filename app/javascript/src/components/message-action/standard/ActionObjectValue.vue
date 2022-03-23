@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- <action-postback :showTitle="showTitle" v-bind:value="data" v-if="data.type === 'postback'" @input="changeAction" :type="type" :name="name" :labelRequired="labelRequired"/> -->
+    <!-- <action-postback :showTitle="showTitle" v-bind:value="data" v-if="data.type === 'postback'" @input="changeAction" :type="type" :name="name" :requiredLabel="requiredLabel"/> -->
     <action-send-message
       :showTitle="showTitle"
       v-bind:value="data"
       v-if="data.type === 'message'"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-send-message>
 
     <action-open-url
@@ -16,7 +16,7 @@
       v-if="data.type === 'uri' && regexUrl"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-open-url>
 
     <action-open-tel
@@ -25,7 +25,7 @@
       v-if="data.type === 'uri' && regexUri"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-open-tel>
 
     <action-datetime-picker
@@ -34,7 +34,7 @@
       v-if="data.type === 'datetimepicker'"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-datetime-picker>
 
     <action-survey
@@ -43,7 +43,7 @@
       v-if="data.type === 'survey'"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-survey>
 
     <action-default
@@ -52,7 +52,7 @@
       v-if="data.type === 'camera' || data.type === 'cameraRoll' || data.type === 'location'"
       @input="changeAction"
       :name="name"
-      :labelRequired="labelRequired"
+      :requiredLabel="requiredLabel"
     ></action-default>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
     data: Object,
     name: String,
     type: String,
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     }
@@ -76,15 +76,11 @@ export default {
 
   computed: {
     regexUrl() {
-      return this.data.id
-        ? this.data.id === 1
-        : Util.validateUrl(this.data.uri);
+      return this.data.id ? this.data.id === 1 : Util.validateUrl(this.data.uri);
     },
 
     regexUri() {
-      return this.data.id
-        ? this.data.id === 2
-        : !Util.validateUrl(this.data.uri);
+      return this.data.id ? this.data.id === 2 : !Util.validateUrl(this.data.uri);
     }
   },
   methods: {

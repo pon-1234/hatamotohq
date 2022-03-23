@@ -22,7 +22,7 @@
           <div class="ctext-wrap">
             <i>{{ sender.name || "システム" }}</i>
             <p>
-              <message-content :data="message.content" :time="readableTime"></message-content>
+              <message-content :data="message" :time="readableTime"></message-content>
             </p>
           </div>
         </div>

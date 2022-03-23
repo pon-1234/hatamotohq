@@ -7,6 +7,10 @@
         <span class="account-user-avatar">
           <img src="https://icon-library.com/images/user-icon-image/user-icon-image-18.jpg" alt="user-image" class="rounded-circle">
         </span>
+        <span>
+          <span class="account-position"><%= current_admin&.role_i18n %></span>
+          <span class="account-user-name"><%= current_admin&.name %></span>
+        </span>
       </a>
       <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
         <!-- item-->
@@ -15,10 +19,10 @@
         </div>
 
         <!-- item-->
-        <a href="javascript:void(0);" class="dropdown-item notify-item">
+        <%= link_to edit_admin_profile_path, class: "dropdown-item notify-item" do %>
           <i class="mdi mdi-account-edit mr-1"></i>
           <span>アカウント設定</span>
-        </a>
+        <% end %>
 
         <!-- item-->
         <%= link_to destroy_admin_session_path, method: :delete, class: "dropdown-item notify-item" do %>

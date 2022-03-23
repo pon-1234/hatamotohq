@@ -8,13 +8,23 @@
   <div class="h-100" id="left-side-menu-container" data-simplebar>
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
+      <% if can? :manage, Admin %>
+        <li class="side-nav-item <%= controller?("admin/accounts") ? 'mm-active' : '' %>">
+          <%= link_to admin_accounts_path, class: "side-nav-link #{controller?("admin/accounts") ? 'active' : '' }" do %>
+            <i class="uil-user-square"></i>
+            <span> 管理者管理 </span>
+          <% end %>
+        </li>
+      <% end %>
 
-      <li class="side-nav-item <%= controller?("admin/users") ? 'mm-active' : '' %>">
-        <%= link_to admin_users_path, class: "side-nav-link #{controller?("admin/users") ? 'active' : '' }" do %>
-          <i class="uil-users-alt"></i>
-          <span> クライアント一覧 </span>
-        <% end %>
-      </li>
+      <ul class="metismenu side-nav">
+        <li class="side-nav-item <%= controller?("admin/agencies") ? 'mm-active' : '' %>">
+          <%= link_to admin_agencies_path, class: "side-nav-link #{controller?("admin/agencies") ? 'active' : '' }" do %>
+            <i class="uil-users-alt"></i>
+            <span> 契約者一覧 </span>
+          <% end %>
+        </li>
+      </ul>
 
       <!-- トーク -->
       <li class="side-nav-item <%= controller?("admin/announcements") ? 'mm-active' : '' %>">

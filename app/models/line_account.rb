@@ -5,7 +5,7 @@
 # Table name: line_accounts
 #
 #  id              :bigint           not null, primary key
-#  owner_id        :bigint
+#  client_id       :bigint
 #  line_user_id    :string(255)
 #  line_name       :string(255)
 #  display_name    :string(255)
@@ -22,19 +22,22 @@
 #
 # Indexes
 #
-#  index_line_accounts_on_owner_id  (owner_id)
+#  index_line_accounts_on_client_id  (client_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (owner_id => users.id)
+#  fk_rails_...  (client_id => clients.id)
 #
 require 'securerandom'
 class LineAccount < ApplicationRecord
-  belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
+  belongs_to :client
   has_many :channels
   has_many :line_friends, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :rich_menus, dependent: :destroy
+  has_many :medias, dependent: :destroy
+  has_many :templates, dependent: :destroy
+  has_many :scenarios, dependent: :destroy
 
   enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
 
@@ -48,6 +51,14 @@ class LineAccount < ApplicationRecord
 
   def latest_messages
     Message.joins(:channel).references(:channel).where(channels: { line_account_id: self.id }).from_friend.limit(8)
+  end
+
+  def get_messages_quota
+    return if self.channel_id.nil?
+    insight = Insight.find_or_initialize_by(line_account: self, type: :monthly, date: Time.zone.today.beginning_of_month)
+    quota = LineApi::GetQuota.new(self).perform
+    insight.quota = quota
+    insight.save
   end
 
   private

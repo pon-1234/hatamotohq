@@ -22,4 +22,8 @@ class Admin::ApplicationController < ActionController::Base
     # For authenticating websocket connection
     cookies.signed[:admin_id] = current_admin.id
   end
+
+  def current_ability
+    @current_ability ||= AdminAbility.new(current_admin)
+  end
 end

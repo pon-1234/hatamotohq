@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100">
         ラベル
-        <required-mark v-if="labelRequired" />
+        <required-mark v-if="requiredLabel" />
       </label>
       <div class="w-100">
         <input
@@ -13,7 +13,7 @@
           maxlength="13"
           v-model.trim="label"
           class="w-100 form-control"
-          v-validate="{ required: labelRequired && showTitle, max: 12 }"
+          v-validate="{ required: requiredLabel && showTitle, max: 12 }"
           data-vv-as="ラベル"
           @keyup="changeLabel"
         />
@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-group mt-2" v-if="showLaunchMessage">
-      <label>選択時のメッセージ</label>
+      <label>選択時のメッセージ<required-mark v-if="requiredLabel" /></label>
       <input
         type="text"
         placeholder="選択時のメッセージを入力してください"
@@ -31,7 +31,7 @@
         class="w-100 form-control"
         :name="name + '_display_text'"
         maxlength="301"
-        v-validate="'max:300'"
+        v-validate="'required|max:300'"
         data-vv-as="選択時のメッセージ"
         @keyup="changeDisplayText($event)"
       />
@@ -67,7 +67,7 @@
             :showTitle="false"
             :value="action"
             :name="name + '_postback_' + index"
-            :labelRequired="false"
+            :requiredLabel="false"
             @input="changeActionType(index, $event)"
           >
           </action-postback>
@@ -85,7 +85,7 @@
 export default {
   props: {
     value: Object,
-    labelRequired: Boolean,
+    requiredLabel: Boolean,
     showTitle: Boolean,
     name: String,
     limit: {

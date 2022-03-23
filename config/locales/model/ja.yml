@@ -14,6 +14,11 @@ ja:
         avatar: アバター
         postal_code: 郵便番号
         phone_number: 電話番号
+      agency:
+        email: メール
+        name: 契約者名
+      client:
+        name: クライアント名
       tag:
         name: タグ名
       folder:
@@ -27,3 +32,30 @@ ja:
       user: ユーザー
       group: グループ
       device: デバイス
+  activemodel:
+    attributes:
+      api/v1/upload_media_validator:
+        file: ファイル
+        type: タイプ
+        duration: デュレイション
+      api/v1/send_message_validator:
+        packageId: パッケージID
+        stickerId: スタンプID
+        type: タイプ
+        originalContentUrl: オリジナルコンテンツURL
+        previewImageUrl: プレビュー画像URL
+        duration: デュレイション
+        text: テキスト
+      api/v1/send_template_validator:
+        channel_id: チャネルID
+        template_id: テンプレートID
+      api/v1/send_scenario_validator:
+        channel_id: チャネルID
+        scenario_id: シナリオID
+      api/v1/get_message_list_validator:
+        before: 前パラメータ
+      send_available_room_notification_validator:
+        uid: UID
+        type_id: タイプID
+        crm_api_key: APIキー
+        available_room_count: 在庫中数

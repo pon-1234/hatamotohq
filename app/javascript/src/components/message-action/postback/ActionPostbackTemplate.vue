@@ -12,7 +12,7 @@
         class="btn btn-secondary mw-150"
         v-if="currentTemplate.template_id"
       >
-        <message-content :data="currentTemplate.content" v-if="currentTemplate.content" />
+        <message-content :data="currentTemplate" v-if="currentTemplate.content" />
         <span v-else>{{ currentTemplate.name }}</span>
       </div>
       <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary mw-150" v-else>

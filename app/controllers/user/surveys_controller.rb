@@ -90,7 +90,7 @@ class User::SurveysController < User::ApplicationController
   def destroy
     @survey.destroy! if @survey.destroyable?
     render_success
-  rescue => e
+  rescue
     render_bad_request
   end
 

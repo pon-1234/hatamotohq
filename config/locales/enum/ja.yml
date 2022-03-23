@@ -19,6 +19,9 @@ ja:
         active: 有効
         blocked: ブロックした
         deleting: 削除中
+      role:
+        admin: 管理者
+        staff: スタッフ者
     line_friend:
       status:
         active: 有効
@@ -38,7 +41,10 @@ ja:
     admin:
       status:
         active: 有効
-        blocked: 無効
+        blocked: ブロックした
+      role:
+        superadmin: ルート管理者
+        admin: システム管理者
     prefecture:
       hokkaido: 北海道
       aomori: 青森県
@@ -101,3 +107,7 @@ ja:
     fri: 金曜日
     sat: 土曜日
     sun: 日曜日
+  date:
+    formats:
+      hyphen: '%Y-%m-%d'
+      primary: '%Y年%m月%d日'

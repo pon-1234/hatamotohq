@@ -114,7 +114,7 @@
           <action-editor-custom
             name="survey-action"
             :value="surveyData.after_action"
-            :labelRequired="false"
+            :requiredLabel="false"
             :showTitle="false"
             :showLaunchMessage="false"
             @input="surveyData.after_action = $event"
@@ -242,7 +242,6 @@ export default {
           `${this.rootPath}/user/surveys?folder_id=${this.surveyData.folder_id}`
         );
       } else {
-        this.loading;
         window.toastr.error('回答フォームの保存は失敗しました。');
       }
     },

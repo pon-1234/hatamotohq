@@ -17,10 +17,12 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
+#  tester           :boolean          default(FALSE)
 #
 # Indexes
 #
 #  index_line_friends_on_line_account_id  (line_account_id)
+#  index_line_friends_on_tester           (tester)
 #
 # Foreign Keys
 #
@@ -34,6 +36,8 @@ class LineFriend < ApplicationRecord
   has_many :messages, as: :sender
   has_many :survey_responses
   has_many :friend_variables
+  has_many :reservations
+  has_many :pms_reservations, dependent: :destroy
 
   # Validations
   validates :display_name, allow_nil: true, length: { maximum: 255 }
@@ -44,6 +48,8 @@ class LineFriend < ApplicationRecord
   enum status: { active: 'active', blocked: 'blocked' }
   scope :created_at_gteq, ->(date_str) { where('line_friends.created_at >= ?', date_str&.to_date&.beginning_of_day) }
   scope :created_at_lteq, ->(date_str) { where('line_friends.created_at <= ?', date_str&.to_date&.end_of_day) }
+  scope :by_ids, ->(ids) { where(id: ids) }
+  scope :is_tester, -> { where(tester: true) }
 
   after_create_commit :exec_after_create_commit
 
@@ -90,7 +96,7 @@ class LineFriend < ApplicationRecord
     all = Scenario.manual.includes([:tags, :taggings]).enabled.not_empty.where(line_account_id: self.line_account_id)
     without_tag = all.select { |_| _.tags.blank? }
     with_tag = all.joins(:tags).references(:tags).where(tags: { id: self.tag_ids })
-    without_tag + with_tag
+    (without_tag + with_tag).sort_by { |scenario| -scenario.id }
   end
 
   # Available scenarios that will be sent after making friend

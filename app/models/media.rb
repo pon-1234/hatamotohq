@@ -31,7 +31,8 @@ class Media < ApplicationRecord
 
   # Validations
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], if: :type_image?
-  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'audio/mp4', 'video/mp4', 'video/quicktime'], if: :type_audio?
+  validates :file, content_type: ['audio/m4a', 'audio/x-m4a', 'audio/mp4', 'video/mp4', 'video/quicktime', 'audio/mpeg', 'audio/ogg',
+                                  'audio/vnd.wave', 'audio/wave', 'audio/wav', 'audio/x-wav', 'video/x-ms-asf'], if: :type_audio?
   validates :file, content_type: ['video/mp4', 'video/quicktime'], if: :type_video?
   validates :file, content_type: ['image/jpg', 'image/jpeg', 'image/png'], dimension: { width: 1040 }, if: :type_imagemap?
   validates :file, content_type: ['image/jpeg', 'image/png'], if: :type_richmenu?
@@ -56,8 +57,7 @@ class Media < ApplicationRecord
     if file.attached? && file.representable?
       url_for(file.preview(resize: '240x240').processed)
     end
-  rescue StandardError => e
-    p "Could not generate preview url #{e.message}"
+  rescue
     url
   end
 

@@ -38,7 +38,7 @@
                   </div>
 
                   <div class="form-group">
-                    <a href="pages-recoverpw.html" class="text-muted float-right"
+                    <a :href="`${userRootUrl}/user/password/new`" class="text-muted float-right"
                       ><small>パスワードを忘れましたか?</small></a
                     >
                     <label for="password">パスワード</label>

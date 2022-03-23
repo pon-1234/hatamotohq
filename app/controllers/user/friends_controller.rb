@@ -84,6 +84,7 @@ class User::FriendsController < User::ApplicationController
       params.permit(
         :display_name,
         :note,
+        :tester,
         tag_ids: []
       )
     end
