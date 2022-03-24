@@ -51,7 +51,7 @@ export default {
     actionData: {
       type: Array,
       default: () => {
-        return SCORING_DEFAULT_ACTION_DATA;
+        return _.cloneDeep(SCORING_DEFAULT_ACTION_DATA);
       }
     },
     name: {
@@ -62,7 +62,7 @@ export default {
 
   data() {
     return {
-      content: SCORING_DEFAULT_ACTION_DATA
+      content: _.cloneDeep(SCORING_DEFAULT_ACTION_DATA)
     };
   },
 
