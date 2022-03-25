@@ -34,7 +34,17 @@
                   <td>
                     <div class="fw-300 text-truncate">{{ template.name }}</div>
                   </td>
-                  <td>{{ template.template_messages_count }}</td>
+                  <td class="fw-150">
+                    <span>{{ template.template_messages_count }}</span>
+                    <div
+                      class="btn btn-sm btn-light my-1"
+                      data-toggle="modal"
+                      data-target="#modalTemplatePreview"
+                      @click="curTemplateIndex = index"
+                    >
+                      プレビュー
+                    </div>
+                  </td>
                   <td>
                     <div class="btn-group">
                       <button
@@ -132,6 +142,7 @@
       </template>
     </modal-confirm>
     <!-- END: Copy template modal -->
+    <modal-template-preview :templateId="curTemplate.id" v-if="curTemplate"></modal-template-preview>
   </div>
 </template>
 <script>
