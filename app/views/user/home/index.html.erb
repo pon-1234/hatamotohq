@@ -58,14 +58,14 @@
             <tbody>
               <% @messages.each do |message| %>
                 <tr>
-                  <td>
+                  <td class="fw-160">
                     <%= formatted_time(message.created_at) %>
                   </td>
-                  <td>
+                  <td class="fw-240">
                     <%= message.sender.name %>
                   </td>
-                  <td class="max-2-lines">
-                    <%= message.text %>
+                  <td>
+                    <div class="max-2-lines"><%= message.text %></div>
                   </td>
                 </tr>
                 <% end %>

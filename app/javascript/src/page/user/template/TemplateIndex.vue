@@ -34,8 +34,8 @@
                   <td>
                     <div class="fw-300 text-truncate">{{ template.name }}</div>
                   </td>
-                  <td class="fw-150">
-                    <span>{{ template.template_messages_count }}</span>
+                  <td class="fw-150 d-flex justify-content-center align-items-center template-message-count-wrapper">
+                    <span class="template-message-count">{{ template.template_messages_count }}</span>
                     <div
                       class="btn btn-sm btn-light my-1"
                       data-toggle="modal"
@@ -280,6 +280,13 @@ export default {
 
     td .chat-item {
       padding: 0px;
+    }
+    .template-message-count-wrapper {
+      gap: 0 6px;
+
+      .template-message-count {
+        margin-top: 1px;
+      }
     }
   }
 </style>
