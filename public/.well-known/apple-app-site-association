@@ -9,6 +9,16 @@
           {
             "/": "/user/channels/*",
             "comment": "Matches channel detail"
+          },
+          {
+            "/": "/user/channels/",
+            "exclude": true,
+            "comment": "Exclude /user/channels/"
+          },
+          {
+            "/": "/user/channels",
+            "exclude": true,
+            "comment": "Exclude /user/channels"
           }
         ]
       }
