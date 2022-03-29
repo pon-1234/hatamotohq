@@ -5,7 +5,8 @@ class Postback::ScoringHandler < Postback::BaseHandler
 
   def perform
     variable = Variable.find @content['variable']['id']
-    friend_variable = FriendVariable.find_or_initialize_by line_friend_id: @friend.id, variable_id: variable.id
+    # update for latest friend variable
+    friend_variable = FriendVariable.all.order(id: :desc).find_or_initialize_by line_friend_id: @friend.id, variable_id: variable.id
     new_value = calculate_new_variable_value(@content['operation'], @content['value'], (friend_variable.value || variable.default || '0'))
     friend_variable.scorings.build operation: @content['operation'], value: @content['value'],
       old_value: friend_variable.value, new_value: new_value
