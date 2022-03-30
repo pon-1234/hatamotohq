@@ -15,10 +15,13 @@
     <div class="border rounded p-1 mr-2 mb-1 pc" v-if="queryParams.visible_eq === null">
       <span class="mr-1">自分が非表示した友達を表示</span>
     </div>
-    <div class="border rounded p-1 mr-2 pc" v-if="queryParams.locked_eq === null">
+    <div class="border rounded p-1 mr-2 mb-1 pc" v-if="queryParams.locked_eq === null">
       <span class="mr-1">自分がブロックした友達を表示</span>
     </div>
-    <div class="btn btn-xs btn-primary ml-1 text-nowrap" @click="clearSearch()">クリア</div>
+    <div class="border rounded p-1 mr-2 mb-1 pc" v-if="queryParams.tester_eq && queryParams.tester_eq == true">
+      <span class="mr-1">テスターのみ</span>
+    </div>
+    <div class="btn btn-xs btn-primary ml-1 mb-1 text-nowrap" @click="clearSearch()">クリア</div>
   </div>
 </template>
 

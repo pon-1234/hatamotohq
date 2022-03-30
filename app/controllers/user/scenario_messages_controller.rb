@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::ScenarioMessagesController < User::ApplicationController
-  before_action :find_scenario, only: [:index, :new, :create, :update, :import]
+  before_action :find_scenario, only: [:index, :create, :update, :import]
   before_action :find_message, only: [:show, :update, :destroy, :delete_confirm]
 
   include User::ScenarioMessagesHelper
@@ -12,7 +12,10 @@ class User::ScenarioMessagesController < User::ApplicationController
       @messages = @scenario.scenario_messages.order(step: :asc).page(params[:page])
     end
     respond_to do |format|
-      format.html
+      format.html do
+        @testers = current_user.line_account.line_friends.is_tester
+          .to_json(only: %i(id display_name))
+      end
       format.json
     end
   end

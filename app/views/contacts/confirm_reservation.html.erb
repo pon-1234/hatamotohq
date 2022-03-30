@@ -1,0 +1,26 @@
+
+<% content_for(:body_class, 'confirm-reservation') %>
+<div class="card mb-3 confirm-reservation-container">
+  <div class="room-image">
+    <%= image_tag @room_information[:room_photo_url], class: 'card-img-top' if @room_information[:room_photo_url] %>
+  </div>
+  <div class="card-body confirm-reservation-main pt-1 pb-3">
+    <h2 class="confirm-reservation-price"><%= @latest_pms_reservation.charge_total %>円</h2>
+    <h3 class="confirm-reservation-room-name"><%= @latest_pms_reservation.room_list.first['room_name'] %></h3>
+
+    <div class="d-flex justify-content-between confirm-reservation-addition-infor mb-5">
+      <p><%= @room_information.try(:[], :room_area) %></p>
+      <p><%= @latest_pms_reservation.room_list.first['pax_count'] %>人</p>
+      <p><%= @room_information && @room_information.try(:[], :not_smock) ? '禁煙' : '喫煙' %></p>
+    </div>
+
+    <div class="actions row confirm-reservation-confirm-buttons pb-4">
+      <div class="col-12 col-md-6 mb-2 confirm-reservation-cancel-btn">
+        <%= button_to 'キャンセル', cancel_reservation_contacts_path, params: {friend_line_id: @friend.line_user_id, last_pms_reservation_id: @latest_pms_reservation.id}, form_class: 'w-100', class: 'btn btn-secondary w-100' %>
+      </div>
+      <div class="col-12 col-md-6 confirm-reservation-accept-btn">
+        <%= button_to '確認する', confirmed_reservation_contacts_path, remote: true, params: {friend_line_id: @friend.line_user_id, last_pms_reservation_id: @latest_pms_reservation.id}, form_class: 'w-100', class: 'btn btn-success w-100' %>
+      </div>
+    </div>
+  </div>
+</div>

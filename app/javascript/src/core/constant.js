@@ -53,7 +53,8 @@ export const ImageType = ['image/jpeg', 'image/png', 'image/jpg'];
 
 export const VideoType = ['video/mp4'];
 
-export const AudioType = ['audio/m4a', 'audio/x-m4a'];
+export const AudioType = ['audio/m4a', 'audio/x-m4a', 'audio/wav', 'audio/x-wav', 'audio/mpeg',
+  'audio/mpeg3', 'audio/x-mpeg-3', 'audio/ogg'];
 
 export const PdfType = ['application/pdf', 'application/x-pdf'];
 
@@ -61,7 +62,7 @@ export const ImageMimeBytes = ['89504e47', 'ffd8ffe0', 'ffd8ffe1', 'ffd8ffe2', '
 
 export const VideoMimeBytes = ['66747970'];
 
-export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920'];
+export const AudioMimeBytes = ['464F524D', '664C6143', '52494646', '57415645', '41564920', '4944333', '4f676753'];
 
 export const PdfMimeBytes = ['255044462D'];
 
@@ -291,10 +292,15 @@ export const PostbackTypes = {
   text: 'テキスト送信',
   template: 'テンプレート送信',
   scenario: 'シナリオ送信',
-  // flexMessage: 'Flexメッセージ送信',
   email: 'メール通知',
   tag: 'タグ操作',
   reminder: 'リマインダ操作',
+  scoring: 'スコアリング操作',
+  rsv_intro: '予約・紹介送信',
+  rsv_cancel_intro: '予約・空室待ちキャンセル',
+  rsv_contact: '予約・お問い合わせ',
+  rsv_checkin: '予約・事前チェックイン',
+  service_review: 'サービス評価フォーム送信',
   none: '何もしない'
 };
 
@@ -341,3 +347,13 @@ export const aspectModes = [
 ];
 
 export const FontSizeClass = ['XXs', 'Xs', 'Sm', 'Md', 'Lg', 'Xl', 'XXl', '3Xl', '4Xl', '5Xl'];
+
+export const Weekday = [
+  { name: '日', value: 'sun' },
+  { name: '月', value: 'mon' },
+  { name: '火', value: 'tue' },
+  { name: '水', value: 'wed' },
+  { name: '木', value: 'thu' },
+  { name: '金', value: 'fri' },
+  { name: '土', value: 'sat' }
+];

@@ -78,7 +78,7 @@
                         :index="index"
                         :value="item.action"
                         :supports="['', 'message', 'survey']"
-                        :labelRequired="false"
+                        :requiredLabel="false"
                         :showTitle="false"
                         :name="'imagemap_action_' + index"
                         @input="item.action = $event"
@@ -253,6 +253,7 @@ export default {
 
     onSelectMedia(media) {
       this.backgroundUrl = `${this.rootPath}/medias/${media.id}/content`;
+      this.publish(this.actionObjects);
     },
 
     publish(actionObject) {

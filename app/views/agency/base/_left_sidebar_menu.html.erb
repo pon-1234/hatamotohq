@@ -1,0 +1,19 @@
+  <!-- ========== Left Sidebar Start ========== -->
+<div class="left-side-menu">
+  <!-- LOGO -->
+  <a href="index.html" class="logo ml-4 logo-light">
+    <span class="text-white brand-text font-weight-bold">LINE CRM</span>
+  </a>
+
+  <div class="h-100" id="left-side-menu-container" data-simplebar>
+    <!--- Sidemenu -->
+    <ul class="metismenu side-nav">
+      <li class="side-nav-item <%= controller?("agency/clients") ? 'mm-active' : '' %>">
+        <%= link_to agency_clients_path, class: "side-nav-link #{controller?("agency/clients") ? 'active' : '' }" do %>
+          <i class="uil-users-alt"></i>
+          <span> クライアント一覧 </span>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</div>

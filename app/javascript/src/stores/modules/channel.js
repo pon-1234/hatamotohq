@@ -166,7 +166,7 @@ export const actions = {
       context.commit('updateChannels', { event: event, channel: event.channel });
       break;
 
-    case 'line_follow':
+    case 'follow':
       context.commit('updateChannels', { event: event, channel: event.channel });
       break;
     default:
@@ -182,6 +182,15 @@ export const actions = {
   async sendMessage(context, payload) {
     try {
       return await ChannelAPI.sendMessage(context.state.activeChannel.id, payload);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async sendMedia(context, query) {
+    try {
+      const response = await ChannelAPI.sendMedia(query);
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -227,12 +236,11 @@ export const actions = {
     }
   },
 
-  async sendMedia(context, query) {
+  async assign(context, payload) {
     try {
-      const response = await ChannelAPI.sendMedia(query);
-      return response;
+      return await ChannelAPI.assign(payload);
     } catch (error) {
-      console.log(error);
+      return null;
     }
   }
 };

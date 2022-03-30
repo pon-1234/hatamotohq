@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class User::ScenariosController < User::ApplicationController
-  load_and_authorize_resource
-  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm, :copy]
+  load_and_authorize_resource except: :send_to_testers
+  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm, :copy, :send_to_testers]
 
   include User::ScenariosHelper
 
@@ -14,7 +14,10 @@ class User::ScenariosController < User::ApplicationController
       @scenarios = @q.result.page(params[:page]).per(8)
     end
     respond_to do |format|
-      format.html
+      format.html do
+        @testers = current_user.line_account.line_friends.is_tester
+          .to_json(only: %i(id display_name))
+      end
       format.json
     end
   end
@@ -64,16 +67,30 @@ class User::ScenariosController < User::ApplicationController
 
   # POST /user/scenarios/:id/copy
   def copy
-    new_scenario = @scenario.clone!
+    @scenario.clone!
     render_success
-  rescue => e
-    logger.error e.message
+  rescue
     render_bad_request
   end
 
   # GET /user/scenarios/manual
   def manual
     @scenarios = Scenario.accessible_by(current_ability).manual
+  end
+
+  # POST /user/scenarios/:id/send_to_testers
+  def send_to_testers
+    authorize! :send_to_testers, @scenario
+    validator = SendScenarioToTestersValidator.new scenario_id: params[:id],
+      line_friend_ids: params[:line_friend_ids]
+    unless validator.valid?
+      render_bad_request_with_message validator.errors.full_messages.first
+      return
+    end
+    channel_ids = params[:line_friend_ids].map { |line_friend_id| LineFriend.find_by(id: line_friend_id).channel }
+      .compact.map(&:id)
+    ScenarioSendToTesterSchedulerJob.perform_later channel_ids, params[:id]
+    render_success
   end
 
   private

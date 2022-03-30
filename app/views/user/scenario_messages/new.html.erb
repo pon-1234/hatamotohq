@@ -5,7 +5,7 @@
         <ol class="breadcrumb m-0">
           <li class="breadcrumb-item">メッセージ</li>
           <li class="breadcrumb-item"><%= link_to "シナリオ一覧", user_scenarios_path %></li>
-          <li class="breadcrumb-item"><%= @scenario.title.truncate(10) %></li>
+          <li class="breadcrumb-item"><%= @scenario_id %></li>
           <li class="breadcrumb-item"><%= link_to "メッセージ一覧", user_scenario_messages_path(id: @scenario_id) %></li>
           <li class="breadcrumb-item active">新規メッセージ登録</li>
         </ol>

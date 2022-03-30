@@ -14,8 +14,8 @@
       <!-- end chat area-->
 
       <!-- start user detail -->
-      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''">
-        <channel-friend-detail></channel-friend-detail>
+      <div class="channel-friend" :class="showUserDetail ? 'channel-friend-visible' : ''" :key="contentKey">
+        <channel-friend-detail :role="role"></channel-friend-detail>
       </div>
       <!-- end user detail -->
     </div>
@@ -54,7 +54,8 @@ ActionCable.logger.enabled = true;
 
 export default {
   props: {
-    channel_id: Number
+    channel_id: Number,
+    role: String
   },
 
   async beforeMount() {
@@ -66,7 +67,7 @@ export default {
   data() {
     return {
       ws: null,
-      rerender: true
+      contentKey: 0
     };
   },
 
@@ -109,10 +110,15 @@ export default {
       );
     },
 
+    forceRerender() {
+      this.contentKey++;
+    },
+
     // Activate the first channel if no channel was specified. Otherwise, activate the specified one
     async activateChannel() {
       const channel = this.channels.find(_ => _.id === this.channel_id);
       this.setActiveChannel(channel || this.channels[0]);
+      this.forceRerender();
     },
 
     sendMediaMessage(media) {

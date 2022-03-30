@@ -31,6 +31,28 @@ Rails.application.routes.draw do
   get 'surveys/:code/:friend_id/answer_success', to: 'surveys#answer_success', as: 'survey_answer_success'
   get 'surveys/:code/:friend_id/answer_error', to: 'surveys#answer_error', as: 'survey_answer_error'
   get 'surveys/:code/:friend_id/already_answer', to: 'surveys#already_answer', as: 'survey_already_answer'
+  # reservations
+  get 'reservations/inquiry_form/:friend_line_id', to: 'reservations#inquiry_form', as: 'reservation_inquiry_form'
+  get 'reservations/inquiry_success', to: 'reservations#inquiry_success', as: 'reservation_inquiry_success'
+  post 'reservations/inquire/:friend_line_id',  to: 'reservations#inquire', as: 'reservation_inquire'
+  post 'reservations/callback', to: 'reservations#callback', as: 'reservation_callback'
+  # service_reviews
+  get 'reviews/new/:friend_line_id', to: 'reviews#new', as: 'review_new'
+  post 'reviews/:friend_line_id', to: 'reviews#create', as: 'review_create'
+  get 'reviews/result', to: 'reviews#result', as: 'review_result'
+  resources :review_questions, only: :index
+
+  # contacts
+  get 'contacts/new/:friend_line_id', to: 'contacts#new', as: 'contact_new'
+  get 'contacts/result', to: 'contacts#result', as: 'contact_result'
+  resources :contacts, only: :create do
+    collection do
+      get :confirm_reservation
+      post :confirmed_reservation
+      post :cancel_reservation
+      get :confirm_reservation_result
+    end
+  end
 
   # medias
   get 'medias/:id/content', to: 'medias#variant'
@@ -43,6 +65,10 @@ Rails.application.routes.draw do
       sessions: 'user/sessions',
       passwords: 'user/passwords'
     }
+    devise_scope :admin do
+      get 'user/password/sent', to: 'user/passwords#sent', as: :new_user_password_sent
+      get 'user/password/expired', to: 'user/passwords#expired', as: :new_user_password_expired
+    end
     namespace :user, path: Subdomain::UserConstraint.path do
       root to: 'home#index'
       get '/bot/setup', to: 'bot#setup'
@@ -50,10 +76,15 @@ Rails.application.routes.draw do
       resources :home, only: [:index] do
         get :announcements, on: :collection
       end
+      resources :staffs do
+        get :all, on: :collection
+      end
       resources :channels do
         member do
           get :scenarios
           post :update_last_seen
+          post :assign
+          post :unassign
         end
         resources :messages do
           collection do
@@ -87,6 +118,7 @@ Rails.application.routes.draw do
           post :import, on: :collection
         end
         post :copy, on: :member
+        post :send_to_testers, on: :member
       end
       resources :auto_responses do
         post :copy, on: :member
@@ -112,6 +144,8 @@ Rails.application.routes.draw do
         end
         resources :episodes
       end
+      resources :reservations
+      resources :reviews, only: :index
       resources :variables do
         member do
           post :copy
@@ -135,30 +169,77 @@ Rails.application.routes.draw do
     end
   end
 
-  # # Admin
+  # Admin
   constraints Subdomain::AdminConstraint.new do
     devise_for :admins, path: Subdomain::AdminConstraint.path, controllers: {
       sessions: 'admin/sessions',
       passwords: 'admin/passwords'
     }
+    devise_scope :admin do
+      get 'admin/password/sent', to: 'admin/passwords#sent', as: :new_admin_password_sent
+      get 'admin/password/expired', to: 'admin/passwords#expired', as: :new_admin_password_expired
+    end
     namespace :admin, path: Subdomain::AdminConstraint.path do
-      root to: 'users#index'
-      resources :users do
-        get :search, on: :collection
-        get :delete_confirm, on: :member
-        get :sso, on: :member
-      end
+      root to: 'accounts#index'
       resources :announcements do
         get :search, on: :collection
         post :upload_image,  on: :collection
       end
+      resources :accounts
+      resources :agencies do
+        get :search, on: :collection
+        get :sso, on: :member
+      end
+      resource :profile, only: %i(edit update)
     end
 
     require 'sidekiq/web'
     require 'sidekiq-scheduler/web'
-    # Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    #   username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
-    # end
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      username == ENV['BASIC_AUTH_ID'] && password == ENV['BASIC_AUTH_PASSWORD']
+    end
     mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Agency
+  constraints Subdomain::AgencyConstraint.new do
+    devise_for :agencies, path: Subdomain::AgencyConstraint.path, controllers: {
+      sessions: 'agency/sessions',
+      passwords: 'agency/passwords'
+    }
+    devise_scope :agency do
+      get 'agency/password/sent', to: 'agency/passwords#sent', as: :new_agency_password_sent
+      get 'agency/password/expired', to: 'agency/passwords#expired', as: :new_agency_password_expired
+    end
+    namespace :agency, path: Subdomain::AgencyConstraint.path do
+      root to: 'clients#index'
+      resources :clients do
+        get :search, on: :collection
+        get :delete_confirm, on: :member
+        get :sso, on: :member
+      end
+      resource :profile, only: %i(edit update)
+    end
+  end
+
+  # API
+  namespace :api do
+    namespace :v1 do
+      namespace :staff do
+        post :login, to: 'auth#login'
+        delete :logout, to: 'auth#logout'
+        resources :channels, only: [:index] do
+          resources :messages, only: [:index, :create] do
+            post :send_template, on: :collection
+            post :send_scenario, on: :collection
+          end
+          get 'scenarios', on: :member
+          post 'update_last_seen', on: :member
+        end
+        get 'emojis/:pack_id', to: 'emojis#show', as: :emojis
+        resources :medias, only: [:index, :create]
+        resources :templates, only: :index
+      end
+    end
   end
 end

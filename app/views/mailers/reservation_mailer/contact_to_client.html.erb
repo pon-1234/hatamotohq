@@ -1,0 +1,16 @@
+<p>お客様からお問い合わせが来ました。メッセージ対応をお願いします。</p>
+<p>チャネルURL：<%= link_to user_channel_url(@from_crm_line_friend.channel), user_channel_url(@from_crm_line_friend.channel) %></p>
+<p>顧客情報は以下となります：<p>
+<p>氏名：<%= @latest_reservation.guest_name %></p>
+<p>電話番号：<%= @latest_reservation.guest_phone_number %></p>
+<p>※最新の予約情報</p>
+<p>・予約サイト： <%= @latest_reservation.agency_name %></p>
+<p>・プラン名： <%= @latest_reservation.agency_plan_name %></p>
+<p>・予約番号： <%= @latest_reservation.agency_booking_number %></p>
+<p>・予約日時： <%= I18n.l Date.parse(@latest_reservation.booking_date), format: :primary %>
+  <%= @latest_reservation.booking_time %></p>
+<p>・宿泊日時： <%= I18n.l Date.parse(@latest_reservation.check_in_date), format: :primary %>
+  <%= @latest_reservation.check_in_time %></p>
+<% if @latest_reservation.tags.present? %>
+  <p>・タグ：<%= @latest_reservation.tags.join('、') %></p>
+<% end %>

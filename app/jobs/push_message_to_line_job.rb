@@ -44,7 +44,8 @@ class PushMessageToLineJob < ApplicationJob
       # Normalized message params
       message_params = {
         replyToken: @reply_token,
-        message: message.try(:with_indifferent_access),
+        message: message.try(:with_indifferent_access).except(:html_content),
+        html_content: message[:html_content],
         timestamp: Time.zone.now
       }
       Messages::MessageBuilder.new(nil, @channel, message_params).perform

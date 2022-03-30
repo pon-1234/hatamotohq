@@ -59,9 +59,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import ErrorMessage from '../common/ErrorMessage.vue';
 export default {
-  components: { ErrorMessage },
   data() {
     return {
       message: ''

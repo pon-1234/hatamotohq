@@ -25,5 +25,8 @@
 #
 FactoryBot.define do
   factory :template do
+    name { 'sample name' }
+    template_messages_count { 1 }
+    type { 'message' }
   end
 end

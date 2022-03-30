@@ -4,20 +4,20 @@
 #
 # Table name: messages
 #
-#  id              :bigint           not null, primary key
-#  channel_id      :bigint
-#  sender_type     :string(255)
-#  sender_id       :bigint
-#  type            :string(255)
-#  from            :string(255)
-#  text            :text(65535)
-#  line_message_id :string(255)
-#  content         :json
-#  timestamp       :string(255)
-#  reply_token     :string(255)
-#  status          :string(255)      default("sent")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id           :bigint           not null, primary key
+#  channel_id   :bigint
+#  sender_type  :string(255)
+#  sender_id    :bigint
+#  type         :string(255)
+#  from         :string(255)
+#  text         :text(65535)
+#  content      :json
+#  html_content :text(65535)
+#  timestamp    :string(255)
+#  reply_token  :string(255)
+#  status       :string(255)      default("sent")
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 # Indexes
 #
@@ -56,6 +56,7 @@ class Message < ApplicationRecord
       created_at: created_at.to_i,
       text: text,
       content: content,
+      html_content: html_content,
       timestamp: timestamp,
       status: status
     }
@@ -85,9 +86,12 @@ class Message < ApplicationRecord
     end
 
     def dispatch_create_events
-      # Broadcast message via websocket
-      ws_channel = "channel_user_#{channel.line_account.owner_id}"
-      Ws::ChannelWs.new(ws_channel).send_message(self)
+      # Broadcast message via websocket to admin and the staff whom is assigned
+      admin_channel = "channel_user_#{channel.line_account.client&.admin&.id}"
+      Ws::ChannelWs.new(admin_channel).send_message(self)
+
+      staff_channel = "channel_user_#{channel.assignee_id}"
+      Ws::ChannelWs.new(staff_channel).send_message(self)
     end
 
     def send_reply

@@ -14,7 +14,8 @@ export const state = {
     created_at_gteq: null,
     created_at_lteq: null,
     visible_eq: true,
-    locked_eq: false
+    locked_eq: false,
+    channel_assignee_id_eq: null
   },
   clearQueryParams: false
 };

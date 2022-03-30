@@ -1,0 +1,9 @@
+<p>
+<b><%= @admin_name %></b>さんが<b><%= @assignee_name %></b>さんの担当者をあなたに割り当てました。
+</p>
+<p>
+割当日：<b><%= Time.zone.today.strftime('%Y年%m月%d日') %></b>
+</p>
+<p>
+LINE CRMで確認 <%= @channel_url %>
+</p>

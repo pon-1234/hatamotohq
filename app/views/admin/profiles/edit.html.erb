@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <% if can?(:manage, Admin) %>
+            <li class="breadcrumb-item"><%= link_to '管理者一覧',  admin_accounts_path %></li>
+          <% end %>
+          <li class="breadcrumb-item">アカウント設定</li>
+        </ol>
+      </div>
+      <h4 class="page-title">アカウント設定</h4>
+    </div>
+  </div>
+</div>
+
+<admin-profile-edit :account="<%= current_admin.to_json %>"></admin-profile-edit>

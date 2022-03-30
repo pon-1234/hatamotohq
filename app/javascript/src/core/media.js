@@ -62,7 +62,7 @@ class Media {
     }
 
     if (types.includes(MessageType.Audio)) {
-      mineTypes.push('audio/m4a,audio/x-m4a');
+      mineTypes.push('audio/m4a,audio/x-m4a,audio/mpeg,audio/mpeg3,audio/x-mpeg-3,audio/wav,audio/ogg');
     }
 
     if (types.includes('pdf')) {
@@ -100,11 +100,17 @@ class Media {
     return result;
   }
 
-  static async validateFileByMimeBytes(even, type, url) {
-    const result = {
+  static async validateFileByMimeBytes(even, type, url, mineType) {
+    let result = {
       valid: true
     };
-      // get first 4 bytes of header
+
+    if (['video/mp4', 'audio/mp4'].includes(mineType.toString()) && type === 'audio') {
+      result = this.messageError();
+      return result;
+    }
+
+    // get first 4 bytes of header
     const arr = (new Uint8Array(even.target.result)).subarray(0, 4);
     let header = '';
     for (let i = 0; i < arr.length; i++) {
@@ -116,6 +122,7 @@ class Media {
       for (let i = 0; i < arr.length - 1; i++) {
         total += arr[i];
       }
+
       if (total === 0) {
         const isValidFileUploadIsVideo = await this.validateFileIsVideo(url);
         if ((type === 'video' && isValidFileUploadIsVideo) || (type === 'audio' && !isValidFileUploadIsVideo)) {
@@ -126,8 +133,7 @@ class Media {
 
     const isValidType = await this.isValidMineType(type, header);
     if (!isValidType) {
-      result.valid = false;
-      result.message = 'ファイルの形式が無効です。';
+      result = this.messageError();
     }
 
     return result;
@@ -164,6 +170,14 @@ class Media {
     const durationInMilis = data.duration;
     const duration = moment.duration(durationInMilis / 1000, 'seconds');
     return `${duration.minutes()}:${duration.seconds()}`;
+  }
+
+  static messageError() {
+    const result = {
+      valid: false,
+      message: 'ファイルの形式が無効です。'
+    };
+    return result;
   }
 }
 

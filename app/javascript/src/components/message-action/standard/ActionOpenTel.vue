@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100">
         ラベル
-        <required-mark v-if="labelRequired" />
+        <required-mark v-if="requiredLabel" />
       </label>
       <div class="w-100">
         <input
@@ -15,7 +15,7 @@
           class="w-100 form-control"
           @keyup="onValueChanged"
           data-vv-as="ラベル"
-          v-validate="{ required: labelRequired && showTitle }"
+          v-validate="{ required: requiredLabel && showTitle }"
         />
         <error-message :message="errors.first(name + '_label')"></error-message>
       </div>
@@ -52,7 +52,7 @@ export default {
       type: Boolean,
       default: true
     },
-    labelRequired: {
+    requiredLabel: {
       type: Boolean,
       default: true
     }

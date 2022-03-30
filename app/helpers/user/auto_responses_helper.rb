@@ -7,6 +7,7 @@ module User::AutoResponsesHelper
     auto_response.folder_id = params[:folder_id]
     auto_response.name = params[:name]
     auto_response.status = params[:status]
+    auto_response.biz_hours = params[:biz_hours]
     auto_response
   end
 

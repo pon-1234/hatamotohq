@@ -57,7 +57,7 @@
         <action-editor-custom
           name="actions"
           :value="episodeData.actions"
-          :labelRequired="false"
+          :requiredLabel="false"
           :showTitle="false"
           :limit="10"
           :showLaunchMessage="false"

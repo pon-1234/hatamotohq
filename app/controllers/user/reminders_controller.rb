@@ -52,10 +52,9 @@ class User::RemindersController < User::ApplicationController
 
   # POST /user/reminders/:id/copy
   def copy
-    new_reminder = @reminder.clone!
+    @reminder.clone!
     render_success
-  rescue => e
-    logger.error e.message
+  rescue
     render_bad_request
   end
 

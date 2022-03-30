@@ -7,6 +7,7 @@
 #  id               :bigint           not null, primary key
 #  line_account_id  :bigint
 #  line_friend_id   :bigint
+#  assignee_id      :bigint
 #  title            :string(255)
 #  avatar           :string(255)
 #  last_message     :string(255)
@@ -21,11 +22,13 @@
 #
 # Indexes
 #
+#  index_channels_on_assignee_id      (assignee_id)
 #  index_channels_on_line_account_id  (line_account_id)
 #  index_channels_on_line_friend_id   (line_friend_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (assignee_id => users.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #  fk_rails_...  (line_friend_id => line_friends.id)
 #
@@ -33,6 +36,7 @@ class Channel < ApplicationRecord
   default_scope { order(last_activity_at: :desc) }
   belongs_to :line_account
   belongs_to :line_friend
+  belongs_to :assignee, class_name: 'User', optional: true
   has_many :messages, dependent: :destroy, autosave: true
   has_many :remindings
   has_many :reminders, through: :remindings
@@ -46,7 +50,7 @@ class Channel < ApplicationRecord
     # Make friend to be a participant
     ChannelMember.create(channel: self, participant: line_friend)
     # Make owner of official account to be a participant
-    ChannelMember.create(channel: self, participant: line_account.owner)
+    ChannelMember.create(channel: self, participant: line_account.client.admin)
   end
 
   def push_event_data
@@ -57,6 +61,7 @@ class Channel < ApplicationRecord
       last_activity_at: last_activity_at,
       last_seen_at: last_seen_at,
       unread_count: unread_messages.count,
+      assignee_id: assignee_id,
       line_friend: line_friend.push_event_data
     }
   end
@@ -69,6 +74,11 @@ class Channel < ApplicationRecord
     update!(locked: false)
   end
 
+  def update_assignee(agent = nil)
+    update!(assignee: agent)
+    send_email_notification_to_assignee if agent.present?
+  end
+
   def unread_messages
     messages.unread_since(last_seen_at)
   end
@@ -77,4 +87,11 @@ class Channel < ApplicationRecord
   def cancel_scenarios
     ScenarioEvent.queued.where(channel_id: id).destroy_all
   end
+
+  private
+    def send_email_notification_to_assignee
+      admin = self.line_account.client.admin
+      assignee = self.assignee
+      SystemMailer.notify_assignee(admin, assignee, self).deliver_later
+    end
 end

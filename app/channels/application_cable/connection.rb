@@ -4,17 +4,19 @@ class ApplicationCable::Connection < ActionCable::Connection::Base
   identified_by :current_user
 
   def connect
-    params = request.query_parameters()
-    if verified_user = User.find_by(id: cookies.signed[:user_id])
-      self.current_user = verified_user
-      logger.add_tags 'ActionCable', current_user.email
-    end
+    self.current_user = find_verified_user
+    logger.add_tags('ActionCable', current_user.email) if current_user
   end
 
     private
-      def find_verified_user(authentication_token)
-        verified_user = User.find_by authentication_token: uid
-        reject_unauthorized_connection if verified_user.nil?
-        verified_user
+      def find_verified_user
+        verified_user = if cookies.signed[:user_id]
+          User.find_by id: cookies.signed[:user_id]
+        elsif request.headers['Authorization']
+          token_payload = Common::JwtProcessor.decode request.headers['Authorization'].split(' ').last rescue nil
+          User.staff.find_by(id: token_payload['staff_id']) if token_payload
+        end
+        return verified_user if verified_user
+        reject_unauthorized_connection
       end
 end

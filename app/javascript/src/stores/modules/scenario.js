@@ -140,5 +140,13 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  async sendScenarioToTesters(_, payload) {
+    try {
+      return await ScenarioApi.sendScenarioToTesters(payload);
+    } catch (error) {
+      return null;
+    }
   }
 };

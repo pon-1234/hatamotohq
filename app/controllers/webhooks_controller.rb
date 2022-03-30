@@ -2,7 +2,6 @@
 
 class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
-  include WebhooksHelper
 
   def index
     events = events_params[:events]
@@ -10,7 +9,7 @@ class WebhooksController < ApplicationController
     return render_bad_request if events.blank? || key.blank?
     # only handle first event
     event = events.first
-    handle_event(event, key)
+    WebhookHandler.new.handle_event(event, key)
     render_success
   rescue StandardError => e
     logger.error(e)

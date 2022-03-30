@@ -1,5 +1,5 @@
 <template>
-  <div :key="componentKey">
+  <div :key="componentKey" class="mxw-1200">
     <div class="card">
       <div class="card-header left-border"><h3 class="card-title">基本設定</h3></div>
       <div class="card-body">
@@ -161,7 +161,7 @@
         <action-editor-custom
           name="after_action"
           :value="scenarioData.after_action"
-          :labelRequired="false"
+          :requiredLabel="false"
           :showTitle="false"
           :showLaunchMessage="false"
           @input="updateAction"

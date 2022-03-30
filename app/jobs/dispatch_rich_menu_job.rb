@@ -12,8 +12,6 @@ class DispatchRichMenuJob < ApplicationJob
     @richmenu = RichMenu.find(richmenu_id)
     @richmenu.clear_logs
     @line_account = @richmenu.line_account
-    success = true
-    friend_ids = @line_account.line_friends.pluck(:line_user_id)
     if @richmenu.disabled?
       disable_rich_menu
     elsif @richmenu.enabled?
