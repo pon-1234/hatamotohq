@@ -40,9 +40,8 @@ export default {
     },
     readableTime() {
       const timeMessage = Util.formattedDate(this.channel.last_activity_at);
-      const currentTime = moment();
-      const dif = currentTime.diff(timeMessage, 'days');
-      if (dif >= 1) {
+      const currentTime = Util.formattedDate(moment());
+      if (currentTime !== timeMessage) {
         return moment(this.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
           .tz('Asia/Tokyo')
           .format('MM/DD');
