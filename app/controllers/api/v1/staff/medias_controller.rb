@@ -38,6 +38,6 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
       return unless params[:file].content_type == 'audio/*' && params[:file].original_filename.end_with?('.ogg')
       temp_file = params[:file].tempfile
       content_type_of_temp_file = MIME::Types.type_for(temp_file.path).first.content_type
-      params[:file].content_type == 'audio/ogg' if content_type_of_temp_file == 'audio/ogg'
+      params[:file].content_type = 'audio/ogg' if content_type_of_temp_file == 'audio/ogg'
     end
 end
