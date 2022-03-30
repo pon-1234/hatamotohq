@@ -32,6 +32,7 @@
       <action-postback-scoring
         v-if="postbackType === 'scoring'"
         :action-data="content"
+        :name="name"
         @input="updateContent"
       ></action-postback-scoring>
     </div>

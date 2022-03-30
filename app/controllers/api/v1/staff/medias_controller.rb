@@ -2,6 +2,7 @@
 
 class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
   authorize_resource
+  before_action :check_content_type, only: :create
 
   # GET /api/v1/staff/medias
   def index
@@ -30,5 +31,13 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
   private
     def media_params
       params.permit :file, :type
+    end
+
+    # Fix error cann't upload ogg file from mobile side
+    def check_content_type
+      return unless params[:file].content_type == 'audio/*' && params[:file].original_filename.end_with?('.ogg')
+      temp_file = params[:file].tempfile
+      content_type_of_temp_file = MIME::Types.type_for(temp_file.path).first.content_type
+      params[:file].content_type == 'audio/ogg' if content_type_of_temp_file == 'audio/ogg'
     end
 end
