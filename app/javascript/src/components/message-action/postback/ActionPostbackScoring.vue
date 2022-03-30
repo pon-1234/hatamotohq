@@ -2,12 +2,22 @@
   <section>
     <div>
       <div class="d-flex align-items-center">
-        <div
-          class="btn btn-secondary mw-300 mr-2 mb-auto"
-          data-toggle="modal"
-          :data-target="`#${name}-modal-select-variable`"
-        >
-          {{ content.variable.name || "友だち情報を選択" }}
+        <div class="select-variable-btn-wrapper">
+          <div
+            class="btn btn-secondary mw-300 mr-2 mb-auto"
+            data-toggle="modal"
+            :data-target="`#${name}-modal-select-variable`"
+          >
+            {{ content.variable.name || "友だち情報を選択" }}
+          </div>
+          <input
+            type="hidden"
+            :name="name + '_postback_friend_information'"
+            v-model="content.variable.id"
+            v-validate="'required'"
+            data-vv-as="友だち情報"
+          />
+          <error-message :message="errors.first(name + '_postback_friend_information')"></error-message>
         </div>
         <div>
           <input
@@ -51,7 +61,7 @@ export default {
     actionData: {
       type: Array,
       default: () => {
-        return SCORING_DEFAULT_ACTION_DATA;
+        return _.cloneDeep(SCORING_DEFAULT_ACTION_DATA);
       }
     },
     name: {
@@ -62,7 +72,7 @@ export default {
 
   data() {
     return {
-      content: SCORING_DEFAULT_ACTION_DATA
+      content: _.cloneDeep(SCORING_DEFAULT_ACTION_DATA)
     };
   },
 

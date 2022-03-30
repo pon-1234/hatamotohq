@@ -273,7 +273,7 @@ export default {
 
     // Select media for sending new message
     selectMedia(media, event) {
-      if (this.isVideo(media)) {
+      if (!this.isManageMode && this.isVideo(media)) {
         event.preventDefault();
         event.target.pause();
       }
