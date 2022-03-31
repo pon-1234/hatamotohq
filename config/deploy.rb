@@ -15,7 +15,7 @@ set :linked_files, %w[.env config/master.key]
 append :linked_dirs, '.bundle'
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets public/uploads config/secrets]
+set :linked_dirs, %w[log tmp/pids tmp/cache tmp/sockets public/uploads config/secrets public/.well-known]
 
 ## Defaults:
 # set :scm,           :git
