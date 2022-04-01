@@ -62,7 +62,7 @@ export default {
   },
 
   created() {
-    this.avatarImgObj.src = this.sender.avatar_url;
+    this.avatarImgObj.src = this.sender.avatar_url || '/img/no-image-profile.png';
   },
 
   computed: {
