@@ -52,11 +52,6 @@ export default {
 
   mounted() {
     this.addScrollListener();
-    const vm = this;
-    // After lazyload then scroll to bottom
-    this.$Lazyload.$on('loaded', function() {
-      vm.scrollToBottom();
-    });
   },
 
   updated() {
