@@ -52,11 +52,11 @@ export default {
 
   mounted() {
     this.addScrollListener();
-    const vm = this;
+    // const vm = this;
     // After lazyload then scroll to bottom
-    this.$Lazyload.$on('loaded', function() {
-      vm.scrollToBottom();
-    });
+    // this.$Lazyload.$on('loaded', function() {
+    //   vm.scrollToBottom();
+    // });
   },
 
   updated() {
@@ -138,7 +138,7 @@ export default {
     },
 
     scrollToBottom() {
-      this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
+      this.$refs.chatPanel.scrollTo(0, 20000);
       this.markMessagesRead();
     },
 
