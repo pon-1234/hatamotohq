@@ -132,7 +132,9 @@ export default {
       this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
     },
 
-    scrollToBottom() {
+    async scrollToBottom() {
+      this.latestMessageId = _.last(this.messages).id;
+      if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
       this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
       this.markMessagesRead();
     },
