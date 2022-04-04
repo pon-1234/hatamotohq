@@ -52,11 +52,6 @@ export default {
 
   mounted() {
     this.addScrollListener();
-    // const vm = this;
-    // After lazyload then scroll to bottom
-    // this.$Lazyload.$on('loaded', function() {
-    //   vm.scrollToBottom();
-    // });
   },
 
   updated() {
@@ -137,8 +132,12 @@ export default {
       this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
     },
 
-    scrollToBottom() {
-      this.$refs.chatPanel.scrollTo(0, 20000);
+    async scrollToBottom() {
+      // get element last
+      this.latestMessageId = _.last(this.messages).id;
+      if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
+      // set scroll to bottom
+      this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
       this.markMessagesRead();
     },
 
