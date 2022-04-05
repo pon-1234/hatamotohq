@@ -14,7 +14,7 @@
       :showNoResults="false"
       @select="onSelected"
       @remove="onSelected(null)"
-      @open="$emit('open')"
+      @open="$emit('open', agents.length)"
       @close="$emit('close')"
     >
       <template slot="singleLabel" slot-scope="props">
