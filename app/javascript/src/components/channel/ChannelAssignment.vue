@@ -1,6 +1,6 @@
 <template>
   <div>
-    <staff-selection :selected="channel.assignee_id" @select="assignAgent"></staff-selection>
+    <staff-selection :selected="channel.assignee_id" @select="assignAgent" @open="$emit('open')" @close="$emit('close')"></staff-selection>
   </div>
 </template>
 
