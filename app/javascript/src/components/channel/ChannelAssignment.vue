@@ -1,6 +1,6 @@
 <template>
   <div>
-    <staff-selection :selected="channel.assignee_id" @select="assignAgent" @open="$emit('open')" @close="$emit('close')"></staff-selection>
+    <staff-selection :selected="channel.assignee_id" @select="assignAgent" @open="openStaffSelect" @close="$emit('close')"></staff-selection>
   </div>
 </template>
 
@@ -22,6 +22,9 @@ export default {
       } else {
         window.toastr.error('失敗しました。');
       }
+    },
+    openStaffSelect(staffCount) {
+      this.$emit('open', staffCount);
     }
   }
 };

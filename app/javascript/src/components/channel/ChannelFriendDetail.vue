@@ -27,13 +27,13 @@
           </template>
         </div>
         <hr class="" />
-        <div :class="`channel-info ${isStaffSelectOpened ? 'pt100' : ''}`">
+        <div class="channel-info" :style="isStaffSelectOpened ? `padding-top: ${(staffCount > 0 ? staffCount-1 : 0)*50}px` : ''">
           <template v-if="isAdmin">
             <!-- START: 担当者 -->
             <p class="mt-3 mb-1 font-12">
               <strong><i class="uil uil-user"></i> 担当者:</strong>
             </p>
-            <p><channel-assignment :key="contentKey" :channel="activeChannel" @open="isStaffSelectOpened = true" @close="isStaffSelectOpened = false"></channel-assignment></p>
+            <p><channel-assignment :key="contentKey" :channel="activeChannel" @open="openStaffSelect" @close="isStaffSelectOpened = false"></channel-assignment></p>
             <!-- END: 担当者 -->
           </template>
 
@@ -73,7 +73,8 @@ export default {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
       contentKey: 0,
-      isStaffSelectOpened: false
+      isStaffSelectOpened: false,
+      staffCount: 0
     };
   },
 
@@ -125,6 +126,10 @@ export default {
         loading: '/images/loading.gif'
       };
       return avatarImgObj;
+    },
+    openStaffSelect(staffCount) {
+      this.isStaffSelectOpened = true;
+      this.staffCount = staffCount;
     }
   }
 };
@@ -151,9 +156,6 @@ export default {
     .channel-info {
       height: 250px;
       overflow-y: scroll;
-    }
-    .pt100 {
-      padding-top: 50px;
     }
   }
 </style>
