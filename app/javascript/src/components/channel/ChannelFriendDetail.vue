@@ -144,11 +144,20 @@ export default {
     .chat-panel {
       height: calc(100vh - 50px);
     }
+    .channel-info {
+      padding-top: unset !important;
+    }
   }
 
   @media (max-width: 767px) {
     .chat-panel {
       height: calc(100vh - 25px);
+    }
+  }
+
+  @media (min-width: 767.1px) and (max-width: 999.9px) {
+    .channel-info {
+      padding-top: unset !important;
     }
   }
 
@@ -158,4 +167,11 @@ export default {
       overflow-y: scroll;
     }
   }
+
+  @media (min-width: 1400.1px) {
+    .channel-info {
+      padding-top: unset !important;
+    }
+  }
+
 </style>
