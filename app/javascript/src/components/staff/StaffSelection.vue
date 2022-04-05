@@ -14,6 +14,8 @@
       :showNoResults="false"
       @select="onSelected"
       @remove="onSelected(null)"
+      @open="$emit('open')"
+      @close="$emit('close')"
     >
       <template slot="singleLabel" slot-scope="props">
         <div class="d-flex align-items-center">

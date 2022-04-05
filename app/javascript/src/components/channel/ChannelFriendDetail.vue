@@ -27,13 +27,13 @@
           </template>
         </div>
         <hr class="" />
-        <div class="channel-info">
+        <div :class="`channel-info ${isStaffSelectOpened ? 'pt100' : ''}`">
           <template v-if="isAdmin">
             <!-- START: 担当者 -->
             <p class="mt-3 mb-1 font-12">
               <strong><i class="uil uil-user"></i> 担当者:</strong>
             </p>
-            <p><channel-assignment :key="contentKey" :channel="activeChannel"></channel-assignment></p>
+            <p><channel-assignment :key="contentKey" :channel="activeChannel" @open="isStaffSelectOpened = true" @close="isStaffSelectOpened = false"></channel-assignment></p>
             <!-- END: 担当者 -->
           </template>
 
@@ -72,7 +72,8 @@ export default {
   data() {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
-      contentKey: 0
+      contentKey: 0,
+      isStaffSelectOpened: false
     };
   },
 
@@ -150,6 +151,9 @@ export default {
     .channel-info {
       height: 250px;
       overflow-y: scroll;
+    }
+    .pt100 {
+      padding-top: 50px;
     }
   }
 </style>
