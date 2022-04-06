@@ -299,7 +299,6 @@ export const PostbackTypes = {
   rsv_intro: '予約・紹介送信',
   rsv_cancel_intro: '予約・空室待ちキャンセル',
   rsv_contact: '予約・お問い合わせ',
-  rsv_checkin: '予約・事前チェックイン',
   service_review: 'サービス評価フォーム送信',
   none: '何もしない'
 };
