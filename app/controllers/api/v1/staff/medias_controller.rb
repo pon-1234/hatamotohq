@@ -17,10 +17,13 @@ class Api::V1::Staff::MediasController < Api::V1::Staff::ApplicationController
       render_bad_request_with_message(upload_media_validator.errors.full_messages.first)
       return
     end
-
     @media = Media.new media_params
     @media.line_account = current_staff.line_account
     if @media.save
+      @media.set_blob_duration(params[:duration]) if params[:duration].present?
+      MediaConverter::AudioConverter.new(@media).perform
+    elsif params[:file].content_type == 'audio/*' && @media.is_unknown_audio?
+      @media.save validate: false
       @media.set_blob_duration(params[:duration]) if params[:duration].present?
       MediaConverter::AudioConverter.new(@media).perform
     else
