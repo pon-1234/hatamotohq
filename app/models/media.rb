@@ -76,4 +76,8 @@ class Media < ApplicationRecord
   def set_blob_duration(duration)
     file.blob.update_columns(duration: duration)
   end
+
+  def is_unknown_audio?
+    self.type == 'audio' && self.errors.details[:file].length == 1 && self.errors.details[:file].first[:error] == :content_type_invalid
+  end
 end
