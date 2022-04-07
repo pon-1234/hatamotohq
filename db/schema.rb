@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_18_090613) do
+ActiveRecord::Schema.define(version: 2022_04_07_080905) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -590,6 +590,57 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.index ['friend_variable_id'], name: 'index_scorings_on_friend_variable_id'
   end
 
+  create_table 'site_measurements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.integer 'measurable_id'
+    t.string 'measurable_type'
+    t.json 'actions'
+    t.integer 'sending_count'
+    t.integer 'click_count'
+    t.integer 'receiver_count'
+    t.integer 'visitor_count'
+    t.bigint 'site_id', null: false
+    t.string 'site_name'
+    t.text 'redirect_url'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['measurable_id'], name: 'index_site_measurements_on_measurable_id'
+    t.index ['measurable_type'], name: 'index_site_measurements_on_measurable_type'
+    t.index ['site_id'], name: 'index_site_measurements_on_site_id'
+  end
+
+  create_table 'site_measurements_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'site_measurement_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_site_measurements_line_friends_on_line_friend_id'
+    t.index ['site_measurement_id'], name: 'index_site_measurements_line_friends_on_site_measurement_id'
+  end
+
+  create_table 'sites', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.text 'url'
+    t.string 'name'
+    t.bigint 'folder_id', null: false
+    t.integer 'sending_count'
+    t.string 'click_count_integer'
+    t.integer 'receiver_count'
+    t.integer 'visitor_count'
+    t.string 'code'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['code'], name: 'index_sites_on_code'
+    t.index ['folder_id'], name: 'index_sites_on_folder_id'
+  end
+
+  create_table 'sites_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'site_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_friend_id'], name: 'index_sites_line_friends_on_line_friend_id'
+    t.index ['site_id'], name: 'index_sites_line_friends_on_site_id'
+  end
+
   create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
@@ -779,6 +830,12 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'
   add_foreign_key 'scorings', 'friend_variables'
+  add_foreign_key 'site_measurements', 'sites'
+  add_foreign_key 'site_measurements_line_friends', 'line_friends'
+  add_foreign_key 'site_measurements_line_friends', 'site_measurements'
+  add_foreign_key 'sites', 'folders'
+  add_foreign_key 'sites_line_friends', 'line_friends'
+  add_foreign_key 'sites_line_friends', 'sites'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_questions', 'surveys'

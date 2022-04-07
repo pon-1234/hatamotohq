@@ -166,6 +166,7 @@ Rails.application.routes.draw do
         patch :update, on: :collection
         get :friends, on: :member
       end
+      resources :sites, only: [:index, :new, :create]
     end
   end
 

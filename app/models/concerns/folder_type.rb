@@ -14,7 +14,8 @@ module FolderType
       variable: 'variable',
       survey: 'survey',
       flex_message: 'flex_message',
-      reminder: 'reminder'
+      reminder: 'reminder',
+      site: 'site'
     }, _prefix: :type
   end
 end

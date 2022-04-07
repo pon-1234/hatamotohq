@@ -31,6 +31,7 @@
 class ScenarioMessage < ApplicationRecord
   belongs_to :scenario, counter_cache: true
   has_many :scenario_events, dependent: :destroy
+  has_many :site_measurements, as: :measurable
 
   # Validation
   validates_presence_of :content, :message_type_id

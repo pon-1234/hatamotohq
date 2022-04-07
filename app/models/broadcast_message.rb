@@ -22,6 +22,7 @@
 #
 class BroadcastMessage < ApplicationRecord
   belongs_to :broadcast
+  has_many :site_measurements, as: :measurable
 
   # Validation
   validates :content, presence: true
