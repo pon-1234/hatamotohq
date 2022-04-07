@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Postback::BaseHandler
-  def initialize(friend, content)
+  def initialize(friend, content, reply_token = nil)
     @friend = friend
     @content = content
   end

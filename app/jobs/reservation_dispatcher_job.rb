@@ -17,7 +17,7 @@ class ReservationDispatcherJob < ApplicationJob
 
     def parse_rooms_data(rooms_data)
       rooms = []
-      rooms_data.each do |room_data|
+      rooms_data.to_a.each do |room_data|
         rooms << Room.new(room_data, @inquiry)
       end
       rooms
