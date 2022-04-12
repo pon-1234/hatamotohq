@@ -166,7 +166,9 @@ Rails.application.routes.draw do
         patch :update, on: :collection
         get :friends, on: :member
       end
-      resources :sites, only: [:index, :new, :create]
+      resources :sites, only: [:index, :new, :create] do
+        get 'redirect/:code', to: 'sites#redirect', on: :collection
+      end
     end
   end
 
