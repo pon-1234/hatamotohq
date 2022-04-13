@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   get 'medias/:id/content', to: 'medias#variant'
   get 'medias/:id/content/:size', to: 'medias#variant'
 
+  # url click measurement
+  get 'sites/:code', to: 'sites#statistic'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -166,9 +169,8 @@ Rails.application.routes.draw do
         patch :update, on: :collection
         get :friends, on: :member
       end
-      resources :sites, only: [:index, :new, :create] do
-        get 'redirect/:code', to: 'sites#redirect', on: :collection
-      end
+      # url click measurement
+      resources :sites, only: [:index, :new, :create]
     end
   end
 

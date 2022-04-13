@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_07_080905) do
+ActiveRecord::Schema.define(version: 2022_04_14_075954) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -617,6 +617,15 @@ ActiveRecord::Schema.define(version: 2022_04_07_080905) do
     t.index ['site_measurement_id'], name: 'index_site_measurements_line_friends_on_site_measurement_id'
   end
 
+  create_table 'site_references', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.string 'code'
+    t.string 'line_user_id'
+    t.string 'site_measurement_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['code'], name: 'index_site_references_on_code'
+  end
+
   create_table 'sites', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.text 'url'
     t.string 'name'
@@ -625,10 +634,10 @@ ActiveRecord::Schema.define(version: 2022_04_07_080905) do
     t.string 'click_count_integer'
     t.integer 'receiver_count'
     t.integer 'visitor_count'
-    t.string 'code'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
-    t.index ['code'], name: 'index_sites_on_code'
+    t.bigint 'client_id', null: false
+    t.index ['client_id'], name: 'index_sites_on_client_id'
     t.index ['folder_id'], name: 'index_sites_on_folder_id'
   end
 
@@ -833,6 +842,7 @@ ActiveRecord::Schema.define(version: 2022_04_07_080905) do
   add_foreign_key 'site_measurements', 'sites'
   add_foreign_key 'site_measurements_line_friends', 'line_friends'
   add_foreign_key 'site_measurements_line_friends', 'site_measurements'
+  add_foreign_key 'sites', 'clients'
   add_foreign_key 'sites', 'folders'
   add_foreign_key 'sites_line_friends', 'line_friends'
   add_foreign_key 'sites_line_friends', 'sites'

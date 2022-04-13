@@ -73,7 +73,7 @@ gem 'rqrcode'
 gem 'sentry-ruby'
 gem 'sentry-rails'
 # gem 'ddtrace'
-gem 'logster'
+# gem 'logster'
 
 # support for format JSON
 gem 'active_model_serializers', '~> 0.10.0'

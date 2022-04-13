@@ -12,20 +12,22 @@
 #  click_count_integer :string(255)
 #  receiver_count      :integer
 #  visitor_count       :integer
-#  code                :string(255)
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  client_id           :bigint           not null
 #
 # Indexes
 #
-#  index_sites_on_code       (code)
+#  index_sites_on_client_id  (client_id)
 #  index_sites_on_folder_id  (folder_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (client_id => clients.id)
 #  fk_rails_...  (folder_id => folders.id)
 #
 class Site < ApplicationRecord
+  has_many :site_measurements, dependent: :destroy
+  belongs_to :client
   belongs_to :folder
-  validates :code, presence: true, uniqueness: true
 end
