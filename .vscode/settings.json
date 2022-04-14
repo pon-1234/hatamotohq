@@ -10,6 +10,5 @@
       "tabWidth": 2, // works
       "printWidth": 120 // does not work
     }
-  },
-  "ruby.intellisense": "rubyLocate"
+  }
 }

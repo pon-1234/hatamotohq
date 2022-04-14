@@ -4,17 +4,17 @@
 #
 # Table name: sites
 #
-#  id                  :bigint           not null, primary key
-#  url                 :text(65535)
-#  name                :string(255)
-#  folder_id           :bigint           not null
-#  sending_count       :integer
-#  click_count_integer :string(255)
-#  receiver_count      :integer
-#  visitor_count       :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  client_id           :bigint           not null
+#  id             :bigint           not null, primary key
+#  url            :text(65535)
+#  name           :string(255)
+#  folder_id      :bigint           not null
+#  sending_count  :integer
+#  click_count    :integer
+#  receiver_count :integer
+#  visitor_count  :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  client_id      :bigint           not null
 #
 # Indexes
 #
