@@ -8,11 +8,6 @@ class User::SitesController < User::ApplicationController
 
   def create
     site = Site.new site_params
-    code = loop do
-      result = SecureRandom.alphanumeric(6)
-      break result unless Site.exists?(code: result)
-    end
-    site.code = code
     unless site.save
       render_bad_request_with_message(site.first_error_message)
     else

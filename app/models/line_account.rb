@@ -79,5 +79,6 @@ class LineAccount < ApplicationRecord
       Folder.create(name: '未分類', line_account: self, type: :survey)
       Folder.create(name: '未分類', line_account: self, type: :variable)
       Folder.create(name: '未分類', line_account: self, type: :flex_message)
+      Folder.create(name: '未分類', line_account: self, type: :site)
     end
 end
