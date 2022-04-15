@@ -34,6 +34,7 @@
           :data="messageData.content"
           @changeContent="changeContentMessage"
         />
+        <url-config :index="index" :messageContent="messageData.content" v-if="messageData.message_type_id === MessageTypeIds.Text"></url-config>
       </div>
     </div>
   </div>
