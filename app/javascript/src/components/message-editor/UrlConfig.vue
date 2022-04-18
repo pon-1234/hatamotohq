@@ -1,7 +1,7 @@
 <template>
   <div class="mt-2">
     <div class="d-flex align-items-center">
-      <button @click="searchSites" class="btn btn-primary mw-200">URLもし込</button>
+      <button :disabled="notUseShorternUrl" @click="searchSites" class="btn btn-primary mw-200">読み込み</button>
       <div class="checkbox-inline ml-3">
         <div class="custom-control custom-checkbox mr-4" @click="changeShortenUrlUsage">
           <input
@@ -14,7 +14,75 @@
         </div>
       </div>
     </div>
-    <div>{{sites}}</div>
+    <div class="row" v-show="sitesInMessageContent && sitesInMessageContent.length">
+      <div :class="`mt-2 ${showConfigUrlPanel ? 'col-sm-6' : 'col'}`" v-show="!notUseShorternUrl">
+        <table class="table table-centered mb-0">
+          <thead>
+            <tr>
+              <th>サイト名</th>
+              <th class="d-none d-md-table-cell">訪問時</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(site, index) in sitesInMessageContent" :key="site.id" :class="`site-row ${selectedSiteIndex === index ? 'selected' : ''}`">
+              <td>
+                <strong>{{site.name}}</strong>
+                <br/>
+                <span>{{site.url}}</span>
+              </td>
+              <td class="d-none d-md-table-cell">
+                <div>-</div>
+              </td>
+              <td>
+                <button @click="showConfigUrlPanel = true; selectedSiteIndex = index" class="btn btn-sm btn-primary mw-120 float-right">設定</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-6" v-show="showConfigUrlPanel" v-if="sitesInMessageContent[selectedSiteIndex]">
+        <div class="panel panel-default border p-2 rounded">
+          <div class="mb-2">
+            <b>サイト設定</b> <small>URL:<span>{{sitesInMessageContent[selectedSiteIndex].url}}</span></small>
+          </div>
+          <div class="panel-body">
+            <div>
+              <div class="form-group">
+                <b>サイト登録名</b>
+                <input type="text" class="form-control" v-model="sitesInMessageContent[selectedSiteIndex].name">
+              </div>
+              <div class="form-group"><b>リダイレクト設定</b> <br>
+                (元)
+                <a target="_blank" :href="sitesInMessageContent[selectedSiteIndex].url">{{sitesInMessageContent[selectedSiteIndex].url}}</a>
+                <div class="input-group">
+                  <span class="input-group-text">(変更) -&gt;</span>
+                  <input type="text" placeholder="http://example.com" class="form-control">
+                </div>
+                <small class="form-help">
+                  転送先を変更します。<br><b style="color: red;">記録は元(変更前)のURLへのアクセスとしてカウントされます</b>
+                </small>
+              </div>
+              <div class="form-group"><b>訪問時アクション</b>
+                <div class="has-modal-xl">
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <span class="btn btn-warning btn-sm btn-block"><i class="glyphicon glyphicon-flash"></i> アクションを設定する</span>
+                    </div>
+                    <div class="col-sm-4"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <button @click="showConfigUrlPanel = false; selectedSiteIndex = null" type="button" class="btn btn-danger float-left">閉じる</button>
+            <button type="button" class="btn btn-success float-right">設定する</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -22,23 +90,22 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   props: ['messageContent', 'index'],
-  // inject: ['parentValidator'],
-  // created() {
-  //   this.$validator = this.parentValidator;
-  // },
   data() {
     return {
       notUseShorternUrl: false,
-      sites: []
+      showConfigUrlPanel: false,
+      selectedSiteIndex: null
     };
   },
   mounted() {
-    // abc
   },
   computed: {
     ...mapState('site', {
       sites: state => _.flatten(state.folders.map((folder) => folder.sites))
-    })
+    }),
+    sitesInMessageContent: function() {
+      return this.sites.filter(site => this.messageContent.text.includes(site.url)) || [];
+    }
   },
   methods: {
     ...mapActions('site', [
@@ -48,11 +115,6 @@ export default {
       this.notUseShorternUrl = !this.notUseShorternUrl;
     },
     async searchSites() {
-      // Todo call ajax to get site of current client
-      // this.sites = [
-      //   { name: 'google.com', url: 'https://google.com' },
-      //   { name: 'Vnexpress', url: 'http://vnexpress.net' }
-      // ];
       await this.getSites();
     }
   }
@@ -60,4 +122,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .site-row.selected {
+    background-color: #fcf8e3;
+  }
 </style>
