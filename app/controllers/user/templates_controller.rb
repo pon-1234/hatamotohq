@@ -69,7 +69,13 @@ class User::TemplatesController < User::ApplicationController
           :id,
           :order,
           :message_type_id,
-          content: {}
+          content: {},
+          site_measurements_attributes: [
+            :id,
+            :site_id,
+            :site_name,
+            :redirect_url
+          ]
         ]
       )
     end

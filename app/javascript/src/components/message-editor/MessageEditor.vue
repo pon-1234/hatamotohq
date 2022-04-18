@@ -34,7 +34,7 @@
           :data="messageData.content"
           @changeContent="changeContentMessage"
         />
-        <url-config :index="index" :messageContent="messageData.content" v-if="messageData.message_type_id === MessageTypeIds.Text"></url-config>
+        <url-config @configured="configUrl" :index="index" :messageContent="messageData.content" v-if="messageData.message_type_id === MessageTypeIds.Text"></url-config>
       </div>
     </div>
   </div>
@@ -182,6 +182,10 @@ export default {
 
     moveDown() {
       this.$emit('moveDown', this.index);
+    },
+
+    configUrl({ index, content }) {
+      this.$emit('configUrl', { index: index, content: content });
     }
   }
 };

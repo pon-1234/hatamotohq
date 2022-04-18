@@ -25,6 +25,8 @@ class TemplateMessage < ApplicationRecord
 
   belongs_to :template, counter_cache: true, inverse_of: :template_messages
   has_many :site_measurements, as: :measurable
+  
+  accepts_nested_attributes_for :site_measurements
 
   # Validation
   validates :message_type_id, presence: true

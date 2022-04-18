@@ -35,7 +35,7 @@
                 <div>-</div>
               </td>
               <td>
-                <button @click="showConfigUrlPanel = true; selectedSiteIndex = index" class="btn btn-sm btn-primary mw-120 float-right">設定</button>
+                <button @click="selectSite(index)" class="btn btn-sm btn-primary mw-120 float-right">設定</button>
               </td>
             </tr>
           </tbody>
@@ -50,14 +50,14 @@
             <div>
               <div class="form-group">
                 <b>サイト登録名</b>
-                <input type="text" class="form-control" v-model="sitesInMessageContent[selectedSiteIndex].name">
+                <input v-model="siteName" type="text" class="form-control">
               </div>
               <div class="form-group"><b>リダイレクト設定</b> <br>
                 (元)
                 <a target="_blank" :href="sitesInMessageContent[selectedSiteIndex].url">{{sitesInMessageContent[selectedSiteIndex].url}}</a>
                 <div class="input-group">
                   <span class="input-group-text">(変更) -&gt;</span>
-                  <input type="text" placeholder="http://example.com" class="form-control">
+                  <input v-model="redirectUrl" type="text" placeholder="http://example.com" class="form-control">
                 </div>
                 <small class="form-help">
                   転送先を変更します。<br><b style="color: red;">記録は元(変更前)のURLへのアクセスとしてカウントされます</b>
@@ -77,7 +77,7 @@
           </div>
           <div class="panel-footer">
             <button @click="showConfigUrlPanel = false; selectedSiteIndex = null" type="button" class="btn btn-danger float-left">閉じる</button>
-            <button type="button" class="btn btn-success float-right">設定する</button>
+            <button @click="configUrl" type="button" class="btn btn-success float-right">設定する</button>
             <div class="clearfix"></div>
           </div>
         </div>
@@ -94,7 +94,9 @@ export default {
     return {
       notUseShorternUrl: false,
       showConfigUrlPanel: false,
-      selectedSiteIndex: null
+      selectedSiteIndex: null,
+      siteName: null,
+      redirectUrl: null
     };
   },
   mounted() {
@@ -116,6 +118,15 @@ export default {
     },
     async searchSites() {
       await this.getSites();
+    },
+    selectSite(index) {
+      this.showConfigUrlPanel = true;
+      this.selectedSiteIndex = index;
+      this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
+    },
+    configUrl() {
+      this.showConfigUrlPanel = false;
+      this.$emit('configured', { index: this.index, content: { site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id } });
     }
   }
 };
