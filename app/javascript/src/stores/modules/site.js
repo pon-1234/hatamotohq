@@ -30,7 +30,6 @@ export const actions = {
     try {
       const folders = await SiteAPI.list(query);
       context.commit('setFolders', folders);
-      console.log('start', folders);
     } catch (error) {
       console.log(error);
     }

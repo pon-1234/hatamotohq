@@ -116,6 +116,8 @@ export default {
     ]),
     changeShortenUrlUsage() {
       this.notUseShorternUrl = !this.notUseShorternUrl;
+      if (this.notUseShorternUrl) { this.showConfigUrlPanel = false; }
+      this.$emit('changeShortenUrlUsage', { index: this.index, notUseShorternUrl: this.notUseShorternUrl });
     },
     async searchSites() {
       await this.getSites();

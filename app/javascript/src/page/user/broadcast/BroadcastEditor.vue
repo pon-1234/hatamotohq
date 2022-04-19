@@ -137,6 +137,7 @@
               @moveUp="moveMessageUp"
               @moveDown="moveMessageDown"
               @configUrl="configUrl"
+              @changeShortenUrlUsage="changeShortenUrlUsage"
             />
           </div>
           <div class="btn btn-primary" @click="addMessage" v-if="broadcastData.messages.length < 5">
@@ -369,6 +370,13 @@ export default {
 
     configUrl({ index, content }) {
       this.broadcastData.messages[index].site_measurements_attributes = [content];
+    },
+
+    changeShortenUrlUsage({ index, notUseShorternUrl }) {
+      if (notUseShorternUrl) {
+        this.broadcastData.messages[index].site_measurements_attributes = null;
+        this.broadcastData.messages[index].notUseShorternUrl = notUseShorternUrl;
+      }
     }
   }
 };

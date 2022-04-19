@@ -36,6 +36,7 @@
         />
         <url-config
           @configured="configUrl"
+          @changeShortenUrlUsage="changeShortenUrlUsage"
           :index="index"
           :messageContent="messageData.content"
           :siteMeasurements="siteMeasurements"
@@ -192,6 +193,10 @@ export default {
 
     configUrl({ index, content }) {
       this.$emit('configUrl', { index: index, content: content });
+    },
+
+    changeShortenUrlUsage({ index, notUseShorternUrl }) {
+      this.$emit('changeShortenUrlUsage', { index: index, notUseShorternUrl: notUseShorternUrl });
     }
   }
 };
