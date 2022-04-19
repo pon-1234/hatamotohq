@@ -69,8 +69,11 @@
             :key="index"
             v-bind:data="item"
             v-bind:index="index"
+            v-bind:showUrlClickConfig="true"
+            v-bind:siteMeasurements="scenarioMessageData.site_measurements"
             @selectTemplate="selectTemplate"
             @input="onMessageContentChanged"
+            @configUrl="configUrl"
           ></message-editor>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>
@@ -182,6 +185,10 @@ export default {
       this.setPreviewContent(this.scenarioMessageData.messages);
     },
 
+    configUrl({ index, content }) {
+      this.scenarioMessageData.messages[index].site_measurements_attributes = [content];
+    },
+
     async submit() {
       if (this.loading) return;
       this.loading = true;
@@ -195,6 +202,7 @@ export default {
       const messageContent = this.scenarioMessageData.messages[0];
       payload.message_type_id = messageContent.message_type_id;
       payload.content = messageContent.content;
+      payload.site_measurements_attributes = messageContent.site_measurements_attributes;
 
       let response = null;
       if (this.message_id) {

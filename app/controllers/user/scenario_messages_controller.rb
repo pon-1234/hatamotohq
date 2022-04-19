@@ -81,7 +81,8 @@ class User::ScenarioMessagesController < User::ApplicationController
         :order,
         :message_type_id,
         :status,
-        content: {}
+        content: {},
+        site_measurements_attributes: [:id, :site_id, :site_name, :redirect_url]
       )
     end
 

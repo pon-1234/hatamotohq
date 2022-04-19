@@ -130,10 +130,13 @@
               v-bind:data="item"
               v-bind:index="index"
               v-bind:messagesCount="broadcastData.messages.length"
+              v-bind:showUrlClickConfig="true"
+              v-bind:siteMeasurements="item.site_measurements"
               @input="changeContent"
               @remove="removeMessage"
               @moveUp="moveMessageUp"
               @moveDown="moveMessageDown"
+              @configUrl="configUrl"
             />
           </div>
           <div class="btn btn-primary" @click="addMessage" v-if="broadcastData.messages.length < 5">
@@ -362,6 +365,10 @@ export default {
 
     resetListTag() {
       this.broadcastData.tags = [];
+    },
+
+    configUrl({ index, content }) {
+      this.broadcastData.messages[index].site_measurements_attributes = [content];
     }
   }
 };

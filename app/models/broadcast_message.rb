@@ -27,9 +27,12 @@ class BroadcastMessage < ApplicationRecord
   # Validation
   validates :content, presence: true
 
+  accepts_nested_attributes_for :site_measurements
+
   def clone_to!(broadcast_id)
     new_message = self.dup
     new_message.broadcast_id = broadcast_id
+    new_message.site_measurements = self.site_measurements.map(&:dup)
     new_message.save!
     new_message
   end

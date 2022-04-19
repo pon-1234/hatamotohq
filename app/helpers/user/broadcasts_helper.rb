@@ -41,9 +41,13 @@ module User::BroadcastsHelper
 
   def build_broadcast_messages(broadcast, broadcast_messages_params)
     # Delete old messages before adding new one
+    broadcast.broadcast_messages.map(&:site_measurements).flatten.each(&:destroy)
     broadcast.broadcast_messages.destroy_all
     # Insert new message
     broadcast_messages_params.each do |broadcast_message_params|
+      broadcast_message_params[:site_measurements_attributes].each do |site_measurement_attributes|
+        site_measurement_attributes.delete(:id)
+      end
       broadcast_message = BroadcastMessage.new(broadcast_message_params)
       broadcast_message.broadcast = broadcast
       broadcast_message.save!

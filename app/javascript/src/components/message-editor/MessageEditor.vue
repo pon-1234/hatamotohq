@@ -34,14 +34,20 @@
           :data="messageData.content"
           @changeContent="changeContentMessage"
         />
-        <url-config @configured="configUrl" :index="index" :messageContent="messageData.content" v-if="messageData.message_type_id === MessageTypeIds.Text"></url-config>
+        <url-config
+          @configured="configUrl"
+          :index="index"
+          :messageContent="messageData.content"
+          :siteMeasurements="siteMeasurements"
+          v-if="showUrlClickConfig && messageData.message_type_id === MessageTypeIds.Text"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate'],
+  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate', 'showUrlClickConfig', 'siteMeasurements'],
   data() {
     return {
       messageData: {

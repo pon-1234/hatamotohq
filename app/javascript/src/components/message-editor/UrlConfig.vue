@@ -89,14 +89,15 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  props: ['messageContent', 'index'],
+  props: ['messageContent', 'index', 'siteMeasurements'],
   data() {
     return {
       notUseShorternUrl: false,
       showConfigUrlPanel: false,
       selectedSiteIndex: null,
       siteName: null,
-      redirectUrl: null
+      redirectUrl: null,
+      currentSiteMeasurementId: null
     };
   },
   mounted() {
@@ -122,11 +123,18 @@ export default {
     selectSite(index) {
       this.showConfigUrlPanel = true;
       this.selectedSiteIndex = index;
-      this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
+      if (this.siteMeasurements && this.siteMeasurements.length) {
+        const currentSiteMeasurement = _.find(this.siteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
+        this.currentSiteMeasurementId = currentSiteMeasurement.id;
+        this.siteName = currentSiteMeasurement.site_name;
+        this.redirectUrl = currentSiteMeasurement.redirect_url;
+      } else {
+        this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
+      }
     },
     configUrl() {
       this.showConfigUrlPanel = false;
-      this.$emit('configured', { index: this.index, content: { site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id } });
+      this.$emit('configured', { index: this.index, content: { id: this.currentSiteMeasurementId, site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id } });
     }
   }
 };

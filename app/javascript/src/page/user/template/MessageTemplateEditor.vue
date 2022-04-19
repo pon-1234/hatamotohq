@@ -43,7 +43,6 @@
               @remove="removeMessage"
               @moveUp="moveUp"
               @moveDown="moveDown"
-              @configUrl="configUrl"
             />
           </div>
         </div>
@@ -182,10 +181,6 @@ export default {
 
     changeContent({ index, content }) {
       this.templateData.messages.splice(index, 1, content);
-    },
-
-    configUrl({ index, content }) {
-      this.templateData.messages[index].site_measurements_attributes = [content];
     },
 
     async submitSaveTemplate() {
