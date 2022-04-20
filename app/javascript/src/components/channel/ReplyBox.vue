@@ -22,21 +22,21 @@
             data-toggle="modal"
             data-target="#modalSelectSticker"
             @click="showStickerModal()"
-            class="btn btn-sm px-2 font-16 btn-light"
-            ><i class="uil uil-smile"></i
+            class="btn btn-sm px-2 btn-light"
+            ><i class="uil font-20 uil-smile"></i
           ></a>
-          <a data-toggle="modal" data-target="#modalSendMedia" class="btn btn-sm px-2 font-16 btn-light"
+          <a data-toggle="modal" data-target="#modalSendMedia" class="btn btn-sm px-2 font-20 btn-light"
             ><i class="uil uil-file"></i
           ></a>
           <div class="btn-group dropup">
             <button
               type="button"
-              class="btn btn-sm px-2 font-16 btn-light dropdown-toggle"
+              class="btn btn-sm px-2 btn-light dropdown-toggle"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i class="uil-plus"></i>
+              <i class="uil-plus font-20"></i>
             </button>
             <div class="dropdown-menu">
               <div role="button" class="dropdown-item" data-toggle="modal" data-target="#modalSendTemplate">
