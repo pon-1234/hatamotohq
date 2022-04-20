@@ -9,7 +9,7 @@
               <div class="card-header pt-4 pb-4 text-center bg-primary">
                 <a href="#" class="text-white text-uppercase" style="font-size: 1.2rem">
                   <!-- <span><img src="assets/images/logo.png" alt="" height="18"></span> -->
-                  <span>LINE CRM</span>
+                  <span>Hotel Insight CRM</span>
                 </a>
               </div>
               <!-- END: Logo -->
@@ -38,7 +38,9 @@
                   </div>
                   <div class="form-group">
                     <!-- <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a> -->
-                    <a :href="`${rootPath}/agency/password/new`" class="text-muted float-right"><small>パスワードを忘れましたか?</small></a>
+                    <a :href="`${rootPath}/agency/password/new`" class="text-muted float-right"
+                      ><small>パスワードを忘れましたか?</small></a
+                    >
                     <label for="password">パスワード</label>
                     <!-- START: Input password component -->
                     <input-password name="agency[password]" :password.sync="agencyData.password"></input-password>

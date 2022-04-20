@@ -9,7 +9,7 @@
               <div class="card-header pt-4 pb-4 text-center bg-info">
                 <a href="#" class="text-white text-uppercase" style="font-size: 1.2rem">
                   <!-- <span><img src="assets/images/logo.png" alt="" height="18"></span> -->
-                  <span>LINE CRM</span>
+                  <span>Hotel Insight CRM</span>
                 </a>
               </div>
               <!-- END: Logo -->
@@ -37,7 +37,9 @@
                     <error-message :message="errors.first('admin[email]')"></error-message>
                   </div>
                   <div class="form-group">
-                    <a :href="`${adminRootUrl}/admin/password/new`" class="text-muted float-right"><small>パスワードを忘れましたか?</small></a>
+                    <a :href="`${adminRootUrl}/admin/password/new`" class="text-muted float-right"
+                      ><small>パスワードを忘れましたか?</small></a
+                    >
                     <label for="password">パスワード</label>
                     <!-- START: Input password component -->
                     <input-password name="admin[password]" :password.sync="adminData.password"></input-password>
