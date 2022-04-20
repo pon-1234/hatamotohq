@@ -1,5 +1,6 @@
 
 import FolderAPI from '../api/folder_api';
+import SiteAPI from '../api/site_api';
 
 export const state = {
   folders: []
@@ -22,6 +23,15 @@ export const actions = {
       return folders;
     } catch (error) {
       return null;
+    }
+  },
+
+  async getSites(context, query) {
+    try {
+      const folders = await SiteAPI.list(query);
+      context.commit('setFolders', folders);
+    } catch (error) {
+      console.log(error);
     }
   }
 };

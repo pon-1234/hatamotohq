@@ -100,7 +100,7 @@ class User::BroadcastsController < User::ApplicationController
 
     def messages_params
       params.require(:messages).map do |p|
-        p.permit(:message_type_id, content: {})
+        p.permit(:message_type_id, content: {}, site_measurements_attributes: [:id, :site_id, :site_name, :redirect_url])
       end
     end
 

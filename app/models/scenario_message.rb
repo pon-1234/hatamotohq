@@ -36,6 +36,8 @@ class ScenarioMessage < ApplicationRecord
   # Validation
   validates_presence_of :content, :message_type_id
 
+  accepts_nested_attributes_for :site_measurements
+
   # Scope
   scope :ordered, -> { order(status: :desc, is_initial: :desc, date: :asc, time: :asc, order: :asc) }
   enum status: { enabled: 'enabled', disabled: 'disabled' }

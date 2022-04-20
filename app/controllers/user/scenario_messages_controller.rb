@@ -33,6 +33,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   def create
     @message = ScenarioMessage.new(message_params)
     @message.scenario = @scenario
+    @message.site_measurements = [] if params[:notUseShorternUrl]
     if @message.save
       @scenario.reorder_messages
     else
@@ -48,6 +49,7 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # PATCH /user/scenarios/:scenario_id/messages/:id
   def update
+    @message.site_measurements.destroy_all if params[:notUseShorternUrl]
     if @message.update!(message_params)
       @scenario.reorder_messages
     else
@@ -81,7 +83,8 @@ class User::ScenarioMessagesController < User::ApplicationController
         :order,
         :message_type_id,
         :status,
-        content: {}
+        content: {},
+        site_measurements_attributes: [:id, :site_id, :site_name, :redirect_url]
       )
     end
 

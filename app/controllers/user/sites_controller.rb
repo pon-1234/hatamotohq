@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class User::SitesController < User::ApplicationController
-  def index; end
+  def index
+    if request.format.json?
+      @folders = Folder.accessible_by(current_ability).type_site.includes([:sites])
+    end
+    respond_to do |format|
+      format.html
+      format.json
+    end
+  end
 
   def new
   end
