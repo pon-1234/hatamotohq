@@ -23,15 +23,15 @@
             :message="message"
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
+            v-bind:unreadDivWasShown.sync="unreadDivWasShown"
           >
           </chat-item>
         </span>
       </ul>
 
-      <reply-box @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
+      <reply-box ref="replyBox" @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
     </div>
     <loading-indicator></loading-indicator>
-    <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
 </template>
 <script>
@@ -46,7 +46,8 @@ export default {
       isLoadingPrevious: true,
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
-      latestMessageId: null
+      latestMessageId: null,
+      unreadDivWasShown: false
     };
   },
 
@@ -82,6 +83,8 @@ export default {
       }
       if (newChannel) {
         this.loadMoreMessages();
+        this.$refs.replyBox.clearInput();
+        this.unreadDivWasShown = false;
       }
     }
   },
@@ -132,7 +135,9 @@ export default {
       this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
     },
 
-    scrollToBottom() {
+    async scrollToBottom() {
+      this.latestMessageId = _.last(this.messages).id;
+      if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
       this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
       this.markMessagesRead();
     },

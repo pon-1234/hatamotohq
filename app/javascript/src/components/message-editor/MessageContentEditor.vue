@@ -130,7 +130,7 @@ export default {
           this.messageData.altText = 'ボタンメッセージ';
         }
         if (this.messageData.template.type === 'confirm') {
-          this.messageData.altText = '確認メッセージ';
+          this.messageData.altText = '質問メッセージ';
         }
         if (this.messageData.template.type === 'carousel') {
           this.messageData.altText = 'カルーセルメッセージ';

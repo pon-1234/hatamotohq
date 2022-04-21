@@ -121,7 +121,7 @@ export default {
 
     genAvatarImgObj(url) {
       const avatarImgObj = {
-        src: url,
+        src: url || '/img/no-image-profile.png',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
       };

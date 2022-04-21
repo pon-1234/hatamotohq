@@ -35,7 +35,7 @@ export const mutations = {
 };
 
 export const actions = {
-  async getQuestions(context) {    
+  async getQuestions(context) {
     try {
       const response = await ReviewAPI.question_list();
       context.commit('setQuestions', response.data);
@@ -44,7 +44,7 @@ export const actions = {
     }
   },
 
-  async getReviews(context) {    
+  async getReviews(context) {
     try {
       const params = {
         page: state.queryParams.page,
