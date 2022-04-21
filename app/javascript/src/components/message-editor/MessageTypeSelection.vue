@@ -22,9 +22,9 @@ export default {
         { text: '動画メッセージ', value: 4 },
         { text: '音声メッセージ', value: 5 },
         { text: '位置情報メッセージ', value: 6 },
-        { text: 'イメージマップメッセージ', value: 7 }, // imagemap
+        { text: 'リッチ画像メッセージ', value: 7 }, // imagemap
         { text: 'ボタンメッセージ', value: 8 },
-        { text: '確認メッセージ', value: 9 },
+        { text: '質問メッセージ', value: 9 },
         { text: 'カルーセルメッセージ', value: 10 },
         { text: '画像カルーセルメッセージ', value: 11 }
         // { text: 'Flexメッセージ', value: 12 }
