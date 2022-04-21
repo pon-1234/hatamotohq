@@ -32,7 +32,6 @@
       <reply-box ref="replyBox" @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
     </div>
     <loading-indicator></loading-indicator>
-    <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
   </div>
 </template>
 <script>
