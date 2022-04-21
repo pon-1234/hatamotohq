@@ -85,6 +85,7 @@ export default {
       if (newChannel) {
         this.loadMoreMessages();
         this.$refs.replyBox.clearInput();
+        this.unreadDivWasShown = false;
       }
     }
   },
