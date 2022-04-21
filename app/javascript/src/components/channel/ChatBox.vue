@@ -23,6 +23,7 @@
             :message="message"
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
+            v-bind:unreadDivWasShown.sync="unreadDivWasShown"
           >
           </chat-item>
         </span>
@@ -46,7 +47,8 @@ export default {
       isLoadingPrevious: true,
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
-      latestMessageId: null
+      latestMessageId: null,
+      unreadDivWasShown: false
     };
   },
 

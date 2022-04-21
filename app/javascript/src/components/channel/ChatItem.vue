@@ -49,6 +49,11 @@ export default {
       type: String,
       required: false,
       default: moment()
+    },
+    unreadDivWasShown: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -57,12 +62,20 @@ export default {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
-      }
+      },
+      shouldShowUnreadDiv: false
     };
   },
 
   created() {
     this.avatarImgObj.src = this.sender.avatar_url || '/img/no-image-profile.png';
+    if (this.unreadDivWasShown) return;
+    if (!this.prevMessage) return this.isUnread(this.message);
+    this.shouldShowUnreadDiv = this.isUnread(this.prevMessage) ? false : this.isUnread(this.message);
+    if (this.shouldShowUnreadDiv) {
+      // show one line mark at the same time
+      this.$emit('update:unreadDivWasShown', true);
+    }
   },
 
   computed: {
@@ -87,10 +100,6 @@ export default {
       const date1 = Util.formattedDate(ts1);
       const date2 = ts2 ? Util.formattedDate(ts2) : null;
       return date1 !== date2;
-    },
-    shouldShowUnreadDiv() {
-      if (!this.prevMessage) return this.isUnread(this.message);
-      return this.isUnread(this.prevMessage) ? false : this.isUnread(this.message);
     },
     alignBubble() {
       return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
