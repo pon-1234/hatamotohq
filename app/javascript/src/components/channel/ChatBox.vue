@@ -29,7 +29,7 @@
         </span>
       </ul>
 
-      <reply-box @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
+      <reply-box ref="replyBox" @sendTextMessage="sendTextMessage" @resetModalSticker="resetModalSticker"></reply-box>
     </div>
     <loading-indicator></loading-indicator>
     <!-- <modal-select-flex-message-template name="modal-flex-message-template" @input="selectFlexMessageTemplate"/> -->
@@ -84,6 +84,7 @@ export default {
       }
       if (newChannel) {
         this.loadMoreMessages();
+        this.$refs.replyBox.clearInput();
       }
     }
   },
