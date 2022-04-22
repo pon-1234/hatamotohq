@@ -369,7 +369,7 @@ export default {
     },
 
     configUrl({ index, content }) {
-      this.broadcastData.messages[index].site_measurements_attributes = [content];
+      this.broadcastData.messages[index].site_measurements_attributes = content;
     },
 
     changeShortenUrlUsage({ index, notUseShorternUrl }) {

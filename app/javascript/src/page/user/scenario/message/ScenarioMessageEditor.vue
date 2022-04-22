@@ -187,7 +187,7 @@ export default {
     },
 
     configUrl({ index, content }) {
-      this.scenarioMessageData.messages[index].site_measurements_attributes = [content];
+      this.scenarioMessageData.messages[index].site_measurements_attributes = content;
     },
 
     changeShortenUrlUsage({ index, notUseShorternUrl }) {

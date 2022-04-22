@@ -20,7 +20,7 @@
           <thead>
             <tr>
               <th>サイト名</th>
-              <th class="d-none d-md-table-cell">訪問時</th>
+              <th :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">訪問時</th>
               <th></th>
             </tr>
           </thead>
@@ -31,8 +31,8 @@
                 <br/>
                 <span>{{site.url}}</span>
               </td>
-              <td class="d-none d-md-table-cell">
-                <div>-</div>
+              <td :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">
+                <div v-html="getActionsOfUrl(site)"></div>
               </td>
               <td>
                 <button @click="selectSite(index)" class="btn btn-sm btn-primary mw-120 float-right">設定</button>
@@ -63,13 +63,19 @@
                   転送先を変更します。<br><b style="color: red;">記録は元(変更前)のURLへのアクセスとしてカウントされます</b>
                 </small>
               </div>
-              <div class="form-group"><b>訪問時アクション</b>
+              <div class="form-group">
                 <div class="has-modal-xl">
                   <div class="row">
-                    <div class="col-sm-8">
-                      <span class="btn btn-warning btn-sm btn-block"><i class="glyphicon glyphicon-flash"></i> アクションを設定する</span>
+                    <div class="col">
+                      <action-editor-custom
+                        :requiredLabel="requiredLabel"
+                        :showTitle="showTitle"
+                        :showLaunchMessage="false"
+                        :value="actionData"
+                        :key="contentKey"
+                        @input="updateAction"
+                      />
                     </div>
-                    <div class="col-sm-4"></div>
                   </div>
                 </div>
               </div>
@@ -97,10 +103,17 @@ export default {
       selectedSiteIndex: null,
       siteName: null,
       redirectUrl: null,
-      currentSiteMeasurementId: null
+      currentSiteMeasurementId: null,
+      actionData: null,
+      mutationSiteMeasurements: [],
+      contentKey: 0
     };
   },
+  provide() {
+    return { parentValidator: this.$validator };
+  },
   mounted() {
+    if (this.siteMeasurements) this.mutationSiteMeasurements = _.cloneDeep(this.siteMeasurements);
   },
   computed: {
     ...mapState('site', {
@@ -125,18 +138,88 @@ export default {
     selectSite(index) {
       this.showConfigUrlPanel = true;
       this.selectedSiteIndex = index;
-      if (this.siteMeasurements && this.siteMeasurements.length) {
-        const currentSiteMeasurement = _.find(this.siteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
+      if (this.mutationSiteMeasurements && this.mutationSiteMeasurements.length) {
+        const currentSiteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
+        if (!currentSiteMeasurement) {
+          this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
+          return;
+        }
         this.currentSiteMeasurementId = currentSiteMeasurement.id;
         this.siteName = currentSiteMeasurement.site_name;
         this.redirectUrl = currentSiteMeasurement.redirect_url;
+        this.actionData = currentSiteMeasurement.actions;
+        if (currentSiteMeasurement.actions && currentSiteMeasurement.actions.length) {
+          this.actionData = currentSiteMeasurement.actions[0];
+          this.forceRerenderActionForm();
+        }
       } else {
         this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
       }
     },
-    configUrl() {
+    async configUrl() {
+      const result = await this.$validator.validateAll();
+      if (!result) return;
       this.showConfigUrlPanel = false;
-      this.$emit('configured', { index: this.index, content: { id: this.currentSiteMeasurementId, site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id } });
+      const urlConfigObject = { id: this.currentSiteMeasurementId, site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id, actions: [this.actionData] };
+      const currentSiteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
+      if (currentSiteMeasurement) {
+        Object.assign(currentSiteMeasurement, urlConfigObject);
+      } else {
+        this.mutationSiteMeasurements.push(urlConfigObject);
+      }
+
+      this.$emit('configured', { index: this.index, content: this.mutationSiteMeasurements });
+      this.actionData = null;
+      this.forceRerenderActionForm();
+    },
+    updateAction(actions) {
+      this.actionData = actions;
+    },
+    getActionsOfUrl(site) {
+      const siteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === site.id);
+      let result = '';
+      if (!siteMeasurement || !siteMeasurement.actions.length) return '';
+      siteMeasurement.actions[0].data.actions.forEach(action => {
+        switch (action.type) {
+        case 'text':
+          result += `テキスト[${action.content.text}]を送信 <br>`;
+          break;
+        case 'template':
+          result += `テンプレート[${action.content.name}]を送信 <br>`;
+          break;
+        case 'scenario':
+          result += `シナリオ[${action.content.title}]を送信 <br>`;
+          break;
+        case 'email':
+          result += `メール通知[${action.content.text}]を送信 <br>`;
+          break;
+        case 'tag':
+          result += 'タグ操作を送信 <br>';
+          break;
+        case 'reminder':
+          result += `リマインダ操作[${action.content.reminder.name}]を送信 <br>`;
+          break;
+        case 'scoring':
+          result += `スコアリング操作[${action.content.variable.name}]を送信 <br>`;
+          break;
+        case 'rsv_intro':
+          result += '予約・紹介送信を送信 <br>';
+          break;
+        case 'rsv_contact':
+          result += '予約・お問い合わせを送信 <br>';
+          break;
+        case 'rsv_cancel_intro':
+          result += '予約・空室待ちキャンセルを送信 <br>';
+          break;
+        case 'service_review':
+          result += 'サービス評価フォームを送信 <br>';
+          break;
+        }
+      });
+      return result;
+    },
+    forceRerenderActionForm() {
+      this.contentKey++;
     }
   }
 };
@@ -145,5 +228,10 @@ export default {
 <style lang="scss" scoped>
   .site-row.selected {
     background-color: #fcf8e3;
+  }
+  ::v-deep {
+    .config-score-container {
+      overflow-x: scroll;
+    }
   }
 </style>

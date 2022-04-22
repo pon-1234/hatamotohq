@@ -83,9 +83,14 @@ class User::ScenarioMessagesController < User::ApplicationController
         :order,
         :message_type_id,
         :status,
-        content: {},
-        site_measurements_attributes: [:id, :site_id, :site_name, :redirect_url]
-      )
+        content: {}
+      ).tap do |whitelisted|
+        whitelisted[:site_measurements_attributes] = []
+        params[:site_measurements_attributes].to_a.each_with_index do |site_measurement, index|
+          whitelisted[:site_measurements_attributes][index] = site_measurement
+          whitelisted.permit!
+        end
+      end
     end
 
     def find_scenario

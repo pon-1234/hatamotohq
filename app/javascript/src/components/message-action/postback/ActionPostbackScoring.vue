@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="config-score-container">
     <div>
       <div class="d-flex align-items-center">
         <div class="select-variable-btn-wrapper">
