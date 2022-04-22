@@ -23,7 +23,6 @@
             :message="message"
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
-            v-bind:unreadDivWasShown.sync="unreadDivWasShown"
           >
           </chat-item>
         </span>
@@ -37,6 +36,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 import Util from '@/core/util';
+import moment from 'moment';
 
 export default {
   data() {
@@ -136,6 +136,7 @@ export default {
     },
 
     async scrollToBottom() {
+      if (this.messages.length === 0) return;
       this.latestMessageId = _.last(this.messages).id;
       if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
       this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
@@ -175,6 +176,7 @@ export default {
       const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
       await this.getMessages({ channelId: this.activeChannel.id, before: before });
       this.scrollToBottom();
+      this.calcShowingUnreadDiv();
     },
 
     // Send a text message from input
@@ -287,6 +289,28 @@ export default {
 
     resetModalSticker(event) {
       this.$emit('onResetModalSticker', event);
+    },
+
+    calcShowingUnreadDiv() {
+      this.unreadDivWasShown = false;
+      this.messages = this.messages.forEach((message, index) => {
+        if (this.unreadDivWasShown) {
+          // only show one unread mark at the same time
+          message.shouldShowUnreadDiv = false;
+        } else {
+          const prevMessage = index > 0 ? this.messages[index - 1] : null;
+          if (!prevMessage) return this.isUnread(message);
+          message.shouldShowUnreadDiv = this.isUnread(prevMessage) ? false : this.isUnread(message);
+          if (message.shouldShowUnreadDiv) {
+            this.unreadDivWasShown = true;
+          }
+        }
+        return message;
+      });
+    },
+
+    isUnread(message) {
+      return message.from === 'friend' && moment(message.timestamp).isAfter(moment(this.activeChannel.last_seen_at));
     }
   }
 };

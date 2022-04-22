@@ -20,9 +20,9 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">住所<required-mark /></label>
+            <label class="col-xl-3">住所</label>
             <div class="col-xl-9">
-              <ValidationProvider name="住所" rules="required|max:255" v-slot="{ errors }">
+              <ValidationProvider name="住所" rules="max:255" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
@@ -36,9 +36,9 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-xl-3">電話番号<required-mark /></label>
+            <label class="col-xl-3">電話番号</label>
             <div class="col-xl-9">
-              <ValidationProvider name="電話番号" rules="required|numeric|min:10|max:11" v-slot="{ errors }">
+              <ValidationProvider name="電話番号" rules="numeric|min:10|max:11" v-slot="{ errors }">
                 <input
                   type="text"
                   class="form-control"
