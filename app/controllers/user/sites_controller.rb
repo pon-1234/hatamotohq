@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class User::SitesController < User::ApplicationController
+  before_action :find_site, only: [:show, :update, :destroy]
+
+  # GET /user/sites
   def index
     if request.format.json?
       @folders = Folder.accessible_by(current_ability).type_site.includes([:sites])
@@ -11,11 +14,9 @@ class User::SitesController < User::ApplicationController
     end
   end
 
-  def new
-  end
-
   def create
     site = Site.new site_params
+    site.client_id = current_user.client_id
     unless site.save
       render_bad_request_with_message(site.first_error_message)
     else
@@ -23,8 +24,30 @@ class User::SitesController < User::ApplicationController
     end
   end
 
+  # GET /user/sites/:id/edit
+  def edit
+    @site_id = params[:id]
+  end
+
+  # PATCH /user/sites/:id
+  def update
+    unless @site.update!(site_params)
+      render_bad_request_with_message(@site.first_error_message)
+    end
+  end
+
+  # DELETE /user/sites/:id
+  def destroy
+    @site.destroy!
+    render_success
+  end
+
   private
     def site_params
-      params.require(:site).permit :folder_id, :url
+      params.require(:site).permit :folder_id, :url, :name
+    end
+
+    def find_site
+      @site = Site.find(params[:id])
     end
 end

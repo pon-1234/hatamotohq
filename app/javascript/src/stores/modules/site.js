@@ -7,8 +7,25 @@ export const state = {
 };
 
 export const mutations = {
+  pushFolder(state, folder) {
+    folder.templates = [];
+    state.folders.push(folder);
+  },
+
   setFolders(state, folders) {
     state.folders = folders;
+  },
+
+  updateFolder(state, newItem) {
+    const item = state.folders.find(item => item.id === newItem.id);
+    if (item) {
+      item.name = newItem.name;
+    }
+  },
+
+  deleteFolder(state, id) {
+    const index = state.folders.findIndex(_ => _.id === id);
+    state.folders.splice(index, 1);
   }
 };
 
@@ -32,6 +49,53 @@ export const actions = {
       context.commit('setFolders', folders);
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  async updateSite(context, payload) {
+    try {
+      const response = await SiteAPI.update(payload);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async deleteSite(context, id) {
+    try {
+      return await SiteAPI.delete(id);
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async createFolder(context, payload) {
+    try {
+      const folder = await FolderAPI.create(payload);
+      context.commit('pushFolder', folder);
+      return folder;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async updateFolder(context, payload) {
+    try {
+      const response = await FolderAPI.update(payload);
+      context.commit('updateFolder', response);
+      return response;
+    } catch (error) {
+      return null;
+    }
+  },
+
+  async deleteFolder(context, id) {
+    try {
+      const response = await FolderAPI.delete(id);
+      context.commit('deleteFolder', id);
+      return response;
+    } catch (error) {
+      return null;
     }
   }
 };

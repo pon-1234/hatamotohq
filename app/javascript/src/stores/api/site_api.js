@@ -7,5 +7,21 @@ export default {
       contentType: 'application/json',
       cache: false
     });
+  },
+
+  update: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}`,
+      method: 'PATCH',
+      data: JSON.stringify(query),
+      contentType: 'application/json'
+    });
+  },
+
+  delete: (id) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/sites/' + id,
+      method: 'DELETE'
+    });
   }
 };

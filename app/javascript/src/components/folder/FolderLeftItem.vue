@@ -95,6 +95,8 @@ export default {
         return this.data.variables.length;
       case 'reminder':
         return this.data.reminders.length;
+      case 'site':
+        return this.data.sites.length;
       }
       return 0;
     },

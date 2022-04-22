@@ -590,7 +590,7 @@ ActiveRecord::Schema.define(version: 2022_04_14_085607) do
     t.index ['friend_variable_id'], name: 'index_scorings_on_friend_variable_id'
   end
 
-  create_table 'site_measurements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'site_measurements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.integer 'measurable_id'
     t.string 'measurable_type'
     t.json 'actions'
@@ -608,7 +608,7 @@ ActiveRecord::Schema.define(version: 2022_04_14_085607) do
     t.index ['site_id'], name: 'index_site_measurements_on_site_id'
   end
 
-  create_table 'site_measurements_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'site_measurements_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'site_measurement_id', null: false
     t.bigint 'line_friend_id', null: false
     t.datetime 'created_at', precision: 6, null: false
@@ -630,10 +630,10 @@ ActiveRecord::Schema.define(version: 2022_04_14_085607) do
     t.text 'url'
     t.string 'name'
     t.bigint 'folder_id', null: false
-    t.integer 'sending_count'
-    t.integer 'click_count'
-    t.integer 'receiver_count'
-    t.integer 'visitor_count'
+    t.integer 'sending_count', default: 0
+    t.integer 'click_count', default: 0
+    t.integer 'receiver_count', default: 0
+    t.integer 'visitor_count', default: 0
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.bigint 'client_id', null: false
@@ -641,7 +641,7 @@ ActiveRecord::Schema.define(version: 2022_04_14_085607) do
     t.index ['folder_id'], name: 'index_sites_on_folder_id'
   end
 
-  create_table 'sites_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'sites_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.bigint 'site_id', null: false
     t.bigint 'line_friend_id', null: false
     t.datetime 'created_at', precision: 6, null: false

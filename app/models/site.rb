@@ -8,10 +8,10 @@
 #  url            :text(65535)
 #  name           :string(255)
 #  folder_id      :bigint           not null
-#  sending_count  :integer
-#  click_count    :integer
-#  receiver_count :integer
-#  visitor_count  :integer
+#  sending_count  :integer          default(0)
+#  click_count    :integer          default(0)
+#  receiver_count :integer          default(0)
+#  visitor_count  :integer          default(0)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  client_id      :bigint           not null

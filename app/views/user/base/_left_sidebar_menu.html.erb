@@ -118,6 +118,12 @@
             <span>サービス評価一覧</span>
           <% end %>
         </li>
+        <li class="side-nav-item <%= controller?("user/sites") ? 'mm-active' : '' %>">
+          <%= link_to user_sites_path, class: "side-nav-link #{controller?("user/sites" ) ? 'active' : '' }" do %>
+            <i class="uil-link"></i>
+            <span>URLクリック測定</span>
+          <% end %>
+        </li>
 
         <li class="side-nav-title side-nav-item">友だち属性</li>
         <!-- タグ管理 -->

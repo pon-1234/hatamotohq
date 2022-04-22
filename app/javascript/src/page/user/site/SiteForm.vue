@@ -25,6 +25,25 @@
             </div>
             <div class="form-border">
               <ValidationProvider
+                :name="'サイト名'"
+                :rules="'required'"
+                v-slot="{ errors }"
+              >
+                <div class="form-group">
+                  <label>サイト名<required-mark /></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="site[name]"
+                    placeholder="サイト名を入力してください"
+                    v-model.trim="siteFormData.name"
+                  />
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </div>
+              </ValidationProvider>
+            </div>
+            <div class="form-border">
+              <ValidationProvider
                 :name="'URL'"
                 :rules="'required|url'"
                 v-slot="{ errors }"
@@ -65,6 +84,7 @@ export default {
       loading: true,
       siteFormData: {
         url: null,
+        name: null,
         folder_id: null
       }
     };

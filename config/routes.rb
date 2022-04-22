@@ -170,7 +170,7 @@ Rails.application.routes.draw do
         get :friends, on: :member
       end
       # url click measurement
-      resources :sites, only: [:index, :new, :create]
+      resources :sites
     end
   end
 
