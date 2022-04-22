@@ -1,6 +1,6 @@
 <template>
   <li :id="`chatItem${message.id}`">
-    <chat-item-unread-mark v-if="shouldShowUnreadDiv"></chat-item-unread-mark>
+    <chat-item-unread-mark v-if="message.shouldShowUnreadDiv"></chat-item-unread-mark>
     <div class="d-flex align-items-center mb-2" v-if="shouldShowDate">
       <div class="fh-2 bg-light flex-grow-1"></div>
       <span class="font-12 font-weight-bold border border-light py-1 px-2 date-title">{{ readableDate }}</span>
@@ -49,11 +49,6 @@ export default {
       type: String,
       required: false,
       default: moment()
-    },
-    unreadDivWasShown: {
-      type: Boolean,
-      required: false,
-      default: false
     }
   },
   data() {
@@ -62,20 +57,12 @@ export default {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
-      },
-      shouldShowUnreadDiv: false
+      }
     };
   },
 
-  created() {
+  mounted() {
     this.avatarImgObj.src = this.sender.avatar_url || '/img/no-image-profile.png';
-    if (this.unreadDivWasShown) return;
-    if (!this.prevMessage) return this.isUnread(this.message);
-    this.shouldShowUnreadDiv = this.isUnread(this.prevMessage) ? false : this.isUnread(this.message);
-    if (this.shouldShowUnreadDiv) {
-      // show one line mark at the same time
-      this.$emit('update:unreadDivWasShown', true);
-    }
   },
 
   computed: {
@@ -103,12 +90,6 @@ export default {
     },
     alignBubble() {
       return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
-    }
-  },
-
-  methods: {
-    isUnread(message) {
-      return message.from === 'friend' && moment(message.timestamp).isAfter(moment(this.lastSeenAt));
     }
   }
 };
