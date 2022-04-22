@@ -1,6 +1,6 @@
 <template>
   <li :id="`chatItem${message.id}`">
-    <chat-item-unread-mark v-if="showUnreadMarkDiv"></chat-item-unread-mark>
+    <chat-item-unread-mark v-if="showUnreadMarkDiv" :key="componentKey"></chat-item-unread-mark>
     <div class="d-flex align-items-center mb-2" v-if="shouldShowDate">
       <div class="fh-2 bg-light flex-grow-1"></div>
       <span class="font-12 font-weight-bold border border-light py-1 px-2 date-title">{{ readableDate }}</span>
@@ -53,7 +53,7 @@ export default {
     showUnreadMarkDiv: {
       type: Boolean,
       required: false,
-      default: false
+      default: null
     }
   },
   data() {
@@ -62,7 +62,8 @@ export default {
         src: '',
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
-      }
+      },
+      componentKey: 0
     };
   },
 
@@ -95,6 +96,12 @@ export default {
     },
     alignBubble() {
       return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
+    }
+  },
+
+  methods: {
+    forceRerender() {
+      this.componentKey++;
     }
   }
 };
