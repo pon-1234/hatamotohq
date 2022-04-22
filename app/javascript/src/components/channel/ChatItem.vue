@@ -1,6 +1,6 @@
 <template>
   <li :id="`chatItem${message.id}`">
-    <chat-item-unread-mark v-if="message.shouldShowUnreadDiv"></chat-item-unread-mark>
+    <chat-item-unread-mark v-if="showUnreadMarkDiv"></chat-item-unread-mark>
     <div class="d-flex align-items-center mb-2" v-if="shouldShowDate">
       <div class="fh-2 bg-light flex-grow-1"></div>
       <span class="font-12 font-weight-bold border border-light py-1 px-2 date-title">{{ readableDate }}</span>
@@ -49,6 +49,11 @@ export default {
       type: String,
       required: false,
       default: moment()
+    },
+    showUnreadMarkDiv: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {

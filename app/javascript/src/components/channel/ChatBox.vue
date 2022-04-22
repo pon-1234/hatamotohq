@@ -23,6 +23,7 @@
             :message="message"
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
+            :showUnreadMarkDiv="message.shouldShowUnreadDiv"
           >
           </chat-item>
         </span>
