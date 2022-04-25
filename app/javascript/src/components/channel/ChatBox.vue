@@ -23,7 +23,8 @@
             :message="message"
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
-            v-bind:unreadDivWasShown.sync="unreadDivWasShown"
+            :showUnreadMarkDiv="message.shouldShowUnreadDiv"
+            :key="componentKey"
           >
           </chat-item>
         </span>
@@ -37,6 +38,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
 import Util from '@/core/util';
+import moment from 'moment';
 
 export default {
   data() {
@@ -47,7 +49,8 @@ export default {
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
       latestMessageId: null,
-      unreadDivWasShown: false
+      unreadDivWasShown: false,
+      componentKey: 0
     };
   },
 
@@ -78,13 +81,13 @@ export default {
       deep: true
     },
     activeChannel(newChannel, oldChannel) {
+      this.unreadDivWasShown = false;
       if (oldChannel && newChannel.id === oldChannel.id) {
         return;
       }
       if (newChannel) {
         this.loadMoreMessages();
         this.$refs.replyBox.clearInput();
-        this.unreadDivWasShown = false;
       }
     }
   },
@@ -124,6 +127,10 @@ export default {
       'markMessagesRead'
     ]),
     ...mapMutations('channel', ['setShowChatBox', 'setShowUserDetail']),
+    forceRerender() {
+      this.componentKey++;
+    },
+
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
@@ -136,6 +143,7 @@ export default {
     },
 
     async scrollToBottom() {
+      if (this.messages.length === 0) return;
       this.latestMessageId = _.last(this.messages).id;
       if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
       this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
@@ -175,6 +183,7 @@ export default {
       const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
       await this.getMessages({ channelId: this.activeChannel.id, before: before });
       this.scrollToBottom();
+      this.calcShowingUnreadDiv();
     },
 
     // Send a text message from input
@@ -266,27 +275,30 @@ export default {
       event.preventDefault();
     },
 
-    selectFlexMessageTemplate(template) {
-      const content = JSON.parse(template.json_message);
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-      const message = {
-        channel: channel,
-        content: {
-          key: new Date().getTime(),
-          is_bot_sender: 0,
-          attr: 'chat-reverse',
-          content: { ...content, id: template.id }
-        }
-      };
-
-      this.$emit('onSendMessage', message);
-    },
-
     resetModalSticker(event) {
       this.$emit('onResetModalSticker', event);
+    },
+
+    calcShowingUnreadDiv() {
+      this.unreadDivWasShown = false;
+      for (let index = 0; index < this.messages.length; index++) {
+        const message = this.messages[index];
+        const prevMessage = index === 0 ? null : this.messages[index - 1];
+        if (this.unreadDivWasShown) {
+          // only show one unread mark at the same time
+          message.shouldShowUnreadDiv = false;
+        } else {
+          message.shouldShowUnreadDiv = prevMessage && this.isUnread(prevMessage) ? false : this.isUnread(message);
+          if (message.shouldShowUnreadDiv) {
+            this.unreadDivWasShown = true;
+          }
+        }
+      }
+      this.forceRerender();
+    },
+
+    isUnread(message) {
+      return message.from === 'friend' && moment(message.timestamp).isAfter(moment(this.activeChannel.last_seen_at));
     }
   }
 };
