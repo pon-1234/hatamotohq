@@ -31,7 +31,7 @@
         class="w-100 form-control"
         :name="name + '_display_text'"
         maxlength="301"
-        v-validate="'required|max:300'"
+        v-validate="{ required: requiredLabel, max: 300 }"
         data-vv-as="選択時のメッセージ"
         @keyup="changeDisplayText($event)"
       />
