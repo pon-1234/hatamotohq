@@ -8,10 +8,10 @@
 #  measurable_id   :integer
 #  measurable_type :string(255)
 #  actions         :json
-#  sending_count   :integer
-#  click_count     :integer
-#  receiver_count  :integer
-#  visitor_count   :integer
+#  sending_count   :integer          default(0)
+#  click_count     :integer          default(0)
+#  receiver_count  :integer          default(0)
+#  visitor_count   :integer          default(0)
 #  site_id         :bigint           not null
 #  site_name       :string(255)
 #  redirect_url    :text(65535)
@@ -31,4 +31,5 @@
 class SiteMeasurement < ApplicationRecord
   belongs_to :site
   belongs_to :measurable, polymorphic: true
+  has_many :site_measurements_line_friends, dependent: :destroy
 end

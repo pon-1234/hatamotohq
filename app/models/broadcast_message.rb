@@ -36,4 +36,8 @@ class BroadcastMessage < ApplicationRecord
     new_message.save!
     new_message
   end
+
+  def is_text_message?
+    message_type_id == 1
+  end
 end

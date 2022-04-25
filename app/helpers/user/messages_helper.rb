@@ -29,4 +29,25 @@ module User::MessagesHelper
     end
     messages
   end
+
+  def update_site_measurement_statistic(messages, friends)
+    messages = messages.select { |message| message.is_text_message? && message.site_measurements.exists? }
+    messages.each do |message|
+      message.site_measurements.each do |site_measurement|
+        site = site_measurement.site
+        friends.each do |friend|
+          site.update! sending_count: site.sending_count.next
+          site_measurement.update! sending_count: site_measurement.sending_count.next
+          unless SitesLineFriend.exists?(site_id: site.id, line_friend_id: friend.id)
+            SitesLineFriend.create!(site_id: site.id, line_friend_id: friend.id)
+            site.update! receiver_count: site.receiver_count.next
+          end
+          unless SiteMeasurementsLineFriend.exists?(site_measurement_id: site_measurement.id, line_friend_id: friend.id)
+            SiteMeasurementsLineFriend.create!(site_measurement_id: site_measurement.id, line_friend_id: friend.id)
+            site_measurement.update! receiver_count: site_measurement.receiver_count.next
+          end
+        end
+      end
+    end
+  end
 end

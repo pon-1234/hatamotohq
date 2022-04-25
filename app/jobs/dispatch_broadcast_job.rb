@@ -27,6 +27,7 @@ class DispatchBroadcastJob < ApplicationJob
     channels = Channel.where(line_friend_id: friends.map(&:id))
 
     nomalized_messages_data = []
+    success = nil
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
@@ -50,6 +51,7 @@ class DispatchBroadcastJob < ApplicationJob
       end
       success
     end
+    update_site_measurement_statistic(messages, friends) if success
   end
 
   # send message to specific friend
@@ -62,6 +64,7 @@ class DispatchBroadcastJob < ApplicationJob
     messages = @broadcast.broadcast_messages
 
     nomalized_messages_data = []
+    success = nil
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
@@ -75,6 +78,7 @@ class DispatchBroadcastJob < ApplicationJob
       end if success
       success
     end
+    update_site_measurement_statistic(messages, friends) if success
   end
 
   private

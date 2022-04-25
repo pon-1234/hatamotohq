@@ -178,7 +178,7 @@ export default {
     getActionsOfUrl(site) {
       const siteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === site.id);
       let result = '';
-      if (!siteMeasurement || !siteMeasurement.actions.length) return '';
+      if (!siteMeasurement || !siteMeasurement.actions.length || siteMeasurement.actions[0] === null) return '';
       siteMeasurement.actions[0].data.actions.forEach(action => {
         switch (action.type) {
         case 'text':

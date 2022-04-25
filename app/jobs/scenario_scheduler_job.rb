@@ -25,6 +25,7 @@ class ScenarioSchedulerJob < ApplicationJob
       if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
         after_sending_scenario_statistic(@scenario, @channel.line_friend)
+        update_site_measurement_statistic([scenario_message], [@channel.line_friend])
       else
         create_message_event(scenario_message, schedule_at)
       end

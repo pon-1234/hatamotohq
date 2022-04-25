@@ -80,6 +80,7 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def execute_after_deliver
+      update_site_measurement_statistic([scenario_message], [self.channel.line_friend]) if scenario_message
       # If this event is the last
       if self.is_last
         Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario)

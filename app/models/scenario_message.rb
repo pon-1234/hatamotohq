@@ -54,6 +54,10 @@ class ScenarioMessage < ApplicationRecord
     new_message
   end
 
+  def is_text_message?
+    message_type_id == 1
+  end
+
   private
     def execute_before_save
       self.order = 1 if order.blank? || (order == 0)
