@@ -19,8 +19,8 @@ module SendScenarioStatistic
     @sent_scenario_message_count += 1
     if @sent_scenario_message_count == @total_scenario_message_number
       @scenario_log.update! status: 'done', end_at: Time.zone.now
+      update_scenario_statistics(scenario, line_friend)
     end
-    update_scenario_statistics(scenario, line_friend)
   end
 
   def update_scenario_statistics(scenario, line_friend)
