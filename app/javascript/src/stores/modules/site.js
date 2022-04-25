@@ -3,7 +3,8 @@ import FolderAPI from '../api/folder_api';
 import SiteAPI from '../api/site_api';
 
 export const state = {
-  folders: []
+  folders: [],
+  siteDetail: {}
 };
 
 export const mutations = {
@@ -14,6 +15,10 @@ export const mutations = {
 
   setFolders(state, folders) {
     state.folders = folders;
+  },
+
+  setSiteDetail(state, siteDetail) {
+    state.siteDetail = siteDetail;
   },
 
   updateFolder(state, newItem) {
@@ -47,6 +52,15 @@ export const actions = {
     try {
       const folders = await SiteAPI.list(query);
       context.commit('setFolders', folders);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getSiteDetail(context, query) {
+    try {
+      const result = await SiteAPI.detail(query);
+      context.commit('setSiteDetail', result);
     } catch (error) {
       console.log(error);
     }

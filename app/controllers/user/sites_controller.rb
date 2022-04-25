@@ -14,6 +14,15 @@ class User::SitesController < User::ApplicationController
     end
   end
 
+  def show
+    @site_id = params[:id]
+    @line_friend_count = @site.client.line_friends.count
+    respond_to do |format|
+      format.html
+      format.json
+    end
+  end
+
   def create
     site = Site.new site_params
     site.client_id = current_user.client_id

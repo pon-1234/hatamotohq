@@ -87,7 +87,7 @@
                     <div class="text-sm text-nowrap">{{ formattedDate(site.created_at) }}</div>
                   </td>
                   <td>
-                    <a href=""  class="btn btn-warning btn-sm text-nowrap">詳細</a>
+                    <a :href="`/user/sites/${site.id}`"  class="btn btn-warning btn-sm text-nowrap">詳細</a>
                   </td>
                 </tr>
               </tbody>

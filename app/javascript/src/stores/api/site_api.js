@@ -9,6 +9,16 @@ export default {
     });
   },
 
+  detail: (query) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
+  },
+
   update: (query) => {
     return window.$.ajax({
       url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}`,
