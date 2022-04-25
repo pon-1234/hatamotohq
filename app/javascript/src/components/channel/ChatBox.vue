@@ -24,6 +24,7 @@
             :prevMessage="index > 0 ? messages[index - 1] : null"
             :lastSeenAt="activeChannel.last_seen_at"
             :showUnreadMarkDiv="message.shouldShowUnreadDiv"
+            :key="componentKey"
           >
           </chat-item>
         </span>
@@ -48,7 +49,8 @@ export default {
       scrollTopBeforeLoad: null,
       heightBeforeLoad: null,
       latestMessageId: null,
-      unreadDivWasShown: false
+      unreadDivWasShown: false,
+      componentKey: 0
     };
   },
 
@@ -79,13 +81,13 @@ export default {
       deep: true
     },
     activeChannel(newChannel, oldChannel) {
+      this.unreadDivWasShown = false;
       if (oldChannel && newChannel.id === oldChannel.id) {
         return;
       }
       if (newChannel) {
         this.loadMoreMessages();
         this.$refs.replyBox.clearInput();
-        this.unreadDivWasShown = false;
       }
     }
   },
@@ -125,6 +127,10 @@ export default {
       'markMessagesRead'
     ]),
     ...mapMutations('channel', ['setShowChatBox', 'setShowUserDetail']),
+    forceRerender() {
+      this.componentKey++;
+    },
+
     addScrollListener() {
       this.setScrollParams();
       this.scrollToBottom();
@@ -269,45 +275,26 @@ export default {
       event.preventDefault();
     },
 
-    selectFlexMessageTemplate(template) {
-      const content = JSON.parse(template.json_message);
-      // eslint-disable-next-line no-undef
-      const channel = _.cloneDeep(this.activeChannel);
-      channel.last_timetamp = new Date().getTime();
-      this.setActiveChannel(channel);
-      const message = {
-        channel: channel,
-        content: {
-          key: new Date().getTime(),
-          is_bot_sender: 0,
-          attr: 'chat-reverse',
-          content: { ...content, id: template.id }
-        }
-      };
-
-      this.$emit('onSendMessage', message);
-    },
-
     resetModalSticker(event) {
       this.$emit('onResetModalSticker', event);
     },
 
     calcShowingUnreadDiv() {
       this.unreadDivWasShown = false;
-      this.messages = this.messages.forEach((message, index) => {
+      for (let index = 0; index < this.messages.length; index++) {
+        const message = this.messages[index];
+        const prevMessage = index === 0 ? null : this.messages[index - 1];
         if (this.unreadDivWasShown) {
           // only show one unread mark at the same time
           message.shouldShowUnreadDiv = false;
         } else {
-          const prevMessage = index > 0 ? this.messages[index - 1] : null;
-          if (!prevMessage) return this.isUnread(message);
-          message.shouldShowUnreadDiv = this.isUnread(prevMessage) ? false : this.isUnread(message);
+          message.shouldShowUnreadDiv = prevMessage && this.isUnread(prevMessage) ? false : this.isUnread(message);
           if (message.shouldShowUnreadDiv) {
             this.unreadDivWasShown = true;
           }
         }
-        return message;
-      });
+      }
+      this.forceRerender();
     },
 
     isUnread(message) {
