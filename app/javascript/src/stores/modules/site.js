@@ -4,7 +4,8 @@ import SiteAPI from '../api/site_api';
 
 export const state = {
   folders: [],
-  siteDetail: {}
+  siteDetail: {},
+  scenarios: []
 };
 
 export const mutations = {
@@ -31,6 +32,10 @@ export const mutations = {
   deleteFolder(state, id) {
     const index = state.folders.findIndex(_ => _.id === id);
     state.folders.splice(index, 1);
+  },
+
+  setScenarios(state, scenarios) {
+    state.scenarios = scenarios;
   }
 };
 
@@ -110,6 +115,15 @@ export const actions = {
       return response;
     } catch (error) {
       return null;
+    }
+  },
+
+  async getScenarios(context, query) {
+    try {
+      const result = await SiteAPI.getScenarios(query);
+      context.commit('setScenarios', result);
+    } catch (error) {
+      console.log(error);
     }
   }
 };

@@ -170,7 +170,12 @@ Rails.application.routes.draw do
         get :friends, on: :member
       end
       # url click measurement
-      resources :sites
+      resources :sites do
+        member do
+          get :scenarios, defaults: { format: :json }
+          get :broadcasts, defaults: { format: :json }
+        end
+      end
     end
   end
 

@@ -68,8 +68,8 @@
 
         <div class="row">
           <general-info :siteDetail="siteDetail" v-if="showedTab === 'general'" />
-          <group-by-broadcast-info v-if="showedTab === 'broadcast'" />
-          <group-by-scenario-info v-if="showedTab === 'scenario'" />
+          <group-by-broadcast-info :siteId="site_id" v-if="showedTab === 'broadcast'" />
+          <group-by-scenario-info :siteId="site_id" v-if="showedTab === 'scenario'" />
         </div>
       </div>
     </div>

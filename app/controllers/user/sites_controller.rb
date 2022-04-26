@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::SitesController < User::ApplicationController
-  before_action :find_site, only: [:show, :update, :destroy]
+  before_action :find_site, except: [:index, :create]
 
   # GET /user/sites
   def index
@@ -49,6 +49,15 @@ class User::SitesController < User::ApplicationController
   def destroy
     @site.destroy!
     render_success
+  end
+
+  # GET /user/sites/:id/scenarios
+  def scenarios
+    @site_measurements = @site.site_measurements.scenario_messages_of_site
+  end
+
+  # GET /user/sites/:id/broadcasts
+  def broadcasts
   end
 
   private
