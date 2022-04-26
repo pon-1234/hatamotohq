@@ -5,7 +5,8 @@ export default {
       method: 'GET',
       data: query,
       dataType: 'json',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      cache: false
     });
   },
   search: (query) => {
