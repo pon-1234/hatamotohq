@@ -34,7 +34,7 @@
             </tr>
             <tr>
               <th>クリック数／送信回数</th>
-              <td>{{(siteDetail.click_count / siteDetail.sending_count) | numberToPercent}}</td>
+              <td>{{((siteDetail.click_count / siteDetail.sending_count) || 0) | numberToPercent}}</td>
             </tr>
           </tbody>
         </table>

@@ -24,7 +24,7 @@
                   @click="currentScenarioIndex = index"
                   type="button"
                   data-toggle="modal"
-                  data-target="#modalScenarioMessagePreview"
+                  data-target="#modalMessagePreview"
                   class="btn btn-xs btn-default btn-light"
                   >プレビュー</a
                 >
@@ -36,7 +36,7 @@
         </table>
       </div>
     </div>
-    <modal-scenario-message-preview :scenariosMessage="scenarios[currentScenarioIndex] || {}" />
+    <modal-message-preview :message="scenarios[currentScenarioIndex] || {}" type="scenario" />
   </div>
 </template>
 <script>

@@ -5,7 +5,8 @@ import SiteAPI from '../api/site_api';
 export const state = {
   folders: [],
   siteDetail: {},
-  scenarios: []
+  scenarios: [],
+  broadcasts: []
 };
 
 export const mutations = {
@@ -36,6 +37,10 @@ export const mutations = {
 
   setScenarios(state, scenarios) {
     state.scenarios = scenarios;
+  },
+
+  setBroadcasts(state, broadcasts) {
+    state.broadcasts = broadcasts;
   }
 };
 
@@ -122,6 +127,15 @@ export const actions = {
     try {
       const result = await SiteAPI.getScenarios(query);
       context.commit('setScenarios', result);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getBroadcasts(context, query) {
+    try {
+      const result = await SiteAPI.getBroadcasts(query);
+      context.commit('setBroadcasts', result);
     } catch (error) {
       console.log(error);
     }

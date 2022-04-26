@@ -58,6 +58,7 @@ class User::SitesController < User::ApplicationController
 
   # GET /user/sites/:id/broadcasts
   def broadcasts
+    @site_measurements = @site.site_measurements.broadcast_messages_of_site
   end
 
   private

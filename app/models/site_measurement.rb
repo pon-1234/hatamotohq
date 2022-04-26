@@ -34,11 +34,18 @@ class SiteMeasurement < ApplicationRecord
   # trick: create this relationship to use polymorphic in where, order clause
   belongs_to :scenario_message, -> { where(site_measurements: { measurable_type: 'ScenarioMessage' }) },
     foreign_key: 'measurable_id', optional: true
+  belongs_to :broadcast_message, -> { where(site_measurements: { measurable_type: 'BroadcastMessage' }) },
+    foreign_key: 'measurable_id', optional: true
   has_many :site_measurements_line_friends, dependent: :destroy
 
   scope :scenario_messages_of_site, -> do
     where(measurable_type: 'ScenarioMessage').includes(scenario_message: :scenario)
       .order('scenarios.id, scenario_messages.order')
+  end
+
+  scope :broadcast_messages_of_site, -> do
+    where(measurable_type: 'BroadcastMessage').includes(broadcast_message: { broadcast: :tags })
+      .order('broadcasts.id')
   end
 
   def real_site_url
