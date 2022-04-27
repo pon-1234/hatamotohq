@@ -102,7 +102,7 @@ class User::BroadcastsController < User::ApplicationController
       params.require(:messages).map do |p|
         p.permit(:message_type_id, content: {}).tap do |whitelisted|
           whitelisted[:site_measurements_attributes] = []
-          p[:site_measurements_attributes].to_a.each_with_index do |site_measurement, index|
+          (p[:site_measurements_attributes] || p[:site_measurements]).to_a.each_with_index do |site_measurement, index|
             whitelisted[:site_measurements_attributes][index] = site_measurement
             whitelisted.permit!
           end

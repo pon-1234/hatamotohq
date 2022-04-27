@@ -23,4 +23,11 @@ class SiteReference < ApplicationRecord
   def line_friend
     @line_friend ||= LineFriend.find_by line_user_id: line_user_id
   end
+
+  def self.generate_code
+    loop do
+      code = SecureRandom.alphanumeric(6)
+      break code unless SiteReference.exists?(code: code)
+    end
+  end
 end

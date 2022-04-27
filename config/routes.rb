@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   get 'medias/:id/content/:size', to: 'medias#variant'
 
   # url click measurement
-  get 'sites/:code', to: 'sites#statistic'
+  get 'sites/:code', to: 'sites#statistic', as: :site_statistic
 
   # User
   constraints Subdomain::UserConstraint.new do
