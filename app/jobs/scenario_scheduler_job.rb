@@ -9,6 +9,10 @@ class ScenarioSchedulerJob < ApplicationJob
   def perform(channel_id, scenario_id)
     @channel = Channel.find(channel_id)
     @scenario = Scenario.find(scenario_id)
+
+    # Does not send a scenario if it was applying to the channel
+    return if ScenarioFriend.running.exists?(scenario: @scenario, line_friend: @channel.line_friend)
+
     scenario_messages = @scenario.scenario_messages.enabled.ordered
     return if scenario_messages.empty?
     begin_sending_scenario_statistic(@scenario, @channel.line_friend, scenario_messages)

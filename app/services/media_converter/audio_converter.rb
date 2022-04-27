@@ -26,12 +26,12 @@ class MediaConverter::AudioConverter
   private
     attr_accessor :media
 
-    def get_duration filepath
+    def get_duration(filepath)
       pipe = 'ffmpeg -i ' + filepath.to_s + " 2>&1 | grep 'Duration' | cut -d ' ' -f 4 | sed s/,//"
       result = `#{pipe}`
       if result =~ /([\d][\d]):([\d][\d]):([\d][\d]).([\d]+)/
         duration = ($2.to_i * 60) + $3.to_i
       end
-      return duration
+      duration
     end
 end
