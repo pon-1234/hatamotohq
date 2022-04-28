@@ -127,7 +127,7 @@ export default {
       } else {
         this.mediaData.type = mediaType;
       }
-      if (input.type === 'video/mp4' && mediaType !== this.oldType) this.mediaData.type = this.oldType;
+      if (input.type === 'video/mp4' && this.oldType && mediaType !== this.oldType) this.mediaData.type = this.oldType;
       const validationResult = Media.validateFileSizeByType(this.mediaData.type, input.size);
       // set default type if file cannot be read error
       if (!this.mediaData.type || !validationResult.valid) this.mediaData.type = this.oldType;

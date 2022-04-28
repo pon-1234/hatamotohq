@@ -23,7 +23,7 @@
       ファイルサイズ：10MB以下<br />
       画像の幅: 1040px
     </span>
-    <span v-else> ファイル形式：JPG、JPEG、PNG、M4A、MP3、MP4、WAV、WMA、Ogg<br /> </span>
+    <span v-else> ファイル形式：JPG、JPEG、PNG、M4A、MP3、MP4、WAV、Ogg<br /> </span>
   </div>
 </template>
 
