@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="card-body mvh-50">
-          <div class="table-responsive">
+          <div class="table-responsive mh-155">
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
@@ -89,7 +89,7 @@
               </tbody>
             </table>
           </div>
-          <div class="d-flex justify-content-center mt-4 text-center">
+          <div class="d-flex justify-content-center mt-3 text-center">
             <b-pagination
               v-if="totalRows > perPage"
               v-model="queryParams.page"

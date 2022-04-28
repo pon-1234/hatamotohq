@@ -117,7 +117,7 @@ export default {
 
   mounted() {
     this.inquiryFormData.date_start = this.currentDate;
-    this.inquiryFormData.date_end = this.currentDate;
+    this.inquiryFormData.date_end = this.tomorrow;
   },
 
   computed: {
@@ -127,6 +127,13 @@ export default {
 
     currentDate() {
       return moment()
+        .tz('Asia/Tokyo')
+        .format();
+    },
+
+    tomorrow() {
+      return moment()
+        .add(1, 'day')
         .tz('Asia/Tokyo')
         .format();
     }
