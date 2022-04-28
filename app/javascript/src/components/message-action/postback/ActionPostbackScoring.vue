@@ -4,7 +4,7 @@
       <div class="d-flex align-items-center">
         <div class="select-variable-btn-wrapper">
           <div
-            class="btn btn-secondary mw-300 mr-2 mb-auto"
+            class="btn btn-secondary mw-170 mr-2 mb-auto"
             data-toggle="modal"
             :data-target="`#${name}-modal-select-variable`"
           >
@@ -32,14 +32,14 @@
           <error-message :message="errors.first(name + '_postback_score')"></error-message>
         </div>
 
-        <span class="px-2 mb-auto mt-1">を</span>
-        <select class="fw-120 form-control mb-auto" v-model="content.operation">
+        <span class="px-2">を</span>
+        <select class="fw-120 form-control" v-model="content.operation">
           <option value="set">← (代入)</option>
           <option value="add">＋ (加算)</option>
           <option value="minus">－ (減算)</option>
           <option value="unset">X (消去)</option>
         </select>
-        <span class="text-nowrap pl-2 mr-auto mb-auto mt-1">する</span>
+        <span class="text-nowrap pl-2 mr-auto">する</span>
       </div>
     </div>
     <modal-select-variable type="text" :id="`${name}-modal-select-variable`" @selectVariable="selectVariable($event)">
@@ -106,9 +106,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-  .config-score-container {
-    overflow-x: scroll;
-  }
-</style>
