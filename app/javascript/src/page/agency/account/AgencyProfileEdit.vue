@@ -78,6 +78,22 @@
       <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
         <div class="card-body">
           <div class="form-group row">
+            <label class="col-xl-3">現在のパスワード<required-mark /></label>
+            <div class="col-xl-9">
+              <ValidationProvider name="現在のパスワード" rules="required|min:8|max:128" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="agency[current_password]"
+                  placeholder="入力してください"
+                  maxlength="256"
+                  v-model.trim="agencyFormData.current_password"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+          <div class="form-group row">
             <label class="col-xl-3">パスワード<required-mark /></label>
             <div class="col-xl-9">
               <ValidationProvider name="パスワード" rules="required|min:8|max:128" v-slot="{ errors }" vid="password">
@@ -130,6 +146,7 @@ export default {
       agencyFormData: {
         id: null,
         email: null,
+        current_password: null,
         password: null,
         password_confirmation: null,
         name: null,
@@ -157,13 +174,13 @@ export default {
 
     submitUpdatePassword() {
       this.submitted = true;
-      const formData = _.pick(this.agencyFormData, ['id', 'password', 'password_confirmation']);
+      const formData = _.pick(this.agencyFormData, ['id', 'current_password', 'password', 'password_confirmation']);
       this.updateAgencyProfile(formData)
         .then(_ => {
           Util.showSuccessThenRedirect('パースワードの変更は完了しました。', `${this.userRootUrl}/agency`);
         })
-        .catch(_ => {
-          window.toastr.error('エラーを発生しました。');
+        .catch(error => {
+          window.toastr.error(error.responseJSON.message);
         });
     }
   }

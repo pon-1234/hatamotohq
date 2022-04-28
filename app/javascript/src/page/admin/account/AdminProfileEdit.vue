@@ -47,6 +47,22 @@
       <ValidationObserver ref="observer" v-slot="{ validate, invalid }">
         <div class="card-body">
           <div class="form-group row">
+            <label class="col-xl-3">現在のパスワード<required-mark /></label>
+            <div class="col-xl-9">
+              <ValidationProvider name="現在のパスワード" rules="required|min:8|max:128" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="account[current_password]"
+                  placeholder="入力してください"
+                  maxlength="129"
+                  v-model.trim="accountFormData.current_password"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+          <div class="form-group row">
             <label class="col-xl-3">パスワード<required-mark /></label>
             <div class="col-xl-9">
               <ValidationProvider
@@ -117,6 +133,7 @@ export default {
       accountFormData: {
         id: null,
         email: null,
+        current_password: null,
         password: null,
         password_confirmation: null,
         name: null
@@ -150,13 +167,15 @@ export default {
 
     onUpdatePassword() {
       this.submitted = true;
-      const formData = _.pick(this.accountFormData, ['id', 'password', 'password_confirmation']);
-      const response = this.updateAdminProfile(formData);
-      if (response) {
-        Util.showSuccessThenRedirect('パースワードの変更は完了しました。', this.accountListUrl);
-      } else {
-        window.toastr.error('パースワードの変更は失敗しました。');
-      }
+      const formData = _.pick(this.accountFormData, ['id', 'current_password', 'password', 'password_confirmation']);
+      this.updateAdminProfile(formData)
+        .then(response => {
+          Util.showSuccessThenRedirect('パースワードの変更は完了しました。', this.accountListUrl);
+        })
+        .catch(error => {
+          this.loading = false;
+          window.toastr.error(error.responseJSON.message);
+        });
     }
   }
 };
