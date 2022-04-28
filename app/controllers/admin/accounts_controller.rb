@@ -30,7 +30,7 @@ class Admin::AccountsController < Admin::ApplicationController
   # PATCH /admin/accounts/:id
   def update
     authorize! :manage, Admin
-    if @account.update(account_params)
+    if @account.update_with_password(account_params.merge(current_password: params[:current_password]))
       render_success
     else
       render_bad_request_with_message(@account.first_error_message)

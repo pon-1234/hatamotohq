@@ -30,7 +30,7 @@ class Admin::AgenciesController < Admin::ApplicationController
 
   # PATCH /admin/agencies/:id
   def update
-    if !@agency.update(agency_params.except([:email]))
+    if !@agency.update_with_password(agency_params.except([:email]).merge(current_password: params[:current_password]))
       render_bad_request_with_message(@agency.first_error_message)
     end
   end

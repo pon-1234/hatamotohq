@@ -41,7 +41,8 @@ class User::StaffsController < User::ApplicationController
 
   # PATCH /user/staffs/:id
   def update
-    @staff.update!(user_params)
+    success = @staff.update_with_password(user_params.merge(current_password: params[:current_password]))
+    raise @staff.errors.full_messages.first unless success
   rescue => e
     render_bad_request_with_message(e.message)
   end
