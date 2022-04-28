@@ -50,7 +50,7 @@ export const actions = {
     try {
       return await AccountApi.update(query);
     } catch (error) {
-      return null;
+      return error;
     }
   },
 
@@ -58,7 +58,7 @@ export const actions = {
     try {
       return await AccountApi.updateProfile(query);
     } catch (error) {
-      return null;
+      return error;
     }
   },
 

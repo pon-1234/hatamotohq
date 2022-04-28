@@ -17,6 +17,7 @@ ja:
       agency:
         email: メール
         name: 契約者名
+        current_password: 現在のパスワード
       client:
         name: クライアント名
       tag:
@@ -28,6 +29,8 @@ ja:
       device:
         token: トークン
         os: OS
+      admin:
+        current_password: 現在のパスワード
     models:
       user: ユーザー
       group: グループ

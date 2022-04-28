@@ -6,7 +6,7 @@ class Agency::ProfilesController < Agency::ApplicationController
 
   # PATCH /agency/profile
   def update
-    if !current_agency.update(agency_params.except([:email]))
+    if !current_agency.update_with_password(agency_params.except([:email]))
       render_bad_request_with_message(current_agency.first_error_message)
     end
   end
@@ -18,6 +18,7 @@ class Agency::ProfilesController < Agency::ApplicationController
         :name,
         :address,
         :phone_number,
+        :current_password,
         :password,
         :password_confirmation
       )
