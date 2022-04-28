@@ -105,6 +105,7 @@ export default {
       border-radius: 5px;
       border: 1px solid #ededed;
       padding: 5px 10px !important;
+      min-width: 250px !important;
     }
     div[aria-invalid="true"] {
       box-shadow: initial !important;
