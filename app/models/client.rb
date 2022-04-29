@@ -31,6 +31,8 @@ class Client < ApplicationRecord
 
   enum status: { active: 'active', blocked: 'blocked' }
 
+  delegate :line_friends, to: :line_account, allow_nil: true
+
   def admin
     @admin ||= self.users.admin.first
   end

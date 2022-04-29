@@ -31,9 +31,12 @@
 class ScenarioMessage < ApplicationRecord
   belongs_to :scenario, counter_cache: true
   has_many :scenario_events, dependent: :destroy
+  has_many :site_measurements, as: :measurable
 
   # Validation
   validates_presence_of :content, :message_type_id
+
+  accepts_nested_attributes_for :site_measurements
 
   # Scope
   scope :ordered, -> { order(status: :desc, is_initial: :desc, date: :asc, time: :asc, order: :asc) }
@@ -49,6 +52,10 @@ class ScenarioMessage < ApplicationRecord
     new_message.scenario_id = scenario_id
     new_message.save!
     new_message
+  end
+
+  def is_text_message?
+    message_type_id == 1
   end
 
   private

@@ -14,9 +14,20 @@ Vue.filter('formatted_date', (value) => {
   return moment(value).tz('Asia/Tokyo').format('YYYY年MM月DD日');
 });
 
+Vue.filter('formatted_time_without_minute', (value) => {
+  if (!value) return '';
+  value = value.toString();
+  return moment(value).tz('Asia/Tokyo').format('YYYY.MM.DD HH時');
+});
+
 Vue.filter('truncate', (value, length) => {
   if (!value) return '';
   return _.truncate(value, {
     length: length
   });
+});
+
+Vue.filter('number_to_percent', (value) => {
+  value = value.toFixed(2) * 100;
+  return `${value.toString()} %`;
 });

@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   get 'medias/:id/content', to: 'medias#variant'
   get 'medias/:id/content/:size', to: 'medias#variant'
 
+  # url click measurement
+  get 'sites/:code', to: 'sites#statistic', as: :site_statistic
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -165,6 +168,13 @@ Rails.application.routes.draw do
         get :edit, on: :collection
         patch :update, on: :collection
         get :friends, on: :member
+      end
+      # url click measurement
+      resources :sites do
+        member do
+          get :scenarios, defaults: { format: :json }
+          get :broadcasts, defaults: { format: :json }
+        end
       end
     end
   end
