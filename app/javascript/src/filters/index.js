@@ -27,7 +27,7 @@ Vue.filter('truncate', (value, length) => {
   });
 });
 
-Vue.filter('numberToPercent', (value) => {
+Vue.filter('number_to_percent', (value) => {
   value = value.toFixed(2) * 100;
   return `${value.toString()} %`;
 });

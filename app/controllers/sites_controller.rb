@@ -17,7 +17,8 @@ class SitesController < ApplicationController
       site_measurement.visitor_count = site_measurement.visitor_count.to_i.next
       SiteMeasurementsLineFriend.create!(site_measurement_id: site_measurement.id, line_friend_id: line_friend.id)
     end
-    [site, site_measurement].each(&:save!)
+    site.save!
+    site_measurement.save!
 
     # Handle postback actions
     SiteActionHandlerJob.perform_later(line_friend, site_measurement.actions.first['data'])

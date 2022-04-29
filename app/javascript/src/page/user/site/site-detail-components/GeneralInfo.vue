@@ -34,7 +34,7 @@
             </tr>
             <tr>
               <th>クリック数／送信回数</th>
-              <td>{{((siteDetail.click_count / siteDetail.sending_count) || 0) | numberToPercent}}</td>
+              <td>{{((siteDetail.click_count / siteDetail.sending_count) || 0) | number_to_percent}}</td>
             </tr>
           </tbody>
         </table>
@@ -58,7 +58,7 @@
             </tr>
             <tr>
               <th>訪問人数／友だち総数</th>
-              <td>{{(siteDetail.visitor_count / siteDetail.friendTotal) | numberToPercent}}</td>
+              <td>{{(siteDetail.visitor_count / siteDetail.friendTotal) | number_to_percent}}</td>
             </tr>
           </tbody>
         </table>
