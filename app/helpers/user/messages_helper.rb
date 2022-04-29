@@ -38,12 +38,12 @@ module User::MessagesHelper
         friends.each do |friend|
           site.update! sending_count: site.sending_count.next
           site_measurement.update! sending_count: site_measurement.sending_count.next
-          unless SitesLineFriend.exists?(site_id: site.id, line_friend_id: friend.id)
-            SitesLineFriend.create!(site_id: site.id, line_friend_id: friend.id)
+          unless SitesLineFriend.exists?(site_id: site.id, line_friend_id: friend.id, sent: true)
+            SitesLineFriend.create!(site_id: site.id, line_friend_id: friend.id, sent: true)
             site.update! receiver_count: site.receiver_count.next
           end
-          unless SiteMeasurementsLineFriend.exists?(site_measurement_id: site_measurement.id, line_friend_id: friend.id)
-            SiteMeasurementsLineFriend.create!(site_measurement_id: site_measurement.id, line_friend_id: friend.id)
+          unless SiteMeasurementsLineFriend.exists?(site_measurement_id: site_measurement.id, line_friend_id: friend.id, sent: true)
+            SiteMeasurementsLineFriend.create!(site_measurement_id: site_measurement.id, line_friend_id: friend.id, sent: true)
             site_measurement.update! receiver_count: site_measurement.receiver_count.next
           end
         end
