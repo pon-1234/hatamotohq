@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_22_073647) do
+ActiveRecord::Schema.define(version: 2022_04_29_042743) do
   create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
@@ -613,6 +613,8 @@ ActiveRecord::Schema.define(version: 2022_04_22_073647) do
     t.bigint 'line_friend_id', null: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.boolean 'sent', default: false
+    t.boolean 'visited', default: false
     t.index ['line_friend_id'], name: 'index_site_measurements_line_friends_on_line_friend_id'
     t.index ['site_measurement_id'], name: 'index_site_measurements_line_friends_on_site_measurement_id'
   end
@@ -646,6 +648,8 @@ ActiveRecord::Schema.define(version: 2022_04_22_073647) do
     t.bigint 'line_friend_id', null: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.boolean 'sent', default: false
+    t.boolean 'visited', default: false
     t.index ['line_friend_id'], name: 'index_sites_line_friends_on_line_friend_id'
     t.index ['site_id'], name: 'index_sites_line_friends_on_site_id'
   end

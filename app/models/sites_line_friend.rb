@@ -9,6 +9,8 @@
 #  line_friend_id :bigint           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  sent           :boolean          default(FALSE)
+#  visited        :boolean          default(FALSE)
 #
 # Indexes
 #
