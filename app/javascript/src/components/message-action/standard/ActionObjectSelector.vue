@@ -155,12 +155,16 @@ export default {
   computed: {
     actionTypes() {
       const objects = this.$store.getters['global/actionObjects'];
-      return objects != null
+      let result = objects != null
         ? objects.filter(
           item =>
             (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
         )
         : [];
+      if (this.data.type === 'survey') {
+        result = result.filter(item => item.title !== '電話する');
+      }
+      return result;
     }
   }
 };
