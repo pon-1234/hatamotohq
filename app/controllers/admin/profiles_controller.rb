@@ -6,7 +6,7 @@ class Admin::ProfilesController < Admin::ApplicationController
 
   # PATCH /admin/profile
   def update
-    if current_admin.update(account_params)
+    if current_admin.update_with_password(account_params)
       render_success
     else
       render_bad_request_with_message(current_admin.first_error_message)
@@ -18,6 +18,7 @@ class Admin::ProfilesController < Admin::ApplicationController
       params.permit(
         :email,
         :name,
+        :current_password,
         :password,
         :password_confirmation
       )
