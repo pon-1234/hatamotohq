@@ -84,7 +84,7 @@ class User::FriendsController < User::ApplicationController
     @q = LineFriend.includes(:tags).accessible_by(current_ability).ransack(params[:q])
     line_friends = @q.result
     csv = Export::ExportLineFriendService.new line_friends_for_export(line_friends)
-    render json: csv.perform_hash
+    send_data csv.perform_hash, filename: "LineFriend_#{Time.zone.now.strftime('%Y-%m-%d_%H-%M')}.csv"
   end
 
   private

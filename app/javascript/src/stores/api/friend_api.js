@@ -69,16 +69,5 @@ export default {
       method: 'GET',
       contentType: 'application/json'
     });
-  },
-
-  export: (query) => {
-    return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/export`,
-      method: 'GET',
-      data: query,
-      dataType: 'html',
-      contentType: 'application/html',
-      cache: false
-    });
   }
 };

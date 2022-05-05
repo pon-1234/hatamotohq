@@ -17,7 +17,7 @@ module User::FriendsHelper
     headers.each do |header|
       row[header] = friend[header]
     end
-    row['tags'] = friend.tags.collect(&:name).join(',')
+    row['tags'] = friend.tags.collect(&:name).join('、')
     row
   end
 end

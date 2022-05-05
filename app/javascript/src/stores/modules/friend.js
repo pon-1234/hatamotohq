@@ -158,17 +158,5 @@ export const actions = {
     } catch (error) {
       return null;
     }
-  },
-
-  async exportCsvFriends(context) {
-    const params = {
-      q: _.omit(state.queryParams, 'page')
-    };
-    try {
-      return await FriendAPI.export(params);
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
   }
 };

@@ -5,7 +5,7 @@ ja:
       line_user_id: LINEユーザーID
       line_name: LINEアカウント名
       display_name: 表示名
-      line_picture_url: 画像URL
+      line_picture_url: プロファイル画像URL
       tags: タグ
       status: 状況
       note: メモ
