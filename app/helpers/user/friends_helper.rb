@@ -7,10 +7,17 @@ module User::FriendsHelper
     rows = []
     headers = %w(id line_user_id line_name display_name line_picture_url status note created_at)
     friends.each do |friend|
-      row = export_for_row_hash(headers, friend)
-      row['tags'] = friend.tags.collect(&:name).join(',')
-      rows << row
+      rows << to_row(headers, friend)
     end
     rows
+  end
+
+  def to_row(headers, friend)
+    row = {}
+    headers.each do |header|
+      row[header] = friend[header]
+    end
+    row['tags'] = friend.tags.collect(&:name).join(',')
+    row
   end
 end

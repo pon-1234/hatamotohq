@@ -3,7 +3,7 @@
     <div class="card mvh-50">
       <div class="card-header d-flex justify-content-between flex-wrap">
         <div class="w-lg-100 w-xl-25 mb-lg-3 mb-xl-0">
-          <a href="#" class="btn btn-primary text-nowrap" @click="exportCsv"><i class="fas fa-download"></i> CSVダウンロード</a>
+          <a href="#" class="btn btn-outline-primary text-nowrap" @click="exportCsv"><i class="fas fa-download"></i> CSVダウンロード</a>
         </div>
         <div class="d-flex justify-content-end">
           <div class="filter-tester-accounts custom-control custom-checkbox mr-3 d-flex align-items-center">
