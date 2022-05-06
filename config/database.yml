@@ -12,13 +12,13 @@
 default: &default
   adapter: mysql2
   encoding: utf8mb4
-  collation: utf8mb4_0900_ai_ci
+  collation: utf8mb4_unicode_ci
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
   encoding: utf8mb4
-  collation: utf8mb4_general_ci
+  collation: utf8mb4_unicode_ci
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   database: <%= ENV['DATABASE_NAME'] %>
@@ -30,7 +30,7 @@ development:
 test:
   <<: *default
   encoding: utf8mb4
-  collation: utf8mb4_general_ci
+  collation: utf8mb4_unicode_ci
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   database: <%= ENV['DATABASE_NAME'] %>_test
@@ -39,7 +39,7 @@ test:
 production:
   <<: *default
   encoding: utf8mb4
-  collation: utf8mb4_general_ci
+  collation: utf8mb4_unicode_ci
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   host: <%= ENV['DATABASE_HOST'] %>
