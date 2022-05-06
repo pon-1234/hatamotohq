@@ -9,6 +9,7 @@
 #  folder_id       :bigint
 #  code            :string(255)
 #  name            :string(255)
+#  banner_url      :string(255)
 #  liff_id         :string(255)
 #  title           :string(255)
 #  description     :text(65535)

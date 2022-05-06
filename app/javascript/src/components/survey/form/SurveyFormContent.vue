@@ -1,5 +1,10 @@
 <template>
   <div class="bg-white" v-if="survey">
+    <div
+      v-bind:style="{ backgroundImage: `url(${survey.banner_url})` }"
+      class="banner mb-1"
+      v-if="survey.banner_url"
+    ></div>
     <div class="font-weight-bold">{{ survey.title }}</div>
     <div class="font-12">{{ survey.description }}</div>
 
@@ -7,7 +12,7 @@
       <!-- Input text question -->
       <survey-form-text :question="question" :qnum="index + 1" v-if="question.type === 'text'"></survey-form-text>
 
-      <!-- Input mmulti line text question -->
+      <!-- Input multi line text question -->
       <survey-form-textarea
         :question="question"
         :qnum="index + 1"
@@ -67,3 +72,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .banner {
+    width: 100%;
+    padding-top: 50%;
+    background-size: cover;
+  }
+</style>

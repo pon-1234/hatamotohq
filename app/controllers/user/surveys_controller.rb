@@ -100,6 +100,7 @@ class User::SurveysController < User::ApplicationController
         :id,
         :folder_id,
         :name,
+        :banner_url,
         :title,
         :description,
         :success_message,

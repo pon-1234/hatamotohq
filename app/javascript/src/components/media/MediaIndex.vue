@@ -160,7 +160,7 @@
         </div>
       </div>
 
-      <div class="text-center mt-5" v-if="(!medias || medias.length === 0) && !loading">
+      <div class="text-center my-5" v-if="(!medias || medias.length === 0) && !loading">
         <b>登録したメディアはありません。</b>
       </div>
     </div>

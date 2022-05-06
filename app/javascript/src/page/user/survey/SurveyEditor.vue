@@ -82,6 +82,13 @@
             </div>
           </div>
 
+          <div class="form-group d-flex">
+            <label class="fw-300 mb-auto">バナー</label>
+            <div class="flex-grow-1">
+              <input-image :imageUrl.sync="surveyData.banner_url"></input-image>
+            </div>
+          </div>
+
           <div class="custom-control custom-checkbox">
             <input
               type="checkbox"
@@ -163,6 +170,7 @@ export default {
         name: null,
         title: null,
         description: null,
+        banner_url: null,
         questions: null,
         after_action: null,
         success_message: null,
@@ -222,6 +230,7 @@ export default {
         'id',
         'folder_id',
         'name',
+        'banner_url',
         'title',
         'description',
         'success_message',
