@@ -17,7 +17,7 @@
             :href="`${rootPath}/user/sites/new?folder_id=${curFolder.id}`"
             class="btn btn-primary"
           >
-            <i class="uil-plus"></i> 新規作成
+            <i class="uil-plus"></i> 新規登録
           </a>
           <div class="mt-2 table-responsive" v-if="curFolder">
             <table class="table table-centered mb-0">
@@ -26,7 +26,7 @@
                   <th class="fw-400">サイト名</th>
                   <th>フォルダー</th>
                   <th>訪問/発行</th>
-                  <!-- <th>短縮登録</th> -->
+                  <th>短縮登録</th>
                   <th>作成日</th>
                   <th></th>
                 </tr>
@@ -82,6 +82,9 @@
                   </td>
                   <td>
                     <span class="text-nowrap">{{ site.visitor_count }} 人 / {{site.receiver_count }} 人</span>
+                  </td>
+                  <td>
+                    <span class="text-nowrap">{{ site.sending_count }}回</span>
                   </td>
                   <td>
                     <div class="text-sm text-nowrap">{{ formattedDate(site.created_at) }}</div>

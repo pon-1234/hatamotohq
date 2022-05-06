@@ -96,7 +96,7 @@ export default {
       case 'reminder':
         return this.data.reminders.length;
       case 'site':
-        return this.data.sites.length;
+        return this.data.sites ? this.data.sites.length : 0;
       }
       return 0;
     },
