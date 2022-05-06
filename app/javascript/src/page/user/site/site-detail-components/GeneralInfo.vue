@@ -6,7 +6,7 @@
           <tbody>
             <tr>
               <th>登録日</th>
-              <td>{{ siteDetail.created_at | formatted_time_without_minute }}</td>
+              <td>{{ siteDetail.created_at | formatted_time }}</td>
             </tr>
           </tbody>
         </table>
@@ -34,7 +34,7 @@
             </tr>
             <tr>
               <th>クリック数／送信回数</th>
-              <td>{{((siteDetail.click_count / siteDetail.sending_count) || 0) | number_to_percent}}</td>
+              <td>{{(siteDetail.click_count / siteDetail.sending_count) | number_to_percent}}</td>
             </tr>
           </tbody>
         </table>
@@ -55,6 +55,10 @@
             <tr>
               <th>訪問人数</th>
               <td>{{siteDetail.visitor_count}}人</td>
+            </tr>
+            <tr>
+              <th>訪問人数／URL送信人数</th>
+              <td>{{(siteDetail.visitor_count / siteDetail.receiver_count) | number_to_percent}}</td>
             </tr>
             <tr>
               <th>訪問人数／友だち総数</th>
