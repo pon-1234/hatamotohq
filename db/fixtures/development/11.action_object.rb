@@ -76,6 +76,16 @@ json_arr = [
       "type": 'survey',
       "label": '回答フォーム'
     }
+  },
+  {
+    "id": 8,
+    "type": 'message',
+    "title": 'テキストメッセージ',
+    "description": 'This action can be configured only with quick reply buttons. When a button associated with this action is tapped, the survey screen in LINE is opened.',
+    "format": {
+      "type": 'message',
+      "label": 'テキストメッセージ'
+    }
   }
 ]
 
