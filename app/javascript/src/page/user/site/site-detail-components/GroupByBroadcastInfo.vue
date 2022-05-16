@@ -92,4 +92,7 @@ export default {
       }
     }
   }
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
 </style>

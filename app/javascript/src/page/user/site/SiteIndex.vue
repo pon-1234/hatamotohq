@@ -232,14 +232,18 @@ export default {
     },
 
     async submitUpdateSite(site) {
-      const response = await this.updateSite(site);
-      if (response) {
-        window.toastr.success('フォルダーの変更は完了しました。');
+      if (!site.notChange) {
+        const response = await this.updateSite(site);
+        if (response) {
+          window.toastr.success('サイト名の変更は完了しました。');
+        } else {
+          window.toastr.error('サイト名の変更は失敗しました。');
+        }
+        this.selectedSiteIndex = null;
+        await this.getSites();
       } else {
-        window.toastr.error('フォルダーの変更は失敗しました。');
+        this.selectedSiteIndex = null;
       }
-      this.selectedSiteIndex = null;
-      await this.getSites();
       this.forceRerender();
     },
 
@@ -247,9 +251,9 @@ export default {
       const response = await this.deleteSite(this.curSite.id);
       const url = `${this.rootPath}/user/sites?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('テンプレートの削除は完了しました。', url);
+        Util.showSuccessThenRedirect('サイトの削除は完了しました。', url);
       } else {
-        window.toastr.error('テンプレートの削除は失敗しました。');
+        window.toastr.error('サイトの削除は失敗しました。');
       }
       this.forceRerender();
     },
