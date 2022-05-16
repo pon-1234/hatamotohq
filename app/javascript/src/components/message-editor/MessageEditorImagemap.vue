@@ -81,6 +81,7 @@
                         :requiredLabel="false"
                         :showTitle="false"
                         :name="'imagemap_action_' + index"
+                        :messageType="'imagemap'"
                         @input="item.action = $event"
                       />
                     </div>

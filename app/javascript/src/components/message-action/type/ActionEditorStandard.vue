@@ -6,6 +6,7 @@
       :supports="supports"
       @input="changeAction"
       :isNone="isNone"
+      :messageType="messageType"
       class="form-group"
     />
 
@@ -21,7 +22,7 @@
 
 <script>
 export default {
-  props: ['value', 'name', 'supports', 'requiredLabel', 'isNone', 'showTitle'],
+  props: ['value', 'name', 'supports', 'requiredLabel', 'isNone', 'showTitle', 'messageType'],
   data() {
     return {
       type: 'basic',
