@@ -64,20 +64,6 @@ export const actions = {
     }
   },
 
-  async getActionObjectConfigs(context, query = {}) {
-    // Loaded from cache, no need to load new one
-    if (context.state.action_objects && context.state.action_objects.length > 0) {
-      return;
-    }
-    let data = null;
-    try {
-      data = await Global.getActionObjectConfigs(query);
-    } catch (error) {
-      console.log(error);
-    }
-    context.commit('setActionObjects', data);
-  },
-
   async uploadImageMap(_, payload) {
     try {
       return await MediaAPI.uploadImageMap(payload.file);

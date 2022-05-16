@@ -158,7 +158,6 @@ Rails.application.routes.draw do
       resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
-      get '/action_objects', to: 'action_objects#index'
       resources :medias do
         post :bulk_delete, on: :collection
         member do
