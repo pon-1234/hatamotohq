@@ -6,6 +6,7 @@
       :action="formAction"
       method="post"
       enctype="multipart/form-data"
+      data-remote="true"
     >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
       <div class="mxw-1200">
@@ -111,7 +112,8 @@ export default {
     ]),
 
     async onSubmit(e) {
-      this.$refs.form.submit();
+      // use requestSubmit() instead of submit() to use data-remote of Rails
+      this.$refs.form.requestSubmit();
     }
   }
 };

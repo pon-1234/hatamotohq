@@ -1,0 +1,5 @@
+<% if @error_message %>
+  toastr.error('<%= @error_message %>');
+<% else %>
+  window.location.href = '<%= user_sites_path %>';
+<% end %>

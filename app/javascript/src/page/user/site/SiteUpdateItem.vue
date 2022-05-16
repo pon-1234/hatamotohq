@@ -1,22 +1,29 @@
 <template>
-  <div class="input-group d-flex">
-  <input
-    type="text"
-    placeholder="フォルダー名"
-    class="form-control"
-    v-model.trim="siteName"
-    @click.stop
-    @keyup.enter="enterSubmitChangeName"
-    ref="folderName"
-    name="folder_name"
-    maxlength="254"
-    data-vv-as="フォルダー名"
-    v-validate="'required|max:254'"
-  />
-  <span class="ml-auto">
-    <div class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</div>
-  </span>
-</div>
+  <ValidationObserver ref="observer">
+    <ValidationProvider
+      :name="'サイト名'"
+      :rules="'required|max:255'"
+      v-slot="{ errors }"
+    >
+      <div class="input-group d-flex">
+        <input
+          type="text"
+          placeholder="サイト名"
+          class="form-control"
+          v-model.trim="siteName"
+          @click.stop
+          @keyup.enter="enterSubmitChangeName"
+          name="site_name"
+          maxlength="255"
+          data-vv-as="サイト名"
+        />
+        <span class="ml-auto">
+          <div class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</div>
+        </span>
+      </div>
+      <span class="error-explanation">{{ errors[0] }}</span>
+    </ValidationProvider>
+  </ValidationObserver>
 </template>
 <script>
 
@@ -42,6 +49,8 @@ export default {
         this.isEdit = false;
         if (this.siteName !== this.data.name) {
           this.$emit('editSite', { id: this.data.id, name: this.siteName });
+        } else {
+          this.$emit('editSite', { id: this.data.id, name: this.siteName, notChange: true });
         }
       });
     },

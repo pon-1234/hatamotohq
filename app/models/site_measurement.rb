@@ -48,6 +48,8 @@ class SiteMeasurement < ApplicationRecord
       .order('broadcasts.id')
   end
 
+  before_save :set_default_site_name
+
   def real_site_url
     redirect_url || site.url
   end
@@ -55,4 +57,9 @@ class SiteMeasurement < ApplicationRecord
   def real_site_name
     site_name || site.name
   end
+
+  private
+    def set_default_site_name
+      self.site_name = site.name unless self.site_name.present?
+    end
 end

@@ -42,51 +42,60 @@
         </table>
       </div>
       <div class="col-sm-6" v-show="showConfigUrlPanel" v-if="sitesInMessageContent[selectedSiteIndex]">
-        <div class="panel panel-default border p-2 rounded">
-          <div class="mb-2">
-            <b>サイト設定</b> <small>URL:<span>{{sitesInMessageContent[selectedSiteIndex].url}}</span></small>
-          </div>
-          <div class="panel-body">
-            <div>
-              <div class="form-group">
-                <b>サイト登録名</b>
-                <input v-model="siteName" type="text" class="form-control">
-              </div>
-              <div class="form-group"><b>リダイレクト設定</b> <br>
-                (元)
-                <a target="_blank" :href="sitesInMessageContent[selectedSiteIndex].url">{{sitesInMessageContent[selectedSiteIndex].url}}</a>
-                <div class="input-group">
-                  <span class="input-group-text">(変更) -&gt;</span>
-                  <input v-model="redirectUrl" type="text" placeholder="http://example.com" class="form-control">
+        <ValidationObserver ref="observer" v-slot="{ validate }">
+          <div class="panel panel-default border p-2 rounded">
+            <div class="mb-2">
+              <b>サイト設定</b> <small>URL:<span>{{sitesInMessageContent[selectedSiteIndex].url}}</span></small>
+            </div>
+            <div class="panel-body">
+              <div>
+                <div class="form-group">
+                  <b>サイト登録名</b>
+                  <input v-model="siteName" type="text" class="form-control">
                 </div>
-                <small class="form-help">
-                  転送先を変更します。<br><b style="color: red;">記録は元(変更前)のURLへのアクセスとしてカウントされます</b>
-                </small>
-              </div>
-              <div class="form-group">
-                <div class="has-modal-xl">
-                  <div class="row">
-                    <div class="col">
-                      <action-editor-custom
-                        :requiredLabel="requiredLabel"
-                        :showTitle="showTitle"
-                        :showLaunchMessage="false"
-                        :value="actionData"
-                        :key="contentKey"
-                        @input="updateAction"
-                      />
+                <div class="form-group"><b>リダイレクト設定</b> <br>
+                  (元)
+                  <a target="_blank" :href="sitesInMessageContent[selectedSiteIndex].url">{{sitesInMessageContent[selectedSiteIndex].url}}</a>
+                  <ValidationProvider
+                    :name="'リダイレクトURL'"
+                    :rules="'url'"
+                    v-slot="{ errors }"
+                  >
+                    <div class="input-group">
+                      <span class="input-group-text">(変更) -&gt;</span>
+                      <input v-model="redirectUrl" type="text" placeholder="http://example.com" class="form-control">
+                    </div>
+                    <span class="error-explanation">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                  <p><small class="form-help">
+                    転送先を変更します。<br><b style="color: red;">記録は元(変更前)のURLへのアクセスとしてカウントされます</b>
+                  </small></p>
+                </div>
+                <div class="form-group">
+                  <div class="has-modal-xl">
+                    <div class="row">
+                      <div class="col">
+                        <action-editor-custom
+                          :requiredLabel="requiredLabel"
+                          :showTitle="showTitle"
+                          :showLaunchMessage="false"
+                          :value="actionData"
+                          :key="contentKey"
+                          @input="updateAction"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="panel-footer">
+              <button @click="showConfigUrlPanel = false; selectedSiteIndex = null" type="button" class="btn btn-danger float-left">閉じる</button>
+              <button type="button" class="btn btn-success float-right" @click="validate().then(configUrl)">設定する</button>
+              <div class="clearfix"></div>
+            </div>
           </div>
-          <div class="panel-footer">
-            <button @click="showConfigUrlPanel = false; selectedSiteIndex = null" type="button" class="btn btn-danger float-left">閉じる</button>
-            <button @click="configUrl" type="button" class="btn btn-success float-right">設定する</button>
-            <div class="clearfix"></div>
-          </div>
-        </div>
+        </ValidationObserver>
       </div>
     </div>
   </div>

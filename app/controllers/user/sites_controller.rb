@@ -26,10 +26,14 @@ class User::SitesController < User::ApplicationController
   def create
     site = Site.new site_params
     site.client_id = current_user.client_id
-    unless site.save
-      render_bad_request_with_message(site.first_error_message)
-    else
-      redirect_to user_sites_path, notice: 'サイトの作成は完了しました'
+    respond_to do |format|
+      format.js do
+        unless site.save
+          @error_message = site.errors.full_messages.first
+        else
+          flash[:notice] = 'サイトの作成は完了しました'
+        end
+      end
     end
   end
 

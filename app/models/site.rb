@@ -30,4 +30,6 @@ class Site < ApplicationRecord
   has_many :site_measurements, dependent: :destroy
   belongs_to :client
   belongs_to :folder
+
+  validates :name, uniqueness: {scope: :client_id}
 end
