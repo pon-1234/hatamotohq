@@ -359,6 +359,16 @@ export const Weekday = [
 
 export const ActionObjectsCollect = [
   {
+    id: 8,
+    type: 'message',
+    title: 'テキストメッセージ',
+    description: 'This action can be configured only with quick reply buttons. When a button associated with this action is tapped, the survey screen in LINE is opened.',
+    format: {
+      type: 'message',
+      label: 'テキストメッセージ'
+    }
+  },
+  {
     id: 1,
     title: 'URLを開く',
     type: 'uri',
@@ -432,16 +442,6 @@ export const ActionObjectsCollect = [
     format: {
       type: 'survey',
       label: '回答フォーム'
-    }
-  },
-  {
-    id: 8,
-    type: 'message',
-    title: 'テキストメッセージ',
-    description: 'This action can be configured only with quick reply buttons. When a button associated with this action is tapped, the survey screen in LINE is opened.',
-    format: {
-      type: 'message',
-      label: 'テキストメッセージ'
     }
   }
 ];
