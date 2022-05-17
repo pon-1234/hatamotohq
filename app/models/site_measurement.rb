@@ -51,11 +51,11 @@ class SiteMeasurement < ApplicationRecord
   before_save :set_default_site_name
 
   def real_site_url
-    redirect_url || site.url
+    redirect_url.present? ? redirect_url : site.url
   end
 
   def real_site_name
-    site_name || site.name
+    site_name.present? ? site_name : site.name
   end
 
   private

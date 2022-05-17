@@ -19,25 +19,27 @@
         <table class="table table-centered mb-0">
           <thead>
             <tr>
-              <th>サイト名</th>
-              <th :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">訪問時</th>
+              <th style="width: 50%">サイト名</th>
+              <th style="width: 30%" :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">訪問時</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(site, index) in sitesInMessageContent" :key="site.id" :class="`site-row ${selectedSiteIndex === index ? 'selected' : ''}`">
               <td>
-                <strong>{{site.name}}</strong>
-                <br/>
+                <p class="mxw-400"><strong>{{site.name}}</strong></p>
                 <span>{{site.url}}</span>
               </td>
               <td :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">
                 <div v-html="getActionsOfUrl(site)"></div>
               </td>
               <td>
-                <div class="float-right d-flex flex-column">
+                <div class="float-right d-flex flex-column" v-if="!showConfigUrlPanel">
                   <button @click="selectSite(index)" v-if="!mutationSiteMeasurements.find((siteMeasurement) => siteMeasurement.site_id === site.id)" class="btn btn-sm btn-secondary mw-100 mb-1">登録</button>
-                  <button data-toggle="modal" :data-target="`#modalDeleteSiteMeasurement_${site.id}`" v-else class="btn btn-sm btn-outline-danger mw-100">削除</button>
+                  <span v-else>
+                    <button @click="selectSite(index)" class="btn btn-sm btn-primary mw-100">設定</button>
+                    <button data-toggle="modal" :data-target="`#modalDeleteSiteMeasurement_${site.id}`" class="btn btn-sm btn-outline-danger mw-100">削除</button>
+                  </span>
                 </div>
               </td>
 
