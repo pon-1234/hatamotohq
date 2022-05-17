@@ -35,8 +35,20 @@
                 <div v-html="getActionsOfUrl(site)"></div>
               </td>
               <td>
-                <button @click="selectSite(index)" class="btn btn-sm btn-primary mw-120 float-right">設定</button>
+                <div class="float-right d-flex flex-column">
+                  <button @click="selectSite(index)" v-if="!mutationSiteMeasurements.find((siteMeasurement) => siteMeasurement.site_id === site.id)" class="btn btn-sm btn-secondary mw-100 mb-1">登録</button>
+                  <button data-toggle="modal" :data-target="`#modalDeleteSiteMeasurement_${site.id}`" v-else class="btn btn-sm btn-outline-danger mw-100">削除</button>
+                </div>
               </td>
+
+              <modal-confirm
+                title="このサイト設定を削除してもよろしいですか？"
+                :id="`modalDeleteSiteMeasurement_${site.id}`"
+                type="delete"
+                @confirm="removeSite(site)"
+              >
+              </modal-confirm>
+
             </tr>
           </tbody>
         </table>
@@ -164,6 +176,12 @@ export default {
       } else {
         this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
       }
+    },
+    removeSite(site) {
+      const siteMeasurements = _.cloneDeep(this.mutationSiteMeasurements);
+      _.remove(siteMeasurements, (siteMeasurement) => siteMeasurement.site_id.toString() === site.id.toString());
+      this.mutationSiteMeasurements = siteMeasurements;
+      this.$emit('configured', { index: this.index, content: this.mutationSiteMeasurements });
     },
     async configUrl() {
       const result = await this.$validator.validateAll();
