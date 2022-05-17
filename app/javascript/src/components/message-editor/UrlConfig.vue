@@ -19,16 +19,15 @@
         <table class="table table-centered mb-0">
           <thead>
             <tr>
-              <th>サイト名</th>
-              <th :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">訪問時</th>
+              <th style="width: 50%">サイト名</th>
+              <th style="width: 30%" :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">訪問時</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(site, index) in sitesInMessageContent" :key="site.id" :class="`site-row ${selectedSiteIndex === index ? 'selected' : ''}`">
               <td>
-                <strong>{{site.name}}</strong>
-                <br/>
+                <p class="mxw-400"><strong>{{site.name}}</strong></p>
                 <span>{{site.url}}</span>
               </td>
               <td :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">
