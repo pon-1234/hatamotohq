@@ -34,9 +34,12 @@
                 <div v-html="getActionsOfUrl(site)"></div>
               </td>
               <td>
-                <div class="float-right d-flex flex-column">
+                <div class="float-right d-flex flex-column" v-if="!showConfigUrlPanel">
                   <button @click="selectSite(index)" v-if="!mutationSiteMeasurements.find((siteMeasurement) => siteMeasurement.site_id === site.id)" class="btn btn-sm btn-secondary mw-100 mb-1">登録</button>
-                  <button data-toggle="modal" :data-target="`#modalDeleteSiteMeasurement_${site.id}`" v-else class="btn btn-sm btn-outline-danger mw-100">削除</button>
+                  <span v-else>
+                    <button @click="selectSite(index)" class="btn btn-sm btn-primary mw-100">設定</button>
+                    <button data-toggle="modal" :data-target="`#modalDeleteSiteMeasurement_${site.id}`" class="btn btn-sm btn-outline-danger mw-100">削除</button>
+                  </span>
                 </div>
               </td>
 
