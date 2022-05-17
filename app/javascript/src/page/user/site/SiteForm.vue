@@ -27,7 +27,7 @@
             <div class="form-border">
               <ValidationProvider
                 :name="'サイト名'"
-                :rules="'required'"
+                :rules="'required|max:255'"
                 v-slot="{ errors }"
               >
                 <div class="form-group">
@@ -36,6 +36,7 @@
                     type="text"
                     class="form-control"
                     name="site[name]"
+                    maxlength="255"
                     placeholder="サイト名を入力してください"
                     v-model.trim="siteFormData.name"
                   />

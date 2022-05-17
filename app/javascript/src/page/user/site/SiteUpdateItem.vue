@@ -1,5 +1,5 @@
 <template>
-  <ValidationObserver ref="observer">
+  <ValidationObserver ref="observer" v-slot="{ validate }">
     <ValidationProvider
       :name="'サイト名'"
       :rules="'required|max:255'"
@@ -18,7 +18,7 @@
           data-vv-as="サイト名"
         />
         <span class="ml-auto">
-          <div class="btn btn-default" @click="submitChangeName" ref="buttonChange">決定</div>
+          <div class="btn btn-default" @click.prevent="validate().then(submitChangeName)" ref="buttonChange">決定</div>
         </span>
       </div>
       <span class="error-explanation">{{ errors[0] }}</span>
