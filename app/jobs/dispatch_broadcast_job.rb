@@ -82,6 +82,9 @@ class DispatchBroadcastJob < ApplicationJob
 
     if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
+      nomalized_messages_data.each do |content|
+        insert_delivered_message(channels, content)
+      end
     else
       success = send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       nomalized_messages_data.each do |content|
