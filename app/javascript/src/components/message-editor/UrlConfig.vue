@@ -61,10 +61,17 @@
             </div>
             <div class="panel-body">
               <div>
-                <div class="form-group">
-                  <b>サイト登録名</b>
-                  <input v-model="siteName" type="text" class="form-control">
-                </div>
+                <ValidationProvider
+                    :name="'サイト登録名'"
+                    :rules="'max:255'"
+                    v-slot="{ errors }"
+                >
+                  <div class="form-group">
+                    <b>サイト登録名</b>
+                    <input v-model="siteName" type="text" class="form-control" maxlength="255">
+                    <span class="error-explanation">{{ errors[0] }}</span>
+                  </div>
+                </ValidationProvider>
                 <div class="form-group"><b>リダイレクト設定</b> <br>
                   (元)
                   <a target="_blank" :href="sitesInMessageContent[selectedSiteIndex].url">{{sitesInMessageContent[selectedSiteIndex].url}}</a>
@@ -180,6 +187,10 @@ export default {
     removeSite(site) {
       const siteMeasurements = _.cloneDeep(this.mutationSiteMeasurements);
       _.remove(siteMeasurements, (siteMeasurement) => siteMeasurement.site_id.toString() === site.id.toString());
+      this.currentSiteMeasurementId = null;
+      this.siteName = null;
+      this.redirectUrl = null;
+      this.actionData = null;
       this.mutationSiteMeasurements = siteMeasurements;
       this.$emit('configured', { index: this.index, content: this.mutationSiteMeasurements });
     },
