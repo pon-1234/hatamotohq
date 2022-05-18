@@ -55,7 +55,7 @@ module User::MessagesHelper
     site_reference = SiteReference.create! code: SiteReference.generate_code, line_user_id: line_user_id,
       site_measurement_id: site_measurement.id
     shorten_url = Rails.application.routes.url_helpers.site_statistic_url(site_reference.code)
-    need_to_replace_url = site_measurement.real_site_url
+    need_to_replace_url = site_measurement.site.url
     message_content_text = message.content['text'].dup
     message_content_text.gsub!(need_to_replace_url, shorten_url)
     message.content['text'] = message_content_text
