@@ -31,5 +31,5 @@ class Site < ApplicationRecord
   belongs_to :client
   belongs_to :folder
 
-  validates :name, uniqueness: {scope: :client_id}
+  validates :name, uniqueness: { scope: :client_id }
 end
