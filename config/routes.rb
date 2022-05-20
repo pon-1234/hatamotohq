@@ -176,6 +176,7 @@ Rails.application.routes.draw do
           get :broadcasts, defaults: { format: :json }
         end
       end
+      resources :stream_routes, only: [:new, :create]
     end
   end
 

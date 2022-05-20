@@ -18,15 +18,18 @@
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
 #  tester           :boolean          default(FALSE)
+#  stream_route_id  :bigint
 #
 # Indexes
 #
 #  index_line_friends_on_line_account_id  (line_account_id)
+#  index_line_friends_on_stream_route_id  (stream_route_id)
 #  index_line_friends_on_tester           (tester)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (line_account_id => line_accounts.id)
+#  fk_rails_...  (stream_route_id => stream_routes.id)
 #
 FactoryBot.define do
   factory :line_friend do
