@@ -1,8 +1,14 @@
+# frozen_string_literal: true
+
 class User::StreamRoutesController < User::ApplicationController
-  def new; end
+  def new
+    @folder_options_for_select = current_user.client.line_account.folders.type_stream_route
+      .select('id, name').to_json
+  end
 
   def create
-    stream_route = StreamRounte.new(stream_route_params)
+    stream_route = StreamRoute.new(stream_route_params)
+    stream_route.client_id = current_user.client_id
     respond_to do |format|
       format.html
       format.json do

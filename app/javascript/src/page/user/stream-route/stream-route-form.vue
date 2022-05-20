@@ -32,8 +32,8 @@
             </div>
             <div class="form-border">
               <ValidationProvider
-                :name="'サイト名'"
-                :rules="'required|max:255'"
+                :name="'QRコード表示用テキスト'"
+                :rules="'max:16'"
                 v-slot="{ errors }"
               >
                 <div class="form-group">
@@ -42,7 +42,7 @@
                     type="text"
                     class="form-control"
                     maxlength="255"
-                    placeholder="サイト名を入力してください"
+                    placeholder="QRコード表示用テキストを入力してください"
                     v-model.trim="streamRouteFormData.qr_title"
                   />
                   <span class="error-explanation">{{ errors[0] }}</span>
@@ -67,26 +67,24 @@
 
             <div class="row">
               <div class="col-sm-8">
-                <label for="prevent_default">友だち追加時設定</label>
+                <label for="run_add_friend_actions">友だち追加時設定</label>
                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                    <label class="btn btn-primary active d-flex justify-content-center prevent-default-label">
+                    <label @click="changeRunAddFriendActions(false)" class="btn btn-primary d-flex justify-content-center prevent-default-label">
                       <input
                         type="radio"
-                        name="prevent_default"
-                        value="0"
+                        name="run_add_friend_actions"
+                        :value="false"
                         autocomplete="off"
-                        :checked="run_add_friend_actions === '0'"
-                        @change="changeRunAddFriendActions('0')"
+                        :checked="!streamRouteFormData.run_add_friend_actions"
                       > 無視する
                     </label>
-                    <label class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
+                    <label @click="changeRunAddFriendActions(true)" class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
                       <input
                         type="radio"
-                        name="prevent_default"
-                        value="1"
+                        name="run_add_friend_actions"
+                        :value="true"
                         autocomplete="off"
-                        :checked="run_add_friend_actions === '1'"
-                        @change="changeRunAddFriendActions('1')"
+                        :checked="streamRouteFormData.run_add_friend_actions"
                       > 無視しない
                     </label>
                 </div>
@@ -95,13 +93,25 @@
 
             <div class="row mt-3">
               <div class="col-sm-8">
-                <label for="prevent_default">アクションの実行</label>
+                <label for="always_run_actions">アクションの実行</label>
                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                    <label class="btn btn-primary active d-flex justify-content-center prevent-default-label">
-                      <input v-model="streamRouteFormData.always_run_actions" type="radio" name="prevent_default" value="true" autocomplete="off" checked=""> いつでも
+                    <label @click="changeAlwaysRunActions(true)" class="btn btn-primary d-flex justify-content-center prevent-default-label">
+                      <input
+                        type="radio"
+                        name="always_run_actions"
+                        :value="false"
+                        autocomplete="off"
+                        :checked="streamRouteFormData.always_run_actions"
+                      > いつでも
                     </label>
-                    <label class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
-                      <input v-model="streamRouteFormData.always_run_actions" type="radio" name="prevent_default" value="false" autocomplete="off"> 初回の友だち追加時のみ
+                    <label @click="changeAlwaysRunActions(false)" class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
+                      <input
+                        type="radio"
+                        name="always_run_actions"
+                        :value="true"
+                        autocomplete="off"
+                        :checked="!streamRouteFormData.always_run_actions"
+                      > 初回の友だち追加時のみ
                     </label>
                 </div>
               </div>
@@ -112,7 +122,7 @@
                 <label class="fw-300">フォルダー</label>
                 <div class="flex-grow-1">
                   <select v-model="streamRouteFormData.folder_id" class="form-control fw-300" name="site[sxfolder_id]">
-                    <option v-for="(folder, index) in folders" :key="index" :value="folder.id">
+                    <option v-for="(folder, index) in folder_options" :key="index" :value="folder.id">
                       {{ folder.name }}
                     </option>
                   </select>
@@ -135,6 +145,7 @@ import { mapActions, mapState } from 'vuex';
 import Util from '@/core/util';
 
 export default {
+  props: ['folder_options'],
   data() {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
@@ -143,8 +154,8 @@ export default {
       streamRouteFormData: {
         name: null,
         qr_title: null,
-        run_add_friend_actions: '0',
-        always_run_actions: '1',
+        run_add_friend_actions: false,
+        always_run_actions: true,
         folder_id: null
       }
     };
@@ -165,7 +176,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('stream_route', [
+    ...mapActions('streamRoute', [
       'createStreamRoute'
     ]),
 
@@ -173,11 +184,19 @@ export default {
       const formData = _.pick(this.streamRouteFormData, ['name', 'qr_title', 'run_add_friend_actions', 'always_run_actions', 'folder_id']);
       this.createStreamRoute(formData)
         .then(response => {
-          Util.showSuccessThenRedirect('create success!', `${this.userRootUrl}/user/`);
+          Util.showSuccessThenRedirect('create success!', `${this.rootPath}/user/`);
         })
         .catch(error => {
           window.toastr.error(error.responseJSON.message);
         });
+    },
+
+    changeRunAddFriendActions(value) {
+      this.streamRouteFormData.run_add_friend_actions = value;
+    },
+
+    changeAlwaysRunActions(value) {
+      this.streamRouteFormData.always_run_actions = value;
     }
   }
 };

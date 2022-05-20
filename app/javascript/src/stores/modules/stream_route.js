@@ -5,7 +5,7 @@ export const actions = {
     try {
       return await StreamRouteApi.create(query);
     } catch (error) {
-      return null;
+      return error;
     }
-  },
+  }
 };

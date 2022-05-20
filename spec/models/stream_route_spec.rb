@@ -13,13 +13,17 @@
 #  always_run_actions     :boolean          default(FALSE)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  client_id              :bigint           not null
+#  qr_title               :string(255)
 #
 # Indexes
 #
+#  index_stream_routes_on_client_id  (client_id)
 #  index_stream_routes_on_folder_id  (folder_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (client_id => clients.id)
 #  fk_rails_...  (folder_id => folders.id)
 #
 require 'rails_helper'

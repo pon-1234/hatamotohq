@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_18_094434) do
+ActiveRecord::Schema.define(version: 2022_05_20_092205) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -656,6 +656,9 @@ ActiveRecord::Schema.define(version: 2022_05_18_094434) do
     t.boolean 'always_run_actions', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'client_id', null: false
+    t.string 'qr_title'
+    t.index ['client_id'], name: 'index_stream_routes_on_client_id'
     t.index ['folder_id'], name: 'index_stream_routes_on_folder_id'
   end
 
@@ -857,6 +860,7 @@ ActiveRecord::Schema.define(version: 2022_05_18_094434) do
   add_foreign_key 'sites', 'folders'
   add_foreign_key 'sites_line_friends', 'line_friends'
   add_foreign_key 'sites_line_friends', 'sites'
+  add_foreign_key 'stream_routes', 'clients'
   add_foreign_key 'stream_routes', 'folders'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
