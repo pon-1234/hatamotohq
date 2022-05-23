@@ -38,7 +38,13 @@ class User::StreamRoutesController < User::ApplicationController
 
   private
     def stream_route_params
-      params.permit(:name, :qr_title, :folder_id, :actions, :run_add_friend_actions, :always_run_actions)
+      params.permit(:name, :qr_title, :folder_id, :run_add_friend_actions, :always_run_actions).tap do |whitelisted|
+        whitelisted[:actions] = []
+        params[:actions].to_a.each_with_index do |action, index|
+          whitelisted[:actions][index] = action
+          whitelisted.permit!
+        end
+      end
     end
 
     def load_folders
