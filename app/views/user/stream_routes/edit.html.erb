@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <div class="page-title-box">
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item">流入経路分析</li>
+          <li class="breadcrumb-item"><%= link_to '流入経路一覧', '#!' %></li>
+          <li class="breadcrumb-item active">流入経路編集</li>
+        </ol>
+      </div>
+      <h4 class="page-title">流入経路編集</h4>
+    </div>
+  </div>
+</div>
+<stream-route-form :original_stream_route="<%= @stream_route.to_json %>" :folder_options="<%= @folder_options_for_select %>"></stream-route-form>

@@ -7,5 +7,13 @@ export const actions = {
     } catch (error) {
       return error;
     }
+  },
+
+  async updateStreamRoute(_, query) {
+    try {
+      return await StreamRouteApi.update(query);
+    } catch (error) {
+      return error;
+    }
   }
 };

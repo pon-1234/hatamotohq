@@ -1,9 +1,7 @@
 <template>
   <ValidationObserver ref="observer" v-slot="{ validate }">
     <form
-      ref="form"
       @submit.prevent="validate().then(onSubmit)"
-      :action="formAction"
       method="post"
       enctype="multipart/form-data"
     >
@@ -41,7 +39,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    maxlength="255"
+                    maxlength="16"
                     placeholder="QRコード表示用テキストを入力してください"
                     v-model.trim="streamRouteFormData.qr_title"
                   />
@@ -69,7 +67,7 @@
               <div class="col-sm-8">
                 <label for="run_add_friend_actions">友だち追加時設定</label>
                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                    <label @click="changeRunAddFriendActions(false)" class="btn btn-primary d-flex justify-content-center prevent-default-label">
+                    <label @click="changeRunAddFriendActions(false)" :class="`${!streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label`">
                       <input
                         type="radio"
                         name="run_add_friend_actions"
@@ -78,7 +76,7 @@
                         :checked="!streamRouteFormData.run_add_friend_actions"
                       > 無視する
                     </label>
-                    <label @click="changeRunAddFriendActions(true)" class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
+                    <label @click="changeRunAddFriendActions(true)" :class="`${streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label`">
                       <input
                         type="radio"
                         name="run_add_friend_actions"
@@ -95,7 +93,7 @@
               <div class="col-sm-8">
                 <label for="always_run_actions">アクションの実行</label>
                 <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                    <label @click="changeAlwaysRunActions(true)" class="btn btn-primary d-flex justify-content-center prevent-default-label">
+                    <label @click="changeAlwaysRunActions(true)" :class="`${streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label`">
                       <input
                         type="radio"
                         name="always_run_actions"
@@ -104,7 +102,7 @@
                         :checked="streamRouteFormData.always_run_actions"
                       > いつでも
                     </label>
-                    <label @click="changeAlwaysRunActions(false)" class="btn btn-primary text-center d-flex justify-content-center prevent-default-label">
+                    <label @click="changeAlwaysRunActions(false)" :class="`${!streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label`">
                       <input
                         type="radio"
                         name="always_run_actions"
@@ -121,7 +119,7 @@
               <div class="form-group">
                 <label class="fw-300">フォルダー</label>
                 <div class="flex-grow-1">
-                  <select v-model="streamRouteFormData.folder_id" class="form-control fw-300" name="site[sxfolder_id]">
+                  <select v-model="streamRouteFormData.folder_id" class="form-control fw-300">
                     <option v-for="(folder, index) in folder_options" :key="index" :value="folder.id">
                       {{ folder.name }}
                     </option>
@@ -141,17 +139,18 @@
   </ValidationObserver>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import Util from '@/core/util';
 
 export default {
-  props: ['folder_options'],
+  props: ['folder_options', 'original_stream_route'],
   data() {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       loading: true,
       streamRouteFormData: {
+        id: null,
         name: null,
         qr_title: null,
         run_add_friend_actions: false,
@@ -163,32 +162,47 @@ export default {
 
   async beforeMount() {
     this.streamRouteFormData.folder_id = Util.getParamFromUrl('folder_id');
+    if (this.original_stream_route) {
+      this.streamRouteFormData = {
+        id: this.original_stream_route.id,
+        name: this.original_stream_route.name,
+        qr_title: this.original_stream_route.qr_title,
+        run_add_friend_actions: this.original_stream_route.run_add_friend_actions,
+        always_run_actions: this.original_stream_route.always_run_actions,
+        folder_id: this.original_stream_route.folder_id
+      };
+    }
     this.loading = false;
   },
 
   computed: {
-    formAction() {
-      return `${this.rootPath}/user/sites`;
-    },
-    ...mapState('site', {
-      folders: state => state.folders
-    })
   },
 
   methods: {
     ...mapActions('streamRoute', [
-      'createStreamRoute'
+      'createStreamRoute', 'updateStreamRoute'
     ]),
 
     async onSubmit(e) {
-      const formData = _.pick(this.streamRouteFormData, ['name', 'qr_title', 'run_add_friend_actions', 'always_run_actions', 'folder_id']);
-      this.createStreamRoute(formData)
-        .then(response => {
-          Util.showSuccessThenRedirect('create success!', `${this.rootPath}/user/`);
-        })
-        .catch(error => {
-          window.toastr.error(error.responseJSON.message);
-        });
+      const formData = _.pick(this.streamRouteFormData, ['id', 'name', 'qr_title', 'run_add_friend_actions', 'always_run_actions', 'folder_id']);
+
+      if (formData.id) {
+        this.updateStreamRoute(formData)
+          .then(response => {
+            Util.showSuccessThenRedirect('流入経路の変更は完了しました', `${this.rootPath}/user/`);
+          })
+          .catch(error => {
+            window.toastr.error(error.responseJSON.message);
+          });
+      } else {
+        this.createStreamRoute(formData)
+          .then(response => {
+            Util.showSuccessThenRedirect('流入経路の作成は完了しました', `${this.rootPath}/user/`);
+          })
+          .catch(error => {
+            window.toastr.error(error.responseJSON.message);
+          });
+      }
     },
 
     changeRunAddFriendActions(value) {
