@@ -49,16 +49,19 @@
             </div>
 
             <div class=" form-group">
-              <label for="action_id">アクション</label>
-              <div id="action_selector">
+              <div class="form-group">
                 <div class="has-modal-xl">
                   <div class="row">
-                    <div class="col-sm-4">
-                      <span class="btn btn-warning btn-sm btn-block"><i class="glyphicon glyphicon-flash"></i> アクションを設定する</span>
+                    <div class="col-sm-8">
+                      <action-editor-custom
+                        :requiredLabel="requiredLabel"
+                        :showTitle="showTitle"
+                        :showLaunchMessage="false"
+                        :value="streamRouteFormData.actionData[0]"
+                        @input="updateAction"
+                      />
                     </div>
-                    <div class="col-sm-4"></div>
                   </div>
-                  <input type="hidden" name="action_id" value="0">
                 </div>
               </div>
             </div>
@@ -155,7 +158,8 @@ export default {
         qr_title: null,
         run_add_friend_actions: false,
         always_run_actions: true,
-        folder_id: null
+        folder_id: null,
+        actionData: []
       }
     };
   },
@@ -169,10 +173,15 @@ export default {
         qr_title: this.original_stream_route.qr_title,
         run_add_friend_actions: this.original_stream_route.run_add_friend_actions,
         always_run_actions: this.original_stream_route.always_run_actions,
-        folder_id: this.original_stream_route.folder_id
+        folder_id: this.original_stream_route.folder_id,
+        actionData: this.original_stream_route.actions
       };
     }
     this.loading = false;
+  },
+
+  provide() {
+    return { parentValidator: this.$validator };
   },
 
   computed: {
@@ -184,8 +193,10 @@ export default {
     ]),
 
     async onSubmit(e) {
+      const result = await this.$validator.validateAll();
+      if (!result) return;
       const formData = _.pick(this.streamRouteFormData, ['id', 'name', 'qr_title', 'run_add_friend_actions', 'always_run_actions', 'folder_id']);
-
+      formData.actions = [this.streamRouteFormData.actionData];
       if (formData.id) {
         this.updateStreamRoute(formData)
           .then(response => {
@@ -211,6 +222,10 @@ export default {
 
     changeAlwaysRunActions(value) {
       this.streamRouteFormData.always_run_actions = value;
+    },
+
+    updateAction(actions) {
+      this.streamRouteFormData.actionData = actions;
     }
   }
 };
@@ -222,6 +237,5 @@ export default {
     color: #000;
     border-color: #adadad;
     box-shadow: unset;
-
   }
 </style>
