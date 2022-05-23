@@ -61,6 +61,9 @@ Rails.application.routes.draw do
   # url click measurement
   get 'sites/:code', to: 'sites#statistic', as: :site_statistic
 
+  # Stream route
+  get 'stream_route/:code', to: 'stream_routes#show'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'

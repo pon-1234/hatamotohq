@@ -30,7 +30,7 @@ class StreamRoute < ApplicationRecord
   belongs_to :folder
   belongs_to :client
 
-  validates :name, uniqueness: { scope: :client_id }
+  validates :name, :code, uniqueness: { scope: :client_id }
 
   before_create do
     self.code = generate_code
@@ -39,7 +39,7 @@ class StreamRoute < ApplicationRecord
   def generate_code
     loop do
       random_code = SecureRandom.alphanumeric(6)
-      break random_code unless StreamRoute.exists?(code: random_code)
+      break random_code unless StreamRoute.where(client_id: client_id).exists?(code: random_code)
     end
   end
 end
