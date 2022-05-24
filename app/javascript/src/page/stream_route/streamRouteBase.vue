@@ -5,8 +5,7 @@
 import liff from '@line/liff';
 
 export default {
-  props: [],
-
+  props: ['code', 'friendship_status_changed', 'added_friend_before'],
   data() {
     return {
       contentKey: 0
@@ -14,22 +13,34 @@ export default {
   },
 
   mounted() {
-    liff
-      .init({
-        liffId: '1657142924-AyEOw4R3'
-      })
+    if (this.added_friend_before === 'true') return;
+    liff.init({ liffId: '1657161444-0K6jEMn1' })
       .then(() => {
         if (!liff.isLoggedIn()) {
-          alert('login')
-          // TODO 
-          // Need to change new redirect url
-          liff.login({ bot_prompt: 'normal', hoangtestaaaaaaaaaaa: 'let_starttttttt', redirectUri: "https://fbc8-123-25-30-176.ngrok.io/stream_route/facebook?a=1&b=2&c=3" });
+          liff.login({ bot_prompt: 'normal', redirectUri: `https://4c1b-58-187-180-50.ngrok.io/stream_route/${this.code}` });
         } else {
-          alert('Ok roi')
-          const userId = liff.getContext().userId;
-          // TODO 
-          // Need redirect to new url to save friend data
-          alert(userId);
+          liff.getFriendship().then((data) => {
+            // in case added officer account as friend
+            if (data.friendFlag) {
+              const userId = liff.getContext().userId;
+              if (this.friendship_status_changed === 'true') {
+                alert('first add time');
+                // for first time officer account is added as friend
+                window.location.href = `https://4c1b-58-187-180-50.ngrok.io/stream_route/${this.code}/?line_user_id=${userId}&friendship_status_changed=true&added_friend_before=true`;
+              } else {
+                alert('added friend before');
+                // nexttime when stream route link is accessed
+                // Only available when chose アクションの実行 -> いつでも
+                // need to add added_friend_before param to avoid infinite loop
+                window.location.href = `https://4c1b-58-187-180-50.ngrok.io/stream_route/${this.code}/?line_user_id=${userId}&added_friend_before=true`;
+              }
+            } else {
+              // if have not add officer account as friend yet then logout and back to login screen
+              // Maybe need create a popup to explain and guide for users
+              liff.logout();
+              liff.login({ bot_prompt: 'normal', redirectUri: `https://4c1b-58-187-180-50.ngrok.io/stream_route/${this.code}` });
+            }
+          });
         }
       })
       .catch((err) => {
@@ -38,15 +49,9 @@ export default {
   },
 
   computed: {
-    // primaryLabel() {
-    //   return this.type === 'scenario' ? 'シナリオ' : '一斉配信';
-    // }
   },
 
   methods: {
-    // forceRerender() {
-    //   this.contentKey++;
-    // },
   }
 };
 </script>
