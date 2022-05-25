@@ -33,6 +33,7 @@
     "@ckeditor/ckeditor5-typing": "^26.0.0",
     "@ckeditor/ckeditor5-upload": "^26.0.0",
     "@ckeditor/ckeditor5-vue2": "^1.0.5",
+    "@line/liff": "^2.20.0",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.1.4-1",
