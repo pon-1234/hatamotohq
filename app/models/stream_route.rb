@@ -42,4 +42,12 @@ class StreamRoute < ApplicationRecord
       break random_code unless StreamRoute.where(client_id: client_id).exists?(code: random_code)
     end
   end
+
+  def actions_include_scenarios?
+    return false if actions.blank?
+    actions_body = actions.first
+    actions_body.extend Hashie::Extensions::DeepLocate
+    actions_body = actions_body.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('scenario') }
+    actions_body.present?
+  end
 end
