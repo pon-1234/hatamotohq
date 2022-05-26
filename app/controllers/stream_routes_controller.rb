@@ -5,19 +5,17 @@ class StreamRoutesController < ApplicationController
   RETRY_DELAY = 0.5
 
   def show
+    if params['liff.state'] && params['liff.state'].include?('code=')
+      params[:code] = params['liff.state'].split('code=').last
+    end
     @stream_route = StreamRoute.find_by code: params[:code]
     if params[:friendship_status_changed] && params[:line_user_id]
       update_source_for_line_friend
-      if @line_friend.run_add_friend_actions && !@stream_route.actions_include_scenarios?
-        # Need run add friend scenarios before run stream route actions
-        AcquireFriendJob.perform_later(@line_friend.id)
-      end
-      # if stream route actions include any scenario then only run stream route actions anyway
-      StreamRouteActionHandlerJob.perform_later(@line_friend, @stream_route.actions.first['data']) if @stream_route.actions.present?
+      # Logic to run actions is included in after_create_commit callback in the line_friend model 
     elsif params[:line_user_id] && @stream_route.always_run_actions
       # in case chose アクションの実行 -> いつでも then always run actions everytime user access the link
       @line_friend = LineFriend.find_by!(line_user_id: params[:line_user_id])
-      StreamRouteActionHandlerJob.perform_later(@line_friend, @stream_route.actions.first['data']) if @stream_route.actions.present?      
+      StreamRouteActionHandlerJob.perform_later(@line_friend, @stream_route.actions.first['data']) if @stream_route.actions.present?
     end
   end
 

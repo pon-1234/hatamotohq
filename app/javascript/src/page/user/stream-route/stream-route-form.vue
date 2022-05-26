@@ -6,7 +6,7 @@
       enctype="multipart/form-data"
     >
       <input type="hidden" name="authenticity_token" :value="csrfToken" />
-      <div class="mxw-1200">
+      <div>
         <div class="card">
           <div class="card-body">
             <div class="form-border">

@@ -3,7 +3,7 @@
     <div class="alert alert-success" role="alert">
       <h4 class="alert-heading">友だち追加完了</h4>
       <p class="py-2">
-        お答えありがとうございました！
+        ありがとうございました！
       </p>
       <hr>
       <p class="mb-0">上部✖︎ボタンを押して終了してください</p>
@@ -30,7 +30,7 @@ export default {
     liff.init({ liffId: process.env.LIFF_ID })
       .then(() => {
         if (!liff.isLoggedIn()) {
-          liff.login({ bot_prompt: 'normal', redirectUri: `${this.rootPath}/stream_route/${this.code}` });
+          liff.login({ bot_prompt: 'aggressive', redirectUri: `${this.rootPath}/stream_route/${this.code}` });
         } else {
           liff.getFriendship().then((data) => {
             // in case added officer account as friend

@@ -4,6 +4,9 @@ class User::StreamRoutesController < User::ApplicationController
   before_action :load_folders, only: %i(new edit)
   before_action :load_stream_route, only: %i(edit update)
 
+  def show
+  end
+
   def new; end
 
   def create
