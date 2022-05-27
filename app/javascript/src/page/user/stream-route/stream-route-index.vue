@@ -53,7 +53,7 @@
                   </td>
 
                   <td class="">
-                    <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0].data.actions"></ChoseActionsPresentor>
+                    <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0] ? streamRoute.actions[0].data.actions : {}"></ChoseActionsPresentor>
                     <span v-else>-</span>
                   </td>
                   <td>
@@ -61,6 +61,7 @@
                   </td>
                   <td>
                     <span class="text-nowrap">{{streamRoute.friend_count}}人</span>
+                    <a class="btn btn-default border p-1" :href="`${rootPath}/user/stream_routes/${streamRoute.id}`">詳細</a>
                   </td>
                   <td>
                     <div class="text-sm text-nowrap">{{streamRoute.created_at | formatted_time}}</div>
@@ -80,9 +81,8 @@
                       </button>
                       <div class="dropdown-menu">
                         <a
-                          role="button"
                           class="dropdown-item"
-                          @click="toggleUpdateSiteItem(index)"
+                          :href="`${rootPath}/user/stream_routes/${streamRoute.id}/edit`"
                         >
                         編集する
                         </a>
@@ -90,8 +90,8 @@
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
-                          data-target="#modalDeleteSite"
-                          @click="curSiteIndex = index"
+                          data-target="#modalCopyStreamRoute"
+                          @click="curStreamRouteIndex = index"
                         >
                           複製する
                         </a>
@@ -99,8 +99,8 @@
                           role="button"
                           class="dropdown-item"
                           data-toggle="modal"
-                          data-target="#modalDeleteSite"
-                          @click="curSiteIndex = index"
+                          data-target="#modalDeleteStreamRoute"
+                          @click="curStreamRouteIndex = index"
                         >
                           削除する
                         </a>
@@ -133,20 +133,30 @@
     </modal-confirm>
     <!-- END: Delete folder modal -->
 
-    <!-- START: Delete site modal -->
     <modal-confirm
-      title="このサイトを削除してもよろしいですか？"
-      id="modalDeleteSite"
+      title="この流入経路を削除してもよろしいですか？"
+      id="modalDeleteStreamRoute"
       type="delete"
-      @confirm="submitDeleteSite"
+      @confirm="submitDeleteStreamRoute"
     >
       <template v-slot:content>
-        <div v-if="curSite">
-          サイト名：<b>{{ curSite.name }}</b>
+        <div v-if="curStreamRoute">
+          流入経路名：<b>{{ curStreamRoute.name }}</b>
         </div>
       </template>
     </modal-confirm>
-    <!-- END: Delete site modal -->
+    <modal-confirm
+      title="この流入経路をコーピーしてもよろしいですか？"
+      id="modalCopyStreamRoute"
+      type="confirm"
+      @confirm="submitCopyStreamRoute"
+    >
+      <template v-slot:content>
+        <div v-if="curStreamRoute">
+          流入経路名：<b>{{ curStreamRoute.name }}</b>
+        </div>
+      </template>
+    </modal-confirm>
     <show-qr-code-modal :streamRoute="showQrCodeOfStreamRoute"></show-qr-code-modal>
   </div>
 </template>
@@ -161,8 +171,7 @@ export default {
       isPc: true,
       listUpdate: false,
       selectedFolderIndex: 0,
-      selectedSiteIndex: null,
-      curSiteIndex: null,
+      curStreamRouteIndex: null,
       loading: false,
       contentKey: 0,
       showQrCodeOfStreamRoute: null
@@ -170,7 +179,6 @@ export default {
   },
   async beforeMount() {
     await this.getStreamRoutes();
-    await this.getSites();
     const folderId = Util.getParamFromUrl('folder_id');
     setTimeout(() => {
       if (folderId) {
@@ -185,10 +193,6 @@ export default {
   },
 
   computed: {
-    // ...mapState('site', {
-    //   folders: state => state.folders
-    // }),
-
     ...mapState('streamRoute', {
       folders: state => state.foldersIncludeStreamRoutes
     }),
@@ -197,21 +201,19 @@ export default {
       return this.folders[this.selectedFolderIndex];
     },
 
-    curSite() {
-      return this.curFolder && this.curSiteIndex ? this.curFolder.sites[this.curSiteIndex] : null;
+    curStreamRoute() {
+      return this.curFolder && this.curStreamRouteIndex ? this.curFolder.stream_routes[this.curStreamRouteIndex] : null;
     }
   },
   methods: {
-    ...mapActions('site', [
-      'getSites',
+    ...mapActions('streamRoute', [
+      'getStreamRoutes',
+      'deleteStreamRoute',
+      'copyStreamRoute',
       'deleteFolder',
       'createFolder',
-      'updateFolder',
-      'updateSite',
-      'deleteSite'
+      'updateFolder'
     ]),
-
-    ...mapActions('streamRoute', ['getStreamRoutes']),
 
     onSelectedFolderChanged(index) {
       this.selectedFolderIndex = index;
@@ -250,34 +252,13 @@ export default {
       }
     },
 
-    toggleUpdateSiteItem(no) {
-      if (this.selectedSiteIndex === no) this.selectedSiteIndex = null;
-      else this.selectedSiteIndex = no;
-    },
-
-    async submitUpdateSite(site) {
-      if (!site.notChange) {
-        const response = await this.updateSite(site);
-        if (response) {
-          window.toastr.success('サイト名の変更は完了しました。');
-        } else {
-          window.toastr.error('サイト名の変更は失敗しました。');
-        }
-        this.selectedSiteIndex = null;
-        await this.getSites();
-      } else {
-        this.selectedSiteIndex = null;
-      }
-      this.forceRerender();
-    },
-
-    async submitDeleteSite() {
-      const response = await this.deleteSite(this.curSite.id);
-      const url = `${this.rootPath}/user/sites?folder_id=${this.curFolder.id}`;
+    async submitDeleteStreamRoute() {
+      const response = await this.deleteStreamRoute(this.curStreamRoute.id);
+      const url = `${this.rootPath}/user/stream_routes?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('サイトの削除は完了しました。', url);
+        Util.showSuccessThenRedirect('流入経路の削除は完了しました。', url);
       } else {
-        window.toastr.error('サイトの削除は失敗しました。');
+        window.toastr.error('流入経路の削除は失敗しました。');
       }
       this.forceRerender();
     },
@@ -289,6 +270,17 @@ export default {
     copyUrl(url) {
       navigator.clipboard.writeText(url);
       window.toastr.success('コピーしました');
+    },
+
+    async submitCopyStreamRoute() {
+      const response = await this.copyStreamRoute(this.curStreamRoute.id);
+      if (response) {
+        window.toastr.success('この流入経路をコーピは完了しました。');
+        const url = `${this.rootPath}/user/stream_routes?folder_id=${this.curFolder.id}`;
+        Util.showSuccessThenRedirect('この流入経路をコーピは完了しました。', url);
+      } else {
+        window.toastr.error('この流入経路をコーピは失敗しました。');
+      }
     }
   }
 };

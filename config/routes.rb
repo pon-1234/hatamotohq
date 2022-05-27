@@ -180,7 +180,11 @@ Rails.application.routes.draw do
           get :broadcasts, defaults: { format: :json }
         end
       end
-      resources :stream_routes
+      resources :stream_routes do
+        member do
+          post 'copy'
+        end
+      end
     end
   end
 

@@ -57,7 +57,7 @@
                         :requiredLabel="requiredLabel"
                         :showTitle="showTitle"
                         :showLaunchMessage="false"
-                        :value="streamRouteFormData.actionData[0]"
+                        :value="streamRouteFormData.actionData ? streamRouteFormData.actionData[0] : {}"
                         @input="updateAction"
                       />
                     </div>

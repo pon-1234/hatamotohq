@@ -41,8 +41,6 @@ export default {
   },
 
   methods: {
-    // ...mapActions('template', ['getTemplate']),
-    // ...mapActions('preview', ['setMessages']),
 
     forceRerender() {
       this.contentKey++;

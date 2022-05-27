@@ -2,7 +2,7 @@
 
 class User::StreamRoutesController < User::ApplicationController
   before_action :load_folders, only: %i(new edit)
-  before_action :load_stream_route, only: %i(show edit update)
+  before_action :load_stream_route, only: %i(show edit update destroy copy)
 
   def index
     if request.format.json?
@@ -53,6 +53,19 @@ class User::StreamRoutesController < User::ApplicationController
         end
       end
     end
+  end
+
+  def destroy
+    @stream_route.destroy!
+    render_success
+  end
+
+  def copy
+    duplicated_stream_route = @stream_route.dup
+    duplicated_stream_route.name = "#{duplicated_stream_route.name}（コピー）" 
+    duplicated_stream_route.code = nil
+    duplicated_stream_route.save
+    render_success
   end
 
   private
