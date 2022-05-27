@@ -28,5 +28,15 @@ export default {
       contentType: 'application/json',
       cache: false
     });
+  },
+
+  getStreamRoutes: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
   }
 };

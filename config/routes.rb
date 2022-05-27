@@ -63,7 +63,7 @@ Rails.application.routes.draw do
 
   # Stream route
   get 'stream_route/:code', to: 'stream_routes#show'
-  get '/stream_route_detail', to: 'stream_routes#show'
+  get '/stream_route_detail', to: 'stream_routes#show', as: 'stream_route_detail'
 
   # User
   constraints Subdomain::UserConstraint.new do
@@ -180,7 +180,7 @@ Rails.application.routes.draw do
           get :broadcasts, defaults: { format: :json }
         end
       end
-      resources :stream_routes, only: [:show, :new, :create, :edit, :update]
+      resources :stream_routes
     end
   end
 

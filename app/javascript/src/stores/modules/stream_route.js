@@ -2,6 +2,7 @@ import StreamRouteApi from '../api/stream_route_api';
 
 export const state = {
   friendList: [],
+  foldersIncludeStreamRoutes: [],
   totalRows: 0,
   perPage: 0,
   queryParams: {
@@ -13,6 +14,10 @@ export const state = {
 export const mutations = {
   setFriendList(state, friends) {
     state.friendList = friends;
+  },
+
+  setFoldersIncludeStreamRoutes(state, foldersIncludeStreamRoutes) {
+    state.foldersIncludeStreamRoutes = foldersIncludeStreamRoutes;
   },
 
   setMeta(state, meta) {
@@ -55,6 +60,20 @@ export const actions = {
       const response = await StreamRouteApi.getDetail(params);
       context.commit('setFriendList', response.data);
       context.commit('setMeta', response.meta);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getStreamRoutes(context) {
+    try {
+      // const params = {
+      //   page: state.queryParams.page,
+      //   q: _.omit(state.queryParams, 'page')
+      // };
+      const response = await StreamRouteApi.getStreamRoutes();
+      console.log(response);
+      context.commit('setFoldersIncludeStreamRoutes', response);
     } catch (error) {
       console.log(error);
     }

@@ -51,4 +51,9 @@ class StreamRoute < ApplicationRecord
     actions_body = actions_body.deep_locate -> (key, value, object) { key.eql?('type') && value.eql?('scenario') }
     actions_body.present?
   end
+
+  def stream_route_url
+    routes = Rails.application.routes.url_helpers
+    routes.stream_route_detail_url(stream_route_code: self.code)
+  end
 end

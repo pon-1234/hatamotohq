@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="d-flex">
         <folder-left
-          type="site"
+          type="stream_route"
           :data="folders"
           :isPc="isPc"
           :selectedFolder="selectedFolderIndex"
@@ -14,7 +14,7 @@
         <div class="flex-grow-1" :key="contentKey">
           <a
             v-if="folders && folders.length && curFolder"
-            :href="`${rootPath}/user/sites/new?folder_id=${curFolder.id}`"
+            :href="`${rootPath}/user/stream_routes/new?folder_id=${curFolder.id}`"
             class="btn btn-primary"
           >
             <i class="uil-plus"></i> 新規登録
@@ -23,80 +23,95 @@
             <table class="table table-centered mb-0">
               <thead class="thead-light">
                 <tr>
-                  <th class="fw-400">サイト名</th>
+                  <th class="fw-200">流入経路名称</th>
+                  <th>アクション</th>
+                  <th>友達追加時設定</th>
+                  <th>集計</th>
+                  <th>登録日時</th>
                   <th>フォルダー</th>
-                  <th>訪問/発行</th>
-                  <th>短縮登録</th>
-                  <th>作成日</th>
-                  <th></th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(site, index) in curFolder.sites" v-bind:key="site.id">
-                  <td>
-                    <div class="d-flex justify-content-between fw-400">
-                      <div class="text-truncate w-75">
-                        <site-update-item
-                        v-if="selectedSiteIndex === index"
-                        :data="site"
-                        @editSite="submitUpdateSite"
-                        ></site-update-item>
-                        <div v-else class="d-flex flex-column">
-                          <span>{{site.name}}</span>
-                          <a :href="`${site.url}`" target="_blank">{{ site.url}}</a>
-                        </div>
-                      </div>
+                <tr v-for="(streamRoute, index) in curFolder.stream_routes" v-bind:key="streamRoute.id">
 
-                      <div class="btn-group">
-                        <button
-                          type="button"
-                          class="btn btn-light btn-sm dropdown-toggle"
-                          data-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          操作 <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a
-                            role="button"
-                            class="dropdown-item"
-                            @click="toggleUpdateSiteItem(index)"
-                          >
-                          名前を変える
-                          </a>
-                          <a
-                            role="button"
-                            class="dropdown-item"
-                            data-toggle="modal"
-                            data-target="#modalDeleteSite"
-                            @click="curSiteIndex = index"
-                          >
-                            サイトを削除
-                          </a>
-                        </div>
+                  <td style="min-width: 300px;">
+                    <div class="stream-url-text-wrap">
+                      <label for="itemcheck_307640" style="display: block;">
+                          {{streamRoute.name}}
+                      </label>
+                      <div class="input-group input-group-sm d-flex">
+                        <input type="text" class="form-control input-sm" :value="streamRoute.stream_route_url" disabled>
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-default copy-btn" @click="copyUrl(streamRoute.stream_route_url)">
+                            <span class="glyphicon glyphicon-copy uil-copy"></span>
+                          </button>
+                          <a href="" target="_blank" class="btn btn-default qr-btn">QR</a>
+                        </span>
                       </div>
                     </div>
                   </td>
+
                   <td class="">
-                    <span class="text-nowrap">{{ curFolder.name }}</span>
+                    <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0].data.actions"></ChoseActionsPresentor>
+                    <span v-else>-</span>
                   </td>
                   <td>
-                    <span class="text-nowrap">{{ site.visitor_count }} 人 / {{site.receiver_count }} 人</span>
+                    <span class="text-nowrap">{{streamRoute.run_add_friend_actions ? '無視しない' : '無視する'}}</span>
                   </td>
                   <td>
-                    <span class="text-nowrap">{{ site.sending_count }}回</span>
+                    <span class="text-nowrap">{{streamRoute.friend_count}}人</span>
                   </td>
                   <td>
-                    <div class="text-sm text-nowrap">{{ formattedDate(site.created_at) }}</div>
+                    <div class="text-sm text-nowrap">{{streamRoute.created_at | formatted_time}}</div>
                   </td>
                   <td>
-                    <a :href="`/user/sites/${site.id}`"  class="btn btn-sm btn-light">詳細</a>
+                    <div class="text-sm text-nowrap">{{curFolder.name}}</div>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button
+                        type="button"
+                        class="btn btn-light btn-sm dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        操作 <span class="caret"></span>
+                      </button>
+                      <div class="dropdown-menu">
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          @click="toggleUpdateSiteItem(index)"
+                        >
+                        編集する
+                        </a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteSite"
+                          @click="curSiteIndex = index"
+                        >
+                          複製する
+                        </a>
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#modalDeleteSite"
+                          @click="curSiteIndex = index"
+                        >
+                          削除する
+                        </a>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div class="text-center mt-5" v-if="curFolder.sites && curFolder.sites.length === 0">
-              <b>URLはありません。</b>
+            <div class="text-center mt-5" v-if="curFolder.stream_routes && curFolder.stream_routes.length === 0">
+              <b>流入経路はありません。</b>
             </div>
           </div>
         </div>
@@ -152,6 +167,7 @@ export default {
     };
   },
   async beforeMount() {
+    await this.getStreamRoutes();
     await this.getSites();
     const folderId = Util.getParamFromUrl('folder_id');
     setTimeout(() => {
@@ -167,8 +183,12 @@ export default {
   },
 
   computed: {
-    ...mapState('site', {
-      folders: state => state.folders
+    // ...mapState('site', {
+    //   folders: state => state.folders
+    // }),
+
+    ...mapState('streamRoute', {
+      folders: state => state.foldersIncludeStreamRoutes
     }),
 
     curFolder() {
@@ -188,6 +208,8 @@ export default {
       'updateSite',
       'deleteSite'
     ]),
+
+    ...mapActions('streamRoute', ['getStreamRoutes']),
 
     onSelectedFolderChanged(index) {
       this.selectedFolderIndex = index;
@@ -260,9 +282,23 @@ export default {
 
     formattedDate(date) {
       return Util.formattedDate(date);
+    },
+
+    copyUrl(url) {
+      navigator.clipboard.writeText(url);
+      window.toastr.success('コピーしました');
     }
   }
 };
 </script>
 <style lang="scss">
+  .copy-btn, .qr-btn {
+    padding-top: 4.2px;
+    padding-bottom: 4.2px;
+    border: 1px solid #dee2e6;
+  }
+  .copy-btn {
+    border-left: none;
+  }
+
 </style>

@@ -31,7 +31,7 @@
                 <span>{{site.url}}</span>
               </td>
               <td :class="`d-none ${showConfigUrlPanel ? '' : 'd-md-table-cell'}`" v-show="!showConfigUrlPanel">
-                <div v-html="getActionsOfUrl(site)"></div>
+                <ChoseActionsPresentor :actions="getActionOfSite(site)"></ChoseActionsPresentor>
               </td>
               <td>
                 <div class="float-right d-flex flex-column" v-if="!showConfigUrlPanel">
@@ -215,48 +215,10 @@ export default {
     updateAction(actions) {
       this.actionData = actions;
     },
-    getActionsOfUrl(site) {
+    getActionOfSite(site) {
       const siteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === site.id);
-      let result = '';
-      if (!siteMeasurement || !siteMeasurement.actions.length || siteMeasurement.actions[0] === null) return '';
-      siteMeasurement.actions[0].data.actions.forEach(action => {
-        switch (action.type) {
-        case 'text':
-          result += `テキスト[${action.content.text}]を送信 <br>`;
-          break;
-        case 'template':
-          result += `テンプレート[${action.content.name}]を送信 <br>`;
-          break;
-        case 'scenario':
-          result += `シナリオ[${action.content.title}]を送信 <br>`;
-          break;
-        case 'email':
-          result += `メール通知[${action.content.text}]を送信 <br>`;
-          break;
-        case 'tag':
-          result += 'タグ操作を送信 <br>';
-          break;
-        case 'reminder':
-          result += `リマインダ操作[${action.content.reminder.name}]を送信 <br>`;
-          break;
-        case 'scoring':
-          result += `スコアリング操作[${action.content.variable.name}]を送信 <br>`;
-          break;
-        case 'rsv_intro':
-          result += '予約・紹介送信を送信 <br>';
-          break;
-        case 'rsv_contact':
-          result += '予約・お問い合わせを送信 <br>';
-          break;
-        case 'rsv_cancel_intro':
-          result += '予約・空室待ちキャンセルを送信 <br>';
-          break;
-        case 'service_review':
-          result += 'サービス評価フォームを送信 <br>';
-          break;
-        }
-      });
-      return result;
+      if (!siteMeasurement || !siteMeasurement.actions.length || siteMeasurement.actions[0] === null) return [];
+      return siteMeasurement.actions[0].data.actions;
     },
     forceRerenderActionForm() {
       this.contentKey++;
