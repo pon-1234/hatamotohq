@@ -46,7 +46,7 @@
                           <button type="button" class="btn btn-default copy-btn" @click="copyUrl(streamRoute.stream_route_url)">
                             <span class="glyphicon glyphicon-copy uil-copy"></span>
                           </button>
-                          <a href="" target="_blank" class="btn btn-default qr-btn">QR</a>
+                          <a href="" target="_blank" class="btn btn-default qr-btn" @click="showQrCodeOfStreamRoute = streamRoute" data-toggle="modal" data-target="#modalTemplatePreview">QR</a>
                         </span>
                       </div>
                     </div>
@@ -147,6 +147,7 @@
       </template>
     </modal-confirm>
     <!-- END: Delete site modal -->
+    <show-qr-code-modal :streamRoute="showQrCodeOfStreamRoute"></show-qr-code-modal>
   </div>
 </template>
 <script>
@@ -163,7 +164,8 @@ export default {
       selectedSiteIndex: null,
       curSiteIndex: null,
       loading: false,
-      contentKey: 0
+      contentKey: 0,
+      showQrCodeOfStreamRoute: null
     };
   },
   async beforeMount() {
