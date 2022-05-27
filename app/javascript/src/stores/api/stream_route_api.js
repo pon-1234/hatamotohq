@@ -17,5 +17,16 @@ export default {
       contentType: 'application/json',
       dataType: 'json'
     });
+  },
+
+  getDetail: (params) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/${params.q.streamRouteId}`,
+      method: 'GET',
+      dataType: 'json',
+      data: params,
+      contentType: 'application/json',
+      cache: false
+    });
   }
 };

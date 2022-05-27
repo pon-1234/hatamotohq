@@ -2,9 +2,15 @@
 
 class User::StreamRoutesController < User::ApplicationController
   before_action :load_folders, only: %i(new edit)
-  before_action :load_stream_route, only: %i(edit update)
+  before_action :load_stream_route, only: %i(show edit update)
 
   def show
+    respond_to do |format|
+      format.html
+      format.json do
+        @friends = @stream_route.line_friends.page(params[:page])
+      end
+    end
   end
 
   def new; end

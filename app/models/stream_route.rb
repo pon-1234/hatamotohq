@@ -27,6 +27,7 @@
 #  fk_rails_...  (folder_id => folders.id)
 #
 class StreamRoute < ApplicationRecord
+  has_many :line_friends, dependent: :nullify
   belongs_to :folder
   belongs_to :client
 
