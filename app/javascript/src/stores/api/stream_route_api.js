@@ -28,5 +28,31 @@ export default {
       contentType: 'application/json',
       cache: false
     });
+  },
+
+  getStreamRoutes: () => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes`,
+      method: 'GET',
+      dataType: 'json',
+      contentType: 'application/json',
+      cache: false
+    });
+  },
+
+  delete: (id) => {
+    return window.$.ajax({
+      url: process.env.MIX_ROOT_PATH + '/user/stream_routes/' + id,
+      method: 'DELETE'
+    });
+  },
+
+  copy: (id) => {
+    return window.$.ajax({
+      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/${id}/copy`,
+      method: 'POST',
+      contentType: 'application/json',
+      dataType: 'json'
+    });
   }
 };
