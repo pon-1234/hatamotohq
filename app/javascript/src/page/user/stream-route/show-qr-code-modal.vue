@@ -1,12 +1,12 @@
 <template>
   <div
-    id="modalTemplatePreview"
+    id="modalShowQRCode"
     class="modal fade"
     tabindex="-1"
     role="dialog"
     aria-labelledby="info-header-modalLabel"
     aria-hidden="true"
-    ref="modalTemplatePreview"
+    ref="modalShowQRCode"
   >
     <div class="modal-dialog">
       <div class="modal-content">
@@ -37,18 +37,15 @@ export default {
   },
 
   mounted() {
-    $(this.$refs.modalTemplatePreview).on('show.bs.modal', this.onShow);
+    $(this.$refs.modalShowQRCode).on('show.bs.modal', this.onShow);
   },
 
   methods: {
-
     forceRerender() {
       this.contentKey++;
     },
 
     async onShow() {
-      this.template = await this.getTemplate(this.templateId);
-      this.setMessages(this.template.messages);
       this.forceRerender();
     }
   }

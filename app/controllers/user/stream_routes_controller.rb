@@ -5,12 +5,11 @@ class User::StreamRoutesController < User::ApplicationController
   before_action :load_stream_route, only: %i(show edit update destroy copy)
 
   def index
-    if request.format.json?
-      @folders = Folder.accessible_by(current_ability).type_stream_route.includes([stream_routes: [:line_friends]])
-    end
     respond_to do |format|
       format.html
-      format.json
+      format.json do
+        @folders = Folder.accessible_by(current_ability).type_stream_route.includes([stream_routes: [:line_friends]])
+      end
     end
   end
 

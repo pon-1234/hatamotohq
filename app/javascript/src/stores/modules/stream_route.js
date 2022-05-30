@@ -100,12 +100,7 @@ export const actions = {
 
   async getStreamRoutes(context) {
     try {
-      // const params = {
-      //   page: state.queryParams.page,
-      //   q: _.omit(state.queryParams, 'page')
-      // };
       const response = await StreamRouteApi.getStreamRoutes();
-      console.log(response);
       context.commit('setFoldersIncludeStreamRoutes', response);
     } catch (error) {
       console.log(error);

@@ -34,10 +34,9 @@
               </thead>
               <tbody>
                 <tr v-for="(streamRoute, index) in curFolder.stream_routes" v-bind:key="streamRoute.id">
-
-                  <td style="min-width: 300px;">
+                  <td class="mw-300">
                     <div class="stream-url-text-wrap">
-                      <label for="itemcheck_307640" style="display: block;">
+                      <label style="display: block;">
                           {{streamRoute.name}}
                       </label>
                       <div class="input-group input-group-sm d-flex">
@@ -46,7 +45,7 @@
                           <button type="button" class="btn btn-default copy-btn" @click="copyUrl(streamRoute.stream_route_url)">
                             <span class="glyphicon glyphicon-copy uil-copy"></span>
                           </button>
-                          <a href="" target="_blank" class="btn btn-default qr-btn" @click="showQrCodeOfStreamRoute = streamRoute" data-toggle="modal" data-target="#modalTemplatePreview">QR</a>
+                          <a href="" target="_blank" class="btn btn-default qr-btn" @click="showQrCodeOfStreamRoute = streamRoute" data-toggle="modal" data-target="#modalShowQRCode">QR</a>
                         </span>
                       </div>
                     </div>
@@ -169,7 +168,6 @@ export default {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
       isPc: true,
-      listUpdate: false,
       selectedFolderIndex: 0,
       curStreamRouteIndex: null,
       loading: false,
@@ -261,10 +259,6 @@ export default {
         window.toastr.error('流入経路の削除は失敗しました。');
       }
       this.forceRerender();
-    },
-
-    formattedDate(date) {
-      return Util.formattedDate(date);
     },
 
     copyUrl(url) {

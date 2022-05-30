@@ -200,7 +200,7 @@ export default {
       if (formData.id) {
         this.updateStreamRoute(formData)
           .then(response => {
-            Util.showSuccessThenRedirect('流入経路の変更は完了しました', `${this.rootPath}/user/`);
+            Util.showSuccessThenRedirect('流入経路の変更は完了しました', `${this.rootPath}/user/stream_routes?folder_id=${formData.folder_id}`);
           })
           .catch(error => {
             window.toastr.error(error.responseJSON.message);
@@ -208,7 +208,7 @@ export default {
       } else {
         this.createStreamRoute(formData)
           .then(response => {
-            Util.showSuccessThenRedirect('流入経路の作成は完了しました', `${this.rootPath}/user/`);
+            Util.showSuccessThenRedirect('流入経路の作成は完了しました', `${this.rootPath}/user/stream_routes?folder_id=${formData.folder_id}`);
           })
           .catch(error => {
             window.toastr.error(error.responseJSON.message);
