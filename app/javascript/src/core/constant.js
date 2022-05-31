@@ -390,19 +390,18 @@ export const ActionObjectsCollect = [
       uri: 'tel://0987654321'
     }
   },
-
-  {
-    id: 3,
-    type: 'datetimepicker',
-    title: '時間を選択する',
-    description: 'When a control associated with this action is tapped, a postback event is returned via webhook with the date and time selected by the user from the date and time selection dialog. The datetime picker action does not support time zones.',
-    format: {
-      type: 'datetimepicker',
-      label: 'Select date',
-      data: 'storeId=12345',
-      mode: 'datetime'
-    }
-  },
+  // {
+  //   id: 3,
+  //   type: 'datetimepicker',
+  //   title: '時間を選択する',
+  //   description: 'When a control associated with this action is tapped, a postback event is returned via webhook with the date and time selected by the user from the date and time selection dialog. The datetime picker action does not support time zones.',
+  //   format: {
+  //     type: 'datetimepicker',
+  //     label: 'Select date',
+  //     data: 'storeId=12345',
+  //     mode: 'datetime'
+  //   }
+  // },
   {
     id: 4,
     type: 'cameraRoll',
