@@ -14,12 +14,18 @@
 import liff from '@line/liff';
 
 export default {
-  props: ['code', 'friendship_status_changed', 'added_friend_before'],
+  props: ['stream_route_code', 'friendship_status_changed', 'added_friend_before'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
-      contentKey: 0
+      rootPath: process.env.MIX_ROOT_PATH
     };
+  },
+
+  created() {
+    // When populate stream_route_code into redirectUri of liff.login,
+    // redundant callback request is generated from liff lead to not expect errors happen
+    // So use localStorage to save stream_route_code for using to another requests later
+    if (this.stream_route_code) localStorage.setItem('currentStreamRouteCode', this.stream_route_code);
   },
 
   mounted() {
@@ -30,7 +36,7 @@ export default {
     liff.init({ liffId: process.env.LIFF_ID })
       .then(() => {
         if (!liff.isLoggedIn()) {
-          liff.login({ bot_prompt: 'aggressive', redirectUri: `${this.rootPath}/stream_route/${this.code}` });
+          liff.login({ bot_prompt: 'aggressive' });
         } else {
           liff.getFriendship().then((data) => {
             // in case added officer account as friend
@@ -38,18 +44,23 @@ export default {
               const userId = liff.getContext().userId;
               if (this.friendship_status_changed === 'true') {
                 // for first time officer account is added as friend
-                window.location.href = `${this.rootPath}/stream_route/${this.code}/?line_user_id=${userId}&friendship_status_changed=true&added_friend_before=true`;
+                const currentStreamRouteCode = localStorage.getItem('currentStreamRouteCode');
+                localStorage.removeItem('currentStreamRouteCode');
+                window.location.href = `${this.rootPath}/stream_route_detail/${currentStreamRouteCode}?line_user_id=${userId}&friendship_status_changed=true&added_friend_before=true`;
               } else {
                 // nexttime when stream route link is accessed
                 // Only available when chose アクションの実行 -> いつでも
                 // need to add added_friend_before param to avoid infinite loop
-                window.location.href = `${this.rootPath}/stream_route/${this.code}/?line_user_id=${userId}&added_friend_before=true`;
+                const currentStreamRouteCode = localStorage.getItem('currentStreamRouteCode');
+                localStorage.removeItem('currentStreamRouteCode');
+                window.location.href = `${this.rootPath}/stream_route_detail/${currentStreamRouteCode}?line_user_id=${userId}&added_friend_before=true`;
               }
             } else {
-              // if have not add officer account as friend yet then logout and back to login screen
+              // if have not add officer account as friend yet then logout
+              // User need remove app connection from line app before add officer account from stream route link one more time
               // Maybe need create a popup to explain and guide for users
+              localStorage.removeItem('currentStreamRouteCode');
               liff.logout();
-              liff.login({ bot_prompt: 'normal', redirectUri: `${this.rootPath}/stream_route/${this.code}` });
             }
           });
         }

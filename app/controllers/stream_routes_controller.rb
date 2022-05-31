@@ -5,10 +5,7 @@ class StreamRoutesController < ApplicationController
   RETRY_DELAY = 0.5
 
   def show
-    if params['liff.state'] && params['liff.state'].include?('code=')
-      params[:code] = params['liff.state'].split('code=').last
-    end
-    @stream_route = StreamRoute.find_by code: params[:code]
+    @stream_route = StreamRoute.find_by code: params[:stream_route_code]
     if params[:friendship_status_changed] && params[:line_user_id]
       update_source_for_line_friend
       # Logic to run actions is included in after_create_commit callback in the line_friend model 
