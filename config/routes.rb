@@ -61,6 +61,13 @@ Rails.application.routes.draw do
   # url click measurement
   get 'sites/:code', to: 'sites#statistic', as: :site_statistic
 
+  # Stream route
+  # Sample url set for stream route and QR code: https://example.com/stream_route_detail/V7WHX8
+  # Sample url set for liff app and line login app: https://example.com/stream_route_detail
+  get '/stream_route_detail', to: 'stream_routes#show', as: 'stream_route_detail'
+  # use stream_route_code, but not code as parameter, because line login also return a code parameter
+  get '/stream_route_detail/:stream_route_code', to: 'stream_routes#show', as: 'stream_route_detail_with_code'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -174,6 +181,11 @@ Rails.application.routes.draw do
         member do
           get :scenarios, defaults: { format: :json }
           get :broadcasts, defaults: { format: :json }
+        end
+      end
+      resources :stream_routes do
+        member do
+          post 'copy'
         end
       end
     end

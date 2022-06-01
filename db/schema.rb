@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_061304) do
+ActiveRecord::Schema.define(version: 2022_05_20_092205) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -285,7 +285,9 @@ ActiveRecord::Schema.define(version: 2022_05_16_061304) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.boolean 'tester', default: false
+    t.bigint 'stream_route_id'
     t.index ['line_account_id'], name: 'index_line_friends_on_line_account_id'
+    t.index ['stream_route_id'], name: 'index_line_friends_on_stream_route_id'
     t.index ['tester'], name: 'index_line_friends_on_tester'
   end
 
@@ -645,6 +647,21 @@ ActiveRecord::Schema.define(version: 2022_05_16_061304) do
     t.index ['site_id'], name: 'index_sites_line_friends_on_site_id'
   end
 
+  create_table 'stream_routes', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'folder_id', null: false
+    t.string 'name'
+    t.json 'actions'
+    t.string 'code'
+    t.boolean 'run_add_friend_actions', default: false
+    t.boolean 'always_run_actions', default: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'client_id', null: false
+    t.string 'qr_title'
+    t.index ['client_id'], name: 'index_stream_routes_on_client_id'
+    t.index ['folder_id'], name: 'index_stream_routes_on_folder_id'
+  end
+
   create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
@@ -804,6 +821,7 @@ ActiveRecord::Schema.define(version: 2022_05_16_061304) do
   add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'clients'
   add_foreign_key 'line_friends', 'line_accounts'
+  add_foreign_key 'line_friends', 'stream_routes'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
   add_foreign_key 'pms_reservations', 'line_friends'
@@ -842,6 +860,8 @@ ActiveRecord::Schema.define(version: 2022_05_16_061304) do
   add_foreign_key 'sites', 'folders'
   add_foreign_key 'sites_line_friends', 'line_friends'
   add_foreign_key 'sites_line_friends', 'sites'
+  add_foreign_key 'stream_routes', 'clients'
+  add_foreign_key 'stream_routes', 'folders'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_questions', 'surveys'

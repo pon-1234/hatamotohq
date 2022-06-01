@@ -33,6 +33,8 @@ ja:
         current_password: 現在のパスワード
       site:
         name: 指定のサイト名
+      stream_route:
+        name: 流入経路名称
     models:
       user: ユーザー
       group: グループ
