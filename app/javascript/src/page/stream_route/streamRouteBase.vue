@@ -1,12 +1,22 @@
 <template>
-  <div v-show="added_friend_before == 'true'">
-    <div class="alert alert-success" role="alert">
-      <h4 class="alert-heading">友だち追加完了</h4>
-      <p class="py-2">
-        ありがとうございました！
-      </p>
-      <hr>
-      <p class="mb-0">上部✖︎ボタンを押して終了してください</p>
+  <div>
+    <div v-show="added_friend_before == 'true'">
+      <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">リンクが完了しました</h4>
+        <p class="py-2">
+          ありがとうございました！
+        </p>
+        <hr>
+        <p class="mb-0">上部✖︎ボタンを押して終了してください</p>
+      </div>
+    </div>
+    <div v-show="notAddFriend">
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        リンクに失敗しました
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -17,7 +27,8 @@ export default {
   props: ['stream_route_code', 'friendship_status_changed', 'added_friend_before'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH
+      rootPath: process.env.MIX_ROOT_PATH,
+      notAddFriend: false
     };
   },
 
@@ -61,6 +72,7 @@ export default {
               // Maybe need create a popup to explain and guide for users
               localStorage.removeItem('currentStreamRouteCode');
               liff.logout();
+              this.notAddFriend = true;
             }
           });
         }

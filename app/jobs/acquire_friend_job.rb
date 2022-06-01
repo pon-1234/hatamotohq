@@ -4,7 +4,7 @@ class AcquireFriendJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
 
-  WAIT_FOR_STREAM_ROUTE_UPDATE_TIME = 6  # sleep 6s
+  WAIT_FOR_STREAM_ROUTE_UPDATE_TIME = 5  # sleep 5s
 
   def perform(friend_id)
     sleep WAIT_FOR_STREAM_ROUTE_UPDATE_TIME
