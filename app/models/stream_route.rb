@@ -54,6 +54,6 @@ class StreamRoute < ApplicationRecord
 
   def stream_route_url
     routes = Rails.application.routes.url_helpers
-    routes.stream_route_detail_with_code_url(stream_route_code: self.code)
+    routes.stream_route_detail_with_code_url(stream_route_code: self.code, liff_id: client.line_account.liff_id)
   end
 end
