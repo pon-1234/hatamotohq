@@ -37,6 +37,7 @@ export default {
     // redundant callback request is generated from liff lead to not expect errors happen
     // So use localStorage to save stream_route_code for using to another requests later
     if (this.stream_route_code) localStorage.setItem('currentStreamRouteCode', this.stream_route_code);
+    if (this.liff_id) localStorage.setItem('currentLiffId', this.liff_id);
   },
 
   mounted() {
@@ -44,7 +45,8 @@ export default {
       liff.closeWindow();
       return;
     }
-    liff.init({ liffId: this.liff_id })
+    const liffId = this.liff_id || localStorage.getItem('currentLiffId');
+    liff.init({ liffId: liffId })
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({ bot_prompt: 'aggressive' });
@@ -57,6 +59,7 @@ export default {
                 // for first time officer account is added as friend
                 const currentStreamRouteCode = localStorage.getItem('currentStreamRouteCode');
                 localStorage.removeItem('currentStreamRouteCode');
+                localStorage.removeItem('currentLiffId');
                 window.location.href = `${this.rootPath}/stream_route_detail/${currentStreamRouteCode}?line_user_id=${userId}&friendship_status_changed=true&added_friend_before=true`;
               } else {
                 // nexttime when stream route link is accessed
@@ -64,6 +67,7 @@ export default {
                 // need to add added_friend_before param to avoid infinite loop
                 const currentStreamRouteCode = localStorage.getItem('currentStreamRouteCode');
                 localStorage.removeItem('currentStreamRouteCode');
+                localStorage.removeItem('currentLiffId');
                 window.location.href = `${this.rootPath}/stream_route_detail/${currentStreamRouteCode}?line_user_id=${userId}&added_friend_before=true`;
               }
             } else {
@@ -71,6 +75,7 @@ export default {
               // User need remove app connection from line app before add officer account from stream route link one more time
               // Maybe need create a popup to explain and guide for users
               localStorage.removeItem('currentStreamRouteCode');
+              localStorage.removeItem('currentLiffId');
               liff.logout();
               this.notAddFriend = true;
             }
