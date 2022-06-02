@@ -52,7 +52,7 @@
                   </td>
 
                   <td class="">
-                    <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0] ? streamRoute.actions[0].data.actions : {}"></ChoseActionsPresentor>
+                    <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0] && streamRoute.actions[0].data ? streamRoute.actions[0].data.actions : {}"></ChoseActionsPresentor>
                     <span v-else>-</span>
                   </td>
                   <td>
