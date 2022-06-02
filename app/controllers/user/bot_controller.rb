@@ -29,7 +29,8 @@ class User::BotController < User::ApplicationController
           :line_name,
           :line_user_id,
           :channel_id,
-          :channel_secret
+          :channel_secret,
+          :liff_id
         )
     end
 end
