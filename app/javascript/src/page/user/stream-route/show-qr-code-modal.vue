@@ -15,7 +15,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body" :key="contentKey">
-          <div class="mr-auto">
+          <div class="mr-auto" v-if="streamRoute">
             <div class="qr-code-container d-flex justify-content-center">
               <qr-code :text="streamRoute.stream_route_url"></qr-code>
             </div>
