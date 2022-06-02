@@ -29,7 +29,8 @@ class User::SettingController < User::ApplicationController
         :id,
         :line_user_id,
         :line_name,
-        :display_name
+        :display_name,
+        :liff_id
       )
     end
 

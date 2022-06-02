@@ -36,6 +36,22 @@
               </div>
             </div>
             <div class="form-group d-flex">
+              <label class="fw-350">LIFF ID<required-mark /></label>
+              <div class="flex-grow-1">
+                <ValidationProvider name="LIFF ID" rules="required|max:255" v-slot="{ errors }">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="setting[liff_id]"
+                    placeholder="入力してください"
+                    maxlength="256"
+                    v-model.trim="settingFormData.liff_id"
+                  />
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+            </div>
+            <div class="form-group d-flex">
               <label class="fw-350">LINEアカウント名<required-mark /></label>
               <div class="flex-grow-1">
                 <ValidationProvider name="LINEアカウント名" rules="required|max:255" v-slot="{ errors }">

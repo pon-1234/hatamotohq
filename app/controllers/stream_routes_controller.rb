@@ -5,6 +5,7 @@ class StreamRoutesController < ApplicationController
   RETRY_DELAY = 0.5
 
   def show
+    @liff_id = current_user.client.line_account.liff_id
     @stream_route = StreamRoute.find_by code: params[:stream_route_code]
     if params[:friendship_status_changed] && params[:line_user_id]
       update_source_for_line_friend

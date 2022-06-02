@@ -24,7 +24,7 @@
 import liff from '@line/liff';
 
 export default {
-  props: ['stream_route_code', 'friendship_status_changed', 'added_friend_before'],
+  props: ['liff_id', 'stream_route_code', 'friendship_status_changed', 'added_friend_before'],
   data() {
     return {
       rootPath: process.env.MIX_ROOT_PATH,
@@ -44,7 +44,7 @@ export default {
       liff.closeWindow();
       return;
     }
-    liff.init({ liffId: process.env.LIFF_ID })
+    liff.init({ liffId: this.liff_id })
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({ bot_prompt: 'aggressive' });
