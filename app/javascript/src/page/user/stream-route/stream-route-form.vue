@@ -196,7 +196,7 @@ export default {
       const result = await this.$validator.validateAll();
       if (!result) return;
       const formData = _.pick(this.streamRouteFormData, ['id', 'name', 'qr_title', 'run_add_friend_actions', 'always_run_actions', 'folder_id']);
-      formData.actions = [this.streamRouteFormData.actionData];
+      formData.actions = _.isArray(this.streamRouteFormData.actionData) ? this.streamRouteFormData.actionData : [this.streamRouteFormData.actionData];
       if (formData.id) {
         this.updateStreamRoute(formData)
           .then(response => {
