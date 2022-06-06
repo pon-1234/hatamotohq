@@ -79,6 +79,9 @@ export default {
               liff.logout();
               this.notAddFriend = true;
             }
+          }, () => {
+            liff.logout();
+            liff.login({ bot_prompt: 'aggressive' });
           });
         }
       })
