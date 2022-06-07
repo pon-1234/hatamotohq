@@ -20,15 +20,15 @@
             <i class="uil-plus"></i> 新規登録
           </a>
           <div class="mt-2 table-responsive" v-if="curFolder">
-            <table class="table table-centered mb-0">
+            <table class="table table-centered mb-0 text-nowrap">
               <thead class="thead-light">
                 <tr>
                   <th class="fw-200">流入経路名称</th>
-                  <th>アクション</th>
+                  <th class="d-none d-xl-table-cell">アクション</th>
                   <th>友達追加時設定</th>
                   <th>集計</th>
-                  <th>登録日時</th>
-                  <th>フォルダー</th>
+                  <th class="d-none d-xl-table-cell">登録日時</th>
+                  <th class="d-none d-xl-table-cell">フォルダー</th>
                   <th>操作</th>
                 </tr>
               </thead>
@@ -51,7 +51,7 @@
                     </div>
                   </td>
 
-                  <td class="">
+                  <td class="d-none d-xl-table-cell">
                     <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0] && streamRoute.actions[0].data ? streamRoute.actions[0].data.actions : {}"></ChoseActionsPresentor>
                     <span v-else>-</span>
                   </td>
@@ -62,10 +62,10 @@
                     <span class="text-nowrap">{{streamRoute.friend_count}}人</span>
                     <a class="btn btn-default border p-1" :href="`${rootPath}/user/stream_routes/${streamRoute.id}`">詳細</a>
                   </td>
-                  <td>
+                  <td class="d-none d-xl-table-cell">
                     <div class="text-sm text-nowrap">{{streamRoute.created_at | formatted_time}}</div>
                   </td>
-                  <td>
+                  <td class="d-none d-xl-table-cell">
                     <div class="text-sm text-nowrap">{{curFolder.name}}</div>
                   </td>
                   <td>
