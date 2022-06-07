@@ -23,8 +23,8 @@
             <table class="table table-centered mb-0 text-nowrap">
               <thead class="thead-light">
                 <tr>
-                  <th class="fw-200">流入経路名称</th>
-                  <th class="d-none d-xl-table-cell">アクション</th>
+                  <th class="fw-200 stream-route-name-column-label">流入経路名称</th>
+                  <th>アクション</th>
                   <th>友達追加時設定</th>
                   <th>集計</th>
                   <th class="d-none d-xl-table-cell">登録日時</th>
@@ -34,13 +34,13 @@
               </thead>
               <tbody>
                 <tr v-for="(streamRoute, index) in curFolder.stream_routes" v-bind:key="streamRoute.id">
-                  <td class="mw-300">
+                  <td class="mw-300 stream-route-name-column-value">
                     <div class="stream-url-text-wrap">
                       <label style="display: block;">
                           {{streamRoute.name}}
                       </label>
-                      <div class="input-group input-group-sm d-flex">
-                        <input type="text" class="form-control input-sm" :value="streamRoute.stream_route_url" disabled>
+                      <div class="input-group input-group-sm d-flex flex-column flex-xl-row stream-route-url-container">
+                        <input type="text" class="form-control input-sm stream-route-url-input" :value="streamRoute.stream_route_url" disabled>
                         <span class="input-group-btn">
                           <button type="button" class="btn btn-default copy-btn" @click="copyUrl(streamRoute.stream_route_url)">
                             <span class="glyphicon glyphicon-copy uil-copy"></span>
@@ -51,7 +51,7 @@
                     </div>
                   </td>
 
-                  <td class="d-none d-xl-table-cell">
+                  <td>
                     <ChoseActionsPresentor v-if="streamRoute.actions" :actions="streamRoute.actions[0] && streamRoute.actions[0].data ? streamRoute.actions[0].data.actions : {}"></ChoseActionsPresentor>
                     <span v-else>-</span>
                   </td>
@@ -279,7 +279,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .copy-btn, .qr-btn {
     padding-top: 4.2px;
     padding-bottom: 4.2px;
@@ -289,4 +289,20 @@ export default {
     border-left: none;
   }
 
+  @media screen and (max-width: 1366px) {
+    .stream-route-url-input {
+      width: 180px;
+    }
+    .stream-route-name-column-label, .stream-route-name-column-value {
+      min-width: auto !important;
+      max-width: auto !important;
+      width: auto !important;
+    }
+    .stream-route-url-container {
+      gap: 5px 0;
+    }
+    .copy-btn {
+      border-left: 1px solid #dee2e6;
+    }
+  }
 </style>
