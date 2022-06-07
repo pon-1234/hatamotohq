@@ -291,7 +291,7 @@ export default {
 
   @media screen and (max-width: 1366px) {
     .stream-route-url-input {
-      width: 180px;
+      width: 180px !important;
     }
     .stream-route-name-column-label, .stream-route-name-column-value {
       min-width: auto !important;
