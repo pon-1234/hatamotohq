@@ -148,6 +148,10 @@ class LineFriend < ApplicationRecord
     self.survey_responses.where(survey_id: survey_id).count
   end
 
+  def is_changed_before?
+    updated_at != created_at
+  end
+
   private
     def exec_after_create_commit
       AcquireFriendJob.perform_later(self.id)

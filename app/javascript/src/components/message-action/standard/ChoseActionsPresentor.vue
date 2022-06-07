@@ -1,6 +1,6 @@
 <template>
-  <div v-if="actions.length > 0">
-    <div class="fw-200 text-truncate" v-html="willBeShowedActions"></div>
+  <div class="d-inline-block chose-actions-presentor" v-if="actions.length > 0">
+    <div class="fw-200 text-truncate chose-actions-presentor-main" v-html="willBeShowedActions"></div>
   </div>
   <div v-else>なし</div>
 </template>
@@ -58,3 +58,15 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  @media screen and (max-width: 1366px) {
+    .chose-actions-presentor {
+      .chose-actions-presentor-main {
+        width: 150px !important;
+        max-width: 150px !important;
+        min-width: 150px !important;
+      }
+    }
+  }
+</style>
