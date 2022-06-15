@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-block chose-actions-presentor" v-if="actions.length > 0">
+  <div class="d-inline-block chose-actions-presentor align-middle" v-if="actions.length > 0">
     <div class="fw-200 text-truncate chose-actions-presentor-main" v-html="willBeShowedActions"></div>
   </div>
   <div v-else>なし</div>

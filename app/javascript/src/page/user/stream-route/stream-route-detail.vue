@@ -6,7 +6,7 @@
           <table class="table table-centered mt-2 pc">
             <thead class="thead-light">
               <tr>
-                <th class="d-lg-table-cell">対応マーク</th>
+                <th class="d-lg-table-cell">タグ</th>
                 <th class="d-lg-table-cell">名前</th>
                 <th class="d-lg-table-cell">友だち追加日時</th>
               </tr>
