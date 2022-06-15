@@ -2,7 +2,8 @@
 
 class Postback::AssignStaffHandler < Postback::BaseHandler
   def perform
-    @friend.channel.update! assignee_id: @content['staff_id']
+    assignee = User.staff.find_by(id: @content['staff_id'])
+    @friend.channel.update_assignee(assignee)
   rescue => exception
     puts exception.message
   end

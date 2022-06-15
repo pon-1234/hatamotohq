@@ -1,9 +1,18 @@
 <template>
   <div>
     <staff-selection @select="changeValue" :selected="actionData.staff_id"></staff-selection>
+    <input
+      :name="name + '_postback_staff_id'"
+      v-model="content.staff_id"
+      class="d-none"
+      v-validate="'required'"
+      data-vv-as="担当者"
+    />
+    <error-message :message="errors.first(name + '_postback_staff_id')"></error-message>
   </div>
 </template>
 <script>
+
 export default {
   props: {
     actionData: {
@@ -22,15 +31,13 @@ export default {
   inject: ['parentValidator'],
   data() {
     return {
-      // eslint-disable-next-line no-undef
-      content: _.cloneDeep(this.actionData)
+      content: { staff_id: null, ...(_.cloneDeep(this.actionData)) }
     };
   },
 
   watch: {
     actionData: {
       handler(val) {
-        // eslint-disable-next-line no-undef
         this.content = _.cloneDeep(this.actionData);
       },
       deep: true
@@ -43,7 +50,7 @@ export default {
 
   methods: {
     changeValue(staffId) {
-      // console.log($event);
+      this.content.staff_id = staffId;
       this.$emit('input', { staff_id: staffId });
     }
   }
