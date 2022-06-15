@@ -35,6 +35,13 @@
         :name="name"
         @input="updateContent"
       ></action-postback-scoring>
+
+      <action-postback-assign-staff
+        v-if="postbackType === 'assign_staff'"
+        :action-data="content"
+        :name="name"
+        @input="updateContent"
+      ></action-postback-assign-staff>
     </div>
   </div>
 </template>
