@@ -78,7 +78,7 @@
                     </tool-tip>
                   </label>
                   <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                      <label @click="changeRunAddFriendActions(false)" :class="`${!streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label`">
+                      <label @click="changeRunAddFriendActions(false)" :class="`${!streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label w-50`">
                         <input
                           type="radio"
                           name="run_add_friend_actions"
@@ -87,7 +87,7 @@
                           :checked="!streamRouteFormData.run_add_friend_actions"
                         > 無視する
                       </label>
-                      <label @click="changeRunAddFriendActions(true)" :class="`${streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label`">
+                      <label @click="changeRunAddFriendActions(true)" :class="`${streamRouteFormData.run_add_friend_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label w-50`">
                         <input
                           type="radio"
                           name="run_add_friend_actions"
@@ -104,7 +104,7 @@
                 <div class="col-sm-8">
                   <label for="always_run_actions">アクションの実行</label>
                   <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
-                      <label @click="changeAlwaysRunActions(true)" :class="`${streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label`">
+                      <label @click="changeAlwaysRunActions(true)" :class="`${streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary d-flex justify-content-center prevent-default-label w-50`">
                         <input
                           type="radio"
                           name="always_run_actions"
@@ -113,7 +113,7 @@
                           :checked="streamRouteFormData.always_run_actions"
                         > いつでも
                       </label>
-                      <label @click="changeAlwaysRunActions(false)" :class="`${!streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label`">
+                      <label @click="changeAlwaysRunActions(false)" :class="`${!streamRouteFormData.always_run_actions ? 'active' : ''} btn btn-primary text-center d-flex justify-content-center prevent-default-label w-50`">
                         <input
                           type="radio"
                           name="always_run_actions"
