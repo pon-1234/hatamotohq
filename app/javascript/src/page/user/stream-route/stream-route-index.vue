@@ -56,20 +56,22 @@
                     <span v-else>-</span>
                   </td>
                   <td>
-                    <span class="text-nowrap">{{streamRoute.run_add_friend_actions ? '無視しない' : '無視する'}}</span>
+                    <span class="text-nowrap run-add-friend-action-label">{{streamRoute.run_add_friend_actions ? '無視しない' : '無視する'}}</span>
                   </td>
                   <td>
-                    <span class="text-nowrap">{{streamRoute.friend_count}}人</span>
-                    <a class="btn btn-default border p-1" :href="`${rootPath}/user/stream_routes/${streamRoute.id}`">詳細</a>
+                    <div class="statistic-info-container d-flex align-items-center">
+                      <p class="text-nowrap mb-0">{{streamRoute.friend_count}}人</p>
+                      <a class="btn btn-default border p-1" :href="`${rootPath}/user/stream_routes/${streamRoute.id}`">詳細</a>
+                    </div>
                   </td>
                   <td class="d-none d-xl-table-cell">
-                    <div class="text-sm text-nowrap">{{streamRoute.created_at | formatted_time}}</div>
+                    <div class="text-sm text-nowrap stream-router-created-at">{{streamRoute.created_at | formatted_time}}</div>
                   </td>
                   <td class="d-none d-xl-table-cell">
-                    <div class="text-sm text-nowrap">{{curFolder.name}}</div>
+                    <div class="text-sm text-nowrap stream-route-folder">{{curFolder.name}}</div>
                   </td>
                   <td>
-                    <div class="btn-group">
+                    <div class="btn-group stream-route-actions">
                       <button
                         type="button"
                         class="btn btn-light btn-sm dropdown-toggle"
@@ -288,6 +290,31 @@ export default {
   .copy-btn {
     border-left: none;
   }
+  .statistic-info-container {
+    margin-top: 28px;
+    gap: 3px;
+    p {
+      margin-top: 2px;
+    }
+  }
+  .run-add-friend-action-label {
+    display: inline-block;
+    margin-top: 28px;
+  }
+  .stream-router-created-at, .stream-route-folder, .stream-route-actions {
+    margin-top: 28px;
+  }
+
+  ::v-deep {
+    .chose-actions-presentor-main {
+      margin-top: 28px;
+    }
+    @media screen and (max-width: 1366px) {
+      .chose-actions-presentor-main {
+        margin-top: -10px;
+      }
+    }
+  }
 
   @media screen and (max-width: 1366px) {
     .stream-route-url-input {
@@ -303,6 +330,13 @@ export default {
     }
     .copy-btn {
       border-left: 1px solid #dee2e6;
+    }
+    .statistic-info-container, .run-add-friend-action-label,
+      .stream-router-created-at, .stream-route-folder, .stream-route-actions {
+        margin-top: -10px;
+      }
+    .run-add-friend-action-label {
+      display: block;
     }
   }
 </style>
