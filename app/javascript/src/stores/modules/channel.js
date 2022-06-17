@@ -160,7 +160,7 @@ export const actions = {
     const eventType = event.action;
     switch (eventType) {
     case 'new_message':
-      if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id) {
+      if (context.state.activeChannel && context.state.activeChannel.id && event.channel.id === context.state.activeChannel.id && !event.channel.locked) {
         context.commit('pushMessage', event.content);
       }
       context.commit('updateChannels', { event: event, channel: event.channel });
