@@ -146,6 +146,7 @@ class DispatchBroadcastJob < ApplicationJob
         timestamp: Time.zone.now
       }
       channels.each do |channel|
+        next if channel.locked?
         Messages::MessageBuilder.new(nil, channel, message_params).perform
         Messages::SystemLogBuilder.new(channel).perform_broadcast(@broadcast)
       end
