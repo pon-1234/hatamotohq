@@ -20,3 +20,8 @@ Vue.filter('truncate', (value, length) => {
     length: length
   });
 });
+
+Vue.filter('number_to_percent', (value) => {
+  value = _.isFinite(value) ? _.round(value * 100, 2) : 0;
+  return `${value.toString()} %`;
+});

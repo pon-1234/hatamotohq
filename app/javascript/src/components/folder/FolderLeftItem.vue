@@ -95,6 +95,10 @@ export default {
         return this.data.variables.length;
       case 'reminder':
         return this.data.reminders.length;
+      case 'site':
+        return this.data.sites ? this.data.sites.length : 0;
+      case 'stream_route':
+        return this.data.stream_routes ? this.data.stream_routes.length : 0;
       }
       return 0;
     },

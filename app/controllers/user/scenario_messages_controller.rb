@@ -33,6 +33,7 @@ class User::ScenarioMessagesController < User::ApplicationController
   def create
     @message = ScenarioMessage.new(message_params)
     @message.scenario = @scenario
+    @message.site_measurements = [] if params[:notUseShorternUrl]
     if @message.save
       @scenario.reorder_messages
     else
@@ -48,6 +49,7 @@ class User::ScenarioMessagesController < User::ApplicationController
 
   # PATCH /user/scenarios/:scenario_id/messages/:id
   def update
+    @message.site_measurements.destroy_all if params[:notUseShorternUrl]
     if @message.update!(message_params)
       @scenario.reorder_messages
     else
@@ -82,7 +84,13 @@ class User::ScenarioMessagesController < User::ApplicationController
         :message_type_id,
         :status,
         content: {}
-      )
+      ).tap do |whitelisted|
+        whitelisted[:site_measurements_attributes] = []
+        params[:site_measurements_attributes].to_a.each_with_index do |site_measurement, index|
+          whitelisted[:site_measurements_attributes][index] = site_measurement
+          whitelisted.permit!
+        end
+      end
     end
 
     def find_scenario

@@ -58,6 +58,16 @@ Rails.application.routes.draw do
   get 'medias/:id/content', to: 'medias#variant'
   get 'medias/:id/content/:size', to: 'medias#variant'
 
+  # url click measurement
+  get 'sites/:code', to: 'sites#statistic', as: :site_statistic
+
+  # Stream route
+  # Sample url set for stream route and QR code: https://example.com/stream_route_detail/V7WHX8
+  # Sample url set for liff app and line login app: https://example.com/stream_route_detail
+  get '/stream_route_detail', to: 'stream_routes#show', as: 'stream_route_detail'
+  # use stream_route_code, but not code as parameter, because line login also return a code parameter
+  get '/stream_route_detail/:stream_route_code', to: 'stream_routes#show', as: 'stream_route_detail_with_code'
+
   # User
   constraints Subdomain::UserConstraint.new do
     root to: 'user/home#index'
@@ -96,6 +106,7 @@ Rails.application.routes.draw do
       resources :friends do
         collection do
           get :search
+          get :export
         end
         member do
           post :toggle_locked
@@ -154,7 +165,6 @@ Rails.application.routes.draw do
       resources :folders
       resources :tags
       get '/emojis/:pack_id', to: 'emojis#show'
-      get '/action_objects', to: 'action_objects#index'
       resources :medias do
         post :bulk_delete, on: :collection
         member do
@@ -165,6 +175,18 @@ Rails.application.routes.draw do
         get :edit, on: :collection
         patch :update, on: :collection
         get :friends, on: :member
+      end
+      # url click measurement
+      resources :sites do
+        member do
+          get :scenarios, defaults: { format: :json }
+          get :broadcasts, defaults: { format: :json }
+        end
+      end
+      resources :stream_routes do
+        member do
+          post 'copy'
+        end
       end
     end
   end

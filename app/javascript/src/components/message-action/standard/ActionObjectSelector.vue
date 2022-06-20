@@ -24,6 +24,9 @@ export default {
     supports: {
       type: Array,
       default: () => []
+    },
+    messageType: {
+      type: String
     }
   },
 
@@ -34,7 +37,6 @@ export default {
   },
 
   async beforeMount() {
-    await this.$store.dispatch('global/getActionObjectConfigs');
     // TODO this is bad smelling code :3 need refactoring
     if (this.data.type === 'uri') {
       this.selected = this.data.id || (Util.validateUrl(this.data.uri) ? 1 : 2);
@@ -154,14 +156,16 @@ export default {
 
   computed: {
     actionTypes() {
-      const objects = this.$store.getters['global/actionObjects'];
+      const objects = _.cloneDeep(this.ActionObjectsCollect);
+      // with message is not rich image message, remove message action object
+      if (this.messageType !== 'imagemap') _.remove(objects, (object) => object.type === 'message');
       let result = objects != null
         ? objects.filter(
           item =>
             (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
         )
         : [];
-      if (this.data.type === 'survey') {
+      if (this.messageType === 'imagemap') {
         result = result.filter(item => item.title !== '電話する');
       }
       return result;

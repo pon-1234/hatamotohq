@@ -45,6 +45,7 @@
         :isNone="isNone"
         :showTitle="showTitle"
         :requiredLabel="requiredLabel"
+        :messageType="messageType"
         @input="updateAction"
       />
     </div>
@@ -72,7 +73,10 @@ export default {
       type: Boolean,
       default: true
     },
-    value: Object
+    value: Object,
+    messageType: {
+      type: String
+    }
   },
   inject: ['parentValidator'],
 

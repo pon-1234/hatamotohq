@@ -12,16 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_18_090613) do
-  create_table 'action_objects', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
-    t.string 'title'
-    t.text 'description'
-    t.json 'format'
-    t.string 'type'
-    t.datetime 'created_at', precision: 6, null: false
-    t.datetime 'updated_at', precision: 6, null: false
-  end
-
+ActiveRecord::Schema.define(version: 2022_05_20_092205) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -294,7 +285,9 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
     t.boolean 'tester', default: false
+    t.bigint 'stream_route_id'
     t.index ['line_account_id'], name: 'index_line_friends_on_line_account_id'
+    t.index ['stream_route_id'], name: 'index_line_friends_on_stream_route_id'
     t.index ['tester'], name: 'index_line_friends_on_tester'
   end
 
@@ -590,7 +583,86 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
     t.index ['friend_variable_id'], name: 'index_scorings_on_friend_variable_id'
   end
 
-  create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci', force: :cascade do |t|
+  create_table 'site_measurements', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.integer 'measurable_id'
+    t.string 'measurable_type'
+    t.json 'actions'
+    t.integer 'sending_count', default: 0
+    t.integer 'click_count', default: 0
+    t.integer 'receiver_count', default: 0
+    t.integer 'visitor_count', default: 0
+    t.bigint 'site_id', null: false
+    t.string 'site_name'
+    t.text 'redirect_url'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['measurable_id'], name: 'index_site_measurements_on_measurable_id'
+    t.index ['measurable_type'], name: 'index_site_measurements_on_measurable_type'
+    t.index ['site_id'], name: 'index_site_measurements_on_site_id'
+  end
+
+  create_table 'site_measurements_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'site_measurement_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.boolean 'sent', default: false
+    t.boolean 'visited', default: false
+    t.index ['line_friend_id'], name: 'index_site_measurements_line_friends_on_line_friend_id'
+    t.index ['site_measurement_id'], name: 'index_site_measurements_line_friends_on_site_measurement_id'
+  end
+
+  create_table 'site_references', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.string 'code'
+    t.string 'line_user_id'
+    t.string 'site_measurement_id'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['code'], name: 'index_site_references_on_code'
+  end
+
+  create_table 'sites', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.text 'url'
+    t.string 'name'
+    t.bigint 'folder_id', null: false
+    t.integer 'sending_count', default: 0
+    t.integer 'click_count', default: 0
+    t.integer 'receiver_count', default: 0
+    t.integer 'visitor_count', default: 0
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'client_id', null: false
+    t.index ['client_id'], name: 'index_sites_on_client_id'
+    t.index ['folder_id'], name: 'index_sites_on_folder_id'
+  end
+
+  create_table 'sites_line_friends', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'site_id', null: false
+    t.bigint 'line_friend_id', null: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.boolean 'sent', default: false
+    t.boolean 'visited', default: false
+    t.index ['line_friend_id'], name: 'index_sites_line_friends_on_line_friend_id'
+    t.index ['site_id'], name: 'index_sites_line_friends_on_site_id'
+  end
+
+  create_table 'stream_routes', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'folder_id', null: false
+    t.string 'name'
+    t.json 'actions'
+    t.string 'code'
+    t.boolean 'run_add_friend_actions', default: false
+    t.boolean 'always_run_actions', default: false
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.bigint 'client_id', null: false
+    t.string 'qr_title'
+    t.index ['client_id'], name: 'index_stream_routes_on_client_id'
+    t.index ['folder_id'], name: 'index_stream_routes_on_folder_id'
+  end
+
+  create_table 'survey_answers', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.bigint 'survey_response_id'
     t.bigint 'survey_question_id'
     t.json 'answer'
@@ -749,6 +821,7 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
   add_foreign_key 'insights', 'line_accounts'
   add_foreign_key 'line_accounts', 'clients'
   add_foreign_key 'line_friends', 'line_accounts'
+  add_foreign_key 'line_friends', 'stream_routes'
   add_foreign_key 'media', 'line_accounts'
   add_foreign_key 'messages', 'channels'
   add_foreign_key 'pms_reservations', 'line_friends'
@@ -780,6 +853,15 @@ ActiveRecord::Schema.define(version: 2022_03_18_090613) do
   add_foreign_key 'scenarios', 'folders'
   add_foreign_key 'scenarios', 'line_accounts'
   add_foreign_key 'scorings', 'friend_variables'
+  add_foreign_key 'site_measurements', 'sites'
+  add_foreign_key 'site_measurements_line_friends', 'line_friends'
+  add_foreign_key 'site_measurements_line_friends', 'site_measurements'
+  add_foreign_key 'sites', 'clients'
+  add_foreign_key 'sites', 'folders'
+  add_foreign_key 'sites_line_friends', 'line_friends'
+  add_foreign_key 'sites_line_friends', 'sites'
+  add_foreign_key 'stream_routes', 'clients'
+  add_foreign_key 'stream_routes', 'folders'
   add_foreign_key 'survey_answers', 'survey_questions'
   add_foreign_key 'survey_answers', 'survey_responses'
   add_foreign_key 'survey_questions', 'surveys'
