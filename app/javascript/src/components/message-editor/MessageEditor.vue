@@ -34,13 +34,21 @@
           :data="messageData.content"
           @changeContent="changeContentMessage"
         />
+        <url-config
+          @configured="configUrl"
+          @changeShortenUrlUsage="changeShortenUrlUsage"
+          :index="index"
+          :messageContent="messageData.content"
+          :siteMeasurements="siteMeasurements"
+          v-if="showUrlClickConfig && messageData.message_type_id === MessageTypeIds.Text"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate'],
+  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate', 'showUrlClickConfig', 'siteMeasurements'],
   data() {
     return {
       messageData: {
@@ -181,6 +189,14 @@ export default {
 
     moveDown() {
       this.$emit('moveDown', this.index);
+    },
+
+    configUrl({ index, content }) {
+      this.$emit('configUrl', { index: index, content: content });
+    },
+
+    changeShortenUrlUsage({ index, notUseShorternUrl }) {
+      this.$emit('changeShortenUrlUsage', { index: index, notUseShorternUrl: notUseShorternUrl });
     }
   }
 };

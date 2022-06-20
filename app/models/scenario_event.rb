@@ -63,7 +63,13 @@ class ScenarioEvent < ApplicationRecord
 
   private
     def deliver_message
-      normalized = self.content
+      message = scenario_message
+      if message && message.site_measurements.any?
+        message.site_measurements.each do |site_measurement|
+          attach_shorten_url_to_message(message, site_measurement, channel.line_friend.line_user_id)
+        end
+      end
+      normalized = message ? message.content : self.content
       if contain_survey_action?(normalized)
         normalized = normalize_messages_with_survey_action(self.channel, normalized)
       end
@@ -80,6 +86,7 @@ class ScenarioEvent < ApplicationRecord
     end
 
     def execute_after_deliver
+      update_site_measurement_statistic([scenario_message], [self.channel.line_friend]) if scenario_message
       # If this event is the last
       if self.is_last
         Messages::SystemLogBuilder.new(self.channel).perform_scenario_end(self.scenario)

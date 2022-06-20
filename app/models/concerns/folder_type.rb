@@ -14,7 +14,9 @@ module FolderType
       variable: 'variable',
       survey: 'survey',
       flex_message: 'flex_message',
-      reminder: 'reminder'
+      reminder: 'reminder',
+      site: 'site',
+      stream_route: 'stream_route'
     }, _prefix: :type
   end
 end

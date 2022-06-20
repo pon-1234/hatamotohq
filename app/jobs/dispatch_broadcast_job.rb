@@ -27,6 +27,13 @@ class DispatchBroadcastJob < ApplicationJob
     channels = Channel.where(line_friend_id: friends.map(&:id))
 
     nomalized_messages_data = []
+
+    if messages.any? { |message| message.site_measurements.any? }
+      send_messages_with_shorten_urls(line_account, messages, friends)
+      update_site_measurement_statistic(messages, friends)
+      return true
+    end
+
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
@@ -62,12 +69,22 @@ class DispatchBroadcastJob < ApplicationJob
     messages = @broadcast.broadcast_messages
 
     nomalized_messages_data = []
+
+    if messages.any? { |message| message.site_measurements.any? }
+      send_messages_with_shorten_urls(line_account, messages, friends)
+      update_site_measurement_statistic(messages, friends)
+      return true
+    end
+
     messages.each do |message|
       nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
     end
 
     if contain_survey_action?(nomalized_messages_data)
       send_messages_with_survey_action(channels, nomalized_messages_data)
+      nomalized_messages_data.each do |content|
+        insert_delivered_message(channels, content)
+      end
     else
       success = send_multicast(line_account, nomalized_messages_data, friends.map(&:line_user_id))
       nomalized_messages_data.each do |content|
@@ -132,6 +149,25 @@ class DispatchBroadcastJob < ApplicationJob
         next if channel.locked?
         Messages::MessageBuilder.new(nil, channel, message_params).perform
         Messages::SystemLogBuilder.new(channel).perform_broadcast(@broadcast)
+      end
+    end
+
+    def send_messages_with_shorten_urls(line_account, messages, friends)
+      friends.each do |friend|
+        nomalized_messages_data = []
+        messages.each do |message|
+          message.reload
+          if message.site_measurements.any?
+            message.site_measurements.each do |site_measurement|
+              attach_shorten_url_to_message(message, site_measurement, friend.line_user_id)
+            end
+          end
+          nomalized_messages_data << Normalizer::MessageNormalizer.new(message.content).perform
+        end
+        LineApi::PushMessage.new(line_account).perform nomalized_messages_data, friend.line_user_id
+        nomalized_messages_data.each do |content|
+          insert_delivered_message([friend.channel], content)
+        end
       end
     end
 end

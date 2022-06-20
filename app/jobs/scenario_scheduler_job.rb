@@ -29,12 +29,18 @@ class ScenarioSchedulerJob < ApplicationJob
       if scenario_message.is_initial? || (schedule_at < Time.zone.now)
         deliver_now(scenario_message)
         after_sending_scenario_statistic(@scenario, @channel.line_friend)
+        update_site_measurement_statistic([scenario_message], [@channel.line_friend])
       else
         create_message_event(scenario_message, schedule_at)
       end
     end
 
     def deliver_now(scenario_message)
+      if scenario_message.site_measurements.any?
+        scenario_message.site_measurements.each do |site_measurement|
+          attach_shorten_url_to_message(scenario_message, site_measurement, @channel.line_friend.line_user_id)
+        end
+      end
       normalized = scenario_message.content
       if contain_survey_action?(normalized)
         normalized = normalize_messages_with_survey_action(@channel, normalized)

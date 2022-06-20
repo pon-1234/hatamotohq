@@ -44,6 +44,24 @@
           </div>
 
           <div class="form-group row mt-4">
+            <label class="col-4">LIFF ID<required-mark></required-mark></label>
+            <div class="col-8">
+              <ValidationProvider name="LIFF ID" rules="required|max:255" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[liff_id]"
+                  maxlength="256"
+                  v-validate="'required|max:255'"
+                  v-model.trim="botForm.liff_id"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+
+          <div class="form-group row mt-4">
             <label class="col-4">チャネルID<required-mark></required-mark></label>
             <div class="col-8">
               <ValidationProvider name="チャネルID" rules="required|max:255" v-slot="{ errors }">

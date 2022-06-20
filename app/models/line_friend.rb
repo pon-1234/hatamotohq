@@ -18,18 +18,22 @@
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
 #  tester           :boolean          default(FALSE)
+#  stream_route_id  :bigint
 #
 # Indexes
 #
 #  index_line_friends_on_line_account_id  (line_account_id)
+#  index_line_friends_on_stream_route_id  (stream_route_id)
 #  index_line_friends_on_tester           (tester)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (line_account_id => line_accounts.id)
+#  fk_rails_...  (stream_route_id => stream_routes.id)
 #
 class LineFriend < ApplicationRecord
   belongs_to :line_account
+  belongs_to :stream_route, optional: true
   has_one :channel
   has_many :taggings, as: :taggable
   has_many :tags, through: :taggings
@@ -142,6 +146,10 @@ class LineFriend < ApplicationRecord
 
   def responses_count_for(survey_id)
     self.survey_responses.where(survey_id: survey_id).count
+  end
+
+  def is_changed_before?
+    updated_at != created_at
   end
 
   private

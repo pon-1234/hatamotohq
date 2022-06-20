@@ -16,6 +16,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
 import 'bootstrap/js/dist/modal';
 import Multiselect from 'vue-multiselect';
+import VueQRCodeComponent from 'vue-qrcode-component'
 
 import {
   BootstrapVue,
@@ -74,6 +75,7 @@ Vue.use(VueLazyload, {
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('qr-code', VueQRCodeComponent);
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 Validator.localize('ja', ja);
 Validator.extend('email', value => {

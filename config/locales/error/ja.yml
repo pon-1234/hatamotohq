@@ -38,3 +38,11 @@ ja:
           attributes:
             crm_api_key:
               invalid: が違います
+
+  activerecord:
+    errors:
+      models:
+        site:
+          attributes:
+            name:
+              taken: は既に使用されています。

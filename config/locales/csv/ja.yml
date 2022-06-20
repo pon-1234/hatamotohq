@@ -1,27 +1,15 @@
 ja:
   header_csv:
-    group:
+    line_friend:
       id: ID
-      name: グループ名
-      code: グループコード
-      formatted_code: グループコード
-      description: グループ説明
-      user_id: ユーザーID
-      user_name: ハンドルネーム
-      joined_at: 参加日
-      status: 承認
-    medical_examination:
-      user_id: ユーザー識別情報
-      exam_date: 受診日
-      exam_type_localized: 健診内容
-      place: 受診先機関名
-      point: 獲得ポイント数
-    company:
-      id: ID
-      name: 会社名
-      code: コード
-      users_count: メンバー数
-      created_at: 作成日時
+      line_user_id: LINEユーザーID
+      line_name: LINEアカウント名
+      display_name: 表示名
+      line_picture_url: プロファイル画像URL
+      tags: タグ
+      status: 状況
+      note: メモ
+      created_at: 登録日時
     user:
       id: ID
       email: メールアドレス
@@ -37,95 +25,3 @@ ja:
       address: 住所
       postal_code: 郵便番号
       phone_number: 電話番号
-    walk_rally:
-      date: 日付
-      user_id: ユーザーID
-      user_nick_name: ハンドル名
-      point: ポイント
-      walk_rally_uid: ウォークラリーID
-      walk_rally_name: ウォークラリー名
-      check_point_id: チェックポイントID
-      check_point_name: チェックポイント名
-    user_info:
-      id: ユーザーID
-      height: 身長
-      weight: 体重
-      bmi: BMI
-      birthday: 誕生日
-      gender_i18n: 性別
-      email: メールアドレス
-      joined_at: 登録日
-    food_master:
-      id: ID
-      name: メニュー名
-      volume: 分量
-      unit: 単位
-      calo: カロ
-      created_at: 登録日時
-    meal:
-      id: ID
-      type_i18n: 食事
-      user_id: ユーザーID
-      user_nick_name: ユーザー名
-      food_name: メニュー
-      food_calo: カロリー
-      food_volume: 数量
-      volume: 分量
-      unit: 単位
-      calo: カロ
-      point: 付与ポイント
-      created_at: 登録日時
-      updated_at: 登録日時
-    exchange:
-      user_id: ユーザーID
-      user_nick_name: ニックネーム
-      postal_code: 郵便番号
-      phone_number: 電話番号
-      address: 住所
-      name: 氏名
-      email: メール
-      category: カテゴリー
-      reward_name: 物品名
-      point: ポイント
-      exchange_date: 交換日時
-    calo_target_master:
-      age_from: 年齢範囲開始
-      age_to: 年齢範囲終了
-      m_mets_1: METs目標
-      m_target_1: 男性目標
-      m_mets_2: METs目標
-      m_target_2: 男性目標
-      m_mets_3: METs目標
-      m_target_3: 男性目標
-      fm_mets_1: METs目標
-      fm_target_1: 女性目標
-      fm_mets_2: METs目標
-      fm_target_2: 女性目標
-      fm_mets_3: METs目標
-      fm_target_3: 女性目標
-    activity:
-      code: code
-      email: email
-      type: type
-      start_at: start_at
-      end_at: end_at
-      distance: distance (km)
-      steps: steps
-      duration_time: duration_time (h)
-      average_speed: average_speed (km/h)
-    activity_location:
-      code: code
-      email: email
-      lat: lat
-      lng: lon
-      time: time
-      hacc: hacc
-      type: type
-    event_log:
-      created_at: チェックイン日時
-      user_id: ユーザーID
-      user_nick_name: ハンドル名
-      point: ポイント獲得
-      event_id: イベントQRコードID
-      event_title: イベントQRコードタイトル
-      open_url: URLリンク

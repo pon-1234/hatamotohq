@@ -24,6 +24,7 @@ class TemplateMessage < ApplicationRecord
   default_scope { order(order: :asc) }
 
   belongs_to :template, counter_cache: true, inverse_of: :template_messages
+  has_many :site_measurements, as: :measurable
 
   # Validation
   validates :message_type_id, presence: true
