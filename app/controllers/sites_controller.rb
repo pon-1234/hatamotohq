@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class SitesController < ApplicationController
+  AUTOMATIC_REQUEST_USER_AGENT_REGEX = /^facebookexternalhit(.+)line-poker(.+)$/
+
   def statistic
+    return if is_automatic_request?
     site_reference = SiteReference.find_by code: params[:code]
     site_measurement = site_reference.site_measurement
     site = site_measurement.site
@@ -28,4 +31,9 @@ class SitesController < ApplicationController
   rescue => exception
     puts exception.message
   end
+
+  private
+    def is_automatic_request?
+      request.user_agent.match(AUTOMATIC_REQUEST_USER_AGENT_REGEX)
+    end
 end
