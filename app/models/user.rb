@@ -98,7 +98,7 @@ class User < ApplicationRecord
   end
 
   def active_for_authentication?
-    super and self.active?
+    super and self.active? and self.client.active?
   end
 
   def inactive_message
