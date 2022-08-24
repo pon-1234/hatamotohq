@@ -97,6 +97,14 @@ class User < ApplicationRecord
     self.allowlisted_jwts.exists? jti: json_token_indentifier
   end
 
+  def active_for_authentication?
+    super and self.active?
+  end
+
+  def inactive_message
+    "ユーザーはブロック中ですので、ログインできませんでした。"
+  end
+
   # make access_token unavailable after logout
   def revocate_access_token(json_token_indentifier)
     raise Common::AlreadyLogedOut.new unless self.allowlisted_jwts.exists?(jti: json_token_indentifier)
