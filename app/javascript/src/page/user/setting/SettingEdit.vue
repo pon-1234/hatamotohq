@@ -36,9 +36,9 @@
               </div>
             </div>
             <div class="form-group d-flex">
-              <label class="fw-350">LIFF ID<required-mark /></label>
+              <label class="fw-350">LIFF ID</label>
               <div class="flex-grow-1">
-                <ValidationProvider name="LIFF ID" rules="required|max:255" v-slot="{ errors }">
+                <ValidationProvider name="LIFF ID" rules="max:255" v-slot="{ errors }">
                   <input
                     type="text"
                     class="form-control"
