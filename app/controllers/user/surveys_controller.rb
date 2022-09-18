@@ -2,7 +2,8 @@
 
 class User::SurveysController < User::ApplicationController
   include User::SurveysHelper
-  before_action :find_survey, only: [:show, :update, :destroy, :answered_users, :responses, :friend_responses, :copy, :toggle_status]
+
+  before_action :find_survey, except: [:index, :new, :create]
   # GET /user/surveys
   def index
     if request.format.json?
@@ -92,6 +93,12 @@ class User::SurveysController < User::ApplicationController
     render_success
   rescue
     render_bad_request
+  end
+
+  # GET /user/surveys/:id/export
+  def export
+    csv = Export::ExportSurveyResponseService.new convert_to_csv(@survey)
+    send_data csv.perform_hash, filename: "#{@survey.title}_#{Time.zone.now.strftime('%Y%m%d%H%M')}.csv"
   end
 
   private
