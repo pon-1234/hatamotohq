@@ -102,7 +102,7 @@ class User < ApplicationRecord
   end
 
   def inactive_message
-    "ユーザーはブロック中ですので、ログインできませんでした。"
+    'ユーザーはブロック中ですので、ログインできませんでした。'
   end
 
   # make access_token unavailable after logout

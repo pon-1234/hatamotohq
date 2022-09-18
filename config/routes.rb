@@ -147,6 +147,7 @@ Rails.application.routes.draw do
           post :copy
           post :toggle_status
           get '/:friend_id/responses', to: 'surveys#friend_responses'
+          get :export
         end
       end
       resources :reminders do

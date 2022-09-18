@@ -61,7 +61,7 @@ class User::StreamRoutesController < User::ApplicationController
 
   def copy
     duplicated_stream_route = @stream_route.dup
-    duplicated_stream_route.name = "#{duplicated_stream_route.name}（コピー）" 
+    duplicated_stream_route.name = "#{duplicated_stream_route.name}（コピー）"
     duplicated_stream_route.code = nil
     duplicated_stream_route.save
     render_success

@@ -24,6 +24,7 @@
 class SurveyResponse < ApplicationRecord
   belongs_to :survey
   belongs_to :line_friend
+  delegate :name, to: :line_friend, prefix: true
   has_many :survey_answers
 
   after_create do

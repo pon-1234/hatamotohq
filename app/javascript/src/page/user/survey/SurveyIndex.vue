@@ -63,6 +63,12 @@
                         <a
                           role="button"
                           class="dropdown-item"
+                          :href="`${rootPath}/user/surveys/${survey.id}/export`"
+                          >回答一覧DL</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
                           data-toggle="modal"
                           data-target="#modalCopySurvey"
                           @click="curSurveyIndex = index"
