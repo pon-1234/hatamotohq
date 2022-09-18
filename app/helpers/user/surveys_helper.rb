@@ -15,9 +15,11 @@ module User::SurveysHelper
   end
 
   def response_to_row(response)
-    p response
-    headers = %w(id created_at answer_user_id answer_user_name)
-    data = [response.id, response.created_at, response.line_friend_id, response.line_friend_name]
+    questions = response.survey.survey_questions
+    question_titles = questions.pluck(:content).map { |x| x['text'] }
+    answers = response.survey_answers.pluck(:answer)
+    headers = %w(id created_at answer_user_id answer_user_name) + question_titles
+    data = [response.id, response.created_at, response.line_friend_id, response.line_friend_name] + answers
     [headers, data].transpose.to_h
   end
 end
