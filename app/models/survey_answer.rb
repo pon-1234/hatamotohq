@@ -29,6 +29,10 @@ class SurveyAnswer < ApplicationRecord
 
   has_one_attached :file
 
+  def norm_answer
+    survey_question.file? ? file_url : answer
+  end
+
   def file_url
     rails_public_blob_url(file) if file.attached?
   end
