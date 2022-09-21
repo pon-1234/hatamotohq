@@ -98,6 +98,16 @@
             />
             <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
           </div>
+
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="googleSheetCheck"
+              v-model.trim="save_on_google_sheet"
+            />
+            <label class="custom-control-label" for="googleSheetCheck">Googleスプレッドシート連携</label>
+          </div>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
@@ -164,6 +174,7 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       contentKey: 0,
       loading: true,
+      save_on_google_sheet: false,
       surveyData: {
         id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
@@ -174,7 +185,8 @@ export default {
         questions: null,
         after_action: null,
         success_message: null,
-        re_answer: true
+        re_answer: true,
+        auth_code: ''
       }
     };
   },
@@ -226,6 +238,11 @@ export default {
           return ViewHelper.scrollToRequiredField(false);
         }
       }
+      if (this.save_on_google_sheet) {
+        // const googleUser = await this.$gAuth.signIn()
+        // const authCode = await this.$gAuth.getAuthCode();
+        this.surveyData.auth_code = await this.$gAuth.getAuthCode();
+      }
       const payload = _.pick(this.surveyData, [
         'id',
         'folder_id',
@@ -235,7 +252,8 @@ export default {
         'description',
         'success_message',
         're_answer',
-        'after_action'
+        'after_action',
+        'auth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;
