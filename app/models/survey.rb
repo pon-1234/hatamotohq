@@ -19,6 +19,7 @@
 #  re_answer         :boolean          default(FALSE)
 #  ggapi_auth_code   :string(255)
 #  ggapi_auth_tokens :json
+#  spreadsheet_id    :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  deleted_at        :datetime
@@ -33,6 +34,9 @@
 #  fk_rails_...  (folder_id => folders.id)
 #  fk_rails_...  (line_account_id => line_accounts.id)
 #
+
+require 'google/apis/sheets_v4'
+
 class Survey < ApplicationRecord
   default_scope { order(created_at: :desc) }
   belongs_to :line_account
@@ -99,6 +103,38 @@ class Survey < ApplicationRecord
     return if self.ggapi_auth_code.nil?
     result = GoogleApi::GetServiceTokens.new.perform(self.ggapi_auth_code)
     self.ggapi_auth_tokens = result
+
+    create_survey_sheet
+  end
+
+  def create_survey_sheet
+    return if self.spreadsheet_id.nil?
+    sheets = Google::Apis::SheetsV4::SheetsService.new
+    sheets.authorization = self.ggapi_auth_tokens['access_token']
+    spreadsheet = {
+      properties: {
+        title: self.name
+      }
+    }
+    spreadsheet = sheets.create_spreadsheet(spreadsheet,
+                                            fields: 'spreadsheetId')
+    self.spreadsheet_id = spreadsheet.spreadsheet_id
+
+    # Add sheet header
+    question_titles = survey_questions.pluck('content').pluck('text')
+    values = [
+      [
+        '回答ID',
+        '回答日時',
+        '回答者ID',
+        '回答者名'
+      ] + question_titles
+    ]
+    value_range = Google::Apis::SheetsV4::ValueRange.new(values: values)
+    result = sheets.append_spreadsheet_value(self.spreadsheet_id,
+                                              "A1:A#{4 + question_titles.size}",
+                                              value_range,
+                                              value_input_option: 'RAW')
   end
 
   private

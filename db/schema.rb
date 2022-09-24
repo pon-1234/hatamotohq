@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_24_132019) do
+ActiveRecord::Schema.define(version: 2022_09_24_152818) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -709,6 +709,7 @@ ActiveRecord::Schema.define(version: 2022_09_24_132019) do
     t.boolean 're_answer', default: false
     t.string 'ggapi_auth_code'
     t.json 'ggapi_auth_tokens'
+    t.string 'spreadsheet_id'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.datetime 'deleted_at'
