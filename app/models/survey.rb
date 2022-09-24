@@ -4,22 +4,24 @@
 #
 # Table name: surveys
 #
-#  id              :bigint           not null, primary key
-#  line_account_id :bigint
-#  folder_id       :bigint
-#  code            :string(255)
-#  name            :string(255)
-#  banner_url      :string(255)
-#  liff_id         :string(255)
-#  title           :string(255)
-#  description     :text(65535)
-#  after_action    :json
-#  success_message :text(65535)
-#  status          :string(255)      default(NULL)
-#  re_answer       :boolean          default(FALSE)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  deleted_at      :datetime
+#  id                :bigint           not null, primary key
+#  line_account_id   :bigint
+#  folder_id         :bigint
+#  code              :string(255)
+#  name              :string(255)
+#  banner_url        :string(255)
+#  liff_id           :string(255)
+#  title             :string(255)
+#  description       :text(65535)
+#  after_action      :json
+#  success_message   :text(65535)
+#  status            :string(255)      default(NULL)
+#  re_answer         :boolean          default(FALSE)
+#  ggapi_auth_code   :string(255)
+#  ggapi_auth_tokens :json
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
 #
 # Indexes
 #
@@ -50,6 +52,8 @@ class Survey < ApplicationRecord
   before_create do
     self.code = generate_code
   end
+
+  before_save :get_google_service_tokens, if: :will_save_change_to_ggapi_auth_code?
 
   def destroyable?
     self.survey_responses.count == 0
@@ -89,6 +93,12 @@ class Survey < ApplicationRecord
   def toggle_status
     self.status = self.published? ? 'unpublished' : 'published'
     self.save
+  end
+
+  def get_google_service_tokens
+    return if self.ggapi_auth_code.nil?
+    result = GoogleApi::GetServiceTokens.new.perform(self.ggapi_auth_code)
+    self.ggapi_auth_tokens = result
   end
 
   private

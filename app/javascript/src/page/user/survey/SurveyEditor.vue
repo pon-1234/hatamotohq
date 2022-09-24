@@ -241,7 +241,7 @@ export default {
       if (this.save_on_google_sheet) {
         // const googleUser = await this.$gAuth.signIn()
         // const authCode = await this.$gAuth.getAuthCode();
-        this.surveyData.auth_code = await this.$gAuth.getAuthCode();
+        this.surveyData.ggapi_auth_code = await this.$gAuth.getAuthCode();
       }
       const payload = _.pick(this.surveyData, [
         'id',
@@ -253,7 +253,7 @@ export default {
         'success_message',
         're_answer',
         'after_action',
-        'auth_code'
+        'ggapi_auth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;

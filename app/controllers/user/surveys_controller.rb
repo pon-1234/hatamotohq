@@ -113,6 +113,7 @@ class User::SurveysController < User::ApplicationController
         :success_message,
         :re_answer,
         :status,
+        :ggapi_auth_code,
         survey_questions_attributes: [
           :id,
           :required,
