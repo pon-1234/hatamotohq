@@ -187,7 +187,7 @@ export default {
         re_answer: true,
         sync_to_ggsheet: true,
         connected_to_ggsheet: false,
-        ggapi_auth_code: ''
+        google_oauth_code: ''
       }
     };
   },
@@ -242,7 +242,7 @@ export default {
 
       // Authorize with google api if needed
       if (published && this.surveyData.sync_to_ggsheet && !this.surveyData.connected_to_ggsheet) {
-        this.surveyData.ggapi_auth_code = await this.$gAuth.getAuthCode();
+        this.surveyData.google_oauth_code = await this.$gAuth.getAuthCode();
       }
 
       const payload = _.pick(this.surveyData, [
@@ -256,7 +256,7 @@ export default {
         're_answer',
         'after_action',
         'sync_to_ggsheet',
-        'ggapi_auth_code'
+        'google_oauth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;

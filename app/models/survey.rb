@@ -18,10 +18,11 @@
 #  status               :string(255)      default(NULL)
 #  re_answer            :boolean          default(FALSE)
 #  connected_to_ggsheet :boolean          default(FALSE)
-#  sync_to_ggsheet      :boolean          default(FALSE)
-#  ggapi_auth_code      :string(255)
-#  ggapi_auth_tokens    :json
+#  google_oauth_code    :string(255)
+#  google_oauth_tokens  :json
+#  google_oauth_email   :string(255)
 #  spreadsheet_id       :string(255)
+#  sync_to_ggsheet      :boolean          default(FALSE)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  deleted_at           :datetime
@@ -59,7 +60,7 @@ class Survey < ApplicationRecord
     self.code = generate_code
   end
 
-  before_save :get_google_service_tokens, if: :will_save_change_to_sync_to_ggsheet?
+  after_save_commit :get_google_service_tokens, if: -> { sync_to_ggsheet? and !connected_to_ggsheet? }
 
   def destroyable?
     self.survey_responses.count == 0
@@ -101,9 +102,13 @@ class Survey < ApplicationRecord
     self.save
   end
 
+  def google_oauth_access_token
+    GoogleApi::RefreshAccessToken.new.perform(self.google_oauth_tokens['refresh_token'])
+  end
+
   def get_google_service_tokens
-    return if !self.sync_to_ggsheet || self.ggapi_auth_code.nil?
-    ConnectGoogleSheetJob.perform_later(id)
+    return if !self.sync_to_ggsheet || self.google_oauth_code.nil?
+    ConnectGoogleSheetJob.perform_later(self.id)
   end
 
   private

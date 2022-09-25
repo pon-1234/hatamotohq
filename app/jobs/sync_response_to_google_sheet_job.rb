@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AppendSurveyResponseToGoogleSheetJob < ApplicationJob
+class SyncResponseToGoogleSheetJob < ApplicationJob
   queue_as :default
 
   def perform(response_id)
@@ -8,7 +8,9 @@ class AppendSurveyResponseToGoogleSheetJob < ApplicationJob
     survey = response.survey
     # Init gooogle service
     sheets = Google::Apis::SheetsV4::SheetsService.new
-    sheets.authorization = survey.ggapi_auth_tokens['access_token']
+
+    # Get access token
+    sheets.authorization = survey.google_oauth_access_token
 
     questions = survey.survey_questions
     answers = response.survey_answers.map { |x| x.norm_answer }
@@ -18,7 +20,7 @@ class AppendSurveyResponseToGoogleSheetJob < ApplicationJob
     ]
     value_range = Google::Apis::SheetsV4::ValueRange.new(values: values)
     result = sheets.append_spreadsheet_value(survey.spreadsheet_id,
-                                              "A1:A#{data.size}",
+                                              'A:A',
                                               value_range,
                                               value_input_option: 'RAW')
   end

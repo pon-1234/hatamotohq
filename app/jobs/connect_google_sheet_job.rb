@@ -1,24 +1,27 @@
 # frozen_string_literal: true
 
+require 'jwt'
+
 class ConnectGoogleSheetJob < ApplicationJob
   queue_as :default
 
   def perform(survey_id)
     @survey = Survey.find(survey_id)
-    return if @survey.connected_to_ggsheet?
+    return if @survey.nil? || @survey.connected_to_ggsheet?
 
-    result = GoogleApi::GetServiceTokens.new.perform(@survey.ggapi_auth_code)
-    @survey.ggapi_auth_tokens = result
-    create_survey_sheet
+    result = GoogleApi::GetServiceTokens.new.perform(@survey.google_oauth_code)
+    @survey.google_oauth_tokens = result
+    create_spreadsheet_and_sync
+    update_google_oauth_email
+    update_google_oauth_for_related_surveys
 
     @survey.connected_to_ggsheet = true
     @survey.save!
   end
 
-  def create_survey_sheet
-    return unless @survey.spreadsheet_id.nil?
+  def create_spreadsheet_and_sync
     sheets = Google::Apis::SheetsV4::SheetsService.new
-    sheets.authorization = @survey.ggapi_auth_tokens['access_token']
+    sheets.authorization = @survey.google_oauth_access_token
     spreadsheet = {
       properties: {
         title: @survey.name
@@ -43,5 +46,15 @@ class ConnectGoogleSheetJob < ApplicationJob
                                               "A1:A#{4 + question_titles.size}",
                                               value_range,
                                               value_input_option: 'RAW')
+    SyncAllResponseToGoogleSheetJob.perform_now(@survey.id)
+  end
+
+  def update_google_oauth_email
+    basic_info = JWT.decode @survey.google_oauth_tokens['id_token'], nil, false
+    @survey.google_oauth_email = basic_info.first['email']
+  end
+
+  def update_google_oauth_for_related_surveys
+    related_surveys = Survey.where(google_oauth_email: @survey.google_oauth_email).update(google_oauth_tokens: @survey.google_oauth_tokens)
   end
 end

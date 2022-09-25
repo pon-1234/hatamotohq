@@ -29,6 +29,6 @@ class SurveyResponse < ApplicationRecord
 
   after_create do
     Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self.survey)
-    AppendSurveyResponseToGoogleSheetJob.perform_later(self.id)
+    SyncResponseToGoogleSheetJob.perform_later(self.id) if self.survey.sync_to_ggsheet?
   end
 end

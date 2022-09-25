@@ -81,7 +81,7 @@ Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 
 const gauthOption = {
   clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
-  scope: 'https://www.googleapis.com/auth/spreadsheets',
+  scope: 'email https://www.googleapis.com/auth/spreadsheets',
   plugin_name: 'lineCrm',
   prompt: 'consent',
   fetch_basic_profile: false

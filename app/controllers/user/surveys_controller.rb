@@ -114,7 +114,7 @@ class User::SurveysController < User::ApplicationController
         :re_answer,
         :status,
         :sync_to_ggsheet,
-        :ggapi_auth_code,
+        :google_oauth_code,
         survey_questions_attributes: [
           :id,
           :required,
