@@ -103,10 +103,10 @@
             <input
               type="checkbox"
               class="custom-control-input"
-              id="googleSheetCheck"
-              v-model.trim="save_on_google_sheet"
+              id="syncToGoogleSheet"
+              v-model.trim="surveyData.sync_to_ggsheet"
             />
-            <label class="custom-control-label" for="googleSheetCheck">Googleスプレッドシート連携</label>
+            <label class="custom-control-label" for="syncToGoogleSheet">Googleスプレッドシート連携</label>
           </div>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
@@ -174,7 +174,6 @@ export default {
       rootPath: process.env.MIX_ROOT_PATH,
       contentKey: 0,
       loading: true,
-      save_on_google_sheet: false,
       surveyData: {
         id: null,
         folder_id: Util.getParamFromUrl('folder_id'),
@@ -186,7 +185,9 @@ export default {
         after_action: null,
         success_message: null,
         re_answer: true,
-        auth_code: ''
+        sync_to_ggsheet: true,
+        connected_to_ggsheet: false,
+        ggapi_auth_code: ''
       }
     };
   },
@@ -238,11 +239,12 @@ export default {
           return ViewHelper.scrollToRequiredField(false);
         }
       }
-      if (this.save_on_google_sheet) {
-        // const googleUser = await this.$gAuth.signIn()
-        // const authCode = await this.$gAuth.getAuthCode();
+
+      // Authorize with google api if needed
+      if (published && this.surveyData.sync_to_ggsheet && !this.surveyData.connected_to_ggsheet) {
         this.surveyData.ggapi_auth_code = await this.$gAuth.getAuthCode();
       }
+
       const payload = _.pick(this.surveyData, [
         'id',
         'folder_id',
@@ -253,6 +255,7 @@ export default {
         'success_message',
         're_answer',
         'after_action',
+        'sync_to_ggsheet',
         'ggapi_auth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
@@ -275,7 +278,6 @@ export default {
 
     onQuestionsChanged(questions) {
       this.surveyData.questions = questions;
-      // this.forceRerender();
     }
   }
 };

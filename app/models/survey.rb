@@ -4,25 +4,27 @@
 #
 # Table name: surveys
 #
-#  id                :bigint           not null, primary key
-#  line_account_id   :bigint
-#  folder_id         :bigint
-#  code              :string(255)
-#  name              :string(255)
-#  banner_url        :string(255)
-#  liff_id           :string(255)
-#  title             :string(255)
-#  description       :text(65535)
-#  after_action      :json
-#  success_message   :text(65535)
-#  status            :string(255)      default(NULL)
-#  re_answer         :boolean          default(FALSE)
-#  ggapi_auth_code   :string(255)
-#  ggapi_auth_tokens :json
-#  spreadsheet_id    :string(255)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  deleted_at        :datetime
+#  id                   :bigint           not null, primary key
+#  line_account_id      :bigint
+#  folder_id            :bigint
+#  code                 :string(255)
+#  name                 :string(255)
+#  banner_url           :string(255)
+#  liff_id              :string(255)
+#  title                :string(255)
+#  description          :text(65535)
+#  after_action         :json
+#  success_message      :text(65535)
+#  status               :string(255)      default(NULL)
+#  re_answer            :boolean          default(FALSE)
+#  connected_to_ggsheet :boolean          default(FALSE)
+#  sync_to_ggsheet      :boolean          default(FALSE)
+#  ggapi_auth_code      :string(255)
+#  ggapi_auth_tokens    :json
+#  spreadsheet_id       :string(255)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  deleted_at           :datetime
 #
 # Indexes
 #
@@ -57,7 +59,7 @@ class Survey < ApplicationRecord
     self.code = generate_code
   end
 
-  before_save :get_google_service_tokens, if: :will_save_change_to_ggapi_auth_code?
+  before_save :get_google_service_tokens, if: :will_save_change_to_sync_to_ggsheet?
 
   def destroyable?
     self.survey_responses.count == 0
@@ -100,41 +102,8 @@ class Survey < ApplicationRecord
   end
 
   def get_google_service_tokens
-    return if self.ggapi_auth_code.nil?
-    result = GoogleApi::GetServiceTokens.new.perform(self.ggapi_auth_code)
-    self.ggapi_auth_tokens = result
-
-    create_survey_sheet
-  end
-
-  def create_survey_sheet
-    return if self.spreadsheet_id.nil?
-    sheets = Google::Apis::SheetsV4::SheetsService.new
-    sheets.authorization = self.ggapi_auth_tokens['access_token']
-    spreadsheet = {
-      properties: {
-        title: self.name
-      }
-    }
-    spreadsheet = sheets.create_spreadsheet(spreadsheet,
-                                            fields: 'spreadsheetId')
-    self.spreadsheet_id = spreadsheet.spreadsheet_id
-
-    # Add sheet header
-    question_titles = survey_questions.pluck('content').pluck('text')
-    values = [
-      [
-        '回答ID',
-        '回答日時',
-        '回答者ID',
-        '回答者名'
-      ] + question_titles
-    ]
-    value_range = Google::Apis::SheetsV4::ValueRange.new(values: values)
-    result = sheets.append_spreadsheet_value(self.spreadsheet_id,
-                                              "A1:A#{4 + question_titles.size}",
-                                              value_range,
-                                              value_input_option: 'RAW')
+    return if !self.sync_to_ggsheet || self.ggapi_auth_code.nil?
+    ConnectGoogleSheetJob.perform_later(id)
   end
 
   private
