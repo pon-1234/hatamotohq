@@ -113,6 +113,8 @@ class User::SurveysController < User::ApplicationController
         :success_message,
         :re_answer,
         :status,
+        :sync_to_ggsheet,
+        :google_oauth_code,
         survey_questions_attributes: [
           :id,
           :required,

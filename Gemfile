@@ -50,6 +50,7 @@ gem 'image_processing'
 gem 'activerecord-import'
 gem 'roo'
 gem 'rubyzip'
+gem 'google-apis-sheets_v4'
 
 # Localization
 gem 'enum_help'

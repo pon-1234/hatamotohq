@@ -28,11 +28,7 @@ class SurveyResponse < ApplicationRecord
   has_many :survey_answers
 
   after_create do
-    distribute_system_log
+    Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self.survey)
+    SyncResponseToGoogleSheetJob.perform_later(self.id) if self.survey.sync_to_ggsheet?
   end
-
-  private
-    def distribute_system_log
-      Messages::SystemLogBuilder.new(self.line_friend.channel).perform_survey(self.survey)
-    end
 end
