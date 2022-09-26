@@ -52,6 +52,22 @@
               </div>
             </div>
             <div class="form-group d-flex">
+              <label class="fw-350">PMS APIキー</label>
+              <div class="flex-grow-1">
+                <ValidationProvider name="PMS APIキー" rules="max:255" v-slot="{ errors }">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="setting[pms_api_key]"
+                    placeholder="入力してください"
+                    maxlength="256"
+                    v-model.trim="settingFormData.pms_api_key"
+                  />
+                  <span class="error-explanation">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </div>
+            </div>
+            <div class="form-group d-flex">
               <label class="fw-350">LINEアカウント名<required-mark /></label>
               <div class="flex-grow-1">
                 <ValidationProvider name="LINEアカウント名" rules="required|max:255" v-slot="{ errors }">
@@ -146,7 +162,8 @@ export default {
         display_name: null,
         channel_id: null,
         channel_secret: null,
-        liff_id: null
+        liff_id: null,
+        pms_api_key: null
       }
     };
   },
