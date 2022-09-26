@@ -30,7 +30,8 @@ class User::SettingController < User::ApplicationController
         :line_user_id,
         :line_name,
         :display_name,
-        :liff_id
+        :liff_id,
+        :pms_api_key
       )
     end
 

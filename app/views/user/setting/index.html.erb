@@ -25,6 +25,14 @@
             <td><%= @line_account.line_user_id %></td>
           </tr>
           <tr>
+            <th>LIFF ID</th>
+            <td><%= @line_account.liff_id.blank? ? '未設定' : @line_account.liff_id %></td>
+          </tr>
+          <tr>
+            <th>PMS APIキー</th>
+            <td><%= @line_account.pms_api_key.blank? ? '未設定' : @line_account.pms_api_key %></td>
+          </tr>
+          <tr>
             <th>チャネルID</th>
             <td><%= @line_account.channel_id %></td>
           </tr>
