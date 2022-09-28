@@ -12,17 +12,18 @@ class Room
   attr_reader :ota_url
   attr_reader :reservation_inquiry
 
-  def initialize(json, reservation_inquiry = nil)
+  def initialize(json, params = nil, reservation_inquiry = nil)
+    @params = params
     return if json.blank?
-    @type_id = json['typeId']
-    @type_name = json['typeName']
-    @image_url = json['roomPhotos']&.first.to_s
-    @area = "#{json['roomArea']['value']}#{json['roomArea']['unit']}"
-    @price = json['plans']&.first['planCalendar']&.first['price']&.to_s
-    @non_smoking = json['nonSmoking']
-    @capacity = "#{json['paxMin']}〜#{json['paxMax']}"
-    @vacant = json['plans']&.first['planCalendar']&.first['stock'].to_i > 0
-    @ota_url = json['otaUrl']
+    @type_id = json['id']
+    @type_name = json['name']
+    @image_url = json['lineImage']&.to_s || "#{ENV['DOMAIN']}/images/no-image.png"
+    @area = "#{json['roomArea'] || '-'}#{json['roomAreaUnit'] == 0 ? '平米' : '畳'}"
+    @price = json['stockCalendar'].pluck('price')&.min&.to_s
+    @non_smoking = json['labels'].first
+    @capacity = "#{json['paxMin'] || '-'}〜#{json['paxMax'] || '-'}"
+    @vacant = json['stockCalendar'].pluck('stock')&.min.to_i >= @params[:num_room].to_i
+    @ota_url = json['otaUrl'] || ENV['DOMAIN']
     @reservation_inquiry = reservation_inquiry
   end
 

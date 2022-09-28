@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_26_120604) do
+ActiveRecord::Schema.define(version: 2022_09_28_070109) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -418,7 +418,7 @@ ActiveRecord::Schema.define(version: 2022_09_26_120604) do
   end
 
   create_table 'reservation_inquiries', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
-    t.integer 'capacity'
+    t.integer 'num_room'
     t.date 'date_start'
     t.date 'date_end'
     t.datetime 'created_at', precision: 6, null: false

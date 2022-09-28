@@ -7,10 +7,11 @@ class Pms::BaseRequest
   include HTTParty
   base_uri ENV['PMS_API_URL']
 
-  def initialize
+  def initialize(api_key)
+    @api_key = api_key
   end
 
   def auth_header
-    @auth_header ||= { 'X-API-KEY' => ENV['PMS_API_KEY'] }
+    @auth_header ||= { 'X-API-KEY' => @api_key }
   end
 end

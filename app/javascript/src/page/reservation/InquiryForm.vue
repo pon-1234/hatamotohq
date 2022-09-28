@@ -12,17 +12,17 @@
       <div class="card">
         <div class="card-header border-bottom border-success"><h4>予約フォーム</h4></div>
         <div class="card-body">
-          <!-- 人数 -->
+          <!-- 部屋数 -->
           <div class="form-group row">
-            <label class="col-lg-4">人数<required-mark></required-mark></label>
+            <label class="col-lg-4">部屋数<required-mark></required-mark></label>
             <div class="col-lg-8">
-              <ValidationProvider name="人数" rules="required|numeric|min_value:1|max_value:1000" v-slot="{ errors }">
+              <ValidationProvider name="部屋数" rules="required|numeric|min_value:1|max_value:1000" v-slot="{ errors }">
                 <input
                   type="number"
                   class="form-control"
-                  name="inquiry[capacity]"
-                  placeholder="人数を入力してください"
-                  v-model.trim="inquiryFormData.capacity"
+                  name="inquiry[num_room]"
+                  placeholder="部屋数を入力してください"
+                  v-model.trim="inquiryFormData.num_room"
                 />
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
@@ -50,17 +50,17 @@
             </div>
           </div>
 
-          <!-- 終了日付 -->
+          <!-- チェックアウト日付 -->
           <div class="form-group row">
-            <label class="col-lg-4">終了日付<required-mark /></label>
+            <label class="col-lg-4">チェックアウト日付<required-mark /></label>
             <div class="col-lg-8">
-              <ValidationProvider name="終了日付" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="チェックアウト日付" rules="required" v-slot="{ errors }">
                 <datetime
                   input-class="form-control"
                   type="date"
                   :phrases="{ ok: '確定', cancel: '閉じる' }"
                   :min-datetime="inquiryFormData.date_start"
-                  placeholder="終了日付を選択してください"
+                  placeholder="チェックアウト日付を選択してください"
                   name="inquiry[date_end]"
                   value-zone="Asia/Tokyo"
                   zone="Asia/Tokyo"
@@ -104,7 +104,7 @@ export default {
       loading: true,
       inquiryFormData: {
         friend_line_id: null,
-        capacity: null,
+        num_room: null,
         date_start: null,
         date_end: null
       }

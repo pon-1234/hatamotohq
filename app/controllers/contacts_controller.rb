@@ -47,6 +47,6 @@ class ContactsController < ApplicationController
     end
 
     def load_room_information
-      @room_information = ReservationContact::GetRoomForLatestReservation.new.perform @latest_pms_reservation
+      @room_information = ReservationContact::GetRoomForLatestReservation.new.perform @latest_pms_reservation, @friend
     end
 end

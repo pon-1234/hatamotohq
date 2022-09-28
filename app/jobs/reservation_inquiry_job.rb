@@ -3,7 +3,7 @@
 class ReservationInquiryJob < ReservationDispatcherJob
   def perform(params)
     return if params[:friend_line_id].blank?
-    @inquiry = ReservationInquiry.create!(capacity: params[:capacity], date_start: (Date.parse(params[:date_start]) rescue nil),
+    @inquiry = ReservationInquiry.create!(num_room: params[:num_room], date_start: (Date.parse(params[:date_start]) rescue nil),
       date_end: (Date.parse(params[:date_end]) rescue nil))
     super(params)
   end
@@ -15,7 +15,7 @@ class ReservationInquiryJob < ReservationDispatcherJob
     end
 
     def get_rooms
-      @rooms = parse_rooms_data(Pms::GetRoom.new.perform({ pax: @params[:capacity], dateStart: @params[:date_start], dateEnd: @params[:date_end] }))
+      @rooms = parse_rooms_data(Pms::GetRoom.new(@channel.line_account.pms_api_key).perform({ num_room: @params[:num_room], check_in: @params[:date_start], check_out: @params[:date_end] }))
     end
 
     def build_content

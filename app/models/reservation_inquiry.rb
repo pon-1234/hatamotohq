@@ -5,7 +5,7 @@
 # Table name: reservation_inquiries
 #
 #  id         :bigint           not null, primary key
-#  capacity   :integer
+#  num_room   :integer
 #  date_start :date
 #  date_end   :date
 #  created_at :datetime         not null
