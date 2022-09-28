@@ -58,7 +58,7 @@
                           role="button"
                           class="dropdown-item"
                           :href="`${rootPath}/user/surveys/${survey.id}/edit`"
-                          v-if="survey.status !== 'published'"
+                          v-if="survey.status !== 'published' && survey.editable"
                           >回答フォームを編集</a
                         >
                         <a

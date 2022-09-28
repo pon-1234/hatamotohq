@@ -66,6 +66,10 @@ class Survey < ApplicationRecord
     self.survey_responses.count == 0
   end
 
+  def editable?
+    self.survey_responses.count == 0
+  end
+
   def responses_count
     survey_responses.count
   end
