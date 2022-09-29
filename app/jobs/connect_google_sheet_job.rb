@@ -6,7 +6,7 @@ class ConnectGoogleSheetJob < ApplicationJob
   queue_as :default
 
   def perform(survey_id)
-    @survey = Survey.find(survey_id)
+    @survey = Survey.find_by_id(survey_id)
     return if @survey.nil? || @survey.connected_to_ggsheet?
 
     result = GoogleApi::GetServiceTokens.new.perform(@survey.google_oauth_code)
