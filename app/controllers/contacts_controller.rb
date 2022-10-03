@@ -9,7 +9,7 @@ class ContactsController < ApplicationController
   end
 
   def create
-    ReservationContactJob.perform_later contact_params, params[:contact][:friend_line_id]
+    ReservationContactJob.perform_later contact_params
     redirect_to contact_result_path
   end
 
@@ -35,9 +35,9 @@ class ContactsController < ApplicationController
 
   private
     def contact_params
-      hashed_params = params.require(:contact).permit(:name, :phone_number).to_h
-      # rename phone_number key to phoneNumberPrimary
-      hashed_params[:phoneNumberPrimary] = hashed_params.delete :phone_number
+      hashed_params = params.require(:contact).permit(:name, :phone_number, :friend_line_id).to_h
+      hashed_params[:phoneNumber] = hashed_params.delete :phone_number
+      hashed_params[:lineId] = hashed_params.delete :friend_line_id
       hashed_params
     end
 

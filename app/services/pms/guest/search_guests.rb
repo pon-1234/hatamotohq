@@ -3,13 +3,13 @@
 require "#{Rails.root}/lib/common/error_handle.rb"
 
 class Pms::Guest::SearchGuests < Pms::BaseRequest
-  def perform(friend_information = {})
+  def perform(guest_info)
     options = {
       headers: auth_header.merge('Content-Type' => 'application/json', 'accept' => 'application/json'),
-      body: friend_information.to_json
+      body: guest_info.to_json
     }
     response = self.class.post '/guests/search', options
-    raise Common::PmsApiError.new(response.message) if response.code != 200
+    return nil if response.code != 200
     JSON.parse response.body
   rescue => exception
     raise Common::PmsApiError.new(exception.message)
