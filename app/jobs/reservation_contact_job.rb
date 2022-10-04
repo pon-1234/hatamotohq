@@ -4,7 +4,7 @@ class ReservationContactJob < ApplicationJob
   sidekiq_options retry: false
   queue_as :default
 
-  def perform(friend_search_information, friend_line_id)
-    ReservationContact::ContactWithFriendInformation.new.perform friend_search_information, friend_line_id
+  def perform(guest_info)
+    ReservationContact::ContactWithFriendInformation.new.perform guest_info
   end
 end

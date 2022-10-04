@@ -62,6 +62,24 @@
           </div>
 
           <div class="form-group row mt-4">
+            <label class="col-4">PMS APIキー</label>
+            <div class="col-8">
+              <ValidationProvider name=">PMS APIキー" rules="max:255" v-slot="{ errors }">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="入力してください"
+                  name="bot[pms_api_key]"
+                  maxlength="256"
+                  v-validate="'max:255'"
+                  v-model.trim="botForm.pms_api_key"
+                />
+                <span class="error-explanation">{{ errors[0] }}</span>
+              </ValidationProvider>
+            </div>
+          </div>
+
+          <div class="form-group row mt-4">
             <label class="col-4">チャネルID<required-mark></required-mark></label>
             <div class="col-8">
               <ValidationProvider name="チャネルID" rules="required|max:255" v-slot="{ errors }">
@@ -149,6 +167,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

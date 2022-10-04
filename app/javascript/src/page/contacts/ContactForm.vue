@@ -13,25 +13,9 @@
         <div class="card-header border-bottom border-success"><h4>お問い合わせフォーム</h4></div>
         <div class="card-body">
           <div class="form-group row">
-            <label class="col-lg-4">名前<required-mark></required-mark></label>
-            <div class="col-lg-8">
-              <ValidationProvider name="名前" rules="required" v-slot="{ errors }">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="contact[name]"
-                  placeholder="名前を入力してください"
-                  v-model.trim="contactFormData.name"
-                />
-                <span class="error-explanation">{{ errors[0] }}</span>
-              </ValidationProvider>
-            </div>
-          </div>
-
-          <div class="form-group row">
             <label class="col-lg-4">電話番号<required-mark /></label>
             <div class="col-lg-8">
-              <ValidationProvider name="電話番号" rules="required" v-slot="{ errors }">
+              <ValidationProvider name="電話番号" rules="required|length:11" v-slot="{ errors }">
                 <input
                   class="form-control"
                   type="text"
@@ -69,7 +53,6 @@ export default {
       csrfToken: Util.getCsrfToken(),
       loading: true,
       contactFormData: {
-        name: null,
         phoneNumber: null
       }
     };

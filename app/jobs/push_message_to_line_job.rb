@@ -64,8 +64,6 @@ class PushMessageToLineJob < ApplicationJob
         content['id'] = flex_message_id
       end
     end
-    # TODO
-
     message
   end
 end

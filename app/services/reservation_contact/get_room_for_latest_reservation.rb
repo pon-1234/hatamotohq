@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class ReservationContact::GetRoomForLatestReservation
-  def perform(latest_reservation)
+  def perform(latest_reservation, line_friend)
     prepared_params = {
       dateStart: latest_reservation.check_in_date,
       dateEnd: latest_reservation.check_out_date
     }
-    rooms = Pms::GetRoom.new.perform(prepared_params)
+    rooms = Pms::GetRoom.new(line_friend.line_account.pms_api_key).perform(prepared_params)
     if rooms.present?
       correct_room = rooms.select { |room| room['typeId'] == latest_reservation.room_list.first['room_id'] }.first
       {

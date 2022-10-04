@@ -14,6 +14,7 @@
 #  invite_url      :string(255)
 #  webhook_url     :string(255)
 #  liff_id         :string(255)
+#  pms_api_key     :string(255)
 #  note            :text(65535)
 #  bot_initialized :boolean          default(FALSE)
 #  created_at      :datetime         not null

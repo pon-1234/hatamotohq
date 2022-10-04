@@ -47,7 +47,7 @@ class Reservation < ApplicationRecord
 
   def update_notifier_id_from_pms(inquiry_id)
     return unless inquiry_id && inquiry = ReservationInquiry.find_by_id(inquiry_id)
-    api_result = Pms::CreateRoomNotifier.new.perform({
+    api_result = Pms::CreateRoomNotifier.new(self.line_account.pms_api_key).perform({
       typeId: room_id.to_i,
       conditions: {
         dateStart: I18n.l(inquiry.date_start, format: :hyphen),

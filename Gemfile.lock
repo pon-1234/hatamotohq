@@ -215,6 +215,8 @@ GEM
       webrick
     google-apis-iamcredentials_v1 (0.8.0)
       google-apis-core (>= 0.4, < 2.a)
+    google-apis-sheets_v4 (0.13.0)
+      google-apis-core (>= 0.4, < 2.a)
     google-apis-storage_v1 (0.9.0)
       google-apis-core (>= 0.4, < 2.a)
     google-cloud-core (1.6.0)
@@ -552,6 +554,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fcm
+  google-apis-sheets_v4
   google-cloud-storage (~> 1.11)
   hashie
   httparty

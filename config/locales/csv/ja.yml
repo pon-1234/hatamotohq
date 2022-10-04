@@ -25,3 +25,8 @@ ja:
       address: 住所
       postal_code: 郵便番号
       phone_number: 電話番号
+    survey_response:
+      id: 回答ID
+      created_at: 回答日時
+      answer_user_id: 回答者ID
+      answer_user_name: 回答者名

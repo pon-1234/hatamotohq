@@ -41,6 +41,7 @@
                       {{ survey.responses_count }}回答／<span class="font-12">{{ survey.users_count }}人</span>
                       <a :href="`${rootPath}/user/surveys/${survey.id}`" class="btn btn-sm btn-light ml-2">表示</a>
                     </template>
+                    <a :href="survey.ggsheet_url" v-if="survey.ggsheet_url" target="_blank" class="fw-100"><img src="/img/ggsheet.png" width="35"/></a>
                   </td>
                   <td class="mw-200">
                     <div class="btn-group">
@@ -57,8 +58,14 @@
                           role="button"
                           class="dropdown-item"
                           :href="`${rootPath}/user/surveys/${survey.id}/edit`"
-                          v-if="survey.status !== 'published'"
+                          v-if="survey.status !== 'published' && survey.editable"
                           >回答フォームを編集</a
+                        >
+                        <a
+                          role="button"
+                          class="dropdown-item"
+                          :href="`${rootPath}/user/surveys/${survey.id}/export`"
+                          >回答一覧DL</a
                         >
                         <a
                           role="button"

@@ -98,6 +98,16 @@
             />
             <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
           </div>
+
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="syncToGoogleSheet"
+              v-model.trim="surveyData.sync_to_ggsheet"
+            />
+            <label class="custom-control-label" for="syncToGoogleSheet">Googleスプレッドシート連携</label>
+          </div>
         </div>
         <loading-indicator :loading="this.loading"></loading-indicator>
       </div>
@@ -174,7 +184,10 @@ export default {
         questions: null,
         after_action: null,
         success_message: null,
-        re_answer: true
+        re_answer: true,
+        sync_to_ggsheet: true,
+        connected_to_ggsheet: false,
+        google_oauth_code: ''
       }
     };
   },
@@ -226,6 +239,12 @@ export default {
           return ViewHelper.scrollToRequiredField(false);
         }
       }
+
+      // Authorize with google api if needed
+      if (published && this.surveyData.sync_to_ggsheet && !this.surveyData.connected_to_ggsheet) {
+        this.surveyData.google_oauth_code = await this.$gAuth.getAuthCode();
+      }
+
       const payload = _.pick(this.surveyData, [
         'id',
         'folder_id',
@@ -235,7 +254,9 @@ export default {
         'description',
         'success_message',
         're_answer',
-        'after_action'
+        'after_action',
+        'sync_to_ggsheet',
+        'google_oauth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
       payload.survey_questions_attributes = this.surveyData.questions;
@@ -257,7 +278,6 @@ export default {
 
     onQuestionsChanged(questions) {
       this.surveyData.questions = questions;
-      // this.forceRerender();
     }
   }
 };
