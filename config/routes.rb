@@ -265,4 +265,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Static page
+  get '/privacy_policy', :to => redirect('privacy.html')
+  get '/term_of_service', :to => redirect('term.html')
 end
