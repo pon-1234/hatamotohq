@@ -23,7 +23,7 @@
           :min-datetime="currentDate"
           value-zone="Asia/Tokyo"
           v-validate="'required'"
-          data-vv-as="ゴール日時"
+          data-vv-as="ゴール日"
           zone="Asia/Tokyo"
         ></datetime>
         <error-message :message="errors.first('reminder_goal')"></error-message>

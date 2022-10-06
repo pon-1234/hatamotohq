@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="mt-2 d-flex" v-if="actionData.type === 'set'">
-          <label class="fw-150">ゴール日時</label>
+          <label class="fw-150">ゴール日</label>
           <div class="flex-grow-1">
             <datetime
               v-model="actionData.goal"
@@ -60,7 +60,7 @@
               :min-datetime="currentDate"
               value-zone="Asia/Tokyo"
               v-validate="'required'"
-              data-vv-as="ゴール日時"
+              data-vv-as="ゴール日"
               zone="Asia/Tokyo"
             ></datetime>
             <error-message :message="errors.first(name + '_reminder_goal')"></error-message>
