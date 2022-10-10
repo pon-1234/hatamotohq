@@ -5,7 +5,7 @@ export default {
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
-      cache: false
+      cache: true
     });
   },
 
