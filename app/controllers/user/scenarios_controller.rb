@@ -75,7 +75,7 @@ class User::ScenariosController < User::ApplicationController
 
   # GET /user/scenarios/manual
   def manual
-    @scenarios = Scenario.accessible_by(current_ability).manual
+    @scenarios = Scenario.accessible_by(current_ability).enabled.manual
   end
 
   # POST /user/scenarios/:id/send_to_testers
