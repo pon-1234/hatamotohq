@@ -47,16 +47,15 @@ class Reservation < ApplicationRecord
 
   def update_notifier_id_from_pms(inquiry_id)
     return unless inquiry_id && inquiry = ReservationInquiry.find_by_id(inquiry_id)
-    api_result = Pms::CreateRoomNotifier.new(self.line_account.pms_api_key).perform({
-      typeId: room_id.to_i,
-      conditions: {
-        dateStart: I18n.l(inquiry.date_start, format: :hyphen),
-        dateEnd: I18n.l(inquiry.date_end, format: :hyphen),
-        onStockGt: 0,
-        onPriceLt: 0
-      },
-      callbackUrl: "#{ENV['DOMAIN']}/reservations/callback"
-    })
+    api_result = Pms::CreateRoomNotifier.new(self.line_account.pms_api_key).perform(
+      room_id.to_i,
+      {
+        listenOn: 'roomStock',
+        stockTo: "#{ENV['DOMAIN']}/reservations/callback",
+        stockFrom: I18n.l(inquiry.date_start, format: :hyphen),
+        stockTo: I18n.l(inquiry.date_end, format: :hyphen)
+      }
+    )
     if api_result
       self.notifier_id = api_result
       self.save
