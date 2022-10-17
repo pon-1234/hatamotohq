@@ -99,7 +99,7 @@
             <label class="custom-control-label" for="repeatAnswerCheck">何度でも回答可能にする</label>
           </div>
 
-          <div class="custom-control custom-checkbox">
+          <div class="custom-control custom-checkbox" v-if="can_sync_ggsheet">
             <input
               type="checkbox"
               class="custom-control-input"
@@ -165,7 +165,7 @@ import { mapActions, mapState } from 'vuex';
 import ViewHelper from '@/core/view_helper';
 
 export default {
-  props: ['survey_id'],
+  props: ['survey_id', 'can_sync_ggsheet'],
   provide() {
     return { parentValidator: this.$validator };
   },

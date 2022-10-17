@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class AddGauthVisibleToClient < ActiveRecord::Migration[6.0]
-  # DOTS_HOME_MAIL_SUFFIX = '@dot-homes.jp'
-  DOTS_HOME_MAIL_SUFFIX = '@yopaz.vn'
+  DOTS_HOME_MAIL_SUFFIX = '@dot-homes.jp'
 
   def up
     add_column :clients, :gauth_visible, :boolean, default: false, after: :status
