@@ -259,7 +259,10 @@ export default {
         'google_oauth_code'
       ]);
       payload.status = published ? 'published' : 'draft';
-      payload.survey_questions_attributes = this.surveyData.questions;
+      payload.survey_questions_attributes = this.surveyData.questions.map((question, index) => {
+        question.order = index;
+        return question;
+      });
       let response = null;
       if (this.survey_id) {
         response = await this.updateSurvey(payload);

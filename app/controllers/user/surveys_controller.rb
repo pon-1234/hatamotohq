@@ -119,6 +119,7 @@ class User::SurveysController < User::ApplicationController
         :google_oauth_code,
         survey_questions_attributes: [
           :id,
+          :order,
           :required,
           :type,
           content: {}

@@ -77,6 +77,6 @@ export default {
   .banner {
     width: 100%;
     padding-top: 50%;
-    background-size: cover;
+    background-size: contain;
   }
 </style>

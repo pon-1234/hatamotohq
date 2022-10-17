@@ -23,6 +23,7 @@
 #  fk_rails_...  (survey_id => surveys.id)
 #
 class SurveyQuestion < ApplicationRecord
+  default_scope { order(order: :asc) }
   include QuestionType
   belongs_to :survey
 

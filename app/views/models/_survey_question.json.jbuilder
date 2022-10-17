@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-json.(question, :id, :type, :content, :required)
+json.(question, :id, :type, :order, :content, :required)
