@@ -3,6 +3,8 @@
 class Agency::ClientsController < Agency::ApplicationController
   before_action :find_client, only: [:edit, :update, :sso, :destroy]
 
+  DOTS_HOME_MAIL_SUFFIX = '@dot-homes.jp'
+
   # GET /agency/clients
   def index
     if request.format.json?
@@ -26,6 +28,7 @@ class Agency::ClientsController < Agency::ApplicationController
       # Create a new client
       client = Client.new(params.permit(:name, :address, :phone_number, :status))
       client.agency = current_agency
+      client.gauth_visible = params[:admin][:email].end_with? DOTS_HOME_MAIL_SUFFIX
       client.save!
       client.create_line_account
       # Create client admin

@@ -49,11 +49,13 @@ class User::SurveysController < User::ApplicationController
 
   # GET /user/surveys/new
   def new
+    @can_sync_ggsheet = current_user.client.gauth_visible
   end
 
   # GET /user/surveys/:id/edit
   def edit
     @survey_id = params[:id]
+    @can_sync_ggsheet = current_user.client.gauth_visible
   end
 
   # POST /user/surveys
