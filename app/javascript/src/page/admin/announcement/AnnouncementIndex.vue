@@ -24,7 +24,7 @@
                   <tr>
                     <td class="mw-200">{{ formattedDatetime(announcement.announced_at) }}</td>
                     <td>{{ announcement.title }}</td>
-                    <td>{{ formattedDatetime(announcement.updated_at) }}</td>
+                    <td class="text-nowrap">{{ formattedDatetime(announcement.updated_at) }}</td>
                     <td class="mw-150">
                       <announcement-status :announcement="announcement"></announcement-status>
                     </td>
