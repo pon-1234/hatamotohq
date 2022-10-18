@@ -48,6 +48,8 @@ export default {
   .banner {
     width: 300px;
     height: 150px;
-    background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left bottom;
   }
 </style>

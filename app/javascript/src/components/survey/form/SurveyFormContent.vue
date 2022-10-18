@@ -78,5 +78,7 @@ export default {
     width: 100%;
     padding-top: 50%;
     background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
   }
 </style>
