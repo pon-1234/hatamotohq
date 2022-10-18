@@ -76,9 +76,9 @@ export default {
 <style scoped>
   .banner {
     width: 100%;
-    padding-top: 50%;
+    padding-top: 40%;
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: left bottom;
   }
 </style>
