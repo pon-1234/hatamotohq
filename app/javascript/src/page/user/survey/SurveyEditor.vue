@@ -241,7 +241,7 @@ export default {
       }
 
       // Authorize with google api if needed
-      if (published && this.surveyData.sync_to_ggsheet && !this.surveyData.connected_to_ggsheet) {
+      if (published && this.can_sync_ggsheet && this.surveyData.sync_to_ggsheet && !this.surveyData.connected_to_ggsheet) {
         this.surveyData.google_oauth_code = await this.$gAuth.getAuthCode();
       }
 
