@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex">
-    <div v-bind:style="{ backgroundImage: `url(${imageUrl}` }" v-if="imageUrl" class="banner mr-2"></div>
+    <img :src="`${imageUrl}`" v-if="imageUrl" class="banner mr-2">
     <div v-if="!imageUrl">
       <div class="btn btn-outline-primary mt-auto" data-toggle="modal" :data-target="`#imagemapModalUploadImage`">
         {{ buttonTitle || "画像をアップロード" }}
@@ -47,9 +47,7 @@ export default {
 <style scoped>
   .banner {
     width: 300px;
-    height: 150px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: left bottom;
+    height: auto;
+    object-fit: contain;
   }
 </style>
