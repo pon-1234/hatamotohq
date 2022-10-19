@@ -107,7 +107,7 @@ class Survey < ApplicationRecord
   end
 
   def google_oauth_access_token
-    GoogleApi::RefreshAccessToken.new.perform(self.google_oauth_tokens['refresh_token'])
+    GoogleApi::RefreshAccessToken.new.perform(self.google_oauth_tokens['refresh_token']) rescue nil
   end
 
   def get_google_service_tokens

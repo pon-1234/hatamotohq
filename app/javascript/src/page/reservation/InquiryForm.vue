@@ -13,7 +13,7 @@
         <div class="card-header border-bottom border-success"><h4>予約フォーム</h4></div>
         <div class="card-body">
           <!-- 部屋数 -->
-          <div class="form-group row">
+          <!-- <div class="form-group row">
             <label class="col-lg-4">部屋数<required-mark></required-mark></label>
             <div class="col-lg-8">
               <ValidationProvider name="部屋数" rules="required|numeric|min_value:1|max_value:1000" v-slot="{ errors }">
@@ -27,7 +27,7 @@
                 <span class="error-explanation">{{ errors[0] }}</span>
               </ValidationProvider>
             </div>
-          </div>
+          </div> -->
 
           <!-- チェックイン日付 -->
           <div class="form-group row">
@@ -104,7 +104,7 @@ export default {
       loading: true,
       inquiryFormData: {
         friend_line_id: null,
-        num_room: null,
+        // num_room: null,
         date_start: null,
         date_end: null
       }

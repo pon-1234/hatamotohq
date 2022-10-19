@@ -12,7 +12,7 @@
         <div class="card-body">
           <survey-form-content :survey="survey" :preview="false"></survey-form-content>
         </div>
-        <div class="card-footer border-top border-success">
+        <div class="card-footer border-top border-success text-align-center">
           <button type="submit" class="btn btn-success fw-120">送信</button>
         </div>
         <loading-indicator :loading="loading"></loading-indicator>

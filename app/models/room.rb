@@ -17,7 +17,7 @@ class Room
     return if json.blank?
     @type_id = json['id']
     @type_name = json['name']
-    @image_url = json['lineImage']&.to_s || "#{ENV['DOMAIN']}/images/no-image.png"
+    @image_url = json['lineImage']&.to_s || "https://d809-2a09-bac0-23-00-827-7f9d.ngrok.io/images/no-image.png"
     @area = "#{json['roomArea'] || '-'}#{json['roomAreaUnit'] == 0 ? '平米' : '畳'}"
     @price = json['stockCalendar'].pluck('price')&.min&.to_s
     @non_smoking = json['labels'].first
