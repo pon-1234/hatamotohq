@@ -1,10 +1,6 @@
 <template>
   <div class="bg-white" v-if="survey">
-    <div
-      v-bind:style="{ backgroundImage: `url(${survey.banner_url})` }"
-      class="banner mb-1"
-      v-if="survey.banner_url"
-    ></div>
+    <img :src="`${survey.banner_url}`" v-if="survey.banner_url" class="banner mb-1">
     <div class="font-weight-bold">{{ survey.title }}</div>
     <div class="font-12">{{ survey.description }}</div>
 
@@ -76,7 +72,7 @@ export default {
 <style scoped>
   .banner {
     width: 100%;
-    padding-top: 50%;
-    background-size: contain;
+    height: auto;
+    object-fit: contain;
   }
 </style>
