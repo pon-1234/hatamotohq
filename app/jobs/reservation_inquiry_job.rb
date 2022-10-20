@@ -23,7 +23,6 @@ class ReservationInquiryJob < ReservationDispatcherJob
       @rooms.each do |room|
         contents << room.normalized_json
       end
-      p 'xxxxx', contents
       {
         type: 'carousel',
         contents: contents
