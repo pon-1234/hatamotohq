@@ -15,7 +15,7 @@ class ReservationInquiryJob < ReservationDispatcherJob
     end
 
     def get_rooms
-      @rooms = parse_rooms_data(Pms::GetRoom.new(@channel.line_account.pms_api_key).perform({ num_room: @params[:num_room], check_in: @params[:date_start], check_out: @params[:date_end] }))
+      @rooms = parse_rooms_data(Pms::GetRoom.new(@channel.line_account.pms_api_key).perform({ check_in: @params[:date_start], check_out: @params[:date_end] }))
     end
 
     def build_content
@@ -23,6 +23,7 @@ class ReservationInquiryJob < ReservationDispatcherJob
       @rooms.each do |room|
         contents << room.normalized_json
       end
+      p 'xxxxx', contents
       {
         type: 'carousel',
         contents: contents

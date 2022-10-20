@@ -16,6 +16,8 @@ class ReservationDispatcherJob < ApplicationJob
     def get_rooms; end
 
     def parse_rooms_data(rooms_data)
+      return if rooms_data.blank?
+
       rooms = []
       rooms_data.to_a.each do |room_data|
         rooms << Room.new(room_data, @params, @inquiry)
