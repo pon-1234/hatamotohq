@@ -17,68 +17,68 @@
           <div class="form-group d-flex">
             <label class="fw-300 mb-auto">フォーム名(管理用)<required-mark /></label>
             <div class="flex-grow-1">
-              <input
-                v-model.trim="surveyData.name"
-                type="text"
-                name="survey_name"
-                class="form-control"
-                placeholder="フォーム名(管理用)を入力してください"
-                v-validate="'required|max:64'"
-                maxlength="65"
-                data-vv-as="フォーム名(管理用)"
-              />
-              <error-message :message="errors.first('survey_name')"></error-message>
+              <ValidationProvider name="フォーム名(管理用)" rules="required|max:64" v-slot="{ errors }">
+                <input
+                  v-model.trim="surveyData.name"
+                  type="text"
+                  name="survey_name"
+                  class="form-control"
+                  placeholder="フォーム名(管理用)を入力してください"
+                  maxlength="65"
+                />
+                <error-message :message="errors[0]"></error-message>
+              </ValidationProvider>
             </div>
           </div>
           <div class="form-group d-flex">
             <label class="fw-300 mb-auto">タイトル<required-mark /></label>
             <div class="flex-grow-1">
-              <input
-                v-model.trim="surveyData.title"
-                type="text"
-                name="survey_title"
-                class="form-control"
-                placeholder="タイトルを入力してください"
-                v-validate="'required|max:255'"
-                data-vv-as="タイトル"
-              />
-              <error-message :message="errors.first('survey_title')"></error-message>
+              <ValidationProvider name="タイトル" rules="required|max:255" v-slot="{ errors }">
+                <input
+                  v-model.trim="surveyData.title"
+                  type="text"
+                  name="survey_title"
+                  class="form-control"
+                  placeholder="タイトルを入力してください"
+                />
+                <error-message :message="errors[0]"></error-message>
+              </ValidationProvider>
             </div>
           </div>
           <div class="form-group d-flex">
             <label class="fw-300 mb-auto">説明<required-mark /></label>
             <div class="flex-grow-1">
-              <textarea
-                rows="3"
-                v-model="surveyData.description"
-                type="text"
-                name="survey_description"
-                class="form-control flex-grow-1"
-                placeholder="説明を入力してください"
-                maxlength="1001"
-                v-validate="'required|max:1000'"
-                data-vv-as="説明"
-              >
-              </textarea>
-              <error-message :message="errors.first('survey_description')"></error-message>
+              <ValidationProvider name="説明" rules="required|max:1000" v-slot="{ errors }">
+                <textarea
+                  rows="3"
+                  v-model="surveyData.description"
+                  type="text"
+                  name="survey_description"
+                  class="form-control flex-grow-1"
+                  placeholder="説明を入力してください"
+                  maxlength="1001"
+                >
+                </textarea>
+                <error-message :message="errors[0]"></error-message>
+            </ValidationProvider>
             </div>
           </div>
           <div class="form-group d-flex">
             <label class="fw-300 mb-auto">回答後の文章</label>
             <div class="flex-grow-1">
-              <textarea
-                rows="2"
-                v-model="surveyData.success_message"
-                type="text"
-                name="survey_success_message"
-                class="form-control"
-                placeholder="回答後の文章を入力してください"
-                data-vv-as="回答後の文章"
-                maxlength="1001"
-                v-validate="'max:1000'"
-              >
-              </textarea>
-              <error-message :message="errors.first('survey_success_message')"></error-message>
+              <ValidationProvider name="回答後の文章" rules="max:1000" v-slot="{ errors }">
+                <textarea
+                  rows="2"
+                  v-model="surveyData.success_message"
+                  type="text"
+                  name="survey_success_message"
+                  class="form-control"
+                  placeholder="回答後の文章を入力してください"
+                  maxlength="1001"
+                >
+                </textarea>
+                <error-message :message="errors[0]"></error-message>
+              </ValidationProvider>
             </div>
           </div>
 
