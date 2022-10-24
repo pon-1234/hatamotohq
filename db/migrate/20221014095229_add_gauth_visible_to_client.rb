@@ -7,7 +7,7 @@ class AddGauthVisibleToClient < ActiveRecord::Migration[6.0]
     add_column :clients, :gauth_visible, :boolean, default: false, after: :status
     # Migrate existing data
     Client.all.each do |client|
-      if client.admin&.email.end_with? DOTS_HOME_MAIL_SUFFIX
+      if client.admin&.email&.end_with? DOTS_HOME_MAIL_SUFFIX
         client.gauth_visible = true
         client.save
       end
