@@ -33,6 +33,12 @@ staging:
     include_metadata: true
     description: "This worker dispatch reminder event that was enqueued"
     enabled: true
+  
+  DispatchRichmenuWorker:
+    cron: "0 0 * * * *" # Run every hour
+    include_metadata: true
+    description: "This worker dispatch rich menu to friends"
+    enabled: true
 
   GetNumberOfMessageDeliveryWorker:
     cron: "0 0 5 * * *" # Runs every day
