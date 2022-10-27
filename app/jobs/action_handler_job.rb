@@ -23,6 +23,8 @@ class ActionHandlerJob < ApplicationJob
         case action['type']
         when 'text'
           Postback::SendTextMessageHandler.new(@friend, action_content, @reply_token).perform
+          # Reply token is valid only for first time we use
+          @reply_token = nil
         when 'email'
           Postback::SendMailHandler.new(@friend, action_content).perform
         when 'scenario'

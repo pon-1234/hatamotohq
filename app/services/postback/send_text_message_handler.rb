@@ -14,6 +14,6 @@ class Postback::SendTextMessageHandler < Postback::BaseHandler
       reply_token: @reply_token,
       messages: messages
     }
-    PushMessageToLineJob.perform_later(payload)
+    PushMessageToLineJob.perform_now(payload)
   end
 end
