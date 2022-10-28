@@ -127,13 +127,14 @@ export default {
 
     currentDate() {
       return moment()
+        .add(1, 'days')
         .tz('Asia/Tokyo')
         .format();
     },
 
     tomorrow() {
       return moment()
-        .add(1, 'day')
+        .add(2, 'day')
         .tz('Asia/Tokyo')
         .format();
     }
