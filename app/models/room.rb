@@ -19,7 +19,8 @@ class Room
     @type_name = json['name']
     @image_url = json['lineImage']&.to_s || "#{ENV['DOMAIN']}/images/no-image.png"
     @area = "#{json['roomArea'] || '-'}#{json['roomAreaUnit'] == 0 ? '平米' : '畳'}"
-    @price = json['stockCalendar'].pluck('price')&.min&.to_s
+    min_price = json['stockCalendar'].pluck('price')&.min
+    @price = min_price > 0 ? min_price&.to_s : '-'
     @non_smoking = json['labels'].first
     @capacity = "#{json['paxMin'] || '-'}〜#{json['paxMax'] || '-'}"
     @vacant = json['stockCalendar'].pluck('stock')&.min.to_i >= @params[:num_room].to_i
