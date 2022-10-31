@@ -116,8 +116,8 @@ export default {
   },
 
   mounted() {
-    this.inquiryFormData.date_start = this.currentDate;
-    this.inquiryFormData.date_end = this.tomorrow;
+    this.inquiryFormData.date_start = this.defaultStartDate;
+    this.inquiryFormData.date_end = this.defaultEndDate;
   },
 
   computed: {
@@ -125,14 +125,14 @@ export default {
       return `${this.rootPath}/reservations/inquire/${this.friendLineId}`;
     },
 
-    currentDate() {
+    defaultStartDate() {
       return moment()
         .add(1, 'days')
         .tz('Asia/Tokyo')
         .format();
     },
 
-    tomorrow() {
+    defaultEndDate() {
       return moment()
         .add(2, 'day')
         .tz('Asia/Tokyo')
