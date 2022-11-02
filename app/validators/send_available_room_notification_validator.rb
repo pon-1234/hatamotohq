@@ -14,7 +14,7 @@ class SendAvailableRoomNotificationValidator
   private
     def has_room_bookmark
       unless Reservation.wait.exists?(room_id: type_id, notifier_id: notifier_id)
-        errors.add :base, 'お気に入りた部屋で見つかりませんでした。'
+        errors.add :base, 'キャンセル待ちしている部屋が見つかりませんでした。'
       end
     end
 end

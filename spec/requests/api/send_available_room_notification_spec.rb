@@ -111,7 +111,7 @@ RSpec.describe 'POST /reservations/callback/:uid', type: :request do
 
     it { expect(response.status).to eq(400) }
     it { expect(JSON.parse(response.body)['status']).to eq 'error' }
-    it { expect(JSON.parse(response.body)['message']).to eq 'お気に入りた部屋で見つかりませんでした。' }
+    it { expect(JSON.parse(response.body)['message']).to eq 'キャンセル待ちしている部屋が見つかりませんでした。' }
   end
 
   context 'when send available room notification successfully' do
