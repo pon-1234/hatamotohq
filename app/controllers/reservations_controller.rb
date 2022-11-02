@@ -43,6 +43,7 @@ class ReservationsController < ApplicationController
         .require(:inquiry)
         .permit(
           :friend_line_id,
+          :num_room,
           :date_start,
           :date_end
         )
