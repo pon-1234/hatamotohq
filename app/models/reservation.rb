@@ -50,8 +50,8 @@ class Reservation < ApplicationRecord
     api_result = Pms::CreateRoomNotifier.new(self.line_account.pms_api_key).perform(
       room_id.to_i,
       {
-        listenOn: 'roomStock',
-        stockTo: "#{ENV['DOMAIN']}/reservations/callback",
+        listenOn: ['roomStock'],
+        notifyTo: "#{ENV['DOMAIN']}/reservations/callback",
         stockFrom: I18n.l(inquiry.date_start, format: :hyphen),
         stockTo: I18n.l(inquiry.date_end, format: :hyphen)
       }
