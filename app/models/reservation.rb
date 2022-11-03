@@ -8,6 +8,9 @@
 #  line_friend_id  :bigint
 #  room_id         :string(255)
 #  room_name       :string(255)
+#  stock           :integer
+#  stock_from      :datetime
+#  stock_to        :datetime
 #  notifier_id     :string(255)
 #  status          :string(255)      default("wait")
 #  created_at      :datetime         not null
@@ -51,14 +54,17 @@ class Reservation < ApplicationRecord
       room_id.to_i,
       {
         listenOn: ['roomStock'],
-        notifyTo: "#{ENV['DOMAIN']}/reservations/callback",
+        notifyTo: 'https://ca28-2a09-bac1-7ae0-50-00-246-43.ngrok.io/reservations/callback',
         stockFrom: I18n.l(inquiry.date_start, format: :hyphen),
         stockTo: I18n.l(inquiry.date_end, format: :hyphen)
       }
     )
     if api_result
       self.notifier_id = api_result
-      self.save
+      self.stock = inquiry.num_room
+      self.stock_from = inquiry.date_start
+      self.stock_to = inquiry.date_end
+      self.save!
     end
   end
 end

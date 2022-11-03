@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 
 class AvailableRoomNotificationJob < ReservationDispatcherJob
+  def perform(params, reservation = nil)
+    @params = params
+    @reservation = reservation
+    find_channel
+    get_rooms
+    send_text_message('The room you want to book is available, please check detail below')
+    send_message
+    # Mark reservation as done
+    # reservation.update(status: :done)
+  end
+
   private
     def find_channel
       @channel = @reservation&.line_friend&.channel

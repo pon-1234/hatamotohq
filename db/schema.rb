@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_28_070109) do
+ActiveRecord::Schema.define(version: 2022_11_03_034347) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(version: 2022_09_28_070109) do
     t.string 'phone_number'
     t.string 'address'
     t.string 'status', default: 'active'
+    t.boolean 'gauth_visible', default: false
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
     t.index ['agency_id'], name: 'index_clients_on_agency_id'
@@ -429,6 +430,9 @@ ActiveRecord::Schema.define(version: 2022_09_28_070109) do
     t.bigint 'line_friend_id'
     t.string 'room_id'
     t.string 'room_name'
+    t.integer 'stock'
+    t.datetime 'stock_from'
+    t.datetime 'stock_to'
     t.string 'notifier_id'
     t.string 'status', default: 'wait'
     t.datetime 'created_at', precision: 6, null: false

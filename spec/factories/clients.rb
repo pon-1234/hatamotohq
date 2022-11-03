@@ -4,14 +4,15 @@
 #
 # Table name: clients
 #
-#  id           :bigint           not null, primary key
-#  agency_id    :bigint
-#  name         :string(255)
-#  phone_number :string(255)
-#  address      :string(255)
-#  status       :string(255)      default("active")
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id            :bigint           not null, primary key
+#  agency_id     :bigint
+#  name          :string(255)
+#  phone_number  :string(255)
+#  address       :string(255)
+#  status        :string(255)      default("active")
+#  gauth_visible :boolean          default(FALSE)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 # Indexes
 #

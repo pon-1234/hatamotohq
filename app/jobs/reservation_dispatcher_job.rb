@@ -55,6 +55,6 @@ class ReservationDispatcherJob < ApplicationJob
         channel_id: @channel.id,
         messages: messages
       }
-      PushMessageToLineJob.perform_later(payload)
+      PushMessageToLineJob.perform_now(payload)
     end
 end

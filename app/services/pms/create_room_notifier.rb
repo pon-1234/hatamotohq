@@ -9,7 +9,7 @@ class Pms::CreateRoomNotifier < Pms::BaseRequest
     response = self.class.post("/roomtypes/#{room_type_id}/notifier", options)
     return nil if response.code != 200
     jsonBody = JSON.parse(response.body)
-    jsonBody['notifierId']
+    jsonBody['data']['id']
   rescue
     nil
   end

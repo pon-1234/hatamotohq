@@ -7,8 +7,8 @@ class SendAvailableRoomNotificationValidator
 
   attr_accessor(*ATTRIBUTES)
 
-  validates :notifier_id, :type_id, :available_room_count, presence: true
-  validates :available_room_count, numericality: { only_integer: true, greater_than: 0 }
+  validates :notifier_id, :type_id, presence: true
+  # validates :available_room_count, numericality: { only_integer: true, greater_than: 0 }
   validate :has_room_bookmark
 
   private

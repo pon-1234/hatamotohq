@@ -23,4 +23,3 @@ flex_templates.each do |template|
     s.html_content = template[:html]
   end
 end
-

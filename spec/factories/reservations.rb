@@ -8,6 +8,9 @@
 #  line_friend_id  :bigint
 #  room_id         :string(255)
 #  room_name       :string(255)
+#  stock           :integer
+#  stock_from      :datetime
+#  stock_to        :datetime
 #  notifier_id     :string(255)
 #  status          :string(255)      default("wait")
 #  created_at      :datetime         not null
