@@ -69,9 +69,9 @@ class User::SurveysController < User::ApplicationController
   # PATCH /user/surveys/:id
   def update
     @survey.assign_attributes(survey_params)
-    old_survey_list = @survey.survey_questions.pluck(:id)
-    new_survey_list = survey_params[:survey_questions_attributes].pluck(:id)
-    (old_survey_list - new_survey_list).each { |i| @survey.survey_questions_attributes = { id: i, _destroy: '1' } }
+    cur_question_ids = @survey.survey_questions.pluck(:id)
+    new_question_ids = survey_params[:survey_questions_attributes].pluck(:id)
+    (cur_question_ids - new_question_ids).each { |i| @survey.survey_questions_attributes = { id: i, _destroy: '1' } }
     unless @survey.save(validate: !@survey.draft?)
       render_bad_request_with_message(@survey.first_error_message)
     end
