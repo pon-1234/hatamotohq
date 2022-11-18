@@ -205,6 +205,7 @@ export default {
     },
     copyObject(index) {
       const newObject = _.cloneDeep(this.objectLists[index]);
+      newObject.id = null;
       this.objectLists.push(newObject);
       this.syncObj();
       var newSurvey = $('.survey:last')[0];
