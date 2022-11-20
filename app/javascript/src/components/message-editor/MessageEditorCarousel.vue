@@ -69,11 +69,11 @@
                 <label
                   >画像
                   <tool-tip
-                    title="画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨。"
+                    title="画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨、縦横比：1:1.51）"
                   ></tool-tip
                 ></label>
                 <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-lg-6">
                     <div class="group-button-thumb">
                       <div
                         class="btn btn-secondary btn-block btn-sm uploadfile-thumb"
@@ -102,8 +102,9 @@
                         全パネルの画像を削除
                       </div>
                     </div>
+                    <span class="text-sm mb-2">画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨、縦横比：1:1.51）</span>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-lg-6">
                     <img v-if="column.thumbnailImageUrl" :src="column.thumbnailImageUrl" class="image-carousel-thumb" />
                     <span v-if="errorMessageUploadFile" class="label error-message-upload">{{
                       errorMessageUploadFile
@@ -616,7 +617,7 @@ export default {
   }
 
   .image-carousel-thumb {
-    height: 150px;
+    width: 200px;
   }
 
   .active {

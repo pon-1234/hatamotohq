@@ -129,6 +129,7 @@
                 <div class="btn btn-outline-danger btn-sm" @click="removeAllThumb" v-if="column.imageUrl">
                   全パネルの画像を削除
                 </div>
+                <span class="text-sm mb-2">画像のファイルメッセージの表示が遅延することを防ぐために、個々の画像ファイルサイズを小さくしてください（1MB以下推奨、縦横比：1:1.51）</span>
                 <!-- error message if no image is selected -->
                 <input
                   type="hidden"
