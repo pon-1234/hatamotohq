@@ -94,6 +94,8 @@ class Survey < ApplicationRecord
 
   def clone!
     new_survey = self.dup
+    new_survey.connected_to_ggsheet = false
+    new_survey.google_oauth_code = nil
     new_survey.name = self.name + '（コピー）'
     new_survey.status = :draft
     new_survey.save!
