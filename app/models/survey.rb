@@ -95,7 +95,7 @@ class Survey < ApplicationRecord
   def clone!
     new_survey = self.dup
     new_survey.connected_to_ggsheet = false
-    new_survey.google_oauth_code = nil
+    new_survey.google_oauth_code = ''
     new_survey.name = self.name + '（コピー）'
     new_survey.status = :draft
     new_survey.save!
@@ -113,7 +113,7 @@ class Survey < ApplicationRecord
   end
 
   def get_google_service_tokens
-    return if !self.sync_to_ggsheet || self.google_oauth_code.nil?
+    return if self.google_oauth_code.blank? || !self.published?
     ConnectGoogleSheetJob.perform_later(self.id)
   end
 
