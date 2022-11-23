@@ -43,7 +43,7 @@
       <div class="flex-grow-1">
         <survey-variable-config
           type="text"
-          :field="questionContentData.variable ? value.variable.name : null"
+          :field="questionContentData.variable ? questionContentData.variable.name : null"
           :name="name + '-infomation'"
           @input="questionContentData.variable = $event"
         ></survey-variable-config>
@@ -133,6 +133,10 @@ export default {
         sub_text: null,
         name: this.name,
         profile: null,
+        variable: {
+          name: null,
+          id: null
+        },
         options: [
           {
             value: null,
