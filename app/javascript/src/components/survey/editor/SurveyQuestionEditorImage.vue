@@ -57,10 +57,6 @@ export default {
   data() {
     return {
       value: this.content || {
-        variable: {
-          name: null,
-          id: null
-        },
         text: null,
         name: this.name,
         sub_text: null

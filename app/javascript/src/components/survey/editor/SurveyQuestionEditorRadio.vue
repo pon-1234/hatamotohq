@@ -124,10 +124,6 @@ export default {
         text: null,
         name: this.name,
         sub_text: null,
-        variable: {
-          name: null,
-          id: null
-        },
         options: [
           {
             editing: true,

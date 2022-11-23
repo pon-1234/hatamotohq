@@ -132,11 +132,6 @@ export default {
         text: null,
         sub_text: null,
         name: this.name,
-        profile: null,
-        variable: {
-          name: null,
-          id: null
-        },
         options: [
           {
             value: null,

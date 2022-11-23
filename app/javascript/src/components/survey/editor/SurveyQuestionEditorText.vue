@@ -59,11 +59,7 @@ export default {
       value: this.content || {
         name: this.name,
         text: null,
-        sub_text: null,
-        variable: {
-          name: null,
-          id: null
-        }
+        sub_text: null
       }
     };
   },
