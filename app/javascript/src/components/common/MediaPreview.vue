@@ -1,10 +1,6 @@
 <template>
   <div class="media-content d-flex align-items-center justify-content-center">
-    <div
-      v-if="isImage"
-      class="fw-200 fh-150 image"
-      v-lazy:background-image="src"
-    ></div>
+    <img v-lazy="`${src}`" v-if="isImage" class="image">
     <div v-else-if="isVideo">
       <video :width="200" :height="150" controls>
         <source :src="src" />
@@ -46,7 +42,9 @@ export default {
     display: inline-flex;
 
     .image {
-      background-size: cover;
+      object-fit: contain;
+      height: auto;
+      width: 200px;
     }
   }
 
