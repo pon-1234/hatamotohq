@@ -3,7 +3,7 @@ export default {
   props: ['data'],
   render: function(h) {
     // eslint-disable-next-line no-useless-escape
-    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gim;
+    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.\%\@\:\_\~\+]*[\w-]+)*\/?\#?/gim;
     const text = this.data.replace(urlRegex, function(url, protocol) {
       let actualUrl = url;
       if (protocol === undefined) actualUrl = '//' + actualUrl;
