@@ -63,7 +63,7 @@
               <tr>
                 <th>名前</th>
                 <th class="d-none d-lg-table-cell">登録日時</th>
-                <th class="d-none d-lg-table-cell">タグ</th>
+                <th class="d-none d-lg-table-cell mw-400">タグ</th>
                 <th>状況</th>
                 <th v-if="isAdmin" class="d-none d-lg-table-cell">担当者</th>
                 <th class="d-none d-lg-table-cell">操作</th>
@@ -79,7 +79,7 @@
                   </p>
                 </td>
                 <td class="d-none d-lg-table-cell">{{ formattedDatetime(friend.created_at) }}</td>
-                <td class="d-none d-lg-table-cell">
+                <td class="d-none d-lg-table-cell mxw-300">
                   <friend-tag :tags="friend.tags"></friend-tag>
                 </td>
                 <td>
