@@ -48,9 +48,9 @@ export default {
         case 'rsv_cancel_intro':
           result += '予約・空室待ちキャンセルを送信 <br>';
           break;
-        case 'service_review':
-          result += 'サービス評価フォームを送信 <br>';
-          break;
+        // case 'service_review':
+        //   result += 'サービス評価フォームを送信 <br>';
+        //   break;
         }
       });
       return result;
