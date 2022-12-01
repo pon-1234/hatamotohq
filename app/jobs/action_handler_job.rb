@@ -8,12 +8,12 @@ class ActionHandlerJob < ApplicationJob
     @friend = friend
     @action = action
     @reply_token = reply_token
+    # Create text message if friend select option contains displayText
+    handle_display_text(@action['displayText']) if @action['displayText'].present?
     # Handle multiple actions
     handle_message_action(@action['actions']) if @action['actions'].present?
     # Handle single action
     handle_message_action([@action['action']]) if @action['action'].present?
-    # Create text message if friend select option contains displayText
-    handle_display_text(@action['displayText']) if @action['displayText'].present?
   end
 
   private
@@ -52,6 +52,7 @@ class ActionHandlerJob < ApplicationJob
         when 'assign_staff'
           Postback::AssignStaffHandler.new(@friend, action_content).perform
         end
+        sleep 0.1
       end
     end
 
