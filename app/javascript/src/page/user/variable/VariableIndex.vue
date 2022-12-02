@@ -225,20 +225,22 @@ export default {
 
     async submitDeleteVariable() {
       const response = await this.deleteVariable(this.curVariable.id);
+      const url = `${this.rootPath}/user/variables?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('友だち情報欄の削除は完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('友だち情報欄の削除は完了しました。', url);
       } else {
-        Util.showErrorThenRedirect('友だち情報欄の削除は失敗しました。', window.location.href);
+        Util.showErrorThenRedirect('友だち情報欄の削除は失敗しました。', url);
       }
       this.forceRerender();
     },
 
     async submitCopyVariable() {
       const response = await this.copyVariable(this.curVariable.id);
+      const url = `${this.rootPath}/user/variables?folder_id=${this.curFolder.id}`;
       if (response) {
-        Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', window.location.href);
+        Util.showSuccessThenRedirect('友だち情報欄のコピーは完了しました。', url);
       } else {
-        Util.showErrorThenRedirect('友だち情報欄のコピーは失敗しました。', window.location.href);
+        Util.showErrorThenRedirect('友だち情報欄のコピーは失敗しました。', url);
       }
       this.forceRerender();
     },
