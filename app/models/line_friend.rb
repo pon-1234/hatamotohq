@@ -56,6 +56,7 @@ class LineFriend < ApplicationRecord
   scope :is_tester, -> { where(tester: true) }
 
   after_create_commit :exec_after_create_commit
+  after_update :exec_after_unblock
 
   def self.find_all_by_tags(line_account_id, tag_ids)
     LineAccount.find(line_account_id).line_friends.joins(:tags).references(:tags).where(tags: { id: tag_ids })
@@ -153,7 +154,14 @@ class LineFriend < ApplicationRecord
   end
 
   private
-    def exec_after_create_commit
+
+  def exec_after_create_commit
+    AcquireFriendJob.perform_later(self.id)
+  end
+
+  def exec_after_unblock
+    if saved_change_to_attribute?(:locked) && !locked
       AcquireFriendJob.perform_later(self.id)
     end
+  end
 end
