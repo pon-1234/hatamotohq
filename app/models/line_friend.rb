@@ -160,7 +160,7 @@ class LineFriend < ApplicationRecord
   end
 
   def exec_after_unblock
-    if saved_change_to_attribute?(:locked) && !locked
+    if saved_change_to_attribute?(:status) && self.active?
       AcquireFriendJob.perform_later(self.id)
     end
   end
