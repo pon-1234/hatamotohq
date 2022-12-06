@@ -54,7 +54,7 @@ class Reservation < ApplicationRecord
       room_id.to_i,
       {
         listenOn: ['roomStock'],
-        notifyTo: 'https://ca28-2a09-bac1-7ae0-50-00-246-43.ngrok.io/reservations/callback',
+        notifyTo: "#{ENV['DOMAIN']}/reservations/callback",
         stockFrom: I18n.l(inquiry.date_start, format: :hyphen),
         stockTo: I18n.l(inquiry.date_end, format: :hyphen)
       }
