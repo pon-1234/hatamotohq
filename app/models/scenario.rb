@@ -35,6 +35,8 @@ class Scenario < ApplicationRecord
   belongs_to :line_account
   has_many :scenario_events, dependent: :destroy
   has_many :scenario_messages, dependent: :destroy
+  has_many :scenario_friends, dependent: :destroy
+  has_many :scenario_logs, dependent: :destroy
   has_many :taggings, as: :taggable, dependent: :destroy
   has_many :tags, through: :taggings
 
