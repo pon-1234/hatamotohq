@@ -6,7 +6,7 @@ class AvailableRoomNotificationJob < ReservationDispatcherJob
     @reservation = reservation
     find_channel
     get_rooms
-    send_text_message('The room you want to book is available, please check detail below')
+    send_text_message('お待ちしていただいたお部屋に空きができました。下記でご確認ください')
     send_message
     # Mark reservation as done
     # reservation.update(status: :done)
