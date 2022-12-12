@@ -10,7 +10,6 @@ class WebhookHandler
 
     @friend_id = @event[:source][:userId]
     type = @event[:type]
-    # binding.pry
     case type
     when 'follow'
       handle_follow
