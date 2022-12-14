@@ -105,7 +105,7 @@ class Media {
       valid: true
     };
 
-    if (['video/mp4', 'audio/mp4'].includes(mineType.toString()) && type === 'audio') {
+    if (mineType && ['video/mp4', 'audio/mp4'].includes(mineType.toString()) && type === 'audio') {
       result = this.messageError();
       return result;
     }
