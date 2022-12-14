@@ -45,7 +45,7 @@ class DispatchBroadcastJob < ApplicationJob
       end
     else
       # Deliver messages via line api
-      success = send_multicast(line_account, nomalized_messages_data, friends.map { |friend| [friend.line_user_id, friend.line_name] })
+      success = send_multicast(line_account, nomalized_messages_data, friends)
       nomalized_messages_data.each do |content|
         insert_delivered_message(channels, content)
       end if success
@@ -80,7 +80,7 @@ class DispatchBroadcastJob < ApplicationJob
         insert_delivered_message(channels, content)
       end
     else
-      success = send_multicast(line_account, nomalized_messages_data, friends.map { |friend| [friend.line_user_id, friend.line_name] })
+      success = send_multicast(line_account, nomalized_messages_data, friends)
       nomalized_messages_data.each do |content|
         insert_delivered_message(channels, content)
       end if success
@@ -112,15 +112,15 @@ class DispatchBroadcastJob < ApplicationJob
       LineApi::Broadcast.new(line_account).perform(messages_data)
     end
 
-    def send_multicast(line_account, messages_data, friends_info)
-      friends_info.in_groups_of(MULTICAST_BATCH_SIZE, false) do |friend_info|
-        friend_info&.each do |id, name|
+    def send_multicast(line_account, messages_data, friends)
+      friends.in_groups_of(MULTICAST_BATCH_SIZE, false) do |friends_info|
+        friends_info&.each do |friend|
           messages_change = Marshal.load(Marshal.dump messages_data)
           messages_change.map! do |message|
-            message['text'].gsub! '{name}', name || '' if message['text']
+            message['text'].gsub! '{name}', friend.line_name || '' if message['text']
             message
           end
-          LineApi::Multicast.new(line_account).perform(messages_change, id)
+          LineApi::Multicast.new(line_account).perform(messages_change, friend.line_user_id)
         end
       end
       true
