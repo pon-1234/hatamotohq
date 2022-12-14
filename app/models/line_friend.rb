@@ -122,6 +122,23 @@ class LineFriend < ApplicationRecord
     reminding
   end
 
+  def send_suitable_rich_menu
+    RichMenu.target_condition.where(status: :enabled, line_account_id: line_account.id).sort_by(&:updated_at)&.each do |rich_menu|
+      tag_condition = rich_menu.conditions.detect { |condition| condition['type'].eql?('tag') }
+      tag_ids = tag_condition['data']['tags'].pluck('id')
+      if (tag_ids & self.tags.pluck(:id)).any?
+        unless LineApi::BulkLinkRichMenus.new(line_account).perform([self.line_user_id], rich_menu.line_menu_id)
+          richmenu.logs = 'Could not bulk link rich menu'
+          richmenu.status = :error
+        end
+        return
+      end
+    end
+
+    # If no suitable rich menus was set, unlink all rich menus
+    LineApi::BulkUnlinkRichMenus.new(line_account).perform([self.line_user_id])
+  end
+
   def variables
     FriendVariable.find_by_sql(['
       WITH rfv AS (
@@ -154,14 +171,14 @@ class LineFriend < ApplicationRecord
   end
 
   private
-
-  def exec_after_create_commit
-    AcquireFriendJob.perform_later(self.id)
-  end
-
-  def exec_after_unblock
-    if saved_change_to_attribute?(:status) && self.active?
+    def exec_after_create_commit
       AcquireFriendJob.perform_later(self.id)
     end
-  end
+
+    def exec_after_unblock
+      if saved_change_to_attribute?(:status) && self.active?
+        AcquireFriendJob.perform_later(self.id)
+        send_suitable_rich_menu
+      end
+    end
 end
