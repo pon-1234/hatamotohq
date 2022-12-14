@@ -29,6 +29,7 @@ class User::FriendsController < User::ApplicationController
   # PATCH /user/friends/:id
   def update
     if @friend.update(update_friend_params)
+      @friend.send_suitable_rich_menu
       render_success
     else
       render_bad_request

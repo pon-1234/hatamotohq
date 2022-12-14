@@ -6,6 +6,7 @@ class Postback::AssignOrUnassignTagHandler < Postback::BaseHandler
     unassign_action = @content.find { |action| action['type'] == 'unassign' }
     assign_tag(assign_action) if assign_action.present?
     unassign_tag(unassign_action) if unassign_action.present?
+    @friend.send_suitable_rich_menu
   end
 
   def assign_tag(action)

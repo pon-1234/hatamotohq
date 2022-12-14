@@ -27,17 +27,6 @@ class WebhookHandler
       line_friend = add_friend(@friend_id)
       if line_friend.present?
         handle_after_follow(line_friend.channel)
-        RichMenu.target_condition.where(status: :enabled, line_account_id: @line_account.id).sort_by(&:updated_at)&.each do |rich_menu|
-          tag_condition = rich_menu.conditions.detect { |condition| condition['type'].eql?('tag') }
-          tag_ids = tag_condition['data']['tags'].pluck('id')
-          if (tag_ids & line_friend.tags.pluck(:id)).any?
-            unless LineApi::BulkLinkRichMenus.new(@line_account).perform([line_friend.line_user_id], rich_menu.line_menu_id)
-              richmenu.logs = 'Could not bulk link rich menu'
-              richmenu.status = :error
-            end
-            break
-          end
-        end
       end
     end
 
