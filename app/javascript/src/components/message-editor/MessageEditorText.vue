@@ -16,6 +16,9 @@
       v-validate="'required|max:5000'"
       :name="'message-editor' + index"
     />
+    <div class="text-sm">
+      <p class="m-0">{name}：お客様の名前</p>
+    </div>
     <error-message :message="errors.first('message-editor' + index)"></error-message>
   </div>
 </template>
