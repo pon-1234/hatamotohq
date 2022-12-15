@@ -12,7 +12,7 @@ class PushMessageToLineJob < ApplicationJob
     messages = payload[:messages]
     # Normalize message content
     messages.each do |message|
-      Normalizer::MessageNormalizer.new(message).perform
+      Normalizer::MessageNormalizer.new(message, @channel.line_friend).perform
     end
     # Send using reply token
     if @reply_token.present?

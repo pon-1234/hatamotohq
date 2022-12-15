@@ -7,6 +7,7 @@ class Postback::SendTextMessageHandler < Postback::BaseHandler
   end
 
   def perform
+    Normalizer::MessageNormalizer.new(@content, @friend).perform
     messages = [{ type: 'text', text: @content['text'] }]
     # Rebuild payload
     payload = {
