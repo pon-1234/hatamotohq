@@ -97,6 +97,7 @@ class Api::V1::Staff::MessagesController < Api::V1::Staff::ApplicationController
     # Call line api to send the message to friend
     def push_message_to_line
       line_account = current_staff.line_account
+      Normalizer::MessageNormalizer.new(@message.content, @channel.line_friend).perform
       LineApi::PushMessage.new(line_account).perform [@message.content], @channel.line_friend.line_user_id
     end
 end

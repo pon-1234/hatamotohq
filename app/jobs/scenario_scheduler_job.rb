@@ -41,7 +41,7 @@ class ScenarioSchedulerJob < ApplicationJob
           attach_shorten_url_to_message(scenario_message, site_measurement, @channel.line_friend.line_user_id)
         end
       end
-      normalized = scenario_message.content
+      normalized = Normalizer::MessageNormalizer.new(scenario_message.content, @channel.line_friend).perform
       if contain_survey_action?(normalized)
         normalized = normalize_messages_with_survey_action(@channel, normalized)
       end
@@ -85,7 +85,7 @@ class ScenarioSchedulerJob < ApplicationJob
         channel: @channel,
         scenario_message: message,
         type: 'message',
-        content: message.content,
+        content: Normalizer::MessageNormalizer.new(message.content, @channel.line_friend).perform,
         schedule_at: schedule_at,
         order: message.step,
         status: 'queued',
@@ -100,7 +100,7 @@ class ScenarioSchedulerJob < ApplicationJob
         scenario: @scenario,
         channel: @channel,
         type: 'after_action',
-        content: @scenario.after_action['data'],
+        content: Normalizer::MessageNormalizer.new(@scenario.after_action['data'], @channel.line_friend).perform,
         schedule_at: schedule_at,
         order: step,
         status: 'queued',
