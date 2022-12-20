@@ -128,8 +128,8 @@ class LineFriend < ApplicationRecord
       tag_ids = tag_condition['data']['tags'].pluck('id')
       if (tag_ids & self.tags.pluck(:id)).any?
         unless LineApi::BulkLinkRichMenus.new(line_account).perform([self.line_user_id], rich_menu.line_menu_id)
-          richmenu.logs = 'Could not bulk link rich menu'
-          richmenu.status = :error
+          rich_menu.logs = 'Could not bulk link rich menu'
+          rich_menu.status = :error
         end
         return
       end
