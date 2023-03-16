@@ -19,6 +19,4 @@ ja:
       survey: "回答フォームに回答しました：【%{name}】"
       reminder: "リマインドが配信されました：【%{title}】"
     precheckin:
-      create_success: '事前チェックインが完了しました'
-      update_success: '事前チェックインが編集しました'
-      failed: '事前チェックインが失敗しました'
+      success: '事前チェックインが完了しました'

@@ -3,6 +3,8 @@
 class ReservationsController < ApplicationController
   include ResponseHelper
 
+  ATTRIBUTES = %i[name phone_number check_in_date address age_group companion gender]
+
   skip_before_action :verify_authenticity_token, only: :callback
 
   # GET /reservations/precheckin_form/:friend_line_id
@@ -20,20 +22,23 @@ class ReservationsController < ApplicationController
     @friend_line_id = params[:friend_line_id]
     precheckin = ReservationPrecheckin.find_by(precheckin_params)
     if precheckin.present?
-      @precheckin_data = precheckin.slice(:name, :phone_number, :check_in_date, :address, :age_group, :companion, :gender)
+      @precheckin_data = precheckin.slice(ATTRIBUTES)
     else
       @precheckin_data = {
         phone_number: precheckin_params[:phone_number],
         check_in_date: precheckin_params[:check_in_date]
       }
-      if reservation = get_reservation(precheckin_params)
-        guestId = reservation['guestId']
-        guest = InsightOpenApi::GetGuest.new.perform(guestId)
-        @precheckin_data[:name] = guest['name']
-        @precheckin_data[:address] = guest['address']
+      friend = LineFriend.find_by_line_user_id params[:friend_line_id]
+      pms_api_key = friend.line_account.pms_api_key
+      if reservation = get_reservation(pms_api_key, precheckin_params)
+        guest = Pms::Guest::GetGuests.new(pms_api_key).perform(reservation['guestId'])
+        if guest.present?
+          @precheckin_data[:name] = guest['name']
+          @precheckin_data[:address] = guest['address']
+        end
       end
     end
-    render 'precheckin_detail_form'
+    render :precheckin_detail_form
   end
 
   # POST /reservations/inquire/:friend_line_id
@@ -44,33 +49,28 @@ class ReservationsController < ApplicationController
 
   # POST /reservations/precheckin_detail
   def precheckin_detail
-    response1, response2 = [], []
-    if reservation = get_reservation(precheckin_params)
-      guestId = reservation['guestId']
-      response1 = InsightOpenApi::UpdateGuest.new.perform(precheckin_params, guestId)
-      reservation_id = reservation['id']
-      response2 = InsightOpenApi::UpdateReservation.new.perform(precheckin_params, reservation_id)
+    friend = LineFriend.find_by_line_user_id params[:friend_line_id]
+    pms_api_key = friend.line_account.pms_api_key
+    if reservation = get_reservation(pms_api_key, precheckin_params)
+      Pms::Guest::UpdateGuest.new(pms_api_key).perform(reservation['guestId'], { ageGroup: precheckin_params[:age_group], gender: precheckin_params[:gender] })
+      Pms::Reservation::UpdateReservations.new(pms_api_key).perform(reservation['id'], { companion: precheckin_params[:companion] })
     end
-    friend = LineFriend.find_by line_user_id: params[:friend_line_id]
-    channel_id = friend.channel.id
-    if response1.nil? && response2.nil?
-      messages = [{"text"=>I18n.t('messages.precheckin.failed'), "type"=>"text"}]
+    precheckin = ReservationPrecheckin.find_by(phone_number: precheckin_params[:phone_number], check_in_date: precheckin_params[:check_in_date])
+    if precheckin.present?
+      precheckin.update(precheckin_params)
+      messages = [{"text"=>I18n.t('messages.precheckin.success'), "type"=>"text"}]
     else
-      precheckin = ReservationPrecheckin.find_by(phone_number: precheckin_params[:phone_number], check_in_date: precheckin_params[:check_in_date])
-      if precheckin.present?
-        precheckin.update(precheckin_params)
-        messages = [{"text"=>I18n.t('messages.precheckin.update_success'), "type"=>"text"}]
-      else
-        ReservationPrecheckin.create!(precheckin_params)
-        messages = [{"text"=>I18n.t('messages.precheckin.create_success'), "type"=>"text"}]
-      end
+      ReservationPrecheckin.create!(precheckin_params)
+      messages = [{"text"=>I18n.t('messages.precheckin.success'), "type"=>"text"}]
     end
     payload = {
-      channel_id: channel_id,
+      channel_id: friend.channel.id,
       messages: messages
     }
     PushMessageToLineJob.perform_now(payload)
     redirect_to reservation_precheckin_success_path
+  rescue => exception
+    puts exception.message
   end
 
   # GET /reservations/inquiry_success
@@ -104,15 +104,7 @@ class ReservationsController < ApplicationController
     def precheckin_params
       params
         .require(:precheckin)
-        .permit(
-          :name,
-          :phone_number,
-          :check_in_date,
-          :address,
-          :age_group,
-          :companion,
-          :gender
-        )
+        .permit(ATTRIBUTES)
     end
 
     def inquiry_params
@@ -132,8 +124,13 @@ class ReservationsController < ApplicationController
       @available_room_params.to_h.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
     end
 
-    def get_reservation(params)
-      response = InsightOpenApi::SearchReservations.new.perform(params[:check_in_date], params[:phone_number])
+    def get_reservation(pms_api_key, params)
+      reservation_info = {
+        checkInFrom: params[:check_in_date],
+        checkInTo: params[:check_in_date],
+        guestPhoneNumber: params[:phone_number]
+      }
+      response = Pms::Reservation::SearchReservations.new(pms_api_key).perform(reservation_info)
       response.first if response.present?
     end
 end
