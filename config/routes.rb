@@ -161,6 +161,7 @@ Rails.application.routes.draw do
         resources :episodes
       end
       resources :reservations
+      resources :precheckins
       resources :reviews, only: :index
       resources :variables do
         member do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: reservation_precheckins
@@ -15,12 +17,12 @@
 #
 FactoryBot.define do
   factory :reservation_precheckin do
-    name { "MyString" }
-    phone_number { "MyString" }
-    check_in_date { "2023-03-09" }
-    address { "MyString" }
-    age_group { "MyString" }
-    companion { "MyString" }
+    name { 'MyString' }
+    phone_number { 'MyString' }
+    check_in_date { '2023-03-09' }
+    address { 'MyString' }
+    age_group { 'MyString' }
+    companion { 'MyString' }
     gender { 1 }
   end
 end
