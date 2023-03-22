@@ -5,7 +5,7 @@ class CreateReservationPrecheckins < ActiveRecord::Migration[6.0]
       t.string :phone_number
       t.date :check_in_date
       t.string :address
-      t.string :age_group
+      t.string :birthday
       t.string :companion
       t.integer :gender
 

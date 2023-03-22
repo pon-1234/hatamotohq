@@ -7,7 +7,7 @@
 #  phone_number  :string(255)
 #  check_in_date :date
 #  address       :string(255)
-#  age_group     :string(255)
+#  birthday      :string(255)
 #  companion     :string(255)
 #  gender        :integer
 #  created_at    :datetime         not null

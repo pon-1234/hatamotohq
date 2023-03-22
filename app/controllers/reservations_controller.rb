@@ -3,7 +3,7 @@
 class ReservationsController < ApplicationController
   include ResponseHelper
 
-  ATTRIBUTES = %i[name phone_number check_in_date address age_group companion gender]
+  ATTRIBUTES = %i[name phone_number check_in_date address birthday companion gender]
 
   skip_before_action :verify_authenticity_token, only: :callback
 
@@ -31,10 +31,13 @@ class ReservationsController < ApplicationController
       friend = LineFriend.find_by_line_user_id params[:friend_line_id]
       pms_api_key = friend.line_account.pms_api_key
       if reservation = get_reservation(pms_api_key, precheckin_params)
+        @precheckin_data[:companion] = reservation['companion']
         guest = Pms::Guest::GetGuests.new(pms_api_key).perform(reservation['guestId'])
         if guest.present?
           @precheckin_data[:name] = guest['name']
           @precheckin_data[:address] = guest['address']
+          @precheckin_data[:birthday] = guest['birthday']
+          @precheckin_data[:gender] = guest['gender']
         end
       end
     end
@@ -52,7 +55,7 @@ class ReservationsController < ApplicationController
     friend = LineFriend.find_by_line_user_id params[:friend_line_id]
     pms_api_key = friend.line_account.pms_api_key
     if reservation = get_reservation(pms_api_key, precheckin_params)
-      Pms::Guest::UpdateGuest.new(pms_api_key).perform(reservation['guestId'], { ageGroup: precheckin_params[:age_group], gender: precheckin_params[:gender] })
+      Pms::Guest::UpdateGuest.new(pms_api_key).perform(reservation['guestId'], { birthday: precheckin_params[:birthday], gender: precheckin_params[:gender] })
       Pms::Reservation::UpdateReservations.new(pms_api_key).perform(reservation['id'], { companion: precheckin_params[:companion] })
     end
     precheckin = ReservationPrecheckin.find_by(phone_number: precheckin_params[:phone_number], check_in_date: precheckin_params[:check_in_date])

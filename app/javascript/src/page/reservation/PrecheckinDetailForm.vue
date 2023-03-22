@@ -89,27 +89,27 @@
             </ValidationObserver>
           </div>
           <div v-show="!firstStep">
-            <!-- 年齢層 -->
+            <!-- 誕生日 -->
             <div class="form-group row">
-              <label class="col-lg-4">年齢層<required-mark></required-mark></label>
+              <label class="col-lg-4">誕生日<required-mark></required-mark></label>
               <div class="col-lg-8">
-                <ValidationProvider name="年齢層" rules="required" v-slot="{ errors }">
-                  <select v-model="precheckinFormData.age_group" name="precheckin[age_group]" class="form-control">
-                    <option v-for="age in ageOptions" :key="age" :value="age">
-                      {{ age }}代
-                    </option>
-                    <option :key="80" :value="80">80代以上</option>
-                  </select>
+                <ValidationProvider name="誕生日" rules="required" v-slot="{ errors }">
+                  <input
+                      type="date"
+                      class="form-control"
+                      name="precheckin[birthday]"
+                      v-model.trim="precheckinFormData.birthday"
+                    />
                   <span class="error-explanation">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
             </div>
 
-            <!-- 同伴者 -->
+            <!-- ご利用シーン -->
             <div class="form-group row">
-              <label class="col-lg-4">同伴者<required-mark></required-mark></label>
+              <label class="col-lg-4">ご利用シーン<required-mark></required-mark></label>
               <div class="col-lg-8">
-                <ValidationProvider name="同伴者" rules="required" v-slot="{ errors }">
+                <ValidationProvider name="ご利用シーン" rules="required" v-slot="{ errors }">
                   <select v-model="precheckinFormData.companion" name="precheckin[companion]" class="form-control">
                     <option v-for="(companion, key) in companionOptions" :key="key" :value="key">
                       {{ companion }}
@@ -169,21 +169,21 @@ export default {
       csrfToken: Util.getCsrfToken(),
       loading: true,
       firstStep: true,
-      ageOptions: [10, 20, 30, 40, 50, 60, 70],
       genders: ['男性', '女性', 'その他', '回答しない'],
       companionOptions: {
         single: '一人',
         couple: '恋人',
-        family: '家族',
         friends: '友達',
-        coworker: '同僚'
+        family: '家族',
+        business: 'ビジネス',
+        other: 'その他'
       },
       precheckinFormData: {
         name: null,
         phone_number: null,
         check_in_date: null,
         address: null,
-        age_group: null,
+        birthday: null,
         companion: null,
         gender: null
       }
@@ -196,6 +196,9 @@ export default {
 
   created() {
     Object.assign(this.precheckinFormData, this.precheckinData);
+    if (!Object.keys(this.companionOptions).includes(this.precheckinFormData.companion)) {
+      this.precheckinFormData.companion = null;
+    }
   },
 
   computed: {
