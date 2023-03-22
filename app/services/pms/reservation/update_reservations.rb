@@ -9,7 +9,8 @@ class Pms::Reservation::UpdateReservations < Pms::BaseRequest
       body: reservation_info.to_json
     }
     response = self.class.put "/reservations/#{reservation_id}", options
-    raise Common::PmsApiError.new(response.message) if response.code != 200
+    raise response.message if response.code != 200
+
     JSON.parse response.body
   rescue => exception
     raise Common::PmsApiError.new(exception.message)

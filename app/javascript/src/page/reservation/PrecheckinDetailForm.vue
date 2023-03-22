@@ -94,13 +94,18 @@
               <label class="col-lg-4">誕生日<required-mark></required-mark></label>
               <div class="col-lg-8">
                 <ValidationProvider name="誕生日" rules="required" v-slot="{ errors }">
-                  <input
+                  <datetime
+                      input-class="form-control"
                       type="date"
-                      class="form-control"
+                      :phrases="{ ok: '確定', cancel: '閉じる' }"
+                      placeholder="チェックイン日を選択してください"
                       name="precheckin[birthday]"
-                      v-model.trim="precheckinFormData.birthday"
-                    />
-                  <span class="error-explanation">{{ errors[0] }}</span>
+                      value-zone="Asia/Tokyo"
+                      zone="Asia/Tokyo"
+                      v-model="precheckinFormData.birthday"
+                      format="yyyy-MM-dd"
+                  ></datetime>
+                  <error-message :message="errors[0]"></error-message>
                 </ValidationProvider>
               </div>
             </div>
@@ -155,6 +160,7 @@
 
 <script>
 import Util from '@/core/util.js';
+import moment from 'moment-timezone';
 import { Datetime } from 'vue-datetime';
 
 export default {
@@ -201,9 +207,20 @@ export default {
     }
   },
 
+  mounted() {
+    this.precheckinFormData.birthday = this.defaultStartBirthday;
+  },
+
   computed: {
     formAction() {
       return `${this.rootPath}/reservations/precheckin_detail/${this.friendLineId}`;
+    },
+
+    defaultStartBirthday() {
+      return moment()
+        .subtract(20, 'years')
+        .tz('Asia/Tokyo')
+        .format();
     }
   },
 
