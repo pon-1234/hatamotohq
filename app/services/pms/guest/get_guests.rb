@@ -8,7 +8,8 @@ class Pms::Guest::GetGuests < Pms::BaseRequest
       headers: auth_header.merge('Content-Type' => 'application/json', 'accept' => 'application/json')
     }
     response = self.class.get "/guests/#{guest_id}", options
-    return nil if response.code != 200
+    return if response.code != 200
+
     JSON.parse response.body
   rescue => exception
     raise Common::PmsApiError.new(exception.message)

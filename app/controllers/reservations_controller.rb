@@ -3,8 +3,6 @@
 class ReservationsController < ApplicationController
   include ResponseHelper
 
-  ATTRIBUTES = %i[name phone_number check_in_date address birthday companion gender]
-
   skip_before_action :verify_authenticity_token, only: :callback
 
   # GET /reservations/precheckin_form/:friend_line_id
@@ -19,15 +17,10 @@ class ReservationsController < ApplicationController
 
   # POST /reservations/precheckin/:friend_line_id
   def precheckin
-    @friend_line_id = params[:friend_line_id]
-    precheckin = ReservationPrecheckin.find_by(precheckin_params)
-    if precheckin.present?
-      @precheckin_data = precheckin.slice(ATTRIBUTES)
+    if precheckin = ReservationPrecheckin.find_by(precheckin_params)
+      @precheckin_data = precheckin.slice(ReservationPrecheckin::ATTRIBUTES)
     else
-      @precheckin_data = {
-        phone_number: precheckin_params[:phone_number],
-        check_in_date: precheckin_params[:check_in_date]
-      }
+      @precheckin_data = precheckin_params.slice(:phone_number, :check_in_date)
       friend = LineFriend.find_by_line_user_id params[:friend_line_id]
       pms_api_key = friend.line_account.pms_api_key
       if reservation = get_reservation(pms_api_key, precheckin_params)
@@ -55,20 +48,17 @@ class ReservationsController < ApplicationController
     friend = LineFriend.find_by_line_user_id params[:friend_line_id]
     pms_api_key = friend.line_account.pms_api_key
     if reservation = get_reservation(pms_api_key, precheckin_params)
-      Pms::Guest::UpdateGuest.new(pms_api_key).perform(reservation['guestId'], { birthday: precheckin_params[:birthday], gender: precheckin_params[:gender] })
+      Pms::Guest::UpdateGuest.new(pms_api_key).perform(reservation['guestId'], precheckin_params.slice(:birthday, :gender))
       Pms::Reservation::UpdateReservations.new(pms_api_key).perform(reservation['id'], { companion: precheckin_params[:companion] })
     end
-    precheckin = ReservationPrecheckin.find_by(phone_number: precheckin_params[:phone_number], check_in_date: precheckin_params[:check_in_date])
-    if precheckin.present?
+    if precheckin = ReservationPrecheckin.find_by(precheckin_params.slice(:phone_number, :check_in_date))
       precheckin.update(precheckin_params)
-      messages = [{ 'text'=>I18n.t('messages.precheckin.success'), 'type'=>'text' }]
     else
       ReservationPrecheckin.create!(precheckin_params)
-      messages = [{ 'text'=>I18n.t('messages.precheckin.success'), 'type'=>'text' }]
     end
     payload = {
       channel_id: friend.channel.id,
-      messages: messages
+      messages: [{"text"=>I18n.t('messages.precheckin.success'), "type"=>"text"}]
     }
     PushMessageToLineJob.perform_now(payload)
     redirect_to reservation_precheckin_success_path
@@ -107,7 +97,7 @@ class ReservationsController < ApplicationController
     def precheckin_params
       params
         .require(:precheckin)
-        .permit(ATTRIBUTES)
+        .permit(ReservationPrecheckin::ATTRIBUTES)
     end
 
     def inquiry_params
