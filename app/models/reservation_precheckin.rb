@@ -14,5 +14,6 @@
 #  updated_at    :datetime         not null
 #
 class ReservationPrecheckin < ApplicationRecord
+  ATTRIBUTES = %i[name phone_number check_in_date address birthday companion gender]
   validates :name, :phone_number, :check_in_date, :address, :birthday, :companion, :gender, presence: true
 end
