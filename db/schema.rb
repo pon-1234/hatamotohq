@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_03_034347) do
+ActiveRecord::Schema.define(version: 2023_03_09_090236) do
   create_table 'active_storage_attachments', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -424,6 +424,22 @@ ActiveRecord::Schema.define(version: 2022_11_03_034347) do
     t.date 'date_end'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+  end
+
+  create_table 'reservation_precheckins', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
+    t.bigint 'line_account_id'
+    t.bigint 'line_friend_id'
+    t.string 'name'
+    t.string 'phone_number'
+    t.date 'check_in_date'
+    t.string 'address'
+    t.string 'birthday'
+    t.string 'companion'
+    t.integer 'gender'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['line_account_id'], name: 'index_reservation_precheckins_on_line_account_id'
+    t.index ['line_friend_id'], name: 'index_reservation_precheckins_on_line_friend_id'
   end
 
   create_table 'reservations', options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci', force: :cascade do |t|
@@ -842,6 +858,8 @@ ActiveRecord::Schema.define(version: 2022_11_03_034347) do
   add_foreign_key 'reminders', 'line_accounts'
   add_foreign_key 'remindings', 'channels'
   add_foreign_key 'remindings', 'reminders'
+  add_foreign_key 'reservation_precheckins', 'line_accounts'
+  add_foreign_key 'reservation_precheckins', 'line_friends'
   add_foreign_key 'reservations', 'line_accounts'
   add_foreign_key 'reservations', 'line_friends'
   add_foreign_key 'review_answers', 'review_questions'

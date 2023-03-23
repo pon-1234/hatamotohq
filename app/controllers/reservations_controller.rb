@@ -52,10 +52,10 @@ class ReservationsController < ApplicationController
     end
     if precheckin = ReservationPrecheckin.find_by(precheckin_params.slice(:phone_number, :check_in_date))
       precheckin.update(precheckin_params)
-      messages = [{"text"=>I18n.t('messages.precheckin.update_success'), "type"=>"text"}]
+      messages = [{ 'text'=>I18n.t('messages.precheckin.update_success'), 'type'=>'text' }]
     else
       ReservationPrecheckin.create!(precheckin_params.merge(line_friend_id: friend.id, line_account_id: friend.line_account_id))
-      messages = [{"text"=>I18n.t('messages.precheckin.create_success'), "type"=>"text"}]
+      messages = [{ 'text'=>I18n.t('messages.precheckin.create_success'), 'type'=>'text' }]
     end
     payload = {
       channel_id: friend.channel.id,
