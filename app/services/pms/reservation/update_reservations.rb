@@ -2,14 +2,15 @@
 
 require "#{Rails.root}/lib/common/error_handle.rb"
 
-class Pms::Guest::UpdateGuest < Pms::BaseRequest
-  def perform(pms_guest_id, guest_info = {})
+class Pms::Reservation::UpdateReservations < Pms::BaseRequest
+  def perform(reservation_id, reservation_info = {})
     options = {
       headers: auth_header.merge('Content-Type' => 'application/json', 'accept' => 'application/json'),
-      body: guest_info.to_json
+      body: reservation_info.to_json
     }
-    response = self.class.put "/guests/#{pms_guest_id}", options
-    raise Common::PmsApiError.new(response.message) if response.code != 200
+    response = self.class.put "/reservations/#{reservation_id}", options
+    raise response.message if response.code != 200
+
     JSON.parse response.body
   rescue => exception
     raise Common::PmsApiError.new(exception.message)
