@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Health check for monitoring
+  get '/health', to: 'health#index'
   direct :rails_public_blob do |blob|
     # Preserve the behaviour of `rails_blob_url` inside these environments
     # where S3 or the CDN might not be configured

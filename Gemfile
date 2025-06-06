@@ -8,7 +8,7 @@ ruby '2.6.3'
 #  Core gem
 gem 'dotenv-rails'
 gem 'rails', '~> 6.0.3.6'
-gem 'mysql2', '>= 0.4.4'
+gem 'pg', '~> 1.1'
 gem 'puma', '~> 4.3'
 gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 4.0'
