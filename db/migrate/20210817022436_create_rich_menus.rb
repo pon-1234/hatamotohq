@@ -12,7 +12,7 @@ class CreateRichMenus < ActiveRecord::Migration[6.0]
       t.string :title
       t.string :line_chat_bar_text, comment: 'chatBarText'
       t.string :selected
-      t.mediumtext :areas
+      t.text :areas
       t.string :status, default: 'enabled'
       t.boolean :is_active
       t.datetime :start_at
