@@ -4,10 +4,18 @@ class RenameColumnOnSurveys < ActiveRecord::Migration[6.0]
   def up
     rename_column :survey_questions, :is_required, :required
     rename_column :survey_questions, :index, :order
-    change_column :survey_questions, :content, :json
+    execute <<-SQL
+      ALTER TABLE survey_questions 
+      ALTER COLUMN content TYPE json 
+      USING content::json
+    SQL
     remove_column :surveys, :is_publish
     rename_column :surveys, :action, :after_action
-    change_column :surveys, :after_action, :json
+    execute <<-SQL
+      ALTER TABLE surveys 
+      ALTER COLUMN after_action TYPE json 
+      USING after_action::json
+    SQL
   end
 
   def down
