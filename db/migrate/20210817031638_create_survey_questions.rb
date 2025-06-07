@@ -8,7 +8,7 @@ class CreateSurveyQuestions < ActiveRecord::Migration[6.0]
       t.integer :index, default: 0
       t.boolean :is_required, default: 0
       t.string :type
-      t.longtext :content
+      t.text :content
       t.timestamps
     end
   end

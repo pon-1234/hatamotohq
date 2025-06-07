@@ -10,7 +10,7 @@ class CreateSurveys < ActiveRecord::Migration[6.0]
       t.string :liff_id
       t.string :title
       t.text :description
-      t.longtext :action
+      t.text :action
       t.text :success_message
       t.string :status, default: 'enabled'
       t.boolean :is_publish, default: false

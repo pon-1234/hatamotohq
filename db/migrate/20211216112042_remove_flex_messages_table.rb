@@ -12,7 +12,7 @@ class RemoveFlexMessagesTable < ActiveRecord::Migration[6.0]
       t.string :name
       t.json :json_message
       t.json :json_template
-      t.longtext :html_template
+      t.text :html_template
       t.timestamps
       t.datetime :deleted_at
     end
@@ -20,7 +20,7 @@ class RemoveFlexMessagesTable < ActiveRecord::Migration[6.0]
     create_table :flex_message_sent_logs do |t|
       t.references :flex_message, foreign_key: true
       t.references :line_account, foreign_key: true
-      t.longtext :html_template
+      t.text :html_template
       t.timestamps
     end
   end

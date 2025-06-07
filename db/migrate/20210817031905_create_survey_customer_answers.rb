@@ -7,7 +7,7 @@ class CreateSurveyCustomerAnswers < ActiveRecord::Migration[6.0]
       t.references :survey, foreign_key: true
       t.references :survey_question, foreign_key: true
       t.references :survey_customer, foreign_key: true
-      t.longtext :content
+      t.text :content
       t.timestamps
     end
   end

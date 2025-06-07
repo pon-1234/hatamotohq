@@ -7,7 +7,7 @@ class CreateFlexMessages < ActiveRecord::Migration[6.0]
       t.string :name
       t.json :json_message
       t.json :json_template
-      t.longtext :html_template
+      t.text :html_template
       t.timestamps
       t.datetime :deleted_at
     end
