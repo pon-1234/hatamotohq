@@ -26,9 +26,10 @@ less \
 && rm -rf /var/cache/apk/* \
 && mkdir -p $APP_PATH
 
-# Install Node.js and Yarn
+# Install Node.js and Yarn - use current Alpine packages
 RUN apk add --no-cache nodejs npm \
-&& npm install -g yarn 
+&& npm install -g yarn \
+&& node --version 
 
 RUN gem install bundler --version "$BUNDLE_VERSION" \
 && rm -rf $GEM_HOME/cache/*
@@ -49,8 +50,10 @@ RUN bundle config set --local deployment 'true' \
 # Copy application code
 COPY . .
 
-# Skip asset precompilation for now to avoid Node.js issues
-# RUN SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
+# Install JavaScript dependencies 
+RUN yarn install --ignore-engines
+# Skip asset precompilation for now - will be done at runtime
+# RUN NODE_OPTIONS="--max-old-space-size=2048" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
 
 # Create a script to run db:migrate and then start the server
 RUN echo '#!/bin/sh' > /usr/local/bin/start-server.sh \

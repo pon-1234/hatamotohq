@@ -7,10 +7,10 @@ const {
 const vue = require('./loaders/vue');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env', silent: true });
-// config CkEditor5 
-const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
-const ckeditorSvgLoader = require('./loaders/ckeditor-svg');
-const ckeditorCssLoader = require('./loaders/ckeditor-css');
+// config CkEditor5 - temporarily disabled for build
+// const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
+// const ckeditorSvgLoader = require('./loaders/ckeditor-svg');
+// const ckeditorCssLoader = require('./loaders/ckeditor-css');
 
 const customConfig = require('./custom');
 
@@ -33,22 +33,22 @@ environment.plugins.prepend(
 );
 
 environment.loaders.prepend('vue', vue);
-// config CkEditor5 css
-environment.plugins.prepend('CKEditorWebpackPlugin', new CKEditorWebpackPlugin({
-  addMainLanguageTranslationsToAllAssets: true,
-  buildAllTranslationsToSeparateFiles: true,
-  language: 'en'
-}));
-environment.loaders.prepend('ckeditor-svg', ckeditorSvgLoader);
-environment.loaders.prepend('ckeditor-css', ckeditorCssLoader);
+// config CkEditor5 css - temporarily disabled for build
+// environment.plugins.prepend('CKEditorWebpackPlugin', new CKEditorWebpackPlugin({
+//   addMainLanguageTranslationsToAllAssets: true,
+//   buildAllTranslationsToSeparateFiles: true,
+//   language: 'en'
+// }));
+// environment.loaders.prepend('ckeditor-svg', ckeditorSvgLoader);
+// environment.loaders.prepend('ckeditor-css', ckeditorCssLoader);
 
-environment.loaders.get('css').exclude = [
-  /\.module\.[a-z]+$/,
-  /ckeditor5-[^/]+\/theme\/[\w-/]+\.css$/
-];
-const fileLoader = environment.loaders.get('file');
-fileLoader.exclude = /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/;
-const cssLoader = environment.loaders.get('css');
-cssLoader.exclude = /(\.module\.[a-z]+$)|(ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css)/;
+// environment.loaders.get('css').exclude = [
+//   /\.module\.[a-z]+$/,
+//   /ckeditor5-[^/]+\/theme\/[\w-/]+\.css$/
+// ];
+// const fileLoader = environment.loaders.get('file');
+// fileLoader.exclude = /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/;
+// const cssLoader = environment.loaders.get('css');
+// cssLoader.exclude = /(\.module\.[a-z]+$)|(ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css)/;
 
 module.exports = environment;
