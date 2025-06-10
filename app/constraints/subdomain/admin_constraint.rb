@@ -3,7 +3,9 @@
 class Subdomain::AdminConstraint
   def matches?(request)
     if Rails.env.production?
-      request.subdomain.present? && request.subdomain.include?('admin')
+      subdomain = request.subdomain.to_s
+      Rails.logger.info "AdminConstraint: host=#{request.host}, subdomain='#{subdomain}'"
+      subdomain.present? && subdomain.include?('admin')
     else
       request.subdomain.blank?
     end

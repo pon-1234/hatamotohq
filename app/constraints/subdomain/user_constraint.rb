@@ -3,8 +3,13 @@
 class Subdomain::UserConstraint
   def matches?(request)
     if Rails.env.production?
-      # Allow main domain (no subdomain) or valid client subdomains
-      (request.subdomain.blank? || (request.subdomain.present? && !request.subdomain.include?('admin') && !request.subdomain.include?('agency')))
+      # In production, be more permissive - allow all requests that aren't specifically admin or agency
+      subdomain = request.subdomain.to_s
+      # Log for debugging
+      Rails.logger.info "UserConstraint: host=#{request.host}, subdomain='#{subdomain}'"
+      
+      # Allow if no subdomain or subdomain doesn't contain admin/agency
+      !subdomain.include?('admin') && !subdomain.include?('agency')
     else
       request.subdomain.blank?
     end

@@ -102,6 +102,10 @@ files.keys().map((key) => {
     .split('/')
     .pop()
     .split('.')[0];
+  // Convert PascalCase to kebab-case for component names
+  const kebabName = component.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+  Vue.component(kebabName, files(key).default);
+  // Also register with original name for backward compatibility
   Vue.component(component, files(key).default);
 });
 
