@@ -15,6 +15,7 @@ primary_region = "nrt"
   RAILS_LOG_TO_STDOUT = "true"
   RAILS_SERVE_STATIC_FILES = "true"
   WEB_CONCURRENCY = "2" # CPU数に応じて調整 (cpus=1なら2で十分)
+  NODE_OPTIONS = "--max-old-space-size=2048"
 
 # デプロイ時に実行されるマイグレーションコマンド
 [deploy]
