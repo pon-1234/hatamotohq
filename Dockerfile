@@ -52,8 +52,9 @@ COPY . .
 
 # Install JavaScript dependencies 
 RUN yarn install --ignore-engines
-# Skip asset precompilation for now - will be done at runtime
-# RUN NODE_OPTIONS="--max-old-space-size=2048" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
+
+# Precompile assets with increased memory limit
+RUN NODE_OPTIONS="--max-old-space-size=2048" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
 
 # Create a script to run db:migrate and then start the server
 RUN echo '#!/bin/sh' > /usr/local/bin/start-server.sh \
