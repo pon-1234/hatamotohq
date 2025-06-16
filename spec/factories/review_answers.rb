@@ -7,7 +7,7 @@
 #  id                 :bigint           not null, primary key
 #  review_id          :bigint
 #  review_question_id :bigint
-#  answer             :text(65535)
+#  answer             :text
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #

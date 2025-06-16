@@ -5,7 +5,7 @@
 # Table name: postback_mappers
 #
 #  id         :bigint           not null, primary key
-#  key        :string(255)
+#  key        :string
 #  value      :json
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

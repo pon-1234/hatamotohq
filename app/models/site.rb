@@ -5,8 +5,8 @@
 # Table name: sites
 #
 #  id             :bigint           not null, primary key
-#  url            :text(65535)
-#  name           :string(255)
+#  url            :text
+#  name           :string
 #  folder_id      :bigint           not null
 #  sending_count  :integer          default(0)
 #  click_count    :integer          default(0)

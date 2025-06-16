@@ -5,12 +5,12 @@
 # Table name: taggings
 #
 #  id            :bigint           not null, primary key
-#  deleted_at    :datetime
-#  taggable_type :string(255)
+#  taggable_type :string
+#  taggable_id   :bigint
+#  tag_id        :bigint
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  tag_id        :bigint
-#  taggable_id   :bigint
+#  deleted_at    :datetime
 #
 # Indexes
 #

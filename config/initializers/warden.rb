@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-Warden::Strategies.add(:authentication_token, ApiTokenStrategy)
+Rails.configuration.to_prepare do
+  Warden::Strategies.add(:authentication_token, ApiTokenStrategy)
+end

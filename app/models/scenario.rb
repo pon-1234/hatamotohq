@@ -7,11 +7,11 @@
 #  id                      :bigint           not null, primary key
 #  line_account_id         :bigint
 #  folder_id               :bigint
-#  title                   :string(255)
-#  description             :text(65535)
-#  status                  :string(255)      default("disabled")
-#  mode                    :string(255)      default("time")
-#  type                    :string(255)      default("manual")
+#  title                   :string
+#  description             :text
+#  status                  :string           default("disabled")
+#  mode                    :string           default("time")
+#  type                    :string           default("manual")
 #  after_action            :json
 #  scenario_messages_count :integer
 #  created_at              :datetime         not null

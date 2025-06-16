@@ -8,15 +8,15 @@
 #  line_account_id     :bigint
 #  scenario_id         :bigint
 #  scenario_message_id :bigint
-#  type                :string(255)
-#  content             :json
 #  channel_id          :bigint
 #  schedule_at         :datetime
 #  order               :integer
-#  status              :string(255)
-#  is_last             :boolean          default(FALSE)
+#  status              :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  type                :string
+#  content             :json
+#  is_last             :boolean          default(FALSE)
 #  scenario_log_id     :bigint
 #
 # Indexes

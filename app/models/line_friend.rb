@@ -6,17 +6,17 @@
 #
 #  id               :bigint           not null, primary key
 #  line_account_id  :bigint
-#  line_picture_url :string(255)
-#  line_user_id     :string(255)
-#  line_name        :string(255)
-#  display_name     :string(255)
-#  status           :string(255)      default("active")
-#  locked           :boolean          default(FALSE)
-#  visible          :boolean          default(TRUE)
-#  note             :text(65535)
+#  line_picture_url :string
+#  line_user_id     :string
+#  line_name        :string
+#  display_name     :string
+#  status           :string           default("active")
+#  note             :text
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
+#  locked           :boolean          default(FALSE)
+#  visible          :boolean          default(TRUE)
 #  tester           :boolean          default(FALSE)
 #  stream_route_id  :bigint
 #

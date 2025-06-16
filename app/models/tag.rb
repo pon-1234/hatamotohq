@@ -7,7 +7,7 @@
 #  id              :bigint           not null, primary key
 #  line_account_id :bigint
 #  folder_id       :bigint
-#  name            :string(255)
+#  name            :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime

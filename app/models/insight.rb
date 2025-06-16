@@ -6,10 +6,8 @@
 #
 #  id               :bigint           not null, primary key
 #  line_account_id  :bigint
-#  type             :string(255)      default("daily")
+#  type             :string           default("daily")
 #  date             :date
-#  quota            :integer          default(0)
-#  total_usage      :integer          default(0)
 #  broadcast        :integer
 #  targeting        :integer
 #  auto_response    :integer
@@ -22,6 +20,8 @@
 #  api_reply        :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  quota            :integer          default(0)
+#  total_usage      :integer          default(0)
 #
 # Indexes
 #

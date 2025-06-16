@@ -8,7 +8,7 @@
 #  line_friend_id   :bigint
 #  variable_id      :bigint
 #  survey_answer_id :bigint
-#  value            :text(65535)
+#  value            :text
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

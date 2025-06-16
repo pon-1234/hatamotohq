@@ -5,12 +5,12 @@
 # Table name: folders
 #
 #  id              :bigint           not null, primary key
-#  deleted_at      :datetime
-#  name            :string(255)
-#  type            :string(255)
+#  line_account_id :bigint
+#  name            :string
+#  type            :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  line_account_id :bigint
+#  deleted_at      :datetime
 #
 # Indexes
 #

@@ -5,11 +5,11 @@
 # Table name: auto_response_keywords
 #
 #  id               :bigint           not null, primary key
-#  deleted_at       :datetime
-#  keyword          :string(255)
+#  auto_response_id :bigint
+#  keyword          :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  auto_response_id :bigint
+#  deleted_at       :datetime
 #
 # Indexes
 #

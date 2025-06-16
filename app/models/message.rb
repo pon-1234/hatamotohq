@@ -6,18 +6,18 @@
 #
 #  id           :bigint           not null, primary key
 #  channel_id   :bigint
-#  sender_type  :string(255)
+#  sender_type  :string
 #  sender_id    :bigint
-#  type         :string(255)
-#  from         :string(255)
-#  text         :text(65535)
+#  type         :string
 #  content      :json
-#  html_content :text(65535)
-#  timestamp    :string(255)
-#  reply_token  :string(255)
-#  status       :string(255)      default("sent")
+#  timestamp    :string
+#  reply_token  :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  from         :string
+#  text         :text
+#  status       :string           default("sent")
+#  html_content :text
 #
 # Indexes
 #

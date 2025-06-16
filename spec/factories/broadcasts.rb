@@ -7,16 +7,16 @@
 #  id              :bigint           not null, primary key
 #  line_account_id :bigint
 #  conditions      :json
-#  title           :string(255)
+#  title           :string
 #  deliver_now     :boolean          default(TRUE)
-#  status          :string(255)
-#  type            :string(255)
+#  status          :string
+#  type            :string
 #  schedule_at     :datetime
 #  deliver_at      :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
-#  logs            :text(65535)
+#  logs            :text
 #
 # Indexes
 #

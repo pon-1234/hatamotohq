@@ -7,7 +7,7 @@
 #  id             :bigint           not null, primary key
 #  scenario_id    :bigint           not null
 #  line_friend_id :bigint           not null
-#  status         :string(255)
+#  status         :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #

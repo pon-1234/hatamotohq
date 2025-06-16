@@ -8,9 +8,9 @@
 #  channel_id  :bigint
 #  reminder_id :bigint
 #  goal        :datetime
-#  status      :string(255)      default("active")
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  status      :string           default("active")
 #
 # Indexes
 #

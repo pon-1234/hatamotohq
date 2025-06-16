@@ -7,25 +7,25 @@
 #  id                   :bigint           not null, primary key
 #  line_account_id      :bigint
 #  folder_id            :bigint
-#  code                 :string(255)
-#  name                 :string(255)
-#  banner_url           :string(255)
-#  liff_id              :string(255)
-#  title                :string(255)
-#  description          :text(65535)
+#  code                 :string
+#  name                 :string
+#  liff_id              :string
+#  title                :string
+#  description          :text
 #  after_action         :json
-#  success_message      :text(65535)
-#  status               :string(255)      default(NULL)
+#  success_message      :text
+#  status               :string           default(NULL)
 #  re_answer            :boolean          default(FALSE)
-#  connected_to_ggsheet :boolean          default(FALSE)
-#  google_oauth_code    :string(255)
-#  google_oauth_tokens  :json
-#  google_oauth_email   :string(255)
-#  spreadsheet_id       :string(255)
-#  sync_to_ggsheet      :boolean          default(FALSE)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  deleted_at           :datetime
+#  banner_url           :string
+#  sync_to_ggsheet      :boolean          default(FALSE)
+#  connected_to_ggsheet :boolean          default(FALSE)
+#  google_oauth_code    :string
+#  google_oauth_tokens  :json
+#  google_oauth_email   :string
+#  spreadsheet_id       :string
 #
 # Indexes
 #

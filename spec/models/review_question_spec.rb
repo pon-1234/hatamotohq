@@ -5,9 +5,9 @@
 # Table name: review_questions
 #
 #  id          :bigint           not null, primary key
-#  type        :string(255)
-#  title       :string(255)
-#  description :text(65535)
+#  type        :string
+#  title       :string
+#  description :text
 #  config      :json
 #  sort_order  :integer
 #  required    :boolean          default(TRUE)

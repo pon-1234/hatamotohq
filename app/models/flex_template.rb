@@ -5,9 +5,9 @@
 # Table name: flex_templates
 #
 #  id           :bigint           not null, primary key
-#  type         :string(255)
+#  type         :string
 #  content      :json
-#  html_content :text(65535)
+#  html_content :text
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

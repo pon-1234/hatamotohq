@@ -6,7 +6,7 @@
 #
 #  id               :bigint           not null, primary key
 #  channel_id       :bigint
-#  participant_type :string(255)
+#  participant_type :string
 #  participant_id   :bigint
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null

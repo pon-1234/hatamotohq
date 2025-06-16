@@ -6,15 +6,15 @@
 #
 #  id              :bigint           not null, primary key
 #  measurable_id   :integer
-#  measurable_type :string(255)
+#  measurable_type :string
 #  actions         :json
 #  sending_count   :integer          default(0)
 #  click_count     :integer          default(0)
 #  receiver_count  :integer          default(0)
 #  visitor_count   :integer          default(0)
 #  site_id         :bigint           not null
-#  site_name       :string(255)
-#  redirect_url    :text(65535)
+#  site_name       :string
+#  redirect_url    :text
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

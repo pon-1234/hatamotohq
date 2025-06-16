@@ -4,26 +4,26 @@
 #
 # Table name: rich_menus
 #
-#  id                       :bigint           not null, primary key
-#  line_account_id          :bigint
-#  folder_id                :bigint
-#  line_menu_id(richMenuId) :string(255)
-#  template_id              :string(255)
-#  name                     :string(255)
-#  size                     :json
-#  chat_bar_text            :string(255)
-#  selected                 :boolean
-#  areas                    :json
-#  status                   :string(255)      default("enabled")
-#  target                   :string(255)      default("all")
-#  conditions               :json
-#  enabled                  :boolean
-#  media_id                 :bigint
-#  member_count             :integer          default(0)
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  deleted_at               :datetime
-#  logs                     :text(65535)
+#  id                         :bigint           not null, primary key
+#  line_account_id            :bigint
+#  folder_id                  :bigint
+#  line_menu_id(richMenuId)   :string
+#  template_id                :string
+#  name                       :string
+#  size                       :json
+#  chat_bar_text(chatBarText) :string
+#  selected                   :boolean
+#  areas                      :json
+#  status                     :string           default("enabled")
+#  enabled                    :boolean
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  deleted_at                 :datetime
+#  media_id                   :bigint
+#  target                     :string           default("all")
+#  conditions                 :json
+#  member_count               :integer          default(0)
+#  logs                       :text
 #
 # Indexes
 #

@@ -7,12 +7,12 @@
 #  id              :bigint           not null, primary key
 #  line_account_id :bigint
 #  line_friend_id  :bigint
-#  name            :string(255)
-#  phone_number    :string(255)
+#  name            :string
+#  phone_number    :string
 #  check_in_date   :date
-#  address         :string(255)
-#  birthday        :string(255)
-#  companion       :string(255)
+#  address         :string
+#  birthday        :string
+#  companion       :string
 #  gender          :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null

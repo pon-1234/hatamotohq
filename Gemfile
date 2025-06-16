@@ -3,15 +3,15 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.3'
+ruby '3.3.6'
 
 #  Core gem
 gem 'dotenv-rails'
-gem 'rails', '~> 6.0.3.6'
+gem 'rails', '~> 7.1.5'
 gem 'pg', '~> 1.1'
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 6.0'
 gem 'sass-rails', '>= 6'
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '~> 5.0'
 gem 'jbuilder', '~> 2.7'
 gem 'browser', require: 'browser/browser'
 gem 'httparty'
@@ -26,6 +26,9 @@ gem 'cancancan'
 
 # Hashie is a collection of classes and mixins that make Ruby hashes more powerful.
 gem 'hashie'
+
+# Ruby 3.3 compatibility
+gem 'logger'
 
 # Search engine
 gem 'searchkick'

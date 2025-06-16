@@ -7,12 +7,12 @@
 #  id              :bigint           not null, primary key
 #  line_account_id :bigint
 #  folder_id       :bigint
-#  name            :string(255)
-#  type            :string(255)
-#  default         :string(255)
-#  friends_count   :integer          default(0)
+#  name            :string
+#  type            :string
+#  default         :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  friends_count   :integer          default(0)
 #
 # Indexes
 #

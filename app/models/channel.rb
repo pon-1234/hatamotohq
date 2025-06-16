@@ -7,18 +7,18 @@
 #  id               :bigint           not null, primary key
 #  line_account_id  :bigint
 #  line_friend_id   :bigint
-#  assignee_id      :bigint
-#  title            :string(255)
-#  avatar           :string(255)
-#  last_message     :string(255)
-#  last_activity_at :datetime
-#  last_seen_at     :datetime
-#  locked           :boolean
-#  alias            :string(255)
-#  slug             :string(255)
+#  title            :string
+#  avatar           :string
+#  last_message     :string
+#  alias            :string
+#  slug             :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  deleted_at       :datetime
+#  last_activity_at :datetime
+#  last_seen_at     :datetime
+#  locked           :boolean
+#  assignee_id      :bigint
 #
 # Indexes
 #

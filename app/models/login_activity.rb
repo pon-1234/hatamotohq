@@ -5,23 +5,23 @@
 # Table name: login_activities
 #
 #  id             :bigint           not null, primary key
-#  city           :string(255)
-#  context        :string(255)
-#  country        :string(255)
-#  failure_reason :string(255)
-#  identity       :string(255)
-#  ip             :string(255)
-#  latitude       :float(24)
-#  longitude      :float(24)
-#  referrer       :text(65535)
-#  region         :string(255)
-#  scope          :string(255)
-#  strategy       :string(255)
+#  scope          :string
+#  strategy       :string
+#  identity       :string
 #  success        :boolean
-#  user_agent     :text(65535)
-#  user_type      :string(255)
-#  created_at     :datetime
+#  failure_reason :string
+#  user_type      :string
 #  user_id        :bigint
+#  context        :string
+#  ip             :string
+#  user_agent     :text
+#  referrer       :text
+#  city           :string
+#  region         :string
+#  country        :string
+#  latitude       :float
+#  longitude      :float
+#  created_at     :datetime
 #
 # Indexes
 #

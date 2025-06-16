@@ -6,10 +6,10 @@
 #
 #  id                 :bigint           not null, primary key
 #  friend_variable_id :bigint
-#  operation          :string(255)      default("set")
-#  value              :string(255)
-#  old_value          :string(255)
-#  new_value          :string(255)
+#  operation          :string           default("set")
+#  value              :string
+#  old_value          :string
+#  new_value          :string
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #

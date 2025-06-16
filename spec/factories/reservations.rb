@@ -6,16 +6,16 @@
 #
 #  id              :bigint           not null, primary key
 #  line_friend_id  :bigint
-#  room_id         :string(255)
-#  room_name       :string(255)
+#  room_id         :string
+#  status          :string           default("wait")
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  notifier_id     :string
+#  line_account_id :bigint
+#  room_name       :string
 #  stock           :integer
 #  stock_from      :datetime
 #  stock_to        :datetime
-#  notifier_id     :string(255)
-#  status          :string(255)      default("wait")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  line_account_id :bigint
 #
 # Indexes
 #

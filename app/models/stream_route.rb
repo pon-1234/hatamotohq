@@ -6,15 +6,15 @@
 #
 #  id                     :bigint           not null, primary key
 #  folder_id              :bigint           not null
-#  name                   :string(255)
+#  name                   :string
 #  actions                :json
-#  code                   :string(255)
+#  code                   :string
 #  run_add_friend_actions :boolean          default(FALSE)
 #  always_run_actions     :boolean          default(FALSE)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  client_id              :bigint           not null
-#  qr_title               :string(255)
+#  qr_title               :string
 #
 # Indexes
 #

@@ -8,7 +8,7 @@
 #  reminder_id :bigint
 #  is_initial  :boolean
 #  date        :integer
-#  time        :string(255)
+#  time        :string
 #  actions     :json
 #  messages    :json
 #  created_at  :datetime         not null

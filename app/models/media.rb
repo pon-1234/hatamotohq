@@ -6,10 +6,10 @@
 #
 #  id              :bigint           not null, primary key
 #  line_account_id :bigint
-#  type            :string(255)
-#  provider        :string(255)      default("system")
+#  type            :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  provider        :string           default("system")
 #
 # Indexes
 #

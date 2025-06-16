@@ -5,10 +5,10 @@
 # Table name: announcements
 #
 #  id           :bigint           not null, primary key
-#  title        :text(65535)
-#  body         :text(4294967295)
+#  title        :text
+#  body         :text
 #  announced_at :datetime
-#  status       :string(255)
+#  status       :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #

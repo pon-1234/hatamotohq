@@ -5,20 +5,20 @@
 # Table name: scenario_messages
 #
 #  id              :bigint           not null, primary key
+#  scenario_id     :bigint
+#  status          :string           default("disabled")
+#  name            :string
 #  content         :json
+#  message_type_id :integer
 #  date            :integer
-#  deleted_at      :datetime
+#  time            :string
 #  is_initial      :boolean          default(TRUE)
-#  name            :string(255)
+#  step            :integer
 #  order           :integer
 #  pause           :boolean
-#  status          :string(255)      default("disabled")
-#  step            :integer
-#  time            :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  message_type_id :integer
-#  scenario_id     :bigint
+#  deleted_at      :datetime
 #
 # Indexes
 #

@@ -5,10 +5,10 @@
 # Table name: emojis
 #
 #  id            :bigint           not null, primary key
+#  package_id    :string
+#  line_emoji_id :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  line_emoji_id :string(255)
-#  package_id    :string(255)
 #
 class Emoji < ApplicationRecord
   scope :by_pack, -> (pack_id) { where(package_id: pack_id) }

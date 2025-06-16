@@ -6,10 +6,10 @@
 #
 #  id         :bigint           not null, primary key
 #  survey_id  :bigint
-#  name       :string(255)
+#  name       :string
 #  order      :integer          default(0)
 #  required   :boolean          default(FALSE)
-#  type       :string(255)
+#  type       :string
 #  content    :json
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

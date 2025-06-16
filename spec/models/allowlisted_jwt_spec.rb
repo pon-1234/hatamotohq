@@ -5,7 +5,7 @@
 # Table name: allowlisted_jwts
 #
 #  id         :bigint           not null, primary key
-#  jti        :string(255)
+#  jti        :string
 #  exp        :datetime
 #  user_id    :bigint           not null
 #  created_at :datetime         not null

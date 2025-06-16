@@ -5,9 +5,9 @@
 # Table name: site_references
 #
 #  id                  :bigint           not null, primary key
-#  code                :string(255)
-#  line_user_id        :string(255)
-#  site_measurement_id :string(255)
+#  code                :string
+#  line_user_id        :string
+#  site_measurement_id :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

@@ -5,8 +5,8 @@
 # Table name: emojis
 #
 #  id            :bigint           not null, primary key
-#  package_id    :string(255)
-#  line_emoji_id :string(255)
+#  package_id    :string
+#  line_emoji_id :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
