@@ -1,0 +1,35 @@
+@import 'bootstrap/scss/bootstrap';
+// @import 'bootstrap-icons/font/bootstrap-icons'; // Use CDN or direct file import
+
+// Import custom styles
+@import "./custom/linebot";
+@import "./custom/chat";
+@import "./custom/perfect-scrollbar.min";
+@import "./custom/register";
+@import "./custom/override";
+
+// Main application styles (from original application.scss)
+.card {
+  .left-border {
+    border-left: solid 5px #0acf97;
+    border-bottom: dashed 1px #aaa;
+    font-weight: bold;
+    line-height: 34px;
+    .card-header {
+      border: none;
+    }
+    h3 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+  }
+}
+
+.header-title {
+  margin-left: 5px;
+  padding-left: 15px;
+  border-left: 4px solid #17a2b8;
+  font-size: 1.3rem;
+  line-height: 35px;
+  font-weight: 600;
+}

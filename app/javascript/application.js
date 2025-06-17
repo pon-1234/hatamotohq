@@ -1,4 +1,4 @@
-import '../stylesheets/application'; // This file will contain your custom CSS
+// Entry point for the build script in your package.json
 import Vue from 'vue';
 import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';
@@ -14,9 +14,9 @@ import Clipboard from 'v-clipboard';
 import VTooltip from 'v-tooltip';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload';
-import 'bootstrap/js/dist/modal';
+import * as bootstrap from "bootstrap";
 import Multiselect from 'vue-multiselect';
-import VueQRCodeComponent from 'vue-qrcode-component';
+// import VueQRCodeComponent from 'vue-qrcode-component'; // TODO: Fix Vue component loading
 import GAuth from 'vue-google-oauth2';
 
 import {
@@ -25,10 +25,10 @@ import {
   TabsPlugin
 } from 'bootstrap-vue';
 // Import constant
-import * as constant from '@/core/constant';
+import * as constant from './src/core/constant';
 import 'vue-select/dist/vue-select.css';
-import store from '../src/stores';
-import '../src/filters';
+import store from './src/stores';
+import './src/filters';
 import Rails from '@rails/ujs';
 
 Rails.start();
@@ -38,8 +38,8 @@ window.$ = jQuery;
 window._ = require('lodash');
 const toastr = require('toastr');
 window.toastr = toastr;
-window.emojione = require('../src/lib/emojione');
-window.emojionearea = require('../src/lib/emojionearea');
+window.emojione = require('./src/lib/emojione');
+window.emojionearea = require('./src/lib/emojionearea');
 Object.keys(constant).forEach((key) => {
   Vue.prototype[key] = constant[key];
 });
@@ -76,7 +76,7 @@ Vue.use(VueLazyload, {
 // START: vee-validation configuration
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
-Vue.component('qr-code', VueQRCodeComponent);
+// Vue.component('qr-code', VueQRCodeComponent); // TODO: Fix Vue component loading
 Vue.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
 
 const gauthOption = {
@@ -95,19 +95,16 @@ Validator.extend('email', value => {
 });
 // END: vee-validation configuration
 
-// Automatically import components
-const files = require.context('../src', true, /\.vue$/i);
-files.keys().map((key) => {
-  const component = key
-    .split('/')
-    .pop()
-    .split('.')[0];
-  // Convert PascalCase to kebab-case for component names
-  const kebabName = component.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-  Vue.component(kebabName, files(key).default);
-  // Also register with original name for backward compatibility
-  Vue.component(component, files(key).default);
-});
+// Import all Vue components
+// Note: With esbuild, we need to explicitly import components instead of using require.context
+// You can either:
+// 1. Import components individually as needed
+// 2. Create a separate file that imports all components
+// 3. Use a build-time plugin to generate the imports
+
+// For now, components will be imported in individual pages/views as needed
+// Example: import MyComponent from './src/components/MyComponent.vue';
+// Vue.component('my-component', MyComponent);
 
 // We have to re-create vue app when change the page url
 jQuery(() => {

@@ -59,7 +59,7 @@ const storeData = { modules: {} }
       // Update `storeData.modules` with the latest definitions.
       updateModules();
       // Trigger a hot update in the store.
-      require('../store').default.hotUpdate({ modules: storeData.modules });
+      // require('../store').default.hotUpdate({ modules: storeData.modules }); // TODO: Fix hot module replacement
     });
   }
 })();

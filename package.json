@@ -5,7 +5,12 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue app/javascript",
     "lint-fix": "eslint --fix --ext .js,.vue app/javascript",
-    "doc": "apidoc -i doc/api -o doc/public"
+    "doc": "apidoc -i doc/api -o doc/public",
+    "build": "node esbuild.config.mjs",
+    "build:css:compile": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules",
+    "build:css:prefix": "postcss ./app/assets/builds/application.css --use=autoprefixer --output=./app/assets/builds/application.css",
+    "build:css": "npm run build:css:compile && npm run build:css:prefix",
+    "watch:css": "nodemon --watch ./app/assets/stylesheets/ --ext scss --exec \"npm run build:css\""
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
@@ -14,7 +19,6 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.1.4-1",
-    "@rails/webpacker": "4.3.0",
     "axios": "^0.21.2",
     "bootstrap-vue": "^2.17.3",
     "chart.js": "^2.9.4",
@@ -50,6 +54,8 @@
   },
   "devDependencies": {
     "apidoc": "^0.25.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.5",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
@@ -57,6 +63,11 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^6.2.2",
-    "webpack-dev-server": "^3.11.0"
-  }
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "sass": "^1.89.2"
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
