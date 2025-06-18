@@ -1,116 +1,83 @@
 # frozen_string_literal: true
 
-class User::ScenariosController < User::ApplicationController
-  load_and_authorize_resource except: :send_to_testers
-  before_action :find_scenario, only: [:show, :update, :destroy, :copy, :send_to_testers]
+class User::ScenariosControllerRefactored < User::ApplicationController
+  include Copyable
+  include Toggleable
+  
+  before_action :set_scenario, only: [:show, :edit, :update, :destroy]
 
-  include User::ScenariosHelper
-
-  # GET /user/scenarios
   def index
-    if request.format.json?
-      @params = params[:q]
-      @q = Scenario.accessible_by(current_ability).includes([:tags]).ransack(params[:q])
-      @scenarios = @q.result.page(params[:page]).per(8)
-    end
-    respond_to do |format|
-      format.html do
-        @testers = current_user.line_account.line_friends.is_tester
-          .to_json(only: %i(id display_name))
-      end
-      format.json
-    end
+    @scenarios = current_line_account.scenarios.ordered
   end
 
-  # GET /user/scenarios/search
-  def search
-    index
-    render :index
-  end
-
-  # GET /user/scenarios/:id
   def show
-    respond_to do |format|
-      format.json
-    end
   end
 
-  # GET /user/scenarios/new
   def new
+    @scenario = current_line_account.scenarios.build
   end
 
-  # POST /user/scenarios
-  def create
-    @scenario = build_scenario(scenario_params)
-    if !@scenario.save
-      render_bad_request_with_message(@scenario.first_error_message)
-    end
-  end
-
-  # GET /user/scenarios/:id
   def edit
-    @scenario_id = params[:id]
   end
 
-  # PATCH /user/scenarios/:id
+  def create
+    @scenario = current_line_account.scenarios.build(scenario_params)
+    
+    if @scenario.save
+      redirect_to user_scenario_path(@scenario), notice: t('messages.create_success')
+    else
+      render :new
+    end
+  end
+
   def update
-    if !@scenario.update(update_params)
-      render_bad_request_with_message(@scenario.first_error_message)
+    if @scenario.update(scenario_params)
+      redirect_to user_scenario_path(@scenario), notice: t('messages.update_success')
+    else
+      render :edit
     end
   end
 
-  # DELETE /user/scenarios/:id
   def destroy
-    @scenario.destroy!
-    render_success
-  end
-
-  # POST /user/scenarios/:id/copy
-  def copy
-    @scenario.clone!
-    render_success
-  rescue
-    render_bad_request
-  end
-
-  # GET /user/scenarios/manual
-  def manual
-    @scenarios = Scenario.accessible_by(current_ability).enabled.manual
-  end
-
-  # POST /user/scenarios/:id/send_to_testers
-  def send_to_testers
-    authorize! :send_to_testers, @scenario
-    validator = SendScenarioToTestersValidator.new scenario_id: params[:id],
-      line_friend_ids: params[:line_friend_ids]
-    unless validator.valid?
-      render_bad_request_with_message validator.errors.full_messages.first
-      return
-    end
-    channel_ids = params[:line_friend_ids].map { |line_friend_id| LineFriend.find_by(id: line_friend_id).channel }
-      .compact.map(&:id)
-    ScenarioSendToTesterSchedulerJob.perform_later channel_ids, params[:id]
-    render_success
+    @scenario.destroy
+    redirect_to user_scenarios_path, notice: t('messages.destroy_success')
   end
 
   private
-    def scenario_params
-      params.permit(
-        :title,
-        :description,
-        :mode,
-        :type,
-        :status,
-        tag_ids: [],
-        after_action: {}
-      )
-    end
 
-    def update_params
-      scenario_params.except(:mode)
-    end
+  def set_scenario
+    @scenario = current_line_account.scenarios.find(params[:id])
+  end
 
-    def find_scenario
-      @scenario = Scenario.find(params[:id])
+  def scenario_params
+    params.require(:scenario).permit(:name, :description, :mode, :enabled, 
+                                     :after_action, scenario_messages_attributes: [:id, :content, :step, :_destroy])
+  end
+
+  # For Copyable concern
+  def resource_class
+    Scenario
+  end
+
+  def after_copy_path(scenario)
+    edit_user_scenario_path(scenario)
+  end
+
+  def customize_duplicated_resource(new_scenario, original)
+    # Copy scenario messages
+    original.scenario_messages.each do |message|
+      new_message = message.dup
+      new_message.created_at = nil
+      new_message.updated_at = nil
+      new_scenario.scenario_messages << new_message
     end
+    
+    # Reset some attributes
+    new_scenario.enabled = false
+  end
+
+  # For Toggleable concern
+  def toggle_attribute
+    :enabled
+  end
 end

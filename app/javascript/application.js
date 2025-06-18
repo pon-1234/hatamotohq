@@ -49,6 +49,23 @@ Object.keys(constant).forEach((key) => {
 require('@rails/activestorage').start();
 require('chart.js');
 
+Vue.configureCompat({
+  MODE: 2,
+  GLOBAL_MOUNT: true,
+  GLOBAL_EXTEND: true,
+  GLOBAL_PROTOTYPE: true,
+  RENDER_FUNCTION: true,
+  INSTANCE_DESTROY: true,
+  INSTANCE_EVENT_EMITTER: true,
+  COMPONENT_V_MODEL: true,
+  COMPONENT_ASYNC: true,
+  TRANSITION_GROUP_ROOT: true,
+  ATTR_FALSE_VALUE: true,
+  CUSTOM_DIR: true,
+  V_FOR_REF: true,
+  FILTER: true
+});
+
 Vue.config.devtools = true;
 Vue.use(Chartkick);
 Vue.use(Datetime);
