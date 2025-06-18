@@ -10,11 +10,22 @@ class Api::V1::Staff::AuthController < Api::V1::Staff::ApplicationController
     raise Common::StaffNotFound.new unless staff
     raise Common::PasswordInvalid.new unless staff.valid_password?(params[:password])
     access_token = Common::JwtProcessor.encode({ staff_id: staff.id })
-    render json: { status: 'success', data: { accessToken: access_token } }
+    
+    respond_with_success(
+      data: { 
+        accessToken: access_token,
+        staff: {
+          id: staff.id,
+          email: staff.email,
+          name: staff.username
+        }
+      },
+      message: 'Login successful'
+    )
   end
 
   def logout
     @staff.revocate_access_token(@token_payload['jti']) # include both check already logedout
-    render json: { status: 'success' }
+    respond_with_success(message: 'Logout successful')
   end
 end

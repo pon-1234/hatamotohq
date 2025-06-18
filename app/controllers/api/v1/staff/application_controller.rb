@@ -3,18 +3,37 @@
 Dir[File.join(__dir__, 'lib/common', '*.rb')].each { |file| require file }
 
 class Api::V1::Staff::ApplicationController < ActionController::Base
-  include ResponseHelper
+  include ApiErrorHandler
+  include ApiResponseHelper
 
   protect_from_forgery with: :null_session
 
   before_action :authenticate_staff!
 
-  rescue_from Common::ErrorHandle, with: :render_error_response
-  rescue_from CanCan::AccessDenied, with: :render_permission_denied
+  rescue_from Common::ErrorHandle, with: :render_custom_error
+  rescue_from Common::AccessTokenNil, with: :handle_missing_token
+  rescue_from Common::AccessTokenInvalid, with: :handle_invalid_token
+  rescue_from Common::AlreadyLogedOut, with: :handle_logged_out
 
   protected
-    def render_error_response(error)
-      render json: error, serializer: ::ApiExceptionSerializer, status: error.status_code
+    def render_custom_error(error)
+      respond_with_error(
+        message: error.message || 'An error occurred',
+        status: error.try(:status_code) || :bad_request,
+        code: error.class.name.demodulize.underscore.upcase
+      )
+    end
+
+    def handle_missing_token(error)
+      respond_with_unauthorized(message: 'Access token is required')
+    end
+
+    def handle_invalid_token(error)
+      respond_with_unauthorized(message: 'Invalid access token')
+    end
+
+    def handle_logged_out(error)
+      respond_with_unauthorized(message: 'Session has expired. Please login again')
     end
 
     def authenticate_staff!

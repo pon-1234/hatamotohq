@@ -1,5 +1,5 @@
 <template>
-  <div v-b-tooltip.hover :title="title" class="ml-1">
+  <div v-tooltip="title" class="ml-1">
     <i class="mdi mdi-information-outline icon"></i>
   </div>
 </template>
