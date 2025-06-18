@@ -23,8 +23,8 @@
 #
 FactoryBot.define do
   factory :scenario_friend do
-    scenario { nil }
-    friend { nil }
-    status { 'MyString' }
+    scenario
+    line_friend
+    status { 'stopped' }
   end
 end

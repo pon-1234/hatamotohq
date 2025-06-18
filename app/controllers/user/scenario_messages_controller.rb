@@ -2,7 +2,7 @@
 
 class User::ScenarioMessagesController < User::ApplicationController
   before_action :find_scenario, only: [:index, :create, :update, :import]
-  before_action :find_message, only: [:show, :update, :destroy, :delete_confirm]
+  before_action :find_message, only: [:show, :update, :destroy]
 
   include User::ScenarioMessagesHelper
 

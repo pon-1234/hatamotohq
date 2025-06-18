@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::UsersController < Admin::ApplicationController
-  before_action :find_user, only: [:show, :edit, :update, :destroy, :delete_confirm, :sso]
+  before_action :find_user, only: [:update, :destroy, :sso]
 
   # GET /admin/users
   def index

@@ -1,5 +1,6 @@
 import esbuild from 'esbuild';
 import path from 'path';
+import vuePlugin from 'esbuild-vue';
 
 const args = process.argv.slice(2);
 const watch = args.includes('--watch');
@@ -8,7 +9,8 @@ const config = {
   entryPoints: ['app/javascript/application.js'],
   bundle: true,
   sourcemap: true,
-  format: 'esm',
+  format: 'iife',
+  globalName: 'HatamotoApp',
   outdir: path.join(process.cwd(), 'app/assets/builds'),
   publicPath: '/assets',
   loader: {
@@ -26,24 +28,16 @@ const config = {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     'process.env.MIX_GOOGLE_MAP_KEY': JSON.stringify(process.env.MIX_GOOGLE_MAP_KEY || ''),
     'process.env.GOOGLE_OAUTH_CLIENT_ID': JSON.stringify(process.env.GOOGLE_OAUTH_CLIENT_ID || ''),
+    'process.env.MIX_ROOT_PATH': JSON.stringify(process.env.MIX_ROOT_PATH || ''),
+    'global': 'window'
   },
-  external: [
-    '*.vue'  // Temporarily exclude Vue files
-  ],
+  alias: {
+    '@': path.join(process.cwd(), 'app/javascript/src'),
+    '@channels': path.join(process.cwd(), 'app/javascript/channels'),
+    'vue': 'vue/dist/vue.esm.js'
+  },
   plugins: [
-    {
-      name: 'vue-stub',
-      setup(build) {
-        // Stub Vue files temporarily
-        build.onResolve({ filter: /\.vue$/ }, args => {
-          return { 
-            path: args.path,
-            namespace: 'vue-stub',
-            external: true 
-          };
-        });
-      }
-    }
+    vuePlugin()
   ]
 };
 

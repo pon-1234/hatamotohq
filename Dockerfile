@@ -1,7 +1,7 @@
-FROM ruby:2.6.3-alpine
+FROM ruby:3.3.6-alpine
 
 ENV APP_PATH /var/app
-ENV BUNDLE_VERSION 2.2.14
+ENV BUNDLE_VERSION 2.5.23
 ENV BUNDLE_PATH /usr/local/bundle/gems
 ENV TMP_PATH /tmp/
 ENV RAILS_LOG_TO_STDOUT true
@@ -28,7 +28,7 @@ less \
 
 # Install Node.js and Yarn - use current Alpine packages
 RUN apk add --no-cache nodejs npm \
-&& npm install -g yarn \
+&& npm install -g yarn@1.22.22 \
 && node --version 
 
 RUN gem install bundler --version "$BUNDLE_VERSION" \
@@ -53,8 +53,8 @@ COPY . .
 # Install JavaScript dependencies 
 RUN yarn install --ignore-engines
 
-# Skip asset precompilation during build - will be done at runtime
-# RUN NODE_OPTIONS="--max-old-space-size=4096" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
+# Precompile assets during build
+RUN NODE_OPTIONS="--max-old-space-size=4096" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
 
 # Create a script to run db:migrate and then start the server
 RUN echo '#!/bin/sh' > /usr/local/bin/start-server.sh \

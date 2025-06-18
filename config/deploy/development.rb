@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 server '18.176.164.49', port: 22, roles: %i[web app db], primary: true
-set :repo_url,        'git@github.com:Yopaz-Co-Ltd/line-insight.git'
+set :repo_url,        'git@github.com:pon-1234/hatamotohq.git'
 set :application,     'line-insight'
 set :user,            'deploy'
 set :ssh_options, {

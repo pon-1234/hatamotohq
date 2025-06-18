@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::StaffsController < User::ApplicationController
-  before_action :find_staff, only: [:show, :edit, :update, :destroy, :delete_confirm, :sso]
+  before_action :find_staff, only: [:edit, :update, :destroy, :sso]
 
   # GET /user/staffs
   def index

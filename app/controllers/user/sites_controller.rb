@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::SitesController < User::ApplicationController
-  before_action :find_site, except: [:index, :create, :new]
+  before_action :find_site, except: [:index, :create]
 
   # GET /user/sites
   def index

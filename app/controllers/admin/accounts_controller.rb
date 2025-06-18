@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::AccountsController < Admin::ApplicationController
-  before_action :find_account, only: [:show, :edit, :update, :destroy]
+  before_action :find_account, only: [:update, :destroy]
 
   # GET /admin/accounts
   def index

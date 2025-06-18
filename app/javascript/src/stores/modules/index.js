@@ -1,80 +1,69 @@
-// Register each file as a corresponding Vuex module. Module nesting
-// will mirror [sub-]directory hierarchy and modules are namespaced
-// as the camelCase equivalent of their file name.
+// Manually import all Vuex modules since esbuild doesn't support require.context
+import * as account from './account.js';
+import * as agency from './agency.js';
+import * as announcement from './announcement.js';
+import * as auth from './auth.js';
+import * as autoResponse from './auto_response.js';
+import * as broadcast from './broadcast.js';
+import * as channel from './channel.js';
+import * as client from './client.js';
+import * as flexMessage from './flexMessage.js';
+import * as flexMessageAlt from './flex_message.js';
+import * as friend from './friend.js';
+import * as global from './global.js';
+import * as home from './home.js';
+import * as media from './media.js';
+import * as precheckin from './precheckin.js';
+import * as preview from './preview.js';
+import * as reminder from './reminder.js';
+import * as reservation from './reservation.js';
+import * as review from './review.js';
+import * as richmenu from './richmenu.js';
+import * as scenario from './scenario.js';
+import * as scenarioMessage from './scenario_message.js';
+import * as setting from './setting.js';
+import * as site from './site.js';
+import * as staff from './staff.js';
+import * as streamRoute from './stream_route.js';
+import * as survey from './survey.js';
+import * as system from './system.js';
+import * as tag from './tag.js';
+import * as template from './template.js';
+import * as user from './user.js';
+import * as variable from './variable.js';
 
-import camelCase from 'lodash/camelCase';
-
-const modulesCache = {};
-const storeData = { modules: {} }
-
-;(function updateModules() {
-  // Allow us to dynamically require all Vuex module files.
-  // https://webpack.js.org/guides/dependency-management/#require-context
-  const requireModule = require.context(
-    // Search for files in the current directory.
-    '.',
-    // Search for files in subdirectories.
-    true,
-    // Include any .js files that are not this file or a unit test.
-    /^((?!index|\.unit\.).)*\.js$/
-  );
-
-  // For every Vuex module...
-  requireModule.keys().forEach((fileName) => {
-    const moduleDefinition = requireModule(fileName);
-
-    // Skip the module during hot reload if it refers to the
-    // same module definition as the one we have cached.
-    if (modulesCache[fileName] === moduleDefinition) return;
-
-    // Update the module cache, for efficient hot reloading.
-    modulesCache[fileName] = moduleDefinition;
-
-    // Get the module path as an array.
-    const modulePath = fileName
-      // Remove the "./" from the beginning.
-      .replace(/^\.\//, '')
-      // Remove the file extension from the end.
-      .replace(/\.\w+$/, '')
-      // Split nested modules into an array path.
-      .split(/\//)
-      // camelCase all module namespaces and names.
-      .map(camelCase);
-
-    // Get the modules object for the current path.
-    const { modules } = getNamespace(storeData, modulePath);
-
-    // Add the module to our modules object.
-    modules[modulePath.pop()] = {
-      // Modules are namespaced by default.
-      namespaced: true,
-      ...moduleDefinition
-    };
-  });
-
-  // If the environment supports hot reloading...
-  if (module.hot) {
-    // Whenever any Vuex module is updated...
-    module.hot.accept(requireModule.id, () => {
-      // Update `storeData.modules` with the latest definitions.
-      updateModules();
-      // Trigger a hot update in the store.
-      // require('../store').default.hotUpdate({ modules: storeData.modules }); // TODO: Fix hot module replacement
-    });
-  }
-})();
-
-// Recursively get the namespace of a Vuex module, even if nested.
-function getNamespace(subtree, path) {
-  if (path.length === 1) return subtree;
-
-  const namespace = path.shift();
-  subtree.modules[namespace] = {
-    modules: {},
-    namespaced: true,
-    ...subtree.modules[namespace]
-  };
-  return getNamespace(subtree.modules[namespace], path);
-}
-
-export default storeData.modules;
+// Export all modules with namespacing
+export default {
+  account: { namespaced: true, ...account },
+  agency: { namespaced: true, ...agency },
+  announcement: { namespaced: true, ...announcement },
+  auth: { namespaced: true, ...auth },
+  autoResponse: { namespaced: true, ...autoResponse },
+  broadcast: { namespaced: true, ...broadcast },
+  channel: { namespaced: true, ...channel },
+  client: { namespaced: true, ...client },
+  flexMessage: { namespaced: true, ...flexMessage },
+  flexMessageAlt: { namespaced: true, ...flexMessageAlt },
+  friend: { namespaced: true, ...friend },
+  global: { namespaced: true, ...global },
+  home: { namespaced: true, ...home },
+  media: { namespaced: true, ...media },
+  precheckin: { namespaced: true, ...precheckin },
+  preview: { namespaced: true, ...preview },
+  reminder: { namespaced: true, ...reminder },
+  reservation: { namespaced: true, ...reservation },
+  review: { namespaced: true, ...review },
+  richmenu: { namespaced: true, ...richmenu },
+  scenario: { namespaced: true, ...scenario },
+  scenarioMessage: { namespaced: true, ...scenarioMessage },
+  setting: { namespaced: true, ...setting },
+  site: { namespaced: true, ...site },
+  staff: { namespaced: true, ...staff },
+  streamRoute: { namespaced: true, ...streamRoute },
+  survey: { namespaced: true, ...survey },
+  system: { namespaced: true, ...system },
+  tag: { namespaced: true, ...tag },
+  template: { namespaced: true, ...template },
+  user: { namespaced: true, ...user },
+  variable: { namespaced: true, ...variable }
+};

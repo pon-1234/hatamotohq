@@ -2,7 +2,7 @@
 
 class User::TagsController < User::ApplicationController
   load_and_authorize_resource
-  before_action :find_tag, only: [:update, :destroy, :friends]
+  before_action :find_tag, only: [:update, :destroy]
 
   # GET /user/tags
   def index

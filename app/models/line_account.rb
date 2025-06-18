@@ -40,7 +40,8 @@ class LineAccount < ApplicationRecord
   has_many :templates, dependent: :destroy
   has_many :scenarios, dependent: :destroy
 
-  enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
+  # TODO: Add status column to line_accounts table if needed
+  # enum status: { active: 'active', inactive: 'inactive', disabled: 'disabled' }
 
   before_create do
     self.webhook_url = generate_webhook_url if self.webhook_url.nil?

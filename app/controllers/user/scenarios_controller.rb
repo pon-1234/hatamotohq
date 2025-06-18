@@ -2,7 +2,7 @@
 
 class User::ScenariosController < User::ApplicationController
   load_and_authorize_resource except: :send_to_testers
-  before_action :find_scenario, only: [:show, :update, :destroy, :delete_confirm, :copy, :send_to_testers]
+  before_action :find_scenario, only: [:show, :update, :destroy, :copy, :send_to_testers]
 
   include User::ScenariosHelper
 

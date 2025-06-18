@@ -1,5 +1,3 @@
-// Load all the channels within this directory and all subdirectories.
-// Channel files must be named *_channel.js.
-
-const channels = require.context('.', true, /_channel\.js$/);
-channels.keys().forEach(channels);
+// Channels are loaded manually as needed since esbuild doesn't support require.context
+// Import channels here when needed
+// Example: import './consumer';

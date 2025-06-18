@@ -3,7 +3,7 @@
 class Admin::AnnouncementsController < Admin::ApplicationController
   include Admin::ActiveStorageHelper
 
-  before_action :find_announcement, only: [:show, :edit, :update, :destroy, :delete_confirm]
+  before_action :find_announcement, only: [:show, :edit, :update, :destroy]
 
   # GET /admin/announcements
   def index

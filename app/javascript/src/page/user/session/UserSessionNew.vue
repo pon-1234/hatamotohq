@@ -94,6 +94,12 @@ export default {
     };
   },
 
+  computed: {
+    invalid() {
+      return this.errors.any();
+    }
+  },
+
   methods: {
     onSubmit() {
       this.$refs.form.submit();

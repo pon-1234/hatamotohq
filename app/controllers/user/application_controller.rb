@@ -35,7 +35,8 @@ class User::ApplicationController < ActionController::Base
   end
 
   def ensure_bot_initialized
-    redirect_to user_bot_setup_path unless current_user.line_account.bot_initialized
+    line_account = current_user.line_account
+    redirect_to user_bot_setup_path unless line_account&.bot_initialized
   end
 
   def current_ability
