@@ -1,9 +1,23 @@
 import esbuild from 'esbuild';
 import path from 'path';
-import vuePlugin from 'esbuild-plugin-vue3';
+import fs from 'fs';
 
 const args = process.argv.slice(2);
 const watch = args.includes('--watch');
+
+// Simple Vue plugin that treats .vue files as external for now
+const vueExternalPlugin = {
+  name: 'vue-external',
+  setup(build) {
+    build.onResolve({ filter: /\.vue$/ }, args => {
+      // For now, we'll treat Vue files as external and handle them separately
+      return {
+        path: args.path,
+        external: true
+      };
+    });
+  }
+};
 
 const config = {
   entryPoints: ['app/javascript/application.js'],
@@ -40,8 +54,10 @@ const config = {
     'vue': '@vue/compat/dist/vue.esm-bundler.js'
   },
   plugins: [
-    vuePlugin()
-  ]
+    vueExternalPlugin
+  ],
+  // Exclude Vue files from bundling for now
+  external: ['*.vue']
 };
 
 async function buildOrWatch() {

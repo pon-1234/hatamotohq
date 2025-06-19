@@ -14,6 +14,7 @@ gem 'sass-rails', '>= 6'
 gem 'jbuilder', '~> 2.7'
 gem 'jsbundling-rails'
 gem 'cssbundling-rails'
+gem 'vite_rails'
 # gem 'webpacker', '~> 5.0' # Removed - using jsbundling-rails instead
 gem 'browser', require: 'browser/browser'
 gem 'httparty'

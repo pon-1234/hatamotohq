@@ -9,8 +9,10 @@
     <link href="/css/app.min.css" rel="stylesheet" type="text/css" id="light-style" />
     <script src="/js/vendor.min.js"></script>
     <script src="/js/app.min.js"></script>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= stylesheet_link_tag "application" %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
+
   </head>
 
   <body class="<%= yield(:body_class) if content_for?(:body_class) %>">

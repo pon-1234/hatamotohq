@@ -51,14 +51,27 @@ cap production deploy
 ### Frontend Development
 ```bash
 # Install JavaScript dependencies
-yarn install
+npm install --legacy-peer-deps
 
-# Start Rails server with asset compilation
-rails server
+# Start development servers (Rails + Vite + CSS)
+foreman start -f Procfile.dev
 
-# Compile assets for production
-rails assets:precompile
+# Or start separately:
+rails server      # Terminal 1
+bin/vite dev      # Terminal 2
+npm run watch:css # Terminal 3
+
+# Build for production
+npm run build
+npm run build:css
 ```
+
+### Vue 3 Migration Status (2025年6月)
+- **Build Tool**: Migrated from esbuild to Vite
+- **Vue Version**: 3.5.16 with compatibility mode
+- **Component Status**: Mix of Vue 2 Options API and Vue 3 Composition API
+- **New Components**: Use `<script setup>` syntax
+- **Existing Components**: Continue working with compatibility mode
 
 ## Architecture Overview
 
