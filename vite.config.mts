@@ -17,11 +17,24 @@ export default defineConfig({
       }
     })
   ],
+  optimizeDeps: {
+    include: ['vue', '@vue/compat']
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app/javascript/src'),
       '@channels': path.resolve(__dirname, './app/javascript/channels'),
-      'vue': '@vue/compat/dist/vue.esm-bundler.js'
+      'vue': '@vue/compat/dist/vue.esm-bundler.js',
+      '/images': path.resolve(__dirname, './public/images'),
+      '/img': path.resolve(__dirname, './public/img')
+    }
+  },
+  build: {
+    rollupOptions: {
+      external: [
+        /^\/images\//,
+        /^\/img\//
+      ]
     }
   },
   define: {
