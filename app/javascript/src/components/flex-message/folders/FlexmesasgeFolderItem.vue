@@ -41,61 +41,59 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'active', 'index', 'disableEditor'],
-  data() {
-    return {
-      isEdit: false,
-      isEnter: true
-    };
-  },
-  methods: {
-    getClassName() {
-      let className = 'folder-item ';
-      if (this.active) {
-        className += 'active';
-      }
+<script setup>
+import { ref, computed } from 'vue'
 
-      return className;
-    },
+const props = defineProps(['data', 'active', 'index', 'disableEditor'])
+const emit = defineEmits(['changeSelected', 'editFolder', 'deleteFolder'])
 
-    changeName() {
-      this.isEdit = true;
-    },
+const isEdit = ref(false)
+const isEnter = ref(true)
+const folderName = ref(null)
+const buttonChange = ref(null)
 
-    changeSelected() {
-      this.isEdit = false;
-      this.$emit('changeSelected', { index: this.index, folderId: this.data.id });
-    },
-
-    submitChangeName() {
-      if (this.$refs.folderName.value !== this.data.name) {
-        this.$emit('editFolder', { id: this.data.id, name: this.$refs.folderName.value });
-      }
-    },
-
-    enterSubmitChangeName(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonChange.click();
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
-    },
-
-    deleteFolder() {
-      this.$emit('deleteFolder', this.data);
-    }
+const getClassName = () => {
+  let className = 'folder-item '
+  if (props.active) {
+    className += 'active'
   }
-};
+  return className
+}
+
+const changeName = () => {
+  isEdit.value = true
+}
+
+const changeSelected = () => {
+  isEdit.value = false
+  emit('changeSelected', { index: props.index, folderId: props.data.id })
+}
+
+const submitChangeName = () => {
+  if (folderName.value.value !== props.data.name) {
+    emit('editFolder', { id: props.data.id, name: folderName.value.value })
+  }
+}
+
+const enterSubmitChangeName = (e) => {
+  if (!isEnter.value) {
+    isEnter.value = true
+    return
+  }
+  buttonChange.value.click()
+}
+
+const compositionend = () => {
+  isEnter.value = false
+}
+
+const compositionstart = () => {
+  isEnter.value = true
+}
+
+const deleteFolder = () => {
+  emit('deleteFolder', props.data)
+}
 </script>
 <style lang="scss" scoped>
   .folder-item {

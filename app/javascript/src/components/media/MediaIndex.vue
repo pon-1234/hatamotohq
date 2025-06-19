@@ -180,162 +180,147 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex';
-import Util from '@/core/util';
-import * as moment from 'moment';
+<script setup>
+import { ref, computed, onMounted, onUpdated, onUnmounted, nextTick } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
+import * as moment from 'moment'
 
-export default {
-  props: {
-    types: {
-      type: Array,
-      default: () => ['image', 'audio', 'video', 'richmenu']
-    },
-    mode: {
-      type: String,
-      default: 'read'
-    },
-    filterable: {
-      type: Boolean,
-      default: true
-    }
+const props = defineProps({
+  types: {
+    type: Array,
+    default: () => ['image', 'audio', 'video', 'richmenu']
   },
-  data() {
-    return {
-      rootUrl: process.env.MIX_ROOT_PATH,
-      loading: true,
-      contentKey: 0,
-      currentPage: 1,
-      selectedMedias: [],
-      checkedAll: false,
-      curUploadType: 'image',
-      window: {
-        width: 0
-      }
-    };
+  mode: {
+    type: String,
+    default: 'read'
   },
-  created() {
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-  },
-  async beforeMount() {
-    this.setFilter(this.types);
-    await this.getMedias();
-    this.loading = false;
-  },
-  updated() {
-    Util.addMediaPlayListeners();
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-  computed: {
-    ...mapState('media', {
-      medias: state => state.medias,
-      totalRows: state => state.totalRows,
-      perPage: state => state.perPage
-    }),
-
-    isManageMode() {
-      return this.mode === 'manage';
-    },
-
-    isMobile: function() {
-      return this.window.width < 760;
-    }
-  },
-
-  methods: {
-    ...mapMutations('media', ['setCurPage', 'setFilter', 'resetFilter']),
-    ...mapActions('media', ['getMedias', 'deleteMedias']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    async loadPage() {
-      // bootstrap pagination return old value of current page,
-      // using nextTick to solve the issue
-      this.$nextTick(async() => {
-        this.loading = true;
-        this.setCurPage(this.currentPage);
-        await this.getMedias();
-        this.checkedAll = false;
-        this.selectedMedias = [];
-        this.forceRerender();
-        this.loading = false;
-      });
-    },
-
-    onUploadFinished() {
-      location.reload();
-    },
-
-    // Select media for sending new message
-    selectMedia(media, event) {
-      if (!this.isManageMode && this.isVideo(media)) {
-        event.preventDefault();
-        event.target.pause();
-      }
-      this.$emit('select', media);
-    },
-
-    // Select all media for delete
-    selectAllMedia() {
-      this.selectedMedias = this.checkedAll === true ? this.medias : [];
-    },
-
-    async deleteSelectedMedia() {
-      this.loading = true;
-      const mediaIds = this.selectedMedias.map(_ => _.id);
-      const response = await this.deleteMedias(mediaIds);
-      if (response) {
-        Util.showSuccessThenRedirect('選択したメディアの削除は完了しました。', window.location.href);
-      } else {
-        window.toastr.error('選択したメディアの削除は失敗しました。');
-      }
-      this.loading = false;
-    },
-
-    formattedDate(time) {
-      return moment(time).format('YYYY年MM月DD日');
-    },
-
-    isImage(media) {
-      return media.type === 'image' || media.type === 'richmenu' || media.type === 'imagemap';
-    },
-
-    isVideo(media) {
-      return media.type === 'video';
-    },
-
-    isAudio(media) {
-      return media.type === 'audio';
-    },
-
-    isPdf(media) {
-      return media.type === 'pdf';
-    },
-
-    download(media) {
-      var a = document.createElement('a');
-      a.href = media.download_url;
-      a.download = media.file_name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    },
-
-    resetData() {
-      this.currentPage = 1;
-      this.loadPage();
-    },
-
-    handleResize() {
-      this.window.width = window.innerWidth;
-    }
+  filterable: {
+    type: Boolean,
+    default: true
   }
-};
+})
+
+const emit = defineEmits(['select'])
+const store = useStore()
+
+const rootUrl = ref(process.env.MIX_ROOT_PATH)
+const loading = ref(true)
+const contentKey = ref(0)
+const currentPage = ref(1)
+const selectedMedias = ref([])
+const checkedAll = ref(false)
+const curUploadType = ref('image')
+const windowWidth = ref(0)
+
+const medias = computed(() => store.state.media.medias)
+const totalRows = computed(() => store.state.media.totalRows)
+const perPage = computed(() => store.state.media.perPage)
+const isManageMode = computed(() => props.mode === 'manage')
+const isMobile = computed(() => windowWidth.value < 760)
+
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+}
+
+onMounted(async () => {
+  window.addEventListener('resize', handleResize)
+  handleResize()
+  store.commit('media/setFilter', props.types)
+  await store.dispatch('media/getMedias')
+  loading.value = false
+})
+
+onUpdated(() => {
+  Util.addMediaPlayListeners()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const loadPage = async () => {
+  // bootstrap pagination return old value of current page,
+  // using nextTick to solve the issue
+  await nextTick()
+  loading.value = true
+  store.commit('media/setCurPage', currentPage.value)
+  await store.dispatch('media/getMedias')
+  checkedAll.value = false
+  selectedMedias.value = []
+  forceRerender()
+  loading.value = false
+}
+
+const onUploadFinished = () => {
+  location.reload()
+}
+
+const selectMedia = (media, event) => {
+  if (!isManageMode.value && isVideo(media)) {
+    event.preventDefault()
+    event.target.pause()
+  }
+  emit('select', media)
+}
+
+const selectAllMedia = () => {
+  selectedMedias.value = checkedAll.value === true ? medias.value : []
+}
+
+const deleteSelectedMedia = async () => {
+  loading.value = true
+  const mediaIds = selectedMedias.value.map(_ => _.id)
+  const response = await store.dispatch('media/deleteMedias', mediaIds)
+  if (response) {
+    Util.showSuccessThenRedirect('選択したメディアの削除は完了しました。', window.location.href)
+  } else {
+    window.toastr.error('選択したメディアの削除は失敗しました。')
+  }
+  loading.value = false
+}
+
+const formattedDate = (time) => {
+  return moment(time).format('YYYY年MM月DD日')
+}
+
+const isImage = (media) => {
+  return media.type === 'image' || media.type === 'richmenu' || media.type === 'imagemap'
+}
+
+const isVideo = (media) => {
+  return media.type === 'video'
+}
+
+const isAudio = (media) => {
+  return media.type === 'audio'
+}
+
+const isPdf = (media) => {
+  return media.type === 'pdf'
+}
+
+const download = (media) => {
+  var a = document.createElement('a')
+  a.href = media.download_url
+  a.download = media.file_name
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}
+
+const resetData = () => {
+  currentPage.value = 1
+  loadPage()
+}
+
+const getMedias = () => {
+  store.dispatch('media/getMedias')
+}
 </script>
 
 <style lang="scss" scoped>

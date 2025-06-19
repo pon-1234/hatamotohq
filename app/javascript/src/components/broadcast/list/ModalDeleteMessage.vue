@@ -35,19 +35,17 @@
     </div>
   </div>
 </template>
-<script>
-import moment from 'moment';
+<script setup>
+import moment from 'moment'
 
-export default {
-  props: ['data'],
-  methods: {
-    deleteMessage() {
-      this.$emit('input', this.data.id);
-    },
+const props = defineProps(['data'])
+const emit = defineEmits(['input'])
 
-    formatDateTime(time) {
-      return moment(time).format('YYYY年MM月DD日 HH:mm');
-    }
-  }
-};
+const deleteMessage = () => {
+  emit('input', props.data.id)
+}
+
+const formatDateTime = (time) => {
+  return moment(time).format('YYYY年MM月DD日 HH:mm')
+}
 </script>

@@ -3,8 +3,6 @@
   <span v-else-if="staff.status == 'blocked'"><i class="mdi mdi-circle text-warning"></i> 無効 </span>
 </template>
 
-<script>
-export default {
-  props: ['staff']
-};
+<script setup>
+defineProps(['staff'])
 </script>

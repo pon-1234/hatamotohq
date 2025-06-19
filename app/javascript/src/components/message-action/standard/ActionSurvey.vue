@@ -10,11 +10,10 @@
           maxlength="12"
           v-model.trim="actionData.label"
           class="w-100 form-control"
-          @keyup="changeValue"
-          v-validate="{ required: requiredLabel && showTitle, max: 12 }"
-          data-vv-as="ラベル"
+          @input="changeValue"
+          :class="{ 'is-invalid': labelError }"
         />
-        <error-message :message="errors.first(name + '_label')"></error-message>
+        <error-message :message="labelError"></error-message>
       </div>
     </div>
 
@@ -24,70 +23,125 @@
     </label>
 
     <div>
-      <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary" v-if="actionData.content.id">
+      <div @click="showSurveyModal = true" class="btn btn-secondary" v-if="actionData.content.id">
         <span>{{ actionData.content.name }}</span>
       </div>
 
-      <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary" v-else>回答フォームを選択する</div>
+      <div @click="showSurveyModal = true" class="btn btn-secondary" v-else>回答フォームを選択する</div>
       <input
         type="hidden"
         v-model="actionData.content.id"
         :name="name + '_survey_code'"
-        v-validate="'required'"
-        data-vv-as="回答フォーム"
+        :class="{ 'is-invalid': surveyError }"
       />
-      <error-message :message="errors.first(name + '_survey_code')"></error-message>
+      <error-message :message="surveyError"></error-message>
     </div>
-    <modal-select-survey @selectSurvey="selectSurvey($event)" :id="name"></modal-select-survey>
+    <modal-select-survey v-model="showSurveyModal" @selectSurvey="selectSurvey($event)"></modal-select-survey>
   </section>
 </template>
-<script>
-export default {
-  props: {
-    value: Object,
-    showTitle: {
-      type: Boolean,
-      default: true
-    },
-    name: {
-      type: String,
-      default: 'action'
-    },
-    requiredLabel: {
-      type: Boolean,
-      default: true
-    }
+<script setup>
+import { ref, reactive, watch } from 'vue';
+import ModalSelectSurvey from '../../common/ModalSelectSurvey.vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
+
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      actionData: {
-        type: 'survey',
-        label: null,
-        content: {
-          id: null,
-          name: null
-        }
-      }
-    };
+  showTitle: {
+    type: Boolean,
+    default: true
   },
-
-  created() {
-    this.$validator = this.parentValidator;
-    this.actionData = _.cloneDeep(this.value);
+  name: {
+    type: String,
+    default: 'action'
   },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  }
+});
 
-  methods: {
-    changeValue() {
-      this.$emit('input', this.actionData);
-    },
+const emit = defineEmits(['update:modelValue']);
 
-    selectSurvey(survey) {
-      if (!survey) return;
-      this.actionData.content = _.pick(survey, ['id', 'name']);
-      this.$emit('input', this.actionData);
-    }
+const actionData = reactive({
+  type: 'survey',
+  label: props.modelValue?.label || null,
+  content: {
+    id: props.modelValue?.content?.id || null,
+    name: props.modelValue?.content?.name || null
+  }
+});
+
+const showSurveyModal = ref(false);
+const labelError = ref('');
+const surveyError = ref('');
+
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    actionData.label = newValue.label || null;
+    actionData.content.id = newValue.content?.id || null;
+    actionData.content.name = newValue.content?.name || null;
+  }
+}, { deep: true });
+
+watch(() => actionData.label, () => {
+  validateLabel();
+});
+
+watch(() => actionData.content.id, () => {
+  validateSurvey();
+});
+
+const validateLabel = () => {
+  if (props.requiredLabel && props.showTitle && !actionData.label) {
+    labelError.value = 'ラベルを入力してください。';
+  } else if (actionData.label && actionData.label.length > 12) {
+    labelError.value = 'ラベルは12文字以内で入力してください。';
+  } else {
+    labelError.value = '';
   }
 };
+
+const validateSurvey = () => {
+  if (!actionData.content.id) {
+    surveyError.value = '回答フォームを入力してください。';
+  } else {
+    surveyError.value = '';
+  }
+};
+
+const changeValue = () => {
+  validateLabel();
+  validateSurvey();
+  
+  emit('update:modelValue', {
+    ...props.modelValue,
+    type: 'survey',
+    label: actionData.label,
+    content: {
+      id: actionData.content.id,
+      name: actionData.content.name
+    }
+  });
+};
+
+const selectSurvey = (survey) => {
+  if (!survey) return;
+  actionData.content = {
+    id: survey.id,
+    name: survey.name
+  };
+  changeValue();
+};
+
+defineExpose({
+  validate: () => {
+    validateLabel();
+    validateSurvey();
+    return !labelError.value && !surveyError.value;
+  }
+});
 </script>

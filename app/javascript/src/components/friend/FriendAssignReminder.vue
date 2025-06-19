@@ -5,7 +5,7 @@
         <span class="max-1-lines">{{ reminder.id ? reminder.name : "リマインダを選択する" }}</span>
       </div>
       <div>
-        <input type="hidden" v-model="reminder.id" name="reminder_id" v-validate="'required'" data-vv-as="リマインダ" />
+        <input type="hidden" v-model="reminder.id" name="reminder_id" />
         <error-message class="w-100" :message="errors.first('reminder_id')"></error-message>
       </div>
     </div>
@@ -22,8 +22,6 @@
           placeholder="日付を選択してください"
           :min-datetime="currentDate"
           value-zone="Asia/Tokyo"
-          v-validate="'required'"
-          data-vv-as="ゴール日"
           zone="Asia/Tokyo"
         ></datetime>
         <error-message :message="errors.first('reminder_goal')"></error-message>
@@ -41,76 +39,69 @@
   </div>
 </template>
 
-<script>
-import moment from 'moment';
-import { Datetime } from 'vue-datetime';
-import { mapActions } from 'vuex';
+<script setup>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import moment from 'moment'
+import { Datetime } from 'vue-datetime'
 
-export default {
-  components: {
-    Datetime
-  },
-  props: {
-    friend_id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      contentKey: 0,
-      loading: false,
-      goal: null,
-      reminder: {
-        id: null,
-        name: null
-      },
-      currentDate: moment()
-        .tz('Asia/Tokyo')
-        .format()
-    };
-  },
-
-  methods: {
-    ...mapActions('friend', ['setReminder']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    async submit() {
-      if (this.loading) return;
-      this.loading = true;
-      const valid = await this.$validator.validateAll();
-      if (!valid) {
-        return;
-      }
-      const payload = {
-        friend_id: this.friend_id,
-        reminder_id: this.reminder.id,
-        goal: this.goal
-      };
-      const response = await this.setReminder(payload);
-      if (response) {
-        window.toastr.success('リマインダの設定は完了しました。');
-        this.resetData();
-      } else {
-        window.toastr.error('リマインダの設定は失敗しました。');
-      }
-      this.loading = false;
-    },
-
-    resetData() {
-      this.goal = null;
-      this.reminder = { id: null, name: null };
-      this.forceRerender();
-    },
-
-    onSelectReminder(reminder) {
-      this.reminder = reminder;
-    }
+const props = defineProps({
+  friend_id: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const store = useStore()
+
+const contentKey = ref(0)
+const loading = ref(false)
+const goal = ref(null)
+const reminder = ref({
+  id: null,
+  name: null
+})
+const currentDate = ref(moment().tz('Asia/Tokyo').format())
+const errors = ref({ first: () => null })
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const submit = async () => {
+  if (loading.value) return
+  loading.value = true
+  
+  // Basic validation
+  if (!reminder.value.id || !goal.value) {
+    loading.value = false
+    return
+  }
+  
+  const payload = {
+    friend_id: props.friend_id,
+    reminder_id: reminder.value.id,
+    goal: goal.value
+  }
+  const response = await store.dispatch('friend/setReminder', payload)
+  if (response) {
+    window.toastr.success('リマインダの設定は完了しました。')
+    resetData()
+  } else {
+    window.toastr.error('リマインダの設定は失敗しました。')
+  }
+  loading.value = false
+}
+
+const resetData = () => {
+  goal.value = null
+  reminder.value = { id: null, name: null }
+  forceRerender()
+}
+
+const onSelectReminder = (reminderData) => {
+  reminder.value = reminderData
+}
 </script>
 
 <style>

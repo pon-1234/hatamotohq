@@ -9,54 +9,56 @@
     ></sticker-package>
   </div>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      options: [
-        {
-          packageId: null,
-          animation: false,
-          icon: 'mdi mdi-history icon',
-          active: true
-        },
-        {
-          packageId: 11537,
-          animation: true,
-          active: false
-        },
-        {
-          packageId: 11538,
-          animation: true,
-          active: false
-        },
-        {
-          packageId: 11539,
-          animation: false,
-          active: false
-        }
-      ]
-    };
+<script setup>
+import { ref } from 'vue'
+
+const emit = defineEmits(['input'])
+
+const options = ref([
+  {
+    packageId: null,
+    animation: false,
+    icon: 'mdi mdi-history icon',
+    active: true
   },
-  methods: {
-    defaultActive() {
-      this.options.forEach(element => {
-        element.active = !element.packageId;
-      });
-    },
-    changePackageId(packageId) {
-      this.options.forEach(element => {
-        element.active = element.packageId === packageId;
-      });
-      const option = this.options.find(item => item.packageId === packageId);
-      this.$emit('input', option);
-    }
+  {
+    packageId: 11537,
+    animation: true,
+    active: false
+  },
+  {
+    packageId: 11538,
+    animation: true,
+    active: false
+  },
+  {
+    packageId: 11539,
+    animation: false,
+    active: false
   }
-};
+])
+
+const defaultActive = () => {
+  options.value.forEach(element => {
+    element.active = !element.packageId
+  })
+}
+
+const changePackageId = (packageId) => {
+  options.value.forEach(element => {
+    element.active = element.packageId === packageId
+  })
+  const option = options.value.find(item => item.packageId === packageId)
+  emit('input', option)
+}
+
+defineExpose({
+  defaultActive
+})
 </script>
 
 <style  lang='scss'  scoped>
-  ::v-deep {
+  :deep() {
     .icon {
       font-size: 1.5rem;
     }

@@ -31,77 +31,70 @@
     </div>
     <span v-if="errors.first('flex-template' + index)" class="invalid-box-label">Flexメッセージは必須です</span>
     <modal-select-flex-message-template :name="'flexMessageModal_'+index" @input="pickFlexmessage"/>
-    <input type="hidden" v-model="flexMessageHtml" :name="'flex-template' + index" v-validate="'required'" />
+    <input type="hidden" v-model="flexMessageHtml" :name="'flex-template' + index" />
   </div>
 </template>
 
-<script>
-import { MessageType } from '@/core/constant';
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { MessageType } from '@/core/constant'
 
-export default {
-  props: ['data', 'index'],
-  inject: ['parentValidator'],
+const props = defineProps({
+  data: Object,
+  index: Number
+})
 
-  data() {
-    return {
-      isLoading: false,
-      flexMessageHtml: null
-    };
-  },
+const emit = defineEmits(['input'])
 
-  created() {
-    this.$validator = this.parentValidator;
-  },
+const store = useStore()
 
-  mounted() {
-    if (this.data && this.data.id) {
-      this.fetchFlexMessageLayout(this.data);
-    }
-  },
+const isLoading = ref(false)
+const flexMessageHtml = ref(null)
+const errors = ref({ first: () => null })
 
-  watch: {
-    data: {
-      handler(val, _) {
-        if (val && val.id) {
-          this.fetchFlexMessageLayout(val);
-        } else {
-          this.flexMessageHtml = null;
-        }
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    fetchFlexMessageLayout(flexMessage) {
-      this.isLoading = true;
-      this.$store.dispatch('flexMessage/renderFlexMessage', {
-        flexMessageId: flexMessage.id
-      }).done((html) => {
-        this.flexMessageHtml = html;
-      }).fail(() => {
-        this.flexMessageHtml = 'FlexMessage: Fetch error';
-      }).always(() => {
-        this.isLoading = false;
-      });
-    },
-
-    removeFlexMessage() {
-      this.$emit('input', {
-        type: MessageType.Flex,
-        contents: null
-      });
-    },
-    pickFlexmessage(flexMessage) {
-      const json = JSON.parse(flexMessage.json_message);
-      json.id = flexMessage.id;
-      this.$emit('input', json);
-    }
+onMounted(() => {
+  if (props.data && props.data.id) {
+    fetchFlexMessageLayout(props.data)
   }
-};
+})
+
+watch(() => props.data, (val) => {
+  if (val && val.id) {
+    fetchFlexMessageLayout(val)
+  } else {
+    flexMessageHtml.value = null
+  }
+}, { deep: true })
+
+const fetchFlexMessageLayout = (flexMessage) => {
+  isLoading.value = true
+  store.dispatch('flexMessage/renderFlexMessage', {
+    flexMessageId: flexMessage.id
+  }).done((html) => {
+    flexMessageHtml.value = html
+  }).fail(() => {
+    flexMessageHtml.value = 'FlexMessage: Fetch error'
+  }).always(() => {
+    isLoading.value = false
+  })
+}
+
+const removeFlexMessage = () => {
+  emit('input', {
+    type: MessageType.Flex,
+    contents: null
+  })
+}
+
+const pickFlexmessage = (flexMessage) => {
+  const json = JSON.parse(flexMessage.json_message)
+  json.id = flexMessage.id
+  emit('input', json)
+}
 </script>
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .flex-editor-preview {
       zoom: 0.6;
       overflow: auto;

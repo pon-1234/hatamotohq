@@ -1,107 +1,136 @@
 <template>
-  <div
-    class="modal fade"
-    :id="id ? id : 'modal-template'"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="myModalLabel"
-    aria-hidden="true"
-    ref="modalSelectVariable"
+  <BaseModal
+    :id="id || 'modal-template'"
+    title="友達情報名を選択してください"
+    size="lg"
+    hide-footer
+    modal-class="vh-90"
+    ref="modalRef"
+    @shown="reloadVariables"
   >
-    <div class="modal-dialog modal-lg vh-90 modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">友達情報名を選択してください</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="d-flex">
-            <folder-left
-              type="variable"
-              :isPerview="true"
-              :data="folders"
-              :selectedFolder="selectedFolderIndex"
-              @changeSelectedFolder="changeSelectedFolder"
-            ></folder-left>
-            <div class="flex-grow-1 scroll-table" :key="contentKey">
-              <table class="table">
-                <thead class="thead-light">
-                  <tr>
-                    <th>名称</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(variable, index) in variables" v-bind:key="index">
-                    <td>{{ variable.name }}</td>
-                    <td class="fw-120">
-                      <div @click="selectVariable(variable)" class="btn btn-sm btn-light" data-dismiss="modal">
-                        選択
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+    <div class="d-flex">
+      <folder-left
+        type="variable"
+        :is-preview="true"
+        :data="folders"
+        :selected-folder="selectedFolderIndex"
+        @change-selected-folder="changeSelectedFolder"
+      />
+      <div class="flex-grow-1 scroll-table" :key="contentKey">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>名称</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(variable, index) in variables" :key="index">
+              <td>{{ variable.name }}</td>
+              <td class="fw-120">
+                <button
+                  @click="selectVariable(variable)"
+                  class="btn btn-sm btn-light"
+                  type="button"
+                >
+                  選択
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </BaseModal>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: ['id', 'type'],
-  data() {
-    return {
-      contentKey: 0,
-      folders: [],
-      selectedFolderIndex: 0,
-      surveyContents: 0,
-      survey: null
-    };
+<script setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import BaseModal from '../base/BaseModal.vue';
+import FolderLeft from '../folder/FolderLeft.vue';
+
+// Props
+const props = defineProps({
+  id: {
+    type: String,
+    default: null
   },
-
-  computed: {
-    curFolder() {
-      return this.folders[this.selectedFolderIndex];
-    },
-
-    variables() {
-      return this.curFolder ? this.curFolder.variables.filter(_ => _.type === this.type) : [];
-    }
-  },
-
-  mounted() {
-    $(this.$refs.modalSelectVariable).on('show.bs.modal', this.reloadVariables);
-  },
-
-  methods: {
-    ...mapActions('variable', ['getFolders']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    async reloadVariables() {
-      this.folders = await this.getFolders({ type: this.type });
-    },
-
-    changeSelectedFolder(index) {
-      this.selectedFolderIndex = index;
-      this.forceRerender();
-    },
-
-    selectVariable(variable) {
-      console.log(variable, 'survey');
-      // eslint-disable-next-line no-undef
-      const data = _.cloneDeep(variable);
-      this.$emit('selectVariable', data);
-    }
+  type: {
+    type: String,
+    required: true
   }
+});
+
+// Emits
+const emit = defineEmits(['selectVariable']);
+
+// Store
+const store = useStore();
+
+// Refs
+const modalRef = ref(null);
+
+// State
+const contentKey = ref(0);
+const folders = ref([]);
+const selectedFolderIndex = ref(0);
+
+// Computed
+const curFolder = computed(() => {
+  return folders.value[selectedFolderIndex.value];
+});
+
+const variables = computed(() => {
+  return curFolder.value ? curFolder.value.variables.filter(v => v.type === props.type) : [];
+});
+
+// Methods
+const forceRerender = () => {
+  contentKey.value++;
 };
+
+const reloadVariables = async () => {
+  folders.value = await store.dispatch('variable/getFolders', { type: props.type });
+};
+
+const changeSelectedFolder = (index) => {
+  selectedFolderIndex.value = index;
+  forceRerender();
+};
+
+const selectVariable = (variable) => {
+  const data = JSON.parse(JSON.stringify(variable)); // Deep clone
+  emit('selectVariable', data);
+  modalRef.value?.hide();
+};
+
+const show = () => {
+  modalRef.value?.show();
+};
+
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>
+
+<style scoped>
+.vh-90 {
+  max-height: 90vh;
+}
+
+.fw-120 {
+  width: 120px;
+}
+
+.scroll-table {
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+}
+</style>

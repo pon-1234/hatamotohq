@@ -4,20 +4,15 @@
   }}</span>
 </template>
 
-<script>
-export default {
-  props: {
-    message: String
-  },
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    truncatedMessage() {
-      return _.truncate(
-        this.message, {
-          length: 15
-        }
-      );
-    }
-  }
-};
+const props = defineProps({
+  message: String
+})
+
+const truncatedMessage = computed(() => {
+  if (!props.message) return ''
+  return props.message.length > 15 ? props.message.substring(0, 15) + '...' : props.message
+})
 </script>

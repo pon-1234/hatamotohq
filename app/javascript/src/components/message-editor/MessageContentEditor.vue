@@ -84,81 +84,91 @@
     />
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'index'],
-  data() {
-    return {
-      messageData: {
-        type: 'text',
-        text: ''
-      }
-    };
+<script setup>
+import { ref, onMounted } from 'vue'
+import { MessageType, TemplateMessageType } from '@/core/constant'
+
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
   },
-  created() {
-    if (this.data) {
-      // eslint-disable-next-line no-undef
-      this.messageData = _.cloneDeep(this.data);
+  index: {
+    type: Number,
+    required: true
+  }
+})
+
+const emit = defineEmits(['changeContent'])
+
+const messageData = ref({
+  type: 'text',
+  text: ''
+})
+
+onMounted(() => {
+  if (props.data) {
+    messageData.value = JSON.parse(JSON.stringify(props.data))
+  }
+})
+
+const onTextChanged = (value) => {
+  messageData.value = {
+    type: 'text',
+    text: value
+  }
+  emit('changeContent', messageData.value)
+}
+
+const onStickerChanged = (value) => {
+  messageData.value = {
+    type: 'sticker',
+    packageId: value.packageId,
+    stickerId: value.stickerId
+  }
+  emit('changeContent', messageData.value)
+}
+
+const onMediaChanged = (value) => {
+  messageData.value = value
+  emit('changeContent', messageData.value)
+}
+
+const onTemplateContentChanged = (value) => {
+  messageData.value.template = value
+
+  if (!messageData.value.altText) {
+    if (messageData.value.template.type === 'buttons') {
+      messageData.value.altText = 'ボタンメッセージ'
     }
-  },
-  methods: {
-    onTextChanged(value) {
-      this.messageData = {
-        type: 'text',
-        text: value
-      };
-      this.$emit('changeContent', this.messageData);
-    },
-    onStickerChanged(value) {
-      this.messageData = {
-        type: 'sticker',
-        packageId: value.packageId,
-        stickerId: value.stickerId
-      };
-      this.$emit('changeContent', this.messageData);
-    },
-    onMediaChanged(value) {
-      this.messageData = value;
-      this.$emit('changeContent', this.messageData);
-    },
-
-    onTemplateContentChanged(value) {
-      this.messageData.template = value;
-
-      if (!this.messageData.altText) {
-        if (this.messageData.template.type === 'buttons') {
-          this.messageData.altText = 'ボタンメッセージ';
-        }
-        if (this.messageData.template.type === 'confirm') {
-          this.messageData.altText = '質問メッセージ';
-        }
-        if (this.messageData.template.type === 'carousel') {
-          this.messageData.altText = 'カルーセルメッセージ';
-        }
-        if (this.messageData.template.type === 'image_carousel') {
-          this.messageData.altText = '画像カルーセルメッセージ';
-        }
-      }
-      this.$emit('changeContent', this.messageData);
-    },
-
-    onImagemapChanged(value) {
-      this.messageData = value;
-      this.$emit('changeContent', this.messageData);
-    },
-
-    onLocationChanged(value) {
-      this.messageData = value;
-      this.$emit('changeContent', this.messageData);
-    },
-
-    onFlexChanged(value) {
-      this.messageData = value;
-      if (!this.messageData.altText) {
-        this.messageData.altText = 'Flexメッセージ';
-      }
-      this.$emit('changeContent', this.messageData);
+    if (messageData.value.template.type === 'confirm') {
+      messageData.value.altText = '質問メッセージ'
+    }
+    if (messageData.value.template.type === 'carousel') {
+      messageData.value.altText = 'カルーセルメッセージ'
+    }
+    if (messageData.value.template.type === 'image_carousel') {
+      messageData.value.altText = '画像カルーセルメッセージ'
     }
   }
-};
+  emit('changeContent', messageData.value)
+}
+
+const onImagemapChanged = (value) => {
+  messageData.value = value
+  emit('changeContent', messageData.value)
+}
+
+const onLocationChanged = (value) => {
+  messageData.value = value
+  emit('changeContent', messageData.value)
+}
+
+const onFlexChanged = (value) => {
+  messageData.value = value
+  if (!messageData.value.altText) {
+    messageData.value.altText = 'Flexメッセージ'
+  }
+  emit('changeContent', messageData.value)
+}
 </script>

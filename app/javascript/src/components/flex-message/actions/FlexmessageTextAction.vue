@@ -17,7 +17,7 @@
                 class="form-control"
                 v-model.trim="text"
                 @change="input"
-                v-validate="'required'"
+                required
               />
             </div>
           </div>
@@ -59,75 +59,63 @@
   </div>
 </template>
 
-<script>
-import { ActionMessage } from '../../../core/constant';
-import Util from '@/core/util';
+<script setup>
+import { ref, watch } from 'vue'
+import { ActionMessage } from '../../../core/constant'
+import Util from '@/core/util'
 
-export default {
-  props: ['name', 'data'],
+const props = defineProps(['name', 'data'])
+const emit = defineEmits(['input'])
 
-  data() {
-    return {
-      action: this.data.action || ActionMessage.default,
-      text: this.data.text,
-      size: this.data.size
-    };
-  },
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
-  },
-  watch: {
-    data() {
-      this.text = this.data.text;
-      this.size = this.data.size;
-      this.action = this.data.action || {
-        type: 'none'
-      };
-    },
-    text() {
-      this.input();
-    },
-    // size() {
-    //   this.input();
-    // },
-
-    action: {
-      handler(val) {
-        const mData = this.data;
-        mData.text = this.text;
-        mData.size = this.size;
-        mData.action = val;
-        this.$emit('input', mData);
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    input() {
-      const mData = this.data;
-      mData.text = this.text;
-      mData.size = this.size;
-      mData.action = this.action;
-      this.$emit('input', mData);
-    },
-    changeSize(value) {
-      this.size = value;
-      this.input();
-    },
-    expand() {
-      if ($('div.' + this.name + '-expand').is(':visible')) {
-        $('div.' + this.name + '-expand').parent().removeClass('active');
-      } else {
-        $('div.' + this.name + '-expand').parent().addClass('active');
-      }
-    },
-    getRegexFontSize() {
-      return Util.regexFontSize();
-    }
+const action = ref(props.data.action || ActionMessage.default)
+const text = ref(props.data.text)
+const size = ref(props.data.size)
+const errors = ref({ first: () => null })
+const FontSizeClass = window.FontSizeClass || []
+watch(() => props.data, () => {
+  text.value = props.data.text
+  size.value = props.data.size
+  action.value = props.data.action || {
+    type: 'none'
   }
-};
+})
+
+watch(text, () => {
+  input()
+})
+
+watch(action, (val) => {
+  const mData = props.data
+  mData.text = text.value
+  mData.size = size.value
+  mData.action = val
+  emit('input', mData)
+}, { deep: true })
+
+const input = () => {
+  const mData = props.data
+  mData.text = text.value
+  mData.size = size.value
+  mData.action = action.value
+  emit('input', mData)
+}
+
+const changeSize = (value) => {
+  size.value = value
+  input()
+}
+
+const expand = () => {
+  if ($('div.' + props.name + '-expand').is(':visible')) {
+    $('div.' + props.name + '-expand').parent().removeClass('active')
+  } else {
+    $('div.' + props.name + '-expand').parent().addClass('active')
+  }
+}
+
+const getRegexFontSize = () => {
+  return Util.regexFontSize()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -142,7 +130,7 @@ export default {
   .active i.fa-arrow-expand::before {
     content: "\f077";
   }
-  ::v-deep {
+  :deep() {
     .card-header:first-child {
       border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
     }

@@ -33,21 +33,18 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['name', 'flexMessageTemplates'],
+<script setup>
+const props = defineProps(['name', 'flexMessageTemplates'])
+const emit = defineEmits(['input'])
 
-  methods: {
-    pickTemplateShowCase(template) {
-      this.$emit('input', template.id);
-    }
-  }
-};
+const pickTemplateShowCase = (template) => {
+  emit('input', template.id)
+}
 </script>
 
 <style scoped lang="scss">
 
-  ::v-deep {
+  :deep() {
     .thumb{
       display: block;
     }

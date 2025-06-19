@@ -3,7 +3,7 @@
     <div v-if="showTitle">
       <label class="w-100">
         ラベル
-        <required-mark v-if="requiredLabel" />
+        <RequiredMark v-if="requiredLabel" />
       </label>
       <div class="w-100">
         <input
@@ -13,17 +13,16 @@
           maxlength="13"
           v-model.trim="label"
           class="w-100 form-control"
-          v-validate="{ required: requiredLabel && showTitle, max: 12 }"
-          data-vv-as="ラベル"
+          :required="requiredLabel && showTitle"
           @keyup="changeLabel"
         />
         <div class="w-100 mt-1 font-12 text-muted">10文字を超える場合、文が途中で途切れる場合があります。</div>
-        <error-message class="w-100" :message="errors.first(name + '_label')"></error-message>
+        <ErrorMessage v-if="labelError" class="w-100" :message="labelError" />
       </div>
     </div>
 
     <div class="form-group mt-2" v-if="showLaunchMessage">
-      <label>選択時のメッセージ<required-mark v-if="requiredLabel" /></label>
+      <label>選択時のメッセージ<RequiredMark v-if="requiredLabel" /></label>
       <input
         type="text"
         placeholder="選択時のメッセージを入力してください"
@@ -31,11 +30,10 @@
         class="w-100 form-control"
         :name="name + '_display_text'"
         maxlength="301"
-        v-validate="{ required: requiredLabel, max: 300 }"
-        data-vv-as="選択時のメッセージ"
+        :required="requiredLabel"
         @keyup="changeDisplayText($event)"
       />
-      <error-message class="w-100" :message="errors.first(name + '_display_text')"></error-message>
+      <ErrorMessage v-if="displayTextError" class="w-100" :message="displayTextError" />
     </div>
 
     <div>
@@ -44,7 +42,7 @@
         <div class="card-header">
           <div class="d-flex align-items-center">
             <span class="flex-1 text-nowrap">アクション{{ index + 1 }}</span>
-            <div class="ml-auto" v-if="actions.length > 1">
+            <div class="ms-auto" v-if="actions.length > 1">
               <div @click="moveUp(index)" class="btn btn-sm btn-light" v-if="index > 0">
                 <i class="dripicons-chevron-up"></i>
               </div>
@@ -63,14 +61,13 @@
           </div>
         </div>
         <div class="card-body">
-          <action-postback
-            :showTitle="false"
-            :value="action"
+          <ActionPostback
+            :show-title="false"
+            :model-value="action"
             :name="name + '_postback_' + index"
-            :requiredLabel="false"
-            @input="changeActionType(index, $event)"
-          >
-          </action-postback>
+            :required-label="false"
+            @update:model-value="changeActionType(index, $event)"
+          />
         </div>
       </div>
     </div>
@@ -81,159 +78,188 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    value: Object,
-    requiredLabel: Boolean,
-    showTitle: Boolean,
-    name: String,
-    limit: {
-      type: Number,
-      default: 3
-    },
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
+import ActionPostback from '../postback/ActionPostback.vue';
 
-    showLaunchMessage: {
-      default: true,
-      type: Boolean
-    }
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({})
   },
-
-  data() {
-    return {
-      data: {},
-      label: null,
-      displayText: null,
-      actions: [
-        {
-          type: 'none'
-        }
-      ]
-    };
+  requiredLabel: {
+    type: Boolean,
+    default: false
   },
-  inject: ['parentValidator'],
-
-  created() {
-    this.$validator = this.parentValidator;
-    this.setup();
+  showTitle: {
+    type: Boolean,
+    default: true
   },
+  name: {
+    type: String,
+    required: true
+  },
+  limit: {
+    type: Number,
+    default: 3
+  },
+  showLaunchMessage: {
+    type: Boolean,
+    default: true
+  }
+});
 
-  methods: {
-    setup() {
-      if (!this.value) return;
-      const data = this.value.data;
-      this.label = this.value.label || null;
-      this.actions = data.actions;
-      this.displayText = this.value.displayText || null;
-    },
+// Emits
+const emit = defineEmits(['update:modelValue']);
 
-    changeActionType(index, action) {
-      this.$set(this.actions, index, action);
-      this.updateData();
-    },
+// State
+const data = ref({});
+const label = ref(null);
+const displayText = ref(null);
+const actions = ref([{ type: 'none' }]);
 
-    addAction() {
-      this.actions.push({
-        type: 'none'
-      });
+// Computed
+const labelError = computed(() => {
+  if (props.requiredLabel && props.showTitle && !label.value) {
+    return 'ラベルは必須です';
+  }
+  if (label.value && label.value.length > 12) {
+    return 'ラベルは12文字以内で入力してください';
+  }
+  return null;
+});
 
-      this.updateData();
-    },
+const displayTextError = computed(() => {
+  if (props.requiredLabel && !displayText.value) {
+    return '選択時のメッセージは必須です';
+  }
+  if (displayText.value && displayText.value.length > 300) {
+    return '選択時のメッセージは300文字以内で入力してください';
+  }
+  return null;
+});
 
-    remove(index) {
-      this.actions.splice(index, 1);
-      this.updateData();
-    },
+// Methods
+const setup = () => {
+  if (!props.modelValue) return;
+  const data = props.modelValue.data;
+  label.value = props.modelValue.label || null;
+  actions.value = data.actions || [{ type: 'none' }];
+  displayText.value = props.modelValue.displayText || null;
+};
 
-    moveUp(index) {
-      if (index > 0) {
-        const to = index - 1;
-        this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
-        this.updateData();
-      }
-    },
+const changeActionType = (index, action) => {
+  actions.value[index] = action;
+  updateData();
+};
 
-    moveDown(index) {
-      if (index < this.actions.length) {
-        const to = index + 1;
-        this.actions.splice(to, 0, this.actions.splice(index, 1)[0]);
-        this.updateData();
-      }
-    },
+const addAction = () => {
+  actions.value.push({
+    type: 'none'
+  });
+  updateData();
+};
 
-    changeLabel() {
-      this.updateData();
-    },
+const remove = (index) => {
+  actions.value.splice(index, 1);
+  updateData();
+};
 
-    changeDisplayText($event) {
-      this.displayText = $event.target.value.trim();
-      this.updateData();
-    },
-
-    updateData() {
-      this.$emit('input', {
-        type: 'postback',
-        label: this.label,
-        displayText: this.displayText,
-        data: {
-          displayText: this.displayText,
-          actions: this.actions
-        }
-      });
-    }
+const moveUp = (index) => {
+  if (index > 0) {
+    const to = index - 1;
+    actions.value.splice(to, 0, actions.value.splice(index, 1)[0]);
+    updateData();
   }
 };
+
+const moveDown = (index) => {
+  if (index < actions.value.length) {
+    const to = index + 1;
+    actions.value.splice(to, 0, actions.value.splice(index, 1)[0]);
+    updateData();
+  }
+};
+
+const changeLabel = () => {
+  updateData();
+};
+
+const changeDisplayText = (event) => {
+  displayText.value = event.target.value.trim();
+  updateData();
+};
+
+const updateData = () => {
+  emit('update:modelValue', {
+    type: 'postback',
+    label: label.value,
+    displayText: displayText.value,
+    data: {
+      displayText: displayText.value,
+      actions: actions.value
+    }
+  });
+};
+
+// Lifecycle
+onMounted(() => {
+  setup();
+});
 </script>
 
-<style type="text/scss" scoped>
+<style lang="scss" scoped>
+.d-flex-auto {
+  flex-direction: column;
+}
+
+.tag-content {
+  border: 1px solid #cecece;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.tag {
+  vertical-align: middle;
+  flex: 1;
+  width: calc(100% - 117px);
+  display: inline-block;
+}
+
+@media (max-width: 1290px) {
   .d-flex-auto {
-    flex-direction: column;
-  }
-
-  .tag-content {
-    border: 1px solid #cecece;
-    padding: 10px 20px;
-    border-radius: 5px;
-  }
-
-  .tag {
-    vertical-align: middle;
-    flex: 1;
-    width: calc(100% - 117px);
-    display: inline-block;
-  }
-
-  @media (max-width: 1290px) {
-    .d-flex-auto {
-      flex-direction: row;
-      margin-top: 10px;
-    }
-
-    .d-flex-auto > label {
-      width: 100% !important;
-    }
-    .tag {
-      width: 100%;
-    }
-  }
-
-  .mt-4 {
+    flex-direction: row;
     margin-top: 10px;
   }
 
-  .btn-default {
-    font-size: 10px;
+  .d-flex-auto > label {
+    width: 100% !important;
   }
+  .tag {
+    width: 100%;
+  }
+}
 
-  .btn-add {
-    width: 200px;
-    border: 1px solid #ededed;
-    background: white;
-    color: #1b1b1b;
-  }
+.mt-4 {
+  margin-top: 10px;
+}
 
-  .btn-add:hover {
-    background: white;
-    color: #1b1b1b;
-  }
+.btn-default {
+  font-size: 10px;
+}
+
+.btn-add {
+  width: 200px;
+  border: 1px solid #ededed;
+  background: white;
+  color: #1b1b1b;
+}
+
+.btn-add:hover {
+  background: white;
+  color: #1b1b1b;
+}
 </style>

@@ -1,86 +1,141 @@
 <template>
-  <div
-    class="modal fade"
+  <BaseModal
     id="modalSendScenario"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="myModalLabel"
-    aria-hidden="true"
+    title="シナリオ配信を選択してください。"
+    size="xl"
+    hide-footer
+    modal-class="mh-400"
+    ref="modalRef"
   >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content mh-400">
-        <div class="modal-header">
-          <h5 class="modal-title">シナリオ配信を選択してください。</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body text-sm">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <th>#</th>
-                  <th class="mw-120">配信方式</th>
-                  <th class="mw-200">シナリオ名</th>
-                  <th class="mw-120">メッセージ数</th>
-                  <th class="mw-150"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(scenario, index) in scenarios" :key="index">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ scenario.mode === "date" ? "時刻" : "経過時間" }}</td>
-                  <td>
-                    <p class="item-name mxw-400">{{ scenario.title }}</p>
-                  </td>
-                  <td>{{ scenario.scenario_messages_count || 0 }}</td>
-                  <td class="text-right">
-                    <div role="button" class="btn btn-info btn-sm" @click="sendScenario(scenario)" data-dismiss="modal">
-                      送信
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="text-center mt-4" v-if="scenarios.length === 0">送信できるシナリオはありません。</div>
-        </div>
+    <div class="text-sm">
+      <div class="table-responsive" v-if="scenarios.length > 0">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>#</th>
+              <th class="mw-120">配信方式</th>
+              <th class="mw-200">シナリオ名</th>
+              <th class="mw-120">メッセージ数</th>
+              <th class="mw-150"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(scenario, index) in scenarios" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ scenario.mode === "date" ? "時刻" : "経過時間" }}</td>
+              <td>
+                <p class="item-name mxw-400 mb-0">{{ scenario.title }}</p>
+              </td>
+              <td>{{ scenario.scenario_messages_count || 0 }}</td>
+              <td class="text-end">
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  @click="sendScenario(scenario)"
+                >
+                  送信
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center mt-4" v-else>
+        送信できるシナリオはありません。
       </div>
     </div>
-  </div>
+  </BaseModal>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
+<script setup>
+import { ref, computed, watch, onBeforeMount } from 'vue';
+import { useStore } from 'vuex';
+import BaseModal from '../base/BaseModal.vue';
 
-export default {
-  data() {
-    return {
-      scenarios: [],
-      isPc: true
-    };
-  },
+// Emits
+const emit = defineEmits(['selectScenario']);
 
-  async beforeMount() {
-    this.scenarios = await this.getAvailableScenarios(this.activeChannel.id);
-  },
+// Store
+const store = useStore();
 
-  computed: {
-    ...mapState('channel', { activeChannel: state => state.activeChannel })
-  },
+// Refs
+const modalRef = ref(null);
 
-  methods: {
-    ...mapActions('channel', ['getAvailableScenarios']),
-    sendScenario(scenario) {
-      this.$emit('selectScenario', scenario);
-    }
-  },
-  watch: {
-    // scenario list need to be reloaded every time the active channel be changed
-    activeChannel: async function(newChannel) {
-      this.scenarios = await this.getAvailableScenarios(newChannel.id);
-    }
-  }
+// State
+const scenarios = ref([]);
+
+// Computed
+const activeChannel = computed(() => store.state.channel.activeChannel);
+
+// Methods
+const getAvailableScenarios = (channelId) => {
+  return store.dispatch('channel/getAvailableScenarios', channelId);
 };
+
+const sendScenario = (scenario) => {
+  emit('selectScenario', scenario);
+  modalRef.value?.hide();
+};
+
+const show = () => {
+  modalRef.value?.show();
+};
+
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+// Watch
+watch(activeChannel, async (newChannel) => {
+  if (newChannel?.id) {
+    scenarios.value = await getAvailableScenarios(newChannel.id);
+  }
+});
+
+// Lifecycle
+onBeforeMount(async () => {
+  if (activeChannel.value?.id) {
+    scenarios.value = await getAvailableScenarios(activeChannel.value.id);
+  }
+});
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>
+
+<style scoped>
+.mh-400 {
+  max-height: 400px;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.mw-120 {
+  min-width: 120px;
+}
+
+.mw-150 {
+  min-width: 150px;
+}
+
+.mw-200 {
+  min-width: 200px;
+}
+
+.mxw-400 {
+  max-width: 400px;
+}
+
+.item-name {
+  word-break: break-word;
+}
+
+.text-end {
+  text-align: right !important;
+}
+</style>

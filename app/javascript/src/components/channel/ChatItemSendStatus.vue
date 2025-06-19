@@ -6,15 +6,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    status: {
-      type: String,
-      required: true
-    }
+<script setup>
+defineProps({
+  status: {
+    type: String,
+    required: true
   }
-};
+})
 </script>
 
 <style lang="scss" scoped>

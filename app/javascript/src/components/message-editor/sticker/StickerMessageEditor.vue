@@ -31,34 +31,32 @@
       <error-message :message="errors.first('sticker-id' + index)"></error-message>
     </div>
     <!-- Modal -->
-    <modal-select-sticker :ref="`modalSticker${index}`" :id="`stickerModalCenter${index}`" @input="selectSticker" />
+    <modal-select-sticker :ref="(el) => modalSticker = el" :id="`stickerModalCenter${index}`" @input="selectSticker" />
     <input
       type="hidden"
       v-model="stickerId"
       :name="'sticker-id' + index"
-      v-validate="'required'"
-      data-vv-as="スタンプ"
     />
   </div>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue'
 
-export default {
-  props: ['packageId', 'stickerId', 'index'],
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
-  },
-  methods: {
-    removeSticker() {
-      this.$emit('input', { packageId: null, stickerId: null });
-    },
-    selectSticker(sticker) {
-      this.$emit('input', sticker);
-    },
-    showStickerModal() {
-      this.$refs[`modalSticker${this.index}`].reset();
-    }
-  }
-};
+const props = defineProps(['packageId', 'stickerId', 'index'])
+const emit = defineEmits(['input'])
+
+const modalSticker = ref(null)
+const errors = ref({ first: () => null })
+
+const removeSticker = () => {
+  emit('input', { packageId: null, stickerId: null })
+}
+
+const selectSticker = (sticker) => {
+  emit('input', sticker)
+}
+
+const showStickerModal = () => {
+  modalSticker.value?.reset()
+}
 </script>

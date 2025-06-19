@@ -2,93 +2,110 @@
   <section>
     <label>シナリオ配信</label>
     <div class="btn-template mb20 fz14">
-      <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary btn-block">
+      <div @click="showModal = true" class="btn btn-secondary btn-block">
         {{ currentTemplate.title }}
       </div>
       <input
         type="hidden"
         v-model="currentTemplate.scenario_id"
         :name="name + '_scenario_id'"
-        v-validate="'required'"
-        data-vv-as="シナリオ配信"
+        required
       />
-      <error-message :message="errors.first(name + '_scenario_id')"></error-message>
+      <ErrorMessage v-if="errorMessage" :message="errorMessage" />
     </div>
 
-    <modal-select-scenario @selectScenario="onSelectScenario" :id="name" type="normal"></modal-select-scenario>
+    <ModalSelectScenario 
+      v-model:show="showModal"
+      @select-scenario="onSelectScenario" 
+      type="normal"
+    />
   </section>
 </template>
-<script>
-export default {
-  props: {
-    value: {
-      type: Object,
-      default: () => {
-        return {
-          scenario_id: null,
-          title: 'シナリオ配信一覧から選択'
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
+
+<script setup>
+import { ref, watch, computed, onMounted } from 'vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
+import ModalSelectScenario from '../../common/ModalSelectScenario.vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      scenario_id: null,
+      title: 'シナリオ配信一覧から選択'
+    })
   },
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      scenarios: [],
-      currentTemplate: {
-        scenario_id: null,
-        title: null
-      },
-      current_page_scenario: 0,
-      total_scenario: 0,
-      per_page_scenario: 10,
-      isScenarioLoading: false
-    };
-  },
-
-  created() {
-    this.$validator = this.parentValidator;
-
-    this.currentTemplate = {
-      scenario_id: this.value.scenario_id,
-      title: this.value.scenario_id == null ? 'シナリオ配信一覧から選択' : this.value.title
-    };
-  },
-
-  watch: {
-    currentTemplate: {
-      handler(val) {
-        if (this.value.scenario_id) {
-          this.$emit('input', {
-            title: val.title,
-            scenario_id: this.value.scenario_id
-          });
-        }
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    onSelectScenario(scenario) {
-      this.currentTemplate = { scenario_id: scenario.id, ...scenario };
-      this.$emit('input', {
-        title: scenario.title,
-        scenario_id: scenario.id
-      });
-    }
+  name: {
+    type: String,
+    default: 'postback_action'
   }
+});
 
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// State
+const showModal = ref(false);
+const scenarios = ref([]);
+const currentTemplate = ref({
+  scenario_id: null,
+  title: null
+});
+const current_page_scenario = ref(0);
+const total_scenario = ref(0);
+const per_page_scenario = ref(10);
+const isScenarioLoading = ref(false);
+
+// Computed
+const errorMessage = computed(() => {
+  if (!currentTemplate.value.scenario_id) {
+    return 'シナリオ配信は必須です';
+  }
+  return null;
+});
+
+// Methods
+const onSelectScenario = (scenario) => {
+  currentTemplate.value = { 
+    scenario_id: scenario.id, 
+    ...scenario 
+  };
+  emit('update:modelValue', {
+    title: scenario.title,
+    scenario_id: scenario.id
+  });
 };
+
+// Watch
+watch(currentTemplate, (val) => {
+  if (props.modelValue.scenario_id) {
+    emit('update:modelValue', {
+      title: val.title,
+      scenario_id: props.modelValue.scenario_id
+    });
+  }
+}, { deep: true });
+
+// Lifecycle
+onMounted(() => {
+  currentTemplate.value = {
+    scenario_id: props.modelValue.scenario_id,
+    title: props.modelValue.scenario_id == null ? 'シナリオ配信一覧から選択' : props.modelValue.title
+  };
+});
 </script>
 
 <style scoped>
-  .btn-block {
-    cursor: pointer;
-  }
+.btn-block {
+  cursor: pointer;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.fz14 {
+  font-size: 14px;
+}
 </style>

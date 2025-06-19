@@ -54,74 +54,62 @@
   </div>
 </template>
 
-<script>
-import { ActionMessage } from '../../../core/constant';
+<script setup>
+import { ref, watch } from 'vue'
+import { ActionMessage } from '../../../core/constant'
 
-export default {
-  props: ['name', 'data', 'aspectMode'],
-  data() {
-    return {
-      action: this.data.action || ActionMessage.default,
-      url: this.data.url,
-      aspectModeParams: this.aspectMode === 'contain' ? 'fit' : 'cover',
-      aspectModesOption: this.aspectModes
-    };
-  },
+const props = defineProps(['name', 'data', 'aspectMode'])
+const emit = defineEmits(['input'])
 
-  watch: {
-    data() {
-      this.url = this.data.url;
-      this.action = this.data.action || {
-        type: 'none'
-      };
-    },
-    action: {
-      handler(val) {
-        this.input();
-      },
-      deep: true
-    },
+const action = ref(props.data.action || ActionMessage.default)
+const url = ref(props.data.url)
+const aspectModeParams = ref(props.aspectMode === 'contain' ? 'fit' : 'cover')
+const aspectModesOption = window.aspectModes || ['cover', 'fit']
 
-    aspectMode: {
-      handler(val) {
-        this.aspectModeParams = this.aspectMode === 'contain' ? 'fit' : 'cover';
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    input() {
-      const mData = this.data;
-      mData.url = this.url;
-      mData.action = this.action;
-      mData.aspectMode = this.aspectModeParams;
-      this.$emit('input', mData);
-    },
-
-    uploadImage(data) {
-      this.url = data.originalContentUrl;
-      this.input();
-    },
-
-    expand() {
-      if ($('div.' + this.name + '-expand').is(':visible')) {
-        $('div.' + this.name + '-expand')
-          .parent()
-          .removeClass('active');
-      } else {
-        $('div.' + this.name + '-expand')
-          .parent()
-          .addClass('active');
-      }
-    },
-
-    changeAspectMode() {
-      console.log(this.aspectModeParams);
-      this.input();
-    }
+watch(() => props.data, () => {
+  url.value = props.data.url
+  action.value = props.data.action || {
+    type: 'none'
   }
-};
+})
+
+watch(action, (val) => {
+  input()
+}, { deep: true })
+
+watch(() => props.aspectMode, (val) => {
+  aspectModeParams.value = props.aspectMode === 'contain' ? 'fit' : 'cover'
+}, { deep: true })
+
+const input = () => {
+  const mData = props.data
+  mData.url = url.value
+  mData.action = action.value
+  mData.aspectMode = aspectModeParams.value
+  emit('input', mData)
+}
+
+const uploadImage = (data) => {
+  url.value = data.originalContentUrl
+  input()
+}
+
+const expand = () => {
+  if ($('div.' + props.name + '-expand').is(':visible')) {
+    $('div.' + props.name + '-expand')
+      .parent()
+      .removeClass('active')
+  } else {
+    $('div.' + props.name + '-expand')
+      .parent()
+      .addClass('active')
+  }
+}
+
+const changeAspectMode = () => {
+  console.log(aspectModeParams.value)
+  input()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -136,7 +124,7 @@ export default {
   .active i.fa-arrow-expand::before {
     content: "\f077";
   }
-  ::v-deep {
+  :deep() {
     .card-header:first-child {
       border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
     }

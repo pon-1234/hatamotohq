@@ -7,65 +7,67 @@
           <input
             type="file"
             class="custom-file-input"
-            id="inputFile"
+            :id="`inputFile${qnum}`"
+            accept="application/pdf"
             :name="`answers[${qnum}][answer]`"
             @change="onFileChange"
+            :required="isRequired"
           />
-          <label class="custom-file-label" for="inputFile">{{ fileName || "ファイルを選択" }}</label>
+          <label class="custom-file-label" :for="`inputFile${qnum}`">{{ fileName || "ファイルを選択" }}</label>
         </div>
       </div>
-      <error-message message="ファイルの形式が無効です。" v-if="!this.isValidMineType"></error-message>
-      <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-        <input type="hidden" v-model="fileName" />
-        <error-message :message="errors[0]"></error-message>
-      </ValidationProvider>
+      <error-message message="ファイルの形式が無効です。" v-if="!isValidMineType"></error-message>
+      <input type="hidden" v-model="fileName" />
+      <error-message :message="errorMessage"></error-message>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['question', 'qnum'],
+<script setup>
+import { ref, computed } from 'vue'
 
-  data() {
-    return {
-      fileName: null,
-      isValidMineType: true
-    };
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
   },
-
-  computed: {
-    prefix() {
-      return `surveyQuestion${this.qnum}`;
-    },
-
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    }
-  },
-
-  methods: {
-    onFileChange(event) {
-      var fileData = event.target.files[0];
-      this.fileName = null;
-      this.isValidMineType = false;
-      if (fileData && fileData.type === 'application/pdf') {
-        this.isValidMineType = true;
-        this.fileName = fileData.name;
-      }
-    }
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const fileName = ref(null)
+const isValidMineType = ref(true)
+const errorMessage = ref('')
+
+const prefix = computed(() => {
+  return `surveyQuestion${props.qnum}`
+})
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
+
+const onFileChange = (event) => {
+  const fileData = event.target.files[0]
+  fileName.value = null
+  isValidMineType.value = false
+  if (fileData && fileData.type === 'application/pdf') {
+    isValidMineType.value = true
+    fileName.value = fileData.name
+  }
+}
 </script>

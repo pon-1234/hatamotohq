@@ -54,19 +54,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['survey', 'preview'],
-  data() {
-    return {};
-  },
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    questions() {
-      return this.survey.questions;
-    }
+const props = defineProps({
+  survey: {
+    type: Object,
+    required: true
+  },
+  preview: {
+    type: Boolean,
+    default: false
   }
-};
+})
+
+const questions = computed(() => {
+  return props.survey.questions
+})
 </script>
 
 <style scoped>

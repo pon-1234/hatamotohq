@@ -25,55 +25,41 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex';
-import Util from '@/core/util';
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
 
-export default {
-  computed: {
-    ...mapState('friend', {
-      queryParams: (state) => state.queryParams
-    }),
-    ...mapState('tag', {
-      tagFolders: (state) => state.folders
-    }),
+const store = useStore()
 
-    isSearching() {
-      return this.queryParams.line_name_or_display_name_cont ||
-        !_.isEmpty(this.queryParams.tags_id_in) ||
-        this.queryParams.created_at_gteq ||
-        this.queryParams.visible_eq === null ||
-        this.queryParams.locked_eq === null;
-    }
-  },
-  methods: {
-    ...mapMutations('friend', [
-      'resetQueryParams',
-      'setClearQueryParams'
-    ]),
-    ...mapActions('friend', [
-      'getFriends'
-    ]),
+const queryParams = computed(() => store.state.friend.queryParams)
+const tagFolders = computed(() => store.state.tag.folders)
 
-    getTagNameById(id) {
-      const tags = _.flatten(this.tagFolders.map(_ => _.tags));
-      const tag = tags.find(_ => _.id === id);
-      if (tag) {
-        return tag.name;
-      }
-    },
+const isSearching = computed(() => {
+  return queryParams.value.line_name_or_display_name_cont ||
+    (queryParams.value.tags_id_in && queryParams.value.tags_id_in.length > 0) ||
+    queryParams.value.created_at_gteq ||
+    queryParams.value.visible_eq === null ||
+    queryParams.value.locked_eq === null
+})
 
-    async clearSearch() {
-      this.resetQueryParams();
-      await this.getFriends();
-      this.setClearQueryParams(true);
-    },
-
-    formattedDate(date) {
-      return Util.formattedDate(date);
-    }
+const getTagNameById = (id) => {
+  const tags = tagFolders.value.flatMap(folder => folder.tags)
+  const tag = tags.find(t => t.id === id)
+  if (tag) {
+    return tag.name
   }
-};
+}
+
+const clearSearch = async () => {
+  store.commit('friend/resetQueryParams')
+  await store.dispatch('friend/getFriends')
+  store.commit('friend/setClearQueryParams', true)
+}
+
+const formattedDate = (date) => {
+  return Util.formattedDate(date)
+}
 </script>
 
 <style lang="scss" scoped>

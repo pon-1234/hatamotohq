@@ -8,12 +8,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    status: {
-      type: String
-    }
+<script setup>
+defineProps({
+  status: {
+    type: String
   }
-};
+})
 </script>

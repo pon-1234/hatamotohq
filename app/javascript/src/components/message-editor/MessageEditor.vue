@@ -46,164 +46,170 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'index', 'messagesCount', 'allowCreateFromTemplate', 'showUrlClickConfig', 'siteMeasurements'],
-  data() {
-    return {
-      messageData: {
-        message_type_id: this.MessageTypeIds.Text,
-        content: {
-          type: this.MessageType.Text,
-          text: ''
-        }
-      },
-      rerender: true
-    };
-  },
+<script setup>
+import { ref, onMounted } from 'vue'
+import { MessageType, MessageTypeIds, TemplateMessageType } from '@/core/constant'
 
-  created() {
-    if (this.data) {
-      Object.assign(this.messageData, this.data);
-    }
-  },
+const props = defineProps({
+  data: Object,
+  index: Number,
+  messagesCount: Number,
+  allowCreateFromTemplate: Boolean,
+  showUrlClickConfig: Boolean,
+  siteMeasurements: Array
+})
 
-  methods: {
-    changeSelectedMessage() {
-      switch (this.messageData.message_type_id) {
-      case this.MessageTypeIds.Text:
-        this.messageData.content = {
-          type: this.MessageType.Text,
-          text: ''
-        };
-        break;
-      case this.MessageTypeIds.Sticker:
-        this.messageData.content = {
-          type: this.MessageType.Sticker,
-          packageId: '',
-          stickerId: ''
-        };
-        break;
-      case this.MessageTypeIds.Image:
-        this.messageData.content = {
-          type: this.MessageType.Image,
-          originalContentUrl: '',
-          previewImageUrl: ''
-        };
-        break;
-      case this.MessageTypeIds.Video:
-        this.messageData.content = {
-          type: this.MessageType.Video,
-          originalContentUrl: '',
-          previewImageUrl: ''
-        };
-        break;
-      case this.MessageTypeIds.Audio:
-        this.messageData.content = {
-          type: this.MessageType.Audio,
-          originalContentUrl: '',
-          duration: ''
-        };
-        break;
-      case this.MessageTypeIds.TemplateButtons:
-        this.messageData.content = {
-          type: 'template',
-          template: {
-            type: this.TemplateMessageType.Buttons
-          }
-        };
-        break;
-      case this.MessageTypeIds.TemplateConfirm:
-        this.messageData.content = {
-          type: 'template',
-          template: {
-            type: this.TemplateMessageType.Confirm
-          }
-        };
-        break;
-      case this.MessageTypeIds.TemplateCarousel:
-        this.messageData.content = {
-          type: 'template',
-          template: {
-            type: this.TemplateMessageType.Carousel
-          }
-        };
-        break;
-      case this.MessageTypeIds.TemplateImageCarousel:
-        this.messageData.content = {
-          type: 'template',
-          template: {
-            type: this.TemplateMessageType.ImageCarousel
-          }
-        };
-        break;
-      case this.MessageTypeIds.Imagemap:
-        this.messageData.content = {
-          type: this.MessageType.Imagemap,
-          templateId: 201,
-          templateValue: 6,
-          baseUrl: null,
-          baseSize: {
-            width: 1040,
-            height: 1040
-          },
-          actions: []
-        };
-        break;
-      case this.MessageTypeIds.Location:
-        this.messageData.content = {
-          type: 'location',
-          title: '',
-          address: '',
-          latitude: '',
-          longitude: ''
-        };
-        break;
-      case this.MessageTypeIds.Flex:
-        this.messageData.content = {
-          type: this.MessageType.Flex,
-          contents: null
-        };
-        break;
-      }
-      this.rerender = false;
+const emit = defineEmits(['input', 'remove', 'moveUp', 'moveDown', 'configUrl', 'changeShortenUrlUsage'])
 
-      setTimeout(() => {
-        this.rerender = true;
-      }, 100);
-
-      this.$emit('input', { index: this.index, content: this.messageData });
-    },
-    changeContentMessage(content) {
-      this.messageData.content = content;
-      this.$emit('input', { index: this.index, content: this.messageData });
-    },
-
-    removeMessage() {
-      this.$emit('remove', this.index);
-    },
-
-    moveUp() {
-      this.$emit('moveUp', this.index);
-    },
-
-    moveDown() {
-      this.$emit('moveDown', this.index);
-    },
-
-    configUrl({ index, content }) {
-      this.$emit('configUrl', { index: index, content: content });
-    },
-
-    changeShortenUrlUsage({ index, notUseShorternUrl }) {
-      this.$emit('changeShortenUrlUsage', { index: index, notUseShorternUrl: notUseShorternUrl });
-    }
+const messageData = ref({
+  message_type_id: MessageTypeIds.Text,
+  content: {
+    type: MessageType.Text,
+    text: ''
   }
-};
+})
+const rerender = ref(true)
+
+onMounted(() => {
+  if (props.data) {
+    Object.assign(messageData.value, props.data)
+  }
+})
+
+const changeSelectedMessage = () => {
+  switch (messageData.value.message_type_id) {
+  case MessageTypeIds.Text:
+    messageData.value.content = {
+      type: MessageType.Text,
+      text: ''
+    }
+    break
+  case MessageTypeIds.Sticker:
+    messageData.value.content = {
+      type: MessageType.Sticker,
+      packageId: '',
+      stickerId: ''
+    }
+    break
+  case MessageTypeIds.Image:
+    messageData.value.content = {
+      type: MessageType.Image,
+      originalContentUrl: '',
+      previewImageUrl: ''
+    }
+    break
+  case MessageTypeIds.Video:
+    messageData.value.content = {
+      type: MessageType.Video,
+      originalContentUrl: '',
+      previewImageUrl: ''
+    }
+    break
+  case MessageTypeIds.Audio:
+    messageData.value.content = {
+      type: MessageType.Audio,
+      originalContentUrl: '',
+      duration: ''
+    }
+    break
+  case MessageTypeIds.TemplateButtons:
+    messageData.value.content = {
+      type: 'template',
+      template: {
+        type: TemplateMessageType.Buttons
+      }
+    }
+    break
+  case MessageTypeIds.TemplateConfirm:
+    messageData.value.content = {
+      type: 'template',
+      template: {
+        type: TemplateMessageType.Confirm
+      }
+    }
+    break
+  case MessageTypeIds.TemplateCarousel:
+    messageData.value.content = {
+      type: 'template',
+      template: {
+        type: TemplateMessageType.Carousel
+      }
+    }
+    break
+  case MessageTypeIds.TemplateImageCarousel:
+    messageData.value.content = {
+      type: 'template',
+      template: {
+        type: TemplateMessageType.ImageCarousel
+      }
+    }
+    break
+  case MessageTypeIds.Imagemap:
+    messageData.value.content = {
+      type: MessageType.Imagemap,
+      templateId: 201,
+      templateValue: 6,
+      baseUrl: null,
+      baseSize: {
+        width: 1040,
+        height: 1040
+      },
+      actions: []
+    }
+    break
+  case MessageTypeIds.Location:
+    messageData.value.content = {
+      type: 'location',
+      title: '',
+      address: '',
+      latitude: '',
+      longitude: ''
+    }
+    break
+  case MessageTypeIds.Flex:
+    messageData.value.content = {
+      type: MessageType.Flex,
+      contents: null
+    }
+    break
+  }
+  rerender.value = false
+
+  setTimeout(() => {
+    rerender.value = true
+  }, 100)
+
+  emit('input', { index: props.index, content: messageData.value })
+}
+
+const changeContentMessage = (content) => {
+  messageData.value.content = content
+  emit('input', { index: props.index, content: messageData.value })
+}
+
+const removeMessage = () => {
+  emit('remove', props.index)
+}
+
+const moveUp = () => {
+  emit('moveUp', props.index)
+}
+
+const moveDown = () => {
+  emit('moveDown', props.index)
+}
+
+const configUrl = ({ index, content }) => {
+  emit('configUrl', { index: index, content: content })
+}
+
+const changeShortenUrlUsage = ({ index, notUseShorternUrl }) => {
+  emit('changeShortenUrlUsage', { index: index, notUseShorternUrl: notUseShorternUrl })
+}
 </script>
 
 <style  lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .group-action {
       margin-left: auto;
     }

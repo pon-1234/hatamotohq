@@ -54,36 +54,29 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['message', 'type'],
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 
-  data() {
-    return {
-      contentKey: 0
-    };
-  },
+const props = defineProps(['message', 'type'])
 
-  mounted() {
-    $(this.$refs.modalScenarioMessagePreview).on('show.bs.modal', this.onShow);
-  },
+const contentKey = ref(0)
+const modalMessagePreview = ref(null)
 
-  computed: {
-    primaryLabel() {
-      return this.type === 'scenario' ? 'シナリオ' : '一斉配信';
-    }
-  },
+const primaryLabel = computed(() => {
+  return props.type === 'scenario' ? 'シナリオ' : '一斉配信'
+})
 
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
+onMounted(() => {
+  $(modalMessagePreview.value).on('show.bs.modal', onShow)
+})
 
-    async onShow() {
-      this.forceRerender();
-    }
-  }
-};
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const onShow = async () => {
+  forceRerender()
+}
 </script>
 <style lang="scss" scoped>
   .modal-body-main {

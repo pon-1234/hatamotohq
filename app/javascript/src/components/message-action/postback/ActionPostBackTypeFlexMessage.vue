@@ -6,87 +6,89 @@
     </label>
 
     <div class="btn-template mb20 fz14">
-      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-if="currentTemplate.flex_message_id">
+      <a @click="showFlexMessageModal = true" class="btn-block" v-if="currentTemplate.flex_message_id">
         <span>{{ currentTemplate.title }}</span>
       </a>
-      <a data-toggle="modal" :data-target="'#' + name" class="btn-block" v-else>Flexメッセージから作成</a>
+      <a @click="showFlexMessageModal = true" class="btn-block" v-else>Flexメッセージから作成</a>
       <input
         type="hidden"
         v-model="currentTemplate.flex_message_id"
         :name="name + '_flex_message_id'"
-        v-validate="'required'"
+        :class="{ 'is-invalid': flexMessageError }"
       />
-      <span v-if="errors.first(name + '_flex_message_id')" class="invalid-box-label">Flexメッセージは必須です</span>
+      <span v-if="flexMessageError" class="invalid-box-label">Flexメッセージは必須です</span>
     </div>
 
-    <modal-select-flex-message-template :name="name" @input="selectTemplate" />
+    <modal-select-flex-message-template 
+      v-model="showFlexMessageModal"
+      @selectFlexMessage="selectTemplate" 
+    />
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: {
-      type: Object,
-      default: () => {
-        return {
-          flex_message_id: null,
-          title: 'Flexメッセージから作成'
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
+<script setup>
+import { ref, reactive, watch } from 'vue';
+import ModalSelectFlexMessageTemplate from '../../common/ModalSelectFlexMessageTemplate.vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      flex_message_id: null,
+      title: 'Flexメッセージから作成'
+    })
   },
-  inject: ['parentValidator'],
+  name: {
+    type: String,
+    default: 'postback_action'
+  }
+});
 
-  data() {
-    return {
-      currentTemplate: {
-        flex_message_id: null,
-        title: null
-      }
-    };
-  },
+const emit = defineEmits(['update:modelValue']);
 
-  created() {
-    this.$validator = this.parentValidator;
+const currentTemplate = reactive({
+  flex_message_id: props.modelValue.flex_message_id || null,
+  title: props.modelValue.title || null
+});
 
-    if (this.value.flex_message_id) {
-      this.currentTemplate = {
-        flex_message_id: this.value.flex_message_id,
-        title: this.value.title
-      };
-    }
-  },
+const showFlexMessageModal = ref(false);
+const flexMessageError = ref('');
 
-  watch: {
-    currentTemplate: {
-      handler(val) {
-        if (this.value.flex_message_id) {
-          this.$emit('input', {
-            title: val.title,
-            flex_message_id: this.value.flex_message_id
-          });
-        }
-      },
-      deep: true
-    }
-  },
+watch(() => props.modelValue, (newValue) => {
+  currentTemplate.flex_message_id = newValue.flex_message_id || null;
+  currentTemplate.title = newValue.title || null;
+}, { deep: true });
 
-  methods: {
-    selectTemplate(flexMessage) {
-      const json = JSON.parse(flexMessage.json_message);
-      json.id = flexMessage.id;
-      this.currentTemplate = { flex_message_id: json.id, ...json, title: flexMessage.name };
-      this.$emit('input', {
-        title: flexMessage.name,
-        flex_message_id: flexMessage.id
-      });
-    }
+watch(() => currentTemplate.flex_message_id, () => {
+  validateFlexMessage();
+});
+
+const validateFlexMessage = () => {
+  if (!currentTemplate.flex_message_id) {
+    flexMessageError.value = 'Flexメッセージは必須です';
+  } else {
+    flexMessageError.value = '';
   }
 };
+
+const selectTemplate = (flexMessage) => {
+  const json = JSON.parse(flexMessage.json_message);
+  json.id = flexMessage.id;
+  currentTemplate.flex_message_id = flexMessage.id;
+  currentTemplate.title = flexMessage.name;
+  
+  emit('update:modelValue', {
+    title: flexMessage.name,
+    flex_message_id: flexMessage.id
+  });
+};
+
+defineExpose({
+  validate: () => {
+    validateFlexMessage();
+    return !flexMessageError.value;
+  }
+});
 </script>
 
 <style scoped>

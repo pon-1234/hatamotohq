@@ -19,36 +19,37 @@
     <td class="fw-200">{{ getCreatedAt(tag.created_at) }}</td>
   </tr>
 </template>
-<script>
-import moment from 'moment';
-import { mapActions, mapMutations } from 'vuex';
-export default {
-  props: ['tag'],
-  methods: {
-    ...mapMutations('friend', ['setQueryParam']),
-    ...mapActions('friend', ['getFriends']),
+<script setup>
+import moment from 'moment'
+import { useStore } from 'vuex'
 
-    getCreatedAt(item) {
-      return moment(item).format('YYYY年MM月DD日');
-    },
+const props = defineProps(['tag'])
+const emit = defineEmits(['deleteTag', 'editTag', 'createTag', 'showFriends'])
 
-    deleteTag(query) {
-      this.$emit('deleteTag', query);
-    },
+const store = useStore()
 
-    editTag(query) {
-      this.$emit('editTag', query);
-    },
+const setQueryParam = (payload) => store.commit('friend/setQueryParam', payload)
+const getFriends = () => store.dispatch('friend/getFriends')
 
-    createTag(query) {
-      this.$emit('createTag', query);
-    },
+const getCreatedAt = (item) => {
+  return moment(item).format('YYYY年MM月DD日')
+}
 
-    async showFriends() {
-      this.$emit('showFriends', this.tag);
-    }
-  }
-};
+const deleteTag = (query) => {
+  emit('deleteTag', query)
+}
+
+const editTag = (query) => {
+  emit('editTag', query)
+}
+
+const createTag = (query) => {
+  emit('createTag', query)
+}
+
+const showFriends = async () => {
+  emit('showFriends', props.tag)
+}
 </script>
 <style lang="scss" scoped>
   .tag-item {

@@ -13,65 +13,58 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState } from 'vuex';
 
-import Util from '@/core/util';
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
 
-export default {
-  computed: {
-    ...mapState('preview', {
-      messages: state => state.messages
-    })
-  },
+const store = useStore()
 
-  methods: {
-    isDisplay(message) {
-      return !Util.checkMessageContentForPreview(message);
-    }
-  }
-};
+const messages = computed(() => store.state.preview.messages)
+
+const isDisplay = (message) => {
+  return !Util.checkMessageContentForPreview(message)
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
-    .mb-1,
-    .my-1 {
-      margin-bottom: 0.25rem !important;
-    }
+  :deep(.mb-1),
+  :deep(.my-1) {
+    margin-bottom: 0.25rem !important;
+  }
 
-    .template-message {
-      position: relative;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-box-direction: normal;
-      flex-direction: row;
-      -webkit-box-align: center;
-      align-items: flex-center;
-      justify-content: center;
-      margin-bottom: 15px;
-      font-size: 12px;
-    }
+  :deep(.template-message) {
+    position: relative;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: flex-center;
+    justify-content: center;
+    margin-bottom: 15px;
+    font-size: 12px;
+  }
 
-    .w-min-0 {
-      min-width: 0px;
-    }
+  :deep(.w-min-0) {
+    min-width: 0px;
+  }
 
-    .template-message-main {
-      display: flex;
-      flex-wrap: nowrap;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-      flex-direction: column;
-    }
+  :deep(.template-message-main) {
+    display: flex;
+    flex-wrap: nowrap;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+  }
 
-    .template-message-body {
-      display: -webkit-box;
-      display: flex;
-      -webkit-box-orient: horizontal;
-      -webkit-box-direction: normal;
-      flex-direction: row;
-      margin-bottom: 0.5rem;
-    }
+  :deep(.template-message-body) {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
   }
 </style>

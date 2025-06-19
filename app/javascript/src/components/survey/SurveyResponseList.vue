@@ -56,62 +56,56 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
 
-import { mapActions, mapState } from 'vuex';
-
-export default {
-  props: ['data', 'route'],
-
-  data() {
-    return {
-      responseLists: [],
-      focus: null,
-      isLoading: true,
-      isError: false
-    };
+const props = defineProps({
+  data: {
+    type: [String, Number],
+    required: true
   },
-
-  beforeMount() {
-    console.log(this.data);
-    this.fetchData();
-  },
-
-  computed: {
-    ...mapState('friend', {
-      friend: state => state.friend
-    })
-  },
-
-  methods: {
-    ...mapActions('friend', ['getFriend']),
-    fetchData() {
-      this.isLoading = true;
-      this.isError = false;
-      this.$store.dispatch('survey/getCustomers', { id: this.data })
-        .then((res) => {
-          this.responseLists = res;
-          this.isLoading = false;
-        })
-        .catch(() => {
-          // show error
-          this.isLoading = false;
-
-          this.isError = true;
-        });
-    },
-
-    async showAnswerDetail(surveyId, answerId) {
-      window.location.href = process.env.MIX_ROOT_PATH + '/surveys/' + surveyId + '/answer/' + answerId;
-    },
-
-    changeTilteActiveChannel(title) {
-      if (this.focus != null) {
-        this.responseLists[this.focus].display_name = title;
-        // this.blink();
-      }
-    }
-
+  route: {
+    type: String
   }
-};
+})
+
+const store = useStore()
+
+const responseLists = ref([])
+const focus = ref(null)
+const isLoading = ref(true)
+const isError = ref(false)
+
+const friend = computed(() => store.state.friend.friend)
+
+const fetchData = async () => {
+  isLoading.value = true
+  isError.value = false
+  try {
+    const res = await store.dispatch('survey/getCustomers', { id: props.data })
+    responseLists.value = res
+    isLoading.value = false
+  } catch (error) {
+    // show error
+    isLoading.value = false
+    isError.value = true
+  }
+}
+
+const showAnswerDetail = async (surveyId, answerId) => {
+  window.location.href = process.env.MIX_ROOT_PATH + '/surveys/' + surveyId + '/answer/' + answerId
+}
+
+const changeTilteActiveChannel = (title) => {
+  if (focus.value != null) {
+    responseLists.value[focus.value].display_name = title
+    // this.blink();
+  }
+}
+
+onBeforeMount(() => {
+  console.log(props.data)
+  fetchData()
+})
 </script>

@@ -7,8 +7,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['status', 'locked', 'visible']
-};
+<script setup>
+defineProps(['status', 'locked', 'visible'])
 </script>

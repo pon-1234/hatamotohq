@@ -49,20 +49,14 @@
     <flex-message v-if="content.type === MessageType.Flex" :html="htmlContent"></flex-message>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    data: Object
-  },
+<script setup>
+import { computed } from 'vue'
+import { MessageType, TemplateMessageType } from '@/core/constant'
 
-  computed: {
-    content() {
-      return this.data.content;
-    },
+const props = defineProps({
+  data: Object
+})
 
-    htmlContent() {
-      return this.data.html_content;
-    }
-  }
-};
+const content = computed(() => props.data.content)
+const htmlContent = computed(() => props.data.html_content)
 </script>

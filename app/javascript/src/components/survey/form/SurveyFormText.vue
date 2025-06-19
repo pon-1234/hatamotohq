@@ -1,45 +1,51 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <ValidationProvider name="答え" :rules="{ required: isRequired, max: 255 }" v-slot="{ errors }">
-      <input
-        type="text"
-        :name="`answers[${qnum}][answer]`"
-        class="form-control mt-2"
-        placeholder="入力してください"
-        v-model.trim="answer"
-      />
-      <error-message :message="errors[0]"></error-message>
-    </ValidationProvider>
+    <input
+      type="text"
+      :name="`answers[${qnum}][answer]`"
+      class="form-control mt-2"
+      placeholder="入力してください"
+      v-model.trim="answer"
+      :required="isRequired"
+      maxlength="255"
+    />
+    <error-message :message="errorMessage"></error-message>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['question', 'qnum'],
-  data() {
-    return {
-      answer: undefined
-    };
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
   },
-  computed: {
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    }
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const answer = ref('')
+const errorMessage = ref('')
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
 </script>
 
 <style lang="scss" scoped>

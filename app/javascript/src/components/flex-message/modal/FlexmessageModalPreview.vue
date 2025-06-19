@@ -18,22 +18,12 @@
     </div>
   </div>
 </template>
-<script>
-
-export default {
-  props: ['id', 'model'],
-  data() {
-    return {};
-  },
-  mounted() {
-
-  },
-  methods: {}
-};
+<script setup>
+const props = defineProps(['id', 'model'])
 </script>
 <style lang="scss" scoped>
 
-  ::v-deep {
+  :deep() {
     .title {
       flex: 1 1 0%;
       margin: 0px;

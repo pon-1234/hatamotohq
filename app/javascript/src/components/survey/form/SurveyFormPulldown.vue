@@ -1,53 +1,55 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-      <select class="form-control w-100" :name="`answers[${qnum}][answer]`" v-model="answer">
-        <option v-for="(option, index) in options" :key="index" :value="option.value">
-          {{ option.value }}
-        </option>
-      </select>
-      <error-message :message="errors[0]"></error-message>
-    </ValidationProvider>
+    <select class="form-control w-100" :name="`answers[${qnum}][answer]`" v-model="answer" :required="isRequired">
+      <option v-for="(option, index) in options" :key="index" :value="option.value">
+        {{ option.value }}
+      </option>
+    </select>
+    <error-message :message="errorMessage"></error-message>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['question', 'qnum'],
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 
-  data() {
-    return {
-      answer: null
-    };
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
   },
-
-  created() {
-    this.answer = this.options && this.options.length > 0 ? this.options[0].value : null;
-  },
-
-  computed: {
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    },
-
-    options() {
-      return this.content ? this.content.options : [];
-    }
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const answer = ref(null)
+const errorMessage = ref('')
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
+
+const options = computed(() => {
+  return content.value ? content.value.options : []
+})
+
+onMounted(() => {
+  answer.value = options.value && options.value.length > 0 ? options.value[0].value : null
+})
 </script>
 
 <style lang="scss" scoped>

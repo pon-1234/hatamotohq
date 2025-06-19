@@ -39,7 +39,7 @@
               autocomplete="off"
               name="step"
               type="number"
-              @change="$emit('update:date', date)"
+              @change="emit('update:date', date)"
             />
             <span>日後</span>
           </template>
@@ -68,7 +68,7 @@
               name="step"
               type="number"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @change="$emit('update:date', date)"
+              @change="emit('update:date', date)"
             />
             <span>日と</span>
           </template>
@@ -95,7 +95,7 @@
           v-model="order"
           onblur="this.value = (this.value == 0 ? 1 : this.value);"
           onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-          @input="$emit('update:order', order)"
+          @input="emit('update:order', order)"
         />
       </div>
       <div class="mt-2" v-if="!is_initial">
@@ -106,7 +106,7 @@
             name="zeroday"
             type="checkbox"
             v-bind:value="false"
-            @change="date = zeroday ? 0 : 1"
+            @change="date = zeroday ? 0 : 1; emit('update:date', date)"
           />
           開始当日
         </label>
@@ -116,80 +116,72 @@
   </div>
 </template>
 
-<script>
-import moment from 'moment-timezone';
-import { Datetime } from 'vue-datetime';
-import Util from '@/core/util';
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import moment from 'moment-timezone'
+import { Datetime } from 'vue-datetime'
+import Util from '@/core/util'
 
-export default {
-  components: {
-    Datetime
+const props = defineProps({
+  mode: {
+    type: String,
+    default: 'time'
   },
-  props: {
-    mode: {
-      type: String,
-      default: 'time'
-    },
-    is_initial: {
-      type: Boolean,
-      default: false
-    },
-    date: {
-      type: Number,
-      default: 0
-    },
-    time: {
-      type: String,
-      default: '00:00'
-    },
-    order: {
-      type: Number,
-      default: 1
-    }
+  is_initial: {
+    type: Boolean,
+    default: false
   },
-
-  data() {
-    return {
-      selectedTime: '00:00',
-      zeroday: false
-    };
+  date: {
+    type: Number,
+    default: 0
   },
-
-  created() {
-    this.zeroday = this.date === 0;
-    this.selectedTime = moment.tz(this.time, 'HH:mm', 'Asia/Tokyo').format();
+  time: {
+    type: String,
+    default: '00:00'
   },
-
-  watch: {
-    selectedTime: function(val) {
-      const timeOnly = Util.formattedTime(val);
-      this.$emit('update:time', timeOnly);
-    },
-
-    date: function(val) {
-      this.$emit('update:date', this.date);
-    },
-
-    order: function(val) {
-      this.$emit('update:order', this.order);
-    }
-  },
-
-  methods: {
-    onModeChanged(isInitial) {
-      this.is_initial = isInitial;
-      if (isInitial) {
-        this.date = 0;
-        this.$emit('update:date', this.date);
-        this.time = '00:00';
-        this.$emit('update:time', this.time);
-      } else {
-        this.zeroday = true;
-      }
-      this.$emit('update:is_initial', isInitial);
-    }
+  order: {
+    type: Number,
+    default: 1
   }
-};
+})
+
+const emit = defineEmits(['update:is_initial', 'update:date', 'update:time', 'update:order'])
+
+const selectedTime = ref('00:00')
+const zeroday = ref(false)
+const is_initial = ref(props.is_initial)
+const date = ref(props.date)
+const order = ref(props.order)
+
+onMounted(() => {
+  zeroday.value = props.date === 0
+  selectedTime.value = moment.tz(props.time, 'HH:mm', 'Asia/Tokyo').format()
+})
+
+watch(selectedTime, (val) => {
+  const timeOnly = Util.formattedTime(val)
+  emit('update:time', timeOnly)
+})
+
+watch(date, (val) => {
+  emit('update:date', date.value)
+})
+
+watch(order, (val) => {
+  emit('update:order', order.value)
+})
+
+const onModeChanged = (isInitial) => {
+  is_initial.value = isInitial
+  if (isInitial) {
+    date.value = 0
+    emit('update:date', date.value)
+    emit('update:time', '00:00')
+  } else {
+    zeroday.value = true
+  }
+  emit('update:is_initial', isInitial)
+}
 </script>
 
 <style></style>

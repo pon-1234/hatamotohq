@@ -18,30 +18,28 @@
     </div>
   </div>
 </template>
-<script>
-import Util from '@/core/util';
+<script setup>
+import { ref, onMounted } from 'vue'
+import Util from '@/core/util'
 
-export default {
-  props: ['survey'],
-
-  data() {
-    return {
-      isHidden: false
-    };
-  },
-
-  mounted() {
-    if (Util.isMobile()) {
-      this.isHidden = true;
-    }
-  },
-
-  methods: {
-    changePreview() {
-      this.isHidden = !this.isHidden;
-    }
+const props = defineProps({
+  survey: {
+    type: Object,
+    required: true
   }
-};
+})
+
+const isHidden = ref(false)
+
+const changePreview = () => {
+  isHidden.value = !isHidden.value
+}
+
+onMounted(() => {
+  if (Util.isMobile()) {
+    isHidden.value = true
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -55,31 +53,29 @@ export default {
     }
   }
 
-  ::v-deep {
-    .card-sliding {
-      border-bottom: 0;
-      position: fixed;
-      right: 1rem;
-      bottom: 0;
-      z-index: 10;
-      box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
-      transition: margin 0.3s ease-in-out;
-    }
+  :deep(.card-sliding) {
+    border-bottom: 0;
+    position: fixed;
+    right: 1rem;
+    bottom: 0;
+    z-index: 10;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+    transition: margin 0.3s ease-in-out;
+  }
 
-    .card-header {
-      padding: 0.75rem 1.25rem;
-      margin-bottom: 0;
-      background-color: rgba(0, 0, 0, 0.03);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-    }
+  :deep(.card-header) {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  }
 
-    .mr-2,
-    .mx-2 {
-      margin-right: 0.5rem !important;
-    }
+  :deep(.mr-2),
+  :deep(.mx-2) {
+    margin-right: 0.5rem !important;
+  }
 
-    .card-sliding .card-body {
-      overflow-y: auto;
-    }
+  :deep(.card-sliding .card-body) {
+    overflow-y: auto;
   }
 </style>

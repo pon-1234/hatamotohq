@@ -29,8 +29,6 @@
               @compositionstart="compositionstart($event)"
               name="folder_name"
               maxlength="33"
-              data-vv-as="フォルダー名"
-              v-validate="'required|max:32'"
             />
             <span class="ml-auto">
               <div class="btn btn-default" @click="submitCreateFolder" ref="buttonChange">決定</div>
@@ -56,63 +54,61 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['isPc', 'data', 'selectedFolder', 'type', 'isPerview'],
-  data() {
-    return {
-      isAddMoreFolder: false,
-      folderData: {
-        type: this.type || '',
-        name: null
-      },
-      isEnter: true
-    };
-  },
+<script setup>
+import { ref, reactive } from 'vue'
 
-  created() {},
+const props = defineProps(['isPc', 'data', 'selectedFolder', 'type', 'isPerview'])
+const emit = defineEmits(['changeSelectedFolder', 'submitUpdateFolder', 'submitCreateFolder'])
 
-  methods: {
-    changeSelectedFolder(index) {
-      this.$emit('changeSelectedFolder', index);
-    },
+const isAddMoreFolder = ref(false)
+const folderData = reactive({
+  type: props.type || '',
+  name: null
+})
+const isEnter = ref(true)
+const folderName = ref(null)
+const buttonChange = ref(null)
+const errors = ref({ first: () => null })
 
-    submitUpdateFolder(value) {
-      this.$emit('submitUpdateFolder', value);
-    },
+const changeSelectedFolder = (index) => {
+  emit('changeSelectedFolder', index)
+}
 
-    addMoreFolder() {
-      this.isAddMoreFolder = !this.isAddMoreFolder;
-      this.folderData.name = '';
-    },
+const submitUpdateFolder = (value) => {
+  emit('submitUpdateFolder', value)
+}
 
-    submitCreateFolder(e) {
-      this.$validator.validateAll().then(passed => {
-        if (!passed) return;
-        if (this.folderData.name) {
-          this.$emit('submitCreateFolder', this.folderData);
-          this.isAddMoreFolder = false;
-        }
-      });
-    },
+const addMoreFolder = () => {
+  isAddMoreFolder.value = !isAddMoreFolder.value
+  folderData.name = ''
+}
 
-    enterSubmitAddNewFolder(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonChange.click();
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
-    }
+const submitCreateFolder = (e) => {
+  // Basic validation
+  if (!folderData.name || folderData.name.length > 32) {
+    return
   }
-};
+  if (folderData.name) {
+    emit('submitCreateFolder', folderData)
+    isAddMoreFolder.value = false
+  }
+}
+
+const enterSubmitAddNewFolder = (e) => {
+  if (!isEnter.value) {
+    isEnter.value = true
+    return
+  }
+  buttonChange.value.click()
+}
+
+const compositionend = () => {
+  isEnter.value = false
+}
+
+const compositionstart = () => {
+  isEnter.value = true
+}
 </script>
 <style lang="scss" scoped>
   .folder-list {

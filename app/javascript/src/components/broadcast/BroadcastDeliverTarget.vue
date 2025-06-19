@@ -18,15 +18,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['broadcast'],
-  data() {
-    return {
-      friendAddCondition: this.broadcast.conditions ? this.broadcast.conditions.add_friend_date : null
-    };
-  }
-};
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['broadcast'])
+
+const friendAddCondition = computed(() => {
+  return props.broadcast.conditions ? props.broadcast.conditions.add_friend_date : null
+})
 </script>
 
 <style lang="scss" scoped>

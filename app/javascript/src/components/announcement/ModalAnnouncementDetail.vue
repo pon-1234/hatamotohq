@@ -23,21 +23,17 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['announcement'],
+<script setup>
+const props = defineProps(['announcement'])
 
-  methods: {
-    normalize(body) {
-      if (body && body.includes('<oembed')) {
-        body = body.replaceAll('oembed', 'iframe');
-        body = body.replaceAll('url', 'src');
-        body = body.replaceAll('watch?v=', 'embed/');
-      }
-      return body;
-    }
+const normalize = (body) => {
+  if (body && body.includes('<oembed')) {
+    body = body.replaceAll('oembed', 'iframe')
+    body = body.replaceAll('url', 'src')
+    body = body.replaceAll('watch?v=', 'embed/')
   }
-};
+  return body
+}
 </script>
 
 <style lang="scss" scoped>
@@ -62,7 +58,7 @@ export default {
     }
   }
 
-  ::v-deep {
+  :deep() {
     .image-style-side,
     .image-style-align-left,
     .image-style-align-center,

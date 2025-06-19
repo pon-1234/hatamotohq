@@ -1,81 +1,81 @@
 <template>
-  <div
-    :id="id ? id : 'confirmModal'"
-    class="modal fade"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="info-header-modalLabel"
-    aria-hidden="true"
+  <BaseModal
+    :id="id || 'confirmModal'"
+    :title="title || 'お知らせ'"
+    :ok-text="okButtonText"
+    :ok-variant="okButtonVariant"
+    :ok-disabled="confirmButtonDisabled"
+    cancel-text="キャンセル"
+    @ok="handleConfirm"
+    ref="modalRef"
   >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="info-header-modalLabel">{{ title || "お知らせ" }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        </div>
-        <div class="modal-body">
-          <slot name="content"></slot>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">キャンセル</button>
-          <button
-            type="button"
-            class="btn btn-sm btn-info"
-            data-dismiss="modal"
-            @click="confirm"
-            v-if="type === 'confirm'"
-            :disabled="confirmButtonDisabled"
-          >
-            {{confirmButtonLabel || '確認'}}
-          </button>
-          <button
-            type="button"
-            class="btn btn-sm btn-danger"
-            data-dismiss="modal"
-            @click="confirm"
-            v-if="type === 'delete'"
-          >
-            削除
-          </button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
+    <slot name="content"></slot>
+  </BaseModal>
 </template>
-<script>
-export default {
-  props: {
-    id: {
-      type: String,
-      required: false
-    },
-    title: {
-      type: String,
-      required: false
-    },
-    type: {
-      type: String,
-      required: false,
-      default: 'delete'
-    },
-    confirmButtonDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    confirmButtonLabel: {
-      type: String,
-      required: false,
-      default: null
-    }
+
+<script setup>
+import { ref, computed } from 'vue';
+import BaseModal from '../base/BaseModal.vue';
+
+// Props
+const props = defineProps({
+  id: {
+    type: String,
+    default: null
   },
-  methods: {
-    confirm() {
-      this.$emit('confirm');
-    }
+  title: {
+    type: String,
+    default: null
+  },
+  type: {
+    type: String,
+    default: 'delete',
+    validator: (value) => ['confirm', 'delete'].includes(value)
+  },
+  confirmButtonDisabled: {
+    type: Boolean,
+    default: false
+  },
+  confirmButtonLabel: {
+    type: String,
+    default: null
   }
+});
+
+// Emits
+const emit = defineEmits(['confirm']);
+
+// Refs
+const modalRef = ref(null);
+
+// Computed
+const okButtonText = computed(() => {
+  if (props.type === 'delete') {
+    return '削除';
+  }
+  return props.confirmButtonLabel || '確認';
+});
+
+const okButtonVariant = computed(() => {
+  return props.type === 'delete' ? 'danger' : 'info';
+});
+
+// Methods
+const handleConfirm = () => {
+  emit('confirm');
 };
+
+const show = () => {
+  modalRef.value?.show();
+};
+
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>

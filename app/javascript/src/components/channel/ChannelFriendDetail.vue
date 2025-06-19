@@ -7,8 +7,8 @@
       <div class="mt-3 text-center">
         <img v-lazy="genAvatarImgObj(friend.avatar_url)" class="img-thumbnail avatar-lg rounded-circle" />
         <h4>
-          {{ (friend.display_name || friend.line_name) | truncate(15)
-          }}<span v-if="friend.tester" class="ml-1 pt-1 badge badge-warning badge-sm">テスター</span>
+          {{ truncate(friend.display_name || friend.line_name, 15) }}
+          <span v-if="friend.tester" class="ml-1 pt-1 badge badge-warning badge-sm">テスター</span>
         </h4>
       </div>
 
@@ -33,7 +33,14 @@
             <p class="mt-3 mb-1 font-12">
               <strong><i class="uil uil-user"></i> 担当者:</strong>
             </p>
-            <p><channel-assignment :key="contentKey" :channel="activeChannel" @open="openStaffSelect" @close="isStaffSelectOpened = false"></channel-assignment></p>
+            <p>
+              <channel-assignment 
+                :key="contentKey" 
+                :channel="activeChannel" 
+                @open="openStaffSelect" 
+                @close="isStaffSelectOpened = false"
+              />
+            </p>
             <!-- END: 担当者 -->
           </template>
 
@@ -45,7 +52,7 @@
           <p class="mt-3 mb-1 font-12">
             <strong><i class="uil uil-tag"></i> タグ:</strong>
           </p>
-          <p><friend-tag :tags="friend.tags"></friend-tag></p>
+          <p><friend-tag :tags="friend.tags" /></p>
 
           <p class="mt-4 mb-1 font-12">
             <strong><i class="uil uil-clock"></i> 登録日時:</strong>
@@ -59,80 +66,62 @@
   <!-- end card-->
 </template>
 
-<script>
-import { mapState, mapMutations } from 'vuex';
-import Util from '@/core/util';
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
 
-export default {
-  props: {
-    // TODO: using a state to store user profile, do not passing prop
-    role: String
-  },
+const props = defineProps({
+  role: String
+})
 
-  data() {
-    return {
-      rootPath: process.env.MIX_ROOT_PATH,
-      contentKey: 0,
-      isStaffSelectOpened: false,
-      staffCount: 0
-    };
-  },
+const store = useStore()
 
-  provide() {
-    return { parentValidator: this.$validator };
-  },
+const rootPath = process.env.MIX_ROOT_PATH
+const contentKey = ref(0)
+const isStaffSelectOpened = ref(false)
+const staffCount = ref(0)
 
-  watch: {
-    activeChannel: {
-      handler(val) {
-        this.forceRerender();
-      }
-    }
-  },
+const activeChannel = computed(() => store.state.channel.activeChannel)
+const showUserDetail = computed(() => store.state.channel.showUserDetail)
+const friend = computed(() => activeChannel.value?.line_friend || {})
+const friendAddedAt = computed(() => Util.formattedDate(friend.value.created_at))
+const detailPath = computed(() => `${rootPath}/user/friends/${friend.value.id}`)
+const isAdmin = computed(() => props.role === 'admin')
 
-  computed: {
-    ...mapState('channel', {
-      activeChannel: state => state.activeChannel,
-      showUserDetail: state => state.showUserDetail
-    }),
-    friend() {
-      return this.activeChannel.line_friend;
-    },
-    friendAddedAt() {
-      return Util.formattedDate(this.friend.created_at);
-    },
-    detailPath() {
-      return `${this.rootPath}/user/friends/${this.friend.id}`;
-    },
-    isAdmin() {
-      return this.role === 'admin';
-    }
-  },
-  methods: {
-    ...mapMutations('channel', ['setShowUserDetail']),
+watch(activeChannel, () => {
+  forceRerender()
+})
 
-    forceRerender() {
-      this.contentKey++;
-    },
+const setShowUserDetail = (value) => {
+  store.commit('channel/setShowUserDetail', value)
+}
 
-    hideUserDetail() {
-      if (this.showUserDetail) this.setShowUserDetail(false);
-    },
+const forceRerender = () => {
+  contentKey.value++
+}
 
-    genAvatarImgObj(url) {
-      const avatarImgObj = {
-        src: url || '/img/no-image-profile.png',
-        error: '/img/no-image-profile.png',
-        loading: '/images/loading.gif'
-      };
-      return avatarImgObj;
-    },
-    openStaffSelect(staffCount) {
-      this.isStaffSelectOpened = true;
-      this.staffCount = staffCount;
-    }
+const hideUserDetail = () => {
+  if (showUserDetail.value) setShowUserDetail(false)
+}
+
+const genAvatarImgObj = (url) => {
+  return {
+    src: url || '/img/no-image-profile.png',
+    error: '/img/no-image-profile.png',
+    loading: '/images/loading.gif'
   }
-};
+}
+
+const openStaffSelect = (count) => {
+  isStaffSelectOpened.value = true
+  staffCount.value = count
+}
+
+const truncate = (str, length) => {
+  if (!str) return ''
+  return str.length > length ? str.substring(0, length) + '...' : str
+}
 </script>
 <style lang="scss" scoped>
   .icon-fs {

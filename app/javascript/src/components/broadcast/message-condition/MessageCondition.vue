@@ -14,58 +14,54 @@
     </div>
   </div>
 </template>
-<script>
-import Util from '@/core/util';
-export default {
-  props: ['data'],
-  data() {
-    return {
-      options_prefecture: this.Prefecture,
-      options_gender: this.Gender,
-      options_month: this.MonthBirthday,
-      condition: {
-        type: 'specific',
-        add_friend_date: {
-          start_date: null,
-          end_date: null
-        }
-        // age: {
-        //   min: 0,
-        //   max: 100
-        // },
-        // gender: 'all',
-        // prefecture: null,
-        // month_birthday: [],
-        // message_status: null
-      }
-    };
-  },
-  created() {
-    if (this.data) {
-      Object.assign(this.condition, this.data);
-    }
-  },
-  watch: {
-    condition: {
-      handler(val) {
-        if (val.add_friend_date.start_date) {
-          val.add_friend_date.start_date = Util.setDefaultFormatDate(val.add_friend_date.start_date);
-        }
+<script setup>
+import { reactive, watch, onMounted } from 'vue'
+import Util from '@/core/util'
 
-        if (val.add_friend_date.end_date) {
-          val.add_friend_date.end_date = Util.setDefaultFormatDate(val.add_friend_date.end_date);
-        }
+const props = defineProps(['data'])
+const emit = defineEmits(['input'])
 
-        this.$emit('input', val);
-      },
-      deep: true
-    }
+const options_prefecture = window.Prefecture
+const options_gender = window.Gender
+const options_month = window.MonthBirthday
+
+const condition = reactive({
+  type: 'specific',
+  add_friend_date: {
+    start_date: null,
+    end_date: null
   }
-};
+  // age: {
+  //   min: 0,
+  //   max: 100
+  // },
+  // gender: 'all',
+  // prefecture: null,
+  // month_birthday: [],
+  // message_status: null
+})
+
+onMounted(() => {
+  if (props.data) {
+    Object.assign(condition, props.data)
+  }
+})
+
+watch(condition, (val) => {
+  if (val.add_friend_date.start_date) {
+    val.add_friend_date.start_date = Util.setDefaultFormatDate(val.add_friend_date.start_date)
+  }
+
+  if (val.add_friend_date.end_date) {
+    val.add_friend_date.end_date = Util.setDefaultFormatDate(val.add_friend_date.end_date)
+  }
+
+  emit('input', val)
+}, { deep: true })
 </script>
 
 <style  lang="scss" scoped>
-::v-deep {
+:deep() {
   .fa-arrows-alt-h {
     margin-left: 20px;
     margin-right: 20px;

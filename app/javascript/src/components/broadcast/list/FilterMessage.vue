@@ -41,44 +41,38 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
-export default {
-  props: ['type', 'folderId'],
-  data() {
-    return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      options: this.MessageDeliveriesStatusFilter,
-      selected: this.MessageDeliveriesStatusFilter[0],
-      keyword: '',
-      list_tag: []
-    };
-  },
-  computed: {
-    ...mapState('global', {
-      tags: state => state.tags
-    })
-  },
-  methods: {
-    changeSelected(value) {
-      this.selected = value;
-      this.$emit('input', { status: value.value });
-    },
+const props = defineProps(['type', 'folderId'])
+const emit = defineEmits(['input'])
+const store = useStore()
 
-    changeFilter() {
-      this.$emit('input', { keyword: this.keyword, tags: this.list_tag });
-    },
+const MIX_ROOT_PATH = process.env.MIX_ROOT_PATH
+const options = window.MessageDeliveriesStatusFilter
+const selected = ref(window.MessageDeliveriesStatusFilter[0])
+const keyword = ref('')
+const list_tag = ref([])
 
-    selectTags(tags) {
-      this.list_tag = tags.map(item => item.id);
-    }
-  }
-};
+const tags = computed(() => store.state.global.tags)
+
+const changeSelected = (value) => {
+  selected.value = value
+  emit('input', { status: value.value })
+}
+
+const changeFilter = () => {
+  emit('input', { keyword: keyword.value, tags: list_tag.value })
+}
+
+const selectTags = (tags) => {
+  list_tag.value = tags.map(item => item.id)
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .hdg3 {
       margin: 15px 0;
     }

@@ -5,31 +5,28 @@
   </section>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: {
-    scenario_id: {
-      type: Number,
-      required: true
-    }
-  },
+<script setup>
+import { useStore } from 'vuex'
 
-  methods: {
-    ...mapActions('scenario', [
-      'createMessagesFromTemplate'
-    ]),
-
-    async onSelectTemplate(template) {
-      const payload = {
-        scenario_id: this.scenario_id,
-        template_id: template.id
-      };
-      await this.createMessagesFromTemplate(payload);
-      location.reload();
-    }
+const props = defineProps({
+  scenario_id: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const store = useStore()
+
+const createMessagesFromTemplate = (payload) => store.dispatch('scenario/createMessagesFromTemplate', payload)
+
+const onSelectTemplate = async (template) => {
+  const payload = {
+    scenario_id: props.scenario_id,
+    template_id: template.id
+  }
+  await createMessagesFromTemplate(payload)
+  location.reload()
+}
 </script>
 
 <style>

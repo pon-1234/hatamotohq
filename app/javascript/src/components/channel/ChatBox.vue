@@ -35,273 +35,244 @@
     <loading-indicator></loading-indicator>
   </div>
 </template>
-<script>
-import { mapState, mapMutations, mapActions } from 'vuex';
-import Util from '@/core/util';
-import moment from 'moment';
+<script setup>
+import { ref, computed, watch, onMounted, onUpdated, onUnmounted } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
+import moment from 'moment'
 
-export default {
-  data() {
-    return {
-      animation: false,
-      currentScrollTop: 0,
-      isLoadingPrevious: true,
-      scrollTopBeforeLoad: null,
-      heightBeforeLoad: null,
-      latestMessageId: null,
-      unreadDivWasShown: false,
-      componentKey: 0
-    };
-  },
+const emit = defineEmits(['onResetModalSticker'])
 
-  mounted() {
-    this.addScrollListener();
-  },
+const store = useStore()
 
-  updated() {
-    Util.addMediaPlayListeners();
-  },
+const chatPanel = ref(null)
+const replyBox = ref(null)
+const animation = ref(false)
+const currentScrollTop = ref(0)
+const isLoadingPrevious = ref(true)
+const scrollTopBeforeLoad = ref(null)
+const heightBeforeLoad = ref(null)
+const latestMessageId = ref(null)
+const unreadDivWasShown = ref(false)
+const componentKey = ref(0)
 
-  unmounted() {
-    this.removeScrollListener();
-  },
+const activeChannel = computed(() => store.state.channel.activeChannel)
+const messages = computed(() => store.state.channel.messages)
+const allMessagesLoaded = computed(() => store.state.channel.allMessagesLoaded)
+const isLoadMoreMessage = computed(() => store.state.channel.isLoadMoreMessage)
+const showChatBox = computed(() => store.state.channel.showChatBox)
+const showUserDetail = computed(() => store.state.channel.showUserDetail)
+const latestMessage = computed(() => messages.value[messages.value.length - 1])
+const isMobile = computed(() => Util.isMobile())
+const shouldShowSpinner = computed(() => !allMessagesLoaded.value && isLoadingPrevious.value)
 
-  watch: {
-    messages: {
-      handler(val) {
-        const newestMessage = _.last(val);
-        // Scroll to bottom if receive a new message
-        if (newestMessage && newestMessage.id > this.latestMessageId) {
-          setTimeout(() => {
-            this.latestMessageId = newestMessage.id;
-            this.scrollToBottom();
-          }, 500);
-        }
-      },
-      deep: true
-    },
-    activeChannel(newChannel, oldChannel) {
-      this.unreadDivWasShown = false;
-      if (oldChannel && newChannel.id === oldChannel.id) {
-        return;
-      }
-      if (newChannel) {
-        this.loadMoreMessages();
-        this.$refs.replyBox.clearInput();
+onMounted(() => {
+  addScrollListener()
+})
+
+onUpdated(() => {
+  Util.addMediaPlayListeners()
+})
+
+onUnmounted(() => {
+  removeScrollListener()
+})
+
+watch(messages, (val) => {
+  const newestMessage = val[val.length - 1]
+  // Scroll to bottom if receive a new message
+  if (newestMessage && newestMessage.id > latestMessageId.value) {
+    setTimeout(() => {
+      latestMessageId.value = newestMessage.id
+      scrollToBottom()
+    }, 500)
+  }
+}, { deep: true })
+
+watch(activeChannel, (newChannel, oldChannel) => {
+  unreadDivWasShown.value = false
+  if (oldChannel && newChannel.id === oldChannel.id) {
+    return
+  }
+  if (newChannel) {
+    loadMoreMessages()
+    replyBox.value?.clearInput()
+  }
+})
+
+const forceRerender = () => {
+  componentKey.value++
+}
+
+const removeScrollListener = () => {
+  // Implementation needed if scroll listener was added
+}
+
+const addScrollListener = () => {
+  setScrollParams()
+  scrollToBottom()
+  isLoadingPrevious.value = false
+}
+
+const setScrollParams = () => {
+  heightBeforeLoad.value = chatPanel.value?.scrollHeight
+  scrollTopBeforeLoad.value = chatPanel.value?.scrollTop
+}
+
+const scrollToBottom = async () => {
+  if (messages.value.length === 0) return
+  latestMessageId.value = messages.value[messages.value.length - 1].id
+  if (!document.getElementById(`message_content_${latestMessageId.value}`)) return
+  chatPanel.value.scrollTop = chatPanel.value.scrollHeight
+  store.dispatch('channel/markMessagesRead')
+}
+
+const scrollToMessage = (id) => {
+  location.href = '#'
+  location.href = `#chatItem${id}`
+}
+
+const hiddenChatBox = () => {
+  if (showChatBox.value) store.commit('channel/setShowChatBox', false)
+  if (showUserDetail.value) store.commit('channel/setShowUserDetail', false)
+}
+
+const showUserDetailBox = () => {
+  if (!showUserDetail.value) store.commit('channel/setShowUserDetail', true)
+}
+
+const handleScroll = async (e) => {
+  setScrollParams()
+  if (e.target.scrollTop < 100 && !isLoadingPrevious.value && !allMessagesLoaded.value && messages.value.length > 0) {
+    isLoadingPrevious.value = true
+    await loadMoreMessages()
+    const heightDifference = chatPanel.value.scrollHeight - heightBeforeLoad.value
+    chatPanel.value.scrollTop = scrollTopBeforeLoad.value + heightDifference
+    isLoadingPrevious.value = false
+  }
+}
+
+const shouldLoadMoreChats = () => {
+  return !allMessagesLoaded.value && !isLoadingPrevious.value
+}
+
+const loadMoreMessages = async () => {
+  const before = messages.value && messages.value.length > 0 ? messages.value[0].id : null
+  await store.dispatch('channel/getMessages', { channelId: activeChannel.value.id, before: before })
+  scrollToBottom()
+  calcShowingUnreadDiv()
+}
+
+const sendTextMessage = (message) => {
+  if (message.trim()) {
+    const payload = {
+      channel_id: activeChannel.value.id,
+      message: {
+        type: 'text',
+        text: message
       }
     }
-  },
+    store.dispatch('channel/sendMessage', payload)
+  }
+}
 
-  computed: {
-    ...mapState('channel', {
-      activeChannel: state => state.activeChannel,
-      messages: state => state.messages,
-      allMessagesLoaded: state => state.allMessagesLoaded,
-      isLoadMoreMessage: state => state.isLoadMoreMessage,
-      showChatBox: state => state.showChatBox,
-      showUserDetail: state => state.showUserDetail
-    }),
-
-    latestMessage() {
-      return _.last(this.messages);
-    },
-
-    isMobile() {
-      return Util.isMobile();
-    },
-
-    shouldShowSpinner() {
-      return !this.allMessagesLoaded && this.isLoadingPrevious;
-    }
-  },
-
-  methods: {
-    ...mapActions('channel', [
-      'getMessages',
-      'setActiveChannel',
-      'sendMessage',
-      'sendMedia',
-      'sendTemplate',
-      'sendScenario',
-      'unreadMessage',
-      'markMessagesRead'
-    ]),
-    ...mapMutations('channel', ['setShowChatBox', 'setShowUserDetail']),
-    forceRerender() {
-      this.componentKey++;
-    },
-
-    addScrollListener() {
-      this.setScrollParams();
-      this.scrollToBottom();
-      this.isLoadingPrevious = false;
-    },
-
-    setScrollParams() {
-      this.heightBeforeLoad = this.$refs.chatPanel.scrollHeight;
-      this.scrollTopBeforeLoad = this.$refs.chatPanel.scrollTop;
-    },
-
-    async scrollToBottom() {
-      if (this.messages.length === 0) return;
-      this.latestMessageId = _.last(this.messages).id;
-      if (!document.getElementById(`message_content_${this.latestMessageId}`)) return;
-      this.$refs.chatPanel.scrollTop = this.$refs.chatPanel.scrollHeight;
-      this.markMessagesRead();
-    },
-
-    scrollToMessage(id) {
-      location.href = '#';
-      location.href = `#chatItem${id}`;
-    },
-
-    hiddenChatBox() {
-      if (this.showChatBox) this.setShowChatBox(false);
-      if (this.showUserDetail) this.setShowUserDetail(false);
-    },
-
-    showUserDetailBox() {
-      if (!this.showUserDetail) this.setShowUserDetail(true);
-    },
-
-    async handleScroll(e) {
-      this.setScrollParams();
-      if (e.target.scrollTop < 100 && !this.isLoadingPrevious && !this.allMessagesLoaded && !_.isEmpty(this.messages)) {
-        this.isLoadingPrevious = true;
-        await this.loadMoreMessages();
-        const heightDifference = this.$refs.chatPanel.scrollHeight - this.heightBeforeLoad;
-        this.$refs.chatPanel.scrollTop = this.scrollTopBeforeLoad + heightDifference;
-        this.isLoadingPrevious = false;
-      }
-    },
-
-    shouldLoadMoreChats() {
-      return !this.allMessagesLoaded && !this.isLoadingPrevious;
-    },
-
-    async loadMoreMessages() {
-      const before = this.messages && this.messages.length > 0 ? this.messages[0].id : null;
-      await this.getMessages({ channelId: this.activeChannel.id, before: before });
-      this.scrollToBottom();
-      this.calcShowingUnreadDiv();
-    },
-
-    // Send a text message from input
-    sendTextMessage(message) {
-      if (message.trim()) {
-        const payload = {
-          channel_id: this.activeChannel.id,
-          message: {
-            type: 'text',
-            text: message
-          }
-        };
-        this.sendMessage(payload);
-      }
-    },
-
-    // Send a sticker message
-    sendStickerMessage(sticker) {
-      // close stickers pane
-      this.openedStickerPane = false;
-
-      const payload = {
-        channel_id: this.activeChannel.id,
-        message: {
-          type: 'sticker',
-          packageId: sticker.packageId,
-          stickerId: sticker.stickerId,
-          stickerResourceType: 'STATIC'
-        }
-      };
-      this.sendMessage(payload);
-    },
-
-    sendMediaMessage(media) {
-      let message = null;
-      switch (media.type) {
-      case 'image':
-        message = this.buildImageMessage(media);
-        break;
-      case 'video':
-        message = this.buildVideoMessage(media);
-        break;
-      case 'audio':
-        message = this.buildAudioMessage(media);
-        break;
-      }
-      this.sendMessage(message);
-    },
-
-    buildImageMessage(media) {
-      return {
-        channel_id: this.activeChannel.id,
-        message: {
-          type: 'image',
-          originalContentUrl: media.url,
-          previewImageUrl: media.preview_url
-        }
-      };
-    },
-
-    buildVideoMessage(media) {
-      return {
-        channel_id: this.activeChannel.id,
-        message: {
-          type: 'video',
-          originalContentUrl: media.url,
-          previewImageUrl: media.preview_url
-        }
-      };
-    },
-
-    buildAudioMessage(media) {
-      return {
-        channel_id: this.activeChannel.id,
-        message: {
-          type: 'audio',
-          originalContentUrl: media.url,
-          duration: media.duration || 0
-        }
-      };
-    },
-
-    onDropMessage(event) {
-      event.preventDefault();
-      this.sendMediaToTalk(event.dataTransfer.files);
-    },
-
-    allowDrop(event) {
-      event.preventDefault();
-    },
-
-    resetModalSticker(event) {
-      this.$emit('onResetModalSticker', event);
-    },
-
-    calcShowingUnreadDiv() {
-      this.unreadDivWasShown = false;
-      for (let index = 0; index < this.messages.length; index++) {
-        const message = this.messages[index];
-        const prevMessage = index === 0 ? null : this.messages[index - 1];
-        if (this.unreadDivWasShown) {
-          // only show one unread mark at the same time
-          message.shouldShowUnreadDiv = false;
-        } else {
-          message.shouldShowUnreadDiv = prevMessage && this.isUnread(prevMessage) ? false : this.isUnread(message);
-          if (message.shouldShowUnreadDiv) {
-            this.unreadDivWasShown = true;
-          }
-        }
-      }
-      this.forceRerender();
-    },
-
-    isUnread(message) {
-      return message.from === 'friend' && moment(message.timestamp).isAfter(moment(this.activeChannel.last_seen_at));
+const sendStickerMessage = (sticker) => {
+  const payload = {
+    channel_id: activeChannel.value.id,
+    message: {
+      type: 'sticker',
+      packageId: sticker.packageId,
+      stickerId: sticker.stickerId,
+      stickerResourceType: 'STATIC'
     }
   }
-};
+  store.dispatch('channel/sendMessage', payload)
+}
+
+const sendMediaMessage = (media) => {
+  let message = null
+  switch (media.type) {
+  case 'image':
+    message = buildImageMessage(media)
+    break
+  case 'video':
+    message = buildVideoMessage(media)
+    break
+  case 'audio':
+    message = buildAudioMessage(media)
+    break
+  }
+  store.dispatch('channel/sendMessage', message)
+}
+
+const buildImageMessage = (media) => {
+  return {
+    channel_id: activeChannel.value.id,
+    message: {
+      type: 'image',
+      originalContentUrl: media.url,
+      previewImageUrl: media.preview_url
+    }
+  }
+}
+
+const buildVideoMessage = (media) => {
+  return {
+    channel_id: activeChannel.value.id,
+    message: {
+      type: 'video',
+      originalContentUrl: media.url,
+      previewImageUrl: media.preview_url
+    }
+  }
+}
+
+const buildAudioMessage = (media) => {
+  return {
+    channel_id: activeChannel.value.id,
+    message: {
+      type: 'audio',
+      originalContentUrl: media.url,
+      duration: media.duration || 0
+    }
+  }
+}
+
+const onDropMessage = (event) => {
+  event.preventDefault()
+  // sendMediaToTalk is not defined in original component
+  // This would need to be implemented based on actual requirements
+}
+
+const allowDrop = (event) => {
+  event.preventDefault()
+}
+
+const resetModalSticker = (event) => {
+  emit('onResetModalSticker', event)
+}
+
+const calcShowingUnreadDiv = () => {
+  unreadDivWasShown.value = false
+  for (let index = 0; index < messages.value.length; index++) {
+    const message = messages.value[index]
+    const prevMessage = index === 0 ? null : messages.value[index - 1]
+    if (unreadDivWasShown.value) {
+      // only show one unread mark at the same time
+      message.shouldShowUnreadDiv = false
+    } else {
+      message.shouldShowUnreadDiv = prevMessage && isUnread(prevMessage) ? false : isUnread(message)
+      if (message.shouldShowUnreadDiv) {
+        unreadDivWasShown.value = true
+      }
+    }
+  }
+  forceRerender()
+}
+
+const isUnread = (message) => {
+  return message.from === 'friend' && moment(message.timestamp).isAfter(moment(activeChannel.value.last_seen_at))
+}
 </script>
 <style lang="scss" scoped>
   .icon-fs {

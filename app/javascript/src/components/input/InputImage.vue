@@ -1,53 +1,88 @@
 <template>
   <div class="d-flex">
-    <img :src="`${imageUrl}`" v-if="imageUrl" class="banner mr-2">
+    <img :src="imageUrl" v-if="imageUrl" class="banner me-2" :alt="altText">
     <div v-if="!imageUrl">
-      <div class="btn btn-outline-primary mt-auto" data-toggle="modal" :data-target="`#imagemapModalUploadImage`">
+      <button
+        type="button"
+        class="btn btn-outline-primary mt-auto"
+        @click="showModal"
+      >
         {{ buttonTitle || "画像をアップロード" }}
-      </div>
+      </button>
     </div>
     <div class="d-flex mt-auto flex-column" v-else>
-      <div class="btn btn-outline-danger" @click="setImageUrl(null)">削除</div>
-      <div class="btn btn-outline-primary mt-1" data-toggle="modal" :data-target="`#imagemapModalUploadImage`">
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        @click="setImageUrl(null)"
+      >
+        削除
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-primary mt-1"
+        @click="showModal"
+      >
         変更
-      </div>
+      </button>
     </div>
-    <modal-select-media @select="onSelectMedia" :types="['image']" :filterable="false" :id="`imagemapModalUploadImage`">
-    </modal-select-media>
+    <modal-select-media
+      ref="modalRef"
+      @select="onSelectMedia"
+      :types="['image']"
+      :filterable="false"
+      :id="`imagemapModalUploadImage`"
+    />
   </div>
 </template>
-<script>
-export default {
-  props: {
-    buttonTitle: {
-      type: String,
-      required: false
-    },
-    imageUrl: {
-      type: String,
-      required: false
-    }
+
+<script setup>
+import { ref, computed } from 'vue';
+import ModalSelectMedia from '../media/ModalSelectMedia.vue';
+
+// Props
+const props = defineProps({
+  buttonTitle: {
+    type: String,
+    default: null
   },
-
-  methods: {
-    onSelectMedia(data) {
-      if (data) {
-        this.setImageUrl(data.url);
-      }
-    },
-
-    setImageUrl(url) {
-      this.imageUrl = url;
-      this.$emit('update:imageUrl', this.imageUrl);
-    }
+  imageUrl: {
+    type: String,
+    default: null
   }
+});
+
+// Emits
+const emit = defineEmits(['update:imageUrl']);
+
+// Refs
+const modalRef = ref(null);
+
+// Computed
+const altText = computed(() => {
+  return props.imageUrl ? '選択された画像' : '';
+});
+
+// Methods
+const onSelectMedia = (data) => {
+  if (data) {
+    setImageUrl(data.url);
+  }
+};
+
+const setImageUrl = (url) => {
+  emit('update:imageUrl', url);
+};
+
+const showModal = () => {
+  modalRef.value?.show();
 };
 </script>
 
 <style scoped>
-  .banner {
-    width: 300px;
-    height: auto;
-    object-fit: contain;
-  }
+.banner {
+  width: 300px;
+  height: auto;
+  object-fit: contain;
+}
 </style>

@@ -11,30 +11,15 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['data'],
-  data() {
-    return {
-    };
-  },
+<script setup>
+const props = defineProps(['data'])
 
-  created() {
-    // if (this.data) {
-    //   this.center.lat = this.data.latitude;
-    //   this.center.lng = this.data.longitude;
-    // }
-  },
-
-  methods: {
-    getImageMap() {
-      return 'https://maps.googleapis.com/maps/api/staticmap?center=' + this.data.latitude + ',' + this.data.longitude + '&zoom=10&size=200x120' + '&markers=color:red%7Clabel:C%7C' + this.data.latitude + ',' + this.data.longitude + '&key=' + process.env.MIX_GOOGLE_MAP_KEY;
-    }
-  }
-};
+const getImageMap = () => {
+  return 'https://maps.googleapis.com/maps/api/staticmap?center=' + props.data.latitude + ',' + props.data.longitude + '&zoom=10&size=200x120' + '&markers=color:red%7Clabel:C%7C' + props.data.latitude + ',' + props.data.longitude + '&key=' + process.env.MIX_GOOGLE_MAP_KEY
+}
 </script>
 <style lang="scss" scoped>
-::v-deep{
+:deep(){
 
   .location-title {
     font-weight: bold;

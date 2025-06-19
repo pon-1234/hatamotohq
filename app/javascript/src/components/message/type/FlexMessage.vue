@@ -3,27 +3,23 @@
     <div class="preview"><div v-html="html"></div></div>
   </div>
 </template>
-<script>
-import Util from '@/core/util';
+<script setup>
+import { ref, onMounted, nextTick } from 'vue'
+import Util from '@/core/util'
 
-export default {
-  props: ['html'],
-  data() {
-    return {
-      isLoading: false
-    };
-  },
+defineProps(['html'])
 
-  mounted() {
-    this.$nextTick(() => {
-      Util.addMouseScrollHorizontal($('.preview>div'));
-    });
-  }
-};
+const isLoading = ref(false)
+
+onMounted(() => {
+  nextTick(() => {
+    Util.addMouseScrollHorizontal($('.preview>div'))
+  })
+})
 </script>
 
 <style scoped lang="scss">
-  ::v-deep {
+  :deep() {
     .reservation-item {
       -webkit-box-flex: 0;
       flex: none;

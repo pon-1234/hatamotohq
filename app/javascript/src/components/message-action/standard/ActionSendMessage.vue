@@ -11,13 +11,12 @@
           placeholder="ラベルを入力してください"
           type="text"
           maxlength="12"
-          v-model.trim="value.label"
+          v-model.trim="data.label"
           class="w-100 form-control"
-          @keyup="changeValue"
-          v-validate="{ required: requiredLabel && showTitle }"
-          data-vv-as="ラベル"
+          @input="changeValue"
+          :class="{ 'is-invalid': labelError }"
         />
-        <error-message :message="errors.first(name + '_label')"></error-message>
+        <error-message :message="labelError"></error-message>
       </div>
     </div>
     <label class="w-100 mt-4">本文<required-mark /></label>
@@ -27,42 +26,96 @@
         placeholder="本文を入力してください"
         type="text"
         maxlength="300"
-        v-model.trim="value.text"
+        v-model.trim="data.text"
         class="w-100 form-control"
-        @keyup="changeValue"
-        v-validate="'required'"
-        data-vv-as="本文"
+        @input="changeValue"
+        :class="{ 'is-invalid': textError }"
       />
-      <error-message :message="errors.first(name + '_value')"></error-message>
+      <error-message :message="textError"></error-message>
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: Object,
-    name: {
-      type: String,
-      default: 'action'
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
-    },
-    requiredLabel: {
-      type: Boolean,
-      default: true
-    }
-  },
+<script setup>
+import { ref, reactive, watch } from 'vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-  methods: {
-    changeValue() {
-      this.$emit('input', this.value);
-    }
+  name: {
+    type: String,
+    default: 'action'
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const data = reactive({
+  label: props.modelValue?.label || '',
+  text: props.modelValue?.text || ''
+});
+
+const labelError = ref('');
+const textError = ref('');
+
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    data.label = newValue.label || '';
+    data.text = newValue.text || '';
+  }
+}, { deep: true });
+
+watch(() => data.label, () => {
+  validateLabel();
+});
+
+watch(() => data.text, () => {
+  validateText();
+});
+
+const validateLabel = () => {
+  if (props.requiredLabel && props.showTitle && !data.label) {
+    labelError.value = 'ラベルを入力してください。';
+  } else {
+    labelError.value = '';
   }
 };
+
+const validateText = () => {
+  if (!data.text) {
+    textError.value = '本文を入力してください。';
+  } else {
+    textError.value = '';
+  }
+};
+
+const changeValue = () => {
+  validateLabel();
+  validateText();
+  
+  emit('update:modelValue', {
+    ...props.modelValue,
+    label: data.label,
+    text: data.text
+  });
+};
+
+defineExpose({
+  validate: () => {
+    validateLabel();
+    validateText();
+    return !labelError.value && !textError.value;
+  }
+});
 </script>

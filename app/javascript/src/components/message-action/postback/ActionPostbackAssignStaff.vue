@@ -1,66 +1,69 @@
 <template>
   <div>
-    <staff-selection @select="changeValue" :selected="actionData.staff_id"></staff-selection>
+    <StaffSelection 
+      @select="changeValue" 
+      :selected="actionData.staff_id"
+    />
     <input
       :name="name + '_postback_staff_id'"
       v-model="content.staff_id"
       class="d-none"
-      v-validate="'required'"
-      data-vv-as="担当者"
+      required
     />
-    <error-message :message="errors.first(name + '_postback_staff_id')"></error-message>
+    <ErrorMessage v-if="errorMessage" :message="errorMessage" />
   </div>
 </template>
-<script>
 
-export default {
-  props: {
-    actionData: {
-      type: Object,
-      default: () => {
-        return {
-          text: ''
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
-  },
-  inject: ['parentValidator'],
-  data() {
-    return {
-      content: { staff_id: null, ...(_.cloneDeep(this.actionData)) }
-    };
-  },
+<script setup>
+import { ref, watch, computed } from 'vue';
+import StaffSelection from '../../common/StaffSelection.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 
-  watch: {
-    actionData: {
-      handler(val) {
-        this.content = _.cloneDeep(this.actionData);
-      },
-      deep: true
-    }
+// Props
+const props = defineProps({
+  actionData: {
+    type: Object,
+    default: () => ({
+      staff_id: null
+    })
   },
-
-  created() {
-    this.$validator = this.parentValidator;
-  },
-
-  methods: {
-    changeValue(staffId) {
-      this.content.staff_id = staffId;
-      this.$emit('input', { staff_id: staffId });
-    }
+  name: {
+    type: String,
+    default: 'postback_action'
   }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// State
+const content = ref({ 
+  staff_id: null, 
+  ...JSON.parse(JSON.stringify(props.actionData)) 
+});
+
+// Computed
+const errorMessage = computed(() => {
+  if (!content.value.staff_id) {
+    return '担当者は必須です';
+  }
+  return null;
+});
+
+// Methods
+const changeValue = (staffId) => {
+  content.value.staff_id = staffId;
+  emit('update:modelValue', { staff_id: staffId });
 };
+
+// Watch
+watch(() => props.actionData, (newVal) => {
+  content.value = JSON.parse(JSON.stringify(newVal));
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
-  li.multiselect__element {
-    display: block;
-  }
+:deep(li.multiselect__element) {
+  display: block;
 }
 </style>

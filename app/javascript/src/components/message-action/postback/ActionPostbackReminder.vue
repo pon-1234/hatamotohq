@@ -10,7 +10,7 @@
               :id="`${name}typeSet`"
               :name="`${name}_type`"
               value="set"
-              v-model="actionData.type"
+              v-model="localActionData.type"
               @change="onDataChanged()"
               class="custom-control-input"
             />
@@ -22,7 +22,7 @@
               :id="`${name}typeUnset`"
               :name="`${name}_type`"
               value="unset"
-              v-model="actionData.type"
+              v-model="localActionData.type"
               @change="onDataChanged()"
               class="custom-control-input"
             />
@@ -32,26 +32,25 @@
         <div class="mt-2 d-flex">
           <label class="fw-150">リマインダ選択</label>
           <div class="mw-200 mxw-400">
-            <div class="btn btn-secondary w-100" data-toggle="modal" :data-target="`#${name}_selectReminderModal`">
+            <div class="btn btn-secondary w-100" @click="showReminderModal = true">
               <span class="max-1-lines">{{
-                actionData.reminder.id ? actionData.reminder.name : "リマインダを選択する"
+                localActionData.reminder.id ? localActionData.reminder.name : "リマインダを選択する"
               }}</span>
             </div>
             <input
               type="hidden"
-              v-model="actionData.reminder.id"
+              v-model="localActionData.reminder.id"
               :name="name + '_reminder_id'"
-              v-validate="'required'"
-              data-vv-as="リマインダ"
+              :class="{ 'is-invalid': reminderError }"
             />
-            <error-message class="w-100" :message="errors.first(name + '_reminder_id')"></error-message>
+            <error-message class="w-100" :message="reminderError"></error-message>
           </div>
         </div>
-        <div class="mt-2 d-flex" v-if="actionData.type === 'set'">
+        <div class="mt-2 d-flex" v-if="localActionData.type === 'set'">
           <label class="fw-150">ゴール日</label>
           <div class="flex-grow-1">
             <datetime
-              v-model="actionData.goal"
+              v-model="localActionData.goal"
               :name="name + '_reminder_goal'"
               input-class="form-control"
               type="date"
@@ -59,71 +58,120 @@
               placeholder="日付を選択してください"
               :min-datetime="currentDate"
               value-zone="Asia/Tokyo"
-              v-validate="'required'"
-              data-vv-as="ゴール日"
               zone="Asia/Tokyo"
+              :class="{ 'is-invalid': goalError }"
             ></datetime>
-            <error-message :message="errors.first(name + '_reminder_goal')"></error-message>
+            <error-message :message="goalError"></error-message>
           </div>
         </div>
       </div>
     </div>
     <modal-select-reminder
-      :id="`${name}_selectReminderModal`"
+      v-model="showReminderModal"
       @selectReminder="onSelectReminder($event)"
     ></modal-select-reminder>
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, computed, watch } from 'vue';
 import moment from 'moment';
 import { Datetime } from 'vue-datetime';
+import ModalSelectReminder from '../../common/ModalSelectReminder.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 
-export default {
-  components: {
-    Datetime
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      type: 'set',
+      reminder: {
+        id: null,
+        name: null
+      },
+      goal: null
+    })
   },
-  props: {
-    actionData: {
-      type: Array,
-      default: () => {
-        return {
-          type: 'set', // or 'unset'
-          reminder: {
-            id: null,
-            name: null
-          },
-          goal: null
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
-  },
+  name: {
+    type: String,
+    default: 'postback_action'
+  }
+});
 
-  data() {
-    return {
-      currentDate: moment()
-        .tz('Asia/Tokyo')
-        .format()
-    };
-  },
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
-  },
+const emit = defineEmits(['update:modelValue']);
 
-  methods: {
-    onSelectReminder(reminder) {
-      this.actionData.reminder = _.pick(reminder, ['id', 'name']);
-      this.onDataChanged();
-    },
+const localActionData = reactive({
+  type: props.modelValue.type || 'set',
+  reminder: {
+    id: props.modelValue.reminder?.id || null,
+    name: props.modelValue.reminder?.name || null
+  },
+  goal: props.modelValue.goal || null
+});
 
-    onDataChanged() {
-      this.$emit('input', this.actionData);
-    }
+const showReminderModal = ref(false);
+const currentDate = moment().tz('Asia/Tokyo').format();
+
+const reminderError = ref('');
+const goalError = ref('');
+
+watch(() => props.modelValue, (newValue) => {
+  localActionData.type = newValue.type || 'set';
+  localActionData.reminder.id = newValue.reminder?.id || null;
+  localActionData.reminder.name = newValue.reminder?.name || null;
+  localActionData.goal = newValue.goal || null;
+}, { deep: true });
+
+watch(() => localActionData.reminder.id, () => {
+  validateReminder();
+});
+
+watch(() => localActionData.goal, () => {
+  validateGoal();
+});
+
+const validateReminder = () => {
+  if (!localActionData.reminder.id) {
+    reminderError.value = 'リマインダを入力してください。';
+  } else {
+    reminderError.value = '';
   }
 };
+
+const validateGoal = () => {
+  if (localActionData.type === 'set' && !localActionData.goal) {
+    goalError.value = 'ゴール日を入力してください。';
+  } else {
+    goalError.value = '';
+  }
+};
+
+const onSelectReminder = (reminder) => {
+  localActionData.reminder = {
+    id: reminder.id,
+    name: reminder.name
+  };
+  onDataChanged();
+};
+
+const onDataChanged = () => {
+  validateReminder();
+  validateGoal();
+  emit('update:modelValue', {
+    type: localActionData.type,
+    reminder: {
+      id: localActionData.reminder.id,
+      name: localActionData.reminder.name
+    },
+    goal: localActionData.goal
+  });
+};
+
+defineExpose({
+  validate: () => {
+    validateReminder();
+    validateGoal();
+    return !reminderError.value && (!goalError.value || localActionData.type === 'unset');
+  }
+});
 </script>

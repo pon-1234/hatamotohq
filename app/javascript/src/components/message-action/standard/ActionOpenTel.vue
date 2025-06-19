@@ -13,11 +13,10 @@
           maxlength="12"
           v-model.trim="label"
           class="w-100 form-control"
-          @keyup="onValueChanged"
-          data-vv-as="ラベル"
-          v-validate="{ required: requiredLabel && showTitle }"
+          @input="onValueChanged"
+          :class="{ 'is-invalid': labelError }"
         />
-        <error-message :message="errors.first(name + '_label')"></error-message>
+        <error-message :message="labelError"></error-message>
       </div>
     </div>
     <label class="mt4">
@@ -33,60 +32,106 @@
         placeholder="09044445555"
         class="form-control"
         @blur="onValueChanged"
-        data-vv-as="電話番号"
-        v-validate="'required|numeric|min:10|max:11'"
+        :class="{ 'is-invalid': phoneError }"
       />
-      <error-message :message="errors.first(name + '_value')"></error-message>
+      <error-message :message="phoneError"></error-message>
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: Object,
-    name: {
-      type: String,
-      default: 'action'
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
-    },
-    requiredLabel: {
-      type: Boolean,
-      default: true
-    }
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
+
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      label: null,
-      uri: null,
-      linkUri: null
-    };
+  name: {
+    type: String,
+    default: 'action'
   },
-
-  created() {
-    this.$validator = this.parentValidator;
-    const data = _.cloneDeep(this.value);
-    this.label = data.label;
-    this.uri = data.linkUri.replace('tel://', '');
-    this.linkUri = data.linkUri.replace('tel://', '');
+  showTitle: {
+    type: Boolean,
+    default: true
   },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  }
+});
 
-  methods: {
-    onValueChanged() {
-      const data = {
-        id: this.value.id,
-        label: this.label,
-        linkUri: `tel://${this.uri}`,
-        uri: `tel://${this.uri}`,
-        type: this.value.type
-      };
-      this.$emit('input', data);
-    }
+const emit = defineEmits(['update:modelValue']);
+
+const label = ref('');
+const uri = ref('');
+const labelError = ref('');
+const phoneError = ref('');
+
+onMounted(() => {
+  if (props.modelValue) {
+    label.value = props.modelValue.label || '';
+    const linkUri = props.modelValue.linkUri || props.modelValue.uri || '';
+    uri.value = linkUri.replace('tel://', '');
+  }
+});
+
+watch(() => props.modelValue, (newValue) => {
+  if (newValue) {
+    label.value = newValue.label || '';
+    const linkUri = newValue.linkUri || newValue.uri || '';
+    uri.value = linkUri.replace('tel://', '');
+  }
+}, { deep: true });
+
+watch(label, () => {
+  validateLabel();
+});
+
+watch(uri, () => {
+  validatePhone();
+});
+
+const validateLabel = () => {
+  if (props.requiredLabel && props.showTitle && !label.value) {
+    labelError.value = 'ラベルを入力してください。';
+  } else {
+    labelError.value = '';
   }
 };
+
+const validatePhone = () => {
+  if (!uri.value) {
+    phoneError.value = '電話番号を入力してください。';
+  } else if (!/^\d+$/.test(uri.value)) {
+    phoneError.value = '電話番号は数値で入力してください。';
+  } else if (uri.value.length < 10 || uri.value.length > 11) {
+    phoneError.value = '電話番号は10〜11桁で入力してください。';
+  } else {
+    phoneError.value = '';
+  }
+};
+
+const onValueChanged = () => {
+  validateLabel();
+  validatePhone();
+  
+  const data = {
+    id: props.modelValue.id,
+    label: label.value,
+    linkUri: `tel://${uri.value}`,
+    uri: `tel://${uri.value}`,
+    type: props.modelValue.type
+  };
+  emit('update:modelValue', data);
+};
+
+defineExpose({
+  validate: () => {
+    validateLabel();
+    validatePhone();
+    return !labelError.value && !phoneError.value;
+  }
+});
 </script>

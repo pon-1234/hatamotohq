@@ -45,48 +45,45 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState, mapActions } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
-export default {
-  props: ['id'],
-  data() {
-    return {
-      animation: false
-    };
-  },
-  computed: {
-    ...mapState('global', {
-      stickers: state => state.stickers
-    })
-  },
-  methods: {
-    ...mapActions('global', ['getStickers']),
+const props = defineProps(['id'])
+const emit = defineEmits(['input'])
 
-    changePackageId(option) {
-      this.animation = option.animation;
-      this.getStickers({ packageId: option.packageId });
-    },
+const store = useStore()
+const stickerSelected = ref(null)
+const animation = ref(false)
 
-    selectSticker(sticker) {
-      // emit sticker
-      const data = {
-        packageId: sticker.package_id,
-        stickerId: sticker.line_emoji_id
-      };
-      this.$emit('input', data);
-    },
+const stickers = computed(() => store.state.global.stickers)
 
-    reset() {
-      this.$refs.stickerSelected.defaultActive();
-      this.getStickers({ packageId: null });
-    }
+const changePackageId = (option) => {
+  animation.value = option.animation
+  store.dispatch('global/getStickers', { packageId: option.packageId })
+}
+
+const selectSticker = (sticker) => {
+  // emit sticker
+  const data = {
+    packageId: sticker.package_id,
+    stickerId: sticker.line_emoji_id
   }
-};
+  emit('input', data)
+}
+
+const reset = () => {
+  stickerSelected.value.defaultActive()
+  store.dispatch('global/getStickers', { packageId: null })
+}
+
+defineExpose({
+  reset
+})
 </script>
 
 <style  lang="scss"  scoped>
-  ::v-deep {
+  :deep() {
     .sticker-picker {
       margin: -15px !important;
     }

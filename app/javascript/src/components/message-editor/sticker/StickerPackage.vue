@@ -8,24 +8,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['data'],
-  methods: {
-    selectPackageId() {
-      this.$emit('input', this.data.packageId);
-    },
-    getClass() {
-      let className = 'sticker-nav';
-      if (this.data.active) {
-        className += ' active';
-      }
-      if (this.data.animation) {
-        className += ' sticker-nav-animation';
-      }
+<script setup>
+const props = defineProps(['data'])
+const emit = defineEmits(['input'])
 
-      return className;
-    }
+const selectPackageId = () => {
+  emit('input', props.data.packageId)
+}
+
+const getClass = () => {
+  let className = 'sticker-nav'
+  if (props.data.active) {
+    className += ' active'
   }
-};
+  if (props.data.animation) {
+    className += ' sticker-nav-animation'
+  }
+
+  return className
+}
 </script>

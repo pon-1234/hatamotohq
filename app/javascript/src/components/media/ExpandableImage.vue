@@ -5,45 +5,42 @@
     </div>
   </div>
 </template>
-<script>
-import 'viewerjs/dist/viewer.css';
-import Viewer from 'v-viewer';
-import Vue from 'vue';
-Vue.use(Viewer);
+<script setup>
+import { ref, computed } from 'vue'
+import 'viewerjs/dist/viewer.css'
 
-export default {
-  props: {
-    src: {
-      type: String,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      options: {
-        navbar: false,
-        movable: false,
-        zoomable: false,
-        toolbar: {
-          zoomIn: 1,
-          zoomOut: 1,
-          oneToOne: 1,
-          reset: 0,
-          prev: 0,
-          play: {
-            show: 0,
-            size: 'large'
-          },
-          next: 0,
-          rotateLeft: 1,
-          rotateRight: 1,
-          flipHorizontal: 1,
-          flipVertical: 1
-        }
-      }
-    };
+const props = defineProps({
+  src: {
+    type: String,
+    default: ''
   }
-};
+})
+
+const options = ref({
+  navbar: false,
+  movable: false,
+  zoomable: false,
+  toolbar: {
+    zoomIn: 1,
+    zoomOut: 1,
+    oneToOne: 1,
+    reset: 0,
+    prev: 0,
+    play: {
+      show: 0,
+      size: 'large'
+    },
+    next: 0,
+    rotateLeft: 1,
+    rotateRight: 1,
+    flipHorizontal: 1,
+    flipVertical: 1
+  }
+})
+
+const isMobile = computed(() => {
+  return window.innerWidth <= 768
+})
 </script>
 <style lang="scss" scoped>
 .bg-position-center {

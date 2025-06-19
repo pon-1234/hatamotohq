@@ -60,76 +60,66 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState, mapActions, mapMutations } from 'vuex';
-import Util from '@/core/util';
-export default {
-  props: {
-    tag: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      rootUrl: process.env.MIX_ROOT_PATH,
-      loading: false,
-      avatarImgObj: {
-        src: '',
-        error: '/img/no-image-profile.png',
-        loading: '/images/loading.gif'
-      }
-    };
-  },
+<script setup>
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
 
-  created() {
-    this.avatarImgObj.src = this.friend ? this.friend.line_picture_url : '';
-  },
-
-  watch: {
-    tag: {
-      handler() {
-        // Handle tag changed
-        this.resetFriends();
-        // Show all friends, included locked, invisible, blocked friend
-        this.setQueryParam({ tags_id_in: this.tag.id, visible_eq: null, locked_eq: null, status_eq: null });
-        this.loadPage();
-      }
-    }
-  },
-
-  computed: {
-    ...mapState('friend', {
-      queryParams: state => state.queryParams,
-      friends: state => state.friends,
-      totalRows: state => state.totalRows,
-      perPage: state => state.perPage
-    }),
-
-    curPage: {
-      get() {
-        return this.queryParams.page;
-      },
-      set(value) {
-        this.setQueryParam({ page: value });
-      }
-    }
-  },
-  methods: {
-    ...mapMutations('friend', ['resetFriends', 'setQueryParam']),
-    ...mapActions('friend', ['getFriends']),
-
-    async loadPage() {
-      this.$nextTick(async() => {
-        this.loading = true;
-        await this.getFriends();
-        this.loading = false;
-      });
-    },
-
-    formattedDatetime(time) {
-      return Util.formattedDatetime(time);
-    }
+const props = defineProps({
+  tag: {
+    type: Object,
+    required: true
   }
-};
+})
+
+const store = useStore()
+
+const rootUrl = process.env.MIX_ROOT_PATH
+const loading = ref(false)
+const avatarImgObj = ref({
+  src: '',
+  error: '/img/no-image-profile.png',
+  loading: '/images/loading.gif'
+})
+
+const queryParams = computed(() => store.state.friend.queryParams)
+const friends = computed(() => store.state.friend.friends)
+const totalRows = computed(() => store.state.friend.totalRows)
+const perPage = computed(() => store.state.friend.perPage)
+
+const curPage = computed({
+  get() {
+    return queryParams.value.page
+  },
+  set(value) {
+    setQueryParam({ page: value })
+  }
+})
+
+const resetFriends = () => store.commit('friend/resetFriends')
+const setQueryParam = (payload) => store.commit('friend/setQueryParam', payload)
+const getFriends = () => store.dispatch('friend/getFriends')
+
+onMounted(() => {
+  avatarImgObj.value.src = ''
+})
+
+watch(() => props.tag, () => {
+  // Handle tag changed
+  resetFriends()
+  // Show all friends, included locked, invisible, blocked friend
+  setQueryParam({ tags_id_in: props.tag.id, visible_eq: null, locked_eq: null, status_eq: null })
+  loadPage()
+})
+
+const loadPage = async () => {
+  await nextTick()
+  loading.value = true
+  await getFriends()
+  loading.value = false
+}
+
+const formattedDatetime = (time) => {
+  return Util.formattedDatetime(time)
+}
 </script>

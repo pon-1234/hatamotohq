@@ -7,15 +7,14 @@
     </ul>
   </div>
 </template>
-<script>
-export default {
-  methods: {
-    onSearch() {
-      this.$emit('input');
-    },
-    openModal() {
-      $('#TalkModalSearch').modal('show');
-    }
-  }
-};
+<script setup>
+const emit = defineEmits(['input'])
+
+const onSearch = () => {
+  emit('input')
+}
+
+const openModal = () => {
+  $('#TalkModalSearch').modal('show')
+}
 </script>

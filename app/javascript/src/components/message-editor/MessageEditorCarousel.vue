@@ -44,10 +44,9 @@
                   class="form-control"
                   v-model.trim="column.title"
                   maxlength="40"
-                  v-validate="{ required: requiredTitle }"
                   data-vv-as="タイトル"
                 />
-                <error-message :message="errors.first('carousel-title' + indexColumn)"></error-message>
+                <error-message :message="errors.first('carousel-title' + indexColumn)" />
               </div>
               <div class="form-group">
                 <label>パネル{{ selected + 1 }}の本文<required-mark></required-mark></label>
@@ -57,11 +56,10 @@
                   class="form-control"
                   v-model="column.text"
                   maxlength="60"
-                  v-validate="'required'"
                   data-vv-as="本文"
                 >
                 </textarea>
-                <error-message :message="errors.first('carousel-text' + indexColumn)"></error-message>
+                <error-message :message="errors.first('carousel-text' + indexColumn)" />
               </div>
             </div>
             <div class="col-sm-7">
@@ -183,212 +181,208 @@
     ></modal-select-media>
   </div>
 </template>
-<script>
-import ErrorMessage from '../common/ErrorMessage.vue';
-import RequiredMark from '../common/RequiredMark.vue';
-import ToolTip from '../common/ToolTip.vue';
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { TemplateMessageType } from '@/core/constant'
+import { useActionMessage } from '@/composables/useConstants'
+import ErrorMessage from '../common/ErrorMessage.vue'
+import RequiredMark from '../common/RequiredMark.vue'
+import ToolTip from '../common/ToolTip.vue'
 
-export default {
-  components: { RequiredMark, ErrorMessage, ToolTip },
-  props: ['data', 'indexParent'],
-  inject: ['parentValidator'],
-  data() {
-    return {
-      requiredTitle: true,
-      selected: 0,
-      selectedAction: 0,
-      errorMessageUploadFile: '',
-      isThumbnail: false,
-      messageData: {
-        type: this.TemplateMessageType.Carousel,
-        columns: [
-          {
-            thumbnailImageUrl: '',
-            title: '',
-            text: '',
-            actions: [this.ActionMessage.default]
-          }
-        ]
-      }
-    };
-  },
+const props = defineProps({
+  data: Object,
+  indexParent: Number
+})
 
-  created() {
-    this.$validator = this.parentValidator;
-    if (this.data) {
-      Object.assign(this.messageData, this.data);
-      this.$emit('input', this.messageData);
+const emit = defineEmits(['input'])
+
+const actionMessage = useActionMessage()
+
+const requiredTitle = ref(true)
+const selected = ref(0)
+const selectedAction = ref(0)
+const errorMessageUploadFile = ref('')
+const isThumbnail = ref(false)
+const messageData = ref({
+  type: TemplateMessageType.Carousel,
+  columns: [
+    {
+      thumbnailImageUrl: '',
+      title: '',
+      text: '',
+      actions: [actionMessage.default]
     }
-  },
-  watch: {
-    messageData: {
-      handler(val) {
-        const value = _.cloneDeep(val);
-        this.isThumbnail = value.columns.find(item => item.thumbnailImageUrl !== '');
-        if (!this.isThumbnail) {
-          value.columns.forEach(item => {
-            delete item.thumbnailImageUrl;
-          });
-        }
-        // Have to set title for all column if one column have set title
-        this.requiredTitle = !!val.columns.find(item => item.title);
-        this.$emit('input', value);
-      },
-      deep: true
-    }
-  },
-  methods: {
-    addMoreColumn(index) {
-      if (this.messageData.columns.length > 9) return;
-      const option = {
-        thumbnailImageUrl: '',
-        title: '',
-        text: '',
-        actions: []
-      };
+  ]
+})
 
-      this.messageData.columns[0].actions.forEach(item => {
-        option.actions.push({ ...this.ActionMessage.default, label: '' });
-      });
+const errors = ref({ items: [], first: () => null })
 
-      this.messageData.columns.push(option);
-      this.selected = this.messageData.columns.length - 1;
-      console.log('selected tab = ', this.selected);
-    },
+onMounted(() => {
+  if (props.data) {
+    Object.assign(messageData.value, props.data)
+    emit('input', messageData.value)
+  }
+})
 
-    removeColumn(index) {
-      this.messageData.columns.splice(index, 1);
+watch(messageData, (val) => {
+  const value = JSON.parse(JSON.stringify(val))
+  isThumbnail.value = value.columns.find(item => item.thumbnailImageUrl !== '')
+  if (!isThumbnail.value) {
+    value.columns.forEach(item => {
+      delete item.thumbnailImageUrl
+    })
+  }
+  // Have to set title for all column if one column have set title
+  requiredTitle.value = !!val.columns.find(item => item.title)
+  emit('input', value)
+}, { deep: true })
+const addMoreColumn = (index) => {
+  if (messageData.value.columns.length > 9) return
+  const option = {
+    thumbnailImageUrl: '',
+    title: '',
+    text: '',
+    actions: []
+  }
 
-      if (index === 0) {
-        this.selected = index;
-      } else if (this.selected === this.messageData.columns.length) {
-        this.selected = index - 1;
-      }
-    },
+  messageData.value.columns[0].actions.forEach(item => {
+    option.actions.push({ ...actionMessage.default, label: '' })
+  })
 
-    copyColumn(index, column) {
-      if (this.messageData.columns.length > 9) return;
-      // eslint-disable-next-line no-undef
-      this.messageData.columns.splice(index + 1, 0, _.cloneDeep(column));
-    },
+  messageData.value.columns.push(option)
+  selected.value = messageData.value.columns.length - 1
+  console.log('selected tab = ', selected.value)
+}
 
-    moveRightColumn(index) {
-      const option = this.messageData.columns[index];
-      if (this.messageData.columns[index + 1]) {
-        this.messageData.columns[index] = this.messageData.columns.splice(index + 1, 1, option)[0];
-        if (this.selected === index) {
-          this.selected += 1;
-        }
-      }
-    },
+const removeColumn = (index) => {
+  messageData.value.columns.splice(index, 1)
 
-    moveLeftColumn(index) {
-      const option = this.messageData.columns[index];
-      if (this.messageData.columns[index - 1]) {
-        this.messageData.columns[index] = this.messageData.columns.splice(index - 1, 1, option)[0];
+  if (index === 0) {
+    selected.value = index
+  } else if (selected.value === messageData.value.columns.length) {
+    selected.value = index - 1
+  }
+}
 
-        if (this.selected === index) {
-          this.selected -= 1;
-        }
-      }
-    },
+const copyColumn = (index, column) => {
+  if (messageData.value.columns.length > 9) return
+  messageData.value.columns.splice(index + 1, 0, JSON.parse(JSON.stringify(column)))
+}
 
-    changeSelected(index) {
-      this.selected = index;
-    },
-
-    uploadThumb(value) {
-      this.messageData.columns[this.selected].thumbnailImageUrl = value.url;
-      this.$emit('input', this.messageData);
-
-      this.isThumbnail = true;
-    },
-
-    removeCurrentThumb() {
-      this.messageData.columns[this.selected].thumbnailImageUrl = '';
-      console.log('this.selected', this.selected);
-      this.$emit('input', this.messageData);
-    },
-
-    cloneToAll() {
-      this.messageData.columns.forEach(item => {
-        item.thumbnailImageUrl = this.messageData.columns[this.selected].thumbnailImageUrl;
-      });
-    },
-
-    removeAllThumb() {
-      this.messageData.columns.forEach(item => {
-        item.thumbnailImageUrl = '';
-      });
-    },
-
-    changeSelectedAction(index, value) {
-      this.messageData.columns[this.selected].actions.splice(index, 1, value);
-    },
-
-    changeActionColumn(indexColumn, index, data) {
-      this.messageData.columns[indexColumn].actions.splice(index, 1, data);
-    },
-
-    moveTopAction(index) {
-      const option = this.messageData.columns[this.selected].actions[index];
-      if (this.messageData.columns[this.selected].actions[index - 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
-          index - 1,
-          1,
-          option
-        )[0];
-
-        if (this.selectedAction === index) {
-          this.selectedAction -= 1;
-        }
-      }
-    },
-
-    moveBottomAction(index) {
-      const option = this.messageData.columns[this.selected].actions[index];
-      if (this.messageData.columns[this.selected].actions[index + 1]) {
-        this.messageData.columns[this.selected].actions[index] = this.messageData.columns[this.selected].actions.splice(
-          index + 1,
-          1,
-          option
-        )[0];
-        if (this.selectedAction === index) {
-          this.selectedAction += 1;
-        }
-      }
-    },
-
-    copyCurrentAction(index) {
-      if (this.messageData.columns[this.selected].actions.length < 3) {
-        this.messageData.columns.forEach(item => {
-          // eslint-disable-next-line no-undef
-          item.actions.splice(index + 1, 0, _.cloneDeep(item.actions[index]));
-        });
-      }
-    },
-
-    removeCurrentAction(index) {
-      this.messageData.columns.forEach(item => {
-        item.actions.splice(index, 1);
-      });
-
-      if (this.selectedAction === this.messageData.columns[this.selected].actions.length) {
-        this.selectedAction -= 1;
-      }
-    },
-
-    addMoreAction() {
-      this.messageData.columns.forEach(item => {
-        item.actions.push(this.ActionMessage.default);
-      });
-    },
-
-    changeActiveAction(index) {
-      this.selectedAction = index;
+const moveRightColumn = (index) => {
+  const option = messageData.value.columns[index]
+  if (messageData.value.columns[index + 1]) {
+    messageData.value.columns[index] = messageData.value.columns.splice(index + 1, 1, option)[0]
+    if (selected.value === index) {
+      selected.value += 1
     }
   }
-};
+}
+
+const moveLeftColumn = (index) => {
+  const option = messageData.value.columns[index]
+  if (messageData.value.columns[index - 1]) {
+    messageData.value.columns[index] = messageData.value.columns.splice(index - 1, 1, option)[0]
+
+    if (selected.value === index) {
+      selected.value -= 1
+    }
+  }
+}
+
+const changeSelected = (index) => {
+  selected.value = index
+}
+
+const uploadThumb = (value) => {
+  messageData.value.columns[selected.value].thumbnailImageUrl = value.url
+  emit('input', messageData.value)
+
+  isThumbnail.value = true
+}
+
+const removeCurrentThumb = () => {
+  messageData.value.columns[selected.value].thumbnailImageUrl = ''
+  console.log('selected.value', selected.value)
+  emit('input', messageData.value)
+}
+
+const cloneToAll = () => {
+  messageData.value.columns.forEach(item => {
+    item.thumbnailImageUrl = messageData.value.columns[selected.value].thumbnailImageUrl
+  })
+}
+
+const removeAllThumb = () => {
+  messageData.value.columns.forEach(item => {
+    item.thumbnailImageUrl = ''
+  })
+}
+
+const changeSelectedAction = (index, value) => {
+  messageData.value.columns[selected.value].actions.splice(index, 1, value)
+}
+
+const changeActionColumn = (indexColumn, index, data) => {
+  messageData.value.columns[indexColumn].actions.splice(index, 1, data)
+}
+
+const moveTopAction = (index) => {
+  const option = messageData.value.columns[selected.value].actions[index]
+  if (messageData.value.columns[selected.value].actions[index - 1]) {
+    messageData.value.columns[selected.value].actions[index] = messageData.value.columns[selected.value].actions.splice(
+      index - 1,
+      1,
+      option
+    )[0]
+
+    if (selectedAction.value === index) {
+      selectedAction.value -= 1
+    }
+  }
+}
+
+const moveBottomAction = (index) => {
+  const option = messageData.value.columns[selected.value].actions[index]
+  if (messageData.value.columns[selected.value].actions[index + 1]) {
+    messageData.value.columns[selected.value].actions[index] = messageData.value.columns[selected.value].actions.splice(
+      index + 1,
+      1,
+      option
+    )[0]
+    if (selectedAction.value === index) {
+      selectedAction.value += 1
+    }
+  }
+}
+
+const copyCurrentAction = (index) => {
+  if (messageData.value.columns[selected.value].actions.length < 3) {
+    messageData.value.columns.forEach(item => {
+      item.actions.splice(index + 1, 0, JSON.parse(JSON.stringify(item.actions[index])))
+    })
+  }
+}
+
+const removeCurrentAction = (index) => {
+  messageData.value.columns.forEach(item => {
+    item.actions.splice(index, 1)
+  })
+
+  if (selectedAction.value === messageData.value.columns[selected.value].actions.length) {
+    selectedAction.value -= 1
+  }
+}
+
+const addMoreAction = () => {
+  messageData.value.columns.forEach(item => {
+    item.actions.push({ ...actionMessage.default })
+  })
+}
+
+const changeActiveAction = (index) => {
+  selectedAction.value = index
+}
 </script>
 <style lang="scss" scoped>
   .nav-stacked > li {

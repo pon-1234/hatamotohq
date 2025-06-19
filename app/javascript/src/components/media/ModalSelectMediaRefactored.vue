@@ -31,68 +31,59 @@
   </base-modal>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-import BaseModal from '../base/BaseModal.vue';
-import MediaUpload from './MediaUpload.vue';
-import MediaIndex from './MediaIndex.vue';
+<script setup>
+import { ref, computed } from 'vue'
+import BaseModal from '../base/BaseModal.vue'
+import MediaUpload from './MediaUpload.vue'
+import MediaIndex from './MediaIndex.vue'
 
-export default {
-  name: 'ModalSelectMediaRefactored',
-  components: {
-    BaseModal,
-    MediaUpload,
-    MediaIndex
+const props = defineProps({
+  types: {
+    type: Array,
+    default: () => ['image', 'audio', 'video']
   },
-  props: {
-    types: {
-      type: Array,
-      default: () => ['image', 'audio', 'video']
-    },
-    filterable: {
-      type: Boolean,
-      default: true
-    },
-    id: {
-      type: String,
-      default: 'modal-select-media'
-    }
+  filterable: {
+    type: Boolean,
+    default: true
   },
-  data() {
-    return {
-      visible: false
-    };
-  },
-  computed: {
-    modalId() {
-      return this.id || 'modal-select-media';
-    }
-  },
-  methods: {
-    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
-
-    show() {
-      this.$refs.modal.show();
-    },
-
-    hide() {
-      this.$refs.modal.hide();
-    },
-
-    selectMedia(media) {
-      this.$emit('select', media);
-      this.hide();
-    },
-
-    handleShow() {
-      this.visible = true;
-    },
-
-    handleHide() {
-      this.visible = false;
-    }
+  id: {
+    type: String,
+    default: 'modal-select-media'
   }
-};
+})
+
+const emit = defineEmits(['select'])
+
+const visible = ref(false)
+const modal = ref(null)
+
+const modalId = computed(() => props.id || 'modal-select-media')
+
+const show = () => {
+  modal.value?.show()
+}
+
+const hide = () => {
+  modal.value?.hide()
+}
+
+const selectMedia = (media) => {
+  emit('select', media)
+  hide()
+}
+
+const handleShow = () => {
+  visible.value = true
+}
+
+const handleHide = () => {
+  visible.value = false
+}
+
+defineExpose({
+  show,
+  hide
+})
 </script>
 
 <style scoped>

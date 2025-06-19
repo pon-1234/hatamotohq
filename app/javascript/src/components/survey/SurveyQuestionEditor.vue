@@ -137,148 +137,159 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['data', 'name'],
-  data() {
-    return {
-      contentKey: 0,
-      maxObject: 50,
-      objectLists: this.data || [
-        {
-          editing: true,
-          required: false,
-          type: 'text',
-          content: null
-        }
-      ]
-    };
-  },
-  inject: ['parentValidator'],
+<script setup>
+import { ref, onMounted, watch, inject } from 'vue'
 
-  mounted() {
-    this.$validator = this.parentValidator;
-    this.syncObj();
+const props = defineProps({
+  data: {
+    type: Array,
+    default: null
   },
-
-  watch: {
-    errors: {
-      deep: true,
-      handler(val) {
-        this.objectLists.forEach((object, index) => {
-          const fieldText = val.items.find(item => {
-            return (
-              item.field.includes(this.name + '-text-' + index) ||
-              item.field.includes(this.name + '-textarea-' + index) ||
-              item.field.includes(this.name + '-radio-' + index) ||
-              item.field.includes(this.name + '-checkbox-' + index) ||
-              item.field.includes(this.name + '-dropdown-' + index) ||
-              item.field.includes(this.name + '-date-' + index) ||
-              item.field.includes(this.name + '-image-' + index) ||
-              item.field.includes(this.name + '-pdf-' + index)
-            );
-          });
-          if (fieldText) {
-            object.editing = true;
-          }
-        });
-      }
-    }
-  },
-
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
-    syncObj() {
-      this.forceRerender();
-      this.$emit('input', this.objectLists);
-    },
-    addNewObject() {
-      this.objectLists.push({
-        editing: true,
-        required: false,
-        type: 'text',
-        content: null
-      });
-      this.syncObj();
-    },
-    copyObject(index) {
-      const newObject = _.cloneDeep(this.objectLists[index]);
-      newObject.id = null;
-      this.objectLists.push(newObject);
-      this.syncObj();
-      var newSurvey = $('.survey:last')[0];
-      newSurvey.scrollIntoView({
-        behavior: 'smooth'
-      });
-    },
-    removeObject(index) {
-      this.objectLists.splice(index, 1);
-      this.syncObj();
-    },
-    moveUpObject(index) {
-      if (index > 0) {
-        const to = index - 1;
-        this.objectLists.splice(to, 0, this.objectLists.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    },
-    moveDownObject(index) {
-      if (index < this.objectLists.length) {
-        const to = index + 1;
-        this.objectLists.splice(to, 0, this.objectLists.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    }
+  name: {
+    type: String,
+    required: true
   }
-};
+})
+
+const emit = defineEmits(['input'])
+
+const parentValidator = inject('parentValidator', null)
+
+const contentKey = ref(0)
+const maxObject = 50
+const objectLists = ref(props.data || [
+  {
+    editing: true,
+    required: false,
+    type: 'text',
+    content: null
+  }
+])
+
+// For vee-validate compatibility
+const $validator = ref(null)
+const errors = ref({ items: [] })
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const syncObj = () => {
+  forceRerender()
+  emit('input', objectLists.value)
+}
+
+const addNewObject = () => {
+  objectLists.value.push({
+    editing: true,
+    required: false,
+    type: 'text',
+    content: null
+  })
+  syncObj()
+}
+
+const copyObject = (index) => {
+  const newObject = JSON.parse(JSON.stringify(objectLists.value[index]))
+  newObject.id = null
+  objectLists.value.push(newObject)
+  syncObj()
+  const newSurvey = $('.survey:last')[0]
+  newSurvey.scrollIntoView({
+    behavior: 'smooth'
+  })
+}
+
+const removeObject = (index) => {
+  objectLists.value.splice(index, 1)
+  syncObj()
+}
+
+const moveUpObject = (index) => {
+  if (index > 0) {
+    const to = index - 1
+    objectLists.value.splice(to, 0, objectLists.value.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+const moveDownObject = (index) => {
+  if (index < objectLists.value.length) {
+    const to = index + 1
+    objectLists.value.splice(to, 0, objectLists.value.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+// Watch for validation errors
+watch(errors, (val) => {
+  objectLists.value.forEach((object, index) => {
+    const fieldText = val.items.find(item => {
+      return (
+        item.field.includes(props.name + '-text-' + index) ||
+        item.field.includes(props.name + '-textarea-' + index) ||
+        item.field.includes(props.name + '-radio-' + index) ||
+        item.field.includes(props.name + '-checkbox-' + index) ||
+        item.field.includes(props.name + '-dropdown-' + index) ||
+        item.field.includes(props.name + '-date-' + index) ||
+        item.field.includes(props.name + '-image-' + index) ||
+        item.field.includes(props.name + '-pdf-' + index)
+      )
+    })
+    if (fieldText) {
+      object.editing = true
+    }
+  })
+}, { deep: true })
+
+onMounted(() => {
+  $validator.value = parentValidator
+  syncObj()
+})
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
-    .survey {
-      border: 1px solid #dedede;
-      border-radius: 4px;
-      padding: 10px;
-    }
-    .survey-content-text {
-      width: 350px;
-      max-width: 400px;
-      vertical-align: middle;
-      margin: auto 0;
-      word-break: break-word;
-      font-size: 14px;
-    }
-    .mt10 {
-      margin-top: 10px !important;
-    }
-    .mr10 {
-      margin-right: 10px !important;
-    }
-    .btn-tool {
-      cursor: pointer;
-      width: 120px;
-      vertical-align: middle;
-      font-weight: normal !important;
-      text-align: center;
-      max-height: 36px;
-    }
-    .btn-tool > label {
-      font-weight: normal;
-      margin: 0;
-    }
-    .btn-tool input {
-      margin: auto;
-    }
-    .btn-copy {
-      padding: 10px 15px;
-    }
+  :deep(.survey) {
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  :deep(.survey-content-text) {
+    width: 350px;
+    max-width: 400px;
+    vertical-align: middle;
+    margin: auto 0;
+    word-break: break-word;
+    font-size: 14px;
+  }
+  .mt10 {
+    margin-top: 10px !important;
+  }
+  .mr10 {
+    margin-right: 10px !important;
+  }
+  .btn-tool {
+    cursor: pointer;
+    width: 120px;
+    vertical-align: middle;
+    font-weight: normal !important;
+    text-align: center;
+    max-height: 36px;
+  }
+  .btn-tool > label {
+    font-weight: normal;
+    margin: 0;
+  }
+  .btn-tool input {
+    margin: auto;
+  }
+  .btn-copy {
+    padding: 10px 15px;
+  }
 
-    .survey-title {
-      margin: auto 10px auto 0;
-      vertical-align: middle;
-    }
+  .survey-title {
+    margin: auto 10px auto 0;
+    vertical-align: middle;
   }
 </style>
 <style>

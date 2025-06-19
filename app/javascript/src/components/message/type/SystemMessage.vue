@@ -7,23 +7,20 @@
   </div>
 </template>
 
-<script>
-import Util from '@/core/util';
+<script setup>
+import { computed } from 'vue'
+import Util from '@/core/util'
 
-export default {
-  props: {
-    message: {
-      type: Object,
-      required: true
-    }
-  },
-
-  computed: {
-    readableTime() {
-      return Util.formattedTime(this.message.timestamp);
-    }
+const props = defineProps({
+  message: {
+    type: Object,
+    required: true
   }
-};
+})
+
+const readableTime = computed(() => {
+  return Util.formattedTime(props.message.timestamp)
+})
 </script>
 
 <style lang="scss" scoped>

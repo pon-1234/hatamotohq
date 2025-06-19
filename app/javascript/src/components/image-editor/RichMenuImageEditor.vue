@@ -714,150 +714,146 @@
     </div>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, reactive, watch, onMounted } from 'vue'
 
-export default {
-  props: {
-    editor: {
-      type: String,
-      default: 'richmenu'
-    },
-    templateId: {
-      type: Number,
-      default: 201
+const props = defineProps({
+  editor: {
+    type: String,
+    default: 'richmenu'
+  },
+  templateId: {
+    type: Number,
+    default: 201
+  }
+})
+const emit = defineEmits(['save'])
+
+const RichMenuBounds = window.RichMenuBounds || {}
+const ImageMapBounds = window.ImageMapBounds || {}
+
+const bounds = ref(RichMenuBounds[props.templateId])
+const currentData = ref({})
+const selectIndex = ref(0)
+const objectLists = ref([])
+const rendering = ref(true)
+const width = ref(833)
+const height = ref(833)
+
+onMounted(() => {
+  if (props.editor === 'imagemap') {
+    width.value = 346
+    height.value = 520
+    bounds.value = ImageMapBounds[props.templateId]
+  }
+  setup()
+})
+
+watch(() => props.templateId, (val) => {
+  if (props.editor === 'imagemap') {
+    bounds.value = ImageMapBounds[val]
+  } else {
+    bounds.value = RichMenuBounds[val]
+  }
+  setup()
+})
+
+const styleAuto = () => {
+  return props.editor === 'imagemap' ? 'height: 50px;' : ''
+}
+
+const setup = () => {
+  objectLists.value = []
+  if (bounds.value) {
+    for (const [index, bound] of bounds.value.entries()) {
+      objectLists.value.push({
+        name: 'obj_' + index,
+        crop_type_index: bound.crop_index,
+        bound: {
+          x: bound.x,
+          y: bound.y,
+          w: bound.width,
+          h: bound.height
+        },
+        image: {
+          x: 0,
+          y: 0,
+          w: 0,
+          h: 0,
+          zoom: 1,
+          data: null
+        },
+        cache: null
+      })
     }
-  },
-  data() {
-    return {
-      bounds: this.RichMenuBounds[this.templateId],
-      currentData: {},
-      selectIndex: 0,
-      objectLists: [],
-      rendering: true,
-      width: 833,
-      height: 833
-    };
-  },
+  }
+  chooseActive(0)
+}
 
-  created() {
-    if (this.editor === 'imagemap') {
-      this.width = 346;
-      this.height = 520;
-      this.bounds = this.ImageMapBounds[this.templateId];
-    }
-    this.setup();
-  },
+const chooseActive = (index = 0) => {
+  const object = objectLists.value[index]
+  selectIndex.value = index
 
-  watch: {
-    templateId(val) {
-      if (this.editor === 'imagemap') {
-        this.bounds = this.ImageMapBounds[val];
-      } else {
-        this.bounds = this.RichMenuBounds[val];
-      }
-      this.setup();
-    }
-  },
+  $('.preview-area.active').removeClass('active')
+  $('#' + object.name).addClass('active')
+}
 
-  methods: {
-    styleAuto() {
-      return this.editor === 'imagemap' ? 'height: 50px;' : '';
-    },
-    setup() {
-      this.objectLists = [];
-      if (this.bounds) {
-        for (const [index, bound] of this.bounds.entries()) {
-          this.objectLists.push({
-            name: 'obj_' + index,
-            crop_type_index: bound.crop_index,
-            bound: {
-              x: bound.x,
-              y: bound.y,
-              w: bound.width,
-              h: bound.height
-            },
-            image: {
-              x: 0,
-              y: 0,
-              w: 0,
-              h: 0,
-              zoom: 1,
-              data: null
-            },
-            cache: null
-          });
-        }
-      }
-      // this.chooseActive(0);
-      this.chooseActive(0);
-    },
+const saveImage = (data) => {
+  emit('save', data)
+}
 
-    chooseActive(index = 0) {
-      const object = this.objectLists[index];
-      this.selectIndex = index;
+const imageGeneration = (isDownload = true) => {
+  const canvas = document.createElement('canvas')
 
-      $('.preview-area.active').removeClass('active');
-      $('#' + object.name).addClass('active');
-    },
+  if (props.editor === 'imagemap') {
+    canvas.width = 1040
+    canvas.height = 1040
+  } else {
+    canvas.width = 2500
+    canvas.height = 1686
 
-    saveImage(data) {
-      this.$emit('save', data);
-    },
-    imageGeneration(isDownload = true) {
-      const canvas = document.createElement('canvas');
-
-      if (this.editor === 'imagemap') {
-        canvas.width = 1040;
-        canvas.height = 1040;
-      } else {
-        canvas.width = 2500;
-        canvas.height = 1686;
-
-        if (this.templateId > 1000) {
-          canvas.height = 843;
-        }
-      }
-
-      const context = canvas.getContext('2d');
-      context.fillStyle = 'white';
-      context.fillRect(0, 0, canvas.width, canvas.height);
-
-      // drawimage
-      const tasks = [];
-      for (let index = 0; index < this.objectLists.length; index++) {
-        const object = this.objectLists[index];
-        if (object.cache) {
-          tasks.push(new Promise((resolve, reject) => {
-            const image = new Image();
-            image.onload = () => {
-              const bound = object.bound;
-              context.drawImage(image, bound.x, bound.y, bound.w, bound.h);
-              resolve();
-            };
-            image.crossOrigin = 'anonymous';
-            image.src = object.cache;
-          }));
-        }
-      }
-
-      Promise.all(tasks).then(() => {
-        if (isDownload) {
-          const a = document.createElement('a');
-          a.href = canvas.toDataURL('image/jpeg');
-          a.download = `${(new Date().getTime())}_${this.editor}_${a.href.length}.jpg`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        } else {
-          this.saveImage(canvas.toDataURL('image/jpeg'));
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
+    if (props.templateId > 1000) {
+      canvas.height = 843
     }
   }
 
-};
+  const context = canvas.getContext('2d')
+  context.fillStyle = 'white'
+  context.fillRect(0, 0, canvas.width, canvas.height)
+
+  // drawimage
+  const tasks = []
+  for (let index = 0; index < objectLists.value.length; index++) {
+    const object = objectLists.value[index]
+    if (object.cache) {
+      tasks.push(new Promise((resolve, reject) => {
+        const image = new Image()
+        image.onload = () => {
+          const bound = object.bound
+          context.drawImage(image, bound.x, bound.y, bound.w, bound.h)
+          resolve()
+        }
+        image.crossOrigin = 'anonymous'
+        image.src = object.cache
+      }))
+    }
+  }
+
+  Promise.all(tasks).then(() => {
+    if (isDownload) {
+      const a = document.createElement('a')
+      a.href = canvas.toDataURL('image/jpeg')
+      a.download = `${(new Date().getTime())}_${props.editor}_${a.href.length}.jpg`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    } else {
+      saveImage(canvas.toDataURL('image/jpeg'))
+    }
+  }).catch((err) => {
+    console.log(err)
+  })
+}
 </script>
 
 <style scoped lang="scss">
@@ -884,7 +880,7 @@ export default {
     background: #f1f1f1;
   }
 
-  ::v-deep {
+  :deep() {
     .editor-content {
       display: flex;
       flex-direction: row;

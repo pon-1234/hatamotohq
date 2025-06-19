@@ -1,11 +1,11 @@
 <template>
-  <base-modal
+  <BaseModal
     :id="modalId"
-    ref="modal"
+    ref="modalRef"
     title="友達情報名を選択してください"
     size="lg"
     hide-footer
-    @show="reloadVariables"
+    @shown="reloadVariables"
   >
     <div class="d-flex modal-content-height">
       <folder-left
@@ -13,10 +13,10 @@
         :is-preview="true"
         :data="folders"
         :selected-folder="selectedFolderIndex"
-        @changeSelectedFolder="changeSelectedFolder"
+        @change-selected-folder="changeSelectedFolder"
       />
       <div class="flex-grow-1 scroll-table" :key="contentKey">
-        <base-table
+        <BaseTable
           :items="variables"
           :fields="fields"
           :paginate="false"
@@ -25,111 +25,120 @@
           :search-fields="['name']"
         >
           <template #cell(actions)="{ item }">
-            <b-button
-              size="sm"
-              variant="light"
+            <button
+              class="btn btn-sm btn-light"
               @click="selectVariable(item)"
+              type="button"
             >
               選択
-            </b-button>
+            </button>
           </template>
-        </base-table>
+        </BaseTable>
       </div>
     </div>
-  </base-modal>
+  </BaseModal>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import BaseModal from '../base/BaseModal.vue';
 import BaseTable from '../base/BaseTable.vue';
 import FolderLeft from '../folder/FolderLeft.vue';
 
-export default {
-  name: 'ModalSelectVariableRefactored',
-  components: {
-    BaseModal,
-    BaseTable,
-    FolderLeft
+// Props
+const props = defineProps({
+  id: {
+    type: String,
+    default: 'modal-select-variable'
   },
-  props: {
-    id: {
-      type: String,
-      default: 'modal-select-variable'
-    },
-    type: {
-      type: String,
-      required: true
-    }
+  type: {
+    type: String,
+    required: true
+  }
+});
+
+// Emits
+const emit = defineEmits(['select-variable']);
+
+// Store
+const store = useStore();
+
+// Refs
+const modalRef = ref(null);
+
+// State
+const contentKey = ref(0);
+const folders = ref([]);
+const selectedFolderIndex = ref(0);
+
+// Fields configuration
+const fields = [
+  {
+    key: 'name',
+    label: '名称',
+    sortable: true
   },
-  data() {
-    return {
-      contentKey: 0,
-      folders: [],
-      selectedFolderIndex: 0,
-      fields: [
-        {
-          key: 'name',
-          label: '名称',
-          sortable: true
-        },
-        {
-          key: 'actions',
-          label: '',
-          class: 'text-right fw-120'
-        }
-      ]
-    };
-  },
-  computed: {
-    modalId() {
-      return this.id || 'modal-select-variable';
-    },
-    curFolder() {
-      return this.folders[this.selectedFolderIndex];
-    },
-    variables() {
-      return this.curFolder 
-        ? this.curFolder.variables.filter(v => v.type === this.type) 
-        : [];
-    }
-  },
-  methods: {
-    ...mapActions('variable', ['getFolders']),
+  {
+    key: 'actions',
+    label: '',
+    class: 'text-right fw-120'
+  }
+];
 
-    show() {
-      this.$refs.modal.show();
-    },
+// Computed
+const modalId = computed(() => props.id || 'modal-select-variable');
 
-    hide() {
-      this.$refs.modal.hide();
-    },
+const curFolder = computed(() => {
+  return folders.value[selectedFolderIndex.value];
+});
 
-    forceRerender() {
-      this.contentKey++;
-    },
+const variables = computed(() => {
+  return curFolder.value 
+    ? curFolder.value.variables.filter(v => v.type === props.type) 
+    : [];
+});
 
-    async reloadVariables() {
-      try {
-        this.folders = await this.getFolders({ type: this.type });
-      } catch (error) {
-        console.error('Failed to load variables:', error);
-        this.$toast.error('変数の読み込みに失敗しました');
-      }
-    },
+// Methods
+const getFolders = (params) => store.dispatch('variable/getFolders', params);
 
-    changeSelectedFolder(index) {
-      this.selectedFolderIndex = index;
-      this.forceRerender();
-    },
+const show = () => {
+  modalRef.value?.show();
+};
 
-    selectVariable(variable) {
-      const data = JSON.parse(JSON.stringify(variable)); // Deep clone without lodash
-      this.$emit('select-variable', data);
-      this.hide();
-    }
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+const forceRerender = () => {
+  contentKey.value++;
+};
+
+const reloadVariables = async () => {
+  try {
+    folders.value = await getFolders({ type: props.type });
+  } catch (error) {
+    console.error('Failed to load variables:', error);
+    // Note: Toast notification would need to be implemented differently in Vue 3
   }
 };
+
+const changeSelectedFolder = (index) => {
+  selectedFolderIndex.value = index;
+  forceRerender();
+};
+
+const selectVariable = (variable) => {
+  const data = JSON.parse(JSON.stringify(variable)); // Deep clone
+  emit('select-variable', data);
+  hide();
+};
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>
 
 <style scoped>
@@ -148,5 +157,9 @@ export default {
 
 :deep(.table) {
   margin-bottom: 0;
+}
+
+.text-right {
+  text-align: right !important;
 }
 </style>

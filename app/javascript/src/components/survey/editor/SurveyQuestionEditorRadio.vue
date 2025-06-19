@@ -19,7 +19,7 @@
     <div class="form-group clearfix d-flex">
       <div class="fw-200 d-flex align-items-center">
         <span>補足文</span>
-        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
+        <div data-bs-toggle="tooltip" data-bs-placement="top" title="回答入力欄の下に表示されます" class="ml-2">
           <i class="text-md far fa-question-circle"></i>
         </div>
       </div>
@@ -113,97 +113,122 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['content', 'name'],
-  data() {
-    return {
-      max: 50,
-      contentKey: 0,
-      value: this.content || {
-        text: null,
-        name: this.name,
-        sub_text: null,
-        options: [
-          {
-            editing: true,
-            value: null,
-            action: {
-              type: 'none'
-            }
-          }
-        ]
-      }
-    };
+<script setup>
+import { ref, computed, watch, onMounted, inject } from 'vue'
+
+const props = defineProps({
+  content: {
+    type: Object,
+    default: null
   },
-  inject: ['parentValidator'],
-
-  created() {
-    this.$validator = this.parentValidator;
-    this.value.name = this.name;
-    this.syncObj();
-  },
-
-  watch: {
-    errors: {
-      deep: true,
-      handler(val) {
-        this.options.forEach((object, index) => {
-          const fieldText = val.items.find(item => {
-            return item.field.includes(this.name + '-postback-' + index);
-          });
-
-          if (fieldText) {
-            object.editing = true;
-          }
-        });
-      }
-    }
-  },
-
-  computed: {
-    options() {
-      return this.value ? this.value.options : [];
-    }
-  },
-
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    syncObj() {
-      this.forceRerender();
-      console.log(this.value);
-      this.$emit('input', this.value);
-    },
-    addItem() {
-      this.options.push({
-        value: null,
-        action: {
-          type: 'none'
-        }
-      });
-      this.syncObj();
-    },
-    moveUpObject(index) {
-      if (index > 0) {
-        const to = index - 1;
-        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    },
-    moveDownObject(index) {
-      if (index < this.options.length) {
-        const to = index + 1;
-        this.options.splice(to, 0, this.options.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    },
-    removeObject(index) {
-      this.options.splice(index, 1);
-      this.syncObj();
-    }
+  name: {
+    type: String,
+    required: true
   }
-};
+})
+
+const emit = defineEmits(['input'])
+
+const parentValidator = inject('parentValidator', null)
+
+const max = 50
+const contentKey = ref(0)
+const value = ref(props.content || {
+  text: null,
+  name: props.name,
+  sub_text: null,
+  options: [
+    {
+      editing: true,
+      value: null,
+      action: {
+        type: 'none'
+      }
+    }
+  ]
+})
+
+// For vee-validate compatibility
+const $validator = ref(null)
+const errors = ref({ 
+  first: () => null,
+  items: [] 
+})
+
+const options = computed(() => {
+  return value.value ? value.value.options : []
+})
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const syncObj = () => {
+  forceRerender()
+  console.log(value.value)
+  emit('input', value.value)
+}
+
+const addItem = () => {
+  options.value.push({
+    value: null,
+    action: {
+      type: 'none'
+    }
+  })
+  syncObj()
+}
+
+const moveUpObject = (index) => {
+  if (index > 0) {
+    const to = index - 1
+    options.value.splice(to, 0, options.value.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+const moveDownObject = (index) => {
+  if (index < options.value.length) {
+    const to = index + 1
+    options.value.splice(to, 0, options.value.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+const removeObject = (index) => {
+  options.value.splice(index, 1)
+  syncObj()
+}
+
+// Watch for validation errors
+watch(errors, (val) => {
+  options.value.forEach((object, index) => {
+    const fieldText = val.items.find(item => {
+      return item.field.includes(props.name + '-postback-' + index)
+    })
+
+    if (fieldText) {
+      object.editing = true
+    }
+  })
+}, { deep: true })
+
+// Watch for content prop changes
+watch(() => props.content, (newContent) => {
+  if (newContent) {
+    value.value = newContent
+  }
+})
+
+onMounted(() => {
+  $validator.value = parentValidator
+  value.value.name = props.name
+  syncObj()
+  
+  // Initialize Bootstrap tooltips
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+})
 </script>

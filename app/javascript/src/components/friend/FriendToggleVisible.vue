@@ -15,27 +15,22 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: {
-    id: {
-      type: Number
-    },
-    visible: {
-      type: Boolean
-    }
+<script setup>
+import { useStore } from 'vuex'
+
+const props = defineProps({
+  id: {
+    type: Number
   },
-
-  methods: {
-    ...mapActions('friend', [
-      'toggleVisible'
-    ]),
-
-    async toggle() {
-      await this.toggleVisible(this.id);
-      location.reload();
-    }
+  visible: {
+    type: Boolean
   }
-};
+})
+
+const store = useStore()
+
+const toggle = async () => {
+  await store.dispatch('friend/toggleVisible', props.id)
+  location.reload()
+}
 </script>

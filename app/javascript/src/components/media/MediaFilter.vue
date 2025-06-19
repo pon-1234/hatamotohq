@@ -17,30 +17,26 @@
     <div class="btn btn-primary text-nowrap" @click="applyFilter">表示変更</div>
   </div>
 </template>
-<script>
-import { mapMutations } from 'vuex';
+<script setup>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
 
-export default {
-  data() {
-    return {
-      options: [
-        { type: 'image', text: '画像' },
-        { type: 'audio', text: '音声' },
-        { type: 'video', text: '動画' },
-        { type: 'richmenu', text: 'メニュー画像' }
-      ],
-      selectedTypes: ['image', 'audio', 'video', 'richmenu']
-    };
-  },
-  methods: {
-    ...mapMutations('media', ['setFilter']),
+const emit = defineEmits(['filterChanged'])
+const store = useStore()
 
-    applyFilter() {
-      this.setFilter(this.selectedTypes);
-      this.$emit('filterChanged');
-    }
-  }
-};
+const options = ref([
+  { type: 'image', text: '画像' },
+  { type: 'audio', text: '音声' },
+  { type: 'video', text: '動画' },
+  { type: 'richmenu', text: 'メニュー画像' }
+])
+
+const selectedTypes = ref(['image', 'audio', 'video', 'richmenu'])
+
+const applyFilter = () => {
+  store.commit('media/setFilter', selectedTypes.value)
+  emit('filterChanged')
+}
 </script>
 <style lang="scss" scoped>
   .form-check-label {

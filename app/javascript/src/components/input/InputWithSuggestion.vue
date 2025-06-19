@@ -1,14 +1,13 @@
 <template>
-  <div class="input-wrapper">
+  <div class="input-wrapper" ref="wrapperRef">
     <input
       v-model.trim="currentValue"
       :class="classes"
       :type="type"
       :placeholder="placeholder"
-      @focus="showSuggest"
-      @blur="onFocus = false"
+      @focus="handleFocus"
+      @blur="handleBlur"
       @keyup="showSuggest"
-      v-validate="validate"
       @change="change"
       :name="name"
     />
@@ -16,101 +15,130 @@
       <div
         class="recent-contents"
         v-if="show || onFocus"
-        v-click-outside="hideSuggest"
       >
         <div class="recent-contents-list">
           <span
             class="content suggest-contents"
             v-for="(v, i) in suggestList"
-            @click="inputFromSuggest(v)"
+            @mousedown.prevent="inputFromSuggest(v)"
             :key="i"
-            >{{ v }}</span
           >
+            {{ v }}
+          </span>
         </div>
       </div>
     </transition>
   </div>
 </template>
-<script>
-import ClickOutside from 'vue-click-outside';
-export default {
-  directives: {
-    ClickOutside
+
+<script setup>
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
   },
-  inject: ['parentValidator'],
-  props: {
-    validate: {
-      type: Object,
-      required: false
-    },
-    value: {
-      type: String,
-      required: false
-    },
-    name: {
-      type: String,
-      required: false,
-      default: 'default_name'
-    },
-    list: {
-      type: Array,
-      required: true
-    },
-    placeholder: {
-      type: String,
-      required: false,
-      default: 'pxまたはキーワード'
-    },
-    classes: {
-      type: String,
-      required: false
-    },
-    type: {
-      type: String,
-      required: false,
-      default: 'text'
-    }
+  name: {
+    type: String,
+    default: 'default_name'
   },
-  data() {
-    return {
-      show: false,
-      onFocus: false,
-      currentValue: this.value,
-      suggestList: []
-    };
+  list: {
+    type: Array,
+    required: true
   },
-  created() {
-    this.$validator = this.parentValidator;
+  placeholder: {
+    type: String,
+    default: 'pxまたはキーワード'
   },
-  methods: {
-    hideSuggest() {
-      if (!this.onFocus) {
-        this.show = false;
-      }
-    },
-    inputFromSuggest(v) {
-      this.currentValue = v;
-      this.hideSuggest();
-      this.change();
-    },
-    showSuggest() {
-      const temp = this.currentValue.trim();
-      if (temp === '') {
-        this.suggestList = this.list;
-      } else {
-        this.suggestList = this.list.filter((item) => {
-          return item.toLowerCase().indexOf(temp.toLowerCase()) !== -1;
-        });
-      }
-      this.show = this.suggestList.length;
-      this.onFocus = true;
-    },
-    change() {
-      this.$emit('change', this.currentValue);
-    }
+  classes: {
+    type: String,
+    default: ''
+  },
+  type: {
+    type: String,
+    default: 'text'
+  }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue', 'change']);
+
+// Refs
+const wrapperRef = ref(null);
+
+// State
+const show = ref(false);
+const onFocus = ref(false);
+const currentValue = ref(props.modelValue);
+const suggestList = ref([]);
+
+// Methods
+const hideSuggest = () => {
+  if (!onFocus.value) {
+    show.value = false;
   }
 };
+
+const inputFromSuggest = (v) => {
+  currentValue.value = v;
+  hideSuggest();
+  change();
+};
+
+const showSuggest = () => {
+  const temp = currentValue.value.trim();
+  if (temp === '') {
+    suggestList.value = props.list;
+  } else {
+    suggestList.value = props.list.filter((item) => {
+      return item.toLowerCase().indexOf(temp.toLowerCase()) !== -1;
+    });
+  }
+  show.value = suggestList.value.length > 0;
+};
+
+const change = () => {
+  emit('update:modelValue', currentValue.value);
+  emit('change', currentValue.value);
+};
+
+const handleFocus = () => {
+  onFocus.value = true;
+  showSuggest();
+};
+
+const handleBlur = () => {
+  onFocus.value = false;
+  // Delay hiding to allow click on suggestion
+  setTimeout(() => {
+    hideSuggest();
+  }, 200);
+};
+
+// Handle click outside
+const handleClickOutside = (event) => {
+  if (wrapperRef.value && !wrapperRef.value.contains(event.target)) {
+    hideSuggest();
+  }
+};
+
+// Watch for external value changes
+watch(() => props.modelValue, (newValue) => {
+  currentValue.value = newValue;
+});
+
+// Lifecycle
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
+
 <style lang="scss" scoped>
 .input-wrapper {
   position: relative;
@@ -131,10 +159,19 @@ export default {
     width: 100%;
     left: 0;
     top: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .recent-contents-list {
       .suggest-contents {
         cursor: pointer;
+        padding: 4px 0;
+        display: block;
+        
+        &:hover {
+          background-color: #f5f5f5;
+          margin: 0 -10px;
+          padding: 4px 10px;
+        }
       }
     }
   }
@@ -148,8 +185,11 @@ export default {
 
   .fade-enter-active,
   .fade-leave-active {
-    transition: opacity 0.5s;
+    transition: opacity 0.3s;
   }
+  
+  .fade-enter-from,
+  .fade-leave-to {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }

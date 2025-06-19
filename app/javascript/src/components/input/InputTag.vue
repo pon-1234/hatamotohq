@@ -1,272 +1,298 @@
 <template>
-  <div @click="focusForm" v-click-outside="blurInputTag">
-    <b-form-tags
-      v-model="value"
-      :disabled="disabled"
-      no-outer-focus
-      class="mb-2 position-relative"
-      :add-button-text="'追加'"
-      remove-on-delete
-    >
-      <template v-slot="{ tags, disabled, addTag }">
-        <i
-          :class="isFocus ? 'fas fa-angle-up float-r' : 'fas mdi mdi-chevron-down float-r'"
-          class="down icon-action"
-          @click.stop="showDropDown"
-        ></i>
-        <ul class="list-inline d-inline-block mb-2">
-          <li v-for="tag in tags" :key="tag" class="list-inline-item">
-            <b-form-tag @remove="removeTag(tag, addTag)" :title="tag" :disabled="disabled" variant="info">{{
-              tag
-            }}</b-form-tag>
-          </li>
-        </ul>
-        <b-form-input
-          :disabled="disabled"
-          v-model.trim="search"
-          ref="inputTag"
-          class="input-text-tag"
-          type="search"
-          autocomplete="off"
-          placeholder="タグ名を入力"
-        ></b-form-input>
-        <div class="w-100 dropdown-tag row" v-if="!disabled && isFocus" :class="{ top: isShowTop() }">
-          <div :class="getClassLeftTag()">
-            <div class="tag-content">
-              <table class="table table-tags-header">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col" style="height: 42px">フォルダー</th>
-                  </tr>
-                </thead>
-              </table>
-              <div class="tag-scroll folder-list">
-                <div
-                  v-for="(item, index) in folders"
-                  :key="index"
-                  :class="selectedFolderIndex === index ? 'folder-item active' : 'folder-item'"
-                  @click="changeSelected(index)"
-                >
-                  <i :class="selectedFolderIndex === index ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
-                  <span class="tag-label">{{ item.name }}</span> ({{ item.tags.length }})
-                </div>
+  <div @click="focusForm" v-click-outside="blurInputTag" class="input-tag-container">
+    <div class="tag-input-wrapper" :class="{ disabled: disabled }">
+      <i
+        :class="isFocus ? 'fas fa-angle-up float-r' : 'fas mdi mdi-chevron-down float-r'"
+        class="down icon-action"
+        @click.stop="showDropDown"
+      ></i>
+      <ul class="list-inline d-inline-block mb-2">
+        <li v-for="tag in selectedTags" :key="tag.id" class="list-inline-item">
+          <span class="tag-badge" :title="tag.name">
+            {{ tag.name }}
+            <button 
+              v-if="!disabled"
+              @click.stop="removeTag(tag)"
+              class="tag-remove-btn"
+              type="button"
+              aria-label="削除"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </span>
+        </li>
+      </ul>
+      <input
+        :disabled="disabled"
+        v-model.trim="search"
+        ref="inputTag"
+        class="input-text-tag form-control"
+        type="search"
+        autocomplete="off"
+        placeholder="タグ名を入力"
+        @focus="focusForm"
+      />
+      <div class="w-100 dropdown-tag row" v-if="!disabled && isFocus" :class="{ top: isShowTop }">
+        <div :class="leftTagClass">
+          <div class="tag-content">
+            <table class="table table-tags-header">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" style="height: 42px">フォルダー</th>
+                </tr>
+              </thead>
+            </table>
+            <div class="tag-scroll folder-list">
+              <div
+                v-for="(item, index) in folders"
+                :key="index"
+                :class="selectedFolderIndex === index ? 'folder-item active' : 'folder-item'"
+                @click="changeSelected(index)"
+              >
+                <i :class="selectedFolderIndex === index ? 'fas fa-folder-open' : 'fas fa-folder'"></i>
+                <span class="tag-label">{{ item.name }}</span> ({{ item.tags.length }})
               </div>
-            </div>
-          </div>
-          <div :class="getClassRightTag()">
-            <div class="tag-content">
-              <!--<table class="table table-tags-header">-->
-              <!--<thead>-->
-              <!--<tr>-->
-              <!--<th class="w5" style="height: 42px"><i class="fas fa-arrow-left item-sm" @click="backToFolder"></i></th>-->
-              <!--<th v-if="folders[selectedFolderIndex]">{{folders[selectedFolderIndex].name}}</th>-->
-              <!--</tr>-->
-              <!--</thead>-->
-              <!--</table>-->
-              <div class="x-tag-header">
-                <div class="x-btn-back">
-                  <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i>
-                </div>
-                <div class="x-title" v-if="curFolder">{{ curFolder.name }}</div>
-              </div>
-
-              <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
-                <div
-                  v-for="(item, index) in availableOptions"
-                  :key="index"
-                  :class="selectedTags.find((el) => el.id === item.id) ? 'folder-item active' : 'folder-item'"
-                  @click="onTagSelected({ item, addTag })"
-                >
-                  <span class="tag-label">{{ item.name }}</span>
-                  <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span>
-                  <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span>
-                  <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
-                </div>
-              </div>
-              <div v-else class="tag-scroll tag-empty-content text-center">空のデータ</div>
             </div>
           </div>
         </div>
-      </template>
-    </b-form-tags>
+        <div :class="rightTagClass">
+          <div class="tag-content">
+            <div class="x-tag-header">
+              <div class="x-btn-back">
+                <i style="margin: auto" class="fas fa-arrow-left item-sm" @click="backToFolder"></i>
+              </div>
+              <div class="x-title" v-if="curFolder">{{ curFolder.name }}</div>
+            </div>
+
+            <div class="tag-scroll tag-list" v-if="availableOptions && availableOptions.length">
+              <div
+                v-for="(item, index) in availableOptions"
+                :key="index"
+                :class="selectedTags.find((el) => el.id === item.id) ? 'folder-item active' : 'folder-item'"
+                @click="onTagSelected(item)"
+              >
+                <span class="tag-label">{{ item.name }}</span>
+                <span class="tag-choose item-hidden"><i class="fas fa-check"></i>選択</span>
+                <span class="tag-checked item-hidden"><i class="fas fa-check"></i>選択中</span>
+                <span class="tag-remove item-hidden"><i class="fas fa-times"></i>解除</span>
+              </div>
+            </div>
+            <div v-else class="tag-scroll tag-empty-content text-center">空のデータ</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
-import { mapActions, mapState } from 'vuex';
+<script setup>
+import { ref, computed, watch, onBeforeMount, nextTick } from 'vue';
+import { useStore } from 'vuex';
 import ClickOutside from 'vue-click-outside';
 
-export default {
-  props: {
-    tags: {
-      type: Array,
-      default: () => []
-    },
-    allTags: {
-      type: Boolean,
-      default: true
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    tagIds: {
-      type: Array,
-      default: () => []
-    }
+// Props
+const props = defineProps({
+  tags: {
+    type: Array,
+    default: () => []
   },
-  data() {
-    return {
-      value: [],
-      selectedFolderIndex: 0,
-      isFocus: false,
-      search: '',
-      selectedTags: [],
-      isPc: true
-    };
+  allTags: {
+    type: Boolean,
+    default: true
   },
-
-  async beforeMount() {
-    await this.getTags();
+  disabled: {
+    type: Boolean,
+    default: false
   },
+  tagIds: {
+    type: Array,
+    default: () => []
+  }
+});
 
-  created() {
-    if (this.tags) {
-      this.selectedTags = _.cloneDeep(this.tags);
-      this.value = this.selectedTags.map(_ => _.name);
-    }
-  },
+// Emits
+const emit = defineEmits(['input']);
 
-  watch: {
-    tags: {
-      handler(val) {
-        if (!val) return;
-        this.selectedTags = _.cloneDeep(val);
-        this.value = this.selectedTags.map(_ => _.name);
-      }
-    }
-  },
-  computed: {
-    ...mapState('tag', {
-      folders: state => state.folders
-    }),
+// Store
+const store = useStore();
 
-    criteria() {
-      return this.search.trim().toLowerCase();
-    },
+// Refs
+const inputTag = ref(null);
+const selectedFolderIndex = ref(0);
+const isFocus = ref(false);
+const search = ref('');
+const selectedTags = ref([]);
+const isPc = ref(true);
 
-    curFolder() {
-      return this.folders[this.selectedFolderIndex];
-    },
+// Computed
+const folders = computed(() => store.state.tag.folders);
 
-    availableOptions() {
-      const criteria = this.criteria;
-      const options = this.folders[this.selectedFolderIndex].tags;
-      if (criteria) {
-        return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1);
-      }
+const criteria = computed(() => search.value.trim().toLowerCase());
 
-      return options;
-    }
-  },
+const curFolder = computed(() => folders.value[selectedFolderIndex.value]);
 
-  directives: {
-    ClickOutside
-  },
+const availableOptions = computed(() => {
+  const criteriaValue = criteria.value;
+  const options = folders.value[selectedFolderIndex.value]?.tags || [];
+  if (criteriaValue) {
+    return options.filter(opt => opt.name.toLowerCase().indexOf(criteriaValue) > -1);
+  }
+  return options;
+});
 
-  methods: {
-    ...mapActions('tag', ['getTags']),
-    isShowTop() {
-      const rect = this.$refs.inputTag.$el.getBoundingClientRect();
-      return (
-        document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || rect.top + window.scrollY < 100
-      );
-    },
-    changeSelected(index) {
-      this.selectedFolderIndex = index;
-      this.isPc = true;
-    },
+const isShowTop = computed(() => {
+  if (!inputTag.value) return false;
+  const rect = inputTag.value.getBoundingClientRect();
+  return (
+    document.documentElement.scrollHeight - (rect.top + window.scrollY) < 400 || 
+    rect.top + window.scrollY < 100
+  );
+});
 
-    onTagSelected({ item, addTag }) {
-      if (this.selectedTags.find(el => el.id === item.id)) {
-        this.selectedTags = this.selectedTags.filter(el => el.id !== item.id);
-        this.value = this.value.filter(el => el !== item.name);
-      } else {
-        this.selectedTags.push(item);
-        this.value.push(item.name);
-      }
-      this.$emit('input', this.selectedTags);
-      addTag();
-    },
+const leftTagClass = computed(() => {
+  let className = 'col-md-5 tag-content-left';
+  if (isPc.value) {
+    className += ' item-pc';
+  }
+  return className;
+});
 
-    removeTag(name, addTag) {
-      this.value = this.value.filter(el => el !== name);
-      this.selectedTags = this.selectedTags.filter(el => el.name !== name);
-      addTag();
-      this.$emit('input', this.selectedTags);
-    },
+const rightTagClass = computed(() => {
+  let className = 'col-md-7 tag-content-right';
+  if (!isPc.value) {
+    className += ' item-pc';
+  }
+  return className;
+});
 
-    focusForm() {
-      this.isFocus = true;
-      if (this.$refs.inputTag) {
-        this.$refs.inputTag.focus();
-      }
-    },
+// Methods
+const getTags = () => store.dispatch('tag/getTags');
 
-    blurInputTag() {
-      this.isFocus = false;
-      this.search = '';
-    },
+const changeSelected = (index) => {
+  selectedFolderIndex.value = index;
+  isPc.value = true;
+};
 
-    showDropDown() {
-      this.isFocus = !this.isFocus;
-    },
+const onTagSelected = (item) => {
+  const index = selectedTags.value.findIndex(el => el.id === item.id);
+  if (index > -1) {
+    selectedTags.value.splice(index, 1);
+  } else {
+    selectedTags.value.push(item);
+  }
+  emit('input', selectedTags.value);
+};
 
-    getClassLeftTag() {
-      let className = 'col-md-5 tag-content-left';
-
-      if (this.isPc) {
-        className += ' item-pc';
-      }
-      return className;
-    },
-
-    getClassRightTag() {
-      let className = 'col-md-7 tag-content-right';
-
-      if (!this.isPc) {
-        className += ' item-pc';
-      }
-
-      return className;
-    },
-
-    backToFolder() {
-      this.isPc = false;
-    },
-
-    initData() {
-      _.flatMap(this.folders, ({ tags }) =>
-        _.each(tags, tag => {
-          if (this.tagIds.includes(tag.id)) {
-            this.selectedTags.push(tag);
-            this.$emit('input', this.selectedTags);
-          }
-        })
-      );
-    }
+const removeTag = (tag) => {
+  const index = selectedTags.value.findIndex(el => el.id === tag.id);
+  if (index > -1) {
+    selectedTags.value.splice(index, 1);
+    emit('input', selectedTags.value);
   }
 };
+
+const focusForm = () => {
+  isFocus.value = true;
+  nextTick(() => {
+    if (inputTag.value) {
+      inputTag.value.focus();
+    }
+  });
+};
+
+const blurInputTag = () => {
+  isFocus.value = false;
+  search.value = '';
+};
+
+const showDropDown = () => {
+  isFocus.value = !isFocus.value;
+};
+
+const backToFolder = () => {
+  isPc.value = false;
+};
+
+const initData = () => {
+  folders.value.forEach(({ tags }) => {
+    tags.forEach(tag => {
+      if (props.tagIds.includes(tag.id)) {
+        selectedTags.value.push(tag);
+        emit('input', selectedTags.value);
+      }
+    });
+  });
+};
+
+// Lifecycle
+onBeforeMount(async () => {
+  await getTags();
+  if (props.tags) {
+    selectedTags.value = [...props.tags];
+  }
+  if (props.tagIds.length) {
+    initData();
+  }
+});
+
+// Watchers
+watch(() => props.tags, (newTags) => {
+  if (!newTags) return;
+  selectedTags.value = [...newTags];
+});
+
+// Custom directives
+const vClickOutside = ClickOutside.directive;
 </script>
+
 <style lang="scss" scoped>
+  .input-tag-container {
+    position: relative;
+  }
+
+  .tag-input-wrapper {
+    position: relative;
+    &.disabled {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+  }
+
+  .tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: #17a2b8;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .tag-remove-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   .tag-label {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  .b-form-tag {
-    font-weight: bold;
   }
 
   .float-r {
@@ -305,6 +331,8 @@ export default {
     padding-left: 0px !important;
     border: none !important;
     margin-bottom: 0px;
+    background: transparent;
+    outline: none;
   }
 
   .tag-content-left,

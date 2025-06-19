@@ -21,32 +21,25 @@
     </div>
   </div>
 </template>
-<script>
-import Util from '@/core/util';
+<script setup>
+import { ref, onMounted } from 'vue'
+import Util from '@/core/util'
 
-export default {
-  data() {
-    return {
-      isHidden: false
-    };
-  },
+const isHidden = ref(false)
 
-  mounted() {
-    if (Util.isMobile()) {
-      this.isHidden = true;
-    }
-  },
-
-  methods: {
-    toggleVisible() {
-      this.isHidden = !this.isHidden;
-    }
+onMounted(() => {
+  if (Util.isMobile()) {
+    isHidden.value = true
   }
-};
+})
+
+const toggleVisible = () => {
+  isHidden.value = !isHidden.value
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .card-sliding {
       border-bottom: 0;
       position: fixed;

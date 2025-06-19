@@ -1,62 +1,64 @@
 <template>
   <div>
-    <label>本文<required-mark /></label>
+    <label>本文<RequiredMark /></label>
     <textarea
       :name="name + '_postback_text'"
       placeholder="本文を入力してください"
       rows="4"
       v-model="content.text"
       class="form-control"
-      @keyup="changeValue($event)"
+      @input="changeValue"
       maxlength="1001"
-      v-validate="'required|max:1000'"
-      data-vv-as="本文"
+      required
     />
-    <error-message :message="errors.first(name + '_postback_text')"></error-message>
+    <ErrorMessage v-if="errorMessage" :message="errorMessage" />
   </div>
 </template>
-<script>
-export default {
-  props: {
-    actionData: {
-      type: Object,
-      default: () => {
-        return {
-          text: ''
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
-  },
-  inject: ['parentValidator'],
-  data() {
-    return {
-      // eslint-disable-next-line no-undef
-      content: _.cloneDeep(this.actionData)
-    };
-  },
 
-  watch: {
-    actionData: {
-      handler(val) {
-        // eslint-disable-next-line no-undef
-        this.content = _.cloneDeep(this.actionData);
-      },
-      deep: true
-    }
-  },
+<script setup>
+import { ref, watch, computed } from 'vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
 
-  created() {
-    this.$validator = this.parentValidator;
+// Props
+const props = defineProps({
+  actionData: {
+    type: Object,
+    default: () => ({
+      text: ''
+    })
   },
-
-  methods: {
-    changeValue($event) {
-      this.$emit('input', { text: $event.target.value });
-    }
+  name: {
+    type: String,
+    default: 'postback_action'
   }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// State
+const content = ref(JSON.parse(JSON.stringify(props.actionData)));
+
+// Computed
+const errorMessage = computed(() => {
+  if (!content.value.text) {
+    return '本文は必須です';
+  }
+  if (content.value.text.length > 1000) {
+    return '本文は1000文字以内で入力してください';
+  }
+  return null;
+});
+
+// Methods
+const changeValue = (event) => {
+  content.value.text = event.target.value;
+  emit('update:modelValue', { text: event.target.value });
 };
+
+// Watch
+watch(() => props.actionData, (newVal) => {
+  content.value = JSON.parse(JSON.stringify(newVal));
+}, { deep: true });
 </script>

@@ -28,140 +28,139 @@
     </div>
 
     <div class="mt-2">
-      <action-editor-custom
+      <ActionEditorCustom
         v-if="type === 'default' && isSupportPostback"
         :name="name"
-        :value="data"
-        :requiredLabel="requiredLabel"
-        :showTitle="showTitle"
-        @input="updateAction"
+        :model-value="data"
+        :required-label="requiredLabel"
+        :show-title="showTitle"
+        @update:model-value="updateAction"
       />
 
-      <action-editor-standard
+      <ActionEditorStandard
         v-if="type === 'basic'"
-        :value="data"
+        :model-value="data"
         :name="name"
         :supports="supports"
-        :isNone="isNone"
-        :showTitle="showTitle"
-        :requiredLabel="requiredLabel"
-        :messageType="messageType"
-        @input="updateAction"
+        :is-none="isNone"
+        :show-title="showTitle"
+        :required-label="requiredLabel"
+        :message-type="messageType"
+        @update:model-value="updateAction"
       />
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    index: {
-      type: Number,
-      default: 0
-    },
-    name: String,
-    supports: Array,
-    requiredLabel: {
-      type: Boolean,
-      default: true
-    },
-    isNone: {
-      type: Boolean,
-      default: false
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
-    },
-    value: Object,
-    messageType: {
-      type: String
-    }
+<script setup>
+import { ref, reactive, watch, onMounted } from 'vue';
+import { useActionMessage, useActionObjectsType } from '@/composables/useConstants';
+import ActionEditorCustom from './ActionEditorCustom.vue';
+import ActionEditorStandard from './ActionEditorStandard.vue';
+
+// Props
+const props = defineProps({
+  index: {
+    type: Number,
+    default: 0
   },
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      type: 'default',
-      isSupportPostback: true,
-      data: this.ActionMessage.default,
-      tempData: {
-        default: null,
-        basic: null
-      }
-    };
+  name: {
+    type: String,
+    required: true
   },
-
-  watch: {
-    value: {
-      deep: true,
-      handler(val) {
-        if (val) {
-          this.setupData();
-        }
-      }
-    }
+  supports: {
+    type: Array,
+    default: () => []
   },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  },
+  isNone: {
+    type: Boolean,
+    default: false
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  },
+  modelValue: {
+    type: Object,
+    default: null
+  },
+  messageType: {
+    type: String,
+    default: null
+  }
+});
 
-  created() {
-    this.$validator = this.parentValidator;
-    this.tempData.default = this.ActionMessage.default;
+// Emits
+const emit = defineEmits(['update:modelValue']);
 
-    this.tempData.basic = this.isNone
-      ? { type: 'none' }
-      : {
+// Composables
+const ActionMessage = useActionMessage();
+const ActionObjectsType = useActionObjectsType();
+
+// State
+const type = ref('default');
+const isSupportPostback = ref(true);
+const data = ref(JSON.parse(JSON.stringify(ActionMessage.default)));
+const tempData = reactive({
+  default: null,
+  basic: null
+});
+
+// Methods
+const updateAction = (action) => {
+  emit('update:modelValue', action);
+};
+
+const changeType = (newType) => {
+  data.value = tempData[newType];
+  type.value = newType;
+  emit('update:modelValue', data.value);
+};
+
+const setupData = () => {
+  data.value = JSON.parse(JSON.stringify(props.modelValue));
+  if (data.value.type === 'postback') {
+    type.value = 'default';
+  } else {
+    type.value = 'basic';
+  }
+  tempData[type.value] = JSON.parse(JSON.stringify(props.modelValue));
+};
+
+// Watch
+watch(() => props.modelValue, (val) => {
+  if (val) {
+    setupData();
+  }
+}, { deep: true });
+
+// Lifecycle
+onMounted(() => {
+  tempData.default = JSON.parse(JSON.stringify(ActionMessage.default));
+  
+  tempData.basic = props.isNone
+    ? { type: 'none' }
+    : {
         id: 1,
-        type: this.ActionObjectsType.Uri,
+        type: ActionObjectsType.Uri,
         label: '',
         uri: '',
         linkUri: ''
       };
-    if (!this.value) {
-      return;
-    }
-
-    this.setupData();
-
-    if (this.supports && !this.supports.includes('postback')) {
-      this.type = 'basic';
-      this.isSupportPostback = false;
-    }
-  },
-
-  methods: {
-    updateAction(action) {
-      this.$emit('input', action);
-    },
-
-    changeType(type) {
-      // if (type === 'default') {
-      //   this.data = this.ActionMessage.default;
-      // } else {
-      //   this.data = this.isNone ? { type: 'none' } : {
-      //     id: 1,
-      //     type: this.ActionObjectsType.Uri,
-      //     label: '',
-      //     uri: '',
-      //     linkUri: ''
-      //   };
-      // }
-      this.data = this.tempData[type];
-      this.type = type;
-
-      this.$emit('input', this.data);
-    },
-
-    setupData() {
-      // eslint-disable-next-line no-undef
-      this.data = _.cloneDeep(this.value);
-      if (this.data.type === 'postback') {
-        this.type = 'default';
-      } else {
-        this.type = 'basic';
-      }
-      // eslint-disable-next-line no-undef
-      this.tempData[this.type] = _.cloneDeep(this.value);
-    }
+      
+  if (!props.modelValue) {
+    return;
   }
-};
+
+  setupData();
+
+  if (props.supports && !props.supports.includes('postback')) {
+    type.value = 'basic';
+    isSupportPostback.value = false;
+  }
+});
 </script>

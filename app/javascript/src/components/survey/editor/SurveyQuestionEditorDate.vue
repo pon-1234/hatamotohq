@@ -19,7 +19,7 @@
     <div class="form-group clearfix d-flex">
       <div class="fw-200 d-flex align-items-center">
         <span>補足文</span>
-        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
+        <div data-bs-toggle="tooltip" data-bs-placement="top" title="回答入力欄の下に表示されます" class="ml-2">
           <i class="text-md far fa-question-circle"></i>
         </div>
       </div>
@@ -51,39 +51,64 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['content', 'name'],
-  data() {
-    return {
-      value: this.content || {
-        name: this.name,
-        text: null,
-        sub_text: null
-      }
-    };
-  },
-  inject: ['parentValidator'],
+<script setup>
+import { ref, watch, onMounted, inject } from 'vue'
 
-  created() {
-    this.$validator = this.parentValidator;
-    this.value.name = this.name;
-    this.syncObj();
+const props = defineProps({
+  content: {
+    type: Object,
+    default: null
   },
-  watch: {
-    content(val) {
-      this.value = val || {
-        name: this.name,
-
-        text: null,
-        sub_text: null
-      };
-    }
-  },
-  methods: {
-    syncObj() {
-      this.$emit('input', this.value);
-    }
+  name: {
+    type: String,
+    required: true
   }
-};
+})
+
+const emit = defineEmits(['input'])
+
+const parentValidator = inject('parentValidator', null)
+
+const value = ref(props.content || {
+  name: props.name,
+  text: null,
+  sub_text: null
+})
+
+// For vee-validate compatibility
+const $validator = ref(null)
+const errors = ref({ 
+  first: () => null,
+  items: [] 
+})
+
+const syncObj = () => {
+  emit('input', value.value)
+}
+
+// Watch for content changes
+watch(() => props.content, (val) => {
+  value.value = val || {
+    name: props.name,
+    text: null,
+    sub_text: null
+  }
+})
+
+// Watch value changes to emit
+watch(value, () => {
+  syncObj()
+}, { deep: true })
+
+onMounted(() => {
+  $validator.value = parentValidator
+  value.value.name = props.name
+  syncObj()
+  
+  // Initialize Bootstrap tooltips
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+})
 </script>

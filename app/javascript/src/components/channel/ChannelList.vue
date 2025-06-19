@@ -32,75 +32,53 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import { debounce } from 'lodash'
 
-export default {
-  data() {
-    return {
-      keyword: null,
-      loading: false
-    };
-  },
+const store = useStore()
 
-  computed: {
-    ...mapState('channel', {
-      channels: state => state.channels,
-      allChannelLoaded: state => state.allChannelLoaded,
-      activeChannel: state => state.activeChannel,
-      showChatBox: state => state.showChatBox
-    }),
+const keyword = ref(null)
+const loading = ref(false)
 
-    shouldShowSpinner() {
-      return !this.allChannelLoaded || this.loading;
-    }
-  },
+const channels = computed(() => store.state.channel.channels)
+const allChannelLoaded = computed(() => store.state.channel.allChannelLoaded)
+const activeChannel = computed(() => store.state.channel.activeChannel)
+const showChatBox = computed(() => store.state.channel.showChatBox)
+const shouldShowSpinner = computed(() => !allChannelLoaded.value || loading.value)
 
-  methods: {
-    ...mapActions('channel', ['getChannels', 'getMessages', 'setActiveChannel']),
-    ...mapMutations('channel', [
-      'setChannelParams',
-      'setChannelParam',
-      'resetChannels',
-      'resetMessages',
-      'setShowChatBox'
-    ]),
+const resetSearch = () => {
+  keyword.value = null
+  fetchData()
+}
 
-    resetSearch() {
-      this.keyword = null;
-      this.fetchData();
-    },
+const loadMore = () => {
+  const before = channels.value.length > 0 ? channels.value[channels.value.length - 1].last_activity_at : null
+  store.commit('channel/setChannelParam', { before: before })
+  store.dispatch('channel/getChannels')
+}
 
-    loadMore() {
-      const before = !_.isEmpty(this.channels) ? _.last(this.channels).last_activity_at : null;
-      this.setChannelParam({ before: before });
-      this.getChannels();
-    },
+const fetchData = async () => {
+  loading.value = true
+  store.commit('channel/resetChannels')
+  store.commit('channel/setChannelParams', { before: null, keyword: keyword.value })
+  await store.dispatch('channel/getChannels')
+  loading.value = false
+}
 
-    debouncedSearch: _.debounce(async function() {
-      this.fetchData();
-    }, 300),
+const debouncedSearch = debounce(fetchData, 300)
 
-    async fetchData() {
-      this.loading = true;
-      this.resetChannels();
-      this.setChannelParams({ before: null, keyword: this.keyword });
-      await this.getChannels();
-      this.loading = false;
-    },
+const switchChannel = async (channel, index) => {
+  if (!showChatBox.value) store.commit('channel/setShowChatBox', true)
+  const notChanged = activeChannel.value?.id === channel.id
+  // Do nothing if channel is not changed
+  if (notChanged) return
 
-    async switchChannel(channel, index) {
-      if (!this.showChatBox) this.setShowChatBox(true);
-      const notChanged = this.activeChannel.id === channel.id;
-      // Do nothing if channel is not changed
-      if (notChanged) return;
-
-      // Activate new channel
-      this.setActiveChannel(channel);
-      this.resetMessages();
-    }
-  }
-};
+  // Activate new channel
+  store.dispatch('channel/setActiveChannel', channel)
+  store.commit('channel/resetMessages')
+}
 </script>
 
 <style lang="scss" scoped>

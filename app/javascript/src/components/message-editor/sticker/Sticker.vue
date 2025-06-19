@@ -22,18 +22,18 @@
     />
   </span>
 </template>
-<script>
-import { mapMutations } from 'vuex';
-export default {
-  props: ['sticker', 'animation'],
-  methods: {
-    ...mapMutations('global', ['addLog']),
-    onSelectSticker() {
-      this.addLog(this.sticker);
-      this.$emit('input', this.sticker);
-    }
-  }
-};
+<script setup>
+import { useStore } from 'vuex'
+
+const props = defineProps(['sticker', 'animation'])
+const emit = defineEmits(['input'])
+
+const store = useStore()
+
+const onSelectSticker = () => {
+  store.commit('global/addLog', props.sticker)
+  emit('input', props.sticker)
+}
 </script>
 
 <style lang="scss" scoped>

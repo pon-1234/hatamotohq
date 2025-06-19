@@ -71,7 +71,6 @@
                         type="hidden"
                         v-model="item.imageUrl"
                         :name="'image-url-' + index"
-                        v-validate="'required'"
                       />
                     </div>
                   </div>
@@ -139,7 +138,7 @@
                   data-vv-as="パネル画像"
                 />
                 <template v-if="errors.first('image-url-' + indexColumn)">
-                  <error-message message="パネルの画像は必須項目です"></error-message>
+                  <error-message message="パネルの画像は必須項目です" />
                 </template>
                 <!-- image preview -->
                 <div class="form-group text-center">
@@ -162,136 +161,131 @@
     ></modal-select-media>
   </div>
 </template>
-<script>
-import { ActionMessage } from '../../core/constant';
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { TemplateMessageType } from '@/core/constant'
+import { useActionMessage } from '@/composables/useConstants'
 
-export default {
-  props: ['data', 'indexParent'],
-  inject: ['parentValidator'],
-  data() {
-    return {
-      contentKey: 0,
-      selected: 0,
-      errorMessageUploadFile: '',
-      messageData: {
-        type: this.TemplateMessageType.ImageCarousel,
-        columns: [
-          {
-            imageUrl: '',
-            action: ActionMessage.default
-          }
-        ]
-      }
-    };
-  },
+const props = defineProps({
+  data: Object,
+  indexParent: Number
+})
 
-  created() {
-    this.$validator = this.parentValidator;
-    if (this.data) {
-      Object.assign(this.messageData, this.data);
-      this.$emit('input', this.messageData);
+const emit = defineEmits(['input'])
+
+const actionMessage = useActionMessage()
+
+const contentKey = ref(0)
+const selected = ref(0)
+const errorMessageUploadFile = ref('')
+const messageData = ref({
+  type: TemplateMessageType.ImageCarousel,
+  columns: [
+    {
+      imageUrl: '',
+      action: actionMessage.default
     }
-  },
+  ]
+})
 
-  watch: {
-    messageData: {
-      handler(val) {
-        // eslint-disable-next-line no-undef
-        const value = _.cloneDeep(val);
-        this.$emit('input', value);
-      },
-      deep: true
-    }
-  },
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
+const errors = ref({ items: [], first: () => null })
 
-    addMoreColumn(index) {
-      if (this.messageData.columns.length > 9) return;
-      const option = {
-        imageUrl: '',
-        action: ActionMessage.default
-      };
+onMounted(() => {
+  if (props.data) {
+    Object.assign(messageData.value, props.data)
+    emit('input', messageData.value)
+  }
+})
 
-      this.messageData.columns.push(option);
-      this.selected = this.messageData.columns.length - 1;
-    },
+watch(messageData, (val) => {
+  const value = JSON.parse(JSON.stringify(val))
+  emit('input', value)
+}, { deep: true })
+const forceRerender = () => {
+  contentKey.value++
+}
 
-    removeColumn(index) {
-      this.messageData.columns.splice(index, 1);
+const addMoreColumn = (index) => {
+  if (messageData.value.columns.length > 9) return
+  const option = {
+    imageUrl: '',
+    action: { ...actionMessage.default }
+  }
 
-      if (index === 0) {
-        this.selected = index;
-      } else if (this.selected === this.messageData.columns.length) {
-        this.selected = index - 1;
-      }
-    },
+  messageData.value.columns.push(option)
+  selected.value = messageData.value.columns.length - 1
+}
 
-    copyColumn(index, column) {
-      if (this.messageData.columns.length > 9) return;
-      // eslint-disable-next-line no-undef
-      this.messageData.columns.splice(index + 1, 0, _.cloneDeep(column));
-    },
+const removeColumn = (index) => {
+  messageData.value.columns.splice(index, 1)
 
-    moveRightColumn(index) {
-      const option = this.messageData.columns[index];
-      if (this.messageData.columns[index + 1]) {
-        this.messageData.columns[index] = this.messageData.columns.splice(index + 1, 1, option)[0];
-        if (this.selected === index) {
-          this.selected += 1;
-        }
-      }
-    },
+  if (index === 0) {
+    selected.value = index
+  } else if (selected.value === messageData.value.columns.length) {
+    selected.value = index - 1
+  }
+}
 
-    moveLeftColumn(index) {
-      const option = this.messageData.columns[index];
-      if (this.messageData.columns[index - 1]) {
-        this.messageData.columns[index] = this.messageData.columns.splice(index - 1, 1, option)[0];
+const copyColumn = (index, column) => {
+  if (messageData.value.columns.length > 9) return
+  messageData.value.columns.splice(index + 1, 0, JSON.parse(JSON.stringify(column)))
+}
 
-        if (this.selected === index) {
-          this.selected -= 1;
-        }
-      }
-    },
-
-    changeSelected(index) {
-      this.selected = index;
-    },
-
-    async uploadThumb(value) {
-      this.messageData.columns[this.selected].imageUrl = value.url;
-      this.$emit('input', this.messageData);
-    },
-
-    removeCurrentThumb(index) {
-      this.messageData.columns[index].imageUrl = '';
-      this.$emit('input', this.messageData);
-    },
-
-    cloneToAll(index) {
-      this.messageData.columns.forEach(item => {
-        item.imageUrl = this.messageData.columns[index].imageUrl;
-      });
-    },
-
-    removeAllThumb() {
-      this.messageData.columns.forEach(item => {
-        item.imageUrl = '';
-      });
-    },
-
-    changeSelectedAction(value) {
-      this.messageData.columns[this.selected].action = value;
-    },
-
-    changeActionColumn(index, data) {
-      console.log('changeActionColumn', index);
-      this.messageData.columns[index].action = data;
+const moveRightColumn = (index) => {
+  const option = messageData.value.columns[index]
+  if (messageData.value.columns[index + 1]) {
+    messageData.value.columns[index] = messageData.value.columns.splice(index + 1, 1, option)[0]
+    if (selected.value === index) {
+      selected.value += 1
     }
   }
-};
+}
+
+const moveLeftColumn = (index) => {
+  const option = messageData.value.columns[index]
+  if (messageData.value.columns[index - 1]) {
+    messageData.value.columns[index] = messageData.value.columns.splice(index - 1, 1, option)[0]
+
+    if (selected.value === index) {
+      selected.value -= 1
+    }
+  }
+}
+
+const changeSelected = (index) => {
+  selected.value = index
+}
+
+const uploadThumb = async (value) => {
+  messageData.value.columns[selected.value].imageUrl = value.url
+  emit('input', messageData.value)
+}
+
+const removeCurrentThumb = (index) => {
+  messageData.value.columns[index].imageUrl = ''
+  emit('input', messageData.value)
+}
+
+const cloneToAll = (index) => {
+  messageData.value.columns.forEach(item => {
+    item.imageUrl = messageData.value.columns[index].imageUrl
+  })
+}
+
+const removeAllThumb = () => {
+  messageData.value.columns.forEach(item => {
+    item.imageUrl = ''
+  })
+}
+
+const changeSelectedAction = (value) => {
+  messageData.value.columns[selected.value].action = value
+}
+
+const changeActionColumn = (index, data) => {
+  console.log('changeActionColumn', index)
+  messageData.value.columns[index].action = data
+}
 </script>
 
 <style lang="scss" scoped>

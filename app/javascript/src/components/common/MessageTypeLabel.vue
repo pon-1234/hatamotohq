@@ -1,23 +1,43 @@
 <template>
   <div class="d-inline-block text-nowrap">
-    <span v-if="data.type === 'text'">【テキスト】</span>
-    <span v-if="data.type === 'sticker'">【スタンプ】</span>
-    <span v-if="data.type === 'image'">【画像】</span>
-    <span v-if="data.type === 'video'">【動画】</span>
-    <span v-if="data.type === 'audio'">【音声】</span>
-    <span v-if="data.type === 'location'">【位置情報】</span>
-    <span v-if="data.type === 'imagemap'">【リッチ画像】</span>
-    <span v-if="data.type === 'flex'">【Flex】</span>
-    <span v-if="data.type === 'template'">
-      <span v-if="data.template.type === 'buttons'">【ボタン】</span>
-      <span v-if="data.template.type === 'confirm'">【質問】</span>
-      <span v-if="data.template.type === 'carousel'">【カルーセル】</span>
-      <span v-if="data.template.type === 'image_carousel'">【画像カルーセル】</span>
-    </span>
+    <span>{{ messageLabel }}</span>
   </div>
 </template>
-<script>
-export default {
-  props: ['data']
-};
+
+<script setup>
+import { computed } from 'vue';
+
+// Props
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
+  }
+});
+
+// Computed
+const messageLabel = computed(() => {
+  const typeLabels = {
+    text: '【テキスト】',
+    sticker: '【スタンプ】',
+    image: '【画像】',
+    video: '【動画】',
+    audio: '【音声】',
+    location: '【位置情報】',
+    imagemap: '【リッチ画像】',
+    flex: '【Flex】'
+  };
+
+  if (props.data.type === 'template' && props.data.template) {
+    const templateLabels = {
+      buttons: '【ボタン】',
+      confirm: '【質問】',
+      carousel: '【カルーセル】',
+      image_carousel: '【画像カルーセル】'
+    };
+    return templateLabels[props.data.template.type] || '【テンプレート】';
+  }
+
+  return typeLabels[props.data.type] || '【不明】';
+});
 </script>

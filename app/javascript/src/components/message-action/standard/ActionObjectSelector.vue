@@ -10,166 +10,185 @@
     </select>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue';
+import { useActionObjectsType, useActionObjectsCollect } from '@/composables/useConstants';
 import Util from '../../../core/util';
 
-export default {
-  props: {
-    data: Object,
-
-    isNone: {
-      type: Boolean,
-      default: false
-    },
-    supports: {
-      type: Array,
-      default: () => []
-    },
-    messageType: {
-      type: String
-    }
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-
-  data() {
-    return {
-      selected: this.data.id || 'none'
-    };
+  isNone: {
+    type: Boolean,
+    default: false
   },
-
-  async beforeMount() {
-    // TODO this is bad smelling code :3 need refactoring
-    if (this.data.type === 'uri') {
-      this.selected = this.data.id || (Util.validateUrl(this.data.uri) ? 1 : 2);
-    } else {
-      const val = _.find(this.actionTypes, item => {
-        return item.type === this.data.type;
-      });
-      this.selected = val ? val.id : 'none';
-      this.emitObj(this.selected);
-    }
+  supports: {
+    type: Array,
+    default: () => []
   },
+  messageType: {
+    type: String,
+    default: null
+  }
+});
 
-  methods: {
-    changeSelected() {
-      this.emitObj(this.selected);
-    },
+// Emits
+const emit = defineEmits(['update:modelValue']);
 
-    emitObj(value) {
-      // TODO this is bad smelling code :3 need refactoring
-      let val = this.actionTypes.find(item => item.id === value);
+// Composables
+const ActionObjectsType = useActionObjectsType();
+const ActionObjectsCollect = useActionObjectsCollect();
 
-      if (!val) {
-        val = { type: 'none' };
-      }
-      if (val.type === this.data.type) {
-        if (!(val.type === 'uri' && val.id !== this.data.id)) {
-          return;
-        }
-      }
+// State
+const selected = ref(props.modelValue.id || 'none');
 
-      let option = null;
-      switch (val.type) {
-      case 'none':
-        option = { type: 'none' };
-        break;
-      case this.ActionObjectsType.Postback:
-        option = {
-          type: this.ActionObjectsType.Postback,
-          label: null,
-          data: {
-            type: 'text',
-            content: {
-              text: null
-            }
-          }
-        };
-        break;
+// Computed
+const actionTypes = computed(() => {
+  const objects = JSON.parse(JSON.stringify(ActionObjectsCollect));
+  // with message is not rich image message, remove message action object
+  if (props.messageType !== 'imagemap') {
+    const index = objects.findIndex(object => object.type === 'message');
+    if (index > -1) objects.splice(index, 1);
+  }
+  
+  let result = objects != null
+    ? objects.filter(
+        item =>
+          (props.supports.length > 0 ? props.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
+      )
+    : [];
+    
+  if (props.messageType === 'imagemap') {
+    result = result.filter(item => item.title !== '電話する');
+  }
+  
+  return result;
+});
 
-      case this.ActionObjectsType.Message:
-        option = {
-          type: this.ActionObjectsType.Message,
-          label: '',
-          text: ''
-        };
-        break;
+// Methods
+const changeSelected = () => {
+  emitObj(selected.value);
+};
 
-      case this.ActionObjectsType.Uri:
-        if (val.id === 1) {
-          option = {
-            id: 1,
-            type: this.ActionObjectsType.Uri,
-            label: '',
-            uri: '',
-            linkUri: ''
-          };
-        } else {
-          option = {
-            id: 2,
-            type: this.ActionObjectsType.Uri,
-            label: '',
-            uri: '',
-            linkUri: ''
-          };
-        }
-        break;
+const emitObj = (value) => {
+  // TODO this is bad smelling code :3 need refactoring
+  let val = actionTypes.value.find(item => item.id === value);
 
-      case this.ActionObjectsType.Datetimepicker:
-        option = {
-          type: this.ActionObjectsType.Datetimepicker,
-          label: '',
-          data: '',
-          mode: 'date'
-        };
-        break;
-      case this.ActionObjectsType.Camera:
-        option = {
-          type: this.ActionObjectsType.Camera,
-          label: ''
-        };
-        break;
-      case this.ActionObjectsType.CameraRoll:
-        option = {
-          type: this.ActionObjectsType.CameraRoll,
-          label: ''
-        };
-        break;
-      case this.ActionObjectsType.Location:
-        option = {
-          type: this.ActionObjectsType.Location,
-          label: ''
-        };
-        break;
-      case this.ActionObjectsType.Survey:
-        option = {
-          type: this.ActionObjectsType.Survey,
-          label: '',
-          content: {
-            name: '',
-            id: null
-          }
-        };
-        break;
-      }
-      this.$emit('input', option);
-    }
-  },
-
-  computed: {
-    actionTypes() {
-      const objects = _.cloneDeep(this.ActionObjectsCollect);
-      // with message is not rich image message, remove message action object
-      if (this.messageType !== 'imagemap') _.remove(objects, (object) => object.type === 'message');
-      let result = objects != null
-        ? objects.filter(
-          item =>
-            (this.supports.length > 0 ? this.supports.indexOf(item.type) >= 0 : true) && item.type !== 'postback'
-        )
-        : [];
-      if (this.messageType === 'imagemap') {
-        result = result.filter(item => item.title !== '電話する');
-      }
-      return result;
+  if (!val) {
+    val = { type: 'none' };
+  }
+  
+  if (val.type === props.modelValue.type) {
+    if (!(val.type === 'uri' && val.id !== props.modelValue.id)) {
+      return;
     }
   }
+
+  let option = null;
+  switch (val.type) {
+    case 'none':
+      option = { type: 'none' };
+      break;
+      
+    case ActionObjectsType.Postback:
+      option = {
+        type: ActionObjectsType.Postback,
+        label: null,
+        data: {
+          type: 'text',
+          content: {
+            text: null
+          }
+        }
+      };
+      break;
+
+    case ActionObjectsType.Message:
+      option = {
+        type: ActionObjectsType.Message,
+        label: '',
+        text: ''
+      };
+      break;
+
+    case ActionObjectsType.Uri:
+      if (val.id === 1) {
+        option = {
+          id: 1,
+          type: ActionObjectsType.Uri,
+          label: '',
+          uri: '',
+          linkUri: ''
+        };
+      } else {
+        option = {
+          id: 2,
+          type: ActionObjectsType.Uri,
+          label: '',
+          uri: '',
+          linkUri: ''
+        };
+      }
+      break;
+
+    case ActionObjectsType.DatetimePicker:
+      option = {
+        type: ActionObjectsType.DatetimePicker,
+        label: '',
+        data: '',
+        mode: 'date'
+      };
+      break;
+      
+    case ActionObjectsType.Camera:
+      option = {
+        type: ActionObjectsType.Camera,
+        label: ''
+      };
+      break;
+      
+    case ActionObjectsType.CameraRoll:
+      option = {
+        type: ActionObjectsType.CameraRoll,
+        label: ''
+      };
+      break;
+      
+    case ActionObjectsType.Location:
+      option = {
+        type: ActionObjectsType.Location,
+        label: ''
+      };
+      break;
+      
+    case 'survey':
+      option = {
+        type: 'survey',
+        label: '',
+        content: {
+          name: '',
+          id: null
+        }
+      };
+      break;
+  }
+  
+  emit('update:modelValue', option);
 };
+
+// Lifecycle
+onBeforeMount(() => {
+  // TODO this is bad smelling code :3 need refactoring
+  if (props.modelValue.type === 'uri') {
+    selected.value = props.modelValue.id || (Util.validateUrl(props.modelValue.uri) ? 1 : 2);
+  } else {
+    const val = actionTypes.value.find(item => item.type === props.modelValue.type);
+    selected.value = val ? val.id : 'none';
+    emitObj(selected.value);
+  }
+});
 </script>

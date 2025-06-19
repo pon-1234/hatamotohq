@@ -26,36 +26,39 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    types: {
-      type: Array,
-      default: () => ['image']
-    }
-  },
-  data() {
-    return {
+<script setup>
+import { ref, onMounted } from 'vue'
 
-    };
-  },
-  mounted() {
-    $(this.$refs.modalUploadMedia).on('show.bs.modal', this.shownModal);
-  },
-  methods: {
-    onUploadFinished(event) {
-      this.$emit('upload', event);
-      this.$refs.close.click();
-    },
-    shownModal() {
-      this.$refs.mediaUpload.deleteMedia();
-    }
+const props = defineProps({
+  types: {
+    type: Array,
+    default: () => ['image']
   }
-};
+})
+
+const emit = defineEmits(['upload'])
+
+const contentKey = ref(0)
+const modalUploadMedia = ref(null)
+const close = ref(null)
+const mediaUpload = ref(null)
+
+const onUploadFinished = (event) => {
+  emit('upload', event)
+  close.value.click()
+}
+
+const shownModal = () => {
+  mediaUpload.value?.deleteMedia()
+}
+
+onMounted(() => {
+  $(modalUploadMedia.value).on('show.bs.modal', shownModal)
+})
 </script>
 
 <style  lang="scss"  scoped>
-  ::v-deep {
+  :deep() {
     .custom-file {
       position: relative;
       display: inline-block;

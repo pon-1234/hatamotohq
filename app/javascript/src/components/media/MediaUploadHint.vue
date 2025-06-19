@@ -27,15 +27,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    type: {
-      type: String,
-      default: 'image'
-    }
+<script setup>
+defineProps({
+  type: {
+    type: String,
+    default: 'image'
   }
-};
+})
 </script>
 
 <style lang="scss" scoped>

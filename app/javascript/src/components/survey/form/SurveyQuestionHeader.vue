@@ -9,28 +9,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['question', 'qnum'],
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    }
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
+  },
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
 </script>
 
 <style lang="scss" scoped>

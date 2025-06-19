@@ -251,21 +251,19 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RichMenuPreview',
-  components: {},
-  props: {
-    background: String,
-    data: String,
-    templateId: Number,
-    typeTemplate: String
-  }
-};
+<script setup>
+defineProps({
+  background: String,
+  data: String,
+  templateId: Number,
+  typeTemplate: String
+})
+
+defineEmits(['click'])
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .justify-content-center {
       -webkit-box-pack: center !important;
       justify-content: center !important;

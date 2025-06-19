@@ -13,21 +13,19 @@
   <div v-else>アクションなし</div>
 </template>
 
-<script>
-export default {
-  props: {
-    episode: {
-      type: Object,
-      required: true
-    }
-  },
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    actions() {
-      return this.episode.actions.data.actions;
-    }
+const props = defineProps({
+  episode: {
+    type: Object,
+    required: true
   }
-};
+})
+
+const actions = computed(() => {
+  return props.episode.actions.data.actions
+})
 </script>
 
 <style>

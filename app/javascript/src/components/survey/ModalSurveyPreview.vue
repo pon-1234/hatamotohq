@@ -24,33 +24,32 @@
   </div>
   <!-- /.modal -->
 </template>
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: ['survey_id'],
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
-  data() {
-    return {
-      survey: null,
-      contentKey: 0
-    };
-  },
-
-  mounted() {
-    $(this.$refs.modalSurveyPreview).on('show.bs.modal', this.onShow);
-  },
-
-  methods: {
-    ...mapActions('survey', ['getSurvey']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    async onShow() {
-      this.survey = await this.getSurvey(this.survey_id);
-      this.forceRerender();
-    }
+const props = defineProps({
+  survey_id: {
+    type: [String, Number],
+    required: true
   }
-};
+})
+
+const store = useStore()
+const modalSurveyPreview = ref(null)
+const survey = ref(null)
+const contentKey = ref(0)
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const onShow = async () => {
+  survey.value = await store.dispatch('survey/getSurvey', props.survey_id)
+  forceRerender()
+}
+
+onMounted(() => {
+  $(modalSurveyPreview.value).on('show.bs.modal', onShow)
+})
 </script>

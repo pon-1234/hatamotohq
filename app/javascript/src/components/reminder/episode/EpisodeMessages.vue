@@ -8,19 +8,17 @@
   <div v-else>メッセージなし</div>
 </template>
 
-<script>
-export default {
-  props: {
-    episode: {
-      type: Object,
-      required: true
-    }
-  },
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    messages() {
-      return this.episode.messages;
-    }
+const props = defineProps({
+  episode: {
+    type: Object,
+    required: true
   }
-};
+})
+
+const messages = computed(() => {
+  return props.episode.messages
+})
 </script>

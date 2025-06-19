@@ -21,28 +21,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['templateId', 'editor'],
-  data() {
-    return {};
-  },
+<script setup>
+import { onMounted, onUnmounted } from 'vue'
 
-  created() {
-    $('body').css('overflow', 'hidden');
-  },
-  methods: {
-    closeEditor() {
-      $('body').css('overflow', 'initial');
-      this.$emit('close');
-    },
-    saveImage(data) {
-      this.$emit('input', data);
-      this.$emit('deInit');
-      this.closeEditor();
-    }
-  }
-};
+const props = defineProps(['templateId', 'editor'])
+const emit = defineEmits(['close', 'input', 'deInit'])
+
+onMounted(() => {
+  $('body').css('overflow', 'hidden')
+})
+
+onUnmounted(() => {
+  $('body').css('overflow', 'initial')
+})
+
+const closeEditor = () => {
+  $('body').css('overflow', 'initial')
+  emit('close')
+}
+
+const saveImage = (data) => {
+  emit('input', data)
+  emit('deInit')
+  closeEditor()
+}
 </script>
 <style lang="scss" scoped>
   .figure {

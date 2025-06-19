@@ -31,74 +31,72 @@
           name="tag_name"
           data-vv-as="タグ名"
           maxlength="33"
-          v-validate="'required|max:32'"
+          :class="{ 'is-invalid': tagName && tagName.length > 32 }"
         />
         <span class="input-group-btn">
           <button type="button" class="btn btn-light" @click="submitChangeName" ref="buttonChange">決定</button>
         </span>
       </div>
-      <error-message :message="errors.first('tag_name')"></error-message>
+      <error-message :message="tagName && tagName.length > 32 ? 'タグ名は32文字以内で入力してください' : (!tagName && isEdit ? 'タグ名を入力してください' : null)"></error-message>
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data'],
-  data() {
-    return {
-      isEdit: false,
-      isEnter: true,
-      tagName: null
-    };
-  },
+<script setup>
+import { ref, watch, onMounted } from 'vue'
 
-  watch: {
-    data(val) {
-      this.tagName = val.name;
-      this.isEdit = false;
-    }
-  },
+const props = defineProps(['data'])
+const emit = defineEmits(['editTag', 'deleteTag'])
 
-  created() {
-    this.tagName = this.data.name;
-  },
+const isEdit = ref(false)
+const isEnter = ref(true)
+const tagName = ref(null)
+const buttonChange = ref(null)
+const errors = ref({ first: () => null })
 
-  methods: {
-    changeName() {
-      this.isEdit = true;
-    },
+watch(() => props.data, (val) => {
+  tagName.value = val.name
+  isEdit.value = false
+})
 
-    async submitChangeName() {
-      const passed = await this.$validator.validateAll();
-      if (!passed) return;
-      if (this.tagName !== this.data.name) {
-        this.$emit('editTag', { id: this.data.id, name: this.tagName });
-      }
+onMounted(() => {
+  tagName.value = props.data.name
+})
 
-      this.isEdit = false;
-    },
+const changeName = () => {
+  isEdit.value = true
+}
 
-    deleteFolder() {
-      this.$emit('deleteTag', this.data);
-    },
-
-    enterSubmitChangeName(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonChange.click();
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
-    }
+const submitChangeName = async () => {
+  // Simple validation check
+  if (!tagName.value || tagName.value.length > 32) {
+    return
   }
-};
+  if (tagName.value !== props.data.name) {
+    emit('editTag', { id: props.data.id, name: tagName.value })
+  }
+
+  isEdit.value = false
+}
+
+const deleteFolder = () => {
+  emit('deleteTag', props.data)
+}
+
+const enterSubmitChangeName = (e) => {
+  if (!isEnter.value) {
+    isEnter.value = true
+    return
+  }
+  buttonChange.value.click()
+}
+
+const compositionend = () => {
+  isEnter.value = false
+}
+
+const compositionstart = () => {
+  isEnter.value = true
+}
 </script>
 <style lang="scss" scoped>
   .active {

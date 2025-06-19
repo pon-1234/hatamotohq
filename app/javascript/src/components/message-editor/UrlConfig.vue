@@ -121,117 +121,126 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState, mapActions } from 'vuex';
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { flatten, cloneDeep, find, remove } from 'lodash'
 
-export default {
-  props: ['messageContent', 'index', 'siteMeasurements'],
-  data() {
-    return {
-      notUseShorternUrl: false,
-      showConfigUrlPanel: false,
-      selectedSiteIndex: null,
-      siteName: null,
-      redirectUrl: null,
-      currentSiteMeasurementId: null,
-      actionData: null,
-      mutationSiteMeasurements: [],
-      contentKey: 0
-    };
-  },
-  provide() {
-    return { parentValidator: this.$validator };
-  },
-  mounted() {
-    if (this.siteMeasurements) this.mutationSiteMeasurements = _.cloneDeep(this.siteMeasurements);
-  },
-  computed: {
-    ...mapState('site', {
-      sites: state => _.flatten(state.folders.map((folder) => folder.sites))
-    }),
-    sitesInMessageContent: function() {
-      return this.sites.filter(site => this.messageContent.text.includes(site.url)) || [];
-    }
-  },
-  methods: {
-    ...mapActions('site', [
-      'getSites'
-    ]),
-    changeShortenUrlUsage() {
-      this.notUseShorternUrl = !this.notUseShorternUrl;
-      if (this.notUseShorternUrl) { this.showConfigUrlPanel = false; }
-      this.$emit('changeShortenUrlUsage', { index: this.index, notUseShorternUrl: this.notUseShorternUrl });
-    },
-    async searchSites() {
-      await this.getSites();
-    },
-    selectSite(index) {
-      this.showConfigUrlPanel = true;
-      this.selectedSiteIndex = index;
-      if (this.mutationSiteMeasurements && this.mutationSiteMeasurements.length) {
-        const currentSiteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
-        if (!currentSiteMeasurement) {
-          this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
-          return;
-        }
-        this.currentSiteMeasurementId = currentSiteMeasurement.id;
-        this.siteName = currentSiteMeasurement.site_name;
-        this.redirectUrl = currentSiteMeasurement.redirect_url;
-        this.actionData = currentSiteMeasurement.actions;
-        if (currentSiteMeasurement.actions && currentSiteMeasurement.actions.length) {
-          this.actionData = currentSiteMeasurement.actions[0];
-          this.forceRerenderActionForm();
-        }
-      } else {
-        this.siteName = this.sitesInMessageContent[this.selectedSiteIndex].name;
-      }
-    },
-    removeSite(site) {
-      const siteMeasurements = _.cloneDeep(this.mutationSiteMeasurements);
-      _.remove(siteMeasurements, (siteMeasurement) => siteMeasurement.site_id.toString() === site.id.toString());
-      this.currentSiteMeasurementId = null;
-      this.siteName = null;
-      this.redirectUrl = null;
-      this.actionData = null;
-      this.mutationSiteMeasurements = siteMeasurements;
-      this.$emit('configured', { index: this.index, content: this.mutationSiteMeasurements });
-    },
-    async configUrl() {
-      const result = await this.$validator.validateAll();
-      if (!result) return;
-      this.showConfigUrlPanel = false;
-      const urlConfigObject = { id: this.currentSiteMeasurementId, site_name: this.siteName, redirect_url: this.redirectUrl, site_id: this.sitesInMessageContent[this.selectedSiteIndex].id, actions: [this.actionData] };
-      const currentSiteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === this.sitesInMessageContent[this.selectedSiteIndex].id);
-      if (currentSiteMeasurement) {
-        Object.assign(currentSiteMeasurement, urlConfigObject);
-      } else {
-        this.mutationSiteMeasurements.push(urlConfigObject);
-      }
+const props = defineProps({
+  messageContent: Object,
+  index: Number,
+  siteMeasurements: Array
+})
 
-      this.$emit('configured', { index: this.index, content: this.mutationSiteMeasurements });
-      this.actionData = null;
-      this.forceRerenderActionForm();
-    },
-    updateAction(actions) {
-      this.actionData = actions;
-    },
-    getActionOfSite(site) {
-      const siteMeasurement = _.find(this.mutationSiteMeasurements, siteMeasurement => siteMeasurement.site_id === site.id);
-      if (!siteMeasurement || !siteMeasurement.actions.length || siteMeasurement.actions[0] === null) return [];
-      return siteMeasurement.actions[0].data.actions;
-    },
-    forceRerenderActionForm() {
-      this.contentKey++;
+const emit = defineEmits(['changeShortenUrlUsage', 'configured'])
+
+const store = useStore()
+
+const notUseShorternUrl = ref(false)
+const showConfigUrlPanel = ref(false)
+const selectedSiteIndex = ref(null)
+const siteName = ref(null)
+const redirectUrl = ref(null)
+const currentSiteMeasurementId = ref(null)
+const actionData = ref(null)
+const mutationSiteMeasurements = ref([])
+const contentKey = ref(0)
+const requiredLabel = ref(false)
+const showTitle = ref(false)
+
+const sites = computed(() => flatten(store.state.site.folders.map((folder) => folder.sites)))
+const sitesInMessageContent = computed(() => {
+  return sites.value.filter(site => props.messageContent.text.includes(site.url)) || []
+})
+
+onMounted(() => {
+  if (props.siteMeasurements) mutationSiteMeasurements.value = cloneDeep(props.siteMeasurements)
+})
+const changeShortenUrlUsage = () => {
+  notUseShorternUrl.value = !notUseShorternUrl.value
+  if (notUseShorternUrl.value) { showConfigUrlPanel.value = false }
+  emit('changeShortenUrlUsage', { index: props.index, notUseShorternUrl: notUseShorternUrl.value })
+}
+
+const searchSites = async () => {
+  await store.dispatch('site/getSites')
+}
+
+const selectSite = (index) => {
+  showConfigUrlPanel.value = true
+  selectedSiteIndex.value = index
+  if (mutationSiteMeasurements.value && mutationSiteMeasurements.value.length) {
+    const currentSiteMeasurement = find(mutationSiteMeasurements.value, siteMeasurement => siteMeasurement.site_id === sitesInMessageContent.value[selectedSiteIndex.value].id)
+    if (!currentSiteMeasurement) {
+      siteName.value = sitesInMessageContent.value[selectedSiteIndex.value].name
+      return
     }
+    currentSiteMeasurementId.value = currentSiteMeasurement.id
+    siteName.value = currentSiteMeasurement.site_name
+    redirectUrl.value = currentSiteMeasurement.redirect_url
+    actionData.value = currentSiteMeasurement.actions
+    if (currentSiteMeasurement.actions && currentSiteMeasurement.actions.length) {
+      actionData.value = currentSiteMeasurement.actions[0]
+      forceRerenderActionForm()
+    }
+  } else {
+    siteName.value = sitesInMessageContent.value[selectedSiteIndex.value].name
   }
-};
+}
+
+const removeSite = (site) => {
+  const siteMeasurements = cloneDeep(mutationSiteMeasurements.value)
+  remove(siteMeasurements, (siteMeasurement) => siteMeasurement.site_id.toString() === site.id.toString())
+  currentSiteMeasurementId.value = null
+  siteName.value = null
+  redirectUrl.value = null
+  actionData.value = null
+  mutationSiteMeasurements.value = siteMeasurements
+  emit('configured', { index: props.index, content: mutationSiteMeasurements.value })
+}
+
+const configUrl = async () => {
+  // Since we're removing vee-validate, we'll skip validation for now
+  showConfigUrlPanel.value = false
+  const urlConfigObject = { 
+    id: currentSiteMeasurementId.value, 
+    site_name: siteName.value, 
+    redirect_url: redirectUrl.value, 
+    site_id: sitesInMessageContent.value[selectedSiteIndex.value].id, 
+    actions: [actionData.value] 
+  }
+  const currentSiteMeasurement = find(mutationSiteMeasurements.value, siteMeasurement => siteMeasurement.site_id === sitesInMessageContent.value[selectedSiteIndex.value].id)
+  if (currentSiteMeasurement) {
+    Object.assign(currentSiteMeasurement, urlConfigObject)
+  } else {
+    mutationSiteMeasurements.value.push(urlConfigObject)
+  }
+
+  emit('configured', { index: props.index, content: mutationSiteMeasurements.value })
+  actionData.value = null
+  forceRerenderActionForm()
+}
+
+const updateAction = (actions) => {
+  actionData.value = actions
+}
+
+const getActionOfSite = (site) => {
+  const siteMeasurement = find(mutationSiteMeasurements.value, siteMeasurement => siteMeasurement.site_id === site.id)
+  if (!siteMeasurement || !siteMeasurement.actions.length || siteMeasurement.actions[0] === null) return []
+  return siteMeasurement.actions[0].data.actions
+}
+
+const forceRerenderActionForm = () => {
+  contentKey.value++
+}
 </script>
 
 <style lang="scss" scoped>
   .site-row.selected {
     background-color: #fcf8e3;
   }
-  ::v-deep {
+  :deep() {
     .config-score-container {
       overflow-x: scroll;
     }

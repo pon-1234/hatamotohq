@@ -1,49 +1,81 @@
 <template>
   <div>
-    <action-object-selector
-      :title="'Action Type'"
-      :data="action"
+    <ActionObjectSelector
+      title="Action Type"
+      :model-value="action"
       :supports="supports"
-      @input="changeAction"
-      :isNone="isNone"
-      :messageType="messageType"
+      @update:model-value="changeAction"
+      :is-none="isNone"
+      :message-type="messageType"
       class="form-group"
     />
 
-    <action-object-value
-      :data="action"
+    <ActionObjectValue
+      :model-value="action"
       :name="'message_action_' + name"
-      :requiredLabel="requiredLabel"
-      :showTitle="showTitle"
-      @input="changeAction"
+      :required-label="requiredLabel"
+      :show-title="showTitle"
+      @update:model-value="changeAction"
     />
   </div>
 </template>
 
-<script>
-export default {
-  props: ['value', 'name', 'supports', 'requiredLabel', 'isNone', 'showTitle', 'messageType'],
-  data() {
-    return {
-      type: 'basic',
-      action: { type: 'none' }
-    };
+<script setup>
+import { ref, onMounted } from 'vue';
+import ActionObjectSelector from '../standard/ActionObjectSelector.vue';
+import ActionObjectValue from '../standard/ActionObjectValue.vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-
-  created() {
-    // eslint-disable-next-line no-undef
-    this.action = _.cloneDeep(this.value);
+  name: {
+    type: String,
+    required: true
   },
-
-  methods: {
-    changeType(type) {
-      this.type = type;
-    },
-
-    changeAction(value) {
-      this.action = value;
-      this.$emit('input', value);
-    }
+  supports: {
+    type: Array,
+    default: () => []
+  },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  },
+  isNone: {
+    type: Boolean,
+    default: false
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  },
+  messageType: {
+    type: String,
+    default: null
   }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// State
+const type = ref('basic');
+const action = ref({ type: 'none' });
+
+// Methods
+const changeType = (newType) => {
+  type.value = newType;
 };
+
+const changeAction = (value) => {
+  action.value = value;
+  emit('update:modelValue', value);
+};
+
+// Lifecycle
+onMounted(() => {
+  action.value = JSON.parse(JSON.stringify(props.modelValue));
+});
 </script>

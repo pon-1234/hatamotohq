@@ -35,9 +35,9 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
+                  <tbody v-if="folders[selectedFolder].templates && folders[selectedFolder].templates.length">
                     <tr
-                      v-for="(item, index) in folders[this.selectedFolder].templates"
+                      v-for="(item, index) in folders[selectedFolder].templates"
                       :key="index"
                       class="folder-item"
                     >
@@ -71,45 +71,36 @@
   </div>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
-export default {
-  data() {
-    return {
-      selectedFolder: 0,
-      isPc: true
-    };
-  },
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
 
-  computed: {
-    ...mapState('template', {
-      folders: state => state.folders
-    })
-  },
+const emit = defineEmits(['sendTemplate'])
 
-  async beforeMount() {
-    await this.getTemplates();
-  },
+const store = useStore()
 
-  methods: {
-    ...mapActions('template', ['getTemplates']),
+const selectedFolder = ref(0)
+const isPc = ref(true)
 
-    backToFolder() {
-      this.isPc = false;
-    },
+const folders = computed(() => store.state.template.folders)
 
-    selectTemplate(template) {
-      // eslint-disable-next-line no-undef
-      const data = _.cloneDeep(template);
-      this.$emit('sendTemplate', data);
-    },
+onBeforeMount(async () => {
+  await store.dispatch('template/getTemplates')
+})
 
-    changeTemplateFolder(index) {
-      this.selectedFolder = index;
-      this.isPc = true;
-    }
-  }
-};
+const backToFolder = () => {
+  isPc.value = false
+}
+
+const selectTemplate = (template) => {
+  const data = JSON.parse(JSON.stringify(template))
+  emit('sendTemplate', data)
+}
+
+const changeTemplateFolder = (index) => {
+  selectedFolder.value = index
+  isPc.value = true
+}
 </script>
 <style style="scss" scoped>
   .item-name {

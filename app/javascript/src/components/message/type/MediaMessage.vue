@@ -10,28 +10,25 @@
     </div>
   </div>
 </template>
-<script>
-import Util from '@/core/util';
+<script setup>
+import Util from '@/core/util'
 
-export default {
-  props: ['data'],
-  methods: {
-    getClassName() {
-      let className = 'chat-item rounded';
-      if (this.data.type === 'video') {
-        className += ' video';
-      }
+const props = defineProps(['data'])
 
-      return className;
-    },
-
-    getDuration() {
-      if (this.data.type === 'audio') {
-        return Util.getDuration(this.data);
-      }
-    }
+const getClassName = () => {
+  let className = 'chat-item rounded'
+  if (props.data.type === 'video') {
+    className += ' video'
   }
-};
+
+  return className
+}
+
+const getDuration = () => {
+  if (props.data.type === 'audio') {
+    return Util.getDuration(props.data)
+  }
+}
 </script>
 <style lang="scss" scoped>
   .chat-item {

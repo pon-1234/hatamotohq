@@ -11,10 +11,9 @@
         autocomplete="off"
         type="text"
         v-model.trim="messageData.text"
-        v-validate="'required|max:240'"
         data-vv-as="質問文"
       />
-      <error-message :message="errors.first('confirm-label' + indexParent)"></error-message>
+      <error-message :message="errors.first('confirm-label' + indexParent)" />
     </div>
 
     <ul class="w-100 nav nav-tabs nav-bordered mt-2">
@@ -52,48 +51,50 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'indexParent'],
-  inject: ['parentValidator'],
-  data() {
-    return {
-      editingActionIndex: 0,
-      messageData: {
-        type: this.TemplateMessageType.Confirm,
-        text: '',
-        actions: [this.ActionMessage.default, this.ActionMessage.default]
-      }
-    };
-  },
-  watch: {
-    messageData: {
-      handler(val) {
-        this.$emit('input', val);
-      },
-      deep: true
-    }
-  },
-  created() {
-    this.$validator = this.parentValidator;
-    if (this.data) {
-      Object.assign(this.messageData, this.data);
-    }
-  },
-  methods: {
-    changeSelectedAction(index, value) {
-      this.messageData.actions.splice(index, 1, value);
-    },
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { TemplateMessageType } from '@/core/constant'
+import { useActionMessage } from '@/composables/useConstants'
 
-    changeAction(index, data) {
-      this.messageData.actions.splice(index, 1, data);
-    }
+const props = defineProps({
+  data: Object,
+  indexParent: Number
+})
+
+const emit = defineEmits(['input'])
+
+const actionMessage = useActionMessage()
+
+const editingActionIndex = ref(0)
+const messageData = ref({
+  type: TemplateMessageType.Confirm,
+  text: '',
+  actions: [actionMessage.default, actionMessage.default]
+})
+
+const errors = ref({ items: [], first: () => null })
+
+watch(messageData, (val) => {
+  emit('input', val)
+}, { deep: true })
+
+onMounted(() => {
+  if (props.data) {
+    Object.assign(messageData.value, props.data)
   }
-};
+})
+
+const changeSelectedAction = (index, value) => {
+  messageData.value.actions.splice(index, 1, value)
+}
+
+const changeAction = (index, data) => {
+  messageData.value.actions.splice(index, 1, data)
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .template-confirm {
       padding: 0px;
       margin: 0px !important;

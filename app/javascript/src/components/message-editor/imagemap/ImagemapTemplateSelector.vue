@@ -148,45 +148,42 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 
-export default {
-  props: {
-    id: String,
-    isShow: {
-      type: Boolean,
-      default: false
-    },
-    selectionId: {
-      type: Number,
-      default: 201
-    },
-    value: {
-      type: Number,
-      default: 6
-    }
+const props = defineProps({
+  id: String,
+  isShow: {
+    type: Boolean,
+    default: false
   },
-  data() {
-    return {
-      showModal: this.isShow,
-      selectId: this.selectionId,
-      selectValue: this.value
-    };
+  selectionId: {
+    type: Number,
+    default: 201
   },
-  methods: {
-    acceptAction() {
-      this.$emit('accept', {
-        id: this.selectId,
-        value: this.selectValue
-      });
-    },
-
-    selectTemplate(id, value) {
-      this.selectId = id;
-      this.selectValue = value;
-    }
+  value: {
+    type: Number,
+    default: 6
   }
-};
+})
+
+const emit = defineEmits(['accept'])
+
+const showModal = ref(props.isShow)
+const selectId = ref(props.selectionId)
+const selectValue = ref(props.value)
+
+const acceptAction = () => {
+  emit('accept', {
+    id: selectId.value,
+    value: selectValue.value
+  })
+}
+
+const selectTemplate = (id, value) => {
+  selectId.value = id
+  selectValue.value = value
+}
 </script>
 
 <style lang="scss" scoped>

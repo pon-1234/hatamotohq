@@ -1,25 +1,59 @@
 <template>
-  <div class="modal fade modal-tag modal-common01" id="modal-tag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <label class="mb5">設定タグ一覧</label>
-                <ul class="list-tag list-unstyled no-mgn">
-                    <li class="tag" v-for="(item, index) in tags" :key="index">{{item.name}}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-  </div>
+  <BaseModal
+    id="modal-tag"
+    title="設定タグ一覧"
+    hide-footer
+    ref="modalRef"
+  >
+    <ul class="list-tag list-unstyled mb-0">
+      <li class="tag badge badge-secondary" v-for="(item, index) in tags" :key="index">
+        {{ item.name }}
+      </li>
+    </ul>
+  </BaseModal>
 </template>
-<script>
-export default {
-  props: ['tags']
+
+<script setup>
+import { ref } from 'vue';
+import BaseModal from '../base/BaseModal.vue';
+
+// Props
+const props = defineProps({
+  tags: {
+    type: Array,
+    default: () => []
+  }
+});
+
+// Refs
+const modalRef = ref(null);
+
+// Methods
+const show = () => {
+  modalRef.value?.show();
 };
+
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>
+
 <style lang="scss" scoped>
+.list-tag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 .tag {
-  margin-right: 5px;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
 }
 </style>

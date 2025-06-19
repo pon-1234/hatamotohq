@@ -6,8 +6,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['status']
-};
+<script setup>
+defineProps(['status'])
 </script>

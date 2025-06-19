@@ -1,108 +1,149 @@
 <template>
-  <div
-    class="modal fade modal-common01"
-    :id="id ? id : 'modalSelectTemplate'"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="myModalLabel"
-    aria-hidden="true"
+  <BaseModal
+    :id="id || 'modalSelectTemplate'"
+    title="テンプレートを選択してください"
+    size="lg"
+    hide-footer
+    modal-class="vh-90"
+    ref="modalRef"
   >
-    <div class="modal-dialog modal-lg vh-90 modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">テンプレートを選択してください</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="d-flex" v-if="folders && folders.length">
-            <folder-left
-              type="template_message"
-              :isPerview="true"
-              :data="folders"
-              :isPc="isPc"
-              :selectedFolder="selectedFolder"
-              @changeSelectedFolder="changeSelectedFolderTemplate"
-            />
-            <div class="flex-grow-1 scroll-table">
-              <table class="table table-hover">
-                <thead class="thead-light">
-                  <tr>
-                    <th>
-                      <span v-if="folders[selectedFolder]">{{ folders[selectedFolder].name }}</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody v-if="folders[this.selectedFolder].templates && folders[this.selectedFolder].templates.length">
-                  <tr v-for="(item, index) in folders[this.selectedFolder].templates" :key="index" class="folder-item">
-                    <td class="d-flex w-100">
-                      <div class="box-item-name">
-                        <p class="m-0 vw-10 item-name">{{ item.name }}</p>
-                      </div>
-                      <div
-                        class="btn btn-info btn-sm ml-auto my-auto"
-                        @click="selectTemplate(item)"
-                        data-dismiss="modal"
-                      >
-                        選択
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody v-else>
-                  <tr>
-                    <td class="text-center pt40">データーがありません</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+    <div class="d-flex" v-if="folders && folders.length">
+      <folder-left
+        type="template_message"
+        :is-preview="true"
+        :data="folders"
+        :is-pc="isPc"
+        :selected-folder="selectedFolder"
+        @change-selected-folder="changeSelectedFolderTemplate"
+      />
+      <div class="flex-grow-1 scroll-table">
+        <table class="table table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>
+                <span v-if="folders[selectedFolder]">{{ folders[selectedFolder].name }}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="folders[selectedFolder]?.templates?.length">
+            <tr v-for="(item, index) in folders[selectedFolder].templates" :key="index" class="folder-item">
+              <td class="d-flex w-100">
+                <div class="box-item-name">
+                  <p class="m-0 vw-10 item-name">{{ item.name }}</p>
+                </div>
+                <button
+                  class="btn btn-info btn-sm ms-auto my-auto"
+                  @click="selectTemplate(item)"
+                  type="button"
+                >
+                  選択
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td class="text-center pt-5">データーがありません</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </BaseModal>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
-export default {
-  props: ['id'],
+<script setup>
+import { ref, computed, onBeforeMount } from 'vue';
+import { useStore } from 'vuex';
+import BaseModal from '../base/BaseModal.vue';
+import FolderLeft from '../folder/FolderLeft.vue';
 
-  data() {
-    return {
-      selectedFolder: 0,
-      isPc: true
-    };
-  },
-
-  computed: {
-    ...mapState('template', {
-      folders: state => state.folders
-    })
-  },
-
-  async beforeMount() {
-    await this.getTemplates();
-  },
-
-  methods: {
-    ...mapActions('template', ['getTemplates']),
-
-    backToFolder() {
-      this.isPc = false;
-    },
-
-    selectTemplate(template) {
-      // eslint-disable-next-line no-undef
-      const data = _.cloneDeep(template);
-      this.$emit('selectTemplate', data);
-    },
-
-    changeSelectedFolderTemplate(index) {
-      this.selectedFolder = index;
-      this.isPc = true;
-    }
+// Props
+const props = defineProps({
+  id: {
+    type: String,
+    default: null
   }
+});
+
+// Emits
+const emit = defineEmits(['selectTemplate']);
+
+// Store
+const store = useStore();
+
+// Refs
+const modalRef = ref(null);
+
+// State
+const selectedFolder = ref(0);
+const isPc = ref(true);
+
+// Computed
+const folders = computed(() => store.state.template.folders);
+
+// Methods
+const getTemplates = () => store.dispatch('template/getTemplates');
+
+const backToFolder = () => {
+  isPc.value = false;
 };
+
+const selectTemplate = (template) => {
+  const data = JSON.parse(JSON.stringify(template)); // Deep clone
+  emit('selectTemplate', data);
+  modalRef.value?.hide();
+};
+
+const changeSelectedFolderTemplate = (index) => {
+  selectedFolder.value = index;
+  isPc.value = true;
+};
+
+const show = () => {
+  modalRef.value?.show();
+};
+
+const hide = () => {
+  modalRef.value?.hide();
+};
+
+// Lifecycle
+onBeforeMount(async () => {
+  await getTemplates();
+});
+
+// Expose methods for parent component access
+defineExpose({
+  show,
+  hide
+});
 </script>
+
+<style scoped>
+.vh-90 {
+  max-height: 90vh;
+}
+
+.scroll-table {
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+}
+
+.pt-5 {
+  padding-top: 3rem !important;
+}
+
+.vw-10 {
+  width: 10vw;
+}
+
+.item-name {
+  word-break: break-word;
+}
+
+.box-item-name {
+  flex: 1;
+  min-width: 0;
+}
+</style>

@@ -6,9 +6,8 @@
           type="text"
           v-model="background"
           :name="'image-url'"
-          v-validate="'required'"
+          required
           class="d-none"
-          data-vv-as="背景画像"
         />
         <rich-menu-preview
           :background="background"
@@ -99,148 +98,146 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+import { ref, reactive, watch, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
 
-export default {
-  props: {
-    templateId: {
-      type: Number,
-      default: 201
-    },
-    piecesCount: Number,
-    background: String,
-    areas: {
-      type: Array,
-      default: () => []
-    },
-    typeTemplate: {
-      type: String,
-      default: 'large'
-    }
+const props = defineProps({
+  templateId: {
+    type: Number,
+    default: 201
   },
-  data() {
-    return {
-      isShowingEditor: false,
-      alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-      actionObjects: []
-    };
+  piecesCount: Number,
+  background: String,
+  areas: {
+    type: Array,
+    default: () => []
   },
+  typeTemplate: {
+    type: String,
+    default: 'large'
+  }
+})
+const emit = defineEmits(['input', 'onMediaChanged'])
+const store = useStore()
 
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
-    this.actionObjects = [...this.areas];
-  },
+const isShowingEditor = ref(false)
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const actionObjects = ref([])
+const background = ref(props.background)
+const errors = ref({ first: () => null, items: [] })
+const RichMenuBounds = window.RichMenuBounds || {}
+const ActionMessage = window.ActionMessage || { default: {} }
 
-  watch: {
-    piecesCount(val, old) {
-      if (old < val) {
-        for (let i = old; i < val; i++) {
-          this.actionObjects.push({
-            key: this.alphabet.charAt(i),
-            expand: false,
-            action: this.ActionMessage.default,
-            bounds: this.RichMenuBounds[this.templateId][i]
-          });
-        }
-      } else if (old > val) {
-        this.actionObjects.splice(val, old - val);
-      }
-    },
-    templateId(val) {
-      this.actionObjects.forEach((action, index) => {
-        action.bounds = this.RichMenuBounds[val][index];
-      });
-    },
-    actionObjects: {
-      handler(val) {
-        this.$emit('input', val);
-      },
-      deep: true
-    }
-  },
+// Initialize actionObjects
+actionObjects.value = [...props.areas]
 
-  beforeMount() {
-    const old = this.actionObjects.length;
-    const val = this.piecesCount;
-
-    if (old < val) {
-      for (let i = old; i < val; i++) {
-        this.actionObjects.push({
-          key: this.alphabet.charAt(i),
-          expand: false,
-          action: this.ActionMessage.default,
-          bounds: this.RichMenuBounds[this.templateId][i]
-        });
-      }
-    } else if (old > val) {
-      this.actionObjects.splice(val, old - val);
-    }
-  },
-
-  methods: {
-    ...mapActions('global', ['uploadRichMenu']),
-
-    expandAction(key, isAutoCollapse = true, index) {
-      const field = this.errors.items.find(item => item.field.includes('richmenu_type_' + index));
-      if (field && field.field) {
-        this.errors.remove(field.field);
-      }
-      // field.remove();
-      if (isAutoCollapse) {
-        this.actionObjects.forEach((value, index) => {
-          if (key === value.key) {
-            this.$set(this.actionObjects[index], 'expand', true);
-          } else {
-            this.$set(this.actionObjects[index], 'expand', false);
-          }
-        });
-      } else {
-        const index = this.actionObjects.findIndex(val => val.key === key);
-        this.$set(this.actionObjects[index], 'expand', !this.actionObjects[index].expand);
-      }
-    },
-
-    changeObjectAction(key, value) {
-      this.actionObjects[key] = value;
-    },
-    exportImage(data) {
-      this.isShowingEditor = false;
-      // remove header
-      data = data.replace('data:image/jpeg;base64,', '');
-      // upload image
-      this.uploadRichMenu({
-        file: this.b64toBlob(data)
+watch(() => props.piecesCount, (val, old) => {
+  if (old < val) {
+    for (let i = old; i < val; i++) {
+      actionObjects.value.push({
+        key: alphabet.charAt(i),
+        expand: false,
+        action: ActionMessage.default,
+        bounds: RichMenuBounds[props.templateId][i]
       })
-        .then(response => {
-          this.$emit('onMediaChanged', response);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
+    }
+  } else if (old > val) {
+    actionObjects.value.splice(val, old - val)
+  }
+})
 
-    b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
-      const byteCharacters = atob(b64Data);
-      const byteArrays = [];
+watch(() => props.templateId, (val) => {
+  actionObjects.value.forEach((action, index) => {
+    action.bounds = RichMenuBounds[val][index]
+  })
+})
 
-      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
+watch(actionObjects, (val) => {
+  emit('input', val)
+}, { deep: true })
 
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
+onBeforeMount(() => {
+  const old = actionObjects.value.length
+  const val = props.piecesCount
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
+  if (old < val) {
+    for (let i = old; i < val; i++) {
+      actionObjects.value.push({
+        key: alphabet.charAt(i),
+        expand: false,
+        action: ActionMessage.default,
+        bounds: RichMenuBounds[props.templateId][i]
+      })
+    }
+  } else if (old > val) {
+    actionObjects.value.splice(val, old - val)
+  }
+})
 
-      return new Blob(byteArrays, { type: contentType });
+const uploadRichMenu = (payload) => store.dispatch('global/uploadRichMenu', payload)
+
+const expandAction = (key, isAutoCollapse = true, index) => {
+  const field = errors.value.items.find(item => item.field.includes('richmenu_type_' + index))
+  if (field && field.field) {
+    // Remove error - handle validation differently in Vue 3
+    const errorIndex = errors.value.items.findIndex(item => item.field === field.field)
+    if (errorIndex > -1) {
+      errors.value.items.splice(errorIndex, 1)
     }
   }
-};
+  if (isAutoCollapse) {
+    actionObjects.value.forEach((value, idx) => {
+      if (key === value.key) {
+        actionObjects.value[idx].expand = true
+      } else {
+        actionObjects.value[idx].expand = false
+      }
+    })
+  } else {
+    const idx = actionObjects.value.findIndex(val => val.key === key)
+    actionObjects.value[idx].expand = !actionObjects.value[idx].expand
+  }
+}
+
+const changeObjectAction = (key, value) => {
+  actionObjects.value[key] = value
+}
+
+const exportImage = (data) => {
+  isShowingEditor.value = false
+  // remove header
+  data = data.replace('data:image/jpeg;base64,', '')
+  // upload image
+  uploadRichMenu({
+    file: b64toBlob(data)
+  })
+    .then(response => {
+      emit('onMediaChanged', response)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+const b64toBlob = (b64Data, contentType = 'image/jpeg', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data)
+  const byteArrays = []
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize)
+
+    const byteNumbers = new Array(slice.length)
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i)
+    }
+
+    const byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push(byteArray)
+  }
+
+  return new Blob(byteArrays, { type: contentType })
+}
 </script>
 
 <style lang="scss" scoped>

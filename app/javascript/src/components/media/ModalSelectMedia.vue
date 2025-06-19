@@ -50,61 +50,55 @@
     </div>
   </div>
 </template>
-<script>
-import { mapActions } from 'vuex';
+<script setup>
+import { ref, onMounted } from 'vue'
 
-export default {
-  props: {
-    types: {
-      type: Array,
-      default: () => ['image', 'audio', 'video']
-    },
-    filterable: {
-      type: Boolean,
-      default: true
-    },
-    id: {
-      type: String
-    }
+const props = defineProps({
+  types: {
+    type: Array,
+    default: () => ['image', 'audio', 'video']
   },
-
-  data() {
-    return {
-      contentKey: 0,
-      visible: false
-    };
+  filterable: {
+    type: Boolean,
+    default: true
   },
-
-  mounted() {
-    $(this.$refs.modalSelectMedia).on('show.bs.modal', this.shownModal);
-    $(this.$refs.modalSelectMedia).on('hide.bs.modal', this.hideModal);
-  },
-
-  methods: {
-    ...mapActions('media', ['uploadMedia', 'uploadRichMenu', 'uploadImageMap']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    selectMedia(media) {
-      this.$emit('select', media);
-      this.$refs.close.click();
-    },
-
-    shownModal() {
-      this.visible = true;
-    },
-
-    hideModal() {
-      this.visible = false;
-    }
+  id: {
+    type: String
   }
-};
+})
+
+const emit = defineEmits(['select'])
+
+const contentKey = ref(0)
+const visible = ref(false)
+const modalSelectMedia = ref(null)
+const close = ref(null)
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const selectMedia = (media) => {
+  emit('select', media)
+  close.value.click()
+}
+
+const shownModal = () => {
+  visible.value = true
+}
+
+const hideModal = () => {
+  visible.value = false
+}
+
+onMounted(() => {
+  $(modalSelectMedia.value).on('show.bs.modal', shownModal)
+  $(modalSelectMedia.value).on('hide.bs.modal', hideModal)
+})
 </script>
 
 <style  lang="scss"  scoped>
-  ::v-deep {
+  :deep() {
     .hidden {
       display: none !important;
     }

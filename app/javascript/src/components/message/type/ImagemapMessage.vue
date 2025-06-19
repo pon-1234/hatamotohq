@@ -3,10 +3,8 @@
     <img v-if="baseUrl" class="imagemap" v-lazy:background-image="baseUrl" />
   </div>
 </template>
-<script>
-export default {
-  props: ['baseUrl']
-};
+<script setup>
+defineProps(['baseUrl'])
 </script>
 <style lang="scss" scoped>
   .imagemap {

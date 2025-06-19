@@ -22,27 +22,24 @@
   </div>
 </template>
 
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: {
-    id: {
-      type: Number
-    },
-    locked: {
-      type: Boolean
-    }
+<script setup>
+import { useStore } from 'vuex'
+
+const props = defineProps({
+  id: {
+    type: Number
   },
-
-  methods: {
-    ...mapActions('friend', ['toggleLocked']),
-
-    async toggle() {
-      await this.toggleLocked(this.id);
-      setTimeout(() => {
-        location.reload();
-      }, 300);
-    }
+  locked: {
+    type: Boolean
   }
-};
+})
+
+const store = useStore()
+
+const toggle = async () => {
+  await store.dispatch('friend/toggleLocked', props.id)
+  setTimeout(() => {
+    location.reload()
+  }, 300)
+}
 </script>

@@ -52,51 +52,57 @@
     </tbody>
   </table>
 </template>
-<script>
-export default {
-  props: ['friendId'],
-  data() {
-    return {
-      MIX_SERVEY_MEDIA_FLEXA_URL: process.env.MIX_SERVEY_MEDIA_FLEXA_URL,
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
-      responseLists: [],
-      isLoading: true,
-      isError: false
-    };
-  },
-  beforeMount() {
-    this.fetchData();
-  },
-  methods: {
-    fetchData() {
-      this.isLoading = true;
-      this.isError = false;
-      this.$store.dispatch('survey/friendAnswers', { id: this.friendId })
-        .then((res) => {
-          console.log(res);
-          this.responseLists = res;
-          this.isLoading = false;
-        })
-        .catch(() => {
-          // show error
-          this.isLoading = false;
-          this.isError = true;
-        });
-    },
-    trimMidString(originStr, maxChars, trailingCharCount) {
-      let shrinkedStr = originStr;
-      const shrinkedLength = maxChars - trailingCharCount - 3;
-      if (originStr.length > shrinkedLength) {
-        const front = originStr.substr(0, shrinkedLength);
-        const mid = '...';
-        const end = originStr.substr(-trailingCharCount);
-        shrinkedStr = front + mid + end;
-      }
-      return shrinkedStr;
-    },
-    autoText(data) {
-      return Array.isArray(data) ? data.join(', ') : data;
-    }
+<script setup>
+import { ref, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
+
+const props = defineProps({
+  friendId: {
+    type: [String, Number],
+    required: true
   }
-};
+})
+
+const store = useStore()
+
+const MIX_SERVEY_MEDIA_FLEXA_URL = process.env.MIX_SERVEY_MEDIA_FLEXA_URL
+const MIX_ROOT_PATH = process.env.MIX_ROOT_PATH
+const responseLists = ref([])
+const isLoading = ref(true)
+const isError = ref(false)
+
+const fetchData = async () => {
+  isLoading.value = true
+  isError.value = false
+  try {
+    const res = await store.dispatch('survey/friendAnswers', { id: props.friendId })
+    console.log(res)
+    responseLists.value = res
+    isLoading.value = false
+  } catch (error) {
+    // show error
+    isLoading.value = false
+    isError.value = true
+  }
+}
+
+const trimMidString = (originStr, maxChars, trailingCharCount) => {
+  let shrinkedStr = originStr
+  const shrinkedLength = maxChars - trailingCharCount - 3
+  if (originStr.length > shrinkedLength) {
+    const front = originStr.substr(0, shrinkedLength)
+    const mid = '...'
+    const end = originStr.substr(-trailingCharCount)
+    shrinkedStr = front + mid + end
+  }
+  return shrinkedStr
+}
+
+const autoText = (data) => {
+  return Array.isArray(data) ? data.join(', ') : data
+}
+
+onBeforeMount(() => {
+  fetchData()
+})
 </script>

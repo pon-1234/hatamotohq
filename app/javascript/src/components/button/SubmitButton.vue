@@ -7,7 +7,7 @@
       @click="$emit('click')"
     >
       <span v-if="submitted">
-        <b-spinner small></b-spinner>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         <span v-if="object">{{ object }}を</span><span>{{ action }}中</span>
       </span>
       <span v-else>
@@ -17,8 +17,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['object', 'action', 'submitted', 'disabled', 'classes']
-};
+<script setup>
+defineProps({
+  object: {
+    type: String,
+    default: ''
+  },
+  action: {
+    type: String,
+    default: ''
+  },
+  submitted: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  classes: {
+    type: String,
+    default: ''
+  }
+});
+
+defineEmits(['click']);
 </script>

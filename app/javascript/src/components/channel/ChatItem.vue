@@ -30,81 +30,61 @@
     </template>
   </li>
 </template>
-<script>
-import moment from 'moment';
-import Util from '@/core/util';
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import moment from 'moment'
+import Util from '@/core/util'
 
-export default {
-  props: {
-    message: {
-      type: Object,
-      required: true
-    },
-    prevMessage: {
-      type: Object,
-      required: false,
-      default: () => {}
-    },
-    lastSeenAt: {
-      type: String,
-      required: false,
-      default: moment()
-    },
-    showUnreadMarkDiv: {
-      type: Boolean,
-      required: false,
-      default: null
-    }
+const props = defineProps({
+  message: {
+    type: Object,
+    required: true
   },
-  data() {
-    return {
-      avatarImgObj: {
-        src: '',
-        error: '/img/no-image-profile.png',
-        loading: '/images/loading.gif'
-      },
-      componentKey: 0
-    };
+  prevMessage: {
+    type: Object,
+    required: false,
+    default: () => {}
   },
-
-  mounted() {
-    this.avatarImgObj.src = this.sender.avatar_url || '/img/no-image-profile.png';
+  lastSeenAt: {
+    type: String,
+    required: false,
+    default: moment().format()
   },
-
-  computed: {
-    isSystemMessage() {
-      return this.message.from === 'system';
-    },
-    isFriendMessage() {
-      return this.message.from === 'friend';
-    },
-    sender() {
-      return this.message.sender || {};
-    },
-    readableTime() {
-      return Util.formattedTime(this.message.timestamp);
-    },
-    readableDate() {
-      return Util.formattedDate(this.message.timestamp);
-    },
-    shouldShowDate() {
-      const ts1 = this.message.timestamp;
-      const ts2 = this.prevMessage ? this.prevMessage.timestamp : null;
-      const date1 = Util.formattedDate(ts1);
-      const date2 = ts2 ? Util.formattedDate(ts2) : null;
-      return date1 !== date2;
-    },
-    alignBubble() {
-      return this.message.from === 'friend' ? 'clearfix' : 'clearfix odd';
-    }
-  },
-
-  methods: {
-    forceRerender() {
-      this.componentKey++;
-    }
+  showUnreadMarkDiv: {
+    type: Boolean,
+    required: false,
+    default: null
   }
-};
+})
+
+const componentKey = ref(0)
+const avatarImgObj = ref({
+  src: '',
+  error: '/img/no-image-profile.png',
+  loading: '/images/loading.gif'
+})
+
+const isSystemMessage = computed(() => props.message.from === 'system')
+const isFriendMessage = computed(() => props.message.from === 'friend')
+const sender = computed(() => props.message.sender || {})
+const readableTime = computed(() => Util.formattedTime(props.message.timestamp))
+const readableDate = computed(() => Util.formattedDate(props.message.timestamp))
+const shouldShowDate = computed(() => {
+  const ts1 = props.message.timestamp
+  const ts2 = props.prevMessage ? props.prevMessage.timestamp : null
+  const date1 = Util.formattedDate(ts1)
+  const date2 = ts2 ? Util.formattedDate(ts2) : null
+  return date1 !== date2
+})
+const alignBubble = computed(() => props.message.from === 'friend' ? 'clearfix' : 'clearfix odd')
+
+onMounted(() => {
+  avatarImgObj.value.src = sender.value.avatar_url || '/img/no-image-profile.png'
+})
+
+const forceRerender = () => {
+  componentKey.value++
+}
 </script>
 <style lang="scss" scoped>
   .date-title {
@@ -119,7 +99,7 @@ export default {
     background: #ccc;
   }
 
-  ::v-deep {
+  :deep() {
     .more-option {
       display: none;
       margin: 0 5px;

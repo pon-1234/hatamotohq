@@ -22,33 +22,29 @@
   </div>
   <!-- /.modal -->
 </template>
-<script>
-import { mapActions } from 'vuex';
-export default {
-  props: ['reminder_id'],
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
-  data() {
-    return {
-      reminder: null,
-      contentKey: 0
-    };
-  },
+const props = defineProps(['reminder_id'])
+const store = useStore()
 
-  mounted() {
-    $(this.$refs.modalReminderPreview).on('show.bs.modal', this.onShow);
-  },
+const reminder = ref(null)
+const contentKey = ref(0)
+const modalReminderPreview = ref(null)
 
-  methods: {
-    ...mapActions('reminder', ['getReminder']),
+const getReminder = (id) => store.dispatch('reminder/getReminder', id)
 
-    forceRerender() {
-      this.contentKey++;
-    },
+const forceRerender = () => {
+  contentKey.value++
+}
 
-    async onShow() {
-      this.reminder = await this.getReminder(this.reminder_id);
-      this.forceRerender();
-    }
-  }
-};
+const onShow = async () => {
+  reminder.value = await getReminder(props.reminder_id)
+  forceRerender()
+}
+
+onMounted(() => {
+  $(modalReminderPreview.value).on('show.bs.modal', onShow)
+})
 </script>

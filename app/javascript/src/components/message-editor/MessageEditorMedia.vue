@@ -22,55 +22,60 @@
           </div>
         </div>
       </div>
-      <error-message :message="errors.first('media-template' + index)"></error-message>
+      <error-message :message="errors.first('media-template' + index)" />
       <modal-select-media :types="[data.type]" @select="addMedia($event)"></modal-select-media>
     </div>
     <input
       type="hidden"
       v-model="data.originalContentUrl"
       :name="'media-template' + index"
-      v-validate="'required'"
       data-vv-as="ファイル"
     />
   </div>
 </template>
-<script>
-import Util from '@/core/util';
+<script setup>
+import { ref } from 'vue'
+import Util from '@/core/util'
 
-export default {
-  props: ['data', 'index'],
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
   },
-  methods: {
-    removeMedia() {
-      this.data.originalContentUrl = '';
+  index: Number
+})
 
-      if (this.data.type === 'image' || this.data.type === 'video') {
-        this.data.previewImageUrl = '';
-      }
+const emit = defineEmits(['input'])
 
-      if (this.data.type === 'audio') {
-        this.data.duration = '';
-      }
+const errors = ref({ first: () => null })
 
-      this.$emit('input', this.data);
-    },
-    addMedia(media) {
-      const messageData = {
-        type: media.type,
-        originalContentUrl: media.url,
-        previewImageUrl: media.preview_url,
-        duration: media.duration
-      };
-      this.$emit('input', messageData);
-    },
-    getDuration() {
-      return Util.getDuration(this.data);
-    }
+const removeMedia = () => {
+  props.data.originalContentUrl = ''
+
+  if (props.data.type === 'image' || props.data.type === 'video') {
+    props.data.previewImageUrl = ''
   }
-};
+
+  if (props.data.type === 'audio') {
+    props.data.duration = ''
+  }
+
+  emit('input', props.data)
+}
+
+const addMedia = (media) => {
+  const messageData = {
+    type: media.type,
+    originalContentUrl: media.url,
+    previewImageUrl: media.preview_url,
+    duration: media.duration
+  }
+  emit('input', messageData)
+}
+
+const getDuration = () => {
+  return Util.getDuration(props.data)
+}
 </script>
 
 <style lang="scss" scoped>

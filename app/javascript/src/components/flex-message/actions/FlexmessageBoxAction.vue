@@ -25,42 +25,36 @@
   </div>
 </template>
 
-<script>
-import { ActionMessage } from '../../../core/constant';
+<script setup>
+import { ref, watch } from 'vue'
+import { ActionMessage } from '../../../core/constant'
 
-export default {
-  props: ['name', 'data'],
-  data() {
-    return {
-      action: this.data.action || ActionMessage.default
-    };
-  },
-  watch: {
-    data() {
-      this.action = this.data.action || ActionMessage.default;
-    },
-    action: {
-      handler(val) {
-        this.input();
-      },
-      deep: true
-    }
-  },
-  methods: {
-    input() {
-      const mData = this.data;
-      mData.action = this.action;
-      this.$emit('input', mData);
-    },
-    expand() {
-      if ($('div.' + this.name + '-expand').is(':visible')) {
-        $('div.' + this.name + '-expand').parent().removeClass('active');
-      } else {
-        $('div.' + this.name + '-expand').parent().addClass('active');
-      }
-    }
+const props = defineProps(['name', 'data'])
+const emit = defineEmits(['input'])
+
+const action = ref(props.data.action || ActionMessage.default)
+
+watch(() => props.data, () => {
+  action.value = props.data.action || ActionMessage.default
+})
+
+watch(action, (val) => {
+  input()
+}, { deep: true })
+
+const input = () => {
+  const mData = props.data
+  mData.action = action.value
+  emit('input', mData)
+}
+
+const expand = () => {
+  if ($('div.' + props.name + '-expand').is(':visible')) {
+    $('div.' + props.name + '-expand').parent().removeClass('active')
+  } else {
+    $('div.' + props.name + '-expand').parent().addClass('active')
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -76,7 +70,7 @@ export default {
     content: "\f077";
   }
 
-  ::v-deep {
+  :deep() {
     .card-header:first-child {
       border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
     }

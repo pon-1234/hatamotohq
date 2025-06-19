@@ -1999,3 +1999,5 @@ Processing by User::HomeController#index as HTML
 Completed 200 OK in 152ms (Views: 14.4ms | ActiveRecord: 122.0ms | Allocations: 23894)
 
 
+- Gracefully stopping, waiting for requests to finish
+Exiting

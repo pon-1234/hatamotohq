@@ -20,28 +20,22 @@
     </div>
   </div>
 </template>
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
 
-import Util from '@/core/util';
+const store = useStore()
 
-export default {
-  computed: {
-    ...mapState('preview', {
-      messages: state => state.messages
-    })
-  },
+const messages = computed(() => store.state.preview.messages)
 
-  methods: {
-    isDisplay(item) {
-      return !Util.checkMessageContentForPreview(item);
-    }
-  }
-};
+const isDisplay = (item) => {
+  return !Util.checkMessageContentForPreview(item)
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .mb-1,
     .my-1 {
       margin-bottom: 0.25rem !important;

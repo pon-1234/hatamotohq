@@ -19,7 +19,7 @@
     <div class="form-group clearfix d-flex">
       <div class="fw-200 d-flex align-items-center">
         <span>補足文</span>
-        <div v-b-tooltip.hover title="回答入力欄の下に表示されます" class="ml-2">
+        <div data-bs-toggle="tooltip" data-bs-placement="top" title="回答入力欄の下に表示されます" class="ml-2">
           <i class="text-md far fa-question-circle"></i>
         </div>
       </div>
@@ -121,71 +121,103 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['content', 'name'],
-  data() {
-    return {
-      contentKey: 0,
-      max: 50,
-      questionContentData: this.content || {
-        text: null,
-        sub_text: null,
-        name: this.name,
-        options: [
-          {
-            value: null,
-            action: {
-              type: 'none'
-            }
-          }
-        ]
-      }
-    };
-  },
-  inject: ['parentValidator'],
+<script setup>
+import { ref, watch, onMounted, inject } from 'vue'
 
-  created() {
-    this.$validator = this.parentValidator;
-    this.questionContentData.name = this.name;
-    this.syncObj();
+const props = defineProps({
+  content: {
+    type: Object,
+    default: null
   },
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
-
-    syncObj() {
-      this.forceRerender();
-      this.$emit('input', this.questionContentData);
-    },
-    addItem() {
-      this.questionContentData.options.push({
-        value: null,
-        action: {
-          type: 'none'
-        }
-      });
-      this.syncObj();
-    },
-    moveUpObject(index) {
-      if (index > 0) {
-        const to = index - 1;
-        this.questionContentData.options.splice(to, 0, this.questionContentData.options.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    },
-    moveDownObject(index) {
-      if (index < this.questionContentData.options.length) {
-        const to = index + 1;
-        this.questionContentData.options.splice(to, 0, this.questionContentData.options.splice(index, 1)[0]);
-        this.syncObj();
-      }
-    },
-    removeObject(index) {
-      this.questionContentData.options.splice(index, 1);
-      this.syncObj();
-    }
+  name: {
+    type: String,
+    required: true
   }
-};
+})
+
+const emit = defineEmits(['input'])
+
+const parentValidator = inject('parentValidator', null)
+
+const contentKey = ref(0)
+const max = 50
+const questionContentData = ref(props.content || {
+  text: null,
+  sub_text: null,
+  name: props.name,
+  options: [
+    {
+      value: null,
+      action: {
+        type: 'none'
+      }
+    }
+  ]
+})
+
+// For vee-validate compatibility
+const $validator = ref(null)
+const errors = ref({ 
+  first: () => null,
+  items: [] 
+})
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const syncObj = () => {
+  forceRerender()
+  emit('input', questionContentData.value)
+}
+
+const addItem = () => {
+  questionContentData.value.options.push({
+    value: null,
+    action: {
+      type: 'none'
+    }
+  })
+  syncObj()
+}
+
+const moveUpObject = (index) => {
+  if (index > 0) {
+    const to = index - 1
+    questionContentData.value.options.splice(to, 0, questionContentData.value.options.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+const moveDownObject = (index) => {
+  if (index < questionContentData.value.options.length) {
+    const to = index + 1
+    questionContentData.value.options.splice(to, 0, questionContentData.value.options.splice(index, 1)[0])
+    syncObj()
+  }
+}
+
+const removeObject = (index) => {
+  questionContentData.value.options.splice(index, 1)
+  syncObj()
+}
+
+// Watch for content prop changes
+watch(() => props.content, (newContent) => {
+  if (newContent) {
+    questionContentData.value = newContent
+  }
+})
+
+onMounted(() => {
+  $validator.value = parentValidator
+  questionContentData.value.name = props.name
+  syncObj()
+  
+  // Initialize Bootstrap tooltips
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+})
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="media-content d-flex align-items-center justify-content-center">
-    <img v-lazy="`${src}`" v-if="isImage" class="image">
+    <img v-lazy="src" v-if="isImage" class="image" :alt="altText">
     <div v-else-if="isVideo">
       <video :width="200" :height="150" controls>
         <source :src="src" />
@@ -16,49 +16,75 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['src', 'type', 'duration', 'showMedia'],
-  data() {
-    return {
-    };
+<script setup>
+import { computed } from 'vue';
+
+// Props
+const props = defineProps({
+  src: {
+    type: String,
+    required: true
   },
-
-  computed: {
-    isImage() {
-      return this.type === 'image' || this.type === 'richmenu' || this.type === 'imagemap';
-    },
-    isVideo() {
-      return this.type === 'video';
-    },
-    isAudio() {
-      return this.type === 'audio';
-    }
+  type: {
+    type: String,
+    required: true
+  },
+  duration: {
+    type: [String, Number],
+    default: null
+  },
+  showMedia: {
+    type: Boolean,
+    default: true
   }
-};
+});
+
+// Computed
+const isImage = computed(() => {
+  return props.type === 'image' || props.type === 'richmenu' || props.type === 'imagemap';
+});
+
+const isVideo = computed(() => {
+  return props.type === 'video';
+});
+
+const isAudio = computed(() => {
+  return props.type === 'audio';
+});
+
+const altText = computed(() => {
+  const typeMap = {
+    image: '画像',
+    richmenu: 'リッチメニュー',
+    imagemap: 'イメージマップ'
+  };
+  return typeMap[props.type] || 'メディア';
+});
 </script>
+
 <style lang="scss" scoped>
-  .media-content {
-    display: inline-flex;
+.media-content {
+  display: inline-flex;
 
-    .image {
-      object-fit: contain;
-      height: auto;
-      width: 200px;
-    }
-  }
-
-  .chat-item-voice {
+  .image {
+    object-fit: contain;
+    height: auto;
     width: 200px;
-    height: 54px;
-    display: flex;
-    border: 1px solid #dee2e6 !important;
-    border-radius: 4px;
-
-    .audio-player {
-      width: 100%;
-      height: -webkit-fill-available;
-      background-color: #f1f3f4;
-    }
+    max-width: 100%;
   }
+}
+
+.chat-item-voice {
+  width: 200px;
+  height: 54px;
+  display: flex;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 4px;
+
+  .audio-player {
+    width: 100%;
+    height: 100%;
+    background-color: #f1f3f4;
+  }
+}
 </style>

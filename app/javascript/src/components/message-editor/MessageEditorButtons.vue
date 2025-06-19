@@ -9,11 +9,10 @@
           type="text"
           maxlength="41"
           v-model.trim="templateData.title"
-          v-validate="'required|max:40'"
           data-vv-as="タイトル"
           :name="'button-title' + indexParent"
         />
-        <error-message :message="errors.first('button-title' + indexParent)"></error-message>
+        <error-message :message="errors.first('button-title' + indexParent)" />
       </div>
 
       <div class="d-flex group-title col-12">
@@ -25,10 +24,9 @@
           type="text"
           maxlength="61"
           v-model.trim="templateData.text"
-          v-validate="'required|max:60'"
           data-vv-as="テキスト"
         />
-        <error-message :message="errors.first('button-text' + indexParent)"></error-message>
+        <error-message :message="errors.first('button-text' + indexParent)" />
       </div>
 
       <div class="row col-12" style="margin-top: 15px !important">
@@ -81,69 +79,71 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'indexParent'],
-  inject: ['parentValidator'],
-  data() {
-    return {
-      selected: 0,
-      action_type: 'message',
-      contentKey: 0,
-      templateData: {
-        type: this.TemplateMessageType.Buttons,
-        title: '',
-        text: '',
-        altText: '',
-        actions: [this.ActionMessage.default]
-      }
-    };
-  },
-  created() {
-    this.$validator = this.parentValidator;
-    if (this.data) {
-      Object.assign(this.templateData, this.data);
-      this.action_type = this.templateData.actions[0].type;
-    }
-  },
-  watch: {
-    templateData: {
-      handler(val) {
-        this.$emit('input', val);
-      },
-      deep: true
-    }
-  },
-  methods: {
-    forceRerender() {
-      this.contentKey++;
-    },
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { TemplateMessageType } from '@/core/constant'
+import { useActionMessage } from '@/composables/useConstants'
 
-    addMoreAction() {
-      this.selected = this.templateData.actions.length;
-      this.templateData.actions.push(this.ActionMessage.default);
-    },
+const props = defineProps({
+  data: Object,
+  indexParent: Number
+})
 
-    changeSelected(index) {
-      this.selected = index;
-      this.action_type = this.templateData.actions[index].type;
-    },
+const emit = defineEmits(['input'])
 
-    removeAction(index) {
-      this.templateData.actions.splice(index, 1);
-      this.selected = 0;
-      this.forceRerender();
-    },
+const actionMessage = useActionMessage()
 
-    changeAction(index, data) {
-      this.templateData.actions.splice(index, 1, data);
-    }
+const selected = ref(0)
+const action_type = ref('message')
+const contentKey = ref(0)
+const templateData = ref({
+  type: TemplateMessageType.Buttons,
+  title: '',
+  text: '',
+  altText: '',
+  actions: [actionMessage.default]
+})
+
+const errors = ref({ items: [], first: () => null })
+
+onMounted(() => {
+  if (props.data) {
+    Object.assign(templateData.value, props.data)
+    action_type.value = templateData.value.actions[0].type
   }
-};
+})
+
+watch(templateData, (val) => {
+  emit('input', val)
+}, { deep: true })
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const addMoreAction = () => {
+  selected.value = templateData.value.actions.length
+  templateData.value.actions.push({ ...actionMessage.default })
+}
+
+const changeSelected = (index) => {
+  selected.value = index
+  action_type.value = templateData.value.actions[index].type
+}
+
+const removeAction = (index) => {
+  templateData.value.actions.splice(index, 1)
+  selected.value = 0
+  forceRerender()
+}
+
+const changeAction = (index, data) => {
+  templateData.value.actions.splice(index, 1, data)
+}
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep {
+  :deep() {
     .row {
       margin: 0 !important;
     }

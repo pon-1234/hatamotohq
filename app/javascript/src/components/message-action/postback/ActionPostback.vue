@@ -7,112 +7,143 @@
       </select>
     </div>
     <div class="mt-2">
-      <action-postback-text v-if="postbackType === 'text'" :action-data="content" :name="name" @input="updateContent">
-      </action-postback-text>
+      <ActionPostbackText 
+        v-if="postbackType === 'text'" 
+        :action-data="content" 
+        :name="name" 
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-template v-if="postbackType === 'template'" :value="content" @input="updateContent" :name="name">
-      </action-postback-template>
+      <ActionPostbackTemplate 
+        v-if="postbackType === 'template'" 
+        :model-value="content" 
+        @update:model-value="updateContent" 
+        :name="name"
+      />
 
-      <action-postback-scenario v-if="postbackType === 'scenario'" :value="content" :name="name" @input="updateContent">
-      </action-postback-scenario>
+      <ActionPostbackScenario 
+        v-if="postbackType === 'scenario'" 
+        :model-value="content" 
+        :name="name" 
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-email v-if="postbackType === 'email'" :value="content" :name="name" @input="updateContent">
-      </action-postback-email>
+      <ActionPostbackEmail 
+        v-if="postbackType === 'email'" 
+        :model-value="content" 
+        :name="name" 
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-tag v-if="postbackType === 'tag'" :value="content" :name="name" @input="updateContent">
-      </action-postback-tag>
+      <ActionPostbackTag 
+        v-if="postbackType === 'tag'" 
+        :model-value="content" 
+        :name="name" 
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-reminder
+      <ActionPostbackReminder
         v-if="postbackType === 'reminder'"
         :action-data="content"
         :name="name"
-        @input="updateContent"
-      ></action-postback-reminder>
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-scoring
+      <ActionPostbackScoring
         v-if="postbackType === 'scoring'"
         :action-data="content"
         :name="name"
-        @input="updateContent"
-      ></action-postback-scoring>
+        @update:model-value="updateContent"
+      />
 
-      <action-postback-assign-staff
+      <ActionPostbackAssignStaff
         v-if="postbackType === 'assign_staff'"
         :action-data="content"
         :name="name"
-        @input="updateContent"
-      ></action-postback-assign-staff>
+        @update:model-value="updateContent"
+      />
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: String,
-    name: {
-      type: String,
-      default: 'action'
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
-    },
-    requiredLabel: {
-      type: Boolean,
-      default: true
-    }
+
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import { usePostbackTypes } from '@/composables/useConstants';
+import ActionPostbackText from './ActionPostbackText.vue';
+import ActionPostbackTemplate from './ActionPostbackTemplate.vue';
+import ActionPostbackScenario from './ActionPostbackScenario.vue';
+import ActionPostbackEmail from './ActionPostbackEmail.vue';
+import ActionPostbackTag from './ActionPostbackTag.vue';
+import ActionPostbackReminder from './ActionPostbackReminder.vue';
+import ActionPostbackScoring from './ActionPostbackScoring.vue';
+import ActionPostbackAssignStaff from './ActionPostbackAssignStaff.vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: [String, Object],
+    default: null
   },
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      types: this.PostbackTypes,
-      postbackType: null,
-      content: null
-    };
+  name: {
+    type: String,
+    default: 'action'
   },
-
-  watch: {
-    value: {
-      handler(val) {
-        this.setupData();
-      },
-      deep: true
-    }
+  showTitle: {
+    type: Boolean,
+    default: true
   },
+  requiredLabel: {
+    type: Boolean,
+    default: true
+  }
+});
 
-  created() {
-    this.$validator = this.parentValidator;
-    this.setupData();
-  },
+// Emits
+const emit = defineEmits(['update:modelValue']);
 
-  methods: {
-    updateContent(content) {
-      this.content = content;
-      this.notifyDataChanged();
-    },
+// Composables
+const PostbackTypes = usePostbackTypes();
 
-    notifyDataChanged() {
-      this.$emit('input', {
-        type: this.postbackType,
-        content: this.content
-      });
-    },
+// State
+const types = ref(PostbackTypes);
+const postbackType = ref(null);
+const content = ref(null);
 
-    changeActionType() {
-      this.content = undefined;
-      this.notifyDataChanged();
-    },
+// Methods
+const updateContent = (newContent) => {
+  content.value = newContent;
+  notifyDataChanged();
+};
 
-    setupData() {
-      if (this.value) {
-        const data = this.value;
-        this.content = data.content;
-        this.postbackType = data.type || 'none';
-      } else {
-        this.postbackType = 'none';
-      }
-    }
+const notifyDataChanged = () => {
+  emit('update:modelValue', {
+    type: postbackType.value,
+    content: content.value
+  });
+};
+
+const changeActionType = () => {
+  content.value = undefined;
+  notifyDataChanged();
+};
+
+const setupData = () => {
+  if (props.modelValue) {
+    const data = props.modelValue;
+    content.value = data.content;
+    postbackType.value = data.type || 'none';
+  } else {
+    postbackType.value = 'none';
   }
 };
+
+// Watch
+watch(() => props.modelValue, () => {
+  setupData();
+}, { deep: true });
+
+// Lifecycle
+onMounted(() => {
+  setupData();
+});
 </script>

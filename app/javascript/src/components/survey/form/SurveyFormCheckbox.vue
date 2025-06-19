@@ -17,65 +17,62 @@
         <label class="custom-control-label" :for="`${prefix}Option${index}`">{{ option.value }}</label>
       </div>
 
-      <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-        <input type="hidden" v-model="answer" :name="`answers[${qnum}][answer]`" />
-        <error-message :message="errors[0]"></error-message>
-      </ValidationProvider>
+      <input type="hidden" v-model="answer" :name="`answers[${qnum}][answer]`" :required="isRequired" />
+      <error-message :message="errorMessage"></error-message>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['question', 'qnum'],
+<script setup>
+import { ref, computed, watch } from 'vue'
 
-  data() {
-    return {
-      selectedOptions: [],
-      answer: null
-    };
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
   },
-
-  watch: {
-    selectedOptions: {
-      handler(val) {
-        this.answer = val.join(',');
-      }
-    }
-  },
-
-  computed: {
-    prefix() {
-      return `surveyQuestion${this.qnum}`;
-    },
-
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    },
-
-    options() {
-      return this.content ? this.content.options : [];
-    }
-  },
-
-  methods: {
-    onOptionChanged() {
-      return 0;
-    }
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const selectedOptions = ref([])
+const answer = ref(null)
+const errorMessage = ref('')
+
+const prefix = computed(() => {
+  return `surveyQuestion${props.qnum}`
+})
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
+
+const options = computed(() => {
+  return content.value ? content.value.options : []
+})
+
+const onOptionChanged = () => {
+  return 0
+}
+
+// Watch selectedOptions and update answer
+watch(selectedOptions, (val) => {
+  answer.value = val.join(',')
+})
 </script>
 
 <style lang="scss" scoped>

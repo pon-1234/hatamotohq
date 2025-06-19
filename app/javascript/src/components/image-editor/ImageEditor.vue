@@ -1,23 +1,21 @@
 <template>
   <div style="width: 100%; height: 100%; display: flex; flex-direction: column">
     <div style="flex: 1; object-fit: scale-down" id="canvas-area">
-      <canvas id="canvas-editor"></canvas>
+      <canvas id="canvas-editor" ref="canvasRef"></canvas>
     </div>
 
     <div style="position: relative; justify-content: center; height: 40px; display: flex; flex-direction: row">
-      <div style="margin: auto 0; width: 30px;" @click="zoomIn()" v-if="object.image.data !== null">
+      <div style="margin: auto 0; width: 30px;" @click="zoomIn" v-if="object.image.data !== null">
         <i class="fa fa-search-plus" aria-hidden="true"></i>
       </div>
-      <div style="margin: auto 0; width: 30px;" @click="zoomOut()" v-if="object.image.data !== null">
+      <div style="margin: auto 0; width: 30px;" @click="zoomOut" v-if="object.image.data !== null">
         <i class="fa fa-search-minus" aria-hidden="true"></i>
-
       </div>
-
     </div>
     <span v-if="errorMessage" class="w-100 text-center error">{{ errorMessage }}</span>
     <div style="position: relative; text-align: center; height: 40px; display: flex;">
       <label class="btn-img-upload text-info" role="button">
-        <input @change="changeImage($event)" type="file" name="image"
+        <input @change="changeImage" type="file" name="image"
                style="position: absolute; z-index: 1; top: 0; opacity: 0; width: 100%">
         <i class="mdi mdi-image-size-select-actual"></i> アップロード
       </label>
@@ -25,381 +23,384 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, reactive, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import Media from '@/core/media';
 
-export default {
-  props: ['preview', 'data', 'width', 'height'],
-
-  data() {
-    return {
-      object: this.data,
-      currentIndex: 0,
-      rectPath: null,
-      cropType: null,
-      wCenter: 0,
-      hCenter: 0,
-      cropTypes: [],
-      canvas: null,
-      context: null,
-      cropCanvas: null,
-      cropContext: null,
-      clipCanvas: null,
-      clipContext: null,
-      isMouseDown: false,
-      mouseX: 0,
-      mouseY: 0,
-      ratioW: 1,
-      ratioH: 1,
-      remoteW: 0,
-      errorMessage: null
-    };
+// Props
+const props = defineProps({
+  preview: {
+    type: String,
+    required: true
   },
+  modelValue: {
+    type: Object,
+    required: true
+  },
+  width: {
+    type: Number,
+    required: true
+  },
+  height: {
+    type: Number,
+    required: true
+  }
+});
 
-  watch: {
-    data(val) {
-      this.object = val;
-      this.setupCrop();
-      this.canvasRender();
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// Refs
+const canvasRef = ref(null);
+
+// State
+const object = reactive(JSON.parse(JSON.stringify(props.modelValue)));
+const currentIndex = ref(0);
+const rectPath = ref(null);
+const cropType = ref(null);
+const wCenter = ref(0);
+const hCenter = ref(0);
+const cropTypes = ref([]);
+const canvas = ref(null);
+const context = ref(null);
+const cropCanvas = ref(null);
+const cropContext = ref(null);
+const clipCanvas = ref(null);
+const clipContext = ref(null);
+const isMouseDown = ref(false);
+const mouseX = ref(0);
+const mouseY = ref(0);
+const ratioW = ref(1);
+const ratioH = ref(1);
+const remoteW = ref(0);
+const errorMessage = ref(null);
+
+// Methods
+const zoomIn = () => {
+  const img = object.image;
+  const oldW = img.w;
+  const oldH = img.h;
+
+  img.zoom += 0.05;
+
+  img.w = img.origin.w * img.zoom;
+  img.h = img.origin.h * img.zoom;
+  img.x -= (Math.abs(img.w - oldW) / 2);
+  img.y -= Math.abs(img.h - oldH) / 2;
+
+  canvasRender();
+};
+
+const zoomOut = () => {
+  const img = object.image;
+  const oldW = img.w;
+  const oldH = img.h;
+
+  img.zoom -= 0.05;
+
+  if (img.zoom <= 0.05) {
+    img.zoom = 0.05;
+  }
+
+  img.w = img.origin.w * img.zoom;
+  img.h = img.origin.h * img.zoom;
+  img.x += Math.abs(img.w - oldW) / 2;
+  img.y += Math.abs(img.h - oldH) / 2;
+  canvasRender();
+};
+
+const setupCrop = () => {
+  rectPath.value = new Path2D();
+  cropType.value = cropTypes.value[object.crop_type_index];
+  rectPath.value.rect(
+    wCenter.value - cropType.value.w / 2, 
+    hCenter.value - cropType.value.h / 2, 
+    cropType.value.w, 
+    cropType.value.h
+  );
+
+  cropCanvas.value.width = props.width * cropType.value.w / remoteW.value;
+  cropCanvas.value.height = props.height * cropType.value.h / remoteW.value;
+
+  ratioW.value = cropCanvas.value.width / cropType.value.w;
+  ratioH.value = cropCanvas.value.height / cropType.value.h;
+
+  clipCanvas.value.width = cropType.value.w;
+  clipCanvas.value.height = cropType.value.h;
+};
+
+const setupListener = () => {
+  const canvasEl = canvas.value;
+  
+  const handleMouseDown = (e) => {
+    mouseX.value = e.offsetX;
+    mouseY.value = e.offsetY;
+    isMouseDown.value = true;
+  };
+
+  const handleMouseMove = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (object.image.data) {
+      const img = object.image;
+      if (hasHover(img, e)) {
+        canvasEl.style.cursor = 'move';
+      } else {
+        canvasEl.style.cursor = 'default';
+      }
+
+      if (isMouseDown.value) {
+        move(img, {
+          x: e.offsetX - mouseX.value,
+          y: e.offsetY - mouseY.value
+        });
+        mouseX.value = e.offsetX;
+        mouseY.value = e.offsetY;
+        canvasRender();
+      }
     }
-  },
+  };
 
-  mounted() {
-    const container = document.getElementById('canvas-area');
-    this.canvas = document.getElementById('canvas-editor');
+  const handleWheel = (e) => {
+    e.preventDefault();
+    if (object.image.data) {
+      let delta = e.deltaY || e.wheelDelta;
+      delta = Math.max(-1, Math.min(1, delta));
 
-    this.canvas.width = container.offsetWidth;
-    this.canvas.height = container.offsetHeight;
-    this.wCenter = this.canvas.width / 2;
-    this.hCenter = this.canvas.height / 2;
-    this.context = this.canvas.getContext('2d');
-
-    this.cropCanvas = document.createElement('canvas');
-    this.cropContext = this.cropCanvas.getContext('2d');
-
-    this.clipCanvas = document.createElement('canvas');
-    this.clipContext = this.clipCanvas.getContext('2d');
-
-    const aspectRatio = 0.95;
-
-    const sizeCrop = Math.min(this.canvas.width, this.canvas.height);
-    // rectangle
-    const w = sizeCrop * aspectRatio / 3;
-    this.remoteW = w;
-    // 0
-    this.cropTypes.push({
-      w: w,
-      h: w
-    });
-    // 1
-    this.cropTypes.push({
-      w: w * 3,
-      h: w
-    });
-    // 2
-    this.cropTypes.push({
-      w: w * 3,
-      h: w * 2
-    });
-    // 3
-    this.cropTypes.push({
-      w: w * (3 / 2),
-      h: w
-    });
-    // 4
-    this.cropTypes.push({
-      w: w * 2,
-      h: w * 2
-    });
-    // 5
-    this.cropTypes.push({
-      w: w * (3 / 2),
-      h: w * 2
-    });
-
-    // 6
-    this.cropTypes.push({
-      w: w * 2,
-      h: w
-    });
-
-    // 7
-    this.cropTypes.push({
-      w: w,
-      h: w * 3 / 2
-    });
-
-    // 8
-    this.cropTypes.push({
-      w: w * 3 / 2,
-      h: w * 3 / 2
-    });
-
-    // 9
-    this.cropTypes.push({
-      w: w * 3,
-      h: w
-    });
-
-    // 10
-    this.cropTypes.push({
-      w: w * 3,
-      h: w * 3 / 2
-    });
-
-    // 11
-    this.cropTypes.push({
-      w: w * 3,
-      h: w * 3 / 2 / 2
-    });
-
-    // 12
-    this.cropTypes.push({
-      w: w * 3 / 2,
-      h: w * 3
-    });
-
-    // 13
-    this.cropTypes.push({
-      w: w * 3,
-      h: w * 3
-    });
-
-    this.setupListener();
-
-    if (this.object) {
-      this.setupCrop();
-      this.canvasRender();
-    }
-  },
-
-  methods: {
-
-    zoomIn() {
-      const img = this.object.image;
+      const img = object.image;
       const oldW = img.w;
       const oldH = img.h;
 
-      img.zoom += 0.05;
+      if (delta > 0) {
+        img.zoom += 0.05;
 
-      img.w = img.origin.w * img.zoom;
-      img.h = img.origin.h * img.zoom;
-      img.x -= (Math.abs(img.w - oldW) / 2);
-      img.y -= Math.abs(img.h - oldH) / 2;
+        img.w = img.origin.w * img.zoom;
+        img.h = img.origin.h * img.zoom;
+        img.x -= (Math.abs(img.w - oldW) / 2);
+        img.y -= Math.abs(img.h - oldH) / 2;
 
-      this.canvasRender();
-    },
-    zoomOut() {
-      const img = this.object.image;
-      const oldW = img.w;
-      const oldH = img.h;
+        canvasRender();
+      } else if (delta < 0) {
+        img.zoom -= 0.05;
 
-      img.zoom -= 0.05;
+        if (img.zoom <= 0.05) {
+          img.zoom = 0.05;
+        }
 
-      if (img.zoom <= 0.05) {
-        img.zoom = 0.05;
+        img.w = img.origin.w * img.zoom;
+        img.h = img.origin.h * img.zoom;
+        img.x += Math.abs(img.w - oldW) / 2;
+        img.y += Math.abs(img.h - oldH) / 2;
+        canvasRender();
       }
+    }
 
-      img.w = img.origin.w * img.zoom;
-      img.h = img.origin.h * img.zoom;
-      img.x += Math.abs(img.w - oldW) / 2;
-      img.y += Math.abs(img.h - oldH) / 2;
-      this.canvasRender();
-    },
-    setupCrop() {
-      this.rectPath = new Path2D();
-      this.cropType = this.cropTypes[this.object.crop_type_index];
-      this.rectPath.rect(this.wCenter - this.cropType.w / 2, this.hCenter - this.cropType.h / 2, this.cropType.w, this.cropType.h);
+    return false;
+  };
 
-      this.cropCanvas.width = this.width * this.cropType.w / this.remoteW;
-      this.cropCanvas.height = this.height * this.cropType.h / this.remoteW;
+  const handleMouseUp = () => {
+    if (isMouseDown.value) {
+      isMouseDown.value = false;
+    }
+  };
 
-      this.ratioW = this.cropCanvas.width / this.cropType.w;
-      this.ratioH = this.cropCanvas.height / this.cropType.h;
+  canvasEl.addEventListener('mousedown', handleMouseDown);
+  canvasEl.addEventListener('mousemove', handleMouseMove);
+  canvasEl.addEventListener('wheel', handleWheel);
+  window.addEventListener('mouseup', handleMouseUp);
 
-      this.clipCanvas.width = this.cropType.w;
-      this.clipCanvas.height = this.cropType.h;
-    },
+  // Cleanup
+  onUnmounted(() => {
+    canvasEl.removeEventListener('mousedown', handleMouseDown);
+    canvasEl.removeEventListener('mousemove', handleMouseMove);
+    canvasEl.removeEventListener('wheel', handleWheel);
+    window.removeEventListener('mouseup', handleMouseUp);
+  });
+};
 
-    setupListener() {
-      this.canvas.addEventListener('mousedown', e => {
-        this.mouseX = e.offsetX;
-        this.mouseY = e.offsetY;
-        this.isMouseDown = true;
-      });
+const canvasRender = () => {
+  // background
+  context.value.fillStyle = 'white';
+  context.value.fillRect(0, 0, canvas.value.width, canvas.value.height);
 
-      this.canvas.addEventListener('mousemove', e => {
-        e.preventDefault();
-        e.stopPropagation();
+  // modal
+  context.value.globalAlpha = 0.8;
+  if (object.image.data) {
+    const img = object.image;
+    context.value.drawImage(img.data, img.x, img.y, img.w, img.h);
+  }
 
-        if (this.object.image.data) {
-          const img = this.object.image;
-          if (this.hasHover(img, e)) {
-            this.canvas.style.cursor = 'move';
-          } else {
-            this.canvas.style.cursor = 'default';
-          }
+  context.value.fillStyle = '#ededed';
+  context.value.fillRect(0, 0, canvas.value.width, canvas.value.height);
+  context.value.globalAlpha = 1;
 
-          if (this.isMouseDown) {
-            this.move(img, {
-              x: e.offsetX - this.mouseX,
-              y: e.offsetY - this.mouseY
-            });
-            this.mouseX = e.offsetX;
-            this.mouseY = e.offsetY;
-            this.canvasRender();
-          }
-        }
-      });
+  // mask
+  context.value.save();
+  context.value.clip(rectPath.value);
+  context.value.fillStyle = 'white';
+  context.value.fill(rectPath.value);
+  if (object.image.data) {
+    const img = object.image;
+    context.value.drawImage(img.data, img.x, img.y, img.w, img.h);
 
-      this.canvas.addEventListener('wheel', e => {
-        e.preventDefault();
-        if (this.object.image.data) {
-          let delta = e.delta || e.wheelDelta;
-          delta = Math.max(-1, Math.min(1, delta));
-
-          const img = this.object.image;
-          const oldW = img.w;
-          const oldH = img.h;
-
-          if (delta > 0) {
-            img.zoom += 0.05;
-
-            img.w = img.origin.w * img.zoom;
-            img.h = img.origin.h * img.zoom;
-            img.x -= (Math.abs(img.w - oldW) / 2);
-            img.y -= Math.abs(img.h - oldH) / 2;
-
-            this.canvasRender();
-          } else if (delta < 0) {
-            img.zoom -= 0.05;
-
-            if (img.zoom <= 0.05) {
-              img.zoom = 0.05;
-            }
-
-            img.w = img.origin.w * img.zoom;
-            img.h = img.origin.h * img.zoom;
-            img.x += Math.abs(img.w - oldW) / 2;
-            img.y += Math.abs(img.h - oldH) / 2;
-            this.canvasRender();
-          }
-        }
-
-        return false;
-      });
-
-      window.addEventListener('mouseup', e => {
-        if (this.isMouseDown) {
-          this.isMouseDown = false;
-        }
-      });
-    },
-
-    canvasRender() {
-      // backgroud
-      this.context.fillStyle = 'white';
-      this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-      // modal
-      this.context.globalAlpha = 0.8;
-      if (this.object.image.data) {
-        const img = this.object.image;
-
-        this.context.drawImage(img.data, img.x, img.y, img.w, img.h);
-      }
-
-      this.context.fillStyle = '#ededed';
-      this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-      this.context.globalAlpha = 1;
-
-      // mask
-      this.context.save();
-      this.context.clip(this.rectPath);
-      this.context.fillStyle = 'white';
-      this.context.fill(this.rectPath);
-      if (this.object.image.data) {
-        const img = this.object.image;
-        this.context.drawImage(img.data, img.x, img.y, img.w, img.h);
-
-        // crop
-        this.cropContext.fillStyle = 'white';
-        this.cropContext.fillRect(0, 0, this.cropCanvas.width, this.cropCanvas.height);
-        this.cropContext.drawImage(img.data, (img.x * this.ratioW) - (this.wCenter - this.cropType.w / 2) * this.ratioW, img.y * this.ratioH - (this.hCenter - this.cropType.h / 2) * this.ratioW, img.w * this.ratioW, img.h * this.ratioH);
-        this.object.cache = this.cropCanvas.toDataURL('image/jpeg');
-        // preview
-        this.clipContext.drawImage(this.canvas, this.wCenter - this.cropType.w / 2, this.hCenter - this.cropType.h / 2, this.cropType.w, this.cropType.h, 0, 0, this.cropType.w, this.cropType.h);
-        $(this.preview).attr('src', this.clipCanvas.toDataURL('image/jpeg'));
-      }
-      this.context.strokeStyle = '#000000';
-      this.context.setLineDash([3]);
-      this.context.stroke(this.rectPath);
-
-      this.context.restore();
-
-      // sync object
-      this.syncObj();
-    },
-
-    hasHover: function(img, e) {
-      return (e.x >= img.x && e.x <= img.x + img.w) && (e.y >= img.y && e.y <= img.y + img.h);
-    },
-
-    move: function(img, delta) {
-      img.x += delta.x;
-      img.y += delta.y;
-    },
-
-    changeImage(ev) {
-      const blob = ev.currentTarget.files[0];
-      const _this = this;
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(blob);
-      reader.onload = async function(e) {
-        const validMimeBytes = await Media.validateFileByMimeBytes(e, 'image', null);
-        if (!validMimeBytes.valid) {
-          _this.errorMessage = validMimeBytes.message;
-          return;
-        }
-        const img = new Image();
-        img.onload = () => {
-          const imgObj = _this.object.image;
-          imgObj.data = img;
-          imgObj.zoom = 1;
-          imgObj.x = _this.wCenter - img.width / 2;
-          imgObj.y = _this.hCenter - img.height / 2;
-          imgObj.w = img.width;
-          imgObj.h = img.height;
-          imgObj.origin = {
-            w: img.width,
-            h: img.height
-          };
-          $('input[type="file"]').val(null);
-          _this.canvasRender();
-        };
-        img.src = URL.createObjectURL(blob);
-      };
-      this.errorMessage = '';
-      ev.target.value = '';
-    },
-
-    syncObj() {
-      this.$emit('input', this.object);
+    // crop
+    cropContext.value.fillStyle = 'white';
+    cropContext.value.fillRect(0, 0, cropCanvas.value.width, cropCanvas.value.height);
+    cropContext.value.drawImage(
+      img.data, 
+      (img.x * ratioW.value) - (wCenter.value - cropType.value.w / 2) * ratioW.value, 
+      img.y * ratioH.value - (hCenter.value - cropType.value.h / 2) * remoteW.value, 
+      img.w * ratioW.value, 
+      img.h * ratioH.value
+    );
+    object.cache = cropCanvas.value.toDataURL('image/jpeg');
+    
+    // preview
+    clipContext.value.drawImage(
+      canvas.value, 
+      wCenter.value - cropType.value.w / 2, 
+      hCenter.value - cropType.value.h / 2, 
+      cropType.value.w, 
+      cropType.value.h, 
+      0, 
+      0, 
+      cropType.value.w, 
+      cropType.value.h
+    );
+    
+    // Update preview image
+    const previewEl = document.querySelector(props.preview);
+    if (previewEl) {
+      previewEl.src = clipCanvas.value.toDataURL('image/jpeg');
     }
   }
+  context.value.strokeStyle = '#000000';
+  context.value.setLineDash([3]);
+  context.value.stroke(rectPath.value);
+
+  context.value.restore();
+
+  // sync object
+  syncObj();
 };
+
+const hasHover = (img, e) => {
+  return (e.offsetX >= img.x && e.offsetX <= img.x + img.w) && 
+         (e.offsetY >= img.y && e.offsetY <= img.y + img.h);
+};
+
+const move = (img, delta) => {
+  img.x += delta.x;
+  img.y += delta.y;
+};
+
+const changeImage = async (ev) => {
+  const blob = ev.currentTarget.files[0];
+  if (!blob) return;
+  
+  const reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+  
+  reader.onload = async (e) => {
+    const validMimeBytes = await Media.validateFileByMimeBytes(e, 'image', null);
+    if (!validMimeBytes.valid) {
+      errorMessage.value = validMimeBytes.message;
+      return;
+    }
+    
+    const img = new Image();
+    img.onload = () => {
+      const imgObj = object.image;
+      imgObj.data = img;
+      imgObj.zoom = 1;
+      imgObj.x = wCenter.value - img.width / 2;
+      imgObj.y = hCenter.value - img.height / 2;
+      imgObj.w = img.width;
+      imgObj.h = img.height;
+      imgObj.origin = {
+        w: img.width,
+        h: img.height
+      };
+      canvasRender();
+    };
+    img.src = URL.createObjectURL(blob);
+  };
+  
+  errorMessage.value = '';
+  ev.target.value = '';
+};
+
+const syncObj = () => {
+  emit('update:modelValue', object);
+};
+
+// Watch
+watch(() => props.modelValue, (val) => {
+  Object.assign(object, JSON.parse(JSON.stringify(val)));
+  setupCrop();
+  canvasRender();
+}, { deep: true });
+
+// Lifecycle
+onMounted(async () => {
+  await nextTick();
+  
+  const container = document.getElementById('canvas-area');
+  canvas.value = canvasRef.value;
+
+  canvas.value.width = container.offsetWidth;
+  canvas.value.height = container.offsetHeight;
+  wCenter.value = canvas.value.width / 2;
+  hCenter.value = canvas.value.height / 2;
+  context.value = canvas.value.getContext('2d');
+
+  cropCanvas.value = document.createElement('canvas');
+  cropContext.value = cropCanvas.value.getContext('2d');
+
+  clipCanvas.value = document.createElement('canvas');
+  clipContext.value = clipCanvas.value.getContext('2d');
+
+  const aspectRatio = 0.95;
+  const sizeCrop = Math.min(canvas.value.width, canvas.value.height);
+  const w = sizeCrop * aspectRatio / 3;
+  remoteW.value = w;
+  
+  // Initialize crop types
+  cropTypes.value = [
+    { w: w, h: w },                    // 0
+    { w: w * 3, h: w },                // 1
+    { w: w * 3, h: w * 2 },            // 2
+    { w: w * (3 / 2), h: w },          // 3
+    { w: w * 2, h: w * 2 },            // 4
+    { w: w * (3 / 2), h: w * 2 },      // 5
+    { w: w * 2, h: w },                // 6
+    { w: w, h: w * 3 / 2 },            // 7
+    { w: w * 3 / 2, h: w * 3 / 2 },    // 8
+    { w: w * 3, h: w },                // 9
+    { w: w * 3, h: w * 3 / 2 },        // 10
+    { w: w * 3, h: w * 3 / 2 / 2 },    // 11
+    { w: w * 3 / 2, h: w * 3 },        // 12
+    { w: w * 3, h: w * 3 }             // 13
+  ];
+
+  setupListener();
+
+  if (object) {
+    setupCrop();
+    canvasRender();
+  }
+});
 </script>
 
 <style scoped lang="scss">
-  ::v-deep {
-    .btn-img-upload {
-      font-weight: normal;
-      position: relative;
-      margin: auto;
-    }
-  }
+:deep(.btn-img-upload) {
+  font-weight: normal;
+  position: relative;
+  margin: auto;
+}
 
-  .error {
-    color: red;
-  }
+.error {
+  color: red;
+}
 </style>

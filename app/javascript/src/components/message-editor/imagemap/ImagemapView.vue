@@ -170,14 +170,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    background: String,
-    data: String,
-    templateId: Number
-  }
-};
+<script setup>
+defineProps({
+  background: String,
+  data: String,
+  templateId: Number
+})
+
+defineEmits(['click'])
 </script>
 
 <style lang="scss" scoped>

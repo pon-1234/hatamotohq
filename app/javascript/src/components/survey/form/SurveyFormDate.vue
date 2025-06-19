@@ -1,70 +1,61 @@
 <template>
   <div>
     <survey-question-header :question="question" :qnum="qnum"></survey-question-header>
-    <ValidationProvider name="答え" :rules="{ required: isRequired }" v-slot="{ errors }">
-      <div class="form-group mt-2 position-relative">
-        <datetime
-          input-class="form-control btn border border-light text-left"
-          type="date"
-          :phrases="{ ok: '確定', cancel: '閉じる' }"
-          placeholder="日付を選択してください"
-          value-zone="Asia/Tokyo"
-          zone="Asia/Tokyo"
-          :name="`answers[${qnum}][answer]`"
-          v-model="answer"
-        ></datetime>
-        <i class="dripicons-chevron-down dropdown-icon"></i>
-      </div>
-      <!-- the below check is to fix bug datetime component auto validate on show -->
-      <error-message :message="errors[0]"></error-message>
-    </ValidationProvider>
+    <div class="form-group mt-2 position-relative">
+      <input
+        type="date"
+        class="form-control"
+        :name="`answers[${qnum}][answer]`"
+        v-model="answer"
+        :required="isRequired"
+        placeholder="日付を選択してください"
+      />
+      <i class="dripicons-chevron-down dropdown-icon"></i>
+    </div>
+    <error-message :message="errorMessage"></error-message>
   </div>
 </template>
 
-<script>
-import { Datetime } from 'vue-datetime';
+<script setup>
+import { ref, computed } from 'vue'
 
-export default {
-  components: {
-    Datetime
+const props = defineProps({
+  question: {
+    type: Object,
+    required: true
   },
-
-  props: ['question', 'qnum'],
-
-  data() {
-    return {
-      answer: null
-    };
-  },
-
-  computed: {
-    prefix() {
-      return `surveyQuestion${this.qnum}`;
-    },
-
-    isRequired() {
-      return this.question ? this.question.required : false;
-    },
-
-    content() {
-      return this.question ? this.question.content : '';
-    },
-
-    title() {
-      return this.content ? this.content.text : '';
-    },
-
-    subTitle() {
-      return this.content ? this.content.sub_text : '';
-    }
-  },
-
-  methods: {
-    onOptionChanged() {
-      return 0;
-    }
+  qnum: {
+    type: Number,
+    required: true
   }
-};
+})
+
+const answer = ref(null)
+const errorMessage = ref('')
+
+const prefix = computed(() => {
+  return `surveyQuestion${props.qnum}`
+})
+
+const isRequired = computed(() => {
+  return props.question ? props.question.required : false
+})
+
+const content = computed(() => {
+  return props.question ? props.question.content : ''
+})
+
+const title = computed(() => {
+  return content.value ? content.value.text : ''
+})
+
+const subTitle = computed(() => {
+  return content.value ? content.value.sub_text : ''
+})
+
+const onOptionChanged = () => {
+  return 0
+}
 </script>
 
 <style lang="scss" scoped>

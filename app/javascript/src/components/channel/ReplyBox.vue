@@ -12,10 +12,9 @@
         placeholder="Enterで改行、Shift+Enterで送信"
         data-vv-as="メッセージ"
         maxlength="5001"
-        v-validate="'max:5000'"
       >
       </textarea>
-      <error-message :message="errors.first('message')" class="ml-2" v-if="errors.first('message')"></error-message>
+      <error-message :message="messageError" class="ml-2" v-if="messageError" />
       <div class="p-2 bg-light d-flex justify-content-between align-items-center">
         <div>
           <a
@@ -57,42 +56,43 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
-export default {
-  data() {
-    return {
-      message: ''
-    };
-  },
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
-  computed: {
-    ...mapState('channel', {
-      activeChannel: state => state.activeChannel
-    }),
+const emit = defineEmits(['sendTextMessage', 'resetModalSticker'])
 
-    isEnabled() {
-      return this.activeChannel;
-    }
-  },
+const store = useStore()
 
-  methods: {
-    clearInput() {
-      this.message = '';
-    },
+const message = ref('')
+const messageError = ref('')
 
-    sendTextMessage() {
-      this.$emit('sendTextMessage', this.message);
-      this.clearInput();
-    },
+const activeChannel = computed(() => store.state.channel.activeChannel)
+const isEnabled = computed(() => activeChannel.value)
 
-    showStickerModal() {
-      if (this.isEnabled) {
-        this.$emit('resetModalSticker', true);
-      }
-    }
+const clearInput = () => {
+  message.value = ''
+  messageError.value = ''
+}
+
+const sendTextMessage = () => {
+  if (message.value.length > 5000) {
+    messageError.value = 'メッセージは5000文字以下にしてください。'
+    return
   }
-};
+  emit('sendTextMessage', message.value)
+  clearInput()
+}
+
+const showStickerModal = () => {
+  if (isEnabled.value) {
+    emit('resetModalSticker', true)
+  }
+}
+
+defineExpose({
+  clearInput
+})
 </script>
 
 <style>

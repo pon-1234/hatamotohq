@@ -126,150 +126,150 @@
   </div>
   <!-- /.modal -->
 </template>
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex';
-export default {
-  data() {
-    return {
-      contentKey: 0,
-      selectedTags: [],
-      params: {}
-    };
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useStore } from 'vuex'
+
+const props = defineProps(['selectOnlyTester'])
+const emit = defineEmits(['changeSelectOnlyTester'])
+
+const store = useStore()
+const contentKey = ref(0)
+const selectedTags = ref([])
+const params = ref({})
+const inputTag = ref(null)
+
+const queryParams = computed(() => store.state.friend.queryParams)
+const clearQueryParams = computed(() => store.state.friend.clearQueryParams)
+
+const keyword = computed({
+  get() {
+    return params.value.line_name_or_display_name_cont
   },
-  props: ['selectOnlyTester'],
-
-  computed: {
-    ...mapState('friend', {
-      queryParams: state => state.queryParams,
-      clearQueryParams: state => state.clearQueryParams
-    }),
-
-    keyword: {
-      get() {
-        return this.params.line_name_or_display_name_cont;
-      },
-      set(value) {
-        this.params.line_name_or_display_name_cont = value;
-      }
-    },
-
-    tags: {
-      get() {
-        return this.params.tags_id_in || [];
-      },
-      set(value) {
-        const selectedTagIds = value.map(_ => _.id);
-        this.params.tags_id_in = selectedTagIds;
-      }
-    },
-
-    status_eq: {
-      get() {
-        return this.params.status_eq;
-      },
-      set(value) {
-        this.params.status_eq = value;
-      }
-    },
-
-    created_at_gteq: {
-      get() {
-        return this.params.created_at_gteq;
-      },
-      set(value) {
-        this.params.created_at_gteq = value;
-      }
-    },
-
-    created_at_lteq: {
-      get() {
-        return this.params.created_at_lteq;
-      },
-      set(value) {
-        this.params.created_at_lteq = value;
-      }
-    },
-
-    locked_eq: {
-      get() {
-        return this.params.locked_eq;
-      },
-      set(value) {
-        this.params.locked_eq = value;
-      }
-    },
-
-    visible_eq: {
-      get() {
-        return this.params.visible_eq;
-      },
-      set(value) {
-        this.params.visible_eq = value;
-      }
-    }
-  },
-  methods: {
-    ...mapMutations('friend', ['setQueryParams', 'setQueryParam', 'resetQueryParams', 'setClearQueryParams']),
-    ...mapActions('friend', ['getFriends']),
-
-    forceRerender() {
-      this.contentKey++;
-    },
-    onSelectTags(tags) {
-      this.tags = tags;
-      this.selectedTags = tags;
-    },
-    search() {
-      this.setQueryParams(this.params);
-      this.getFriends();
-    },
-    resetSearch() {
-      this.resetQueryParams();
-      this.selectedTags = [];
-      this.forceRerender();
-      const resetParams = {
-        page: 1,
-        status_eq: 'active',
-        line_name_or_display_name_cont: null,
-        tags_id_in: null,
-        created_at_gteq: null,
-        created_at_lteq: null,
-        visible_eq: true,
-        locked_eq: false,
-        channel_assignee_id_eq: null
-      };
-      Object.assign(this.params, resetParams);
-      this.$emit('changeSelectOnlyTester', null);
-    },
-    closeModal() {
-      this.selectedTags = [];
-    },
-    async showModal() {
-      if (this.clearQueryParams) {
-        this.selectedTags = [];
-        this.setClearQueryParams(false);
-      }
-      this.forceRerender();
-      this.params = _.cloneDeep(this.queryParams);
-
-      if (this.params.tags_id_in) {
-        this.$refs.inputTag.initData();
-      }
-    },
-
-    setAssigneeParam(staffId) {
-      this.params.channel_assignee_id_eq = staffId;
-    }
-  },
-  watch: {
-    selectOnlyTester: function(newVal) {
-      this.$emit('changeSelectOnlyTester', newVal);
-      if (newVal) {
-        this.params.tester_eq = true;
-      } else {
-        this.params.tester_eq = null;
-      }
-    }
+  set(value) {
+    params.value.line_name_or_display_name_cont = value
   }
-};
+})
+
+const tags = computed({
+  get() {
+    return params.value.tags_id_in || []
+  },
+  set(value) {
+    const selectedTagIds = value.map(_ => _.id)
+    params.value.tags_id_in = selectedTagIds
+  }
+})
+
+const status_eq = computed({
+  get() {
+    return params.value.status_eq
+  },
+  set(value) {
+    params.value.status_eq = value
+  }
+})
+
+const created_at_gteq = computed({
+  get() {
+    return params.value.created_at_gteq
+  },
+  set(value) {
+    params.value.created_at_gteq = value
+  }
+})
+
+const created_at_lteq = computed({
+  get() {
+    return params.value.created_at_lteq
+  },
+  set(value) {
+    params.value.created_at_lteq = value
+  }
+})
+
+const locked_eq = computed({
+  get() {
+    return params.value.locked_eq
+  },
+  set(value) {
+    params.value.locked_eq = value
+  }
+})
+
+const visible_eq = computed({
+  get() {
+    return params.value.visible_eq
+  },
+  set(value) {
+    params.value.visible_eq = value
+  }
+})
+
+const forceRerender = () => {
+  contentKey.value++
+}
+
+const onSelectTags = (tagsData) => {
+  tags.value = tagsData
+  selectedTags.value = tagsData
+}
+
+const search = () => {
+  store.commit('friend/setQueryParams', params.value)
+  store.dispatch('friend/getFriends')
+}
+
+const resetSearch = () => {
+  store.commit('friend/resetQueryParams')
+  selectedTags.value = []
+  forceRerender()
+  const resetParams = {
+    page: 1,
+    status_eq: 'active',
+    line_name_or_display_name_cont: null,
+    tags_id_in: null,
+    created_at_gteq: null,
+    created_at_lteq: null,
+    visible_eq: true,
+    locked_eq: false,
+    channel_assignee_id_eq: null
+  }
+  Object.assign(params.value, resetParams)
+  emit('changeSelectOnlyTester', null)
+}
+
+const closeModal = () => {
+  selectedTags.value = []
+}
+
+const showModal = async () => {
+  if (clearQueryParams.value) {
+    selectedTags.value = []
+    store.commit('friend/setClearQueryParams', false)
+  }
+  forceRerender()
+  params.value = JSON.parse(JSON.stringify(queryParams.value))
+
+  if (params.value.tags_id_in) {
+    inputTag.value?.initData()
+  }
+}
+
+const setAssigneeParam = (staffId) => {
+  params.value.channel_assignee_id_eq = staffId
+}
+
+watch(() => props.selectOnlyTester, (newVal) => {
+  emit('changeSelectOnlyTester', newVal)
+  if (newVal) {
+    params.value.tester_eq = true
+  } else {
+    params.value.tester_eq = null
+  }
+})
+
+defineExpose({
+  showModal
+})
 </script>

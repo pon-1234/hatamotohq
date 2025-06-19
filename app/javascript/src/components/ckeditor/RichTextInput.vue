@@ -10,51 +10,58 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue'
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 
-import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-
-import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
-import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold';
-import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials';
-import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-import Image from '@ckeditor/ckeditor5-image/src/image';
-import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
-import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
-import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
-import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
-import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
-import Indent from '@ckeditor/ckeditor5-indent/src/indent';
-import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic';
-import LinkPlugin from '@ckeditor/ckeditor5-link/src/link';
-import ListStyle from '@ckeditor/ckeditor5-list/src/list';
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
-import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
-import Table from '@ckeditor/ckeditor5-table/src/table';
-import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
-import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock';
-import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
-import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
+import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat'
+import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
+import BoldPlugin from '@ckeditor/ckeditor5-basic-styles/src/bold'
+import EssentialsPlugin from '@ckeditor/ckeditor5-essentials/src/essentials'
+import Heading from '@ckeditor/ckeditor5-heading/src/heading'
+import Image from '@ckeditor/ckeditor5-image/src/image'
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption'
+import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'
+import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'
+import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar'
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize'
+import Indent from '@ckeditor/ckeditor5-indent/src/indent'
+import ItalicPlugin from '@ckeditor/ckeditor5-basic-styles/src/italic'
+import LinkPlugin from '@ckeditor/ckeditor5-link/src/link'
+import ListStyle from '@ckeditor/ckeditor5-list/src/list'
+import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed'
+import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph'
+import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
+import Table from '@ckeditor/ckeditor5-table/src/table'
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar'
+import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline'
+import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock'
+import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties'
+import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties'
 // eslint-disable-next-line no-unused-vars
-import translation from '@ckeditor/ckeditor5-build-classic/build/translations/ja';
-import Font from '@ckeditor/ckeditor5-font/src/font';
-import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
+import translation from '@ckeditor/ckeditor5-build-classic/build/translations/ja'
+import Font from '@ckeditor/ckeditor5-font/src/font'
+import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline'
 
 // pending upload image
-import UploadImageAdapter from '@/core/upload_image_adapter';
-import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
+import UploadImageAdapter from '@/core/upload_image_adapter'
+import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed'
 
-export default {
-  props: ['value', 'disabled'],
-  data() {
-    return {
-      editor: ClassicEditor,
-      editorConfig: {
+const props = defineProps(['value', 'disabled'])
+const emit = defineEmits(['update:value'])
+
+const value = ref(props.value)
+const editor = ClassicEditor
+
+const uploader = (editor) => {
+  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+    return new UploadImageAdapter(loader)
+  }
+}
+
+const editorConfig = {
         plugins: [
           Autoformat,
           BlockQuote,
@@ -266,25 +273,16 @@ export default {
             'tableProperties', 'tableCellProperties'
           ]
         },
-        extraPlugins: [this.uploader]
+        extraPlugins: [uploader]
       }
-    };
-  },
-  methods: {
-    onInput() {
-      this.$emit('update:value', this.value);
-    },
-    uploader(editor) {
-      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-        return new UploadImageAdapter(loader);
-      };
-    }
-  }
-};
+
+const onInput = () => {
+  emit('update:value', value.value)
+}
 </script>
 
 <style lang="scss" scoped>
-::v-deep {
+:deep() {
   // Customer css ck
   .ck.ck-editor__editable_inline {
     min-height: 300px!important;

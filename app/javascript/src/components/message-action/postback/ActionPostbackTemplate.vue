@@ -2,102 +2,116 @@
   <section>
     <label class="w-100">
       コンテンツ
-      <required-mark />
+      <RequiredMark />
     </label>
 
     <div>
       <div
-        data-toggle="modal"
-        :data-target="'#' + name"
+        @click="showModal = true"
         class="btn btn-secondary mw-150"
         v-if="currentTemplate.template_id"
       >
-        <message-content :data="currentTemplate" v-if="currentTemplate.content" />
+        <MessageContent :data="currentTemplate" v-if="currentTemplate.content" />
         <span v-else>{{ currentTemplate.name }}</span>
       </div>
-      <div data-toggle="modal" :data-target="'#' + name" class="btn btn-secondary mw-150" v-else>
+      <div @click="showModal = true" class="btn btn-secondary mw-150" v-else>
         テンプレートを選択
       </div>
       <input
         type="hidden"
         v-model="currentTemplate.template_id"
         :name="name + '_template_id'"
-        v-validate="'required'"
-        data-vv-as="テンプレート"
+        required
       />
-      <error-message class="w-100" :message="errors.first(name + '_template_id')"></error-message>
+      <ErrorMessage v-if="errorMessage" class="w-100" :message="errorMessage" />
     </div>
 
-    <modal-select-template @selectTemplate="selectTemplate" :id="name" />
+    <ModalSelectTemplate 
+      v-model:show="showModal"
+      @select-template="selectTemplate" 
+    />
   </section>
 </template>
-<script>
-export default {
-  props: {
-    value: {
-      type: Object,
-      default: () => {
-        return {
-          template_id: null,
-          name: 'テンプレートから作成'
-        };
-      }
-    },
-    name: {
-      type: String,
-      default: 'postback_action'
-    }
+
+<script setup>
+import { ref, watch, computed, onMounted } from 'vue';
+import RequiredMark from '../../common/RequiredMark.vue';
+import ErrorMessage from '../../common/ErrorMessage.vue';
+import ModalSelectTemplate from '../../common/ModalSelectTemplate.vue';
+import MessageContent from '../../message/type/MessageContent.vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    default: () => ({
+      template_id: null,
+      name: 'テンプレートから作成'
+    })
   },
-  inject: ['parentValidator'],
-
-  data() {
-    return {
-      currentTemplate: {
-        template_id: null,
-        name: null
-      }
-    };
-  },
-
-  created() {
-    this.$validator = this.parentValidator;
-
-    if (this.value.template_id) {
-      this.currentTemplate = {
-        template_id: this.value.template_id,
-        name: this.value.name
-      };
-    }
-  },
-
-  watch: {
-    currentTemplate: {
-      handler(val) {
-        if (this.value.template_id) {
-          this.$emit('input', {
-            name: val.name,
-            template_id: this.value.template_id
-          });
-        }
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    selectTemplate(template) {
-      this.currentTemplate = { template_id: template.id, ...template };
-      this.$emit('input', {
-        name: template.name,
-        template_id: template.id
-      });
-    }
+  name: {
+    type: String,
+    default: 'postback_action'
   }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// State
+const showModal = ref(false);
+const currentTemplate = ref({
+  template_id: null,
+  name: null
+});
+
+// Computed
+const errorMessage = computed(() => {
+  if (!currentTemplate.value.template_id) {
+    return 'テンプレートは必須です';
+  }
+  return null;
+});
+
+// Methods
+const selectTemplate = (template) => {
+  currentTemplate.value = { 
+    template_id: template.id, 
+    ...template 
+  };
+  emit('update:modelValue', {
+    name: template.name,
+    template_id: template.id
+  });
 };
+
+// Watch
+watch(currentTemplate, (val) => {
+  if (props.modelValue.template_id) {
+    emit('update:modelValue', {
+      name: val.name,
+      template_id: props.modelValue.template_id
+    });
+  }
+}, { deep: true });
+
+// Lifecycle
+onMounted(() => {
+  if (props.modelValue.template_id) {
+    currentTemplate.value = {
+      template_id: props.modelValue.template_id,
+      name: props.modelValue.name
+    };
+  }
+});
 </script>
 
 <style scoped>
-  .btn-block {
-    cursor: pointer;
-  }
+.btn-block {
+  cursor: pointer;
+}
+
+.mw-150 {
+  max-width: 150px;
+}
 </style>

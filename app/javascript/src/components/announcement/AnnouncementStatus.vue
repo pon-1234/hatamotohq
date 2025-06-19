@@ -4,8 +4,6 @@
   <span v-else-if="announcement.status == 'unpublished'"><i class="mdi mdi-circle text-primary"></i> 非公開 </span>
 </template>
 
-<script>
-export default {
-  props: ['announcement']
-};
+<script setup>
+defineProps(['announcement'])
 </script>

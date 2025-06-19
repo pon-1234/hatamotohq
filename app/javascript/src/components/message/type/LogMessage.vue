@@ -5,10 +5,8 @@
     <span>{{ data }}</span>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'time', 'className']
-};
+<script setup>
+defineProps(['data', 'time', 'className'])
 </script>
 
 <style lang='scss' >

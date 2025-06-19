@@ -52,8 +52,6 @@
           @click.stop
           maxlength="33"
           name="folder_name"
-          data-vv-as="フォルダー名"
-          v-validate="'required|max:32'"
         />
         <div class="btn btn-light btn-sm ml-auto" @click="submitChangeName" ref="buttonChange">決定</div>
       </div>
@@ -61,105 +59,101 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data', 'active', 'index', 'type', 'isPerview'],
-  data() {
-    return {
-      isEdit: false,
-      isEnter: true,
-      folderName: ''
-    };
-  },
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 
-  created() {
-    this.folderName = this.data.name;
-  },
+const props = defineProps(['data', 'active', 'index', 'type', 'isPerview'])
+const emit = defineEmits(['changeSelected', 'editTag', 'deleteTag'])
 
-  computed: {
-    childsCount() {
-      switch (this.type) {
-      case 'tag':
-        return this.data.tags.length;
-      case 'scenario':
-        return this.data.scenarios.length;
-      case 'template_message':
-        return this.data.templates.length;
-      case 'rich_menu':
-        return this.data.rich_menus.length;
-      case 'auto_response':
-        return this.data.auto_responses.length;
-      case 'survey':
-        return this.data.surveys.length;
-      case 'variable':
-        return this.data.variables.length;
-      case 'reminder':
-        return this.data.reminders.length;
-      case 'site':
-        return this.data.sites ? this.data.sites.length : 0;
-      case 'stream_route':
-        return this.data.stream_routes ? this.data.stream_routes.length : 0;
-      }
-      return 0;
-    },
+const isEdit = ref(false)
+const isEnter = ref(true)
+const folderName = ref('')
+const buttonChange = ref(null)
+const errors = ref({ first: () => null })
 
-    getClassName() {
-      return 'folder-item ' + (this.active ? 'active' : '');
-    }
-  },
-  methods: {
-    canDelete() {
-      return !(
-        (this.type === 'survey' && this.data.surveys.length > 0) ||
-        (this.type === 'variable' && this.data.variables.length > 0) ||
-        (this.type === 'reminder' && this.data.reminders.length > 0)
-      );
-    },
+onMounted(() => {
+  folderName.value = props.data.name
+})
 
-    changeName() {
-      this.isEdit = true;
-    },
-
-    changeSelected() {
-      this.isEdit = false;
-      this.folderName = this.data.name;
-
-      this.$emit('changeSelected', { index: this.index, folderId: this.data.id });
-    },
-
-    submitChangeName() {
-      this.$validator.validateAll().then(passed => {
-        if (!passed) {
-          return;
-        }
-        this.isEdit = false;
-        if (this.folderName !== this.data.name) {
-          this.$emit('editTag', { id: this.data.id, name: this.folderName });
-        }
-      });
-    },
-
-    enterSubmitChangeName(e) {
-      if (!this.isEnter) {
-        this.isEnter = true;
-        return;
-      }
-      this.$refs.buttonChange.click();
-    },
-
-    deleteFolder() {
-      this.$emit('deleteTag');
-    },
-
-    compositionend() {
-      this.isEnter = false;
-    },
-
-    compositionstart() {
-      this.isEnter = true;
-    }
+const childsCount = computed(() => {
+  switch (props.type) {
+    case 'tag':
+      return props.data.tags.length
+    case 'scenario':
+      return props.data.scenarios.length
+    case 'template_message':
+      return props.data.templates.length
+    case 'rich_menu':
+      return props.data.rich_menus.length
+    case 'auto_response':
+      return props.data.auto_responses.length
+    case 'survey':
+      return props.data.surveys.length
+    case 'variable':
+      return props.data.variables.length
+    case 'reminder':
+      return props.data.reminders.length
+    case 'site':
+      return props.data.sites ? props.data.sites.length : 0
+    case 'stream_route':
+      return props.data.stream_routes ? props.data.stream_routes.length : 0
   }
-};
+  return 0
+})
+
+const getClassName = computed(() => {
+  return 'folder-item ' + (props.active ? 'active' : '')
+})
+
+const canDelete = () => {
+  return !(
+    (props.type === 'survey' && props.data.surveys.length > 0) ||
+    (props.type === 'variable' && props.data.variables.length > 0) ||
+    (props.type === 'reminder' && props.data.reminders.length > 0)
+  )
+}
+
+const changeName = () => {
+  isEdit.value = true
+}
+
+const changeSelected = () => {
+  isEdit.value = false
+  folderName.value = props.data.name
+
+  emit('changeSelected', { index: props.index, folderId: props.data.id })
+}
+
+const submitChangeName = () => {
+  // Basic validation
+  if (!folderName.value || folderName.value.length > 32) {
+    return
+  }
+  isEdit.value = false
+  if (folderName.value !== props.data.name) {
+    emit('editTag', { id: props.data.id, name: folderName.value })
+  }
+}
+
+const enterSubmitChangeName = (e) => {
+  if (!isEnter.value) {
+    isEnter.value = true
+    return
+  }
+  buttonChange.value.click()
+}
+
+const deleteFolder = () => {
+  emit('deleteTag')
+}
+
+const compositionend = () => {
+  isEnter.value = false
+}
+
+const compositionstart = () => {
+  isEnter.value = true
+}
 </script>
 <style lang="scss" scoped>
   .folder-item {

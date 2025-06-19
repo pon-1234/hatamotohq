@@ -7,13 +7,11 @@
   <div v-else>なし</div>
 </template>
 
-<script>
-export default {
-  props: {
-    tags: {
-      type: Array,
-      default: () => []
-    }
+<script setup>
+defineProps({
+  tags: {
+    type: Array,
+    default: () => []
   }
-};
+})
 </script>

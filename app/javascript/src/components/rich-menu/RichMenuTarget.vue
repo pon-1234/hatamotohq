@@ -16,16 +16,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ['rich_menu'],
+<script setup>
+import { computed } from 'vue'
 
-  computed: {
-    tagCondition() {
-      return this.rich_menu.conditions ? this.rich_menu.conditions.find(_ => _.type === 'tag') : null;
-    }
-  }
-};
+const props = defineProps(['rich_menu'])
+
+const tagCondition = computed(() => {
+  return props.rich_menu.conditions ? props.rich_menu.conditions.find(_ => _.type === 'tag') : null
+})
 </script>
 
 <style lang="scss" scoped>

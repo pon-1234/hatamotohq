@@ -9,10 +9,9 @@
         placeholder="代替テキストを入力してください"
         v-model.trim="altText"
         maxlength="401"
-        v-validate="'required|max:400'"
         data-vv-as="代替テキスト"
       />
-      <error-message :message="errors.first(`altText${index}`)"></error-message>
+      <error-message :message="errors.first(`altText${index}`)" />
     </div>
 
     <!--Editor-->
@@ -22,7 +21,6 @@
           type="text"
           v-model="backgroundUrl"
           :name="'image-url' + index"
-          v-validate="'required'"
           data-vv-as="背景画像"
           class="d-none"
         />
@@ -32,7 +30,7 @@
           :class="errors.first('image-url' + index) ? 'fh-260 invalid-box' : 'fh-260'"
           @click="expandAction"
         />
-        <error-message :message="errors.first('image-url' + index)"></error-message>
+        <error-message :message="errors.first('image-url' + index)" />
 
         <button
           type="button"
@@ -119,202 +117,189 @@
   </div>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex';
-import Util from '../../core/util';
-import ErrorMessage from '../common/ErrorMessage.vue';
+<script setup>
+import { ref, computed, watch, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
+import Util from '@/core/util'
+import { ActionMessageImageMap, ImageMapBounds } from '@/core/constant'
+import ErrorMessage from '../common/ErrorMessage.vue'
 
-export default {
-  components: { ErrorMessage },
-  props: ['index', 'data'],
-  data() {
-    return {
-      rootPath: process.env.MIX_ROOT_PATH,
-      isShowingEditor: false,
-      templateId: this.data.templateId,
-      templateValue: this.data.templateValue,
-      altText: this.data.altText,
-      actionObjects: this.data.actions,
-      backgroundUrl: this.data.baseUrl,
-      alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    };
-  },
+const props = defineProps({
+  index: Number,
+  data: Object
+})
 
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
-  },
+const emit = defineEmits(['input'])
 
-  computed: {
-    ...mapState('system', {
-      isSubmitChange: state => state.isSubmitChange
-    })
-  },
+const store = useStore()
 
-  beforeMount() {
-    const old = this.actionObjects.length;
-    const val = this.templateValue;
+const rootPath = process.env.MIX_ROOT_PATH
+const isShowingEditor = ref(false)
+const templateId = ref(props.data.templateId)
+const templateValue = ref(props.data.templateValue)
+const altText = ref(props.data.altText)
+const actionObjects = ref(props.data.actions)
+const backgroundUrl = ref(props.data.baseUrl)
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    if (old < val) {
-      for (let i = old; i < val; i++) {
-        this.actionObjects.push({
-          key: this.alphabet.charAt(i),
-          expand: false,
-          action: this.ActionMessageImageMap.default,
-          area: this.ImageMapBounds[this.templateId][i]
-        });
-      }
-    } else if (old > val) {
-      this.actionObjects.splice(val, old - val);
-    }
-  },
+const errors = ref({ items: [], first: () => null })
 
-  watch: {
-    templateValue(val, old) {
-      if (old < val) {
-        for (let i = old; i < val; i++) {
-          this.actionObjects.push({
-            key: this.alphabet.charAt(i),
-            expand: false,
-            action: this.ActionMessageImageMap.default,
-            area: this.ImageMapBounds[this.templateId][i]
-          });
-        }
-      } else if (old > val) {
-        this.actionObjects.splice(val, old - val);
-      }
-    },
+const isSubmitChange = computed(() => store.state.system.isSubmitChange)
 
-    templateId(val) {
-      this.actionObjects.forEach((action, index) => {
-        action.area = this.ImageMapBounds[val][index];
-      });
-    },
+onBeforeMount(() => {
+  const old = actionObjects.value.length
+  const val = templateValue.value
 
-    altText(val) {
-      this.publish(this.actionObjects);
-    },
-
-    actionObjects: {
-      handler(val) {
-        this.publish(val);
-      },
-      deep: true
-    },
-
-    isSubmitChange: {
-      handler(val) {
-        for (const area of this.actionObjects) {
-          if (Util.validateAction(area.action)) {
-            area.expand = true;
-          } else {
-            area.expand = false;
-          }
-        }
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    ...mapActions('global', ['uploadImageMap']),
-    firstWhere(array, cond) {
-      for (const o of array) {
-        if (cond(o)) {
-          return o;
-        }
-      }
-
-      return null;
-    },
-
-    expandAction(key, isAutoCollapse = true, index) {
-      if (isAutoCollapse) {
-        this.actionObjects.forEach((value, index) => {
-          if (key === value.key) {
-            this.$set(this.actionObjects[index], 'expand', true);
-          } else {
-            this.$set(this.actionObjects[index], 'expand', false);
-          }
-        });
-      } else {
-        const index = this.actionObjects.findIndex(val => val.key === key);
-        this.$set(this.actionObjects[index], 'expand', !this.actionObjects[index].expand);
-      }
-    },
-
-    changeObjectAction(key, value) {
-      this.actionObjects[key] = value;
-    },
-
-    templateChange(data) {
-      this.templateId = data.id;
-      this.templateValue = data.value;
-    },
-
-    onSelectMedia(media) {
-      this.backgroundUrl = `${this.rootPath}/medias/${media.id}/content`;
-      this.publish(this.actionObjects);
-    },
-
-    publish(actionObject) {
-      const actions = actionObject.map(object => {
-        let objectNew = JSON.parse(JSON.stringify(object));
-        objectNew = Object.assign(objectNew, objectNew.action);
-        return objectNew;
-      });
-
-      const params = {
-        type: 'imagemap',
-        baseUrl: this.backgroundUrl,
-        templateId: this.templateId,
-        templateValue: this.templateValue,
-        altText: this.altText,
-        baseSize: {
-          width: 1040,
-          height: 1040
-        },
-        actions: actions
-      };
-
-      this.$emit('input', params);
-    },
-    exportImage(data) {
-      // remove header
-      data = data.replace('data:image/jpeg;base64,', '');
-      // upload image
-      this.uploadImageMap({
-        file: this.b64toBlob(data)
+  if (old < val) {
+    for (let i = old; i < val; i++) {
+      actionObjects.value.push({
+        key: alphabet.charAt(i),
+        expand: false,
+        action: ActionMessageImageMap.default,
+        area: ImageMapBounds[templateId.value][i]
       })
-        .then(res => {
-          this.backgroundUrl = `${this.rootPath}/medias/${res.id}/content`;
-          this.publish(this.actionObjects);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
+    }
+  } else if (old > val) {
+    actionObjects.value.splice(val, old - val)
+  }
+})
 
-    b64toBlob(b64Data, contentType = 'image/jpeg', sliceSize = 512) {
-      const byteCharacters = atob(b64Data);
-      const byteArrays = [];
+watch(templateValue, (val, old) => {
+  if (old < val) {
+    for (let i = old; i < val; i++) {
+      actionObjects.value.push({
+        key: alphabet.charAt(i),
+        expand: false,
+        action: ActionMessageImageMap.default,
+        area: ImageMapBounds[templateId.value][i]
+      })
+    }
+  } else if (old > val) {
+    actionObjects.value.splice(val, old - val)
+  }
+})
 
-      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
+watch(templateId, (val) => {
+  actionObjects.value.forEach((action, index) => {
+    action.area = ImageMapBounds[val][index]
+  })
+})
 
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
+watch(altText, () => {
+  publish(actionObjects.value)
+})
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
+watch(actionObjects, (val) => {
+  publish(val)
+}, { deep: true })
 
-      return new Blob(byteArrays, { type: contentType });
+watch(isSubmitChange, () => {
+  for (const area of actionObjects.value) {
+    if (Util.validateAction(area.action)) {
+      area.expand = true
+    } else {
+      area.expand = false
     }
   }
-};
+}, { deep: true })
+
+const uploadImageMap = (payload) => store.dispatch('global/uploadImageMap', payload)
+
+const firstWhere = (array, cond) => {
+  for (const o of array) {
+    if (cond(o)) {
+      return o
+    }
+  }
+  return null
+}
+
+const expandAction = (key, isAutoCollapse = true, index) => {
+  if (isAutoCollapse) {
+    actionObjects.value.forEach((value, idx) => {
+      if (key === value.key) {
+        actionObjects.value[idx].expand = true
+      } else {
+        actionObjects.value[idx].expand = false
+      }
+    })
+  } else {
+    const idx = actionObjects.value.findIndex(val => val.key === key)
+    actionObjects.value[idx].expand = !actionObjects.value[idx].expand
+  }
+}
+
+const changeObjectAction = (key, value) => {
+  actionObjects.value[key] = value
+}
+
+const templateChange = (data) => {
+  templateId.value = data.id
+  templateValue.value = data.value
+}
+
+const onSelectMedia = (media) => {
+  backgroundUrl.value = `${rootPath}/medias/${media.id}/content`
+  publish(actionObjects.value)
+}
+
+const publish = (actionObject) => {
+  const actions = actionObject.map(object => {
+    let objectNew = JSON.parse(JSON.stringify(object))
+    objectNew = Object.assign(objectNew, objectNew.action)
+    return objectNew
+  })
+
+  const params = {
+    type: 'imagemap',
+    baseUrl: backgroundUrl.value,
+    templateId: templateId.value,
+    templateValue: templateValue.value,
+    altText: altText.value,
+    baseSize: {
+      width: 1040,
+      height: 1040
+    },
+    actions: actions
+  }
+
+  emit('input', params)
+}
+
+const exportImage = (data) => {
+  // remove header
+  data = data.replace('data:image/jpeg;base64,', '')
+  // upload image
+  uploadImageMap({
+    file: b64toBlob(data)
+  })
+    .then(res => {
+      backgroundUrl.value = `${rootPath}/medias/${res.id}/content`
+      publish(actionObjects.value)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+const b64toBlob = (b64Data, contentType = 'image/jpeg', sliceSize = 512) => {
+  const byteCharacters = atob(b64Data)
+  const byteArrays = []
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize)
+
+    const byteNumbers = new Array(slice.length)
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i)
+    }
+
+    const byteArray = new Uint8Array(byteNumbers)
+    byteArrays.push(byteArray)
+  }
+
+  return new Blob(byteArrays, { type: contentType })
+}
 </script>
 
 <style lang="scss" scoped>

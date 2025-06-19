@@ -19,67 +19,65 @@
     </div>
   </div>
 </template>
-<script>
-import moment from 'moment';
-import Util from '@/core/util';
+<script setup>
+import { computed } from 'vue'
+import moment from 'moment'
+import Util from '@/core/util'
 
-export default {
-  props: ['channel', 'active'],
-
-  computed: {
-    avatarImgObj() {
-      return {
-        src: this.friend.avatar_url,
-        error: '/img/no-image-profile.png',
-        loading: '/images/loading.gif'
-      };
-    },
-
-    friend() {
-      return this.channel.line_friend;
-    },
-    readableTime() {
-      const timeMessage = Util.formattedDate(this.channel.last_activity_at);
-      const currentTime = Util.formattedDate(moment());
-      if (currentTime !== timeMessage) {
-        return moment(this.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
-          .tz('Asia/Tokyo')
-          .format('MM/DD');
-      }
-
-      return moment(this.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
-        .tz('Asia/Tokyo')
-        .format('HH:mm');
-    },
-    itemClass() {
-      return this.active ? 'bg-light media mt-1 p-2' : 'media mt-1 p-2';
-    },
-    unreadCountLabel() {
-      return this.channel.unread_count > 99 ? '99+' : this.channel.unread_count;
-    },
-    isUnread() {
-      return this.channel.unread_count > 0;
-    }
+const props = defineProps({
+  channel: {
+    type: Object,
+    required: true
   },
-  methods: {
-    getChannelClass() {
-      let className = 'item ';
-      if (this.active) {
-        className += 'active';
-      }
-
-      if (this.channel.locked) {
-        className += ' blocked';
-      }
-
-      return className;
-    },
-
-    truncate(name, length = 15) {
-      return _.truncate(name, {
-        length: length
-      });
-    }
+  active: {
+    type: Boolean,
+    default: false
   }
-};
+})
+
+const friend = computed(() => props.channel.line_friend)
+
+const avatarImgObj = computed(() => ({
+  src: friend.value.avatar_url,
+  error: '/img/no-image-profile.png',
+  loading: '/images/loading.gif'
+}))
+
+const readableTime = computed(() => {
+  const timeMessage = Util.formattedDate(props.channel.last_activity_at)
+  const currentTime = Util.formattedDate(moment())
+  if (currentTime !== timeMessage) {
+    return moment(props.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
+      .tz('Asia/Tokyo')
+      .format('MM/DD')
+  }
+
+  return moment(props.channel.last_activity_at, 'YYYY-MM-DD HH:mm:ss Z')
+    .tz('Asia/Tokyo')
+    .format('HH:mm')
+})
+
+const itemClass = computed(() => props.active ? 'bg-light media mt-1 p-2' : 'media mt-1 p-2')
+
+const unreadCountLabel = computed(() => props.channel.unread_count > 99 ? '99+' : props.channel.unread_count)
+
+const isUnread = computed(() => props.channel.unread_count > 0)
+
+const getChannelClass = () => {
+  let className = 'item '
+  if (props.active) {
+    className += 'active'
+  }
+
+  if (props.channel.locked) {
+    className += ' blocked'
+  }
+
+  return className
+}
+
+const truncate = (name, length = 15) => {
+  if (!name) return ''
+  return name.length > length ? name.substring(0, length) + '...' : name
+}
 </script>

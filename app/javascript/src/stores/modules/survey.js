@@ -235,5 +235,19 @@ export const actions = {
     } catch (error) {
       return null;
     }
+  },
+
+  /**
+   * Get friend survey responses
+   * @param {Context} context store context
+   * @param {Object} query query params with friend id
+   * @returns friend survey responses or null
+   */
+  async friendAnswers(context, query) {
+    try {
+      return await SurveyAPI.friendResponses(query);
+    } catch (error) {
+      return null;
+    }
   }
 };

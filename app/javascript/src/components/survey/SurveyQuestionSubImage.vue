@@ -21,35 +21,51 @@
         <media-modal :data="media_data" :id="name" @input="uploadedImg"/>
     </div>
 </template>
-<script>
-export default {
-  props: ['data', 'name'],
-  data() {
-    return {
-      url: this.data || null,
-      media_data: {
-        type: this.MessageType.Image,
-        originalContentUrl: this.data || '',
-        previewImageUrl: ''
-      }
-    };
+<script setup>
+import { ref, watch } from 'vue'
+import { MessageType } from '@/core/constant'
+
+const props = defineProps({
+  data: {
+    type: String,
+    default: null
   },
-  methods: {
-    openAddFileModal() {
-      $('#' + this.name).modal('show');
-    },
-    uploadedImg(value) {
-      console.log(value);
-      this.url = value.originalContentUrl;
-      this.$emit('input', value.originalContentUrl);
-    },
-    removeImage() {
-      this.url = null;
-      this.media_data.originalContentUrl = null;
-      this.$emit('input', this.media_data.originalContentUrl);
-    }
+  name: {
+    type: String,
+    required: true
   }
-};
+})
+
+const emit = defineEmits(['input'])
+
+const url = ref(props.data || null)
+const media_data = ref({
+  type: MessageType.Image,
+  originalContentUrl: props.data || '',
+  previewImageUrl: ''
+})
+
+// Watch for changes in props.data
+watch(() => props.data, (newValue) => {
+  url.value = newValue
+  media_data.value.originalContentUrl = newValue || ''
+})
+
+const openAddFileModal = () => {
+  $('#' + props.name).modal('show')
+}
+
+const uploadedImg = (value) => {
+  console.log(value)
+  url.value = value.originalContentUrl
+  emit('input', value.originalContentUrl)
+}
+
+const removeImage = () => {
+  url.value = null
+  media_data.value.originalContentUrl = null
+  emit('input', media_data.value.originalContentUrl)
+}
 </script>
 
 <style scoped>

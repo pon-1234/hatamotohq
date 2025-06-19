@@ -3,8 +3,11 @@
   <span v-else-if="user.status == 'blocked'"><i class="mdi mdi-circle text-warning"></i> ブロックした </span>
 </template>
 
-<script>
-export default {
-  props: ['user']
-};
+<script setup>
+defineProps({
+  user: {
+    type: Object,
+    required: true
+  }
+})
 </script>

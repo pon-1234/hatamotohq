@@ -75,75 +75,65 @@
   </div>
 </template>
 
-<script>
-import Util from '@/core/util';
-import { Datetime } from 'vue-datetime';
-import moment from 'moment-timezone';
+<script setup>
+import { ref, watch, onBeforeMount } from 'vue'
+import Util from '@/core/util'
+import { Datetime } from 'vue-datetime'
+import moment from 'moment-timezone'
 
-export default {
-  components: {
-    Datetime
+const props = defineProps({
+  is_initial: {
+    type: Boolean,
+    default: false
   },
-  props: {
-    is_initial: {
-      type: Boolean,
-      default: false
-    },
-    date: {
-      type: Number,
-      default: 0
-    },
-    time: {
-      type: String,
-      default: '00:00'
-    },
-    order: {
-      type: Number,
-      default: 1
-    }
+  date: {
+    type: Number,
+    default: 0
   },
-
-  data() {
-    return {
-      selectedTime: '00:00',
-      zeroday: false
-    };
+  time: {
+    type: String,
+    default: '00:00'
   },
-
-  beforeMount() {
-    this.zeroday = this.date === 0;
-    this.selectedTime = moment.tz(this.time, 'HH:mm', 'Asia/Tokyo').format();
-  },
-
-  watch: {
-    selectedTime: function(val) {
-      const timeOnly = Util.formattedTime(val);
-      this.$emit('update:time', timeOnly);
-    },
-
-    date: function(val) {
-      this.$emit('update:date', this.date);
-    },
-
-    order: function(val) {
-      this.$emit('update:order', this.order);
-    }
-  },
-
-  methods: {
-    onModeChanged(isInitial) {
-      if (isInitial) {
-        this.date = 0;
-        this.$emit('update:date', this.date);
-        this.time = '00:00';
-        this.$emit('update:time', this.time);
-      } else {
-        this.zeroday = true;
-      }
-      this.$emit('update:is_initial', isInitial);
-    }
+  order: {
+    type: Number,
+    default: 1
   }
-};
+})
+const emit = defineEmits(['update:is_initial', 'update:date', 'update:time', 'update:order'])
+
+const selectedTime = ref('00:00')
+const zeroday = ref(false)
+const is_initial = ref(props.is_initial)
+const date = ref(props.date)
+
+onBeforeMount(() => {
+  zeroday.value = props.date === 0
+  selectedTime.value = moment.tz(props.time, 'HH:mm', 'Asia/Tokyo').format()
+})
+
+watch(selectedTime, (val) => {
+  const timeOnly = Util.formattedTime(val)
+  emit('update:time', timeOnly)
+})
+
+watch(date, (val) => {
+  emit('update:date', date.value)
+})
+
+watch(() => props.order, (val) => {
+  emit('update:order', val)
+})
+
+const onModeChanged = (isInitial) => {
+  if (isInitial) {
+    date.value = 0
+    emit('update:date', date.value)
+    emit('update:time', '00:00')
+  } else {
+    zeroday.value = true
+  }
+  emit('update:is_initial', isInitial)
+}
 </script>
 
 <style></style>

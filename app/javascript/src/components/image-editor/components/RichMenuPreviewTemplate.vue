@@ -103,37 +103,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RichMenuPreviewTemplate',
-  props: {
-    templateId: {
-      type: Number,
-      required: true
-    },
-    objectLists: {
-      type: Array,
-      required: true
-    },
-    activeIndex: {
-      type: Number,
-      default: 0
-    }
+<script setup>
+// Props
+const props = defineProps({
+  templateId: {
+    type: Number,
+    required: true
   },
-  methods: {
-    getIndex(row, col, cols) {
-      return (row - 1) * cols + (col - 1);
-    },
-    getObjectName(index) {
-      return this.objectLists[index]?.name || '';
-    },
-    isActive(index) {
-      return index === this.activeIndex;
-    },
-    selectArea(index) {
-      this.$emit('select', index);
-    }
+  objectLists: {
+    type: Array,
+    required: true
+  },
+  activeIndex: {
+    type: Number,
+    default: 0
   }
+});
+
+// Emits
+const emit = defineEmits(['select']);
+
+// Methods
+const getIndex = (row, col, cols) => {
+  return (row - 1) * cols + (col - 1);
+};
+
+const getObjectName = (index) => {
+  return props.objectLists[index]?.name || '';
+};
+
+const isActive = (index) => {
+  return index === props.activeIndex;
+};
+
+const selectArea = (index) => {
+  emit('select', index);
 };
 </script>
 

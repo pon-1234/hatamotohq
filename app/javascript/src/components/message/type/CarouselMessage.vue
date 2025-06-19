@@ -22,10 +22,8 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['data']
-};
+<script setup>
+defineProps(['data'])
 </script>
 <style lang="scss" scoped>
   .carousel-list {

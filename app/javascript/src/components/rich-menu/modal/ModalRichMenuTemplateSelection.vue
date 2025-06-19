@@ -248,47 +248,44 @@
   </div>
 </template>
 
-<script>
-export default {
-  components: {},
-  props: {
-    isShow: {
-      type: Boolean,
-      default: false
-    },
-    selectionId: {
-      type: Number,
-      default: 201
-    },
-    value: {
-      type: Number,
-      default: 6
-    }
-  },
-  data() {
-    return {
-      showModal: this.isShow,
-      selectId: this.selectionId,
-      selectValue: this.value,
-      type: 'large'
-    };
-  },
-  methods: {
-    acceptAction() {
-      this.$emit('accept', {
-        id: this.selectId,
-        value: this.selectValue,
-        type: this.type
-      });
-    },
+<script setup>
+import { ref } from 'vue'
 
-    selectTemplate(id, value, type = 'large') {
-      this.selectId = id;
-      this.selectValue = value;
-      this.type = type;
-    }
+const props = defineProps({
+  isShow: {
+    type: Boolean,
+    default: false
+  },
+  selectionId: {
+    type: Number,
+    default: 201
+  },
+  value: {
+    type: Number,
+    default: 6
   }
-};
+})
+
+const emit = defineEmits(['accept'])
+
+const showModal = ref(props.isShow)
+const selectId = ref(props.selectionId)
+const selectValue = ref(props.value)
+const type = ref('large')
+
+const acceptAction = () => {
+  emit('accept', {
+    id: selectId.value,
+    value: selectValue.value,
+    type: type.value
+  })
+}
+
+const selectTemplate = (id, value, typeParam = 'large') => {
+  selectId.value = id
+  selectValue.value = value
+  type.value = typeParam
+}
 </script>
 
 <style lang="scss" scoped>

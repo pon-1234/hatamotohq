@@ -1,27 +1,53 @@
 <template>
   <div>
-    <label class="mt-4">ラベル<required-mark/></label>
+    <label class="mt-4">ラベル<RequiredMark /></label>
     <div>
-      <input type="text" maxlength="20" placeholder="ラベルを入力してください" v-model="value.label" class="gw-100 form-control"  @keyup="changeValue" v-validate="'required'" data-vv-as="ラベル" name="action-default"/>
-      <error-message :message="errors.first('action-default')"></error-message>
+      <input 
+        type="text" 
+        maxlength="20" 
+        placeholder="ラベルを入力してください" 
+        :value="modelValue.label"
+        @input="updateLabel"
+        class="gw-100 form-control"
+        name="action-default"
+        required
+      />
+      <ErrorMessage v-if="errorMessage" :message="errorMessage" />
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: ['value'],
-  inject: ['parentValidator'],
-  created() {
-    this.$validator = this.parentValidator;
+
+<script setup>
+import RequiredMark from '../common/RequiredMark.vue';
+import ErrorMessage from '../common/ErrorMessage.vue';
+
+// Props
+const props = defineProps({
+  modelValue: {
+    type: Object,
+    required: true
   },
-  methods: {
-    changeValue() {
-      this.$emit('input', this.value);
-    }
+  errorMessage: {
+    type: String,
+    default: null
   }
+});
+
+// Emits
+const emit = defineEmits(['update:modelValue']);
+
+// Methods
+const updateLabel = (event) => {
+  const updatedValue = {
+    ...props.modelValue,
+    label: event.target.value
+  };
+  emit('update:modelValue', updatedValue);
 };
 </script>
 
 <style lang="scss" scoped>
-
+.gw-100 {
+  width: 100%;
+}
 </style>

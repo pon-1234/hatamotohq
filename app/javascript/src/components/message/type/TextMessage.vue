@@ -1,39 +1,27 @@
-<script>
-export default {
-  props: ['data'],
-  render: function(h) {
-    // eslint-disable-next-line no-useless-escape
-    const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.\%\@\:\_\~\+]*[\w-]+)*\/?\#?/gim;
-    const text = this.data.replace(urlRegex, function(url, protocol) {
-      let actualUrl = url;
-      if (protocol === undefined) actualUrl = '//' + actualUrl;
-      return '<a href="' + actualUrl + '" target="_blank">' + url + '</a>';
-    });
-    return h(
-      'div',
-      {
-        class: 'balloon'
-      },
-      [
-        h(
-          'div',
-          {
-            class: 'selectable chat-item-text'
-          },
-          [
-            h('div', {
-              class: 'view preview-text-content text-prewrap',
-              domProps: {
-                // eslint-disable-next-line no-undef
-                innerHTML: emojione.toImage(text)
-              }
-            })
-          ]
-        )
-      ]
-    );
-  }
-};
+<template>
+  <div class="balloon">
+    <div class="selectable chat-item-text">
+      <div class="view preview-text-content text-prewrap" v-html="formattedText"></div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps(['data'])
+
+const formattedText = computed(() => {
+  // eslint-disable-next-line no-useless-escape
+  const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.\%\@\:\_\~\+]*[\w-]+)*\/?\#?/gim
+  const text = props.data.replace(urlRegex, function(url, protocol) {
+    let actualUrl = url
+    if (protocol === undefined) actualUrl = '//' + actualUrl
+    return '<a href="' + actualUrl + '" target="_blank">' + url + '</a>'
+  })
+  // eslint-disable-next-line no-undef
+  return emojione.toImage(text)
+})
 </script>
 <style lang="scss" scoped>
   .preview-text-content {

@@ -6,13 +6,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    episode: {
-      type: Object,
-      required: true
-    }
+<script setup>
+defineProps({
+  episode: {
+    type: Object,
+    required: true
   }
-};
+})
 </script>
