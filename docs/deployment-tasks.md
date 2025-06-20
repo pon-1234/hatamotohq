@@ -26,6 +26,18 @@
    - すべてのレイアウトファイルで`vite_stylesheet_tag`を使用
    - 不要なCSSビルドスクリプトを削除
 
+### ✅ 最終確認と修正（フィードバック対応）
+
+8. **データベース設定の最終確認**
+   - Gemfileに`gem 'pg'`が存在し、mysql2が無いことを確認済み
+   - `config/database.yml.ci`をPostgreSQLに修正済み
+9. **ビルド済みアセットの対応**
+   - `/public/app/assets/builds`を`.gitignore`に追加
+   - Gitトラッキングから削除済み（200+ファイル）
+10. **Dockerfileの最適化**
+   - bundle installとyarn installが適切に実行されることを確認
+   - 不要なbuild:cssコマンドを削除
+
 ---
 
 # Fly.ioデプロイに向けた必須タスクリスト

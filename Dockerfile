@@ -56,9 +56,6 @@ RUN yarn install --ignore-engines
 # Build frontend assets with Vite
 RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
-# Build CSS
-RUN npm run build:css
-
 EXPOSE $RAILS_PORT
 
 # Use the entrypoint script

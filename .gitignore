@@ -49,6 +49,7 @@ rails_server.log
 /coverage
 /app/assets/builds/*
 !/app/assets/builds/.keep
+/public/app/assets/builds
 
 # Vite Ruby
 /public/vite*
