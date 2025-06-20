@@ -94,7 +94,7 @@ const fetchData = async () => {
 }
 
 const showAnswerDetail = async (surveyId, answerId) => {
-  window.location.href = process.env.MIX_ROOT_PATH + '/surveys/' + surveyId + '/answer/' + answerId
+  window.location.href = import.meta.env.VITE_ROOT_PATH + '/surveys/' + surveyId + '/answer/' + answerId
 }
 
 const changeTilteActiveChannel = (title) => {

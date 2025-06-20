@@ -209,7 +209,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             'テンプレートの作成は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
+            `${import.meta.env.VITE_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
           );
         } else {
           window.toastr.error('エラーを発生しました。');
@@ -220,7 +220,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             'テンプレートの変更は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
+            `${import.meta.env.VITE_ROOT_PATH}/user/templates?folder_id=${this.templateData.folder_id}`
           );
         } else {
           window.toastr.error('エラーを発生しました。');
@@ -231,7 +231,7 @@ export default {
 
     async deleteTemplateTemplate() {
       await this.deleteTemplate({ id: this.template_id });
-      window.location.href = process.env.MIX_ROOT_PATH + '/template/streams';
+      window.location.href = import.meta.env.VITE_ROOT_PATH + '/template/streams';
     }
   }
 };

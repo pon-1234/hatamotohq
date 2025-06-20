@@ -171,7 +171,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       autoResponses: [],
@@ -307,7 +307,7 @@ export default {
     },
 
     openEdit(autoResponse) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`);
+      window.open(`${import.meta.env.VITE_ROOT_PATH}/user/auto_responses/${autoResponse.id}/edit`);
     },
 
     formattedDate(date) {

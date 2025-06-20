@@ -113,7 +113,7 @@ export default {
 
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       componentKey: 0,
       scenarioMessageData: {
@@ -223,7 +223,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect(
           'シナリオにメッセージを保存しました。',
-          `${process.env.MIX_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
+          `${import.meta.env.VITE_ROOT_PATH}/user/scenarios/${this.scenario_id}/messages`
         );
       } else {
         window.toastr.error('シナリオにメッセージの保存は失敗しました。');

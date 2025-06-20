@@ -1,7 +1,7 @@
 export default {
   list: () => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/sites`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/sites`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -11,7 +11,7 @@ export default {
 
   detail: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/sites/${query.id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -21,7 +21,7 @@ export default {
 
   getScenarios: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}/scenarios`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/sites/${query.id}/scenarios`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -31,7 +31,7 @@ export default {
 
   getBroadcasts: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}/broadcasts`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/sites/${query.id}/broadcasts`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -41,7 +41,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/sites/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/sites/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -50,7 +50,7 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/sites/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/sites/' + id,
       method: 'DELETE'
     });
   }

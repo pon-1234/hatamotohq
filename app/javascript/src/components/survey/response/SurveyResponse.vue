@@ -38,7 +38,7 @@ const props = defineProps({
   }
 })
 
-const rootPath = process.env.MIX_ROOT_PATH || ''
+const rootPath = import.meta.env.VITE_ROOT_PATH || ''
 
 // フォーマット関数を定義
 const formattedTime = (datetime) => {

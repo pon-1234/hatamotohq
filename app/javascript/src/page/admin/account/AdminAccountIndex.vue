@@ -137,7 +137,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootUrl: import.meta.env.VITE_ROOT_PATH,
       currentPage: 1,
       contentKey: 0,
       loading: true,

@@ -77,7 +77,7 @@ const props = defineProps({
 
 const store = useStore()
 
-const rootPath = process.env.MIX_ROOT_PATH
+const rootPath = import.meta.env.VITE_ROOT_PATH
 const contentKey = ref(0)
 const isStaffSelectOpened = ref(false)
 const staffCount = ref(0)

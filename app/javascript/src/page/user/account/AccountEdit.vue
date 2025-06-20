@@ -114,7 +114,7 @@ export default {
 
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      ROOT_PATH: import.meta.env.VITE_ROOT_PATH,
       userInfo: {
         accountName: this.auth.line_name,
         currentPassword: '',

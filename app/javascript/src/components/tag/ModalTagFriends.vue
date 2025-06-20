@@ -74,7 +74,7 @@ const props = defineProps({
 
 const store = useStore()
 
-const rootUrl = process.env.MIX_ROOT_PATH
+const rootUrl = import.meta.env.VITE_ROOT_PATH
 const loading = ref(false)
 const avatarImgObj = ref({
   src: '',

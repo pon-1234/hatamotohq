@@ -138,7 +138,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       isPc: true,
       selectedFolderIndex: 0,
       curVariableIndex: null,
@@ -250,7 +250,7 @@ export default {
     },
 
     openEdit(variable) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/variables/${variable.id}/edit`);
+      window.open(`${import.meta.env.VITE_ROOT_PATH}/user/variables/${variable.id}/edit`);
     },
 
     formattedDate(date) {

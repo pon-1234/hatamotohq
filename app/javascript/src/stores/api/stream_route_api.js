@@ -1,7 +1,7 @@
 export default {
   create(query) {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/stream_routes/`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json',
@@ -11,7 +11,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/stream_routes/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json',
@@ -21,7 +21,7 @@ export default {
 
   getDetail: (params) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/${params.q.streamRouteId}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/stream_routes/${params.q.streamRouteId}`,
       method: 'GET',
       dataType: 'json',
       data: params,
@@ -32,7 +32,7 @@ export default {
 
   getStreamRoutes: () => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/stream_routes`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -42,14 +42,14 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/stream_routes/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/stream_routes/' + id,
       method: 'DELETE'
     });
   },
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/stream_routes/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/stream_routes/${id}/copy`,
       method: 'POST',
       contentType: 'application/json',
       dataType: 'json'

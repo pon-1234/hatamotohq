@@ -47,7 +47,7 @@ export default {
   props: ['reminder_id'],
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       reminderData: {
@@ -114,7 +114,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           'リマインダの保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+          `${import.meta.env.VITE_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
         );
       } else {
         this.loading = false;
@@ -125,7 +125,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           'リマインダの更新は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
+          `${import.meta.env.VITE_ROOT_PATH}/user/reminders?folder_id=${this.reminderData.folder_id}`
         );
       } else {
         this.loading = false;

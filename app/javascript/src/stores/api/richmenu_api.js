@@ -1,7 +1,7 @@
 export default {
   list: () => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -11,7 +11,7 @@ export default {
 
   create: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -20,7 +20,7 @@ export default {
 
   update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${payload.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus/${payload.id}`,
       method: 'PATCH',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -29,7 +29,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -38,14 +38,14 @@ export default {
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus/${id}/copy`,
       method: 'POST'
     });
   },
 
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/rich_menus/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/rich_menus/${id}`,
       method: 'DELETE'
     });
   },
@@ -55,7 +55,7 @@ export default {
     formData.append('fileData', data.file);
 
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/uploadImage'),
+      url: import.meta.env.VITE_ROOT_PATH + '?' + '_pid=' + btoa('/richmenus/uploadImage'),
       method: 'POST',
       data: formData,
       processData: false,

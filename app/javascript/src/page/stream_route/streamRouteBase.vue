@@ -27,7 +27,7 @@ export default {
   props: ['liff_id', 'stream_route_code', 'friendship_status_changed', 'added_friend_before'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       notAddFriend: false
     };
   },

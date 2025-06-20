@@ -15,7 +15,7 @@
 const props = defineProps(['data'])
 
 const getImageMap = () => {
-  return 'https://maps.googleapis.com/maps/api/staticmap?center=' + props.data.latitude + ',' + props.data.longitude + '&zoom=10&size=200x120' + '&markers=color:red%7Clabel:C%7C' + props.data.latitude + ',' + props.data.longitude + '&key=' + process.env.MIX_GOOGLE_MAP_KEY
+  return 'https://maps.googleapis.com/maps/api/staticmap?center=' + props.data.latitude + ',' + props.data.longitude + '&zoom=10&size=200x120' + '&markers=color:red%7Clabel:C%7C' + props.data.latitude + ',' + props.data.longitude + '&key=' + import.meta.env.VITE_GOOGLE_MAP_KEY
 }
 </script>
 <style lang="scss" scoped>

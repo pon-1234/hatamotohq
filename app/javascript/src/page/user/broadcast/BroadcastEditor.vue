@@ -171,7 +171,7 @@ export default {
   },
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       broadcastData: {
@@ -247,7 +247,7 @@ export default {
         const broadcast = await this.getBroadcast(this.broadcast_id);
         Object.assign(this.broadcastData, broadcast);
         if (this.broadcastData.status === 'done') {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts`;
+          window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts`;
         }
         this.setDefaultMessageIfNeed();
         if (this.broadcastData.deliver_now) {
@@ -339,7 +339,7 @@ export default {
     onReceiveCreateBroadcastResponse(success) {
       if (success) {
         window.toastr.success('一斉配信の保存は完了しました。');
-        Util.showSuccessThenRedirect('一斉配信の保存は完了しました。', `${process.env.MIX_ROOT_PATH}/user/broadcasts`);
+        Util.showSuccessThenRedirect('一斉配信の保存は完了しました。', `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts`);
       } else {
         window.toastr.error('一斉配信の保存は失敗しました。');
         this.loading = false;
@@ -347,7 +347,7 @@ export default {
     },
     onReceiveUpdateBroadcastResponse(success) {
       if (success) {
-        Util.showSuccessThenRedirect('一斉配信の更新は完了しました。', `${process.env.MIX_ROOT_PATH}/user/broadcasts`);
+        Util.showSuccessThenRedirect('一斉配信の更新は完了しました。', `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts`);
       } else {
         window.toastr.error('一斉配信の更新は失敗しました。');
         this.loading = false;

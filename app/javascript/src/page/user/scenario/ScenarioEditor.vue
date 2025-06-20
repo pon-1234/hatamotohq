@@ -189,7 +189,7 @@ export default {
 
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       componentKey: 0,
       target: 'all', // or 'tags'
@@ -276,12 +276,12 @@ export default {
       if (success) {
         window.toastr.success('シナリオの作成は完了しました。');
         setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+          window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/scenarios`;
         }, 500);
       } else {
         window.toastr.error('シナリオの作成は失敗しました。');
         setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios/new`;
+          window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/scenarios/new`;
           this.loading = false;
         }, 500);
       }
@@ -290,12 +290,12 @@ export default {
       if (success) {
         window.toastr.success('シナリオの更新は完了しました。');
         setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+          window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/scenarios`;
         }, 500);
       } else {
         window.toastr.error('シナリオの更新は失敗しました。');
         setTimeout(() => {
-          window.location.href = `${process.env.MIX_ROOT_PATH}/user/scenarios`;
+          window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/scenarios`;
           this.loading = false;
         }, 500);
       }

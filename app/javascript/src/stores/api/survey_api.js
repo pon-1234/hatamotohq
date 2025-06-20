@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -22,7 +22,7 @@ export default {
 
   getByCode: (code) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/surveys/${code}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/surveys/${code}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -31,7 +31,7 @@ export default {
 
   create: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -40,7 +40,7 @@ export default {
 
   update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${payload.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${payload.id}`,
       method: 'PATCH',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -49,14 +49,14 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${id}`,
       method: 'DELETE'
     });
   },
 
   postAnswer(payload) {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/surveys/${payload.code}/${payload.friend_id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/surveys/${payload.code}/${payload.friend_id}`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -65,7 +65,7 @@ export default {
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${id}/copy`,
       method: 'POST',
       contentType: 'application/json'
     });
@@ -73,7 +73,7 @@ export default {
 
   toggleStatus: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${id}/toggle_status`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${id}/toggle_status`,
       method: 'POST',
       contentType: 'application/json'
     });
@@ -81,7 +81,7 @@ export default {
 
   answeredUsers: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.id}/answered_users`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${query.id}/answered_users`,
       method: 'GET',
       dataType: 'json',
       data: query,
@@ -92,7 +92,7 @@ export default {
 
   responses: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.id}/responses`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${query.id}/responses`,
       method: 'GET',
       dataType: 'json',
       data: query,
@@ -103,7 +103,7 @@ export default {
 
   friendResponses: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/surveys/${query.survey_id}/${query.friend_id}/responses`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/surveys/${query.survey_id}/${query.friend_id}/responses`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',

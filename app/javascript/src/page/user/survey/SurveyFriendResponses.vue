@@ -34,7 +34,7 @@ export default {
   props: ['survey_id', 'friend', 'avatar_url'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       responses: [],

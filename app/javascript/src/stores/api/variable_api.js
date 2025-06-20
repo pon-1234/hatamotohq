@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/variables`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/variables`,
       method: 'GET',
       dataType: 'json',
       data: query,
@@ -12,7 +12,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/variables/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/variables/' + id,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -21,7 +21,7 @@ export default {
 
   create: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/variables`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/variables`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -30,7 +30,7 @@ export default {
 
   update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/variables/${payload.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/variables/${payload.id}`,
       method: 'PATCH',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -39,14 +39,14 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/variables/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/variables/' + id,
       method: 'DELETE'
     });
   },
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/variables/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/variables/${id}/copy`,
       method: 'POST'
     });
   }

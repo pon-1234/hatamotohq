@@ -146,7 +146,7 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       submitted: false,
       userFormData: {
         email: null,

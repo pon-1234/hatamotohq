@@ -76,7 +76,7 @@ export default {
   props: ['variable_id'],
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       variableData: {
@@ -172,7 +172,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
+          `${import.meta.env.VITE_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         this.loading = false;
@@ -183,7 +183,7 @@ export default {
       if (success) {
         Util.showSuccessThenRedirect(
           '友だち情報欄の更新は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
+          `${import.meta.env.VITE_ROOT_PATH}/user/variables?folder_id=${this.variableData.folder_id}`
         );
       } else {
         this.loading = false;

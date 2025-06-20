@@ -133,7 +133,7 @@ const emit = defineEmits(['input'])
 
 const store = useStore()
 
-const rootPath = process.env.MIX_ROOT_PATH
+const rootPath = import.meta.env.VITE_ROOT_PATH
 const isShowingEditor = ref(false)
 const templateId = ref(props.data.templateId)
 const templateValue = ref(props.data.templateValue)

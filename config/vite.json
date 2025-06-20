@@ -3,7 +3,8 @@
     "sourceCodeDir": "app/javascript",
     "watchAdditionalPaths": [],
     "entrypoints": [
-      "application.js"
+      "application.js",
+      "application.scss"
     ]
   },
   "development": {

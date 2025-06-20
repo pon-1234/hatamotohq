@@ -141,7 +141,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       isPc: true,
       listUpdate: false,
       selectedFolderIndex: 0,

@@ -5,7 +5,7 @@ ENV BUNDLE_VERSION 2.5.23
 ENV BUNDLE_PATH /usr/local/bundle/gems
 ENV TMP_PATH /tmp/
 ENV RAILS_LOG_TO_STDOUT true
-ENV RAILS_PORT 3000
+ENV RAILS_PORT 8080
 ENV RAILS_ENV production
 
 # copy entrypoint scripts and grant execution permissions
@@ -53,18 +53,16 @@ COPY . .
 # Install JavaScript dependencies 
 RUN yarn install --ignore-engines
 
-# Precompile assets during build
-RUN NODE_OPTIONS="--max-old-space-size=4096" SECRET_KEY_BASE=dummy_key_for_precompile RAILS_ENV=production bundle exec rails assets:precompile
+# Build frontend assets with Vite
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
-# Create a script to run db:migrate and then start the server
-RUN echo '#!/bin/sh' > /usr/local/bin/start-server.sh \
-&& echo 'set -e' >> /usr/local/bin/start-server.sh \
-&& echo 'echo "Running database migrations..."' >> /usr/local/bin/start-server.sh \
-&& echo 'bundle exec rails db:migrate' >> /usr/local/bin/start-server.sh \
-&& echo 'echo "Starting Rails server..."' >> /usr/local/bin/start-server.sh \
-&& echo 'exec bundle exec rails server -p $RAILS_PORT -b 0.0.0.0' >> /usr/local/bin/start-server.sh \
-&& chmod +x /usr/local/bin/start-server.sh
+# Build CSS
+RUN npm run build:css
 
 EXPOSE $RAILS_PORT
 
-CMD ["/usr/local/bin/start-server.sh"]
+# Use the entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Default command is to start Puma
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

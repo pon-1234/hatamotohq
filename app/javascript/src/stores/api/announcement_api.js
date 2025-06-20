@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/admin/announcements`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   published: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/home/announcements`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/home/announcements`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -22,7 +22,7 @@ export default {
 
   create(payload) {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/admin/announcements/`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json',
@@ -32,7 +32,7 @@ export default {
 
   update: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/${payload.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/admin/announcements/${payload.id}`,
       method: 'PATCH',
       data: JSON.stringify(payload),
       contentType: 'application/json',
@@ -42,7 +42,7 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/admin/announcements/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/admin/announcements/${id}`,
       method: 'DELETE',
       contentType: 'application/json'
     });

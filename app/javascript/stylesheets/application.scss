@@ -1,4 +1,5 @@
-@import "bootstrap-vue/dist/bootstrap-vue.css";
+// Bootstrap-Vue has been removed - using native Bootstrap with custom components
+@import 'bootstrap/scss/bootstrap';
 @import "./emojione/emojione.min.css";
 @import "./emojione/emojionearea.min.css";
 @import "vue-multiselect/dist/vue-multiselect.min.css";

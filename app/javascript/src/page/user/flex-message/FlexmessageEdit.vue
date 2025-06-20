@@ -81,7 +81,7 @@ export default {
         };
         this.altText = JSON.parse(flexMessage.json_message).altText;
       }).catch(() => {
-        window.location.href = process.env.MIX_ROOT_PATH + '/template/flex-messages/folders';
+        window.location.href = import.meta.env.VITE_ROOT_PATH + '/template/flex-messages/folders';
       });
     },
 
@@ -121,7 +121,7 @@ export default {
           html_template: this.flexMessageEditable.html_template
         }
       }).done((res) => {
-        window.location.href = process.env.MIX_ROOT_PATH + '/template/flex-messages/folders/' + this.folder_id;
+        window.location.href = import.meta.env.VITE_ROOT_PATH + '/template/flex-messages/folders/' + this.folder_id;
       }).fail((err) => {
         window.toastr.error(err.responseJSON.message);
       });

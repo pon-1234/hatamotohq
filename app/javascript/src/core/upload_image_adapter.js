@@ -5,7 +5,7 @@ export default class UploadImageAdapter {
   constructor(loader) {
     // The file loader instance to use during the upload.
     this.loader = loader;
-    this.url = process.env.MIX_ROOT_PATH + '/admin/announcements/upload_image';
+    this.url = import.meta.env.VITE_ROOT_PATH + '/admin/announcements/upload_image';
     this.token = Util.getCsrfToken();
   }
 

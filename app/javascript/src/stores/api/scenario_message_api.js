@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -11,7 +11,7 @@ export default {
   },
   delete: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/scenarios/${query.scenario_id}/messages/${query.id}`,
       method: 'DELETE',
       contentType: 'application/json'
     });

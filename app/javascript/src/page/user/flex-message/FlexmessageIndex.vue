@@ -67,7 +67,7 @@
                   </th>
                   <th style="text-align: right">
                     <a
-                      :href="`${MIX_ROOT_PATH}/template/flex-messages/folders/${currentFolder.id}/flex/create`"
+                      :href="`${ROOT_PATH}/template/flex-messages/folders/${currentFolder.id}/flex/create`"
                       class="btn btn-primary btn-sm"
                     >
                       <i class="glyphicon glyphicon-plus"></i> 新しいFlexメッセージ
@@ -109,7 +109,7 @@
                             </template>
                             <base-dropdown-item @click.stop="copyFlexMessage(item)">複製</base-dropdown-item>
                             <base-dropdown-item
-                              :href="`${MIX_ROOT_PATH}/template/flex-messages/folders/${item.folder_id}/flex/${item.id}/edit`"
+                              :href="`${ROOT_PATH}/template/flex-messages/folders/${item.folder_id}/flex/${item.id}/edit`"
                               >編集</base-dropdown-item
                             >
                             <base-dropdown-item @click.stop="deleteFlexMessage(item)">削除</base-dropdown-item>
@@ -153,7 +153,7 @@ export default {
   props: ['folder_id'],
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      ROOT_PATH: import.meta.env.VITE_ROOT_PATH,
 
       isAddMoreFolder: false,
       folderId: this.folder_id,

@@ -1,7 +1,7 @@
 export default {
   list: () => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/templates`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/templates`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -11,7 +11,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/templates/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/templates/' + id,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -20,7 +20,7 @@ export default {
 
   create: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/templates`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/templates`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -29,7 +29,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/templates/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/templates/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -38,14 +38,14 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/templates/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/templates/' + id,
       method: 'DELETE'
     });
   },
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/templates/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/templates/${id}/copy`,
       method: 'POST'
     });
   }

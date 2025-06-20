@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/agency/clients`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/agency/clients`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -11,7 +11,7 @@ export default {
   },
   search: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/agency/clients/search`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/agency/clients/search`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -20,7 +20,7 @@ export default {
   },
   create(query) {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/agency/clients`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/agency/clients`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json',
@@ -29,7 +29,7 @@ export default {
   },
   update: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/agency/clients/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/agency/clients/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json',
@@ -38,7 +38,7 @@ export default {
   },
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/agency/clients/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/agency/clients/${id}`,
       method: 'DELETE',
       contentType: 'application/json'
     });

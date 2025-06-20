@@ -4,13 +4,13 @@
       <h3 class="hdg3">回答内容詳細</h3>
       <div class="row-ttl02 flex">
         <div class="btn-common02 fz14">
-          <a :href="`${MIX_ROOT_PATH}/friends/` + answer.line_customer.friend.id + `/detail`">友だち詳細</a>
+          <a :href="`${ROOT_PATH}/friends/` + answer.line_customer.friend.id + `/detail`">友だち詳細</a>
         </div>
         <div class="btn-common02 fz14">
-          <a :href="`${MIX_ROOT_PATH}/talks/to/` + answer.channel_alias">トーク画面</a>
+          <a :href="`${ROOT_PATH}/talks/to/` + answer.channel_alias">トーク画面</a>
         </div>
         <div class="btn-common02 fz14">
-          <a :href="`${MIX_ROOT_PATH}/surveys/` + answer.survey_id + `/answer/` + answer.id + `/pdf`"
+          <a :href="`${ROOT_PATH}/surveys/` + answer.survey_id + `/answer/` + answer.id + `/pdf`"
             >PDFダウンロード</a
           >
         </div>
@@ -53,14 +53,14 @@
                     <div v-if="question.answers[0].content.type === 'file'">
                       <img
                         style="width: 150px; margin-bottom: 10px"
-                        :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${question.answers[0].content.content.alias}`"
+                        :src="`${SERVEY_MEDIA_FLEXA_URL}/${question.answers[0].content.content.alias}`"
                         v-if="question.answers[0].content.content.mine_type.includes('image/')"
                       />
                       <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
                       <div>
                         <a
                           style="color: #00b900"
-                          :href="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${question.answers[0].content.content.alias}`"
+                          :href="`${SERVEY_MEDIA_FLEXA_URL}/${question.answers[0].content.content.alias}`"
                           target="_blank"
                         >
                           <i class="fa fa-download"></i
@@ -92,8 +92,8 @@ export default {
   props: ['data'],
   data() {
     return {
-      MIX_SERVEY_MEDIA_FLEXA_URL: process.env.MIX_SERVEY_MEDIA_FLEXA_URL,
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      SERVEY_MEDIA_FLEXA_URL: import.meta.env.VITE_SERVEY_MEDIA_FLEXA_URL,
+      ROOT_PATH: import.meta.env.VITE_ROOT_PATH,
       answer: this.data
     };
   },

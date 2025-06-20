@@ -69,7 +69,7 @@ import { mapActions, mapMutations, mapState } from 'vuex';
 export default {
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true
     };
   },

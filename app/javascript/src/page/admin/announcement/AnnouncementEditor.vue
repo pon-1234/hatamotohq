@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootUrl: import.meta.env.VITE_ROOT_PATH,
       announcementData: {
         id: null,
         announced_at: moment().tz('Asia/Tokyo').format(),

@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/broadcasts/' + id,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -21,7 +21,7 @@ export default {
 
   create: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/broadcasts',
+      url: import.meta.env.VITE_ROOT_PATH + '/user/broadcasts',
       method: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -30,7 +30,7 @@ export default {
 
   update: (data) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/broadcasts/' + data.id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/broadcasts/' + data.id,
       method: 'PATCH',
       data: JSON.stringify(data),
       contentType: 'application/json'
@@ -39,7 +39,7 @@ export default {
 
   copy: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts/${id}/copy`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts/${id}/copy`,
       method: 'POST',
       contentType: 'application/json'
     });
@@ -47,7 +47,7 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/broadcasts/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts/${id}`,
       method: 'DELETE',
       contentType: 'application/json'
     });

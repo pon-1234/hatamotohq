@@ -72,7 +72,7 @@ export default {
   props: ['survey_id'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       currentPage: 1

@@ -166,7 +166,7 @@ export default {
           }
         })
         .done(res => {
-          window.location.href = process.env.MIX_ROOT_PATH + '/template/flex-messages/folders/' + this.folderId;
+          window.location.href = import.meta.env.VITE_ROOT_PATH + '/template/flex-messages/folders/' + this.folderId;
         })
         .fail(err => {
           window.toastr.error(err.responseJSON.message);

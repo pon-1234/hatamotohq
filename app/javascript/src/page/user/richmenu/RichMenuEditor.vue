@@ -158,7 +158,7 @@ export default {
   },
   data() {
     return {
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      ROOT_PATH: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       richMenuData: {
@@ -273,7 +273,7 @@ export default {
       if (response) {
         Util.showSuccessThenRedirect(
           'リッチメニュの保存は完了しました。',
-          `${process.env.MIX_ROOT_PATH}/user/rich_menus?folder_id=${this.richMenuData.folder_id}`
+          `${ROOT_PATH}/user/rich_menus?folder_id=${this.richMenuData.folder_id}`
         );
       } else {
         this.loading = false;

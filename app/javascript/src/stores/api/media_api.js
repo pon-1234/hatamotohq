@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/medias`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/medias`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -19,7 +19,7 @@ export default {
     }
 
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/medias',
+      url: import.meta.env.VITE_ROOT_PATH + '/user/medias',
       method: 'POST',
       data: formData,
       processData: false,
@@ -32,7 +32,7 @@ export default {
     formData.append('file', file);
     formData.append('type', 'imagemap');
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/medias`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/medias`,
       method: 'POST',
       data: formData,
       processData: false,
@@ -45,7 +45,7 @@ export default {
     formData.append('file', file);
     formData.append('type', 'richmenu');
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/medias`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/medias`,
       method: 'POST',
       data: formData,
       processData: false,
@@ -55,7 +55,7 @@ export default {
 
   bulkDelete: (ids) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/medias/bulk_delete`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/medias/bulk_delete`,
       method: 'POST',
       data: JSON.stringify({ ids: ids }),
       dataType: 'json',

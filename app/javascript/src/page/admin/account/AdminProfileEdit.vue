@@ -128,7 +128,7 @@ export default {
   props: ['account'],
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootUrl: import.meta.env.VITE_ROOT_PATH,
       submitted: false,
       accountFormData: {
         id: null,

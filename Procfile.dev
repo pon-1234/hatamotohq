@@ -1,3 +1,2 @@
 web: env RUBY_DEBUG_OPEN=true bin/rails server -p 3000
 vite: bin/vite dev
-css: npm run watch:css

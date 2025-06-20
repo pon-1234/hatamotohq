@@ -158,7 +158,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       curBroadcastIndex: 0,
@@ -214,11 +214,11 @@ export default {
     },
 
     openNew() {
-      window.location.href = `${process.env.MIX_ROOT_PATH}/user/broadcasts/new`;
+      window.location.href = `${import.meta.env.VITE_ROOT_PATH}/user/broadcasts/new`;
     },
 
     openMessageIndex(broadcast) {
-      window.open(`${process.env.MIX_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`);
+      window.open(`${import.meta.env.VITE_ROOT_PATH}/user/broadcasts/${broadcast.id}/messages`);
     },
 
     formattedDatetime(time) {

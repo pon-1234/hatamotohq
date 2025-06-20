@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -22,7 +22,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/friends/' + query.id,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/friends/' + query.id,
       method: 'PUT',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -31,14 +31,14 @@ export default {
 
   toggleLocked: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/toggle_locked`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${id}/toggle_locked`,
       method: 'POST'
     });
   },
 
   toggleVisible: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/toggle_visible`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${id}/toggle_visible`,
       method: 'POST'
     });
   },
@@ -46,7 +46,7 @@ export default {
   // Reminder
   getReminders: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/reminders`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${id}/reminders`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -55,7 +55,7 @@ export default {
 
   setReminder: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${payload.friend_id}/set_reminder`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${payload.friend_id}/set_reminder`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
@@ -65,7 +65,7 @@ export default {
   // Custom info
   getVariables: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/friends/${id}/variables`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/friends/${id}/variables`,
       method: 'GET',
       contentType: 'application/json'
     });

@@ -3,7 +3,7 @@ export function WebSocketClient() {
 }
 
 WebSocketClient.prototype.open = function() {
-  this.url = process.env.MIX_WS_FLEXA_URL;
+  this.url = import.meta.env.VITE_WS_FLEXA_URL;
   this.token = window.wsToken;
 
   window.WebSocket = window.WebSocket || window.MozWebSocket;

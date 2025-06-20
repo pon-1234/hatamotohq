@@ -214,7 +214,7 @@ export default {
   },
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       friendData: {
         status: 'active',
         locked: null,
@@ -231,7 +231,7 @@ export default {
         error: '/img/no-image-profile.png',
         loading: '/images/loading.gif'
       },
-      friendIndexPath: `${process.env.MIX_ROOT_PATH}/user/friends`,
+      friendIndexPath: `${import.meta.env.VITE_ROOT_PATH}/user/friends`,
       isShowDisplayName: false,
       field_index: null,
       currentTab: '友だち情報名',

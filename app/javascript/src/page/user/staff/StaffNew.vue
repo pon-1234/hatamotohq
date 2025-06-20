@@ -131,7 +131,7 @@ import Util from '@/core/util';
 export default {
   data() {
     return {
-      userRootUrl: process.env.MIX_ROOT_PATH,
+      userRootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: false,
       staffFormData: {
         email: null,

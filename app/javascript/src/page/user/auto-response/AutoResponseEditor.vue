@@ -302,7 +302,7 @@ export default {
   data() {
     return {
       MAX_AUTO_RESPONSE_MESSAGE: 3,
-      MIX_ROOT_PATH: process.env.MIX_ROOT_PATH,
+      ROOT_PATH: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       contentKey: 0,
       error: null,
@@ -423,7 +423,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             '自動応答の変更は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+            `${ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
           );
         } else {
           window.toastr.error('自動応答の変更は失敗しました。');
@@ -434,7 +434,7 @@ export default {
         if (response) {
           Util.showSuccessThenRedirect(
             '自動応答の作成は完了しました。',
-            `${process.env.MIX_ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
+            `${ROOT_PATH}/user/auto_responses?folder_id=${this.autoResponseData.folder_id}`
           );
         } else {
           window.toastr.error('自動応答の作成は失敗しました。');

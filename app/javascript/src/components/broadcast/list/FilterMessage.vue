@@ -18,10 +18,10 @@
         <a href="javascript:void(0);"><span>検索</span></a>
       </div>
       <div class="btn-common02 fz14">
-        <a :href="`${MIX_ROOT_PATH}/template/streams/create?folder_id=${folderId}`" v-if="type == 'template'"
+        <a :href="`${import.meta.env.VITE_ROOT_PATH}/template/streams/create?folder_id=${folderId}`" v-if="type == 'template'"
           >新規作成</a
         >
-        <a :href="`${MIX_ROOT_PATH}/streams/create`" v-else>新規作成</a>
+        <a :href="`${import.meta.env.VITE_ROOT_PATH}/streams/create`" v-else>新規作成</a>
       </div>
     </div>
     <div class="box-detail">
@@ -49,7 +49,7 @@ const props = defineProps(['type', 'folderId'])
 const emit = defineEmits(['input'])
 const store = useStore()
 
-const MIX_ROOT_PATH = process.env.MIX_ROOT_PATH
+const import.meta.env.VITE_ROOT_PATH = import.meta.env.VITE_ROOT_PATH
 const options = window.MessageDeliveriesStatusFilter
 const selected = ref(window.MessageDeliveriesStatusFilter[0])
 const keyword = ref('')

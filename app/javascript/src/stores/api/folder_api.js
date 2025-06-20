@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/folders`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/folders`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   create: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/folders`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/folders`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -21,7 +21,7 @@ export default {
 
   update: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/folders/${query.id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/folders/${query.id}`,
       method: 'PATCH',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -30,7 +30,7 @@ export default {
 
   delete: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/folders/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/folders/${id}`,
       method: 'DELETE'
     });
   }

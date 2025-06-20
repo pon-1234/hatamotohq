@@ -42,7 +42,7 @@ const props = defineProps({
 const store = useStore()
 const form = ref(null)
 
-const userRootUrl = process.env.MIX_ROOT_PATH
+const userRootUrl = import.meta.env.VITE_ROOT_PATH
 const csrfToken = Util.getCsrfToken()
 const loading = ref(true)
 const survey = ref(null)

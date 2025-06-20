@@ -26,12 +26,12 @@
           <div style="vertical-align: top; padding: 10px; position: relative" v-if="object.first_answer.content">
             <div v-if="object.first_answer.content.type === 'file'">
               <img style="width: 150px; margin-bottom: 10px"
-                    :src="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${object.first_answer.content.content.alias}`"
+                    :src="`${SERVEY_MEDIA_FLEXA_URL}/${object.first_answer.content.content.alias}`"
                     v-if="object.first_answer.content.content.mine_type.includes('image/')">
               <div style="width: 150px; font-size: 60px" v-else><i class="fa fa-file"></i></div>
               <div>
                 <a style="color: #ea5516"
-                    :href="`${MIX_SERVEY_MEDIA_FLEXA_URL}/${object.first_answer.content.content.alias}`"
+                    :href="`${SERVEY_MEDIA_FLEXA_URL}/${object.first_answer.content.content.alias}`"
                     target="_blank">
                   <i
                     class="fa fa-download"></i><span>{{trimMidString(object.first_answer.content.content.name, 25, 10)}}</span>
@@ -45,7 +45,7 @@
         </td>
         <td>
           <div class="btn-edit01">
-            <a class="btn-more btn-more-linebot btn-block" :href="MIX_ROOT_PATH + '/surveys/' + object.survey_id + '/answer/' + object.survey_customer_id"> 回答表示 </a>
+            <a class="btn-more btn-more-linebot btn-block" :href="ROOT_PATH + '/surveys/' + object.survey_id + '/answer/' + object.survey_customer_id"> 回答表示 </a>
           </div>
         </td>
       </tr>
@@ -65,8 +65,8 @@ const props = defineProps({
 
 const store = useStore()
 
-const MIX_SERVEY_MEDIA_FLEXA_URL = process.env.MIX_SERVEY_MEDIA_FLEXA_URL
-const MIX_ROOT_PATH = process.env.MIX_ROOT_PATH
+const SERVEY_MEDIA_FLEXA_URL = import.meta.env.VITE_SERVEY_MEDIA_FLEXA_URL
+const ROOT_PATH = import.meta.env.VITE_ROOT_PATH
 const responseLists = ref([])
 const isLoading = ref(true)
 const isError = ref(false)

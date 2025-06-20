@@ -40,6 +40,8 @@
 yarn-debug.log*
 .yarn-integrity
 .env
+.env.ci
+rails_server.log
 /vendor/*
 /config/secrets/*
 /theme/dist

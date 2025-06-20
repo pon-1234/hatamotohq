@@ -155,7 +155,7 @@ export default {
   props: ['scenario', 'testers'],
   data() {
     return {
-      rootUrl: process.env.MIX_ROOT_PATH,
+      rootUrl: import.meta.env.VITE_ROOT_PATH,
       loading: true,
       curMessageIndex: 0,
       currentPage: 1,

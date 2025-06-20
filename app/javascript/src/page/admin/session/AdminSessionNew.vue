@@ -78,7 +78,7 @@ import Util from '@/core/util.js';
 export default {
   data() {
     return {
-      adminRootUrl: process.env.MIX_ROOT_PATH,
+      adminRootUrl: import.meta.env.VITE_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       adminData: {
         email: null,

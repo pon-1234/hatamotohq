@@ -92,7 +92,7 @@ export default {
   },
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       loading: false,
       contentKey: 0,
       episodeData: {

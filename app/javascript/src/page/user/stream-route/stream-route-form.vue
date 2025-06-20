@@ -158,7 +158,7 @@ export default {
   props: ['folder_options', 'original_stream_route'],
   data() {
     return {
-      rootPath: process.env.MIX_ROOT_PATH,
+      rootPath: import.meta.env.VITE_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       loading: true,
       streamRouteFormData: {

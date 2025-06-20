@@ -204,7 +204,7 @@ const props = defineProps({
 const emit = defineEmits(['select'])
 const store = useStore()
 
-const rootUrl = ref(process.env.MIX_ROOT_PATH)
+const rootUrl = ref(import.meta.env.VITE_ROOT_PATH)
 const loading = ref(true)
 const contentKey = ref(0)
 const currentPage = ref(1)

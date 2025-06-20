@@ -140,10 +140,10 @@ jQuery(() => {
     // VeeValidate v4 doesn't need app.use() - rules are registered globally
     
     // Register Google Maps if API key is available
-    if (process.env.MIX_GOOGLE_MAP_KEY) {
+    if (import.meta.env.VITE_GOOGLE_MAP_KEY) {
       app.use(VueGoogleMaps, {
         load: {
-          key: process.env.MIX_GOOGLE_MAP_KEY,
+          key: import.meta.env.VITE_GOOGLE_MAP_KEY,
           libraries: 'places'
         }
       });

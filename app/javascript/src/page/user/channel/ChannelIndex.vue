@@ -72,7 +72,7 @@ export default {
   },
 
   mounted() {
-    if (window.location.href.toString() !== `${process.env.MIX_ROOT_PATH}/user/channels`) {
+    if (window.location.href.toString() !== `${import.meta.env.VITE_ROOT_PATH}/user/channels`) {
       this.setShowChatBox(true);
     }
   },

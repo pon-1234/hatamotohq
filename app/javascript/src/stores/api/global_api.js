@@ -7,7 +7,7 @@ export default {
     }
 
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/medias',
+      url: import.meta.env.VITE_ROOT_PATH + '/user/medias',
       method: 'POST',
       data: formData,
       processData: false,
@@ -17,7 +17,7 @@ export default {
 
   getStickers: (query = {}) => {
     return window.$.ajax({
-      url: process.env.MIX_ROOT_PATH + '/user/emojis/' + query.packageId,
+      url: import.meta.env.VITE_ROOT_PATH + '/user/emojis/' + query.packageId,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'

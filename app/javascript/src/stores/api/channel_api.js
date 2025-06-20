@@ -1,7 +1,7 @@
 export default {
   list: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -12,7 +12,7 @@ export default {
 
   get: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${id}`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${id}`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json',
@@ -22,7 +22,7 @@ export default {
 
   channelMessages: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/messages`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${query.channelId}/messages`,
       method: 'GET',
       data: query,
       dataType: 'json',
@@ -33,7 +33,7 @@ export default {
 
   availableScenarios: (channelId) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/scenarios`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${channelId}/scenarios`,
       method: 'GET',
       dataType: 'json',
       contentType: 'application/json'
@@ -42,7 +42,7 @@ export default {
 
   sendMessage: (channelId, payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${channelId}/messages`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${channelId}/messages`,
       method: 'POST',
       data: JSON.stringify(payload),
       dataType: 'json',
@@ -52,7 +52,7 @@ export default {
 
   sendScenario: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_scenario`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_scenario`,
       method: 'POST',
       data: JSON.stringify(payload),
       dataType: 'jsonp',
@@ -62,7 +62,7 @@ export default {
 
   sendTemplate: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_template`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${payload.channel_id}/messages/send_template`,
       method: 'POST',
       data: JSON.stringify(payload),
       dataType: 'json',
@@ -72,7 +72,7 @@ export default {
 
   unreadMessage: (query) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${query.channelId}/unreadMessage`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${query.channelId}/unreadMessage`,
       method: 'POST',
       data: JSON.stringify(query),
       contentType: 'application/json'
@@ -81,14 +81,14 @@ export default {
 
   updateLastSeen: (id) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${id}/update_last_seen`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${id}/update_last_seen`,
       method: 'POST'
     });
   },
 
   assign: (payload) => {
     return window.$.ajax({
-      url: `${process.env.MIX_ROOT_PATH}/user/channels/${payload.channel_id}/assign`,
+      url: `${import.meta.env.VITE_ROOT_PATH}/user/channels/${payload.channel_id}/assign`,
       method: 'POST',
       data: JSON.stringify(payload),
       contentType: 'application/json'
