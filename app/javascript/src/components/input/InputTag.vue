@@ -88,7 +88,7 @@
 <script setup>
 import { ref, computed, watch, onBeforeMount, nextTick } from 'vue';
 import { useStore } from 'vuex';
-import ClickOutside from 'vue-click-outside';
+import { vClickOutside } from '@/directives/click-outside';
 
 // Props
 const props = defineProps({
@@ -240,9 +240,6 @@ watch(() => props.tags, (newTags) => {
   if (!newTags) return;
   selectedTags.value = [...newTags];
 });
-
-// Custom directives
-const vClickOutside = ClickOutside.directive;
 </script>
 
 <style lang="scss" scoped>

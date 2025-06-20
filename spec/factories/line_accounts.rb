@@ -5,21 +5,21 @@
 # Table name: line_accounts
 #
 #  id              :bigint           not null, primary key
-#  client_id       :bigint
-#  line_user_id    :string(255)
-#  line_name       :string(255)
-#  display_name    :string(255)
-#  channel_id      :string(255)
-#  channel_secret  :string(255)
-#  invite_url      :string(255)
-#  webhook_url     :string(255)
-#  liff_id         :string(255)
-#  pms_api_key     :string(255)
-#  note            :text(65535)
+#  line_user_id    :string
+#  line_name       :string
+#  display_name    :string
+#  channel_id      :string
+#  channel_secret  :string
+#  invite_url      :string
+#  webhook_url     :string
+#  liff_id         :string
+#  note            :text
 #  bot_initialized :boolean          default(FALSE)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  deleted_at      :datetime
+#  client_id       :bigint
+#  pms_api_key     :string
 #
 # Indexes
 #

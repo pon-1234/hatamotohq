@@ -269,24 +269,23 @@ export default {
 };
 </script>
 <style lang="scss"  scoped>
-  ::v-deep {
-    td .emojione {
-      width: 20px !important;
-    }
+  :deep(td .emojione) {
+    width: 20px !important;
+  }
 
-    td .chat-item > .sticker-static {
-      width: 50px !important;
-    }
+  :deep(td .chat-item > .sticker-static) {
+    width: 50px !important;
+  }
 
-    td .chat-item {
-      padding: 0px;
-    }
-    .template-message-count-wrapper {
-      gap: 0 6px;
+  :deep(td .chat-item) {
+    padding: 0px;
+  }
+  
+  :deep(.template-message-count-wrapper) {
+    gap: 0 6px;
 
-      .template-message-count {
-        margin-top: 1px;
-      }
+    .template-message-count {
+      margin-top: 1px;
     }
   }
 </style>

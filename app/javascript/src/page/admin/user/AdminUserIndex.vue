@@ -103,14 +103,14 @@
               </table>
             </div>
             <div class="d-flex justify-content-center mt-4">
-              <b-pagination
+              <base-pagination
                 v-if="totalRows > perPage"
                 v-model="queryParams.page"
                 :total-rows="totalRows"
                 :per-page="perPage"
                 @change="loadUsers"
                 aria-controls="my-table"
-              ></b-pagination>
+              ></base-pagination>
               <b v-if="!loading && totalRows === 0">データはありません。</b>
             </div>
           </div>

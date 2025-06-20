@@ -129,13 +129,13 @@
       </div>
 
       <div class="d-flex align-items-center mt-2" v-if="medias && medias.length > 0">
-        <b-pagination
+        <base-pagination
           v-model="currentPage"
           :total-rows="totalRows"
           :per-page="perPage"
           @change="loadPage"
           aria-controls="my-table"
-        ></b-pagination>
+        ></base-pagination>
 
         <div class="d-flex align-items-center ml-auto" v-if="isManageMode">
           <label for="selectAllMemberCb" class="d-flex align-items-center m-0 mr-2">

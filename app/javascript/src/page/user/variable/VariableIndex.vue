@@ -260,17 +260,15 @@ export default {
 };
 </script>
 <style lang="scss"  scoped>
-  ::v-deep {
-    td .emojione {
-      width: 20px !important;
-    }
+  :deep(td .emojione) {
+    width: 20px !important;
+  }
 
-    td .chat-item > .sticker-static {
-      width: 50px !important;
-    }
+  :deep(td .chat-item > .sticker-static) {
+    width: 50px !important;
+  }
 
-    td .chat-item {
-      padding: 0px;
-    }
+  :deep(td .chat-item) {
+    padding: 0px;
   }
 </style>

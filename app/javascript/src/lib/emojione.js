@@ -533,5 +533,5 @@
         return string.replace(search,replace);
     };
 
-}(this.emojione = this.emojione || {}));
-if(typeof module === "object") module.exports = this.emojione;
+}(window.emojione = window.emojione || {}));
+if(typeof module === "object") module.exports = window.emojione;

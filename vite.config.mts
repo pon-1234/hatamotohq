@@ -7,24 +7,16 @@ export default defineConfig({
   plugins: [
     RubyPlugin(),
     vue({
-      include: [/\.vue$/],
-      template: {
-        compilerOptions: {
-          compatConfig: {
-            MODE: 2
-          }
-        }
-      }
+      include: [/\.vue$/]
     })
   ],
   optimizeDeps: {
-    include: ['vue', '@vue/compat']
+    include: ['vue']
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app/javascript/src'),
       '@channels': path.resolve(__dirname, './app/javascript/channels'),
-      'vue': '@vue/compat/dist/vue.esm-bundler.js',
       '/images': path.resolve(__dirname, './public/images'),
       '/img': path.resolve(__dirname, './public/img')
     }

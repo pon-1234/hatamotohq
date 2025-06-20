@@ -4,41 +4,39 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'BaseSpinner',
-  props: {
-    type: {
-      type: String,
-      default: 'border',
-      validator: (value) => ['border', 'grow'].includes(value)
-    },
-    variant: {
-      type: String,
-      default: 'primary'
-    },
-    size: {
-      type: String,
-      default: 'md',
-      validator: (value) => ['sm', 'md', 'lg'].includes(value)
-    },
-    label: {
-      type: String,
-      default: 'Loading...'
-    }
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  type: {
+    type: String,
+    default: 'border',
+    validator: (value) => ['border', 'grow'].includes(value)
   },
-  computed: {
-    spinnerClasses() {
-      return [
-        `spinner-${this.type}`,
-        `text-${this.variant}`,
-        {
-          [`spinner-${this.type}-${this.size}`]: this.size !== 'md'
-        }
-      ];
-    }
+  variant: {
+    type: String,
+    default: 'primary'
+  },
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value)
+  },
+  label: {
+    type: String,
+    default: 'Loading...'
   }
-};
+});
+
+const spinnerClasses = computed(() => {
+  return [
+    `spinner-${props.type}`,
+    `text-${props.variant}`,
+    {
+      [`spinner-${props.type}-${props.size}`]: props.size !== 'md'
+    }
+  ];
+});
 </script>
 
 <style scoped>

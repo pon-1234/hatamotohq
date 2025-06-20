@@ -80,7 +80,7 @@
               </table>
             </div>
             <div class="d-flex justify-content-end" v-if="totalRows && totalRows / 10 > 1">
-              <b-pagination
+              <base-pagination
                 v-model="currentPage"
                 :total-rows="totalRows"
                 :per-page="10"
@@ -88,7 +88,7 @@
                 first-number
                 last-number
                 @change="loadPage"
-              ></b-pagination>
+              ></base-pagination>
             </div>
             <div class="text-center mt-4" v-if="announcements.length == 0">
               <b>データはありません。</b>

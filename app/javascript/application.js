@@ -1,75 +1,64 @@
 // Entry point for the build script in your package.json
 import { createApp } from 'vue';
-import * as Vue from 'vue';
-import VeeValidate, { Validator, ValidationObserver, ValidationProvider } from 'vee-validate';
-import ja from 'vee-validate/dist/locale/ja';
-import Chartkick from 'vue-chartkick';
-import { Datetime } from 'vue-datetime';
+// VeeValidate v4
+import './src/core/vee-validate';
+import ValidationProvider from './src/components/validation/ValidationProvider.vue';
+import ValidationObserver from './src/components/validation/ValidationObserver.vue';
+import VueChartkick from 'vue-chartkick';
+import 'chartkick';
+// import { Datetime } from 'vue-datetime'; // Replaced with @vuepic/vue-datepicker
 import { Settings } from 'luxon';
-import 'vue-datetime/dist/vue-datetime.css';
-import DateRangePicker from 'vue2-daterange-picker';
-import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
+// import 'vue-datetime/dist/vue-datetime.css';
+import Datetime from './src/components/datetime/Datetime.vue';
+// import DateRangePicker from 'vue2-daterange-picker'; // TODO: Replace with Vue 3 compatible version
+// import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
 import vSelect from 'vue-select';
-// import * as VueGoogleMaps from 'vue2-google-maps';
-const VueGoogleMaps = null;
-import Clipboard from 'v-clipboard';
-import VTooltip from 'v-tooltip';
-import CKEditor from '@ckeditor/ckeditor5-vue2';
-import VueLazyload from 'vue-lazyload';
-import Multiselect from 'vue-multiselect';
-// import VueQRCodeComponent from 'vue-qrcode-component'; // TODO: Fix Vue component loading
-import GAuth from 'vue-google-oauth2';
+import VueGoogleMaps from '@fawmi/vue-google-maps';
+// import Clipboard from 'v-clipboard'; // Replaced with vue-clipboard3
+import ClipboardPlugin from './src/directives/clipboard';
+import Directives from './src/directives';
+import BaseComponents from './src/components/base';
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css';
+import { CkeditorPlugin } from '@ckeditor/ckeditor5-vue';
+import VueLazyload from 'vue3-lazyload';
+// import Multiselect from 'vue-multiselect'; // Replaced with @vueform/multiselect
+import Multiselect from './src/components/multiselect/Multiselect.vue';
+import QrcodeVue from 'qrcode.vue';
+import vue3GoogleOauth from 'vue3-google-oauth2';
 
-import {
-  BootstrapVue,
-  DropdownPlugin,
-  TabsPlugin
-} from 'bootstrap-vue';
+// Bootstrap-Vue migration completed - all components replaced with custom base components
 // Import constant
 import * as constant from './src/core/constant';
 import 'vue-select/dist/vue-select.css';
 import store from './src/stores';
-import './src/filters';
+import filters from './src/filters';
 import Rails from '@rails/ujs';
 
 Rails.start();
 
-const jQuery = require('jquery');
+import jQuery from 'jquery';
+import _ from 'lodash';
+import toastr from 'toastr';
+// Emojione libraries will be loaded as UMD modules
+import './src/lib/emojione';
+import './src/lib/emojionearea';
+import * as ActiveStorage from '@rails/activestorage';
+
 window.$ = jQuery;
-window._ = require('lodash');
-const toastr = require('toastr');
+window.jQuery = jQuery;
+window._ = _;
 window.toastr = toastr;
-window.emojione = require('./src/lib/emojione');
-window.emojionearea = require('./src/lib/emojionearea');
+// emojione and emojionearea are loaded as UMD modules and available globally
 
-require('@rails/activestorage').start();
-require('chart.js');
+ActiveStorage.start();
 
-Vue.configureCompat({
-  MODE: 2,
-  GLOBAL_MOUNT: true,
-  GLOBAL_EXTEND: true,
-  GLOBAL_PROTOTYPE: true,
-  RENDER_FUNCTION: true,
-  INSTANCE_DESTROY: true,
-  INSTANCE_EVENT_EMITTER: true,
-  COMPONENT_V_MODEL: true,
-  COMPONENT_ASYNC: true,
-  TRANSITION_GROUP_ROOT: true,
-  ATTR_FALSE_VALUE: true,
-  CUSTOM_DIR: true,
-  V_FOR_REF: true,
-  FILTER: true
-});
+// Vue 3 native mode - no compatibility needed
+// window.Vue = Vue; // Removed - no longer needed for Vue 3 mode
 
 Settings.defaultLocale = 'ja';
 
-// VeeValidate configuration
-Validator.localize('ja', ja);
-Validator.extend('email', value => {
-  var pattern = new RegExp('^\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$');
-  return !!pattern.test(value);
-});
+// VeeValidate v4 is configured in src/core/vee-validate.js
 
 // Import all Vue components
 // Note: With esbuild, we need to explicitly import components instead of using require.context
@@ -82,6 +71,7 @@ import AgencySessionNew from './src/page/agency/session/AgencySessionNew.vue';
 import InputPassword from './src/components/input/InputPassword.vue';
 import ErrorMessage from './src/components/common/ErrorMessage.vue';
 import HelloVue3 from './src/components/common/HelloVue3.vue';
+import DatetimeComponent from './src/components/datetime/Datetime.vue';
 
 // Import user page components
 import ScenarioIndex from './src/page/user/scenario/ScenarioIndex.vue';
@@ -125,24 +115,29 @@ jQuery(() => {
       app.config.globalProperties[key] = constant[key];
     });
     
+    // Register filters as global properties (Vue 3 doesn't have filters)
+    Object.keys(filters).forEach((key) => {
+      app.config.globalProperties[`$${key}`] = filters[key];
+    });
+    
     // Register plugins
     app.use(store);
-    app.use(Chartkick);
-    app.use(Datetime);
-    app.use(DateRangePicker);
-    app.use(BootstrapVue);
-    app.use(DropdownPlugin);
-    app.use(TabsPlugin);
-    app.use(Clipboard);
-    app.use(VTooltip);
-    app.use(CKEditor);
+    app.use(VueChartkick);
+    // Datetime is now a component, not a plugin
+    // app.use(DateRangePicker); // TODO: Replace with Vue 3 compatible version
+    // Bootstrap-Vue removed - using custom base components instead
+    app.use(BaseComponents);
+    app.use(ClipboardPlugin);
+    app.use(Directives);
+    app.use(FloatingVue);
+    app.use(CkeditorPlugin);
     app.use(VueLazyload, {
       preLoad: 1.3,
       error: '/images/no-image.png',
       loading: '/images/loading.gif',
       attempt: 1
     });
-    app.use(VeeValidate, { fieldsBagName: 'veeFields', locale: 'ja' });
+    // VeeValidate v4 doesn't need app.use() - rules are registered globally
     
     // Register Google Maps if API key is available
     if (process.env.MIX_GOOGLE_MAP_KEY) {
@@ -154,19 +149,19 @@ jQuery(() => {
       });
     }
     
-    // Temporarily disable Google Auth until client ID is configured
-    // if (process.env.GOOGLE_OAUTH_CLIENT_ID) {
-    //   app.use(GAuth, {
-    //     clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
-    //     scope: 'email https://www.googleapis.com/auth/spreadsheets',
-    //     prompt: 'consent'
-    //   });
-    // }
+    // Google OAuth configuration
+    if (process.env.GOOGLE_OAUTH_CLIENT_ID) {
+      app.use(vue3GoogleOauth, {
+        clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
+        scope: 'email https://www.googleapis.com/auth/spreadsheets',
+        prompt: 'consent'
+      });
+    }
     
     // Register global components
     app.component('v-select', vSelect);
     app.component('multiselect', Multiselect);
-    // app.component('qr-code', VueQRCodeComponent); // TODO: Fix Vue component loading
+    app.component('qrcode-vue', QrcodeVue);
     app.component('ValidationProvider', ValidationProvider);
     app.component('ValidationObserver', ValidationObserver);
     
@@ -177,6 +172,7 @@ jQuery(() => {
     app.component('input-password', InputPassword);
     app.component('error-message', ErrorMessage);
     app.component('hello-vue3', HelloVue3);
+    app.component('datetime', Datetime);
     
     // Register user components
     app.component('scenario-index', ScenarioIndex);

@@ -25,14 +25,14 @@
     </table>
     <div class="text-center">
       <div>
-        <b-pagination
+        <base-pagination
           v-if="totalRows > perPage"
           v-model="currentPage"
           :total-rows="totalRows"
           :per-page="perPage"
           @change="loadUsers"
           aria-controls="my-table"
-        ></b-pagination>
+        ></base-pagination>
       </div>
     </div>
   </div>

@@ -7,7 +7,6 @@
 </template>
 <script setup>
 import { ref, computed } from 'vue'
-import 'viewerjs/dist/viewer.css'
 
 const props = defineProps({
   src: {

@@ -307,21 +307,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep {
-    .form-control[disabled],
-    .form-control[readonly],
-    fieldset[disabled] .form-control {
-      background: white !important;
-    }
+  :deep(.form-control[disabled]),
+  :deep(.form-control[readonly]),
+  :deep(fieldset[disabled] .form-control) {
+    background: white !important;
+  }
 
-    .date-time-picker {
-      max-width: 300px !important;
-      margin: unset !important;
-    }
+  :deep(.date-time-picker) {
+    max-width: 300px !important;
+    margin: unset !important;
+  }
 
-    #time-select-wrapper {
-      max-width: 150px !important;
-    }
+  :deep(#time-select-wrapper) {
+    max-width: 150px !important;
   }
 </style>
 <style>

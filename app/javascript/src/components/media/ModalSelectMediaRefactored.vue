@@ -9,15 +9,15 @@
     @hide="handleHide"
   >
     <template v-if="visible">
-      <b-tabs content-class="mt-3">
-        <b-tab title="新規アップロード" active>
+      <base-tabs-slot content-class="mt-3">
+        <base-tab title="新規アップロード" active>
           <media-upload
             ref="mediaUpload"
             :types="types"
             @upload="selectMedia"
           />
-        </b-tab>
-        <b-tab title="メディア一覧">
+        </base-tab>
+        <base-tab title="メディア一覧">
           <media-index
             ref="modalMediaIndex"
             mode="read"
@@ -25,8 +25,8 @@
             :types="types"
             @select="selectMedia"
           />
-        </b-tab>
-      </b-tabs>
+        </base-tab>
+      </base-tabs-slot>
     </template>
   </base-modal>
 </template>

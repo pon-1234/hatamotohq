@@ -31,220 +31,234 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'BaseDropdown',
-  props: {
-    text: {
-      type: String,
-      default: ''
-    },
-    variant: {
-      type: String,
-      default: 'secondary'
-    },
-    size: {
-      type: String,
-      default: 'md',
-      validator: (value) => ['sm', 'md', 'lg'].includes(value)
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    right: {
-      type: Boolean,
-      default: false
-    },
-    up: {
-      type: Boolean,
-      default: false
-    },
-    offset: {
-      type: Number,
-      default: 0
-    },
-    boundary: {
-      type: String,
-      default: 'scrollParent'
-    },
-    split: {
-      type: Boolean,
-      default: false
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
+
+const props = defineProps({
+  text: {
+    type: String,
+    default: ''
+  },
+  variant: {
+    type: String,
+    default: 'secondary'
+  },
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value)
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  right: {
+    type: Boolean,
+    default: false
+  },
+  up: {
+    type: Boolean,
+    default: false
+  },
+  offset: {
+    type: Number,
+    default: 0
+  },
+  boundary: {
+    type: String,
+    default: 'scrollParent'
+  },
+  split: {
+    type: Boolean,
+    default: false
+  }
+});
+
+// State
+const isOpen = ref(false);
+const toggleId = `dropdown-toggle-${Math.random().toString(36).substr(2, 9)}`;
+const dropdown = ref(null);
+const menu = ref(null);
+
+// Computed
+const dropdownClasses = computed(() => {
+  return {
+    'dropdown': !props.up,
+    'dropup': props.up,
+    'show': isOpen.value
+  };
+});
+
+const toggleClasses = computed(() => {
+  return [
+    'btn',
+    `btn-${props.variant}`,
+    `btn-${props.size}`,
+    {
+      'dropdown-toggle-split': props.split
     }
-  },
-  data() {
-    return {
-      isOpen: false,
-      toggleId: `dropdown-toggle-${this._uid}`
-    };
-  },
-  computed: {
-    dropdownClasses() {
-      return {
-        'dropdown': !this.up,
-        'dropup': this.up,
-        'show': this.isOpen
-      };
-    },
-    toggleClasses() {
-      return [
-        'btn',
-        `btn-${this.variant}`,
-        `btn-${this.size}`,
-        {
-          'dropdown-toggle-split': this.split
-        }
-      ];
-    },
-    menuClasses() {
-      return {
-        'show': this.isOpen,
-        'dropdown-menu-right': this.right,
-        'dropdown-menu-up': this.up
-      };
+  ];
+});
+
+const menuClasses = computed(() => {
+  return {
+    'show': isOpen.value,
+    'dropdown-menu-right': props.right,
+    'dropdown-menu-up': props.up
+  };
+});
+
+// Lifecycle
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+  document.addEventListener('keydown', handleKeydown);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+  document.removeEventListener('keydown', handleKeydown);
+});
+
+// Methods
+const toggle = () => {
+  if (!props.disabled) {
+    isOpen.value = !isOpen.value;
+    if (isOpen.value) {
+      nextTick(() => {
+        positionMenu();
+        focusFirstItem();
+      });
     }
-  },
-  mounted() {
-    document.addEventListener('click', this.handleClickOutside);
-    document.addEventListener('keydown', this.handleKeydown);
-  },
-  beforeDestroy() {
-    document.removeEventListener('click', this.handleClickOutside);
-    document.removeEventListener('keydown', this.handleKeydown);
-  },
-  methods: {
-    toggle() {
-      if (!this.disabled) {
-        this.isOpen = !this.isOpen;
-        if (this.isOpen) {
-          this.$nextTick(() => {
-            this.positionMenu();
-            this.focusFirstItem();
-          });
-        }
-      }
-    },
-    open() {
-      if (!this.disabled) {
-        this.isOpen = true;
-        this.$nextTick(() => {
-          this.positionMenu();
-          this.focusFirstItem();
-        });
-      }
-    },
-    close() {
-      this.isOpen = false;
-    },
-    handleClickOutside(event) {
-      if (!this.$el.contains(event.target)) {
-        this.close();
-      }
-    },
-    handleKeydown(event) {
-      if (!this.isOpen) return;
+  }
+};
 
-      switch (event.key) {
-        case 'Escape':
-          this.close();
-          this.$refs.dropdown.querySelector('.dropdown-toggle').focus();
-          break;
-        case 'ArrowDown':
-          event.preventDefault();
-          this.focusNextItem();
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          this.focusPreviousItem();
-          break;
-        case 'Home':
-          event.preventDefault();
-          this.focusFirstItem();
-          break;
-        case 'End':
-          event.preventDefault();
-          this.focusLastItem();
-          break;
-      }
-    },
-    positionMenu() {
-      const menu = this.$refs.menu;
-      const toggle = this.$refs.dropdown.querySelector('.dropdown-toggle');
-      
-      if (!menu || !toggle) return;
+const open = () => {
+  if (!props.disabled) {
+    isOpen.value = true;
+    nextTick(() => {
+      positionMenu();
+      focusFirstItem();
+    });
+  }
+};
 
-      const toggleRect = toggle.getBoundingClientRect();
-      const menuRect = menu.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
+const close = () => {
+  isOpen.value = false;
+};
 
-      // Reset position
-      menu.style.top = '';
-      menu.style.left = '';
-      menu.style.right = '';
-      menu.style.bottom = '';
+const handleClickOutside = (event) => {
+  if (!dropdown.value.contains(event.target)) {
+    close();
+  }
+};
 
-      // Calculate position
-      let top = toggleRect.bottom + this.offset;
-      let left = toggleRect.left;
+const handleKeydown = (event) => {
+  if (!isOpen.value) return;
 
-      // Adjust for right alignment
-      if (this.right) {
-        left = toggleRect.right - menuRect.width;
-      }
+  switch (event.key) {
+    case 'Escape':
+      close();
+      dropdown.value.querySelector('.dropdown-toggle').focus();
+      break;
+    case 'ArrowDown':
+      event.preventDefault();
+      focusNextItem();
+      break;
+    case 'ArrowUp':
+      event.preventDefault();
+      focusPreviousItem();
+      break;
+    case 'Home':
+      event.preventDefault();
+      focusFirstItem();
+      break;
+    case 'End':
+      event.preventDefault();
+      focusLastItem();
+      break;
+  }
+};
 
-      // Adjust for dropup
-      if (this.up || (top + menuRect.height > viewportHeight && toggleRect.top > menuRect.height)) {
-        top = toggleRect.top - menuRect.height - this.offset;
-        menu.classList.add('dropdown-menu-up');
-      } else {
-        menu.classList.remove('dropdown-menu-up');
-      }
+const positionMenu = () => {
+  const menuEl = menu.value;
+  const toggle = dropdown.value.querySelector('.dropdown-toggle');
+  
+  if (!menuEl || !toggle) return;
 
-      // Keep within viewport
-      if (left < 0) left = 0;
-      if (left + menuRect.width > viewportWidth) {
-        left = viewportWidth - menuRect.width;
-      }
+  const toggleRect = toggle.getBoundingClientRect();
+  const menuRect = menuEl.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const viewportWidth = window.innerWidth;
 
-      menu.style.position = 'fixed';
-      menu.style.top = `${top}px`;
-      menu.style.left = `${left}px`;
-    },
-    getMenuItems() {
-      return Array.from(this.$refs.menu.querySelectorAll('.dropdown-item:not(.disabled):not(:disabled)'));
-    },
-    focusFirstItem() {
-      const items = this.getMenuItems();
-      if (items.length > 0) {
-        items[0].focus();
-      }
-    },
-    focusLastItem() {
-      const items = this.getMenuItems();
-      if (items.length > 0) {
-        items[items.length - 1].focus();
-      }
-    },
-    focusNextItem() {
-      const items = this.getMenuItems();
-      const currentIndex = items.findIndex(item => item === document.activeElement);
-      if (currentIndex < items.length - 1) {
-        items[currentIndex + 1].focus();
-      } else {
-        items[0].focus();
-      }
-    },
-    focusPreviousItem() {
-      const items = this.getMenuItems();
-      const currentIndex = items.findIndex(item => item === document.activeElement);
-      if (currentIndex > 0) {
-        items[currentIndex - 1].focus();
-      } else {
-        items[items.length - 1].focus();
-      }
-    }
+  // Reset position
+  menuEl.style.top = '';
+  menuEl.style.left = '';
+  menuEl.style.right = '';
+  menuEl.style.bottom = '';
+
+  // Calculate position
+  let top = toggleRect.bottom + props.offset;
+  let left = toggleRect.left;
+
+  // Adjust for right alignment
+  if (props.right) {
+    left = toggleRect.right - menuRect.width;
+  }
+
+  // Adjust for dropup
+  if (props.up || (top + menuRect.height > viewportHeight && toggleRect.top > menuRect.height)) {
+    top = toggleRect.top - menuRect.height - props.offset;
+    menuEl.classList.add('dropdown-menu-up');
+  } else {
+    menuEl.classList.remove('dropdown-menu-up');
+  }
+
+  // Keep within viewport
+  if (left < 0) left = 0;
+  if (left + menuRect.width > viewportWidth) {
+    left = viewportWidth - menuRect.width;
+  }
+
+  menuEl.style.position = 'fixed';
+  menuEl.style.top = `${top}px`;
+  menuEl.style.left = `${left}px`;
+};
+
+const getMenuItems = () => {
+  return Array.from(menu.value.querySelectorAll('.dropdown-item:not(.disabled):not(:disabled)'));
+};
+
+const focusFirstItem = () => {
+  const items = getMenuItems();
+  if (items.length > 0) {
+    items[0].focus();
+  }
+};
+
+const focusLastItem = () => {
+  const items = getMenuItems();
+  if (items.length > 0) {
+    items[items.length - 1].focus();
+  }
+};
+
+const focusNextItem = () => {
+  const items = getMenuItems();
+  const currentIndex = items.findIndex(item => item === document.activeElement);
+  if (currentIndex < items.length - 1) {
+    items[currentIndex + 1].focus();
+  } else {
+    items[0].focus();
+  }
+};
+
+const focusPreviousItem = () => {
+  const items = getMenuItems();
+  const currentIndex = items.findIndex(item => item === document.activeElement);
+  if (currentIndex > 0) {
+    items[currentIndex - 1].focus();
+  } else {
+    items[items.length - 1].focus();
   }
 };
 </script>

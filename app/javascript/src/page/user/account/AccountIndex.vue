@@ -58,7 +58,7 @@
 
     <!--MOdal-->
 
-    <b-modal class="modal modal-common01" id="modal-update-account" aria-hidden="true" title="Update" hide-footer>
+    <base-modal class="modal modal-common01" id="modal-update-account" aria-hidden="true" title="Update" hide-footer>
       <div class="form-common01">
         <div class="modal-body">
           <div class="form-group p-0">
@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-    </b-modal>
+    </base-modal>
 
     <div id="modal-delete-account" class="modal fade" role="dialog">
       <div class="modal-dialog" style="margin-top: 100px">

@@ -103,17 +103,17 @@
                           >プレビュー
                         </a>
                         <div>
-                          <b-dropdown>
+                          <base-dropdown>
                             <template v-slot:button-content class="btn btn-sm dropdown-toggle btn-primary action-tags">
                               操作<span class="caret"></span>
                             </template>
-                            <b-dropdown-item @click.stop="copyFlexMessage(item)">複製</b-dropdown-item>
-                            <b-dropdown-item
+                            <base-dropdown-item @click.stop="copyFlexMessage(item)">複製</base-dropdown-item>
+                            <base-dropdown-item
                               :href="`${MIX_ROOT_PATH}/template/flex-messages/folders/${item.folder_id}/flex/${item.id}/edit`"
-                              >編集</b-dropdown-item
+                              >編集</base-dropdown-item
                             >
-                            <b-dropdown-item @click.stop="deleteFlexMessage(item)">削除</b-dropdown-item>
-                          </b-dropdown>
+                            <base-dropdown-item @click.stop="deleteFlexMessage(item)">削除</base-dropdown-item>
+                          </base-dropdown>
                         </div>
                       </div>
                     </td>
@@ -466,21 +466,19 @@ export default {
     color: white;
   }
 
-  ::v-deep {
-    .modal-common01.fade .modal-dialog {
-      -webkit-transform: translateY(-50%);
-      transform: translateY(-50%);
-    }
+  :deep(.modal-common01.fade .modal-dialog) {
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
 
-    .folder-title {
-      white-space: nowrap;
-      width: 20%;
-    }
+  :deep(.folder-title) {
+    white-space: nowrap;
+    width: 20%;
+  }
 
-    .btn-secondary {
-      background-color: #3097d1 !important;
-      border-color: #2a88bd !important;
-      color: white !important;
-    }
+  :deep(.btn-secondary) {
+    background-color: #3097d1 !important;
+    border-color: #2a88bd !important;
+    color: white !important;
   }
 </style>

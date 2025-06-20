@@ -19,13 +19,13 @@
           </p>
         </div>
         <div class="d-flex justify-content-center mt-4" v-if="totalRows > perPage">
-          <b-pagination
+          <base-pagination
             v-model="currentPage"
             :total-rows="totalRows"
             :per-page="perPage"
             @change="loadPage"
             aria-controls="my-table"
-          ></b-pagination>
+          ></base-pagination>
         </div>
         <div v-if="totalRows === 0" class="text-center mt-4"><b>お知らせはありません。</b></div>
       </div>

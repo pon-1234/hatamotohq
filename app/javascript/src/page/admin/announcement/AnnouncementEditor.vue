@@ -115,12 +115,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  ::v-deep {
-    .vdatetime-overlay {
-      z-index: 1049;
-    }
-    .vdatetime-popup {
-      z-index: 1050;
-    }
+  :deep(.vdatetime-overlay) {
+    z-index: 1049;
+  }
+  
+  :deep(.vdatetime-popup) {
+    z-index: 1050;
   }
 </style>

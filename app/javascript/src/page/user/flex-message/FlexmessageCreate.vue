@@ -176,13 +176,12 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-  ::v-deep {
-    .m-auto {
-      margin: auto !important;
-    }
-    .btn-block {
-      cursor: pointer;
-    }
+  :deep(.m-auto) {
+    margin: auto !important;
+  }
+  
+  :deep(.btn-block) {
+    cursor: pointer;
   }
 
   .btn-color {

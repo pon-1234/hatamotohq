@@ -44,14 +44,14 @@
             </tbody>
           </table>
           <div class="d-flex justify-content-center mt-4 text-center">
-            <b-pagination
+            <base-pagination
               v-if="totalRows > perPage"
               v-model="curPage"
               :total-rows="totalRows"
               :per-page="perPage"
               @change="loadPage"
               aria-controls="my-table"
-            ></b-pagination>
+                          ></base-pagination>
             <b v-if="!loading && totalRows === 0">友達はありません。</b>
           </div>
           <loading-indicator :loading="loading"></loading-indicator>

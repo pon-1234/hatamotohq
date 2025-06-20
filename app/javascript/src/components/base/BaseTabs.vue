@@ -14,10 +14,10 @@
             active: currentTabIndex === index,
             disabled: tab.disabled 
           }"
-          :id="`tab-${_uid}-${index}`"
+          :id="`tab-${tabId}-${index}`"
           type="button"
           role="tab"
-          :aria-controls="`panel-${_uid}-${index}`"
+          :aria-controls="`panel-${tabId}-${index}`"
           :aria-selected="currentTabIndex === index"
           :disabled="tab.disabled"
           @click="selectTab(index)"
@@ -39,9 +39,9 @@
           active: currentTabIndex === index,
           fade: fade
         }"
-        :id="`panel-${_uid}-${index}`"
+        :id="`panel-${tabId}-${index}`"
         role="tabpanel"
-        :aria-labelledby="`tab-${_uid}-${index}`"
+        :aria-labelledby="`tab-${tabId}-${index}`"
       >
         <slot :name="tab.slot || `tab-${index}`" />
       </div>
@@ -49,115 +49,137 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'BaseTabs',
-  props: {
-    value: {
-      type: Number,
-      default: 0
-    },
-    tabs: {
-      type: Array,
-      required: true,
-      validator: (tabs) => {
-        return tabs.every(tab => tab.title);
-      }
-    },
-    pills: {
-      type: Boolean,
-      default: false
-    },
-    fill: {
-      type: Boolean,
-      default: false
-    },
-    justified: {
-      type: Boolean,
-      default: false
-    },
-    vertical: {
-      type: Boolean,
-      default: false
-    },
-    small: {
-      type: Boolean,
-      default: false
-    },
-    fade: {
-      type: Boolean,
-      default: true
-    },
-    navClass: {
-      type: String,
-      default: ''
-    },
-    contentClass: {
-      type: String,
-      default: ''
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
+
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    default: 0
+  },
+  value: { // For backward compatibility
+    type: Number,
+    default: 0
+  },
+  tabs: {
+    type: Array,
+    required: true,
+    validator: (tabs) => {
+      return tabs.every(tab => tab.title);
     }
   },
-  data() {
-    return {
-      currentTabIndex: this.value
-    };
+  pills: {
+    type: Boolean,
+    default: false
   },
-  computed: {
-    navClasses() {
-      return [
-        this.pills ? 'nav-pills' : 'nav-tabs',
-        {
-          'nav-fill': this.fill,
-          'nav-justified': this.justified,
-          'flex-column': this.vertical,
-          'small': this.small
-        },
-        this.navClass
-      ];
-    }
+  fill: {
+    type: Boolean,
+    default: false
   },
-  watch: {
-    value(newVal) {
-      this.currentTabIndex = newVal;
+  justified: {
+    type: Boolean,
+    default: false
+  },
+  vertical: {
+    type: Boolean,
+    default: false
+  },
+  small: {
+    type: Boolean,
+    default: false
+  },
+  fade: {
+    type: Boolean,
+    default: true
+  },
+  navClass: {
+    type: String,
+    default: ''
+  },
+  contentClass: {
+    type: String,
+    default: ''
+  }
+});
+
+const emit = defineEmits(['update:modelValue', 'input', 'change']);
+
+// Generate unique ID for this component instance
+const tabId = Math.random().toString(36).substr(2, 9);
+
+// Use modelValue if provided, otherwise fall back to value for compatibility
+const currentTabIndex = ref(props.modelValue ?? props.value);
+
+const navClasses = computed(() => {
+  return [
+    props.pills ? 'nav-pills' : 'nav-tabs',
+    {
+      'nav-fill': props.fill,
+      'nav-justified': props.justified,
+      'flex-column': props.vertical,
+      'small': props.small
     },
-    currentTabIndex(newVal) {
-      this.$emit('input', newVal);
-      this.$emit('change', newVal);
-    }
-  },
-  mounted() {
-    // Find initially active tab
-    const activeIndex = this.tabs.findIndex(tab => tab.active);
-    if (activeIndex >= 0) {
-      this.currentTabIndex = activeIndex;
-    }
-  },
-  methods: {
-    selectTab(index) {
-      if (!this.tabs[index].disabled) {
-        this.currentTabIndex = index;
-      }
-    },
-    nextTab() {
-      let nextIndex = this.currentTabIndex + 1;
-      while (nextIndex < this.tabs.length && this.tabs[nextIndex].disabled) {
-        nextIndex++;
-      }
-      if (nextIndex < this.tabs.length) {
-        this.selectTab(nextIndex);
-      }
-    },
-    previousTab() {
-      let prevIndex = this.currentTabIndex - 1;
-      while (prevIndex >= 0 && this.tabs[prevIndex].disabled) {
-        prevIndex--;
-      }
-      if (prevIndex >= 0) {
-        this.selectTab(prevIndex);
-      }
-    }
+    props.navClass
+  ];
+});
+
+// Watch for prop changes
+watch(() => props.modelValue, (newVal) => {
+  currentTabIndex.value = newVal;
+});
+
+watch(() => props.value, (newVal) => {
+  if (props.modelValue === undefined) {
+    currentTabIndex.value = newVal;
+  }
+});
+
+watch(currentTabIndex, (newVal) => {
+  emit('update:modelValue', newVal);
+  emit('input', newVal); // For backward compatibility
+  emit('change', newVal);
+});
+
+onMounted(() => {
+  // Find initially active tab
+  const activeIndex = props.tabs.findIndex(tab => tab.active);
+  if (activeIndex >= 0) {
+    currentTabIndex.value = activeIndex;
+  }
+});
+
+const selectTab = (index) => {
+  if (!props.tabs[index].disabled) {
+    currentTabIndex.value = index;
   }
 };
+
+const nextTab = () => {
+  let nextIndex = currentTabIndex.value + 1;
+  while (nextIndex < props.tabs.length && props.tabs[nextIndex].disabled) {
+    nextIndex++;
+  }
+  if (nextIndex < props.tabs.length) {
+    selectTab(nextIndex);
+  }
+};
+
+const previousTab = () => {
+  let prevIndex = currentTabIndex.value - 1;
+  while (prevIndex >= 0 && props.tabs[prevIndex].disabled) {
+    prevIndex--;
+  }
+  if (prevIndex >= 0) {
+    selectTab(prevIndex);
+  }
+};
+
+// Expose methods for external use
+defineExpose({
+  nextTab,
+  previousTab,
+  selectTab
+});
 </script>
 
 <style scoped>

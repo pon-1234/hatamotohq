@@ -60,7 +60,7 @@
       <div class="card-body">
         <div class="form-group d-flex flex-column m-0">
           <label class="mb10">キーワード<required-mark /></label>
-          <b-form-tags
+          <base-form-tags
             size="md"
             :limit="10"
             class="bot-tag"
@@ -71,12 +71,12 @@
             separator=" ,;"
             :tag-validator="tagValidator"
             invalid-tag-text="無効なタグ"
-            duplicateTagText="タグはすでに存在します"
-            limitTagsText="キーワード数が上限に達しました"
+            duplicate-tag-text="タグはすでに存在します"
+            limit-tags-text="キーワード数が上限に達しました"
             add-on-change
             :add-button-text="'追加'"
           >
-          </b-form-tags>
+          </base-form-tags>
           <input
             type="hidden"
             name="keywords"
@@ -500,13 +500,12 @@ export default {
 };
 </script>
 <style lang="scss"  scoped>
-  ::v-deep {
-    #tags-limit {
-      border: none;
-      background-color: rgba(255, 255, 255, 0) !important;
-    }
-    .bot-tag.disabled {
-      background-color: #ccc !important;
-    }
+  :deep(#tags-limit) {
+    border: none;
+    background-color: rgba(255, 255, 255, 0) !important;
+  }
+  
+  :deep(.bot-tag.disabled) {
+    background-color: #ccc !important;
   }
 </style>

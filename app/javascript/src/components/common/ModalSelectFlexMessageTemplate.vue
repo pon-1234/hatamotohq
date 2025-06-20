@@ -255,74 +255,79 @@ defineExpose({
   margin-left: -15px;
 }
 
-::v-deep {
-  .modal-common01.fade .modal-dialog {
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+/* Convert ::v-deep to :deep() selectors */
+:deep(.modal-common01.fade .modal-dialog) {
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+:deep(.sample-item) {
+  width: 30%;
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+:deep(.label) {
+  color: #1b1b1b;
+}
+
+:deep(.modal-dialog) {
+  top: 0 !important;
+  margin: auto;
+  transform: translateY(0) !important;
+  padding: 80px !important;
+  max-width: 1000px;
+}
+
+:deep(.flex-item) {
+  flex: 1;
+  max-width: 400px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 2em;
+}
+
+@media (max-width: 1000px) {
+  :deep(.flex-item) {
+    max-width: 700px;
   }
 
-  .sample-item {
-    width: 30%;
-    margin-bottom: 20px;
-    cursor: pointer;
-    display: inline-block;
+  :deep(.tag-content) {
+    height: 70vh !important;
   }
-  .label {
-    color: #1b1b1b;
+  
+  :deep(.sample-item) {
+    width: 40%;
   }
-
-  .modal-dialog {
-    top: 0 !important;
+  
+  :deep(.modal-dialog) {
     margin: auto;
-    transform: translateY(0) !important;
-    padding: 80px !important;
-    max-width: 1000px;
+    padding: 80px 20px !important;
   }
-  .flex-item {
+}
+
+@media (max-width: 768px) {
+  :deep(.flex-item) {
     flex: 1;
-    max-width: 400px;
+    max-width: 500px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     line-height: 2em;
   }
-  @media (max-width: 1000px) {
-    .flex-item {
-      max-width: 700px;
-    }
 
-    .tag-content {
-      height: 70vh !important;
-    }
-    .sample-item {
-      width: 40%;
-    }
-    .modal-dialog {
-      margin: auto;
-      padding: 80px 20px !important;
-    }
+  :deep(.tag-content) {
+    height: 45vh !important;
   }
-  @media (max-width: 768px) {
-    .flex-item {
-      flex: 1;
-      max-width: 500px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      line-height: 2em;
-    }
-
-    .tag-content {
-      height: 45vh !important;
-    }
-    .modal-dialog {
-      padding: 40px 0 !important;
-
-      position: relative;
-      width: auto;
-      margin: auto;
-      max-width: 95%;
-    }
+  
+  :deep(.modal-dialog) {
+    padding: 40px 0 !important;
+    position: relative;
+    width: auto;
+    margin: auto;
+    max-width: 95%;
   }
 }
 
@@ -463,24 +468,23 @@ defineExpose({
   color: white;
 }
 
-::v-deep {
-  .modal-common01.fade .modal-dialog {
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
+/* Convert ::v-deep to :deep() selectors */
+:deep(.modal-common01.fade .modal-dialog) {
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 
-  .folder-title {
-    white-space: nowrap;
-    width: 20%;
-  }
+:deep(.folder-title) {
+  white-space: nowrap;
+  width: 20%;
+}
 
-  .flex-editor {
-    border: 0px solid transparent;
-  }
+:deep(.flex-editor) {
+  border: 0px solid transparent;
+}
 
-  .flex-editor:hover {
-    border: 0px solid #0a90eb;
-  }
+:deep(.flex-editor:hover) {
+  border: 0px solid #0a90eb;
 }
 
 .tag-scroll {

@@ -286,18 +286,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  ::v-deep {
-    .liff_box {
+  /* Convert ::v-deep to :deep() */
+  :deep(.liff_box) {
       margin-top: 200px;
       text-align: center;
       font-size: 16pt;
     }
-    .liff_box p {
+  :deep(.liff_box p) {
       font-weight: bold;
       margin: 20px;
     }
 
-    .btn-link {
+  :deep(.btn-link) {
       text-transform: uppercase;
       background: #00b900;
       border: 1px solid #00b900;
@@ -307,21 +307,21 @@ export default {
       padding-left: 30px;
       padding-right: 30px;
     }
-    .btn-submit {
+  :deep(.btn-submit) {
       text-transform: uppercase;
       width: initial;
       min-width: 100px;
     }
-    .btn-confirm {
+  :deep(.btn-confirm) {
       text-transform: uppercase;
       background: white;
       border: 1px solid #00b900;
       color: #00b900;
-    }
-    .survey {
-      border: 1px solid #dedede;
-      border-radius: 4px;
-      padding: 10px;
-    }
+  }
+  
+  :deep(.survey) {
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    padding: 10px;
   }
 </style>

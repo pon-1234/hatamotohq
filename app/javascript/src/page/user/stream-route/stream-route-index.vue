@@ -305,14 +305,13 @@ export default {
     margin-top: 28px;
   }
 
-  ::v-deep {
-    .chose-actions-presentor-main {
-      margin-top: 28px;
-    }
-    @media screen and (max-width: 1366px) {
-      .chose-actions-presentor-main {
-        margin-top: -10px;
-      }
+  :deep(.chose-actions-presentor-main) {
+    margin-top: 28px;
+  }
+  
+  @media screen and (max-width: 1366px) {
+    :deep(.chose-actions-presentor-main) {
+      margin-top: -10px;
     }
   }
 
