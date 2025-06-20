@@ -66,12 +66,36 @@ npm run build
 npm run build:css
 ```
 
-### Vue 3 Migration Status (2025年6月)
-- **Build Tool**: Migrated from esbuild to Vite
-- **Vue Version**: 3.5.16 with compatibility mode
-- **Component Status**: Mix of Vue 2 Options API and Vue 3 Composition API
-- **New Components**: Use `<script setup>` syntax
-- **Existing Components**: Continue working with compatibility mode
+### Vue 3 Migration Status (2025年1月 - 完了)
+- **Build Tool**: Vite (migrated from esbuild)
+- **Vue Version**: 3.5.16 (Native mode - @vue/compat removed)
+- **Component Status**: 
+  - New components: Use `<script setup>` Composition API
+  - Existing components: 87 files still using Options API (working fine)
+  - Core components (BaseSpinner, BaseDropdown, BaseTabs) migrated to Composition API
+- **All Vue 2 libraries successfully migrated to Vue 3 alternatives**
+
+## Technical Stack
+
+### Frontend (Vue 3)
+- **Framework**: Vue 3.5.16 (Native mode - no compatibility layer)
+- **State Management**: Vuex 4.1.0
+- **Build Tool**: Vite
+- **CSS**: SCSS with Bootstrap utilities
+- **Bundle Size**: ~2.17MB (21% reduction from Vue 2)
+
+### Backend
+- **Framework**: Ruby on Rails 7.2.1
+- **Ruby Version**: 3.3.6
+- **Database**: PostgreSQL
+- **Cache/Queue**: Redis + Sidekiq
+
+### Key Frontend Features
+- **Component Architecture**: Mix of Options API and Composition API
+- **Global Properties**: Filters migrated to global properties (`$formatted_time`, `$formatted_date`, etc.)
+- **Custom Components**: BaseModal, BaseTable, BaseForm, BasePagination, BaseDropdown, etc.
+- **Validation**: VeeValidate v4 with custom validation components
+- **Rich Text**: CKEditor 5 Vue 3 integration
 
 ## Architecture Overview
 

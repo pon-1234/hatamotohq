@@ -5,9 +5,9 @@ HatamotoHQ is a LINE Bot Management Platform - a multi-tenant SaaS application f
 ## Requirements
 
 - Ruby version: 3.3.6
-- Rails version: 7.x
+- Rails version: 7.2.1
 - Node.js: 18.x or higher
-- Yarn: 1.22.x or higher
+- npm: 8.x or higher
 - Database: PostgreSQL
 - Redis (for Sidekiq background jobs)
 
@@ -34,11 +34,14 @@ rails db:seed
 
 ```bash
 # Install JavaScript dependencies
-yarn install
+npm install
 
-# Build assets
-yarn build
-yarn build:css
+# Build assets for production
+npm run build
+npm run build:css
+
+# Or use Foreman to start all services
+foreman start -f Procfile.dev
 ```
 
 ## Development
@@ -52,8 +55,11 @@ rails server
 # In another terminal, start Sidekiq for background jobs
 sidekiq
 
-# For frontend development with hot reloading
-yarn build --watch
+# For frontend development with hot reloading (Vite)
+npm run dev
+
+# Or run all development services
+foreman start -f Procfile.dev
 ```
 
 ### Running Tests

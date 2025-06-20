@@ -24,16 +24,11 @@ HatamotoHQは、LINE Bot機能を中心としたメッセージング・CRMプ�
 
 ---
 
-## 技術スタック
+## 技術スタック詳細
 
-### 現在の構成
-- **Backend**: Ruby on Rails 7.2.1 (Ruby 3.3.6)
-- **Frontend**: Vue 3.5.16（ネイティブモード - @vue/compat削除済み）
-- **State Management**: Vuex 4.1.0
-- **Build Tool**: Vite
-- **Database**: PostgreSQL
-- **Cache/Queue**: Redis + Sidekiq
-- **Deployment**: Fly.io
+詳細な技術スタックについては以下を参照：
+- **基本的なセットアップ**: [README.md](../README.md)
+- **アーキテクチャとAI開発支援情報**: [CLAUDE.md](../CLAUDE.md)
 
 ### Vue 2 → Vue 3 ライブラリ移行（完了）
 | 旧ライブラリ | 新ライブラリ | 状態 |
@@ -53,55 +48,6 @@ HatamotoHQは、LINE Bot機能を中心としたメッセージング・CRMプ�
 | vue-qrcode-component | qrcode.vue | ✅ 完了 |
 | vue-chartkick | vue-chartkick@latest | ✅ 完了 |
 | Bootstrap-Vue | カスタムBaseComponents | ✅ 完了 |
-
----
-
-## 開発環境セットアップ
-
-### 前提条件
-- Ruby 3.3.6
-- Node.js 18.x以上
-- PostgreSQL
-- Redis
-
-### セットアップ手順
-
-1. **依存関係のインストール**
-   ```bash
-   bundle install
-   npm install
-   ```
-
-2. **データベースセットアップ**
-   ```bash
-   rails db:create
-   rails db:migrate
-   rails db:seed
-   # または
-   rails db:refresh
-   ```
-
-3. **開発サーバーの起動**
-   ```bash
-   # foremanを使用（推奨）
-   foreman start -f Procfile.dev
-   
-   # 個別に起動する場合
-   rails server          # Rails
-   bin/vite dev         # Vite
-   npm run watch:css    # CSS監視
-   sidekiq             # バックグラウンドジョブ
-   ```
-
-4. **アクセスURL**
-   - アプリケーション: http://localhost:3000
-   - Vite開発サーバー: http://localhost:3036
-   - Sidekiqダッシュボード: http://localhost:3000/sidekiq
-
-### 開発のヒント
-- **HMR（Hot Module Replacement）**: Viteが.vueファイルの変更を即座に反映
-- **Vue DevTools**: ブラウザ拡張機能をインストールして使用
-- **新規コンポーネント**: Vue 3 Composition API（`<script setup>`）を使用
 
 ---
 
