@@ -34,7 +34,7 @@ class HealthController < ApplicationController
   end
 
   def check_redis
-    Redis.current.ping == 'PONG'
+    $redis.ping == 'PONG'
     { status: 'ok' }
   rescue StandardError => e
     { status: 'error', message: e.message }

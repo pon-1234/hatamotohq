@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReservationsControllerRefactored < ApplicationController
+class ReservationsController < ApplicationController
   include ResponseHelper
 
   skip_before_action :verify_authenticity_token, only: :callback

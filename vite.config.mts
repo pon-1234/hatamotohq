@@ -21,6 +21,14 @@ export default defineConfig({
       '/img': path.resolve(__dirname, './public/img')
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Allow imports to work from the stylesheets directory
+        includePaths: [path.resolve(__dirname, './app/javascript/stylesheets')]
+      }
+    }
+  },
   build: {
     rollupOptions: {
       external: [

@@ -1,0 +1,215 @@
+.btn-group-xs > .btn,
+.btn-xs {
+  padding: 1px 5px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  border-radius: 3px !important;
+}
+
+.text-sm {
+  font-size: 0.7rem !important;
+  .form-control {
+    font-size: 0.875rem !important;
+  }
+}
+
+a.sort_link {
+  color: #212529;
+}
+
+table,
+thead,
+tr,
+tbody,
+th,
+td {
+  vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.b-form-tags-button {
+  width: 80px !important;
+}
+
+// START: Pagination
+.page-item .page-link {
+  background-color: white;
+  border-color: #d7dadc;
+  color: #6e767d;
+}
+
+.page-item.active .page-link {
+  background-color: white;
+  border-color: #17a2b8;
+  color: #17a2b8;
+}
+
+// END: Pagination
+// START: Datetime picker theme
+.theme-success .vdatetime-popup__header,
+.theme-success .vdatetime-calendar__month__day--selected > span > span,
+.theme-success .vdatetime-calendar__month__day--selected:hover > span > span {
+  background: #28a745;
+}
+
+.theme-success .vdatetime-year-picker__item--selected,
+.theme-success .vdatetime-time-picker__item--selected,
+.theme-success .vdatetime-popup__actions__button {
+  color: #28a745;
+}
+
+// END: Datetime picker theme
+// START: Css home page
+.home_announcement_btn {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  color: #000000;
+  border-bottom: 1px solid #dddddd;
+  .output {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.home_announcement_btn:hover {
+  color: #000000;
+  background-color: #e6e6e6;
+  border: 1px solid #dddddd;
+}
+
+// END: Css home page
+
+// START: Fix toast background bug
+#toast-container > .toast-info {
+  background-image: none !important;
+}
+#toast-container > .toast-error {
+  background-image: none !important;
+}
+#toast-container > .toast-success {
+  background-image: none !important;
+}
+#toast-container > .toast-warning {
+  background-image: none !important;
+}
+
+.toast-success {
+  background-color: #51a351 !important;
+}
+.toast-error {
+  background-color: #bd362f !important;
+}
+.toast-info {
+  background-color: #2f96b4 !important;
+}
+.toast-warning {
+  background-color: #f89406 !important;
+}
+// END: Fix toast background bug
+
+.content-page {
+  padding-bottom: 0 !important;
+}
+
+label {
+  display: flex !important;
+  align-items: center;
+}
+
+.simplebar-content-wrapper {
+  overflow-y: scroll !important;
+}
+
+.left-side-menu {
+  z-index: 1021 !important;
+}
+.button-menu-mobile {
+  line-height: 0;
+}
+
+@media (max-width: 1024px) {
+  .navbar-custom {
+    left: 260px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .navbar-custom {
+    left: 0;
+  }
+}
+.confirm-reservation{
+  &-price {
+    color: red; 
+    font-size: 22px;
+  }
+  &-room-name {
+    font-size: 19px;
+  }
+}
+.review-container, .confirm-reservation-container {
+  max-width: 680px;
+  padding: 0 20px;
+  margin: 0 auto;
+  background-color: rgba(73, 95, 126, 0.04) !important;
+  .review-form {
+    padding: 0 !important;
+  }
+  .confirm-reservation-main {
+    background-color: white;
+  }
+  .review-image {
+    margin-bottom: 40px;
+    .review-image-caption {
+      font-size: 20px;
+      top: 50%;
+      right: 50%;
+      transform: translate(50%, -50%);
+    }
+  }
+  .room-image {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .review-container.border {
+    border: none;
+  }
+  .new-review-page, .confirm-reservation {
+    .container, .container-fluid, .container-fluid.p-2 {
+      padding: 0 !important;
+      margin: 0 auto !important;
+    }
+    .container {
+      width: 100%;
+      max-width: unset !important;
+    }
+    .review-container, .confirm-reservation-container {
+      .review-image, .room-image {
+        margin-top: 10px;
+        .review-image-caption {
+          width: 100%;
+          text-align: center;
+          font-size: 20px;
+          top: 50%;
+          right: unset;
+          transform: translateY(-50%);
+        }
+      }
+      &.border {
+        border: none !important;
+      }
+    }
+  }
+}

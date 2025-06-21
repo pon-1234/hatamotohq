@@ -26,9 +26,8 @@ less \
 && rm -rf /var/cache/apk/* \
 && mkdir -p $APP_PATH
 
-# Install Node.js and Yarn - use current Alpine packages
+# Install Node.js and npm - use current Alpine packages
 RUN apk add --no-cache nodejs npm \
-&& npm install -g yarn@1.22.22 \
 && node --version 
 
 RUN gem install bundler --version "$BUNDLE_VERSION" \
@@ -50,8 +49,8 @@ RUN bundle config set --local deployment 'true' \
 # Copy application code
 COPY . .
 
-# Install JavaScript dependencies 
-RUN yarn install --ignore-engines
+# Install JavaScript dependencies using npm
+RUN npm install --legacy-peer-deps
 
 # Build frontend assets with Vite
 RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build

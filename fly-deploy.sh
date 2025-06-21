@@ -76,7 +76,7 @@ if redis_exists "$REDIS_NAME"; then
     echo "✅ Redis $REDIS_NAME already exists"
 else
     echo "💾 Creating Redis instance..."
-    fly redis create --name "$REDIS_NAME" --region "$REGION" --no-replicas
+    fly redis create --name "$REDIS_NAME" --region "$REGION" --no-replicas --enable-eviction
     echo "⏳ Waiting for Redis to be ready..."
     sleep 10
 fi
@@ -110,12 +110,8 @@ echo "  fly secrets set VITE_GOOGLE_MAP_KEY=your-value --app $APP_NAME"
 echo "  fly secrets set SENTRY_DSN=your-value --app $APP_NAME (optional)"
 echo ""
 
-read -p "Have you set the required secrets above? (y/N) " -n 1 -r
-echo ""
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "❌ Please set the required secrets and run this script again"
-    exit 1
-fi
+# Skip the interactive prompt for now
+echo "⚠️  Remember to set these secrets before your app will work properly!"
 
 # Deploy
 echo ""
