@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::BroadcastsControllerRefactored < User::ApplicationController
+class User::BroadcastsController < User::ApplicationController
   load_and_authorize_resource
   before_action :find_broadcast, only: [:show, :update, :destroy, :copy]
 
