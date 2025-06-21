@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::ScenariosControllerRefactored < User::ApplicationController
+class User::ScenariosController < User::ApplicationController
   include Copyable
   include Toggleable
   
