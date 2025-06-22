@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
-    "@vitejs/plugin-vue2": "^2.3.3",
     "@vue/compiler-sfc": "^3.5.17",
     "apidoc": "^0.25.0",
     "autoprefixer": "^10.4.21",

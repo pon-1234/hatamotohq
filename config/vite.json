@@ -19,7 +19,7 @@
   },
   "production": {
     "autoBuild": false,
-    "publicOutputDir": "app/assets/builds",
+    "publicOutputDir": "vite",
     "manifest": true
   }
 }

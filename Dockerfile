@@ -52,8 +52,8 @@ COPY . .
 # Install JavaScript dependencies using npm
 RUN npm install --legacy-peer-deps
 
-# Build frontend assets with Vite
-RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
+# Build frontend assets with Vite in production mode
+RUN NODE_ENV=production RAILS_ENV=production NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 EXPOSE $RAILS_PORT
 
