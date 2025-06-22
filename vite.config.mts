@@ -16,9 +16,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app/javascript/src'),
-      '@channels': path.resolve(__dirname, './app/javascript/channels'),
-      '/images': path.resolve(__dirname, './public/images'),
-      '/img': path.resolve(__dirname, './public/img')
+      '@channels': path.resolve(__dirname, './app/javascript/channels')
     }
   },
   css: {
@@ -35,7 +33,10 @@ export default defineConfig({
         /^\/images\//,
         /^\/img\//
       ]
-    }
+    },
+    // Ensure manifest doesn't include static assets
+    manifest: true,
+    assetsDir: 'assets'
   },
   define: {
     '__VUE_OPTIONS_API__': 'true',

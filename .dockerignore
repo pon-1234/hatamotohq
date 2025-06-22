@@ -1,0 +1,75 @@
+# .dockerignore
+
+# GitとGitHub関連
+.git
+.github
+.gitignore
+
+# DockerとFly.io関連
+Dockerfile*
+.dockerignore
+fly.toml
+fly.*.toml
+fly-*.sh
+
+# ドキュメント
+/docs
+/doc
+*.md
+README*
+
+# ログと一時ファイル
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+!/tmp/pids/
+!/tmp/pids/.keep
+
+# Node.jsの依存関係 (コンテナ内でインストールするため不要)
+/node_modules
+
+# RubyGems (コンテナ内でインストールするため不要)
+/vendor/bundle
+
+# Railsの一時ファイルとストレージ
+/storage/*
+!/storage/.keep
+/public/vite-dev
+/public/vite-test
+/public/assets
+/public/packs
+/public/packs-test
+
+# テスト関連ファイル
+/spec
+/coverage
+.rspec
+
+# 開発用の設定ファイルやログ
+.env*
+!/.env.example
+!/.env.development.example
+!/.env.staging.example
+!/.fly.env.example
+.rubocop.yml
+Procfile.dev
+rails_server.log
+test_login.rb
+add_hosts.sh
+
+# エディタ設定ファイル
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS固有ファイル
+.DS_Store
+
+# キャッシュとビルド成果物
+/.bundle
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
