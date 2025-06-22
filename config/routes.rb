@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       route_for(route, blob)
     else
       # Use an environment variable instead of hard-coding the CDN host
-      File.join(ENV.fetch('CDN_HOST'), blob.key)
+      File.join(ENV.fetch('CDN_HOST', ''), blob.key)
     end
   end
 
