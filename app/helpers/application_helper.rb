@@ -16,6 +16,8 @@ module ApplicationHelper
   end
 
   def custom_flash_message
+    return ''.html_safe unless defined?(flash) && flash.present?
+    
     flash_messages = []
     flash.each do |type, message|
       type = 'success' if type == 'notice'
