@@ -19,7 +19,8 @@
   },
   "production": {
     "autoBuild": false,
-    "publicOutputDir": "vite",
-    "manifest": true
+    "publicOutputDir": "app/assets/builds",
+    "manifest": true,
+    "manifestFilename": ".vite/manifest.json"
   }
 }
