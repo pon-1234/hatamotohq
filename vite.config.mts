@@ -13,6 +13,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['vue']
   },
+  publicDir: 'public',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app/javascript/src'),
@@ -28,12 +29,6 @@ export default defineConfig({
     }
   },
   build: {
-    rollupOptions: {
-      external: [
-        /^\/images\//,
-        /^\/img\//
-      ]
-    },
     // Ensure manifest doesn't include static assets
     manifest: true,
     assetsDir: 'assets'
