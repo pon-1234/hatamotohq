@@ -272,4 +272,15 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Default root route for main domain (without subdomain)
+  root to: redirect { |params, request|
+    if request.subdomain.present?
+      # If there's a subdomain but it doesn't match any constraint, redirect to main domain
+      "https://#{request.domain}/user/sign_in"
+    else
+      # No subdomain - redirect to user login
+      "/user/sign_in"
+    end
+  }
 end
