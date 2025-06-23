@@ -99,107 +99,106 @@ import ClientIndex from './src/page/agency/client/ClientIndex.vue';
 
 // TODO: Import other components as needed
 
-// We have to re-create vue app when change the page url
-jQuery(() => {
-  const appElement = document.getElementById('application');
-  if (appElement) {
-    const app = createApp({
-      locale: 'ja'
+// Vueアプリケーションの初期化ロジック
+const appElement = document.getElementById('application');
+
+if (appElement) {
+  const app = createApp({
+    locale: 'ja'
+  });
+  
+  // Configure app
+  app.config.devtools = true;
+  
+  // Add global properties (replacing Vue.prototype)
+  Object.keys(constant).forEach((key) => {
+    app.config.globalProperties[key] = constant[key];
+  });
+  
+  // Register filters as global properties (Vue 3 doesn't have filters)
+  Object.keys(filters).forEach((key) => {
+    app.config.globalProperties[`$${key}`] = filters[key];
+  });
+  
+  // Register plugins
+  app.use(store);
+  app.use(VueChartkick);
+  // Datetime is now a component, not a plugin
+  // app.use(DateRangePicker); // TODO: Replace with Vue 3 compatible version
+  // Bootstrap-Vue removed - using custom base components instead
+  app.use(BaseComponents);
+  app.use(ClipboardPlugin);
+  app.use(Directives);
+  app.use(FloatingVue);
+  app.use(CkeditorPlugin);
+  app.use(VueLazyload, {
+    preLoad: 1.3,
+    error: '/images/no-image.png',
+    loading: '/images/loading.gif',
+    attempt: 1
+  });
+  // VeeValidate v4 doesn't need app.use() - rules are registered globally
+  
+  // Register Google Maps if API key is available
+  if (import.meta.env.VITE_GOOGLE_MAP_KEY) {
+    app.use(VueGoogleMaps, {
+      load: {
+        key: import.meta.env.VITE_GOOGLE_MAP_KEY,
+        libraries: 'places'
+      }
     });
-    
-    // Configure app
-    app.config.devtools = true;
-    
-    // Add global properties (replacing Vue.prototype)
-    Object.keys(constant).forEach((key) => {
-      app.config.globalProperties[key] = constant[key];
-    });
-    
-    // Register filters as global properties (Vue 3 doesn't have filters)
-    Object.keys(filters).forEach((key) => {
-      app.config.globalProperties[`$${key}`] = filters[key];
-    });
-    
-    // Register plugins
-    app.use(store);
-    app.use(VueChartkick);
-    // Datetime is now a component, not a plugin
-    // app.use(DateRangePicker); // TODO: Replace with Vue 3 compatible version
-    // Bootstrap-Vue removed - using custom base components instead
-    app.use(BaseComponents);
-    app.use(ClipboardPlugin);
-    app.use(Directives);
-    app.use(FloatingVue);
-    app.use(CkeditorPlugin);
-    app.use(VueLazyload, {
-      preLoad: 1.3,
-      error: '/images/no-image.png',
-      loading: '/images/loading.gif',
-      attempt: 1
-    });
-    // VeeValidate v4 doesn't need app.use() - rules are registered globally
-    
-    // Register Google Maps if API key is available
-    if (import.meta.env.VITE_GOOGLE_MAP_KEY) {
-      app.use(VueGoogleMaps, {
-        load: {
-          key: import.meta.env.VITE_GOOGLE_MAP_KEY,
-          libraries: 'places'
-        }
-      });
-    }
-    
-    // Google OAuth configuration
-    if (process.env.GOOGLE_OAUTH_CLIENT_ID) {
-      app.use(vue3GoogleOauth, {
-        clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
-        scope: 'email https://www.googleapis.com/auth/spreadsheets',
-        prompt: 'consent'
-      });
-    }
-    
-    // Register global components
-    app.component('v-select', vSelect);
-    app.component('multiselect', Multiselect);
-    app.component('qrcode-vue', QrcodeVue);
-    app.component('ValidationProvider', ValidationProvider);
-    app.component('ValidationObserver', ValidationObserver);
-    
-    // Register all components that were previously globally registered
-    app.component('user-session-new', UserSessionNew);
-    app.component('admin-session-new', AdminSessionNew);
-    app.component('agency-session-new', AgencySessionNew);
-    app.component('input-password', InputPassword);
-    app.component('error-message', ErrorMessage);
-    app.component('hello-vue3', HelloVue3);
-    app.component('datetime', Datetime);
-    
-    // Register user components
-    app.component('scenario-index', ScenarioIndex);
-    app.component('channel-index', ChannelIndex);
-    app.component('friend-index', FriendIndex);
-    app.component('broadcast-index', BroadcastIndex);
-    app.component('auto-response-index', AutoResponseIndex);
-    app.component('template-index', TemplateIndex);
-    app.component('rich-menu-index', RichMenuIndex);
-    app.component('survey-index', SurveyIndex);
-    app.component('reminder-index', ReminderIndex);
-    app.component('tag-index', TagIndex);
-    app.component('staff-index', StaffIndex);
-    app.component('variable-index', VariableIndex);
-    
-    // Register admin components
-    app.component('admin-account-index', AdminAccountIndex);
-    app.component('admin-user-index', AdminUserIndex);
-    app.component('agency-index', AgencyIndex);
-    app.component('announcement-index', AnnouncementIndex);
-    
-    // Register agency components
-    app.component('client-index', ClientIndex);
-    
-    app.mount('#application');
   }
-});
+  
+  // Google OAuth configuration
+  if (import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID) {
+    app.use(vue3GoogleOauth, {
+      clientId: import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID,
+      scope: 'email https://www.googleapis.com/auth/spreadsheets',
+      prompt: 'consent'
+    });
+  }
+  
+  // Register global components
+  app.component('v-select', vSelect);
+  app.component('multiselect', Multiselect);
+  app.component('qrcode-vue', QrcodeVue);
+  app.component('ValidationProvider', ValidationProvider);
+  app.component('ValidationObserver', ValidationObserver);
+  
+  // Register all components that were previously globally registered
+  app.component('user-session-new', UserSessionNew);
+  app.component('admin-session-new', AdminSessionNew);
+  app.component('agency-session-new', AgencySessionNew);
+  app.component('input-password', InputPassword);
+  app.component('error-message', ErrorMessage);
+  app.component('hello-vue3', HelloVue3);
+  app.component('datetime', Datetime);
+  
+  // Register user components
+  app.component('scenario-index', ScenarioIndex);
+  app.component('channel-index', ChannelIndex);
+  app.component('friend-index', FriendIndex);
+  app.component('broadcast-index', BroadcastIndex);
+  app.component('auto-response-index', AutoResponseIndex);
+  app.component('template-index', TemplateIndex);
+  app.component('rich-menu-index', RichMenuIndex);
+  app.component('survey-index', SurveyIndex);
+  app.component('reminder-index', ReminderIndex);
+  app.component('tag-index', TagIndex);
+  app.component('staff-index', StaffIndex);
+  app.component('variable-index', VariableIndex);
+  
+  // Register admin components
+  app.component('admin-account-index', AdminAccountIndex);
+  app.component('admin-user-index', AdminUserIndex);
+  app.component('agency-index', AgencyIndex);
+  app.component('announcement-index', AnnouncementIndex);
+  
+  // Register agency components
+  app.component('client-index', ClientIndex);
+  
+  app.mount('#application');
+}
 
 toastr.options = {
   closeButton: true,
