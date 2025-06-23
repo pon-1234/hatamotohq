@@ -21,21 +21,26 @@
                     管理パネルにアクセスするには、メールアドレスとパスワードを入力してください。
                   </p>
                 </div>
-                <Form :action="getAction()" method="post" @submit="onFormSubmit" v-slot="{ meta, errors }">
+                <Form :action="getAction()" method="post" @submit="onFormSubmit" v-slot="{ meta, errors: formErrors }">
                   <form ref="actualNativeForm" @submit.prevent :action="getAction()" method="post">
                     <input type="hidden" name="authenticity_token" :value="csrfToken" />
                     <div class="form-group">
                       <label for="emailaddress">メールアドレス</label>
                       <Field
                         name="user[email]"
+                        label="メールアドレス"
                         rules="required|custom_email"
-                        v-model="userData.email"
-                        type="email"
-                        class="form-control"
-                        placeholder="メールを入力してください"
-                        :class="{ 'is-invalid': meta.touched && errors && errors['user[email]'] }"
-                      />
-                      <ErrorMessage name="user[email]" class="text-danger" />
+                        v-slot="{ field, errors: fieldSpecificErrors, meta: fieldMeta }"
+                      >
+                        <input
+                          v-bind="field"
+                          type="email"
+                          class="form-control"
+                          placeholder="メールを入力してください"
+                          :class="{ 'is-invalid': fieldMeta.touched && fieldSpecificErrors.length }"
+                        />
+                      </Field>
+                      <span v-if="formErrors['user[email]']" class="text-danger">{{ formErrors['user[email]'] }}</span>
                     </div>
 
                     <div class="form-group">
@@ -47,8 +52,17 @@
                         name="user[password]"
                         label="パスワード"
                         rules="required"
-                        as="input-password"
-                      />
+                        v-slot="{ field, errors: fieldSpecificErrors, meta: fieldMeta }"
+                      >
+                        <input
+                          v-bind="field"
+                          type="password"
+                          class="form-control"
+                          placeholder="パスワードを入力してください"
+                          :class="{ 'is-invalid': fieldMeta.touched && fieldSpecificErrors.length }"
+                        />
+                      </Field>
+                      <span v-if="formErrors['user[password]']" class="text-danger">{{ formErrors['user[password]'] }}</span>
                     </div>
                     <div class="form-group mb-3">
                       <div class="custom-control custom-checkbox">
@@ -57,7 +71,6 @@
                           type="checkbox"
                           class="custom-control-input"
                           id="checkbox-signin"
-                          v-model="userData.remember_me"
                           :value="true"
                           :unchecked-value="false"
                         />
@@ -87,23 +100,19 @@
 <script>
 import Util from '@/core/util.js';
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import InputPassword from '@/components/input/InputPassword.vue'; // Assuming InputPassword is used
+import PasswordInput from '../../../components/form/inputs/PasswordInput.vue';
 
 export default {
   components: {
     Form,
     Field,
     ErrorMessage,
-    InputPassword
+    PasswordInput
   },
   data() {
     return {
       userRootUrl: import.meta.env.VITE_ROOT_PATH,
-      csrfToken: Util.getCsrfToken(),
-      userData: {
-        email: null,
-        remember_me: false
-      }
+      csrfToken: Util.getCsrfToken()
     };
   },
 

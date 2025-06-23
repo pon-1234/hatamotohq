@@ -68,7 +68,7 @@ import AdminSessionNew from './src/page/admin/session/AdminSessionNew.vue';
 import AgencySessionNew from './src/page/agency/session/AgencySessionNew.vue';
 
 // Import common components
-import InputPassword from './src/components/input/InputPassword.vue';
+import InputPassword from './src/components/form/inputs/PasswordInput.vue';
 import ErrorMessage from './src/components/common/ErrorMessage.vue';
 import HelloVue3 from './src/components/common/HelloVue3.vue';
 import DatetimeComponent from './src/components/datetime/Datetime.vue';
