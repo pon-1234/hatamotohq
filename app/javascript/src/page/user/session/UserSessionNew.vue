@@ -52,8 +52,17 @@
                         name="user[password]"
                         label="パスワード"
                         rules="required"
-                        :as="PasswordInput"
-                      />
+                        v-slot="{ field, errors: fieldSpecificErrors, meta: fieldMeta }"
+                      >
+                        <input
+                          v-bind="field"
+                          type="password"
+                          class="form-control"
+                          placeholder="パスワードを入力してください"
+                          :class="{ 'is-invalid': fieldMeta.touched && fieldSpecificErrors.length }"
+                        />
+                      </Field>
+                      <span v-if="formErrors['user[password]']" class="text-danger">{{ formErrors['user[password]'] }}</span>
                     </div>
                     <div class="form-group mb-3">
                       <div class="custom-control custom-checkbox">
