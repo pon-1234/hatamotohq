@@ -100,9 +100,12 @@ import ClientIndex from './src/page/agency/client/ClientIndex.vue';
 // TODO: Import other components as needed
 
 // Vueアプリケーションの初期化ロジック
+console.log('Vue initialization: Checking for application element...');
 const appElement = document.getElementById('application');
+console.log('Application element found:', appElement);
 
 if (appElement) {
+  console.log('Creating Vue app...');
   const app = createApp({
     locale: 'ja'
   });
@@ -197,7 +200,9 @@ if (appElement) {
   // Register agency components
   app.component('client-index', ClientIndex);
   
+  console.log('Mounting Vue app to #application...');
   app.mount('#application');
+  console.log('Vue app mounted successfully!');
 }
 
 toastr.options = {
