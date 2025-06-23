@@ -52,17 +52,8 @@
                         name="user[password]"
                         label="パスワード"
                         rules="required"
-                        v-slot="{ field, errors: fieldSpecificErrors, meta: fieldMeta }"
-                      >
-                        <input
-                          v-bind="field"
-                          type="password"
-                          class="form-control"
-                          placeholder="パスワードを入力してください"
-                          :class="{ 'is-invalid': fieldMeta.touched && fieldSpecificErrors.length }"
-                        />
-                      </Field>
-                      <span v-if="formErrors['user[password]']" class="text-danger">{{ formErrors['user[password]'] }}</span>
+                        :as="PasswordInput"
+                      />
                     </div>
                     <div class="form-group mb-3">
                       <div class="custom-control custom-checkbox">
@@ -79,7 +70,13 @@
                     </div>
 
                     <div class="form-group mb-0 text-center">
-                      <button type="submit" class="btn btn-success" :disabled="!meta.valid || meta.pending">ログイン</button>
+                      <button type="submit" class="btn btn-success" :disabled="meta.pending">ログイン</button>
+                    </div>
+                    <!-- デバッグ情報 -->
+                    <div v-if="false" class="mt-2 text-muted small">
+                      <p>Form valid: {{ meta.valid }}</p>
+                      <p>Form pending: {{ meta.pending }}</p>
+                      <p>Form errors: {{ JSON.stringify(formErrors) }}</p>
                     </div>
                   </form>
                 </Form>
