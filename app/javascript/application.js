@@ -2,8 +2,8 @@
 import { createApp } from 'vue';
 // VeeValidate v4
 import './src/core/vee-validate';
-import ValidationProvider from './src/components/validation/ValidationProvider.vue';
-import ValidationObserver from './src/components/validation/ValidationObserver.vue';
+// import ValidationProvider from './src/components/validation/ValidationProvider.vue'; // REMOVE THIS
+// import ValidationObserver from './src/components/validation/ValidationObserver.vue'; // REMOVE THIS
 import VueChartkick from 'vue-chartkick';
 import 'chartkick';
 // import { Datetime } from 'vue-datetime'; // Replaced with @vuepic/vue-datepicker
@@ -165,8 +165,8 @@ if (appElement) {
   app.component('v-select', vSelect);
   app.component('multiselect', Multiselect);
   app.component('qrcode-vue', QrcodeVue);
-  app.component('ValidationProvider', ValidationProvider);
-  app.component('ValidationObserver', ValidationObserver);
+  // app.component('ValidationProvider', ValidationProvider); // REMOVE THIS
+  // app.component('ValidationObserver', ValidationObserver); // REMOVE THIS
   
   // Register all components that were previously globally registered
   app.component('user-session-new', UserSessionNew);

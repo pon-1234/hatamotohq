@@ -11,20 +11,21 @@ export default defineConfig({
     })
   ],
   optimizeDeps: {
-    include: ['vue']
+    include: ['vue', 'fast-deep-equal']
   },
   publicDir: 'public',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app/javascript/src'),
-      '@channels': path.resolve(__dirname, './app/javascript/channels')
+      '@channels': path.resolve(__dirname, './app/javascript/channels'),
+      'vue': 'vue/dist/vue.esm-bundler.js'
     }
   },
   css: {
     preprocessorOptions: {
       scss: {
-        // Allow imports to work from the stylesheets directory
-        includePaths: [path.resolve(__dirname, './app/javascript/stylesheets')]
+        includePaths: [path.resolve(__dirname, './app/javascript/stylesheets')],
+        api: 'legacy'
       }
     }
   },

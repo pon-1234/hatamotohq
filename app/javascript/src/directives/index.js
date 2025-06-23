@@ -8,10 +8,10 @@ import { vViewer } from './viewer';
 
 export default {
   install(Vue) {
-    Vue.directive('tooltip', TooltipDirective);
+    // Vue.directive('tooltip', TooltipDirective);
     
     // Alias for backward compatibility with v-b-tooltip
-    Vue.directive('b-tooltip', TooltipDirective);
+    // Vue.directive('b-tooltip', TooltipDirective);
     
     // Register click-outside directive
     Vue.directive('click-outside', vClickOutside);

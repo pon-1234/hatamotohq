@@ -21,49 +21,55 @@
                     管理パネルにアクセスするには、メールアドレスとパスワードを入力してください。
                   </p>
                 </div>
-                <form ref="form" @submit.prevent="onSubmit" :action="getAction()" method="post">
-                  <input type="hidden" name="authenticity_token" :value="csrfToken" />
-                  <div class="form-group">
-                    <label for="emailaddress">メールアドレス</label>
-                    <input
-                      type="text"
-                      v-validate="'required|email'"
-                      data-vv-as="メール"
-                      class="form-control"
-                      name="user[email]"
-                      placeholder="メールを入力してください"
-                      v-model="userData.email"
-                    />
-                    <error-message :message="errors.first('user[email]')"></error-message>
-                  </div>
-
-                  <div class="form-group">
-                    <a :href="`${userRootUrl}/user/password/new`" class="text-muted float-right"
-                      ><small>パスワードを忘れましたか?</small></a
-                    >
-                    <label for="password">パスワード</label>
-                    <input-password name="user[password]" :password.sync="userData.password"></input-password>
-                  </div>
-                  <div class="form-group mb-3">
-                    <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="checkbox-signin"
-                        name="user[remember_me]"
-                        v-model="userData.remember_me"
-                        true-value="true"
-                        false-value="false"
-                        checked
+                <Form :action="getAction()" method="post" @submit="onFormSubmit" v-slot="{ meta, errors }">
+                  <form ref="actualNativeForm" @submit.prevent :action="getAction()" method="post">
+                    <input type="hidden" name="authenticity_token" :value="csrfToken" />
+                    <div class="form-group">
+                      <label for="emailaddress">メールアドレス</label>
+                      <Field
+                        name="user[email]"
+                        rules="required|custom_email"
+                        v-model="userData.email"
+                        type="email"
+                        class="form-control"
+                        placeholder="メールを入力してください"
+                        :class="{ 'is-invalid': meta.touched && errors && errors['user[email]'] }"
                       />
-                      <label class="custom-control-label" for="checkbox-signin">ログインを記憶する</label>
+                      <ErrorMessage name="user[email]" class="text-danger" />
                     </div>
-                  </div>
 
-                  <div class="form-group mb-0 text-center">
-                    <button type="submit" class="btn btn-success" :disabled="invalid">ログイン</button>
-                  </div>
-                </form>
+                    <div class="form-group">
+                      <a :href="`${userRootUrl}/user/password/new`" class="text-muted float-right"
+                        ><small>パスワードを忘れましたか?</small></a
+                      >
+                      <label for="password">パスワード</label>
+                      <Field
+                        name="user[password]"
+                        label="パスワード"
+                        rules="required"
+                        as="input-password"
+                      />
+                    </div>
+                    <div class="form-group mb-3">
+                      <div class="custom-control custom-checkbox">
+                        <Field
+                          name="user[remember_me]"
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="checkbox-signin"
+                          v-model="userData.remember_me"
+                          :value="true"
+                          :unchecked-value="false"
+                        />
+                        <label class="custom-control-label" for="checkbox-signin">ログインを記憶する</label>
+                      </div>
+                    </div>
+
+                    <div class="form-group mb-0 text-center">
+                      <button type="submit" class="btn btn-success" :disabled="!meta.valid || meta.pending">ログイン</button>
+                    </div>
+                  </form>
+                </Form>
               </div>
               <!-- end card-body -->
             </div>
@@ -80,29 +86,32 @@
 
 <script>
 import Util from '@/core/util.js';
+import { Form, Field, ErrorMessage } from 'vee-validate';
+import InputPassword from '@/components/input/InputPassword.vue'; // Assuming InputPassword is used
 
 export default {
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+    InputPassword
+  },
   data() {
     return {
       userRootUrl: import.meta.env.VITE_ROOT_PATH,
       csrfToken: Util.getCsrfToken(),
       userData: {
         email: null,
-        password: null,
         remember_me: false
       }
     };
   },
 
-  computed: {
-    invalid() {
-      return this.errors.any();
-    }
-  },
-
   methods: {
-    onSubmit() {
-      this.$refs.form.submit();
+    onFormSubmit() {
+      // This method is called by VeeValidate's Form @submit event after successful validation
+      // Now, we can submit the actual native form
+      this.$refs.actualNativeForm.submit();
     },
     getAction() {
       return `${this.userRootUrl}/user/sign_in`;
@@ -116,5 +125,12 @@ export default {
     background-image: url(/images/bg-pattern-light.svg);
     background-size: cover;
     background-position: center;
+  }
+  .text-danger {
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+  }
+  .is-invalid {
+    border-color: #fa5c7c; // Default Bootstrap danger color
   }
 </style>
