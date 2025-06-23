@@ -3,15 +3,13 @@ class HealthController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    health_status = check_health_status
-    
-    render json: { 
-      status: health_status[:ok] ? 'ok' : 'error', 
-      timestamp: Time.current.iso8601,
-      version: Rails.version,
-      checks: health_status[:checks]
-    }, status: health_status[:ok] ? :ok : :service_unavailable
+    # Always return a simple 200 OK for basic health check
+    render json: { status: 'ok', timestamp: Time.current.iso8601, version: Rails.version }, status: :ok
   end
+
+  # The detailed checks can be kept for other diagnostic purposes if needed,
+  # or removed if they are not used elsewhere.
+  # For Fly.io health checks, a simple 200 OK is usually sufficient.
 
   private
 
@@ -20,9 +18,7 @@ class HealthController < ApplicationController
       database: check_database,
       redis: check_redis
     }
-    
     ok = checks.values.all? { |check| check[:status] == 'ok' }
-    
     { ok: ok, checks: checks }
   end
 
