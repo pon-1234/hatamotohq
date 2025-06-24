@@ -3,6 +3,22 @@
 class User::SessionsController < Devise::SessionsController
   respond_to :html, :json
   layout 'auth'
+  
+  # Override create to add debugging
+  def create
+    Rails.logger.info "=== LOGIN ATTEMPT ==="
+    Rails.logger.info "Request format: #{request.format}"
+    Rails.logger.info "Request params: #{params.inspect}"
+    Rails.logger.info "Request headers: #{request.headers.env.select { |k,v| k.match(/^HTTP_/) }.inspect}"
+    
+    super do |resource|
+      if resource.persisted?
+        Rails.logger.info "Login successful for user: #{resource.email}"
+      else
+        Rails.logger.info "Login failed"
+      end
+    end
+  end
 
   protected
 
@@ -14,6 +30,10 @@ class User::SessionsController < Devise::SessionsController
 
   # DeviseがJSONレスポンスを返すための設定
   def respond_with(resource, _opts = {})
+    Rails.logger.info "=== RESPOND_WITH called ==="
+    Rails.logger.info "Resource: #{resource.inspect}"
+    Rails.logger.info "Resource errors: #{resource.errors.full_messages}" if resource.respond_to?(:errors)
+    
     if request.format.json?
       render json: {
         success: true,

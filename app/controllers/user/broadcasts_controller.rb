@@ -42,7 +42,7 @@ class User::BroadcastsController < User::ApplicationController
 
   # POST /user/broadcasts
   def create
-    builder_service = Broadcasts::BroadcastBuilderService.new(current_line_account, broadcast_params)
+    builder_service = Broadcasts::BroadcastBuilderService.new(current_user.line_account, broadcast_params)
     @broadcast = builder_service.build
     
     if builder_service.errors.any?
@@ -64,7 +64,7 @@ class User::BroadcastsController < User::ApplicationController
       return
     end
     
-    builder_service = Broadcasts::BroadcastBuilderService.new(current_line_account, broadcast_params)
+    builder_service = Broadcasts::BroadcastBuilderService.new(current_user.line_account, broadcast_params)
     @broadcast = builder_service.update(@broadcast)
     
     if builder_service.errors.any?

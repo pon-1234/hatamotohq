@@ -7,21 +7,21 @@ class User::ScenariosController < User::ApplicationController
   before_action :set_scenario, only: [:show, :edit, :update, :destroy]
 
   def index
-    @scenarios = current_line_account.scenarios.ordered
+    @scenarios = current_user.line_account.scenarios
   end
 
   def show
   end
 
   def new
-    @scenario = current_line_account.scenarios.build
+    @scenario = current_user.line_account.scenarios.build
   end
 
   def edit
   end
 
   def create
-    @scenario = current_line_account.scenarios.build(scenario_params)
+    @scenario = current_user.line_account.scenarios.build(scenario_params)
     
     if @scenario.save
       redirect_to user_scenario_path(@scenario), notice: t('messages.create_success')
@@ -46,7 +46,7 @@ class User::ScenariosController < User::ApplicationController
   private
 
   def set_scenario
-    @scenario = current_line_account.scenarios.find(params[:id])
+    @scenario = current_user.line_account.scenarios.find(params[:id])
   end
 
   def scenario_params

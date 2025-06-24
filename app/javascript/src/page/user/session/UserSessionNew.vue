@@ -118,7 +118,7 @@ export default {
         }
       };
 
-      axios.post(`${this.userRootUrl}/user/sign_in`, formData, {
+      axios.post('/user/sign_in', formData, {
         headers: {
           'Accept': 'application/json',
           'X-CSRF-TOKEN': this.csrfToken

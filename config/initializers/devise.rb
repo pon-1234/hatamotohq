@@ -278,7 +278,6 @@ Devise.setup do |config|
   #
   config.warden do |manager|
     # manager.default_strategies(scope: :user).unshift :authentication_token
-    manager.failure_app = User::FailureApp
   end
 
   # ==> Mountable engine configurations
