@@ -223,6 +223,13 @@ toastr.options = {
   hideMethod: 'fadeOut'
 };
 
+// Configure CSRF token for jQuery AJAX requests
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
 // Unauthenticated detection
 $(document).ajaxError((e, xhr, settings) => {
   if (xhr.status === 401) {
