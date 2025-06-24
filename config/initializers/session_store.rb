@@ -14,7 +14,7 @@ else
     domain: :all,
     tld_length: 2,
     expire_after: 1.months,
-    secure: false,
+    secure: true,
     httponly: true,
-    same_site: :lax
+    same_site: :none
 end

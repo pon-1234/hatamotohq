@@ -8,7 +8,24 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     if Rails.env.development?
-      origins 'http://localhost:3000', 'http://lvh.me:3000', 'http://localhost:3036', 'http://lvh.me:3036'
+      origins(
+        'http://localhost:3000',
+        'http://localhost:3036',
+        'http://lvh.me:3000',
+        'http://lvh.me:3036',
+        /http:\/\/[a-z0-9-]+\.localhost:3000/,
+        /http:\/\/[a-z0-9-]+\.localhost:3036/,
+        /http:\/\/[a-z0-9-]+\.lvh\.me:3000/,
+        /http:\/\/[a-z0-9-]+\.lvh\.me:3036/,
+        'https://localhost:3000',
+        'https://localhost:3036',
+        'https://lvh.me:3000',
+        'https://lvh.me:3036',
+        /https:\/\/[a-z0-9-]+\.localhost:3000/,
+        /https:\/\/[a-z0-9-]+\.localhost:3036/,
+        /https:\/\/[a-z0-9-]+\.lvh\.me:3000/,
+        /https:\/\/[a-z0-9-]+\.lvh\.me:3036/
+      )
     else
       # Add production origins here
       origins '*' # This is just a placeholder, adjust for production
@@ -16,6 +33,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
     resource '*',
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      credentials: true
   end
 end 
