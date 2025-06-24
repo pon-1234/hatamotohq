@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 module ApplicationHelper
@@ -21,8 +20,8 @@ module ApplicationHelper
     flash_messages = []
     flash.each do |type, message|
       type = 'success' if type == 'notice'
-      type = 'error' if type == 'alert'
-      text = "<script type='application/javascript'>toastr.#{type}('#{message}');</script>"
+      type = 'danger' if type == 'alert'
+      text = "<div class='alert alert-#{type} m-3'>#{message}</div>"
       flash_messages << text.html_safe unless message.blank?
     end
     flash_messages.join("\n").html_safe
