@@ -24,7 +24,9 @@
     <div class="wrapper">
       <div class="content container-fluid">
         <div class="container-fluid" id="application">
-          <%= custom_flash_message %>
+          <div id="flash-messages" style="display: none;">
+            <%= custom_flash_message %>
+          </div>
           <%= yield %>
         </div>
       </div>

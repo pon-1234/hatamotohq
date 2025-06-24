@@ -17,8 +17,11 @@ Rails.application.configure do
   # Enable server timing
   config.server_timing = true
 
+  # Disable origin checking for forgery protection. This may be needed for tools like lvh.me
+  config.action_controller.forgery_protection_origin_check = false
+
   # Allow all hosts in development
-  config.hosts.clear
+  # config.hosts.clear
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
@@ -76,4 +79,6 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.hosts << "lvh.me"
 end
