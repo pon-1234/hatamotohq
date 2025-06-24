@@ -10,9 +10,9 @@ if Rails.env.production?
     same_site: :lax
 else
   # 開発環境用の設定
-  # secure, httponly, same_site は development.rb の設定に任せる
-  # domainとtld_lengthを一旦削除し、最もシンプルな設定で試す
   Rails.application.config.session_store :cookie_store,
-    key: "_lineinsight_session_development",
+    key: "_hatamotohq_session_development",
+    domain: :all,
+    tld_length: 2, # *.localhost でCookieを共有するために必要
     expire_after: 1.months
 end

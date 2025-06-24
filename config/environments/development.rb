@@ -20,9 +20,9 @@ Rails.application.configure do
   # Disable origin checking for forgery protection. This may be needed for tools like lvh.me
   config.action_controller.forgery_protection_origin_check = false
 
-  # SameSite Cookie Protectionを無効にする
-  # ローカル開発でサブドメインや別ポートを使う場合にCSRFエラーを防ぐ
-  config.action_dispatch.cookies_same_site_protection = :none
+  # SameSite Cookie Protectionを:laxに戻す
+  # :none はHTTPSが必須だが、開発環境はHTTPのためCookieが保存されなかった
+  config.action_dispatch.cookies_same_site_protection = :lax
 
   # Allow all hosts in development
   # config.hosts.clear
