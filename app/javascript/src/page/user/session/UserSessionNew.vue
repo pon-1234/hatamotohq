@@ -25,14 +25,13 @@
                 <div v-if="serverError" class="alert alert-danger">
                   {{ serverError }}
                 </div>
-                <form :action="getAction()" method="post" ref="loginForm">
-                  <input type="hidden" name="authenticity_token" :value="csrfToken" />
+                <form @submit.prevent="handleLogin">
                   <div class="form-group">
                     <label for="emailaddress">メールアドレス</label>
                     <input
                       type="email"
                       class="form-control"
-                      name="user[email]"
+                      v-model="email"
                       placeholder="メールを入力してください"
                       required
                     />
@@ -46,7 +45,7 @@
                     <input
                       type="password"
                       class="form-control"
-                      name="user[password]"
+                      v-model="password"
                       placeholder="パスワードを入力してください"
                       required
                     />
@@ -57,8 +56,7 @@
                         type="checkbox"
                         class="custom-control-input"
                         id="checkbox-signin"
-                        name="user[remember_me]"
-                        value="1"
+                        v-model="rememberMe"
                       />
                       <label class="custom-control-label" for="checkbox-signin">ログインを記憶する</label>
                     </div>
@@ -84,13 +82,17 @@
 
 <script>
 import Util from '@/core/util.js';
+import axios from 'axios';
 
 export default {
   data() {
     return {
       userRootUrl: import.meta.env.VITE_ROOT_PATH,
       serverError: null,
-      csrfToken: null
+      csrfToken: null,
+      email: '',
+      password: '',
+      rememberMe: false
     };
   },
   mounted() {
@@ -107,8 +109,37 @@ export default {
     }
   },
   methods: {
-    getAction() {
-      return `${this.userRootUrl}/user/sign_in`;
+    handleLogin() {
+      const formData = {
+        user: {
+          email: this.email,
+          password: this.password,
+          remember_me: this.rememberMe ? '1' : '0'
+        }
+      };
+
+      axios.post(`${this.userRootUrl}/user/sign_in`, formData, {
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': this.csrfToken
+        }
+      })
+      .then(response => {
+        if (response.data.success && response.data.redirect_to) {
+          window.location.href = response.data.redirect_to;
+        } else {
+          // Handle cases where response is not as expected
+          this.serverError = 'ログインに成功しましたが、リダイレクト先が不明です。';
+        }
+      })
+      .catch(error => {
+        if (error.response && error.response.data && error.response.data.error) {
+          this.serverError = error.response.data.error;
+        } else {
+          this.serverError = 'ログイン中に不明なエラーが発生しました。';
+        }
+        console.error('Login failed:', error);
+      });
     }
   }
 };

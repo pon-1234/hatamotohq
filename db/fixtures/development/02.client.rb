@@ -6,4 +6,5 @@ Client.seed do |s|
   s.name = 'ホテル１'
   s.address = '東京'
   s.phone_number = '0123456789'
+  s.status = :active
 end

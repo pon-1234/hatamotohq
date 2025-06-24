@@ -9,4 +9,5 @@ User.seed do |s|
   s.name = 'クライアント管理者'
   s.role = 'admin'
   s.client = Client.first
+  s.status = :active
 end
