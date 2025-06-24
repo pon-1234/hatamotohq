@@ -277,7 +277,8 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
   config.warden do |manager|
-    manager.default_strategies(scope: :user).unshift :authentication_token
+    # manager.default_strategies(scope: :user).unshift :authentication_token
+    manager.failure_app = User::FailureApp
   end
 
   # ==> Mountable engine configurations
